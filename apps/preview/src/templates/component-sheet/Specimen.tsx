@@ -1,11 +1,11 @@
 import { BellIcon, DownloadIcon, EllipsisIcon, LayoutGridIcon, LineChartIcon, PlusIcon, SearchIcon, UsersIcon } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@ds/components/alert";
-import { Avatar, AvatarFallback } from "@ds/components/avatar";
-import { Badge } from "@ds/components/badge";
-import { Button } from "@ds/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ds/components/card";
-import { Checkbox } from "@ds/components/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@tyohnn/components/alert";
+import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
+import { Badge } from "@tyohnn/components/badge";
+import { Button } from "@tyohnn/components/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tyohnn/components/card";
+import { Checkbox } from "@tyohnn/components/checkbox";
 import {
     Dialog,
     DialogContent,
@@ -14,7 +14,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@ds/components/dialog";
+} from "@tyohnn/components/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -24,17 +24,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from "@ds/components/dropdown-menu";
-import { Input } from "@ds/components/input";
-import { Kbd, KbdGroup } from "@ds/components/kbd";
-import { Label } from "@ds/components/label";
+} from "@tyohnn/components/dropdown-menu";
+import { Input } from "@tyohnn/components/input";
+import { Kbd, KbdGroup } from "@tyohnn/components/kbd";
+import { Label } from "@tyohnn/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@ds/components/select";
+} from "@tyohnn/components/select";
 import {
     SidebarGroupLabel,
     SidebarMenu,
@@ -42,8 +42,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarProvider,
-} from "@ds/components/sidebar";
-import { Switch } from "@ds/components/switch";
+} from "@tyohnn/components/sidebar";
+import { Switch } from "@tyohnn/components/switch";
 import {
     Table,
     TableBody,
@@ -51,8 +51,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@ds/components/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/components/tabs";
+} from "@tyohnn/components/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
 /**
  * 디자인 시스템 표본. 기능이 아니라 **3층 규칙이 캔버스와 같은 모양으로 붙었는지**를 눈으로 보는 자리다.

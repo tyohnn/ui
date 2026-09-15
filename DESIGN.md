@@ -11,8 +11,9 @@ the same class contract as upstream shadcn, so new upstream components port over
 - TSX holds **no visual values**: no colours, sizes, radii or shadows chosen by the component.
   Layout utilities that upstream bakes in stay, and each exception is explained where it lives.
 - Everything visible is decided by CSS in three layers.
-- Placeholder aliases `@ds/components/*`, `@ds/lib/*`, `@ds/hooks/*` are used for internal imports.
-  A consumer (or the future CLI) maps them onto its own layout.
+- Placeholder aliases `@tyohnn/components/*`, `@tyohnn/lib/*`, `@tyohnn/hooks/*` are used for internal imports.
+  They are path aliases (tsconfig `paths`, Vite `resolve.alias`), not packages; no workspace is named
+  `@tyohnn/components`, `@tyohnn/lib` or `@tyohnn/hooks`. The CLI replaces this alias with the consumer's alias.
 - Variants that are not props are data attributes forwarded by the component (`data-tone`,
   `data-shape`). They only mean something when a layer-3 rule reads them.
 
@@ -138,7 +139,7 @@ always bumps it.
 
 A new component lands in base with all of:
 
-1. `registry/base/components/<name>.tsx` with `cn-*` hooks and `@ds/*` imports only.
+1. `registry/base/components/<name>.tsx` with `cn-*` hooks and `@tyohnn/{components,lib,hooks}/*` imports only.
 2. `registry/base/styles/components/<name>.css`, added to `styles/style.css`.
 3. Default values for any new layer-2 axis (and layer-1 slot) it reads, in base `tokens.css` /
    `globals.css` (`.dark` too for colours).

@@ -6,7 +6,9 @@
         "types": ["node"],
         "baseUrl": ".",
         "paths": {
-            "@ds/*": ["./*"]
+            "@tyohnn/components/*": ["./components/*"],
+            "@tyohnn/lib/*": ["./lib/*"],
+            "@tyohnn/hooks/*": ["./hooks/*"]
         }
     },
     "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts"],

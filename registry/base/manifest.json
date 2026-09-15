@@ -2,9 +2,9 @@
     "name": "base",
     "axisContractVersion": 2,
     "aliases": {
-        "@ds/components/*": "components/*",
-        "@ds/lib/*": "lib/*",
-        "@ds/hooks/*": "hooks/*"
+        "@tyohnn/components/*": "components/*",
+        "@tyohnn/lib/*": "lib/*",
+        "@tyohnn/hooks/*": "hooks/*"
     },
     "dependencies": {
         "@base-ui/react": "1.8.0",
