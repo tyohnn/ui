@@ -1,7 +1,10 @@
 # tyohnn
 
-A design-system registry: Base UI based shadcn components whose look lives entirely in three CSS
-layers (colours, tokens, `cn-*` rules), plus themes that override those layers.
+tyohnn = shadcn + Base UI + a three-layer CSS architecture.
+
+A design-system registry: shadcn components on Base UI primitives whose look lives entirely in three
+CSS layers (colours, tokens, `cn-*` rules), plus themes that override those layers. "base" is the name
+of that foundation layer (`registry/base`), not the "Base" of Base UI.
 
 ```
 registry/base            components · hooks · lib · styles (the default of every layer)

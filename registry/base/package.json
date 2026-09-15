@@ -2,7 +2,7 @@
     "name": "@tyohnn/base",
     "version": "0.0.0",
     "private": true,
-    "description": "tyohnn base: Base UI components with cn-* hooks and the default three-layer CSS (colours, tokens, rules).",
+    "description": "tyohnn base, the foundation layer: shadcn components on Base UI primitives with cn-* hooks, plus the default three-layer CSS (colours, tokens, rules). Not to be confused with the Base in Base UI.",
     "exports": {
         "./components/*": "./components/*.tsx",
         "./lib/*": "./lib/*.ts",

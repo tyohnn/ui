@@ -4,7 +4,8 @@ A dark, dense dashboard theme. It was built from one reference screenshot of a S
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,
 compact rows, and a few saturated accents that carry meaning.
 
-`extends: base`. Everything not listed here comes from base.
+`extends: base` — the tyohnn foundation layer (shadcn components on Base UI primitives plus the default
+three CSS layers; not the "Base" of Base UI). Everything not listed here comes from base.
 
 ## Character
 

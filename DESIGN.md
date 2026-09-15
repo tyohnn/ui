@@ -2,10 +2,20 @@
 
 This file is the contract every component, theme and tool in the repository follows.
 
+tyohnn's foundation is the combination of three things, as first established in an earlier product:
+
+1. **shadcn components** — the upstream anatomy and `cn-*` class contract;
+2. **Base UI primitives** underneath them (behaviour, accessibility, state attributes);
+3. **the three-layer CSS architecture** tyohnn adds on top — layer 1 colours, layer 2 tokens,
+   layer 3 `cn-*` rules.
+
+In this repository **"base" names that foundation layer** (`registry/base`, `@tyohnn/base`): shadcn +
+Base UI + the three layers with their default values. It is unrelated to the word "Base" in Base UI.
+
 ## 1. Hooks: components carry class names, not looks
 
-Components are Base UI based shadcn components (`registry/base/components`). Each element gets a
-stable hook class named `cn-*` (`cn-button`, `cn-button-variant-outline`, `cn-sidebar-menu-badge`, …),
+Components are shadcn components built on Base UI primitives (`registry/base/components`). Each element
+gets a stable hook class named `cn-*` (`cn-button`, `cn-button-variant-outline`, `cn-sidebar-menu-badge`, …),
 the same class contract as upstream shadcn, so new upstream components port over with little work.
 
 - TSX holds **no visual values**: no colours, sizes, radii or shadows chosen by the component.
@@ -31,12 +41,13 @@ Long-form typesetting (`typeset.css` vendor rules + `typeset-preset.css` values)
 
 ## 3. Base and themes
 
-- **Base** (`registry/base`) owns every component, every token name and a default value for each,
-  and a layer-3 file for every component. Base alone is a complete, neutral system (the shadcn mira
-  preset values).
+- **Base** (`registry/base`) is the tyohnn foundation layer — shadcn components, their Base UI
+  primitives and the three CSS layers (not the "Base" of Base UI). It owns every component, every token
+  name and a default value for each, and a layer-3 file for every component. Base alone is a complete,
+  neutral system (the shadcn mira preset values).
 - **A theme** (`registry/themes/<name>`) is an overlay on base. It contains only what differs:
-  `theme.json`, `colors.css`, `tokens.css`, layer-3 files under `styles/` with a `style.css`,
-  `DESIGN.md` and `reference/`.
+  `theme.json`, `colors.css`, `tokens.css`, a `style.css` (with layer-3 files under `styles/` only
+  when a slot cannot express the change), `DESIGN.md` and `reference/`.
 - Product-flavoured slots (selection colour, clay materials, tag and avatar tones, control shadows)
   exist in base with neutral values: either an alias of the colour the rule used before the slot
   existed, `transparent`, or `none`. A theme changes the look by changing those values.
