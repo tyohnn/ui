@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
-import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon } from "lucide-react"
+import { CircleCheck, Info, Loader, OctagonX, TriangleAlert } from "@tyohnn/icons"
 
 /* 면은 중립이고 타입은 아이콘 색으로만 말한다(2026-09-09 사용자 결정).
    richColors 를 켜면 바탕·테두리·글자가 한꺼번에 상태색이 되는데, 토스트가 쌓이면
@@ -25,11 +25,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4 text-success" />,
-        info: <InfoIcon className="size-4 text-info" />,
-        warning: <TriangleAlertIcon className="size-4 text-warning" />,
-        error: <OctagonXIcon className="size-4 text-destructive" />,
-        loading: <Loader2Icon className="size-4 animate-spin text-muted-foreground" />,
+        success: <CircleCheck className="size-4 text-success" />,
+        info: <Info className="size-4 text-info" />,
+        warning: <TriangleAlert className="size-4 text-warning" />,
+        error: <OctagonX className="size-4 text-destructive" />,
+        loading: <Loader className="size-4 animate-spin text-muted-foreground" />,
       }}
       closeButton
       style={

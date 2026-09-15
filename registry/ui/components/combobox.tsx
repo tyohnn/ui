@@ -11,7 +11,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@tyohnn/components/input-group"
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react"
+import { Check, ChevronDown, X } from "@tyohnn/icons"
 
 const Combobox = ComboboxPrimitive.Root
 
@@ -31,7 +31,7 @@ function ComboboxTrigger({
       {...props}
     >
       {children}
-      <ChevronDownIcon
+      <ChevronDown
   className="cn-combobox-trigger-icon pointer-events-none"
 />
     </ComboboxPrimitive.Trigger>
@@ -46,7 +46,7 @@ function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
       className={cn("cn-combobox-clear", className)}
       {...props}
     >
-      <XIcon
+      <X
   className="cn-combobox-clear-icon pointer-events-none"
 />
     </ComboboxPrimitive.Clear>
@@ -156,7 +156,7 @@ function ComboboxItem({
       <ComboboxPrimitive.ItemIndicator
         render={<span className="cn-combobox-item-indicator" />}
       >
-        <CheckIcon
+        <Check
   className="cn-combobox-item-indicator-icon pointer-events-none"
 />
       </ComboboxPrimitive.ItemIndicator>
@@ -254,7 +254,7 @@ function ComboboxChip({
           className="cn-combobox-chip-remove"
           data-slot="combobox-chip-remove"
         >
-          <XIcon
+          <X
   className="cn-combobox-chip-indicator-icon pointer-events-none"
 />
         </ComboboxPrimitive.ChipRemove>

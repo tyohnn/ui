@@ -10,7 +10,7 @@ import {
 } from "react-day-picker"
 
 import { Button, buttonVariants } from "@tyohnn/components/button"
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { CalendarChevronDown, CalendarChevronLeft, CalendarChevronRight } from "@tyohnn/icons"
 
 function Calendar({
   className,
@@ -147,7 +147,7 @@ function Calendar({
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon
+              <CalendarChevronLeft
   className={cn("cn-rtl-flip size-4", className)}
 />
             )
@@ -155,14 +155,14 @@ function Calendar({
 
           if (orientation === "right") {
             return (
-              <ChevronRightIcon
+              <CalendarChevronRight
   className={cn("cn-rtl-flip size-4", className)}
 />
             )
           }
 
           return (
-            <ChevronDownIcon
+            <CalendarChevronDown
   className={cn("size-4", className)}
 />
           )

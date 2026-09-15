@@ -8,6 +8,9 @@
         "mono": "system",
         "hangulFallback": "pretendard"
     },
+    "icons": {
+        "library": "hugeicons"
+    },
     "styles": {
         "colors": "styles/globals.css",
         "tokens": "styles/tokens.css",

@@ -17,9 +17,11 @@ so new upstream components port over with little work.
 - TSX holds **no visual values**: no colours, sizes, radii or shadows chosen by the component.
   Layout utilities that upstream bakes in stay, and each exception is explained where it lives.
 - Everything visible is decided by CSS in three layers.
-- Placeholder aliases `@tyohnn/components/*`, `@tyohnn/lib/*`, `@tyohnn/hooks/*` are used for internal imports.
-  They are path aliases (tsconfig `paths`, Vite `resolve.alias`), not packages; no workspace is named
-  `@tyohnn/components`, `@tyohnn/lib` or `@tyohnn/hooks`. The CLI replaces this alias with the consumer's alias.
+- Placeholder aliases `@tyohnn/components/*`, `@tyohnn/lib/*`, `@tyohnn/hooks/*` and `@tyohnn/icons` are used for
+  internal imports. They are path aliases (tsconfig `paths`, Vite `resolve.alias`), not packages; no workspace is
+  named `@tyohnn/components`, `@tyohnn/lib`, `@tyohnn/hooks` or `@tyohnn/icons`. The CLI replaces this alias with
+  the consumer's alias.
+- Icons come only from `@tyohnn/icons` by semantic name (section 10), never from an icon package.
 - Variants that are not props are data attributes forwarded by the component (`data-tone`,
   `data-shape`). They only mean something when a layer-3 rule reads them.
 
@@ -38,7 +40,7 @@ separate axis.
 
 ## 2. One set of TSX
 
-`registry/ui` (`@tyohnn/ui`) holds the only copy of `components/`, `hooks/` and `lib/`. Every design
+`registry/ui` (`@tyohnn/ui`) holds the only copy of `components/`, `hooks/`, `lib/` and `icons/`. Every design
 system renders these same files; systems differ only in CSS. `registry/ui/manifest.json` lists the
 npm dependencies and files.
 
@@ -48,7 +50,7 @@ A design system is a complete folder, frozen once created. Nothing is composed a
 
 ```
 registry/systems/<name>/
-  system.json                 name · description · forkedFrom { source, commit } · fonts · tags · source
+  system.json                 name · description · forkedFrom { source, commit } · fonts · icons · tags · source
                               (schema: registry/schema/system.schema.json)
   styles/globals.css          layer 1, complete (:root and .dark)
   styles/tokens.css           layer 2, complete
@@ -71,7 +73,7 @@ snapshot is exactly what was reviewed; changes reach a system only when someone 
 ## 4. foundation is the maintainer master copy
 
 `registry/foundation` is shadcn + Base UI + the three layers with the shadcn mira preset values. It holds
-only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisContractVersion`, `fonts`).
+only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisContractVersion`, `fonts`, `icons`).
 
 - It is for maintainers and the theme-from-image skill; the CLI does not list it.
 - It owns the token vocabulary: every name a system must define (section 5).
@@ -87,7 +89,7 @@ node tooling/new-system <name> --from foundation      # or --from <existing syst
 Systems are named for their design and mood, not their use case (`graphite`, not `crm-dashboard`).
 
 This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation/DESIGN.template.md` and
-`system.json` with `forkedFrom` (source and current commit) and the source's `fonts`. Then:
+`system.json` with `forkedFrom` (source and current commit) and the source's `fonts` and `icons`. Then:
 
 1. Tune values **in place** in `styles/globals.css` (both `:root` and `.dark`) and `styles/tokens.css`.
    Do not append override blocks; the file should read as this system's own values.
@@ -160,8 +162,9 @@ removing one always bumps it.
 - `npx turbo typecheck` — `@tyohnn/ui` and the preview.
 - `node tooling/validate-system [name…]` — `system.json` (foundation: `foundation.json` `fonts`) against
   `registry/schema/system.schema.json`, every `registry/fonts/*.json` against `font.schema.json`, font ids
-  that exist in the catalog, a Hangul-capable `hangulFallback`, and the three layer-1 font stacks
-  (section 8).
+  that exist in the catalog, a Hangul-capable `hangulFallback`, the three layer-1 font stacks
+  (section 8), and icons (section 10): every semantic name exported by all six library files, and no
+  icon-package import in `registry/ui` components, hooks or lib.
 - `node tooling/scan-tokens [name…]` — for foundation and every system, on its own files:
   1. **fail** — a `var()` (or Tailwind shorthand such as `text-(color:--x)`) read by the system's styles,
      `registry/ui` or the preview that the system's layer-1/2 files do not define and nothing declares
@@ -176,7 +179,9 @@ removing one always bumps it.
   apps/preview).
 - `node tooling/snapshot/compare-computed.mjs --a <url> --system <name> [--mode dark|light] [--preview <origin>]` —
   compares computed visual styles element by element between two renders of the component sheet. The
-  preview must have been started for the same system (fonts are chosen at start).
+  preview must have been started for the same system (fonts and icons are chosen at start). `--svg box`
+  (default) compares an `<svg>` by its box only and skips its internals, so different icon libraries in the
+  same slot compare equal; `--svg full` compares SVG internals too.
 
 ⚠ Put `.dark` on `<html>`: layer-2 compositions such as `--shadow-control` resolve on `:root`.
 
@@ -270,4 +275,86 @@ names (`SYSTEM=<name>`), through the `virtual:tyohnn-fonts` module.
   catalog `family`, instead of depending on the packages.
 - `init --font <id> --font-heading <id> --font-mono <id>` overrides the system's `fonts` and rewrites the three
   layer-1 stacks with the same rules.
+
+## 10. Icons
+
+Components never import an icon package. They import semantic names from `@tyohnn/icons`:
+
+```tsx
+import { ChevronDown } from "@tyohnn/icons"
+
+<ChevronDown data-slot="accordion-trigger-icon" className="cn-accordion-trigger-icon" />
+```
+
+```
+registry/ui/icons/
+  names.ts                    ICON_NAMES (the semantic set) · IconProps · IconComponent
+  libraries/<library>.tsx     one per library; exports every name as a component
+  index.ts                    export * from "./libraries/<library>"   (the alias target; lucide in the repo)
+  check.ts                    type-level check that every library exports every name
+```
+
+**Libraries** — the six shadcn supports, chosen per system by `system.json` `icons.library`:
+`lucide` (lucide-react) · `tabler` (@tabler/icons-react) · `hugeicons` (@hugeicons/react `HugeiconsIcon` +
+@hugeicons/core-free-icons) · `phosphor` (@phosphor-icons/react) · `remixicon` (@remixicon/react) · `radix`
+(@radix-ui/react-icons). `registry/ui/manifest.json` `iconLibraries` lists each library's file and packages.
+foundation (mira) uses hugeicons; graphite uses lucide.
+
+Every icon takes SVG props (`className`, `data-*`, `aria-*`, and `strokeWidth` where the library draws
+strokes) and renders a 24px box with lucide's stroke weight; CSS sizes it (`size-*`, `[&_svg]` rules), so the
+box default never shows. Library defaults that differ are passed explicitly: hugeicons `strokeWidth={2}`,
+tabler `stroke={2}`, phosphor `size={24}`, radix `width`/`height` 24.
+
+**Names** say what the icon means at its call site. Mappings follow shadcn's `IconPlaceholder` attributes in
+`apps/v4/registry/bases/base` (components) and its examples/blocks (the preview template's icons). A separate
+name exists only where shadcn draws the same lucide glyph differently per library: `SelectIndicator` (select
+and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) and `CalendarChevron*`
+(hugeicons `Arrow*Icon` instead of `Arrow*01Icon`).
+
+| Name | Meaning | lucide | tabler | hugeicons | phosphor | remixicon | radix |
+|---|---|---|---|---|---|---|---|
+| `ArrowDown` | scroll to the latest message | ArrowDownIcon | IconArrowDown | ArrowDown02Icon | ArrowDownIcon | RiArrowDownLine | ArrowDownIcon* |
+| `Bell` | notifications | BellIcon | IconBell | NotificationIcon | BellIcon | RiNotificationLine | BellIcon* |
+| `CalendarChevronDown` | calendar caption dropdown | ChevronDownIcon | IconChevronDown | ArrowDownIcon | CaretDownIcon | RiArrowDownSLine | ChevronDownIcon* |
+| `CalendarChevronLeft` | calendar previous month | ChevronLeftIcon | IconChevronLeft | ArrowLeftIcon | CaretLeftIcon | RiArrowLeftSLine | ChevronLeftIcon* |
+| `CalendarChevronRight` | calendar next month | ChevronRightIcon | IconChevronRight | ArrowRightIcon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
+| `ChartLine` | reports / analytics | ChartLineIcon | IconChartLine | Chart03Icon | ChartLineIcon | RiLineChartLine | BarChartIcon* |
+| `Check` | checked item or box | CheckIcon | IconCheck | Tick02Icon | CheckIcon | RiCheckLine | CheckIcon* |
+| `ChevronDown` | disclosure open / scroll down | ChevronDownIcon | IconChevronDown | ArrowDown01Icon | CaretDownIcon | RiArrowDownSLine | ChevronDownIcon* |
+| `ChevronLeft` | previous | ChevronLeftIcon | IconChevronLeft | ArrowLeft01Icon | CaretLeftIcon | RiArrowLeftSLine | ChevronLeftIcon* |
+| `ChevronRight` | next / submenu / breadcrumb separator | ChevronRightIcon | IconChevronRight | ArrowRight01Icon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
+| `ChevronUp` | disclosure close / scroll up | ChevronUpIcon | IconChevronUp | ArrowUp01Icon | CaretUpIcon | RiArrowUpSLine | ChevronUpIcon* |
+| `CircleCheck` | success status | CircleCheckIcon | IconCircleCheck | CheckmarkCircle02Icon | CheckCircleIcon | RiCheckboxCircleLine | CheckCircledIcon* |
+| `Download` | download / export | DownloadIcon | IconDownload | Download01Icon | DownloadIcon | RiDownloadLine | DownloadIcon* |
+| `Info` | info status | InfoIcon | IconInfoCircle | InformationCircleIcon | InfoIcon | RiInformationLine | InfoCircledIcon* |
+| `LayoutGrid` | overview / grid view | LayoutGridIcon | IconLayoutGrid | GridIcon | GridFourIcon | RiGridLine | DashboardIcon* |
+| `Loader` | loading (spins) | Loader2Icon | IconLoader | Loading03Icon | SpinnerIcon | RiLoaderLine | ReloadIcon* |
+| `Minus` | separator between OTP groups | MinusIcon | IconMinus | MinusSignIcon | MinusIcon | RiSubtractLine | MinusIcon* |
+| `MoreHorizontal` | more items / overflow | MoreHorizontalIcon | IconDots | MoreHorizontalCircle01Icon | DotsThreeIcon | RiMoreLine | DotsHorizontalIcon* |
+| `OctagonX` | error status | OctagonXIcon | IconAlertOctagon | MultiplicationSignCircleIcon | XCircleIcon | RiCloseCircleLine | CrossCircledIcon* |
+| `PanelLeft` | toggle the sidebar | PanelLeftIcon | IconLayoutSidebar | SidebarLeftIcon | SidebarIcon | RiSideBarLine | ViewVerticalIcon* |
+| `Plus` | add / create | PlusIcon | IconPlus | PlusSignIcon | PlusIcon | RiAddLine | PlusIcon* |
+| `Search` | search field | SearchIcon | IconSearch | SearchIcon | MagnifyingGlassIcon | RiSearchLine | MagnifyingGlassIcon* |
+| `SelectIndicator` | select trigger (opens a list) | ChevronDownIcon | IconSelector | UnfoldMoreIcon | CaretDownIcon | RiArrowDownSLine | CaretSortIcon* |
+| `TriangleAlert` | warning status | TriangleAlertIcon | IconAlertTriangle | Alert02Icon | WarningIcon | RiErrorWarningLine | ExclamationTriangleIcon* |
+| `Users` | people / team | UsersIcon | IconUsers | UserGroupIcon | UsersIcon | RiGroupLine | PersonIcon* |
+| `X` | close / clear | XIcon | IconX | Cancel01Icon | XIcon | RiCloseLine | Cross2Icon* |
+
+\* shadcn maps no radix icons; the radix column is tyohnn's closest choice (shadcn's v3 new-york style used
+several of them: `Cross2Icon`, `DotsHorizontalIcon`, `CaretSortIcon`, `ViewVerticalIcon`). `Bell`, `ChartLine`, `Download`, `LayoutGrid`, `Plus` and `Users` are
+used by the preview template only.
+
+**Adding an icon**
+
+1. Find the call site's `IconPlaceholder` in shadcn's sources (or the closest shadcn usage of that lucide
+   icon) and take all five names from it; choose a radix glyph and note it.
+2. Add the semantic name to `names.ts` (sorted, with its meaning) and one export to each of the six
+   `libraries/*.tsx`.
+3. Use it from `@tyohnn/icons`. `npx turbo typecheck` and `node tooling/validate-system` fail until all six
+   files export it; `?template=icons` in the preview shows every name (`ICONS=<library>` for a trial build).
+
+**Resolution.** tsconfig `paths` points `@tyohnn/icons` at `icons/index.ts` (lucide), and `check.ts` typechecks
+all six libraries. The preview's Vite alias points it at `libraries/<icons.library>.tsx` of the system it was
+started for. The CLI (later) will install only the chosen library's packages, copy its library file and write
+`icons/index.ts` to re-export it.
 

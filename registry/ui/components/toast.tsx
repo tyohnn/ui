@@ -5,7 +5,7 @@ import { Toast as ToastPrimitive } from "@base-ui/react/toast"
 import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
-import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "lucide-react"
+import { CircleCheck, Info, Loader, OctagonX, TriangleAlert, X } from "@tyohnn/icons"
 
 const toast = ToastPrimitive.createToastManager()
 
@@ -126,7 +126,7 @@ function ToastClose({
       {...props}
     >
       {children ?? (
-        <XIcon
+        <X
   aria-hidden="true"
 />
       )}
@@ -139,7 +139,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "success") {
     icon = (
-      <CircleCheckIcon
+      <CircleCheck
   aria-hidden="true"
 />
     )
@@ -147,7 +147,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "info") {
     icon = (
-      <InfoIcon
+      <Info
   aria-hidden="true"
 />
     )
@@ -155,7 +155,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "warning") {
     icon = (
-      <TriangleAlertIcon
+      <TriangleAlert
   aria-hidden="true"
 />
     )
@@ -163,7 +163,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "error") {
     icon = (
-      <OctagonXIcon
+      <OctagonX
   className="text-destructive"
   aria-hidden="true"
 />
@@ -172,7 +172,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
 
   if (type === "loading") {
     icon = (
-      <Loader2Icon
+      <Loader
   className="animate-spin"
   aria-hidden="true"
 />

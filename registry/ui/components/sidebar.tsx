@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@tyohnn/components/tooltip"
-import { PanelLeftIcon } from "lucide-react"
+import { PanelLeft } from "@tyohnn/icons"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -271,7 +271,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <PanelLeftIcon
+      <PanelLeft
   className="cn-rtl-flip"
 />
       <span className="sr-only">Toggle Sidebar</span>

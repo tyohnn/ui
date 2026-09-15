@@ -11,12 +11,14 @@ const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
  * `npm run build -w @tyohnn/preview -- --system=<name>` → apps/preview/dist/<name>/
  * (both through scripts/vite-system.mjs). Default foundation.
  * The system decides which fonts the page installs (system.json fonts → registry/fonts catalog →
- * fontsource / npm CSS entries). `?system=` still picks the stylesheet at run time; the page warns
+ * fontsource / npm CSS entries) and which icon library `@tyohnn/icons` resolves to
+ * (system.json icons.library → registry/ui/icons/libraries/<library>.tsx). `?system=` still picks the stylesheet at run time; the page warns
  * when it differs from the system this server was started for.
  */
 // scripts/vite-system.mjs turns `--system=<name>` into SYSTEM (vite itself rejects unknown flags).
 const system = (process.env.SYSTEM || "foundation").replace(/[^a-z0-9-]/gi, "");
 const meta = readSystemMeta(system);
+const iconLibrary = process.env.ICONS || meta.icons?.library || "lucide";
 
 const FONTS_ID = "virtual:tyohnn-fonts";
 const SYSTEM_ID = "virtual:tyohnn-system";
@@ -28,7 +30,7 @@ const systemPlugin = (): Plugin => ({
     {
         if (id === `\0${SYSTEM_ID}`)
         {
-            return `export const system = ${JSON.stringify(system)};\n`;
+            return `export const system = ${JSON.stringify(system)};\nexport const iconLibrary = ${JSON.stringify(iconLibrary)};\n`;
         }
 
         if (id === `\0${FONTS_ID}`)
@@ -63,11 +65,15 @@ const systemPlugin = (): Plugin => ({
 export default defineConfig({
     plugins: [react(), systemPlugin()],
     publicDir: `${repoRoot}dist`,
-    build: { outDir: `dist/${system}`, emptyOutDir: true },
+    build: { outDir: `dist/${process.env.ICONS ? `${system}-${iconLibrary}` : system}`, emptyOutDir: true },
     resolve: {
         // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/ui/…
         // (@tyohnn/ui and the tooling packages are untouched by this pattern).
-        alias: [{ find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` }],
+        // @tyohnn/icons → the started system's icon library (ICONS=<library> overrides it for a trial build).
+        alias: [
+            { find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` },
+            { find: /^@tyohnn\/icons$/, replacement: `${repoRoot}registry/ui/icons/libraries/${iconLibrary}.tsx` },
+        ],
     },
     server: {
         fs: { allow: [repoRoot] },

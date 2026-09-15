@@ -9,6 +9,7 @@
         "description",
         "forkedFrom",
         "fonts",
+        "icons",
         "tags",
         "source"
     ],
@@ -50,6 +51,9 @@
         },
         "fonts": {
             "$ref": "#/$defs/fonts"
+        },
+        "icons": {
+            "$ref": "#/$defs/icons"
         },
         "tags": {
             "type": "array",
@@ -125,6 +129,26 @@
                 ]
             },
             "description": "id of a registry/fonts/<id>.json catalog entry (existence checked by tooling/validate-system)"
+        },
+        "icons": {
+            "type": "object",
+            "required": [
+                "library"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "library": {
+                    "enum": [
+                        "lucide",
+                        "tabler",
+                        "hugeicons",
+                        "phosphor",
+                        "remixicon",
+                        "radix"
+                    ],
+                    "description": "Icon library @tyohnn/icons resolves to: registry/ui/icons/libraries/<library>.tsx"
+                }
+            }
         }
     }
 }

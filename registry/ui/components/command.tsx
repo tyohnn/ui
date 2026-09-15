@@ -15,7 +15,7 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "@tyohnn/components/input-group"
-import { CheckIcon, SearchIcon } from "lucide-react"
+import { Check, Search } from "@tyohnn/icons"
 
 function Command({
   className,
@@ -82,7 +82,7 @@ function CommandInput({
           {...props}
         />
         <InputGroupAddon>
-          <SearchIcon
+          <Search
   className="cn-command-input-icon"
 />
         </InputGroupAddon>
@@ -161,7 +161,7 @@ function CommandItem({
       {...props}
     >
       {children}
-      <CheckIcon
+      <Check
   className="cn-command-item-indicator ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
 />
     </CommandPrimitive.Item>

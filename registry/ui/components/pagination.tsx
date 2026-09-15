@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "@tyohnn/icons"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -77,7 +77,7 @@ function PaginationPrevious({
       className={cn("cn-pagination-previous", className)}
       {...props}
     >
-      <ChevronLeftIcon
+      <ChevronLeft
   data-icon="inline-start"
   className="cn-rtl-flip"
 />
@@ -101,7 +101,7 @@ function PaginationNext({
       {...props}
     >
       <span className="cn-pagination-next-text hidden sm:block">{text}</span>
-      <ChevronRightIcon
+      <ChevronRight
   data-icon="inline-end"
   className="cn-rtl-flip"
 />
@@ -123,7 +123,7 @@ function PaginationEllipsis({
       )}
       {...props}
     >
-      <MoreHorizontalIcon />
+      <MoreHorizontal />
       <span className="sr-only">More pages</span>
     </span>
   )

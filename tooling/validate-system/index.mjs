@@ -7,15 +7,19 @@
 //                 with `hangul: true`                                                             → FAIL
 //   3. stacks     layer-1 --font-sans / --font-heading / --font-mono in :root equal the stacks built
 //                 from the fonts and the catalog (system font → Hangul fallback → platform)       → FAIL
+//   4. icons      (once) every name in registry/ui/icons/names.ts is exported by all six
+//                 icons/libraries/<library>.tsx files and nothing else is; the libraries match the
+//                 schema enum and manifest.json iconLibraries; registry/ui components, hooks and lib
+//                 import no icon package directly (only @tyohnn/icons)                            → FAIL
 //
 // Usage: node tooling/validate-system [foundation|<system>…]
 
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
 
 import Ajv2020 from "ajv/dist/2020.js";
 
-import { fontIds, fontStacks, listSystems, readFontCatalog, readSystemMeta, readTokens, schemaRoot, styleFiles, systemRoot } from "@tyohnn/build-system/registry";
+import { fontIds, fontStacks, listSystems, readFontCatalog, readSystemMeta, readTokens, repoRoot, schemaRoot, styleFiles, systemRoot, uiRoot } from "@tyohnn/build-system/registry";
 
 const readJson = (file) => JSON.parse(readFileSync(file, "utf8"));
 const ajv = new Ajv2020({ allErrors: true, strict: false });
@@ -27,6 +31,7 @@ ajv.addSchema(fontSchema);
 
 const validateSystem = ajv.getSchema(systemSchema.$id);
 const validateFonts = ajv.getSchema(`${systemSchema.$id}#/$defs/fonts`);
+const validateIcons = ajv.getSchema(`${systemSchema.$id}#/$defs/icons`);
 const validateFont = ajv.getSchema(fontSchema.$id);
 const errorsOf = (validate) => (validate.errors ?? []).map((error) => `${error.instancePath || "/"} ${error.message}`);
 
@@ -48,6 +53,7 @@ const check = (name) =>
     if (name === "foundation")
     {
         if (!validateFonts(meta.fonts)) errorsOf(validateFonts).forEach((error) => failures.push(`foundation.json fonts${error}`));
+        if (!validateIcons(meta.icons)) errorsOf(validateIcons).forEach((error) => failures.push(`foundation.json icons${error}`));
     }
     else
     {
@@ -84,9 +90,66 @@ const check = (name) =>
     return failures;
 };
 
+// 4. icons (shared by every system)
+const ICON_PACKAGES = /from\s+["'](lucide-react|@tabler\/icons-react|@hugeicons\/[^"']+|@phosphor-icons\/[^"']+|@remixicon\/[^"']+|@radix-ui\/react-icons)["']/g;
+
+const checkIcons = () =>
+{
+    const failures = [];
+    const iconsRoot = join(uiRoot, "icons");
+    const names = [...readFileSync(join(iconsRoot, "names.ts"), "utf8").matchAll(/^\s+"([A-Za-z0-9]+)",/gm)].map((match) => match[1]);
+    const libraries = systemSchema.$defs.icons.properties.library.enum;
+    const manifest = readJson(join(uiRoot, "manifest.json"));
+
+    if (names.length === 0) failures.push("registry/ui/icons/names.ts lists no names");
+    if (JSON.stringify(Object.keys(manifest.iconLibraries ?? {}).sort()) !== JSON.stringify([...libraries].sort()))
+    {
+        failures.push(`manifest.json iconLibraries (${Object.keys(manifest.iconLibraries ?? {}).join(", ")}) differ from the schema (${libraries.join(", ")})`);
+    }
+
+    for (const library of libraries)
+    {
+        const file = join(iconsRoot, "libraries", `${library}.tsx`);
+
+        if (!existsSync(file))
+        {
+            failures.push(`missing icons/libraries/${library}.tsx`);
+            continue;
+        }
+
+        const source = readFileSync(file, "utf8");
+        const exported = new Set([
+            ...[...source.matchAll(/^export const ([A-Za-z0-9]+)\s*=/gm)].map((match) => match[1]),
+            ...[...source.matchAll(/^\s+[A-Za-z0-9]+ as ([A-Za-z0-9]+),$/gm)].map((match) => match[1]),
+        ]);
+
+        names.filter((name) => !exported.has(name)).forEach((name) => failures.push(`icons/libraries/${library}.tsx does not export ${name}`));
+        [...exported].filter((name) => !names.includes(name)).forEach((name) => failures.push(`icons/libraries/${library}.tsx exports ${name}, which names.ts does not list`));
+    }
+
+    const walk = (root) => readdirSync(root, { withFileTypes: true }).flatMap((entry) =>
+        entry.isDirectory() ? walk(join(root, entry.name)) : /\.(ts|tsx)$/.test(entry.name) ? [join(root, entry.name)] : []);
+
+    for (const file of ["components", "hooks", "lib"].flatMap((folder) => walk(join(uiRoot, folder))))
+    {
+        for (const match of readFileSync(file, "utf8").matchAll(ICON_PACKAGES))
+        {
+            failures.push(`${relative(repoRoot, file)} imports ${match[1]} directly; import from @tyohnn/icons`);
+        }
+    }
+
+    return { names, libraries, failures };
+};
+
+const icons = checkIcons();
+
+console.log(`\nicons: ${icons.names.length} names × ${icons.libraries.length} libraries (${icons.libraries.join(" · ")})`);
+icons.failures.forEach((failure) => console.log(`  ✗ ${failure}`));
+if (icons.failures.length === 0) console.log("  ✓ every library exports every name · no direct icon-package imports in registry/ui");
+
 const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const names = requested.length > 0 ? requested : ["foundation", ...listSystems()];
-let failed = catalogFailures.length > 0;
+let failed = catalogFailures.length > 0 || icons.failures.length > 0;
 
 console.log(`\nfont catalog: ${catalog.size} fonts`);
 catalogFailures.forEach((failure) => console.log(`  ✗ ${failure}`));
@@ -97,7 +160,7 @@ for (const name of names)
     const failures = check(name);
     const meta = readSystemMeta(name);
 
-    console.log(`\n${name}: fonts ${JSON.stringify(meta.fonts)}`);
+    console.log(`\n${name}: fonts ${JSON.stringify(meta.fonts)} · icons ${meta.icons?.library}`);
     failures.forEach((failure) => console.log(`  ✗ ${failure}`));
     console.log(failures.length === 0 ? "  ✓ schema · font ids · layer-1 font stacks" : `  ✗ ${failures.length} failures`);
     failed ||= failures.length > 0;

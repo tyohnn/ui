@@ -13,6 +13,9 @@
         "mono": "system",
         "hangulFallback": "pretendard"
     },
+    "icons": {
+        "library": "lucide"
+    },
     "tags": [
         "dark",
         "dense",

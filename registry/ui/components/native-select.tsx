@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "cn"
 
-import { ChevronDownIcon } from "lucide-react"
+import { SelectIndicator } from "@tyohnn/icons"
 
 type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
   size?: "sm" | "default"
@@ -27,7 +27,7 @@ function NativeSelect({
         className="cn-native-select outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
         {...props}
       />
-      <ChevronDownIcon
+      <SelectIndicator
   className="cn-native-select-icon pointer-events-none absolute select-none"
   aria-hidden="true"
   data-slot="native-select-icon"

@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "description": "Per design system (and foundation): system.json against the schema, font catalog ids and entries, layer-1 font stacks.",
+    "description": "Per design system (and foundation): system.json against the schema, font catalog ids and entries, layer-1 font stacks, icon library completeness.",
     "main": "index.mjs",
     "dependencies": {
         "@tyohnn/build-system": "*",

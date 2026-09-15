@@ -20,7 +20,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@tyohnn/components/dropdown-menu"
-import { CheckIcon } from "lucide-react"
+import { Check } from "@tyohnn/icons"
 
 function Menubar({ className, ...props }: MenubarPrimitive.Props) {
   return (
@@ -125,7 +125,7 @@ function MenubarCheckboxItem({
     >
       <span className="cn-menubar-checkbox-item-indicator pointer-events-none absolute flex items-center justify-center">
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon />
+          <Check />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -159,7 +159,7 @@ function MenubarRadioItem({
     >
       <span className="cn-menubar-radio-item-indicator pointer-events-none absolute flex items-center justify-center">
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon />
+          <Check />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

@@ -1,4 +1,4 @@
-import { BellIcon, DownloadIcon, EllipsisIcon, LayoutGridIcon, LineChartIcon, PlusIcon, SearchIcon, UsersIcon } from "lucide-react";
+import { Bell, ChartLine, Download, LayoutGrid, MoreHorizontal, Plus, Search, Users } from "@tyohnn/icons";
 
 import { Alert, AlertDescription, AlertTitle } from "@tyohnn/components/alert";
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
@@ -128,7 +128,7 @@ const CanvasSheet = () => (
                 <SidebarPanel>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton><LayoutGridIcon /><span>Deals Board</span></SidebarMenuButton>
+                            <SidebarMenuButton><LayoutGrid /><span>Deals Board</span></SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarPanel>
@@ -137,7 +137,7 @@ const CanvasSheet = () => (
                 <SidebarPanel>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton><LineChartIcon /><span>Forecast</span></SidebarMenuButton>
+                            <SidebarMenuButton><ChartLine /><span>Forecast</span></SidebarMenuButton>
                             <SidebarMenuBadge>9</SidebarMenuBadge>
                         </SidebarMenuItem>
                     </SidebarMenu>
@@ -147,7 +147,7 @@ const CanvasSheet = () => (
                 <SidebarPanel>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton isActive><UsersIcon /><span>Companies</span></SidebarMenuButton>
+                            <SidebarMenuButton isActive><Users /><span>Companies</span></SidebarMenuButton>
                             <SidebarMenuBadge>241</SidebarMenuBadge>
                         </SidebarMenuItem>
                     </SidebarMenu>
@@ -162,17 +162,17 @@ const CanvasSheet = () => (
 
         <Section title="Buttons">
             <Spec caption="Outline">
-                <Button variant="outline"><DownloadIcon data-icon="inline-start" />Export</Button>
+                <Button variant="outline"><Download data-icon="inline-start" />Export</Button>
             </Spec>
             <Spec caption="Primary">
-                <Button><PlusIcon data-icon="inline-start" />New Company</Button>
+                <Button><Plus data-icon="inline-start" />New Company</Button>
             </Spec>
             <Spec caption="Round icon">
-                <Button variant="outline" size="icon" data-shape="round" aria-label="Search"><SearchIcon /></Button>
-                <Button variant="outline" size="icon" data-shape="round" aria-label="Notifications"><BellIcon /></Button>
+                <Button variant="outline" size="icon" data-shape="round" aria-label="Search"><Search /></Button>
+                <Button variant="outline" size="icon" data-shape="round" aria-label="Notifications"><Bell /></Button>
             </Spec>
             <Spec caption="Pill · secondary">
-                <Button variant="secondary" data-shape="pill"><PlusIcon data-icon="inline-start" />Add Billings</Button>
+                <Button variant="secondary" data-shape="pill"><Plus data-icon="inline-start" />Add Billings</Button>
             </Spec>
             <Spec caption="Select trigger (user chip)">
                 <Select items={OWNERS.map((owner) => ({ value: owner.initials, label: owner.name }))} defaultValue="ME">
@@ -187,7 +187,7 @@ const CanvasSheet = () => (
                 </Select>
             </Spec>
             <Spec caption="Ghost · icon-sm">
-                <Button variant="ghost" size="icon-sm" aria-label="Actions"><EllipsisIcon /></Button>
+                <Button variant="ghost" size="icon-sm" aria-label="Actions"><MoreHorizontal /></Button>
             </Spec>
         </Section>
 
@@ -260,7 +260,7 @@ const CanvasSheet = () => (
                             </TableCell>
                             <TableCell><Owner {...OWNERS[0]} /></TableCell>
                             <TableCell>7</TableCell>
-                            <TableCell><Button variant="ghost" size="icon-sm" aria-label="Actions"><EllipsisIcon /></Button></TableCell>
+                            <TableCell><Button variant="ghost" size="icon-sm" aria-label="Actions"><MoreHorizontal /></Button></TableCell>
                         </TableRow>
                         <TableRow data-state="selected">
                             <TableCell><Checkbox aria-label="Adventure Works" defaultChecked /></TableCell>
@@ -273,7 +273,7 @@ const CanvasSheet = () => (
                             </TableCell>
                             <TableCell><Owner {...OWNERS[3]} /></TableCell>
                             <TableCell>12</TableCell>
-                            <TableCell><Button variant="ghost" size="icon-sm" aria-label="Actions"><EllipsisIcon /></Button></TableCell>
+                            <TableCell><Button variant="ghost" size="icon-sm" aria-label="Actions"><MoreHorizontal /></Button></TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

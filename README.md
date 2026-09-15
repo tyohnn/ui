@@ -7,7 +7,7 @@ A design-system registry. Each design system is a complete, frozen folder of CSS
 folder plus the shared TSX into a project as they are.
 
 ```
-registry/ui                  the one set of component TSX (components · hooks · lib)
+registry/ui                  the one set of component TSX (components · hooks · lib · icons for six libraries)
 registry/systems/<name>      complete design systems (system.json · styles · DESIGN.md · reference)
 registry/foundation          maintainer master copy of the three layers (mira values) that systems fork
 registry/fonts               font catalog (one JSON per font: family · packages · next/font · licence)
@@ -16,9 +16,9 @@ tooling/build-system         system → dist/systems/<name>/compiled.css for the
 tooling/new-system           fork foundation or a system into registry/systems/<name>
 tooling/backfill-component   copy a new foundation component stylesheet and token defaults into every system
 tooling/scan-tokens          undefined tokens · foundation token set · component stylesheets
-tooling/validate-system      system.json schema · font catalog · layer-1 font stacks
+tooling/validate-system      system.json schema · font catalog · layer-1 font stacks · icon libraries
 tooling/snapshot             computed-style comparison between two renders
-apps/preview                 Vite app: SYSTEM=<name> picks fonts at start; ?system=<name>&mode=dark|light renders a template
+apps/preview                 Vite app: SYSTEM=<name> picks fonts and icons at start; ?system=<name>&mode=dark|light&template=component-sheet|icons renders a template
 ```
 
 ```sh

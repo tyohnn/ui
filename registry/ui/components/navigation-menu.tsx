@@ -2,7 +2,7 @@ import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/naviga
 import { cva } from "class-variance-authority"
 import { cn } from "cn"
 
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDown } from "@tyohnn/icons"
 
 function NavigationMenu({
   align = "start",
@@ -71,7 +71,7 @@ function NavigationMenuTrigger({
       {...props}
     >
       {children}{" "}
-      <ChevronDownIcon
+      <ChevronDown
   className="cn-navigation-menu-trigger-icon"
   aria-hidden="true"
 />

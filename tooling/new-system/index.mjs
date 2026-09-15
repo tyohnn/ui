@@ -44,13 +44,14 @@ mkdirSync(join(target, "reference"), { recursive: true });
 const template = readFileSync(join(foundationRoot, "DESIGN.template.md"), "utf8");
 
 writeFileSync(join(target, "DESIGN.md"), template.replaceAll("{{name}}", name).replaceAll("{{from}}", from));
-// Fonts come with the copied layer-1 stacks, so they start as the source's (see DESIGN.md Typography).
+// Fonts come with the copied layer-1 stacks and icons with the source's look, so both start as the source's.
 writeFileSync(join(target, "system.json"), `${JSON.stringify({
     $schema: "../../schema/system.schema.json",
     name,
     description: "",
     forkedFrom: { source: from, commit: currentCommit() },
     fonts: readSystemMeta(from).fonts,
+    icons: readSystemMeta(from).icons,
     tags: [],
     source: { kind: "", note: "" },
 }, null, 4)}\n`);

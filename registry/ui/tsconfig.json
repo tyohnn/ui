@@ -8,9 +8,10 @@
         "paths": {
             "@tyohnn/components/*": ["./components/*"],
             "@tyohnn/lib/*": ["./lib/*"],
-            "@tyohnn/hooks/*": ["./hooks/*"]
+            "@tyohnn/hooks/*": ["./hooks/*"],
+            "@tyohnn/icons": ["./icons/index.ts"]
         }
     },
-    "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts"],
+    "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts", "icons/**/*.ts", "icons/**/*.tsx"],
     "exclude": ["node_modules"]
 }

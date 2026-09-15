@@ -3,9 +3,13 @@
 // Walks every element under the specimen root in document order on both pages and compares the
 // visual computed properties plus the bounding-box height, element by element.
 //
+// Icons: by default (--svg box) an <svg> is compared by its box only (width · height · rendered
+// width and height) and nothing inside it is walked, so two icon libraries drawing the same slot
+// compare equal. --svg full walks and compares SVG internals like any other element.
+//
 // Usage:
 //   node tooling/snapshot/compare-computed.mjs --a <url> (--b <url> | --system <name> [--mode dark|light]) [--label name] [--light]
-//        [--root '[data-specimen="canvas"]' --root-up 1] [--shots dir] [--out file.json]
+//        [--root '[data-specimen="canvas"]' --root-up 1] [--svg box|full] [--shots dir] [--out file.json]
 // --light removes `dark` from <html> on both pages after load (for apps that hard-code it).
 
 import { writeFileSync } from "node:fs";
@@ -29,6 +33,7 @@ const rootUp = Number(arg("root-up", "1"));
 const shots = arg("shots");
 const out = arg("out");
 const light = process.argv.includes("--light");
+const svgMode = arg("svg", "box");
 
 if (!A || !B)
 {
@@ -71,7 +76,7 @@ const snapshot = async (browser, url) =>
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(400);
 
-    const rows = await page.evaluate(({ rootSelector, rootUp, PROPS, BLOCK }) =>
+    const rows = await page.evaluate(({ rootSelector, rootUp, PROPS, BLOCK, svgMode }) =>
     {
         let root = document.querySelector(rootSelector);
 
@@ -103,20 +108,33 @@ const snapshot = async (browser, url) =>
             return cache.get(colour);
         };
         const normalise = (value) => value.replace(/\b(?:oklab|oklch|lab|lch|rgba?|hsla?|color)\([^()]*\)/g, toPixel);
-        const elements = [root, ...root.querySelectorAll("*")];
+        const elements = [root, ...root.querySelectorAll("*")]
+            .filter((element) => svgMode === "full" || !element.parentElement?.closest("svg"));
+        const round = (value) => String(Math.round(value * 100) / 100);
 
         return elements.map((element, index) =>
         {
             const style = getComputedStyle(element);
             const values = {};
+            const box = element.getBoundingClientRect();
 
-            for (const prop of PROPS)
+            if (svgMode !== "full" && element.tagName.toLowerCase() === "svg")
             {
-                if (prop === "width" && block.has(style.display)) continue;
-                values[prop] = normalise(style.getPropertyValue(prop));
+                values.width = style.getPropertyValue("width");
+                values.height = style.getPropertyValue("height");
+                values["rect-width"] = round(box.width);
+                values["rect-height"] = round(box.height);
             }
+            else
+            {
+                for (const prop of PROPS)
+                {
+                    if (prop === "width" && block.has(style.display)) continue;
+                    values[prop] = normalise(style.getPropertyValue(prop));
+                }
 
-            values["rect-height"] = String(Math.round(element.getBoundingClientRect().height * 100) / 100);
+                values["rect-height"] = round(box.height);
+            }
 
             const classes = typeof element.className === "string" ? element.className : element.getAttribute("class") ?? "";
             const hook = classes.split(/\s+/).find((name) => name.startsWith("cn-")) ?? "";
@@ -124,7 +142,7 @@ const snapshot = async (browser, url) =>
 
             return { index, tag: element.tagName.toLowerCase(), id: `${element.tagName.toLowerCase()}${slot ? `[${slot}]` : ""}${hook ? `.${hook}` : ""}`, text: (element.textContent ?? "").trim().slice(0, 24), values };
         });
-    }, { rootSelector, rootUp, PROPS, BLOCK: [...BLOCK_DISPLAYS] });
+    }, { rootSelector, rootUp, PROPS, BLOCK: [...BLOCK_DISPLAYS], svgMode });
 
     const screenshot = async (path) =>
     {
@@ -175,11 +193,11 @@ await left.close();
 await right.close();
 await browser.close();
 
-const result = { label, a: A, b: B, elements: { a: left.rows.length, b: right.rows.length }, structural, mismatches };
+const result = { label, a: A, b: B, svg: svgMode, elements: { a: left.rows.length, b: right.rows.length }, structural, mismatches };
 
 if (out) writeFileSync(out, JSON.stringify(result, null, 2));
 
-console.log(`${label}: elements a=${left.rows.length} b=${right.rows.length} · structural ${structural.length} · property mismatches ${mismatches.length}`);
+console.log(`${label} (svg ${svgMode}): elements a=${left.rows.length} b=${right.rows.length} · structural ${structural.length} · property mismatches ${mismatches.length}`);
 
 const top = mismatches.slice(0, 25);
 
