@@ -1,0 +1,19 @@
+{
+    "name": "multi-system",
+    "version": "0.0.0",
+    "private": true,
+    "packageManager": "npm@11.6.2",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "turbo dev",
+        "build": "turbo build",
+        "typecheck": "turbo typecheck"
+    },
+    "devDependencies": {
+        "turbo": "^2.3.3",
+        "typescript": "^5"
+    }
+}

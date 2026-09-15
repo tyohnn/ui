@@ -1,0 +1,24 @@
+{
+    "name": "graphite",
+    "description": "Dark · dense · soft clay controls · vivid blue/yellow accents: near-black planes one step apart, hairline dividers, compact rows and tinted tags.",
+    "fonts": {
+        "sans": "pretendard",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "dark",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "1e327ac",
+        "note": "Named sales-crm until 2026-09-15. Unfolded from the sales-crm overlay (foundation + colors.css + tokens.css) on 2026-09-15; values replaced in place."
+    },
+    "tags": [
+        "dark",
+        "dense",
+        "dashboard"
+    ]
+}
