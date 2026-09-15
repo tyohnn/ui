@@ -14,11 +14,19 @@
 // --mode-a dark|light sets `dark` on page a's <html> only (an app whose default mode differs from the compared preview mode).
 // --icons prints the first <svg> under the root on each page (class and the first drawing element) and how many
 // svgs carry lucide's class, to show which icon library each page draws with; --svg box compares their boxes only.
+//
+// Keyed dumps (for before/after checks of one system, e.g. a registry/ui change):
+//   node tooling/snapshot/compare-computed.mjs --dump before.json --system <name> [--mode dark|light] [--preview origin] [--states open|closed]
+//   node tooling/snapshot/compare-computed.mjs --diff before.json after.json [--out diff.json]
+// --dump measures one page (default the preview for --system; --a <url> for any page) with the keys of
+// compare-shadcn (data-slot and order, see collect.mjs), the sheet plus its open select · dropdown · dialog.
+// --diff compares two dumps by key and prints the differences grouped by component and property.
 
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 import { chromium } from "@playwright/test";
 
+import { measureSheet, STATES } from "./collect.mjs";
 import { BLOCK_DISPLAYS as BLOCK_LIST, PROPS } from "./props.mjs";
 
 const arg = (name, fallback) =>
@@ -41,6 +49,65 @@ const light = process.argv.includes("--light");
 const modeA = arg("mode-a");
 const icons = process.argv.includes("--icons");
 const svgMode = arg("svg", "box");
+
+const dump = arg("dump");
+const diff = arg("diff");
+
+if (dump)
+{
+    const url = A ?? B;
+    const mode = arg("mode", "dark") === "light" ? "light" : "dark";
+
+    if (!url) throw new Error("--dump needs --system <name> or --a <url>");
+    const browser = await chromium.launch();
+    const page = await measureSheet(browser, { url, mode, rootSelector, states: arg("states", "open") === "closed" ? [] : STATES, side: "dump" });
+
+    await page.close();
+    await browser.close();
+    writeFileSync(dump, `${JSON.stringify({ url, system, mode, date: new Date().toISOString(), rows: page.rows }, null, 1)}\n`);
+    console.log(`dump ${url} (${mode}): ${page.rows.length} elements → ${dump}`);
+    process.exit(0);
+}
+
+if (diff)
+{
+    const before = JSON.parse(readFileSync(diff, "utf8"));
+    const after = JSON.parse(readFileSync(process.argv[process.argv.indexOf("--diff") + 2], "utf8"));
+    const a = new Map(before.rows.map((row) => [row.key, row]));
+    const b = new Map(after.rows.map((row) => [row.key, row]));
+    const rows = [];
+
+    for (const key of new Set([...a.keys(), ...b.keys()]))
+    {
+        const left = a.get(key);
+        const right = b.get(key);
+
+        if (!left || !right)
+        {
+            rows.push({ key, component: (left ?? right).component, prop: "(unpaired)", before: left?.tag ?? "(none)", after: right?.tag ?? "(none)" });
+            continue;
+        }
+
+        for (const prop of new Set([...Object.keys(left.values), ...Object.keys(right.values), "tag"]))
+        {
+            const l = prop === "tag" ? left.tag : left.values[prop];
+            const r = prop === "tag" ? right.tag : right.values[prop];
+
+            if (l !== r) rows.push({ key, component: left.component, prop, before: l ?? "(none)", after: r ?? "(none)" });
+        }
+    }
+
+    const groups = new Map();
+
+    rows.forEach((row) => groups.set(`${row.component}|${row.prop}`, [...(groups.get(`${row.component}|${row.prop}`) ?? []), row]));
+    if (out) writeFileSync(out, `${JSON.stringify({ before: diff, after: process.argv[process.argv.indexOf("--diff") + 2], rows }, null, 1)}\n`);
+    console.log(`diff: ${before.rows.length} → ${after.rows.length} elements · ${rows.length} differences in ${groups.size} component/property groups`);
+    if (rows.length) console.log("| component | property | count | first key | before | after |\n|---|---|---|---|---|---|");
+    const clip = (value) => String(value).replace(/\|/g, "\\|").slice(0, 60);
+
+    groups.forEach((list, group) => console.log(`| ${group.replace("|", " | ")} | ${list.length} | ${list[0].key} | ${clip(list[0].before)} | ${clip(list[0].after)} |`));
+    process.exit(rows.length ? 1 : 0);
+}
 
 if (!A || !B)
 {

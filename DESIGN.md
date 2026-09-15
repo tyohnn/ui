@@ -188,6 +188,9 @@ removing one always bumps it.
   same slot compare equal; `--svg full` compares SVG internals too. `--mode-a dark|light` sets the mode on the
   first page only (an app whose default mode differs from the compared preview mode); `--icons` prints which
   glyphs each page draws (lucide class count, first svg's drawing element).
+  `--dump <file> --system <name> --mode <mode>` saves one page's values keyed like compare-shadcn (data-slot and
+  order, sheet plus the open select · dropdown · dialog); `--diff <before> <after>` compares two dumps by key. Use
+  them around a `registry/ui` change: dump every system in both modes before, rebuild, dump again, diff.
 - `node tooling/scaffold-prototype doctor --target <monorepo> [--built]` — a scaffolded monorepo (section 11).
 
 - `node tooling/snapshot/compare-shadcn.mjs --system <name> [--mode light|dark] [--reference <url>] [--preview <origin>]` —
