@@ -56,7 +56,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@tyohnn/components/tab
 
 /**
  * 디자인 시스템 표본. 기능이 아니라 **3층 규칙이 캔버스와 같은 모양으로 붙었는지**를 눈으로 보는 자리다.
- * 위쪽 `CanvasSheet` 는 design/sales-crm 의 DesignSystem 시트(2026-09-15)와 같은 구역을 같은 순서로 세운다
+ * 위쪽 `CanvasSheet` 는 graphite 의 원본 캔버스(sales-crm 디자인 캔버스의 DesignSystem 시트, 2026-09-15)와 같은 구역을 같은 순서로 세운다
  * — 버튼 · 체크박스 · 태그 · 아바타 · 밑줄 탭 · 표 · 사이드바 항목. 아래 카드는 나머지 컴포넌트의 밀도를 본다.
  * 화면이 붙기 시작하면 이 파일과 랜딩의 호출을 함께 지운다.
  *

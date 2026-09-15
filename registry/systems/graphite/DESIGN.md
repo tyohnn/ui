@@ -1,4 +1,4 @@
-# sales-crm
+# graphite
 
 A dark, dense dashboard design system. It was built from one reference screenshot of a Sales CRM
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,

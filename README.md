@@ -23,7 +23,7 @@ npm install
 npx turbo typecheck
 node tooling/build-system --all
 node tooling/scan-tokens
-npm run dev -w @tyohnn/preview   # http://localhost:5173/?system=sales-crm&mode=dark
+npm run dev -w @tyohnn/preview   # http://localhost:5173/?system=graphite&mode=dark
 ```
 
 Read [DESIGN.md](DESIGN.md) before adding a component or a design system.

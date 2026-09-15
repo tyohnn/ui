@@ -1,0 +1,21 @@
+{
+    "name": "graphite",
+    "description": "Dark · dense · soft clay controls · vivid blue/yellow accents: near-black planes one step apart, hairline dividers, compact rows and tinted tags.",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "1e327ac",
+        "note": "Named sales-crm until 2026-09-15. Unfolded from the sales-crm overlay (foundation + colors.css + tokens.css) on 2026-09-15; values replaced in place."
+    },
+    "fonts": {
+        "sans": "Pretendard"
+    },
+    "tags": [
+        "dark",
+        "dense",
+        "dashboard"
+    ],
+    "source": {
+        "kind": "reference-screenshot",
+        "note": "Sales CRM dashboard reference: a dark dashboard screenshot provided by the owner, 2026-09-15"
+    }
+}

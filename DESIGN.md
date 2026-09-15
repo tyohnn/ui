@@ -83,6 +83,8 @@ only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisCont
 node tooling/new-system <name> --from foundation      # or --from <existing system>
 ```
 
+Systems are named for their design and mood, not their use case (`graphite`, not `crm-dashboard`).
+
 This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation/DESIGN.template.md` and
 `system.json` with `forkedFrom` (source and current commit). Then:
 
@@ -115,7 +117,7 @@ system may want a different look, so a system tunes the value instead of editing
 
 Version 1 was the mira token set plus slots for selection, clay materials, tag and avatar tones, control
 shadows and surfaces, and the sidebar, table, tag and line-tab axes. Version 2 added the slots below, so
-the sales-crm look needs no layer-3 rule edits:
+the graphite look needs no layer-3 rule edits:
 
 | Area | Layer 1 (colours) | Layer 2 (tokens) |
 |---|---|---|
