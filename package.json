@@ -1,0 +1,23 @@
+{
+    "name": "tyohnn-monorepo",
+    "version": "0.0.0",
+    "private": true,
+    "packageManager": "npm@11.6.2",
+    "workspaces": [
+        "registry/*",
+        "apps/*",
+        "packages/*",
+        "tooling/*"
+    ],
+    "scripts": {
+        "dev": "turbo dev",
+        "build": "turbo build",
+        "typecheck": "turbo typecheck",
+        "compose": "node tooling/compose-theme --all",
+        "scan": "node tooling/scan-tokens"
+    },
+    "devDependencies": {
+        "turbo": "^2.3.3",
+        "typescript": "^5"
+    }
+}
