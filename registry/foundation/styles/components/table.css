@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
    Axis slots: --table-row-height · --table-cell-padding-x · --table-checkbox-inset · --table-*-font-size ·
-   --table-*-line-height · --ui-font-weight-regular. Base values give the mira table.
+   --table-*-line-height · --ui-font-weight-regular. Foundation values give the mira table.
 
    mira: 표 글자 text-xs(12/16) · 머리 h-10 px-2 font-medium · 셀 p-2 ·
          줄 border-b(--border) · 행 hover bg-muted/50 · 선택 bg-muted ·
@@ -98,7 +98,7 @@
     @apply align-middle whitespace-nowrap;
 }
 
-/* 체크박스만 든 칸의 왼쪽 여백. base 는 셀 여백과 같고 오른쪽은 mira 의 pr-0 이다. */
+/* 체크박스만 든 칸의 왼쪽 여백. foundation 은 셀 여백과 같고 오른쪽은 mira 의 pr-0 이다. */
 .cn-table-head,
 .cn-table-cell {
     &:has(> [role="checkbox"]) {

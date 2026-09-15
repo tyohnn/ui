@@ -88,7 +88,7 @@
 /* 이미 켜져 있는 체크박스·라디오는 테두리를 그대로 둔다.
    채워진 상자의 테두리까지 붉히면 무엇이 잘못됐는지가 아니라
    무엇이 켜져 있는지가 안 보인다. mira: aria-invalid:aria-checked:border-primary
-   체크박스의 켜진 색은 --selection 슬롯이 갖는다(base 에서는 --primary 와 같다). */
+   체크박스의 켜진 색은 --selection 슬롯이 갖는다(foundation 에서는 --primary 와 같다). */
 .cn-checkbox[aria-invalid="true"][data-checked] {
     border-color: var(--selection);
 }

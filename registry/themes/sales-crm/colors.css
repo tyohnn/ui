@@ -1,15 +1,15 @@
 /* ============================================================
    sales-crm — layer 1 overrides (colours)
    ------------------------------------------------------------
-   Only the variables whose value differs from base/styles/globals.css. Loaded right after it, so
-   every name here must already exist in base layer 1 (axis contract, checked by tooling/scan-tokens).
+   Only the variables whose value differs from foundation/styles/globals.css. Loaded right after it, so
+   every name here must already exist in foundation layer 1 (axis contract, checked by tooling/scan-tokens).
 
    Source: the dark Sales CRM reference (reference/style.css · reference/crm-spec.md), carried over
    from the original app 9942cbc. Dark is the intended mode. Hex values are kept as hex: converting them to
    oklch shifts the computed colour by one step.
 
-   ⚠ A variable declared in :root here must also be declared in .dark when base declares it in .dark,
-      otherwise this later :root block wins over base .dark (same specificity, later order).
+   ⚠ A variable declared in :root here must also be declared in .dark when foundation declares it in .dark,
+      otherwise this later :root block wins over foundation .dark (same specificity, later order).
    ============================================================ */
 
 :root {

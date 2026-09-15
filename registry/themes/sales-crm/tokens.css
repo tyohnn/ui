@@ -1,7 +1,7 @@
 /* ============================================================
    sales-crm — layer 2 overrides (density · shape · shadow)
    ------------------------------------------------------------
-   Only the tokens whose value differs from base/styles/tokens.css. Every name must exist in base
+   Only the tokens whose value differs from foundation/styles/tokens.css. Every name must exist in foundation
    layer 2 (axis contract, checked by tooling/scan-tokens).
 
    Reference measurements were fractional (29.2 · 40.83 · 13.2px, Inter widths); they are rounded to

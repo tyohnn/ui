@@ -1,7 +1,7 @@
 {
     "name": "sales-crm",
     "description": "Dark, dense dashboard look: near-black planes one step apart, a saturated blue primary, a yellow selection colour, soft clay controls and tinted tags.",
-    "extends": "base",
+    "extends": "foundation",
     "fonts": {
         "sans": "Pretendard"
     },

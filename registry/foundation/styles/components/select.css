@@ -19,7 +19,7 @@
       우리 베이스는 Base UI 라 그 클래스가 렌더되지 않는다.
    ============================================================ */
 
-/* 표면 슬롯 — 바탕 --surface-control · 그림자 --shadow-control · 누르면 눌린 그림자(base 는 모두 none).
+/* 표면 슬롯 — 바탕 --surface-control · 그림자 --shadow-control · 누르면 눌린 그림자(foundation 은 모두 none).
    ⚠ 바탕이 background-image 라 hover 의 background-color(--select-hover)는 그 아래에 깔린다. */
 .cn-select-trigger {
     border: var(--control-border-width) solid var(--input);

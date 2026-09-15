@@ -2,7 +2,7 @@
    3층 — tabs 규칙
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
-   Axis slots for the line variant: --tabs-line-height and --ui-font-weight-regular (base: mira values).
+   Axis slots for the line variant: --tabs-line-height and --ui-font-weight-regular (foundation: mira values).
 
    mira: 탭 묶음 gap-2 · 막대 rounded-lg p-[3px], 가로일 때 h-8 ·
          트리거 rounded-md border px-1.5 py-0.5 gap-1.5 text-xs font-medium, 아이콘 size-3.5,
@@ -81,7 +81,7 @@
     line-height: var(--ui-line-height-md);
 }
 
-/* 밑줄 탭의 트리거 — box and weight slots (base values repeat the default trigger). */
+/* 밑줄 탭의 트리거 — box and weight slots (foundation values repeat the default trigger). */
 .cn-tabs-list[data-variant="line"] .cn-tabs-trigger {
     padding-inline: var(--tabs-line-trigger-padding-x);
     border-width: var(--tabs-line-trigger-border-width);

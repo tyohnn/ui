@@ -15,7 +15,7 @@ const require = createRequire(import.meta.url);
 
 /** Folders Tailwind scans for utility class names */
 export const SOURCES = [
-    join(repoRoot, "registry/base/components"),
+    join(repoRoot, "registry/foundation/components"),
     join(repoRoot, "apps/preview/src"),
     join(repoRoot, "apps/preview/index.html"),
 ];
@@ -41,16 +41,16 @@ export const renderEntry = (name) =>
         "/* Tailwind (scanning is explicit, see @source below) */",
         `@import "tailwindcss" source(none);`,
         "",
-        "/* Layer 1 — colours: base, then overrides */",
+        "/* Layer 1 — colours: foundation, then overrides */",
         ...order.colors.map((file) => line(file)),
         "",
-        "/* Layer 2 — tokens: base, then overrides */",
+        "/* Layer 2 — tokens: foundation, then overrides */",
         ...order.tokens.map((file) => line(file)),
         "",
         "/* Long-form typesetting */",
         ...order.typeset.map((file) => line(file)),
         "",
-        "/* Layer 3 — base barrel, theme replacements substituted in place */",
+        "/* Layer 3 — foundation barrel, theme replacements substituted in place */",
         ...order.rules.map((file) => line(file, " layer(base)")),
         "",
         "/* Layer 3 — theme additions */",

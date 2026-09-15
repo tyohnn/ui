@@ -1,10 +1,10 @@
 /* ============================================================
    sales-crm — layer 3
    ------------------------------------------------------------
-   This theme replaces and adds no layer-3 files. Every look it needs is a value of a base slot
-   (colors.css · tokens.css), so base rule fixes reach it automatically.
+   This theme replaces and adds no layer-3 files. Every look it needs is a value of a foundation slot
+   (colors.css · tokens.css), so foundation rule fixes reach it automatically.
 
    If a future change cannot be expressed as a slot value, add styles/<file>.css with a
-   `replaces: base/styles/components/<file>.css@sha256:<hash>` or `tyohnn:adds` header and list it here
+   `replaces: foundation/styles/components/<file>.css@sha256:<hash>` or `tyohnn:adds` header and list it here
    (see DESIGN.md "Theme rules").
    ============================================================ */

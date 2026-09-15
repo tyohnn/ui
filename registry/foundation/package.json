@@ -1,8 +1,8 @@
 {
-    "name": "@tyohnn/base",
+    "name": "@tyohnn/foundation",
     "version": "0.0.0",
     "private": true,
-    "description": "tyohnn base, the foundation layer: shadcn components on Base UI primitives with cn-* hooks, plus the default three-layer CSS (colours, tokens, rules). Not to be confused with the Base in Base UI.",
+    "description": "tyohnn foundation: shadcn components on Base UI primitives with cn-* hooks, plus the default three-layer CSS (colours, tokens, rules).",
     "exports": {
         "./components/*": "./components/*.tsx",
         "./lib/*": "./lib/*.ts",

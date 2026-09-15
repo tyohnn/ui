@@ -4,8 +4,8 @@ A dark, dense dashboard theme. It was built from one reference screenshot of a S
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,
 compact rows, and a few saturated accents that carry meaning.
 
-`extends: base` — the tyohnn foundation layer (shadcn components on Base UI primitives plus the default
-three CSS layers; not the "Base" of Base UI). Everything not listed here comes from base.
+`extends: foundation` — the tyohnn foundation layer (shadcn components on Base UI primitives plus the default
+three CSS layers). Everything not listed here comes from foundation.
 
 ## Character
 
@@ -73,13 +73,13 @@ for state.
 - Do not put elevation shadows (`--shadow-float`) on in-page surfaces; separate planes by colour.
 - Do not raise the clay strength back toward the reference canvas without an owner decision.
 - Do not add hover backgrounds to sidebar items; hover only brightens the text.
-- Do not introduce new layer-1/2 variable names here. Ask base for a new slot (axis contract).
+- Do not introduce new layer-1/2 variable names here. Ask foundation for a new slot (axis contract).
 - Do not use weights other than 400 and 500 in UI text; 600 is reserved for small initials.
 
 ## Files
 
-- `colors.css` — layer-1 values that differ from base (`:root` and `.dark`), including slot values.
-- `tokens.css` — layer-2 values that differ from base.
+- `colors.css` — layer-1 values that differ from foundation (`:root` and `.dark`), including slot values.
+- `tokens.css` — layer-2 values that differ from foundation.
 - `style.css` — layer 3. The theme replaces and adds no layer-3 files; its button, checkbox, tag, table,
-  line-tab and sidebar looks are values of base slots (contract v2).
+  line-tab and sidebar looks are values of foundation slots (contract v2).
 - `reference/` — the written specification and canvas stylesheet the values came from.

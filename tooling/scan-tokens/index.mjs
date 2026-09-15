@@ -1,15 +1,15 @@
 // Token scan — generalised from an earlier product's token scan.
 //
-// For every theme (base included) it composes the file list the way compose-theme does and checks:
+// For every theme (foundation included) it composes the file list the way compose-theme does and checks:
 //   1. undefined      a var() that no layer-1/2 file defines and nothing declares locally   → FAIL
-//   2. axis contract  a theme colors.css / tokens.css defines a name base does not own,
+//   2. axis contract  a theme colors.css / tokens.css defines a name foundation does not own,
 //                     or a theme layer-3 file defines top-level :root/.dark tokens          → FAIL
-//   3. mode leak      a theme sets a name in :root that base also sets in .dark, but not in
-//                     .dark itself (the later :root would win over base .dark)             → FAIL
+//   3. mode leak      a theme sets a name in :root that foundation also sets in .dark, but not in
+//                     .dark itself (the later :root would win over foundation .dark)             → FAIL
 //   4. dead           a defined token nobody reads anywhere in the registry                 → warning
 //   5. fractional px  a token value with a non-integer px length                            → warning
-//   6. stale fork     a theme layer-3 replacement whose recorded base sha256 differs from the current
-//                     base file (or records none): base changed and the fork did not follow   → warning
+//   6. stale fork     a theme layer-3 replacement whose recorded foundation sha256 differs from the current
+//                     foundation file (or records none): foundation changed and the fork did not follow   → warning
 //
 // Tokens live only in the top-level :root / .dark blocks of layer-1 (globals.css, colors.css) and
 // layer-2 (tokens.css) files. Custom properties inside rules are local geometry, not tokens.
@@ -19,7 +19,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 
-import { baseFiles, composeOrder, listThemes, readChain, readImports, repoRoot, sha256 } from "@tyohnn/compose-theme/registry";
+import { foundationFiles, composeOrder, listThemes, readChain, readImports, repoRoot, sha256 } from "@tyohnn/compose-theme/registry";
 
 const EXTERNAL_PREFIXES = ["--tw-", "--radix-", "--scroll-fade-", "--drawer-", "--toast-"];
 const EXTERNAL_NAMES = new Set([
@@ -146,9 +146,9 @@ const registryReaders = () => [
 ];
 
 const allReads = new Set(registryReaders().flatMap((file) => readUsage(file).reads.map((read) => read.name)));
-const baseColorNames = new Set(readTokens(baseFiles.colors).map((row) => row.name));
-const baseTokenNames = new Set(readTokens(baseFiles.tokens).map((row) => row.name));
-const baseDarkNames = new Set(readTokens(baseFiles.colors).filter((row) => row.scope.includes(".dark")).map((row) => row.name));
+const foundationColorNames = new Set(readTokens(foundationFiles.colors).map((row) => row.name));
+const foundationTokenNames = new Set(readTokens(foundationFiles.tokens).map((row) => row.name));
+const foundationDarkNames = new Set(readTokens(foundationFiles.colors).filter((row) => row.scope.includes(".dark")).map((row) => row.name));
 
 const scanTheme = (name) =>
 {
@@ -164,9 +164,9 @@ const scanTheme = (name) =>
         ...order.typeset,
         ...order.rules,
         ...additions,
-        ...collect(join(repoRoot, "registry/base/components")),
-        ...collect(join(repoRoot, "registry/base/hooks")),
-        ...collect(join(repoRoot, "registry/base/lib")),
+        ...collect(join(repoRoot, "registry/foundation/components")),
+        ...collect(join(repoRoot, "registry/foundation/hooks")),
+        ...collect(join(repoRoot, "registry/foundation/lib")),
         ...collect(join(repoRoot, "apps/preview/src")),
     ];
     const declaredAnywhere = new Set();
@@ -205,9 +205,9 @@ const scanTheme = (name) =>
     {
         for (const row of theme.colors ? readTokens(theme.colors) : [])
         {
-            if (!baseColorNames.has(row.name))
+            if (!foundationColorNames.has(row.name))
             {
-                failures.push(`axis contract: ${row.name} is not a base layer-1 name  (${row.file}:${row.line})`);
+                failures.push(`axis contract: ${row.name} is not a foundation layer-1 name  (${row.file}:${row.line})`);
             }
         }
 
@@ -216,17 +216,17 @@ const scanTheme = (name) =>
 
         for (const row of rootSet)
         {
-            if (baseDarkNames.has(row.name) && !darkSet.has(row.name))
+            if (foundationDarkNames.has(row.name) && !darkSet.has(row.name))
             {
-                failures.push(`mode leak: ${row.name} is set in :root but not .dark, so it overrides base .dark  (${row.file}:${row.line})`);
+                failures.push(`mode leak: ${row.name} is set in :root but not .dark, so it overrides foundation .dark  (${row.file}:${row.line})`);
             }
         }
 
         for (const row of theme.tokens ? readTokens(theme.tokens) : [])
         {
-            if (!baseTokenNames.has(row.name))
+            if (!foundationTokenNames.has(row.name))
             {
-                failures.push(`axis contract: ${row.name} is not a base layer-2 name  (${row.file}:${row.line})`);
+                failures.push(`axis contract: ${row.name} is not a foundation layer-2 name  (${row.file}:${row.line})`);
             }
         }
 
@@ -237,8 +237,8 @@ const scanTheme = (name) =>
             if (recorded !== current)
             {
                 warnings.push(recorded
-                    ? `replacement stale: ${relative(repoRoot, file)} was forked from ${relative(repoRoot, target)}@sha256:${recorded.slice(0, 12)}…, base is now ${current.slice(0, 12)}… — port the base change or turn the difference into a slot`
-                    : `replacement stale: ${relative(repoRoot, file)} records no base sha256 (current ${relative(repoRoot, target)}@sha256:${current})`);
+                    ? `replacement stale: ${relative(repoRoot, file)} was forked from ${relative(repoRoot, target)}@sha256:${recorded.slice(0, 12)}…, foundation is now ${current.slice(0, 12)}… — port the foundation change or turn the difference into a slot`
+                    : `replacement stale: ${relative(repoRoot, file)} records no foundation sha256 (current ${relative(repoRoot, target)}@sha256:${current})`);
             }
         }
 

@@ -2,7 +2,7 @@
    3층 — Checkbox 규칙
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
-   Theme slots: --checkbox-border, --shadow-recessed, --selection{,-foreground}. Base values give
+   Theme slots: --checkbox-border, --shadow-recessed, --selection{,-foreground}. Foundation values give
    the mira checkbox (--input border · --input-fill · primary when checked). Indeterminate stays unfilled
    as in mira.
 
@@ -39,7 +39,7 @@
         box-shadow: none;
     }
 
-    /* Indeterminate — base slots repeat the unchecked look (mira); a theme may fill it like checked. */
+    /* Indeterminate — foundation slots repeat the unchecked look (mira); a theme may fill it like checked. */
     &[data-indeterminate] {
         background-color: var(--checkbox-indeterminate-fill);
         border-color: var(--checkbox-indeterminate-border);

@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "description": "Compose base + a theme overlay into one CSS entry and compile it with the Tailwind CLI.",
+    "description": "Compose foundation + a theme overlay into one CSS entry and compile it with the Tailwind CLI.",
     "main": "index.mjs",
     "exports": {
         ".": "./index.mjs",

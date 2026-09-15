@@ -1,4 +1,4 @@
-// Reads the registry layout: where base and themes live, the base layer-3 barrel,
+// Reads the registry layout: where foundation and themes live, the foundation layer-3 barrel,
 // and the per-file layer-3 overlay of each theme.
 
 import { createHash } from "node:crypto";
@@ -8,14 +8,14 @@ import { fileURLToPath } from "node:url";
 
 export const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const registryRoot = join(repoRoot, "registry");
-export const baseRoot = join(registryRoot, "base");
+export const foundationRoot = join(registryRoot, "foundation");
 export const themesRoot = join(registryRoot, "themes");
 
-export const baseFiles = {
-    colors: join(baseRoot, "styles/globals.css"),
-    tokens: join(baseRoot, "styles/tokens.css"),
-    typeset: [join(baseRoot, "styles/typeset.css"), join(baseRoot, "styles/typeset-preset.css")],
-    barrel: join(baseRoot, "styles/style.css"),
+export const foundationFiles = {
+    colors: join(foundationRoot, "styles/globals.css"),
+    tokens: join(foundationRoot, "styles/tokens.css"),
+    typeset: [join(foundationRoot, "styles/typeset.css"), join(foundationRoot, "styles/typeset-preset.css")],
+    barrel: join(foundationRoot, "styles/style.css"),
 };
 
 const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -25,9 +25,9 @@ export const readImports = (file) =>
     [...stripComments(readFileSync(file, "utf8")).matchAll(/@import\s+["']([^"']+)["']/g)]
         .map((match) => join(dirname(file), match[1]));
 
-/** Theme names in the registry. `base` is always first */
+/** Theme names in the registry. `foundation` is always first */
 export const listThemes = () => [
-    "base",
+    "foundation",
     ...(existsSync(themesRoot)
         ? readdirSync(themesRoot, { withFileTypes: true })
             .filter((entry) => entry.isDirectory() && existsSync(join(themesRoot, entry.name, "theme.json")))
@@ -38,17 +38,17 @@ export const listThemes = () => [
 
 /**
  * Reads the layer-3 marker from the first comment of a theme file:
- *   replaces: base/styles/components/<file>.css@sha256:<hex>   (the hash of the base file it was forked from)
+ *   replaces: foundation/styles/components/<file>.css@sha256:<hex>   (the hash of the foundation file it was forked from)
  *   tyohnn:adds
  */
 const readMarker = (file) =>
 {
     const head = /^\s*\/\*([\s\S]*?)\*\//.exec(readFileSync(file, "utf8"));
-    const replaces = head && /replaces:\s*base\/styles\/(\S+?\.css)(?:@sha256:([0-9a-f]{64}))?(?=\s|$)/.exec(head[1]);
+    const replaces = head && /replaces:\s*foundation\/styles\/(\S+?\.css)(?:@sha256:([0-9a-f]{64}))?(?=\s|$)/.exec(head[1]);
 
     if (replaces)
     {
-        return { kind: "replaces", target: join(baseRoot, "styles", replaces[1]), sha256: replaces[2] ?? null };
+        return { kind: "replaces", target: join(foundationRoot, "styles", replaces[1]), sha256: replaces[2] ?? null };
     }
 
     if (head && /\btyohnn:adds\b/.test(head[1]))
@@ -56,7 +56,7 @@ const readMarker = (file) =>
         return { kind: "adds" };
     }
 
-    throw new Error(`${relative(repoRoot, file)}: the first comment must say "replaces: base/styles/components/<file>.css@sha256:<hash>" or "tyohnn:adds"`);
+    throw new Error(`${relative(repoRoot, file)}: the first comment must say "replaces: foundation/styles/components/<file>.css@sha256:<hash>" or "tyohnn:adds"`);
 };
 
 /** sha256 of a file, hex */
@@ -64,14 +64,14 @@ export const sha256 = (file) => createHash("sha256").update(readFileSync(file)).
 
 /**
  * One theme's own files (not its ancestors). Missing optional files are null.
- * Layer 3: `replaces` maps a base barrel file to the theme file; `style` is the theme barrel that
+ * Layer 3: `replaces` maps a foundation barrel file to the theme file; `style` is the theme barrel that
  * imports the `adds` files.
  */
 export const readTheme = (name) =>
 {
-    if (name === "base")
+    if (name === "foundation")
     {
-        return { name, root: baseRoot, extends: null, colors: null, tokens: null, replaces: new Map(), replaceHashes: new Map(), adds: [], style: null };
+        return { name, root: foundationRoot, extends: null, colors: null, tokens: null, replaces: new Map(), replaceHashes: new Map(), adds: [], style: null };
     }
 
     const root = join(themesRoot, name);
@@ -91,7 +91,7 @@ export const readTheme = (name) =>
     const replaces = new Map();
     const replaceHashes = new Map();
     const adds = [];
-    const baseBarrel = new Set(readImports(baseFiles.barrel));
+    const foundationBarrel = new Set(readImports(foundationFiles.barrel));
 
     for (const file of layer3)
     {
@@ -103,9 +103,9 @@ export const readTheme = (name) =>
             continue;
         }
 
-        if (!baseBarrel.has(marker.target))
+        if (!foundationBarrel.has(marker.target))
         {
-            throw new Error(`${relative(repoRoot, file)} replaces ${relative(repoRoot, marker.target)}, which is not in the base barrel`);
+            throw new Error(`${relative(repoRoot, file)} replaces ${relative(repoRoot, marker.target)}, which is not in the foundation barrel`);
         }
 
         replaces.set(marker.target, file);
@@ -135,7 +135,7 @@ export const readTheme = (name) =>
         name,
         root,
         meta,
-        extends: meta.extends ?? "base",
+        extends: meta.extends ?? "foundation",
         colors: optional("colors.css"),
         tokens: optional("tokens.css"),
         replaces,
@@ -145,7 +145,7 @@ export const readTheme = (name) =>
     };
 };
 
-/** The chain from base to the theme: [base, …ancestors, theme] */
+/** The chain from foundation to the theme: [foundation, …ancestors, theme] */
 export const readChain = (name) =>
 {
     const chain = [];
@@ -171,8 +171,8 @@ export const readChain = (name) =>
 
 /**
  * The ordered file list of a composed theme.
- *   tailwindcss → base/globals → theme/colors → base/tokens → theme/tokens → typeset →
- *   base layer-3 barrel (theme replacements substituted) → theme layer-3 additions
+ *   tailwindcss → foundation/globals → theme/colors → foundation/tokens → theme/tokens → typeset →
+ *   foundation layer-3 barrel (theme replacements substituted) → theme layer-3 additions
  * With a longer chain, every overlay step repeats in chain order (nearest theme last).
  */
 export const composeOrder = (name) =>
@@ -191,10 +191,10 @@ export const composeOrder = (name) =>
 
     return {
         chain: chain.map((theme) => theme.name),
-        colors: [baseFiles.colors, ...overlays.map((theme) => theme.colors).filter(Boolean)],
-        tokens: [baseFiles.tokens, ...overlays.map((theme) => theme.tokens).filter(Boolean)],
-        typeset: baseFiles.typeset,
-        rules: readImports(baseFiles.barrel).map((file) => replaced.get(file) ?? file),
+        colors: [foundationFiles.colors, ...overlays.map((theme) => theme.colors).filter(Boolean)],
+        tokens: [foundationFiles.tokens, ...overlays.map((theme) => theme.tokens).filter(Boolean)],
+        typeset: foundationFiles.typeset,
+        rules: readImports(foundationFiles.barrel).map((file) => replaced.get(file) ?? file),
         additions: overlays.map((theme) => theme.style).filter(Boolean),
         replaced,
     };

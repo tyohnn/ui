@@ -2,7 +2,7 @@
    3층 — avatar 규칙
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
-   Tone slots (data-tone) read --avatar-tone-*; base values alias the plain fallback colours.
+   Tone slots (data-tone) read --avatar-tone-*; foundation values alias the plain fallback colours.
 
    mira: size-8(sm 6 · lg 10) rounded-full · fallback bg-muted muted-foreground(글자 크기 없음) ·
          badge bg-primary ring-background · 묶음 개수 size-8 text-xs/relaxed, 아이콘 size-4(sm 3 · lg 5).
@@ -90,7 +90,7 @@
     }
 }
 
-/* sm 이니셜의 글자 — base slots are `initial`, so the fallback inherits the surrounding type (mira). */
+/* sm 이니셜의 글자 — foundation slots are `initial`, so the fallback inherits the surrounding type (mira). */
 .cn-avatar[data-size="sm"] .cn-avatar-fallback {
     font-size: var(--avatar-font-size-sm);
     font-weight: var(--avatar-font-weight);
