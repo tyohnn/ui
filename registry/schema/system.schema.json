@@ -74,8 +74,39 @@
                 },
                 "note": {
                     "type": "string"
+                },
+                "preset": {
+                    "type": "string",
+                    "description": "shadcn create preset name (kind shadcn-preset)"
+                },
+                "shadcnVersion": {
+                    "type": "string",
+                    "description": "shadcn CLI version the reference app was built with"
+                },
+                "commit": {
+                    "type": "string",
+                    "description": "shadcn-ui/ui commit of that version's tag"
                 }
-            }
+            },
+            "description": "Origin of the material. kind shadcn-preset adds preset · shadcnVersion · commit (tooling/preset/port.mjs).",
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "kind": {
+                                "const": "shadcn-preset"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "preset",
+                            "shadcnVersion",
+                            "commit"
+                        ]
+                    }
+                }
+            ]
         }
     },
     "$defs": {
