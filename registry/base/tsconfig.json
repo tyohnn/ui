@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "jsx": "react-jsx",
+        "types": ["node"],
+        "baseUrl": ".",
+        "paths": {
+            "@ds/*": ["./*"]
+        }
+    },
+    "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts"],
+    "exclude": ["node_modules"]
+}
