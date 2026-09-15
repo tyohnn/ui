@@ -31,7 +31,8 @@
    ============================================================ */
 
 .cn-button {
-    border-radius: var(--control-radius);
+    /* --button-shape-radius is set only by data-shape below; unset, the size radius applies. */
+    border-radius: var(--button-shape-radius, var(--control-radius));
 
     /* 채움 버튼에도 투명 테두리를 두어, outline 버튼과 바깥 크기를 맞춘다.
        mira: border border-transparent bg-clip-padding */
@@ -67,6 +68,7 @@
 .cn-button-variant-secondary {
     background-color: var(--secondary);
     background-image: var(--surface-control);
+    border-color: var(--button-secondary-border);
     box-shadow: var(--shadow-control);
     color: var(--secondary-foreground);
     font-weight: var(--control-font-weight-regular);
@@ -85,7 +87,7 @@
 .cn-button-variant-outline {
     background-color: var(--input-fill);
     background-image: var(--surface-control);
-    border-color: var(--border);
+    border-color: var(--button-outline-border);
     box-shadow: var(--shadow-control);
     font-weight: var(--control-font-weight-regular);
 
@@ -103,6 +105,7 @@
 /* mira: hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted
    hover 는 어두운 쪽에서만 반투명해진다(--ghost-hover). 열린 메뉴(aria-expanded)는 두 모드 모두 --muted 다. */
 .cn-button-variant-ghost {
+    color: var(--button-ghost-foreground);
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
@@ -144,8 +147,16 @@
     }
 }
 
-/* data-shape (round · pill) is not a base rule: mira has no shape variants, so base buttons ignore
-   the attribute. Themes that give it meaning own it (sales-crm replaces this file). */
+/* 모양 — <Button data-shape="round|pill">. The attribute only sets --button-shape-radius, which the
+   radius declarations above read with the size radius as fallback. Base slot values are `initial`, so
+   base buttons keep their size radius (mira has no shapes); a theme gives the shapes a radius. */
+.cn-button[data-shape="round"] {
+    --button-shape-radius: var(--button-round-radius);
+}
+
+.cn-button[data-shape="pill"] {
+    --button-shape-radius: var(--button-pill-radius);
+}
 
 /* --------------------------------------------------------
    size — 밀도
@@ -158,7 +169,7 @@
     min-height: var(--control-height-xs);
     padding-inline: var(--control-padding-x-xs);
     gap: var(--control-gap-xs);
-    border-radius: var(--control-radius-xs);
+    border-radius: var(--button-shape-radius, var(--control-radius-xs));
     font-size: var(--control-font-size-xs);
     line-height: var(--control-line-height-xs);
 
@@ -199,7 +210,11 @@
         height: var(--control-icon-size-md);
     }
 
-    &:has([data-icon="inline-start"]) { padding-inline-start: var(--control-padding-x-icon-md); }
+    &:has([data-icon="inline-start"]) {
+        padding-inline-start: var(--button-icon-start-padding-start-md);
+        padding-inline-end: var(--button-icon-start-padding-end-md);
+    }
+
     &:has([data-icon="inline-end"])   { padding-inline-end: var(--control-padding-x-icon-md); }
 }
 
@@ -228,7 +243,7 @@
     width: var(--control-height-xs);
     height: var(--control-height-xs);
     padding-inline: 0;
-    border-radius: var(--control-radius-xs);
+    border-radius: var(--button-shape-radius, var(--control-radius-xs));
 
     & svg:not([class*="size-"]) { width: var(--control-icon-size-xs); height: var(--control-icon-size-xs); }
 }

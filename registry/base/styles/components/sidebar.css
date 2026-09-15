@@ -129,10 +129,12 @@
     height: var(--sidebar-group-label-height);
     border-radius: var(--sidebar-item-radius);
     padding-inline: var(--sidebar-group-label-padding-x);
-    color: var(--sidebar-icon);
-    font-size: var(--ui-text-sm);
+    color: var(--sidebar-group-label-foreground);
+    font-size: var(--sidebar-group-label-font-size);
+    font-weight: var(--sidebar-group-label-font-weight);
     letter-spacing: var(--sidebar-group-label-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--sidebar-group-label-line-height);
+    text-transform: var(--sidebar-group-label-text-transform);
     @apply transition-[margin,opacity] duration-200 ease-linear;
 
     & > svg {
@@ -179,6 +181,9 @@
     padding: var(--sidebar-item-padding-x);
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);
+    /* The border is always drawn (width 0 in base) so an active border never shifts the label. */
+    border: var(--sidebar-item-border-width) solid var(--sidebar-item-border);
+    font-weight: var(--sidebar-item-font-weight-idle);
     @apply text-left transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8;
 
     /* 아이콘 크기는 컴포넌트의 `[&_svg]:size-4` 리터럴이 아니라 여기서 정한다.
@@ -198,7 +203,7 @@
     &:hover,
     &:active,
     &[data-open]:hover {
-        background-color: var(--sidebar-accent);
+        background-color: var(--sidebar-item-hover-background);
         color: var(--sidebar-accent-foreground);
 
         & > svg {
@@ -212,6 +217,7 @@
     &[data-active] {
         height: var(--sidebar-item-height-active);
         background-color: var(--sidebar-active);
+        border-color: var(--sidebar-item-active-border);
         box-shadow: var(--shadow-raised);
         color: var(--sidebar-active-foreground);
         font-weight: var(--sidebar-item-font-weight);
@@ -246,7 +252,7 @@
 
 .cn-sidebar-menu-button-variant-default {
     &:hover {
-        background-color: var(--sidebar-accent);
+        background-color: var(--sidebar-item-hover-background);
         color: var(--sidebar-accent-foreground);
     }
 }
@@ -333,21 +339,23 @@
    세로 자리도 같은 계산이라 행 높이를 고쳤을 때 둘이 어긋나지 않는다. mira: px-1 text-xs font-medium */
 .cn-sidebar-menu-badge {
     height: var(--sidebar-badge-height);
-    min-width: var(--sidebar-item-action-size);
+    min-width: var(--sidebar-badge-min-width);
     inset-inline-end: var(--sidebar-badge-inset-end);
     top: calc((var(--sidebar-item-height) - var(--sidebar-badge-height)) / 2);
     border-radius: var(--sidebar-badge-radius);
     padding-inline: var(--sidebar-badge-padding-x);
+    background-color: var(--sidebar-badge-background);
     box-shadow: var(--shadow-raised);
     color: var(--sidebar-badge-foreground);
-    font-size: var(--ui-text-sm);
+    font-size: var(--sidebar-badge-font-size);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--sidebar-badge-line-height);
     font-weight: var(--ui-font-weight);
-    @apply peer-hover/menu-button:text-sidebar-accent-foreground peer-data-active/menu-button:text-sidebar-accent-foreground pointer-events-none absolute flex;
+    @apply peer-hover/menu-button:text-(color:--sidebar-badge-hover-foreground) peer-data-active/menu-button:text-(color:--sidebar-badge-active-foreground) pointer-events-none absolute flex;
 
     .peer\/menu-button[data-active] ~ & {
         top: calc((var(--sidebar-item-height-active) - var(--sidebar-badge-height)) / 2);
+        background-color: var(--sidebar-badge-active-background);
     }
 
     .peer\/menu-button[data-size="sm"] ~ & {

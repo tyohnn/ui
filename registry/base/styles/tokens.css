@@ -108,6 +108,15 @@
     --control-icon-button-size-md: var(--control-height-md);
     --control-icon-button-icon-size-md: var(--control-icon-size-md);
 
+    /* md button with a leading icon. mira: the icon side is the narrow one (6) and the far side keeps
+       the md padding (8). */
+    --button-icon-start-padding-start-md: var(--control-padding-x-icon-md);
+    --button-icon-start-padding-end-md: var(--control-padding-x-md);
+
+    /* data-shape radii. `initial` = no shape: the button keeps its size radius (mira has no shapes). */
+    --button-round-radius: initial;
+    --button-pill-radius: initial;
+
     /* Control shadows and surfaces. Themes compose them from the layer-1 --clay-* materials
        (see themes/sales-crm/tokens.css). mira controls are flat: no shadow, no gradient. */
     --shadow-control: none;
@@ -115,6 +124,7 @@
     --shadow-raised: none;
     --shadow-control-pressed: none;
     --shadow-recessed: none;
+    --checkbox-indeterminate-shadow: var(--shadow-recessed);
     --surface-control: none;
     --surface-primary: none;
     --tag-shadow: none;
@@ -202,6 +212,10 @@
     --sidebar-item-height-active: var(--sidebar-item-height);
     --sidebar-item-font-size: var(--ui-text-sm);
     --sidebar-item-line-height: var(--ui-line-height-sm);
+    /* Item border width and the weight of a non-active item. mira: no border, weight inherits
+       (`initial`); only the active item sets --sidebar-item-font-weight. */
+    --sidebar-item-border-width: 0px;
+    --sidebar-item-font-weight-idle: initial;
 
     /* Count badge. mira: sits in the action slot (h-5 min-w-5 px-1 · right-1 · radius 4 · text-xs). */
     --sidebar-badge-height: var(--sidebar-item-action-size);
@@ -209,11 +223,18 @@
     --sidebar-badge-radius: var(--control-indicator-radius);
     --sidebar-badge-inset-end: 4px;
     --sidebar-badge-line-height: var(--ui-line-height-sm);
+    --sidebar-badge-min-width: var(--sidebar-item-action-size);
+    --sidebar-badge-font-size: var(--ui-text-sm);
 
     /* Group label. mira: the item row (h-8 · px-2) with the UI letter spacing. */
     --sidebar-group-label-height: var(--sidebar-item-height);
     --sidebar-group-label-padding-x: var(--sidebar-item-padding-x);
     --sidebar-group-label-letter-spacing: var(--ui-letter-spacing);
+    --sidebar-group-label-font-size: var(--ui-text-sm);
+    --sidebar-group-label-line-height: var(--ui-line-height-sm);
+    /* `initial` = inherit (mira sets neither on the label). */
+    --sidebar-group-label-font-weight: initial;
+    --sidebar-group-label-text-transform: initial;
     --sidebar-separator-margin-block: 8px;
 
     /* 하위 항목. 하위 라벨의 왼쪽이 상위 라벨의 왼쪽(안쪽 여백 8 + 아이콘 16 + 간격 8 = 32)과
@@ -284,6 +305,8 @@
     --table-line-height: var(--ui-line-height-sm);
     --table-head-font-size: var(--table-font-size);
     --table-head-line-height: var(--table-line-height);
+    /* Right padding of a cell holding a checkbox. mira: pr-0. */
+    --table-checkbox-inset-end: 0px;
 
     /* --------------------------------------------------------
        tag — tone badge (<Badge data-tone>)
@@ -292,12 +315,20 @@
     --tag-radius: 9999px;
     --tag-padding-x: var(--control-padding-x-xs);
     --tag-line-height: var(--ui-line-height-xs);
+    --tag-font-size: var(--ui-text-xs);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
        mira: the same h-8 bar as the default tabs.
        -------------------------------------------------------- */
     --tabs-line-height: var(--control-height-lg);
+    /* Divider under the line bar and the trigger box inside it. mira: no divider, and the default
+       trigger box (px 6 · icon side 4 · 1px transparent border · control radius). */
+    --tabs-line-divider-width: 0px;
+    --tabs-line-trigger-padding-x: 6px;
+    --tabs-line-trigger-padding-x-icon: 4px;
+    --tabs-line-trigger-border-width: var(--control-border-width);
+    --tabs-line-trigger-radius: var(--control-radius);
 
     /* 표의 메타 열 — 체크박스·펼치기·손잡이·행 액션이 앉는 좁은 열.
        액션 열만 넓은 것은 메뉴 버튼(아이콘 버튼 md 28)이 오른쪽 끝에 붙기 때문이다. */
@@ -309,10 +340,10 @@
        Avatar 와 AvatarGroupCount 두 곳이 함께 읽는다.
        -------------------------------------------------------- */
     --avatar-size-sm: 24px;
-    /* Small initials. mira gives the fallback no type of its own (it inherits), so no base rule
-       reads these two. They are contract slots for themes that add an initials rule. */
-    --avatar-font-size-sm: var(--ui-text-xs);
-    --avatar-font-weight: var(--ui-font-weight);
+    /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
+    --avatar-font-size-sm: initial;
+    --avatar-font-weight: initial;
+    --avatar-line-height-sm: initial;
     --avatar-size-md: 32px;
     --avatar-size-lg: 40px;
 

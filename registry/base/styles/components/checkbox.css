@@ -29,7 +29,7 @@
     height: var(--control-indicator-size);
     border: var(--control-border-width) solid var(--checkbox-border);
     border-radius: var(--control-indicator-radius);
-    background-color: var(--input-fill);
+    background-color: var(--checkbox-fill);
     box-shadow: var(--shadow-recessed);
 
     &[data-checked] {
@@ -37,6 +37,14 @@
         border-color: var(--selection);
         color: var(--selection-foreground);
         box-shadow: none;
+    }
+
+    /* Indeterminate — base slots repeat the unchecked look (mira); a theme may fill it like checked. */
+    &[data-indeterminate] {
+        background-color: var(--checkbox-indeterminate-fill);
+        border-color: var(--checkbox-indeterminate-border);
+        color: var(--checkbox-indeterminate-foreground);
+        box-shadow: var(--checkbox-indeterminate-shadow);
     }
 
     /* ⚠ 비활성은 data 속성으로 읽는다. Base UI 의 Checkbox 는 네이티브 요소가 아니라
@@ -63,6 +71,10 @@
 
         &[data-checked] {
             border-color: var(--selection);
+        }
+
+        &[data-indeterminate] {
+            border-color: var(--checkbox-indeterminate-border);
         }
     }
 }

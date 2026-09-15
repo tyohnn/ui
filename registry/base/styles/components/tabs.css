@@ -34,6 +34,7 @@
 
     &[data-variant="line"] {
         border-radius: 0;
+        border-bottom: var(--tabs-line-divider-width) solid var(--border);
 
         &:where(.group\/tabs[data-orientation="horizontal"] *) {
             height: var(--tabs-line-height);
@@ -80,7 +81,18 @@
     line-height: var(--ui-line-height-md);
 }
 
-/* 밑줄 탭의 트리거 굵기 슬롯. */
+/* 밑줄 탭의 트리거 — box and weight slots (base values repeat the default trigger). */
 .cn-tabs-list[data-variant="line"] .cn-tabs-trigger {
+    padding-inline: var(--tabs-line-trigger-padding-x);
+    border-width: var(--tabs-line-trigger-border-width);
+    border-radius: var(--tabs-line-trigger-radius);
     font-weight: var(--ui-font-weight-regular);
+
+    &:has([data-icon="inline-start"]) {
+        padding-inline-start: var(--tabs-line-trigger-padding-x-icon);
+    }
+
+    &:has([data-icon="inline-end"]) {
+        padding-inline-end: var(--tabs-line-trigger-padding-x-icon);
+    }
 }

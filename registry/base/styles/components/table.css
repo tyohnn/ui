@@ -53,7 +53,7 @@
 /* hover 는 한 단 옅은 --muted-soft, 선택은 --muted 다. 둘이 한 단 차이라
    마우스를 올린 행과 고른 행이 구별된다. mira: hover:bg-muted/50 data-[state=selected]:bg-muted */
 .cn-table-row {
-    border-bottom: var(--surface-border-width) solid var(--border);
+    border-bottom: var(--surface-border-width) solid var(--table-row-divider);
     transition-property: color, background-color;
     transition-duration: var(--control-duration);
     transition-timing-function: var(--control-ease);
@@ -78,11 +78,11 @@
 .cn-table-head {
     height: var(--table-head-height, var(--table-head-height-default));
     padding-inline: var(--table-cell-padding-x);
-    color: var(--foreground);
+    color: var(--table-head-foreground);
     font-size: var(--table-head-font-size);
     line-height: var(--table-head-line-height);
     font-weight: var(--ui-font-weight-regular);
-    @apply text-left align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0;
+    @apply text-left align-middle whitespace-nowrap;
 }
 
 .cn-table-head-aria {
@@ -95,7 +95,7 @@
     height: var(--table-row-height);
     padding-block: var(--table-cell-padding-y, var(--table-cell-padding-y-default));
     padding-inline: var(--table-cell-padding-x);
-    @apply align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0;
+    @apply align-middle whitespace-nowrap;
 }
 
 /* 체크박스만 든 칸의 왼쪽 여백. base 는 셀 여백과 같고 오른쪽은 mira 의 pr-0 이다. */
@@ -103,6 +103,11 @@
 .cn-table-cell {
     &:has(> [role="checkbox"]) {
         padding-inline-start: var(--table-checkbox-inset);
+    }
+
+    /* mira: [&:has([role=checkbox])]:pr-0 — any descendant checkbox, physical right padding. */
+    &:has([role="checkbox"]) {
+        padding-right: var(--table-checkbox-inset-end);
     }
 }
 

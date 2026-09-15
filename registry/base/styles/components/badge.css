@@ -92,14 +92,14 @@
    그대로 넘기므로 data-tone 이 붙는다. 어떤 variant 와 함께 써도 색조가 이기도록 속성 선택자로
    명시도를 한 단 올린다(0,2,0 > variant 의 0,1,0).
    모양은 2층 tag 축, 색은 1층 --tag-* 슬롯이 갖는다. base 의 태그는 아웃라인 배지와 같게 보인다.
-   ⚠ 글자 크기는 배지와 같은 --ui-text-xs 를 읽는다(sales-crm 테마는 이 파일을 교체해 --ui-text-sm 을 읽는다).
+   글자 크기는 --tag-font-size(base 는 배지와 같은 --ui-text-xs).
    ⚠ 컴포넌트가 가진 overflow-hidden 은 자기 그림자를 자르지 않는다.
    -------------------------------------------------------- */
 .cn-badge[data-tone] {
     height: var(--control-height-xs);
     padding-inline: var(--tag-padding-x);
     border-radius: var(--tag-radius);
-    font-size: var(--ui-text-xs);
+    font-size: var(--tag-font-size);
     line-height: var(--tag-line-height);
     font-weight: var(--ui-font-weight-regular);
     box-shadow: var(--tag-shadow);

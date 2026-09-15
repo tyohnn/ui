@@ -90,6 +90,13 @@
     }
 }
 
+/* sm 이니셜의 글자 — base slots are `initial`, so the fallback inherits the surrounding type (mira). */
+.cn-avatar[data-size="sm"] .cn-avatar-fallback {
+    font-size: var(--avatar-font-size-sm);
+    font-weight: var(--avatar-font-weight);
+    line-height: var(--avatar-line-height-sm);
+}
+
 /* 이니셜 바탕 색조 — <AvatarFallback data-tone="navy"> …
    AvatarFallback 이 나머지 props 를 넘기므로 붙는다. 값은 1층의 --avatar-tone-* 슬롯이 갖는다. */
 .cn-avatar-fallback[data-tone] {

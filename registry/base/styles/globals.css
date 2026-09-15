@@ -294,6 +294,31 @@
     --checkbox-border: var(--input);
     /* Sidebar count badge text. mira: the item text colour. */
     --sidebar-badge-foreground: var(--sidebar-foreground);
+    /* Sidebar item edges, hover and count badge plate. mira: the item has no border (colour stays
+       --border), hover fills --sidebar-accent, the badge has no plate and takes the accent text on hover
+       and when its item is active. */
+    --sidebar-item-border: var(--border);
+    --sidebar-item-active-border: var(--border);
+    --sidebar-item-hover-background: var(--sidebar-accent);
+    --sidebar-group-label-foreground: var(--sidebar-icon);
+    --sidebar-badge-background: transparent;
+    --sidebar-badge-active-background: transparent;
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+    /* Table divider between body rows and head text. mira: --border and --foreground. */
+    --table-row-divider: var(--border);
+    --table-head-foreground: var(--foreground);
+    /* Button variant edges and ghost text. mira: secondary has the transparent button border,
+       outline uses --border, ghost inherits its text colour (`initial` = inherit). */
+    --button-secondary-border: transparent;
+    --button-outline-border: var(--border);
+    --button-ghost-foreground: initial;
+    /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
+       looks unchecked (foreground `initial` = inherit). */
+    --checkbox-fill: var(--input-fill);
+    --checkbox-indeterminate-fill: var(--checkbox-fill);
+    --checkbox-indeterminate-border: var(--checkbox-border);
+    --checkbox-indeterminate-foreground: initial;
 
     /* Clay materials. Layer 2 composes them into --shadow-control · --shadow-raised ·
        --surface-control … when a theme opts into raised controls. Base is flat. */
@@ -453,6 +478,31 @@
     --checkbox-border: var(--input);
     /* Sidebar count badge text. mira: the item text colour. */
     --sidebar-badge-foreground: var(--sidebar-foreground);
+    /* Sidebar item edges, hover and count badge plate. mira: the item has no border (colour stays
+       --border), hover fills --sidebar-accent, the badge has no plate and takes the accent text on hover
+       and when its item is active. */
+    --sidebar-item-border: var(--border);
+    --sidebar-item-active-border: var(--border);
+    --sidebar-item-hover-background: var(--sidebar-accent);
+    --sidebar-group-label-foreground: var(--sidebar-icon);
+    --sidebar-badge-background: transparent;
+    --sidebar-badge-active-background: transparent;
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+    /* Table divider between body rows and head text. mira: --border and --foreground. */
+    --table-row-divider: var(--border);
+    --table-head-foreground: var(--foreground);
+    /* Button variant edges and ghost text. mira: secondary has the transparent button border,
+       outline uses --border, ghost inherits its text colour (`initial` = inherit). */
+    --button-secondary-border: transparent;
+    --button-outline-border: var(--border);
+    --button-ghost-foreground: initial;
+    /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
+       looks unchecked (foreground `initial` = inherit). */
+    --checkbox-fill: var(--input-fill);
+    --checkbox-indeterminate-fill: var(--checkbox-fill);
+    --checkbox-indeterminate-border: var(--checkbox-border);
+    --checkbox-indeterminate-foreground: initial;
 
     /* Clay materials. Layer 2 composes them into --shadow-control · --shadow-raised ·
        --surface-control … when a theme opts into raised controls. Base is flat. */
