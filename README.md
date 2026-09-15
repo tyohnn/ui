@@ -17,7 +17,8 @@ tooling/new-system           fork foundation or a system into registry/systems/<
 tooling/backfill-component   copy a new foundation component stylesheet and token defaults into every system
 tooling/scan-tokens          undefined tokens · foundation token set · component stylesheets
 tooling/validate-system      system.json schema · font catalog · layer-1 font stacks · icon libraries
-tooling/snapshot             computed-style comparison between two renders
+tooling/snapshot             computed-style comparison between two renders · compare-shadcn (a system against its shadcn reference app)
+tooling/preset               port a shadcn create preset: reference app · mechanical port · style diff (see tooling/preset/README.md)
 apps/preview                 Vite app: SYSTEM=<name> picks fonts and icons at start; ?system=<name>&mode=dark|light&template=component-sheet|icons renders a template
 ```
 

@@ -86,7 +86,10 @@ only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisCont
 node tooling/new-system <name> --from foundation      # or --from <existing system>
 ```
 
-Systems are named for their design and mood, not their use case (`graphite`, not `crm-dashboard`).
+Systems are named for their design and mood, not their use case (`graphite`, not `crm-dashboard`). The
+shadcn create presets keep their own names (`vega` …) and are forked by `node tooling/preset/port.mjs <preset>`,
+which runs `new-system` and fills the mechanical parts; `tooling/preset/README.md` is the whole procedure,
+including the comparison against a real shadcn app.
 
 This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation/DESIGN.template.md` and
 `system.json` with `forkedFrom` (source and current commit) and the source's `fonts` and `icons`. Then:
@@ -97,6 +100,7 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    slot expresses, and consider adding a slot to foundation instead.
 3. Fill `system.json` (description, tags, `source` with the origin of the material) and `DESIGN.md`.
    Keep source material in `reference/`. Do not ship another company's name, logo or unique assets.
+   A system ported from a shadcn preset records `source { kind: "shadcn-preset", preset, shadcnVersion, commit }`.
 4. `node tooling/build-system <name>`, `node tooling/scan-tokens <name>`, `node tooling/validate-system <name>`,
    and check the preview: `SYSTEM=<name> npm run dev -w @tyohnn/preview`, then
    `http://localhost:5173/?system=<name>&mode=dark`.
@@ -183,6 +187,11 @@ removing one always bumps it.
   (default) compares an `<svg>` by its box only and skips its internals, so different icon libraries in the
   same slot compare equal; `--svg full` compares SVG internals too.
 
+- `node tooling/snapshot/compare-shadcn.mjs --system <name> [--mode light|dark] [--reference <url>] [--preview <origin>]` —
+  compares the preview against the shadcn reference app of a preset (`tooling/preset/make-reference.mjs`).
+  Elements pair by `data-slot` and order; the sheet plus the open select, dropdown menu and dialog are measured;
+  exclusions with reasons live in `registry/systems/<name>/reference/compare-exclusions.json`.
+
 ⚠ Put `.dark` on `<html>`: layer-2 compositions such as `--shadow-control` resolve on `:root`.
 
 ## 8. Typography
@@ -200,8 +209,8 @@ removing one always bumps it.
 | `mono` | `system` or catalog id | `font-mono` (chart values, questionnaire keys) and typeset code; `system` = the platform monospace stack |
 | `hangulFallback` | catalog id with `hangul: true` | Hangul glyphs for every role; Latin fonts have none |
 
-Ids name files in `registry/fonts/` (section 9). foundation (mira) is `inter`; graphite is `pretendard` for
-every role (its reference app used Pretendard). shadcn presets set no mono font, so both use `system`.
+Ids name files in `registry/fonts/` (section 9). foundation (mira) and vega are `inter`; graphite is `pretendard`
+for every role (its reference app used Pretendard). shadcn presets set no mono font, so all three use `system`.
 
 ### Stacks (layer 1)
 
@@ -298,7 +307,7 @@ registry/ui/icons/
 `lucide` (lucide-react) · `tabler` (@tabler/icons-react) · `hugeicons` (@hugeicons/react `HugeiconsIcon` +
 @hugeicons/core-free-icons) · `phosphor` (@phosphor-icons/react) · `remixicon` (@remixicon/react) · `radix`
 (@radix-ui/react-icons). `registry/ui/manifest.json` `iconLibraries` lists each library's file and packages.
-foundation (mira) uses hugeicons; graphite uses lucide.
+foundation (mira) uses hugeicons; graphite and vega use lucide.
 
 Every icon takes SVG props (`className`, `data-*`, `aria-*`, and `strokeWidth` where the library draws
 strokes) and renders a 24px box with lucide's stroke weight; CSS sizes it (`size-*`, `[&_svg]` rules), so the
