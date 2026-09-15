@@ -13,7 +13,7 @@
         "dev": "turbo dev",
         "build": "turbo build",
         "typecheck": "turbo typecheck",
-        "compose": "node tooling/compose-theme --all",
+        "build-systems": "node tooling/build-system --all",
         "scan": "node tooling/scan-tokens"
     },
     "devDependencies": {

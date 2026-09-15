@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/backfill-component",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Copy a new foundation component stylesheet and its missing token defaults into every system.",
+    "main": "index.mjs",
+    "dependencies": {
+        "@tyohnn/build-system": "*"
+    }
+}

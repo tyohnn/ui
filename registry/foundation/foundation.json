@@ -79,5 +79,6 @@
         "styles/components/toggle-group.css",
         "styles/components/toggle.css",
         "styles/components/tooltip.css"
-    ]
+    ],
+    "designTemplate": "DESIGN.template.md"
 }

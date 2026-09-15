@@ -5,9 +5,9 @@
     "type": "module",
     "description": "Renders a template with one composed theme stylesheet: ?theme=<name>&mode=dark|light&template=<name>.",
     "scripts": {
-        "compose": "node ../../tooling/compose-theme --all",
-        "dev": "npm run compose && vite --port 5173 --strictPort",
-        "build": "npm run compose && vite build",
+        "build-systems": "node ../../tooling/build-system --all",
+        "dev": "npm run build-systems && vite --port 5173 --strictPort",
+        "build": "npm run build-systems && vite build",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
@@ -17,7 +17,7 @@
         "react-dom": "^19.2.1"
     },
     "devDependencies": {
-        "@tyohnn/compose-theme": "*",
+        "@tyohnn/build-system": "*",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@vitejs/plugin-react": "^6.1.1",

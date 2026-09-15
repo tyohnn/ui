@@ -1,25 +1,22 @@
 // Token scan — generalised from an earlier product's token scan.
 //
-// For every theme (foundation included) it composes the file list the way compose-theme does and checks:
-//   1. undefined      a var() that no layer-1/2 file defines and nothing declares locally   → FAIL
-//   2. axis contract  a theme colors.css / tokens.css defines a name foundation does not own,
-//                     or a theme layer-3 file defines top-level :root/.dark tokens          → FAIL
-//   3. mode leak      a theme sets a name in :root that foundation also sets in .dark, but not in
-//                     .dark itself (the later :root would win over foundation .dark)             → FAIL
-//   4. dead           a defined token nobody reads anywhere in the registry                 → warning
-//   5. fractional px  a token value with a non-integer px length                            → warning
-//   6. stale fork     a theme layer-3 replacement whose recorded foundation sha256 differs from the current
-//                     foundation file (or records none): foundation changed and the fork did not follow   → warning
+// Checks foundation and every registry/systems/* folder on its own files (systems are snapshots;
+// nothing is composed):
+//   1. undefined       a var() (or Tailwind shorthand such as text-(color:--x)) read by the system's
+//                      styles, registry/ui or apps/preview that no top-level :root/.dark of the
+//                      system's globals.css / tokens.css defines and nothing declares locally  → FAIL
+//   2. foundation set  a token name foundation defines (per scope) that the system lacks        → FAIL
+//   3. components      a registry/ui component without styles/components/<name>.css in the system,
+//                      or a stylesheet style.css does not import (skipped when foundation has none) → FAIL
+//   4. system-only     a token only this system defines                                          → warning
+//   5. dead · px       a token nothing reads · a fractional px value                             → warning
 //
-// Tokens live only in the top-level :root / .dark blocks of layer-1 (globals.css, colors.css) and
-// layer-2 (tokens.css) files. Custom properties inside rules are local geometry, not tokens.
-//
-// Usage: node tooling/scan-tokens [theme…]
+// Usage: node tooling/scan-tokens [foundation|<system>…] [--verbose]
 
-import { readdirSync, readFileSync } from "node:fs";
-import { extname, join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { basename, extname, join, relative } from "node:path";
 
-import { foundationFiles, composeOrder, listThemes, readChain, readImports, repoRoot, sha256 } from "@tyohnn/compose-theme/registry";
+import { foundationRoot, listSystems, readImports, readTokens, repoRoot, stripComments, styleFiles, systemRoot, uiRoot } from "@tyohnn/build-system/registry";
 
 const EXTERNAL_PREFIXES = ["--tw-", "--radix-", "--scroll-fade-", "--drawer-", "--toast-"];
 const EXTERNAL_NAMES = new Set([
@@ -35,265 +32,150 @@ const isExternal = (name) => EXTERNAL_NAMES.has(name) || EXTERNAL_PREFIXES.some(
 const SCANNED = new Set([".css", ".ts", ".tsx"]);
 const collect = (root) =>
 {
-    let entries;
+    if (!existsSync(root)) return [];
 
-    try { entries = readdirSync(root, { withFileTypes: true }); }
-    catch { return []; }
-
-    return entries.flatMap((entry) =>
+    return readdirSync(root, { withFileTypes: true }).flatMap((entry) =>
     {
         const path = join(root, entry.name);
 
-        if (entry.isDirectory())
-        {
-            return ["node_modules", "dist", "reference"].includes(entry.name) ? [] : collect(path);
-        }
+        if (entry.isDirectory()) return ["node_modules", "dist", "reference"].includes(entry.name) ? [] : collect(path);
 
         return SCANNED.has(extname(entry.name)) ? [path] : [];
     });
 };
 
-/** Blanks comments but keeps offsets and line numbers */
-const stripComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, " "));
-const TOKEN_SELECTOR = /^(?::root|\.dark)(?:\s*,\s*(?::root|\.dark))*$/;
-
-/** Top-level :root / .dark declarations of a file */
-const readTokens = (path) =>
-{
-    const clean = stripComments(readFileSync(path, "utf8"));
-    const rows = [];
-    let depth = 0;
-    let selectorStart = 0;
-
-    for (let index = 0; index < clean.length; index += 1)
-    {
-        const char = clean[index];
-
-        if (char === "{")
-        {
-            if (depth === 0)
-            {
-                const selector = clean.slice(selectorStart, index).trim().split(/[;}]/).pop().trim();
-                let cursor = index + 1;
-                let inner = 1;
-
-                while (cursor < clean.length && inner > 0)
-                {
-                    if (clean[cursor] === "{") inner += 1;
-                    else if (clean[cursor] === "}") inner -= 1;
-                    cursor += 1;
-                }
-
-                if (TOKEN_SELECTOR.test(selector))
-                {
-                    const body = clean.slice(index + 1, cursor - 1);
-
-                    for (const found of body.matchAll(/(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);/g))
-                    {
-                        rows.push({
-                            name: found[1],
-                            value: found[2].trim(),
-                            scope: selector,
-                            file: relative(repoRoot, path),
-                            line: clean.slice(0, index + 1 + found.index).split("\n").length,
-                        });
-                    }
-                }
-
-                index = cursor - 1;
-                selectorStart = cursor;
-                continue;
-            }
-
-            depth += 1;
-        }
-        else if (char === "}")
-        {
-            depth = Math.max(0, depth - 1);
-            if (depth === 0) selectorStart = index + 1;
-        }
-    }
-
-    return rows;
-};
-
-/** var() reads and local custom-property declarations of a file */
 const readUsage = (path) =>
 {
     const source = readFileSync(path, "utf8");
     const clean = extname(path) === ".css" ? stripComments(source) : source;
     const shown = relative(repoRoot, path);
+    const lineOf = (index) => clean.slice(0, index).split("\n").length;
 
     return {
         declared: [...clean.matchAll(/["']?(--[A-Za-z0-9_-]+)["']?\s*:/g)].map((match) => match[1]),
         reads: [
             ...[...clean.matchAll(/var\(\s*(--[A-Za-z0-9_-]+)\s*(,)?/g)].map((match) => ({ match, hasFallback: Boolean(match[2]) })),
-            // Tailwind v4 variable shorthand in @apply / class names: text-(color:--x) · bg-(--x)
             ...[...clean.matchAll(/-\((?:[a-z-]+:)?(--[A-Za-z0-9_-]+)\)/g)].map((match) => ({ match, hasFallback: false })),
-        ].map(({ match, hasFallback }) => ({
-            name: match[1],
-            hasFallback,
-            file: shown,
-            line: clean.slice(0, match.index).split("\n").length,
-        })),
+        ].map(({ match, hasFallback }) => ({ name: match[1], hasFallback, where: `${shown}:${lineOf(match.index)}` })),
     };
 };
 
-/** Every file that can read a token, for the registry-wide dead check */
-const registryReaders = () => [
-    ...collect(join(repoRoot, "registry")),
-    ...collect(join(repoRoot, "apps/preview/src")),
-];
-
-const allReads = new Set(registryReaders().flatMap((file) => readUsage(file).reads.map((read) => read.name)));
-const foundationColorNames = new Set(readTokens(foundationFiles.colors).map((row) => row.name));
-const foundationTokenNames = new Set(readTokens(foundationFiles.tokens).map((row) => row.name));
-const foundationDarkNames = new Set(readTokens(foundationFiles.colors).filter((row) => row.scope.includes(".dark")).map((row) => row.name));
-
-const scanTheme = (name) =>
+/** name → Set(scope) of a system's layer-1/2 tokens */
+const tokenScopes = (root) =>
 {
-    const order = composeOrder(name);
-    const chain = readChain(name).slice(1);
-    const tokenFiles = [...order.colors, ...order.tokens];
-    const definitions = tokenFiles.flatMap(readTokens);
-    const defined = new Map(definitions.map((row) => [row.name, row]));
+    const files = styleFiles(root);
+    const map = new Map();
 
-    const additions = order.additions.flatMap((file) => [file, ...readImports(file)]);
-    const readers = [
-        ...tokenFiles,
-        ...order.typeset,
-        ...order.rules,
-        ...additions,
-        ...collect(join(repoRoot, "registry/ui/components")),
-        ...collect(join(repoRoot, "registry/ui/hooks")),
-        ...collect(join(repoRoot, "registry/ui/lib")),
-        ...collect(join(repoRoot, "apps/preview/src")),
-    ];
+    for (const [layer, file] of [["1", files.colors], ["2", files.tokens]])
+    {
+        for (const row of readTokens(file))
+        {
+            for (const scope of row.scope.split(/\s*,\s*/))
+            {
+                const key = `${row.name}`;
+                const entry = map.get(key) ?? { scopes: new Set(), layer, value: row.value, line: row.line, file };
+
+                entry.scopes.add(scope);
+                map.set(key, entry);
+            }
+        }
+    }
+
+    return map;
+};
+
+const foundationTokens = tokenScopes(foundationRoot);
+const uiComponents = readdirSync(join(uiRoot, "components")).filter((file) => file.endsWith(".tsx")).map((file) => basename(file, ".tsx"));
+const sharedReaders = [...collect(uiRoot), ...collect(join(repoRoot, "apps/preview/src"))];
+
+const scan = (name) =>
+{
+    const root = systemRoot(name);
+    const files = styleFiles(root);
+    const tokens = tokenScopes(root);
+    const styleReaders = collect(join(root, "styles"));
+    const failures = [];
+    const warnings = [];
     const declaredAnywhere = new Set();
     const usages = new Map();
 
-    for (const file of readers)
+    for (const file of [...styleReaders, ...sharedReaders])
     {
         const usage = readUsage(file);
 
         usage.declared.forEach((declared) => declaredAnywhere.add(declared));
-
-        for (const read of usage.reads)
-        {
-            usages.set(read.name, [...(usages.get(read.name) ?? []), read]);
-        }
+        usage.reads.forEach((read) => usages.set(read.name, [...(usages.get(read.name) ?? []), read]));
     }
 
-    const failures = [];
-    const warnings = [];
-
+    // 1. undefined
     for (const [token, rows] of usages)
     {
-        if (defined.has(token) || declaredAnywhere.has(token) || isExternal(token)) continue;
+        if (tokens.has(token) || declaredAnywhere.has(token) || isExternal(token)) continue;
 
-        if (rows.every((row) => row.hasFallback))
-        {
-            warnings.push(`undefined, falls back: ${token}  (${rows[0].file}:${rows[0].line})`);
-        }
-        else
-        {
-            failures.push(`undefined: ${token}  (${rows.map((row) => `${row.file}:${row.line}`).join(", ")})`);
-        }
+        if (rows.every((row) => row.hasFallback)) warnings.push(`undefined, falls back: ${token}  (${rows[0].where})`);
+        else failures.push(`undefined: ${token}  (${rows.map((row) => row.where).join(", ")})`);
     }
 
-    for (const theme of chain)
+    // 2. foundation token set
+    for (const [token, entry] of foundationTokens)
     {
-        for (const row of theme.colors ? readTokens(theme.colors) : [])
+        const own = tokens.get(token);
+
+        for (const scope of entry.scopes)
         {
-            if (!foundationColorNames.has(row.name))
+            if (!own || !own.scopes.has(scope))
             {
-                failures.push(`axis contract: ${row.name} is not a foundation layer-1 name  (${row.file}:${row.line})`);
-            }
-        }
-
-        const rootSet = theme.colors ? readTokens(theme.colors).filter((row) => row.scope.includes(":root")) : [];
-        const darkSet = new Set(theme.colors ? readTokens(theme.colors).filter((row) => row.scope.includes(".dark")).map((row) => row.name) : []);
-
-        for (const row of rootSet)
-        {
-            if (foundationDarkNames.has(row.name) && !darkSet.has(row.name))
-            {
-                failures.push(`mode leak: ${row.name} is set in :root but not .dark, so it overrides foundation .dark  (${row.file}:${row.line})`);
-            }
-        }
-
-        for (const row of theme.tokens ? readTokens(theme.tokens) : [])
-        {
-            if (!foundationTokenNames.has(row.name))
-            {
-                failures.push(`axis contract: ${row.name} is not a foundation layer-2 name  (${row.file}:${row.line})`);
-            }
-        }
-
-        for (const [file, { target, sha256: recorded }] of theme.replaceHashes)
-        {
-            const current = sha256(target);
-
-            if (recorded !== current)
-            {
-                warnings.push(recorded
-                    ? `replacement stale: ${relative(repoRoot, file)} was forked from ${relative(repoRoot, target)}@sha256:${recorded.slice(0, 12)}…, foundation is now ${current.slice(0, 12)}… — port the foundation change or turn the difference into a slot`
-                    : `replacement stale: ${relative(repoRoot, file)} records no foundation sha256 (current ${relative(repoRoot, target)}@sha256:${current})`);
-            }
-        }
-
-        for (const file of [...theme.replaces.values(), ...theme.adds, ...(theme.style ? [theme.style] : [])])
-        {
-            for (const row of readTokens(file))
-            {
-                failures.push(`axis contract: layer-3 file defines token ${row.name}; tokens belong in colors.css / tokens.css  (${row.file}:${row.line})`);
+                failures.push(`missing foundation token: ${token} in ${scope} (layer ${entry.layer})`);
             }
         }
     }
 
-    const seenDead = new Set();
+    // 3. component stylesheets
+    const imported = new Set(readImports(files.barrel));
 
-    for (const row of definitions)
+    for (const component of uiComponents)
     {
-        if (!usages.has(row.name) && !seenDead.has(row.name))
-        {
-            seenDead.add(row.name);
-            warnings.push(allReads.has(row.name)
-                ? `unread here (slot read by another theme): ${row.name}`
-                : `dead: ${row.name}  (${row.file}:${row.line})`);
-        }
+        const inFoundation = existsSync(join(foundationRoot, "styles/components", `${component}.css`));
+        const css = join(root, "styles/components", `${component}.css`);
 
-        if (/(^|[\s(,])-?\d*\.\d+px\b/.test(row.value))
+        if (!inFoundation) continue;
+        if (!existsSync(css)) failures.push(`missing component stylesheet: styles/components/${component}.css`);
+        else if (!imported.has(css)) failures.push(`styles/style.css does not import components/${component}.css`);
+    }
+
+    // 4. system-only tokens
+    if (name !== "foundation")
+    {
+        for (const [token, entry] of tokens)
         {
-            warnings.push(`fractional px: ${row.name}: ${row.value}  (${row.file}:${row.line})`);
+            if (!foundationTokens.has(token)) warnings.push(`system-only token: ${token}  (${relative(repoRoot, entry.file)}:${entry.line})`);
         }
     }
 
-    return { name, defined: defined.size, reads: usages.size, files: readers.length, failures, warnings };
+    // 5. dead · fractional px
+    for (const [token, entry] of tokens)
+    {
+        if (!usages.has(token)) warnings.push(`dead: ${token}  (${relative(repoRoot, entry.file)}:${entry.line})`);
+        if (/(^|[\s(,])-?\d*\.\d+px\b/.test(entry.value)) warnings.push(`fractional px: ${token}: ${entry.value}`);
+    }
+
+    return { tokens: tokens.size, reads: usages.size, failures, warnings };
 };
 
 const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-const verbose = process.argv.includes("--verbose");
-const names = requested.length > 0 ? requested : listThemes();
+const names = requested.length > 0 ? requested : ["foundation", ...listSystems()];
 let failed = false;
 
 for (const name of names)
 {
-    const result = scanTheme(name);
-    const unread = result.warnings.filter((warning) => warning.startsWith("unread here"));
-    const shownWarnings = verbose ? result.warnings : result.warnings.filter((warning) => !warning.startsWith("unread here"));
+    const result = scan(name);
 
-    console.log(`\n${name}: ${result.defined} tokens defined, ${result.reads} tokens read across ${result.files} files`);
-
-    shownWarnings.forEach((warning) => console.log(`  ⚠ ${warning}`));
-
-    if (!verbose && unread.length > 0)
-    {
-        console.log(`  · ${unread.length} contract slots are unread in this composition but read by another theme (--verbose lists them)`);
-    }
-
+    console.log(`\n${name}: ${result.tokens} tokens defined, ${result.reads} tokens read`);
+    result.warnings.forEach((warning) => console.log(`  ⚠ ${warning}`));
     result.failures.forEach((failure) => console.log(`  ✗ ${failure}`));
-    console.log(result.failures.length === 0 ? "  ✓ undefined 0 · axis contract violations 0" : `  ✗ ${result.failures.length} failures`);
+    console.log(result.failures.length === 0
+        ? "  ✓ undefined 0 · foundation tokens complete · component stylesheets complete"
+        : `  ✗ ${result.failures.length} failures`);
     failed ||= result.failures.length > 0;
 }
 

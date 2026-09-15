@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/new-system",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Fork foundation or an existing system into registry/systems/<name>.",
+    "main": "index.mjs",
+    "dependencies": {
+        "@tyohnn/build-system": "*"
+    }
+}

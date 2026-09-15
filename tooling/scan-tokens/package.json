@@ -3,9 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "description": "Per composed theme: undefined tokens, dead tokens, fractional px and axis-contract violations.",
+    "description": "Per design system (and foundation): undefined tokens, missing foundation tokens, missing component stylesheets, system-only and dead tokens.",
     "main": "index.mjs",
     "dependencies": {
-        "@tyohnn/compose-theme": "*"
+        "@tyohnn/build-system": "*"
     }
 }
