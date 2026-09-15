@@ -1,0 +1,13 @@
+{
+    "name": "@tyohnn/snapshot",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Playwright checks: computed-style equivalence between two renders of the same template.",
+    "scripts": {
+        "compare": "node compare-computed.mjs"
+    },
+    "devDependencies": {
+        "@playwright/test": "1.62.1"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "name": "@tyohnn/preview",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Renders a template with one composed theme stylesheet: ?theme=<name>&mode=dark|light&template=<name>.",
+    "scripts": {
+        "compose": "node ../../tooling/compose-theme --all",
+        "dev": "npm run compose && vite --port 5173 --strictPort",
+        "build": "npm run compose && vite build",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@tyohnn/base": "*",
+        "lucide-react": "^1.41.0",
+        "react": "^19.2.1",
+        "react-dom": "^19.2.1"
+    },
+    "devDependencies": {
+        "@tyohnn/compose-theme": "*",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "@vitejs/plugin-react": "^6.1.1",
+        "typescript": "^5",
+        "vite": "8.3.0"
+    }
+}
