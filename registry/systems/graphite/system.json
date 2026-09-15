@@ -1,4 +1,5 @@
 {
+    "$schema": "../../schema/system.schema.json",
     "name": "graphite",
     "description": "Dark · dense · soft clay controls · vivid blue/yellow accents: near-black planes one step apart, hairline dividers, compact rows and tinted tags.",
     "forkedFrom": {
@@ -7,7 +8,10 @@
         "note": "Named sales-crm until 2026-09-15. Unfolded from the sales-crm overlay (foundation + colors.css + tokens.css) on 2026-09-15; values replaced in place."
     },
     "fonts": {
-        "sans": "Pretendard"
+        "sans": "pretendard",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
     },
     "tags": [
         "dark",

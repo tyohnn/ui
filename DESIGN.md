@@ -49,6 +49,7 @@ A design system is a complete folder, frozen once created. Nothing is composed a
 ```
 registry/systems/<name>/
   system.json                 name · description · forkedFrom { source, commit } · fonts · tags · source
+                              (schema: registry/schema/system.schema.json)
   styles/globals.css          layer 1, complete (:root and .dark)
   styles/tokens.css           layer 2, complete
   styles/typeset.css          long-form typesetting rules
@@ -70,7 +71,7 @@ snapshot is exactly what was reviewed; changes reach a system only when someone 
 ## 4. foundation is the maintainer master copy
 
 `registry/foundation` is shadcn + Base UI + the three layers with the shadcn mira preset values. It holds
-only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisContractVersion`).
+only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisContractVersion`, `fonts`).
 
 - It is for maintainers and the theme-from-image skill; the CLI does not list it.
 - It owns the token vocabulary: every name a system must define (section 5).
@@ -86,7 +87,7 @@ node tooling/new-system <name> --from foundation      # or --from <existing syst
 Systems are named for their design and mood, not their use case (`graphite`, not `crm-dashboard`).
 
 This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation/DESIGN.template.md` and
-`system.json` with `forkedFrom` (source and current commit). Then:
+`system.json` with `forkedFrom` (source and current commit) and the source's `fonts`. Then:
 
 1. Tune values **in place** in `styles/globals.css` (both `:root` and `.dark`) and `styles/tokens.css`.
    Do not append override blocks; the file should read as this system's own values.
@@ -94,7 +95,8 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    slot expresses, and consider adding a slot to foundation instead.
 3. Fill `system.json` (description, tags, `source` with the origin of the material) and `DESIGN.md`.
    Keep source material in `reference/`. Do not ship another company's name, logo or unique assets.
-4. `node tooling/build-system <name>`, `node tooling/scan-tokens <name>`, and check the preview:
+4. `node tooling/build-system <name>`, `node tooling/scan-tokens <name>`, `node tooling/validate-system <name>`,
+   and check the preview: `SYSTEM=<name> npm run dev -w @tyohnn/preview`, then
    `http://localhost:5173/?system=<name>&mode=dark`.
 
 ### Token slots (axis contract version 2)
@@ -156,6 +158,10 @@ removing one always bumps it.
 ## 7. Checks
 
 - `npx turbo typecheck` — `@tyohnn/ui` and the preview.
+- `node tooling/validate-system [name…]` — `system.json` (foundation: `foundation.json` `fonts`) against
+  `registry/schema/system.schema.json`, every `registry/fonts/*.json` against `font.schema.json`, font ids
+  that exist in the catalog, a Hangul-capable `hangulFallback`, and the three layer-1 font stacks
+  (section 8).
 - `node tooling/scan-tokens [name…]` — for foundation and every system, on its own files:
   1. **fail** — a `var()` (or Tailwind shorthand such as `text-(color:--x)`) read by the system's styles,
      `registry/ui` or the preview that the system's layer-1/2 files do not define and nothing declares
@@ -168,7 +174,100 @@ removing one always bumps it.
 - `node tooling/build-system <name>… | --all` — `dist/systems/<name>/compiled.css` (Tailwind CLI; fixed
   order tailwindcss → globals → tokens → typeset → style.css in `layer(base)`; `@source` registry/ui and
   apps/preview).
-- `node tooling/snapshot/compare-computed.mjs --a <url> --system <name> [--mode dark|light]` — compares
-  computed visual styles element by element between two renders of the component sheet.
+- `node tooling/snapshot/compare-computed.mjs --a <url> --system <name> [--mode dark|light] [--preview <origin>]` —
+  compares computed visual styles element by element between two renders of the component sheet. The
+  preview must have been started for the same system (fonts are chosen at start).
 
 ⚠ Put `.dark` on `<html>`: layer-2 compositions such as `--shadow-control` resolve on `:root`.
+
+## 8. Typography
+
+### `fonts` in system.json
+
+```json
+"fonts": { "sans": "inter", "heading": "inherit", "mono": "system", "hangulFallback": "pretendard" }
+```
+
+| Key | Value | Role |
+|---|---|---|
+| `sans` | catalog id | body and UI text; `html` gets `font-sans` |
+| `heading` | `inherit` or catalog id | titles marked `cn-font-heading` (card, dialog, sheet, drawer, alert-dialog, empty, questionnaire) and typeset headings |
+| `mono` | `system` or catalog id | `font-mono` (chart values, questionnaire keys) and typeset code; `system` = the platform monospace stack |
+| `hangulFallback` | catalog id with `hangul: true` | Hangul glyphs for every role; Latin fonts have none |
+
+Ids name files in `registry/fonts/` (section 9). foundation (mira) is `inter`; graphite is `pretendard` for
+every role (its reference app used Pretendard). shadcn presets set no mono font, so both use `system`.
+
+### Stacks (layer 1)
+
+`styles/globals.css` declares the three stacks in `:root`, built from `fonts` and the catalog's `family`
+names, and `@theme inline` maps Tailwind's `font-sans` · `font-heading` · `font-mono` to them:
+
+```css
+--font-sans: "Inter", "Inter Variable", "Pretendard", ui-sans-serif, system-ui, sans-serif;
+--font-heading: var(--font-sans);                         /* heading: inherit */
+--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Pretendard", monospace;
+```
+
+1. The role's font: its catalog `family`, then the family its package registers when different
+   (`"Inter Variable"` from `@fontsource-variable/inter`), so the stack works whichever way the app installs it.
+2. The Hangul fallback, right after (omitted when the role's font is the fallback itself, as in graphite).
+3. Platform fallbacks for the font's category: sans/display `ui-sans-serif, system-ui, sans-serif` · serif
+   `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif` · mono `ui-monospace … monospace`. For
+   `mono: system` the Hangul fallback sits before the final `monospace`.
+4. `heading: inherit` is `--font-heading: var(--font-sans)`; a heading font gets its own stack.
+
+`tooling/validate-system` rebuilds the stacks and fails on any difference, so edit `fonts` and the three
+lines together. Layer 1 names fonts; it never loads them (`@font-face`, `@import`): loading belongs to the app.
+
+### Type ramp axes (layer 2)
+
+Sizes live in `styles/tokens.css`, not in the font choice. When a system changes fonts, re-check these
+(letter-spacing values assume the font's own spacing):
+
+- `--ui-text-{xs,sm,md,lg}` · `--ui-line-height-*` · `--ui-font-weight(-regular)` · `--ui-letter-spacing` —
+  short UI text in non-control components (badges, table cells, sidebar labels).
+- `--heading-font-size-{sm,md,lg,xl}` · `--heading-line-height-*` · `--heading-letter-spacing` — section,
+  panel, route and shell-less screen titles.
+- `--typeset-{doc,tool}-{size,leading,measure,flow,scale-h1..h3}` · `--typeset-space-*` · `--typeset-tracking` —
+  long-form reading rhythm; `typeset-preset.css` points `--typeset-font-{body,heading,mono}` at the three stacks.
+
+## 9. Fonts: catalog and installation
+
+`registry/fonts/<id>.json` (schema `registry/schema/font.schema.json`) describes one font once:
+
+```json
+{
+  "id": "inter", "family": "Inter", "category": "sans", "provider": "google",
+  "next": { "import": "Inter", "variable": "--font-sans-inter" },
+  "fontsource": { "package": "@fontsource-variable/inter", "variable": true, "css": "@fontsource-variable/inter", "family": "Inter Variable" },
+  "weights": [400, 500, 600, 700], "axes": ["wght", "opsz"], "subsets": ["latin"], "hangul": false,
+  "license": { "name": "OFL-1.1", "url": "https://openfontlicense.org" }
+}
+```
+
+- `provider: google` fonts carry `fontsource` (a `@fontsource-variable/*` package when one exists, otherwise
+  `@fontsource/*` with `staticWeights`). `provider: local` fonts (Pretendard) carry `npm` (package, CSS entry,
+  registered family) and `local.files` (woff2 paths inside the package, per weight).
+- `license` is one line: name and URL. Licence texts stay in the packages.
+- Seeded with the preset fonts and Pretendard: `geist`, `inter`, `figtree`, `jetbrains-mono`, `noto-sans`,
+  `playfair-display`, `pretendard`. Add a font by adding a file; a system may only name catalog ids.
+
+Fonts are always self-hosted. Nothing in the repository or the preview loads `fonts.googleapis.com` or
+`fonts.gstatic.com`. The preview (`apps/preview`) imports the CSS entries of the fonts its started system
+names (`SYSTEM=<name>`), through the `virtual:tyohnn-fonts` module.
+
+**How the CLI will install fonts** (a later phase; recorded here so the catalog carries what it needs):
+
+- **Next.js**
+  - `provider: google` — `import { <next.import> } from "next/font/google"` in the root `layout`, configured
+    with `variable: <next.variable>`, `weights`, `subsets`; the variable class goes on `<html>`.
+  - `provider: local` — `next/font/local` with `local.files`.
+  - The layer-1 stack then reads the next/font variable in place of the family names (next/font hashes them).
+- **Everything else (Vite and others)** — install the `fontsource.package` / `npm.package` and add
+  `@import "<css>"` to the entry CSS. The layer-1 stack works as written.
+- `--vendor-fonts` — copy the woff2 files into `public/fonts` and generate `@font-face` rules named with the
+  catalog `family`, instead of depending on the packages.
+- `init --font <id> --font-heading <id> --font-mono <id>` overrides the system's `fonts` and rewrites the three
+  layer-1 stacks with the same rules.
+

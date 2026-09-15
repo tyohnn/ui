@@ -1,0 +1,35 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "noto-sans",
+    "family": "Noto Sans",
+    "category": "sans",
+    "provider": "google",
+    "next": {
+        "import": "Noto_Sans",
+        "variable": "--font-sans-noto-sans"
+    },
+    "fontsource": {
+        "package": "@fontsource-variable/noto-sans",
+        "variable": true,
+        "css": "@fontsource-variable/noto-sans",
+        "family": "Noto Sans Variable"
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700
+    ],
+    "axes": [
+        "wght",
+        "wdth"
+    ],
+    "subsets": [
+        "latin"
+    ],
+    "hangul": false,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}

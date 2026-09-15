@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>tyohnn preview</title>
         <script>
-            // One design system per page. ?system=<name> (default foundation) · ?mode=dark|light (default dark).
+            // One design system per page. ?system=<name> (default: the system the server was started for) · ?mode=dark|light (default dark).
             // `dark` must sit on <html>: layer-2 clay compositions resolve on :root.
             (() => {
                 const params = new URLSearchParams(location.search);
-                const system = (params.get("system") || "foundation").replace(/[^a-z0-9-]/gi, "");
+                const system = (params.get("system") || "__TYOHNN_SYSTEM__").replace(/[^a-z0-9-]/gi, "");
                 const mode = params.get("mode") === "light" ? "light" : "dark";
 
                 document.documentElement.classList.toggle("dark", mode === "dark");

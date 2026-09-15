@@ -1,0 +1,130 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://tyohnn.dev/schema/system.schema.json",
+    "title": "tyohnn design system",
+    "description": "registry/systems/<name>/system.json",
+    "type": "object",
+    "required": [
+        "name",
+        "description",
+        "forkedFrom",
+        "fonts",
+        "tags",
+        "source"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Named for the design and mood, not the use case; equals the folder name"
+        },
+        "description": {
+            "type": "string",
+            "minLength": 1
+        },
+        "forkedFrom": {
+            "type": "object",
+            "required": [
+                "source",
+                "commit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "source": {
+                    "type": "string"
+                },
+                "commit": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "fonts": {
+            "$ref": "#/$defs/fonts"
+        },
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "source": {
+            "type": "object",
+            "required": [
+                "kind",
+                "note"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "kind": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "$defs": {
+        "fonts": {
+            "type": "object",
+            "required": [
+                "sans",
+                "heading",
+                "mono",
+                "hangulFallback"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "sans": {
+                    "$ref": "#/$defs/fontId"
+                },
+                "heading": {
+                    "description": "inherit: headings use the sans stack",
+                    "anyOf": [
+                        {
+                            "const": "inherit"
+                        },
+                        {
+                            "$ref": "#/$defs/fontId"
+                        }
+                    ]
+                },
+                "mono": {
+                    "description": "system: the platform monospace stack (no font to install)",
+                    "anyOf": [
+                        {
+                            "const": "system"
+                        },
+                        {
+                            "$ref": "#/$defs/fontId"
+                        }
+                    ]
+                },
+                "hangulFallback": {
+                    "$ref": "#/$defs/fontId"
+                }
+            }
+        },
+        "fontId": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "not": {
+                "enum": [
+                    "inherit",
+                    "system"
+                ]
+            },
+            "description": "id of a registry/fonts/<id>.json catalog entry (existence checked by tooling/validate-system)"
+        }
+    }
+}

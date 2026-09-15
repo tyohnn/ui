@@ -9,7 +9,7 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 
-import { currentCommit, foundationRoot, repoRoot, systemRoot, systemsRoot } from "@tyohnn/build-system/registry";
+import { currentCommit, foundationRoot, readSystemMeta, repoRoot, systemRoot, systemsRoot } from "@tyohnn/build-system/registry";
 
 const args = process.argv.slice(2);
 const name = args.find((arg) => !arg.startsWith("--") && arg !== args[args.indexOf("--from") + 1]);
@@ -44,11 +44,13 @@ mkdirSync(join(target, "reference"), { recursive: true });
 const template = readFileSync(join(foundationRoot, "DESIGN.template.md"), "utf8");
 
 writeFileSync(join(target, "DESIGN.md"), template.replaceAll("{{name}}", name).replaceAll("{{from}}", from));
+// Fonts come with the copied layer-1 stacks, so they start as the source's (see DESIGN.md Typography).
 writeFileSync(join(target, "system.json"), `${JSON.stringify({
+    $schema: "../../schema/system.schema.json",
     name,
     description: "",
     forkedFrom: { source: from, commit: currentCommit() },
-    fonts: { sans: "Pretendard" },
+    fonts: readSystemMeta(from).fonts,
     tags: [],
     source: { kind: "", note: "" },
 }, null, 4)}\n`);

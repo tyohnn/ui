@@ -7,7 +7,10 @@
     "main": "index.mjs",
     "exports": {
         ".": "./index.mjs",
-        "./registry": "./registry.mjs"
+        "./registry": {
+            "types": "./registry.d.mts",
+            "default": "./registry.mjs"
+        }
     },
     "dependencies": {
         "@tailwindcss/cli": "4.3.3",

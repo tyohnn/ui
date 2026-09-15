@@ -112,6 +112,70 @@ export const readTokens = (path) =>
     return rows;
 };
 
+export const fontsRoot = join(registryRoot, "fonts");
+export const schemaRoot = join(registryRoot, "schema");
+
+/** system.json of a system, or foundation.json for `foundation` */
+export const readSystemMeta = (name) =>
+    JSON.parse(readFileSync(join(systemRoot(name), name === "foundation" ? "foundation.json" : "system.json"), "utf8"));
+
+/** Font catalog: id → registry/fonts/<id>.json */
+export const readFontCatalog = () =>
+    new Map(existsSync(fontsRoot)
+        ? readdirSync(fontsRoot).filter((file) => file.endsWith(".json")).map((file) =>
+            [file.slice(0, -".json".length), JSON.parse(readFileSync(join(fontsRoot, file), "utf8"))])
+        : []);
+
+/** Platform fallbacks that close every layer-1 stack, by catalog category */
+export const FALLBACKS = {
+    sans: ["ui-sans-serif", "system-ui", "sans-serif"],
+    display: ["ui-sans-serif", "system-ui", "sans-serif"],
+    serif: ["ui-serif", "Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
+    mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", '"Liberation Mono"', '"Courier New"', "monospace"],
+};
+
+/** Family names one catalog font contributes: its canonical family, then the name its package registers if different */
+export const fontFamilies = (font) =>
+    [...new Set([font.family, font.fontsource?.family ?? font.npm?.family].filter(Boolean))].map((family) => `"${family}"`);
+
+/**
+ * The layer-1 stacks a system's fonts produce:
+ *   --font-sans     system font → Hangul fallback → platform fallbacks
+ *   --font-heading  var(--font-sans) for `inherit`, otherwise a stack like sans
+ *   --font-mono     like sans; `system` = platform monospace with the Hangul fallback before `monospace`
+ */
+export const fontStacks = (fonts, catalog = readFontCatalog()) =>
+{
+    const get = (id) =>
+    {
+        const font = catalog.get(id);
+
+        if (!font) throw new Error(`Unknown font "${id}" (no registry/fonts/${id}.json)`);
+
+        return font;
+    };
+    const hangulId = fonts.hangulFallback;
+    const stack = (id) =>
+    {
+        const hangul = id === hangulId ? [] : fontFamilies(get(hangulId));
+
+        return [...fontFamilies(get(id)), ...hangul, ...FALLBACKS[get(id).category]].join(", ");
+    };
+    const mono = FALLBACKS.mono;
+
+    return {
+        "--font-sans": stack(fonts.sans),
+        "--font-heading": fonts.heading === "inherit" ? "var(--font-sans)" : stack(fonts.heading),
+        "--font-mono": fonts.mono === "system"
+            ? [...mono.slice(0, -1), ...fontFamilies(get(hangulId)), mono.at(-1)].join(", ")
+            : stack(fonts.mono),
+    };
+};
+
+/** Catalog ids a system's fonts need installed (heading `inherit` and mono `system` need none) */
+export const fontIds = (fonts) =>
+    [...new Set([fonts.sans, fonts.heading, fonts.mono, fonts.hangulFallback].filter((id) => id && id !== "inherit" && id !== "system"))];
+
 /** Short commit hash of the repository HEAD, or null outside git */
 export const currentCommit = () =>
 {

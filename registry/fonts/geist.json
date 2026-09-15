@@ -1,0 +1,34 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "geist",
+    "family": "Geist",
+    "category": "sans",
+    "provider": "google",
+    "next": {
+        "import": "Geist",
+        "variable": "--font-sans-geist"
+    },
+    "fontsource": {
+        "package": "@fontsource-variable/geist",
+        "variable": true,
+        "css": "@fontsource-variable/geist",
+        "family": "Geist Variable"
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700
+    ],
+    "axes": [
+        "wght"
+    ],
+    "subsets": [
+        "latin"
+    ],
+    "hangul": false,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}

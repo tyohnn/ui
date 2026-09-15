@@ -23,7 +23,6 @@ const EXTERNAL_NAMES = new Set([
     "--spacing", "--anchor-width", "--anchor-height", "--available-width", "--available-height",
     "--transform-origin", "--positioner-width", "--positioner-height", "--collapsible-panel-height",
     "--collapsible-panel-width", "--accordion-panel-height", "--accordion-panel-width", "--nested-drawers",
-    "--font-mono",
     // Base UI Positioner sizes set at runtime (navigation-menu reads them as w-(--popup-width)).
     "--popup-width", "--popup-height",
 ]);

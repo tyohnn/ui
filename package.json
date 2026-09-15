@@ -14,7 +14,8 @@
         "build": "turbo build",
         "typecheck": "turbo typecheck",
         "build-systems": "node tooling/build-system --all",
-        "scan": "node tooling/scan-tokens"
+        "scan": "node tooling/scan-tokens",
+        "validate": "node tooling/validate-system"
     },
     "devDependencies": {
         "turbo": "^2.3.3",

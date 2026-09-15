@@ -1,0 +1,97 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://tyohnn.dev/schema/font.schema.json",
+    "title": "tyohnn font catalog entry",
+    "description": "registry/fonts/<id>.json: one font a design system can name in system.json fonts. The file name is the id.",
+    "type": "object",
+    "required": ["id", "family", "category", "provider", "next", "weights", "axes", "subsets", "hangul", "license"],
+    "properties": {
+        "$schema": { "type": "string" },
+        "id": { "$ref": "#/$defs/id" },
+        "family": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Canonical family name; the first name of this font in a layer-1 stack."
+        },
+        "category": { "enum": ["sans", "serif", "mono", "display"] },
+        "provider": {
+            "enum": ["google", "local"],
+            "description": "google: next/font/google and a fontsource package. local: next/font/local with local.files and an npm package."
+        },
+        "next": {
+            "type": "object",
+            "required": ["import", "variable"],
+            "additionalProperties": false,
+            "properties": {
+                "import": { "type": "string", "minLength": 1, "description": "next/font/google export, or localFont for provider local" },
+                "variable": { "type": "string", "pattern": "^--font-[a-z0-9-]+$" }
+            }
+        },
+        "fontsource": {
+            "type": "object",
+            "required": ["package", "variable", "css", "family"],
+            "additionalProperties": false,
+            "properties": {
+                "package": { "type": "string", "pattern": "^@fontsource(-variable)?/[a-z0-9-]+$" },
+                "variable": { "type": "boolean" },
+                "css": { "type": "string", "minLength": 1, "description": "CSS entry to import (package root for a variable build)" },
+                "family": { "type": "string", "minLength": 1, "description": "Family name the package registers" },
+                "staticWeights": { "type": "array", "items": { "type": "integer" }, "description": "Only for @fontsource/* static builds" }
+            }
+        },
+        "npm": {
+            "type": "object",
+            "required": ["package", "css", "family"],
+            "additionalProperties": false,
+            "properties": {
+                "package": { "type": "string", "minLength": 1 },
+                "css": { "type": "string", "minLength": 1 },
+                "family": { "type": "string", "minLength": 1 },
+                "variableCss": { "type": "string" },
+                "variableFamily": { "type": "string" }
+            }
+        },
+        "local": {
+            "type": "object",
+            "required": ["files"],
+            "additionalProperties": false,
+            "properties": {
+                "files": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": ["path", "weight", "style"],
+                        "additionalProperties": false,
+                        "properties": {
+                            "path": { "type": "string", "pattern": "\\.woff2$", "description": "Path inside node_modules" },
+                            "weight": { "type": "integer" },
+                            "style": { "enum": ["normal", "italic"] }
+                        }
+                    }
+                }
+            }
+        },
+        "weights": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 1, "maximum": 1000 } },
+        "axes": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z]{4}$" } },
+        "subsets": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "hangul": { "type": "boolean", "description": "Covers Hangul; only such a font can be a hangulFallback" },
+        "license": {
+            "type": "object",
+            "required": ["name", "url"],
+            "additionalProperties": false,
+            "properties": {
+                "name": { "type": "string" },
+                "url": { "type": "string", "pattern": "^https://" }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "allOf": [
+        { "if": { "properties": { "provider": { "const": "google" } } }, "then": { "required": ["fontsource"] } },
+        { "if": { "properties": { "provider": { "const": "local" } } }, "then": { "required": ["npm", "local"] } }
+    ],
+    "$defs": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    }
+}

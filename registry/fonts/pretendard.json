@@ -1,0 +1,58 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "pretendard",
+    "family": "Pretendard",
+    "category": "sans",
+    "provider": "local",
+    "next": {
+        "import": "localFont",
+        "variable": "--font-sans-pretendard"
+    },
+    "npm": {
+        "package": "pretendard",
+        "css": "pretendard/dist/web/static/pretendard.css",
+        "family": "Pretendard",
+        "variableCss": "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css",
+        "variableFamily": "Pretendard Variable"
+    },
+    "local": {
+        "files": [
+            {
+                "path": "pretendard/dist/web/static/woff2/Pretendard-Regular.woff2",
+                "weight": 400,
+                "style": "normal"
+            },
+            {
+                "path": "pretendard/dist/web/static/woff2/Pretendard-Medium.woff2",
+                "weight": 500,
+                "style": "normal"
+            },
+            {
+                "path": "pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2",
+                "weight": 600,
+                "style": "normal"
+            },
+            {
+                "path": "pretendard/dist/web/static/woff2/Pretendard-Bold.woff2",
+                "weight": 700,
+                "style": "normal"
+            }
+        ]
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700
+    ],
+    "axes": [],
+    "subsets": [
+        "latin",
+        "korean"
+    ],
+    "hangul": true,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://github.com/orioncactus/pretendard/blob/main/LICENSE"
+    }
+}

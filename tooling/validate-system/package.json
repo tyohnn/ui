@@ -1,0 +1,12 @@
+{
+    "name": "@tyohnn/validate-system",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Per design system (and foundation): system.json against the schema, font catalog ids and entries, layer-1 font stacks.",
+    "main": "index.mjs",
+    "dependencies": {
+        "@tyohnn/build-system": "*",
+        "ajv": "^8.20.0"
+    }
+}

@@ -50,3 +50,11 @@
 .cn-rtl-flip {
     @apply rtl:rotate-180;
 }
+
+/* `cn-font-heading` is the upstream heading marker (card · dialog · sheet · drawer · alert-dialog ·
+   empty · questionnaire titles). shadcn's CLI rewrites it to `font-heading`; this repository keeps
+   the marker and gives it its meaning once: headings read the layer-1 --font-heading stack, which
+   is var(--font-sans) when system.json fonts.heading is `inherit`. */
+.cn-font-heading {
+    font-family: var(--font-heading);
+}
