@@ -1,0 +1,15 @@
+{
+    "name": "@tyohnn/preset",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Port a shadcn create preset into registry/systems/<preset>: reference app, mechanical port, style diff.",
+    "scripts": {
+        "make-reference": "node make-reference.mjs",
+        "port": "node port.mjs",
+        "style-diff": "node style-diff.mjs"
+    },
+    "dependencies": {
+        "@tyohnn/build-system": "*"
+    }
+}

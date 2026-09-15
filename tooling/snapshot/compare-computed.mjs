@@ -19,6 +19,8 @@ import { writeFileSync } from "node:fs";
 
 import { chromium } from "@playwright/test";
 
+import { BLOCK_DISPLAYS as BLOCK_LIST, PROPS } from "./props.mjs";
+
 const arg = (name, fallback) =>
 {
     const index = process.argv.indexOf(`--${name}`);
@@ -46,24 +48,7 @@ if (!A || !B)
     process.exit(2);
 }
 
-export const PROPS = [
-    "color", "background-color", "background-image",
-    "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
-    "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
-    "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
-    "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius",
-    "box-shadow",
-    "padding-top", "padding-right", "padding-bottom", "padding-left",
-    "margin-top", "margin-right", "margin-bottom", "margin-left",
-    "row-gap", "column-gap",
-    "height", "width",
-    "font-size", "font-weight", "line-height", "letter-spacing",
-    "opacity",
-    "outline-color", "outline-style", "outline-width", "outline-offset",
-    "text-transform",
-];
-
-const BLOCK_DISPLAYS = new Set(["block", "flex", "grid", "table", "list-item", "flow-root"]);
+const BLOCK_DISPLAYS = new Set(BLOCK_LIST);
 
 const snapshot = async (browser, url, mode) =>
 {
