@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
    Theme slots: variant surfaces (--surface-*), shadows (--shadow-control*), the primary border,
-   the quieter weight (--control-font-weight-regular), the icon-button axis and data-shape.
+   the quieter weight (--control-font-weight-regular) and the icon-button axis.
    Base values keep all of them at the mira look (flat, no gradient, 500).
 
    컴포넌트(packages/ui/src/components/button.tsx)는 cn-* 클래스만 갖고,
@@ -144,16 +144,8 @@
     }
 }
 
-/* 모양 — data-shape. round 는 원형 아이콘 버튼, pill 은 알약. 값이 아니라 모양의 규칙이라
-   토큰을 두지 않는다(반경이 높이의 절반이면 된다). Button 이 나머지 props 를 그대로 넘기므로
-   <Button data-shape="round"> 로 쓴다. */
-.cn-button[data-shape="round"] {
-    border-radius: 50%;
-}
-
-.cn-button[data-shape="pill"] {
-    border-radius: 9999px;
-}
+/* data-shape (round · pill) is not a base rule: mira has no shape variants, so base buttons ignore
+   the attribute. Themes that give it meaning own it (sales-crm replaces this file). */
 
 /* --------------------------------------------------------
    size — 밀도
