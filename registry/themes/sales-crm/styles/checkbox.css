@@ -1,0 +1,85 @@
+/* tyohnn:replaces components/checkbox.css
+   ------------------------------------------------------------
+   sales-crm owns this layer-3 file outright: compose-theme loads it in place of
+   base/styles/components/checkbox.css, at the same position in the barrel.
+   Why a value override is not enough: the unchecked box drops its fill (a literal transparent instead of --input-fill) and the indeterminate state is filled like checked. Both are rule changes, not values.
+   Source: the original app 9942cbc packages/ui/src/styles/components/checkbox.css, unchanged below.
+   ------------------------------------------------------------ */
+
+/* ============================================================
+   3층 — Checkbox 규칙
+   ------------------------------------------------------------
+   2026-09-13 mira 규칙으로 옮김.
+   2026-09-15 표면과 선택 색을 참조 스크린샷(2026-09-15, design/sales-crm 캔버스)에 맞춤 —
+   꺼진 상자는 채움 없이 안으로 파인 그림자(--shadow-recessed)와 --checkbox-border, 켜진 상자와
+   섞인 상자는 주 버튼(파랑)과 갈라 둔 --selection(노랑) 바탕에 --selection-foreground 체크다.
+
+   지시자 축을 읽는다. 라벨 옆에 붙는 표식이라 높이가 아니라 한 변이 정본이다.
+   Radio 와 같은 값을 읽고 모서리만 다르다 — 체크박스는 네모, 라디오는 원.
+
+   ⚠ 바탕은 채움(--input-fill)이다. mira 는 밝은 쪽에 바탕이 없고 어두운 쪽만
+      dark:bg-input/30 인데, 다크 값은 1층이 갖는 규칙이라 --input-fill 하나로
+      읽는다(밝은 쪽 값 input/20 은 흰 바탕과 거의 같다).
+   ⚠ 포커스 링·검증 실패·전환은 _control-family.css 가 갖는다. 전환은 그림자만
+      움직인다(mira transition-shadow). 켜진 상태에서 검증에 실패했을 때 테두리를
+      붉히지 않는 예외도 거기 있다.
+   ⚠ 컴포넌트가 갖고 있는 것: relative, shrink-0, outline-none,
+      disabled:opacity-50, 그리고 손가락이 닿는 범위를 넓히는 after 의사요소.
+      16px 상자를 그대로 누르게 두지 않으려는 장치이므로 지우지 말 것.
+   ============================================================ */
+
+.cn-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--control-indicator-size);
+    height: var(--control-indicator-size);
+    border: var(--control-border-width) solid var(--checkbox-border);
+    border-radius: var(--control-indicator-radius);
+    background-color: transparent;
+    box-shadow: var(--shadow-recessed);
+
+    &[data-checked],
+    &[data-indeterminate] {
+        background-color: var(--selection);
+        border-color: var(--selection);
+        color: var(--selection-foreground);
+        box-shadow: none;
+    }
+
+    /* ⚠ 비활성은 data 속성으로 읽는다. Base UI 의 Checkbox 는 네이티브 요소가 아니라
+       `<span>` 을 그리고(nativeButton=false) `data-disabled` 만 붙인다. 그래서
+       컴포넌트가 가진 `disabled:opacity-50` 은 `:disabled` 를 보는 셈이라 한 번도
+       맞은 적이 없고, 비활성 체크박스가 켜진 것과 똑같이 진하게 그려졌다(2026-09-11,
+       디자인 싱크 채점에서 실측). */
+    &[data-disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* 감싼 Field 가 비활성이면 함께 흐려진다. mira: group-has-disabled/field:opacity-50 */
+    .group\/field:has(:disabled) & {
+        opacity: 0.5;
+    }
+
+    /* 라벨을 눌러 포커스가 들어온 경우에는 링을 그리지 않고 테두리도 평소 색으로 둔다.
+       라벨 자신이 이미 포커스 표시를 갖고 있어 두 겹이 된다.
+       mira: group-has-[:focus-visible]/field-label:ring-0 …:not-data-checked:border-input …:data-checked:border-primary */
+    .group\/field-label:has(:focus-visible) & {
+        box-shadow: none;
+        border-color: var(--checkbox-border);
+
+        &[data-checked],
+        &[data-indeterminate] {
+            border-color: var(--selection);
+        }
+    }
+}
+
+.cn-checkbox-indicator {
+    & svg {
+        width: var(--control-indicator-icon-size);
+        height: var(--control-indicator-icon-size);
+    }
+}

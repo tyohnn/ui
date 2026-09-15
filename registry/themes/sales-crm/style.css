@@ -1,0 +1,17 @@
+/* ============================================================
+   sales-crm — layer 3
+   ------------------------------------------------------------
+   Layer 3 in a theme works per file (see DESIGN.md "Theme rules"):
+
+     replaces (loaded in place of the base file of the same name, same barrel position)
+       styles/badge.css      styles/button.css     styles/checkbox.css
+       styles/sidebar.css    styles/table.css      styles/tabs.css
+
+     adds (imported below, after the whole base barrel, also into layer(base))
+       styles/avatar-initials.css
+
+   Every other component keeps the base rule and picks up this theme's layer-1/2 values.
+   Each file states `tyohnn:replaces` or `tyohnn:adds` in its first comment; compose-theme reads it.
+   ============================================================ */
+
+@import "./styles/avatar-initials.css";

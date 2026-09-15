@@ -1,0 +1,16 @@
+/* tyohnn:adds
+   ------------------------------------------------------------
+   sales-crm adds this layer-3 file after the whole base barrel. It only has a selector base does not
+   have, so base/styles/components/avatar.css stays in place (tone rules included).
+   Why: small initials get their own type (9px · 600 · line-height 1). mira lets the fallback inherit
+   the surrounding text, and a literal line-height cannot be expressed as a token value.
+   Source: the original app 9942cbc packages/ui/src/styles/components/avatar.css.
+   ------------------------------------------------------------ */
+
+/* sm 이니셜 — 캔버스: 20px 원에 9px · 600 · 행간 1.
+   ⚠ 행간 1 은 리터럴이다. 원 안에서 글줄 높이를 글자 크기로 붙이는 보정이다. */
+.cn-avatar[data-size="sm"] .cn-avatar-fallback {
+    font-size: var(--avatar-font-size-sm);
+    font-weight: var(--avatar-font-weight);
+    line-height: 1;
+}

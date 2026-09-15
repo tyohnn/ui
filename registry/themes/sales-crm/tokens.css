@@ -1,0 +1,63 @@
+/* ============================================================
+   sales-crm — layer 2 overrides (density · shape · shadow)
+   ------------------------------------------------------------
+   Only the tokens whose value differs from base/styles/tokens.css. Every name must exist in base
+   layer 2 (axis contract, checked by tooling/scan-tokens).
+
+   Reference measurements were fractional (29.2 · 40.83 · 13.2px, Inter widths); they are rounded to
+   whole pixels and the type is moved onto 13 · 12 · 11 steps for Pretendard.
+
+   Clay composition: the control shadows and surfaces are built from the layer-1 --clay-* materials,
+   which colors.css sets per mode. ⚠ They are resolved on :root, so .dark must sit on <html>.
+   ============================================================ */
+
+:root {
+    --control-gap-md: 5px;
+    --control-font-weight-regular: 400;
+    --control-icon-button-size-md: 29px;
+    --control-icon-button-icon-size-md: 15px;
+    --shadow-control: inset 0 1px 0 var(--clay-highlight), inset 0 -1px 0 var(--clay-shade), 0 1px 1px var(--clay-contact), 0 2px 6px -1px var(--clay-ambient);
+    --shadow-control-primary: inset 0 1px 0 var(--clay-primary-highlight), inset 0 -1px 0 var(--clay-primary-shade), 0 1px 1px var(--clay-contact), 0 2px 8px -1px var(--clay-primary-ambient);
+    --shadow-raised: inset 0 1px 0 var(--clay-highlight), inset 0 -1px 0 var(--clay-shade-soft), 0 1px 1px var(--clay-contact-soft), 0 1px 3px var(--clay-ambient-soft);
+    --shadow-control-pressed: inset 0 1px 1px var(--clay-shade), inset 0 -1px 0 var(--clay-highlight);
+    --shadow-recessed: inset 0 1px 1px var(--clay-contact);
+    --surface-control: linear-gradient(to bottom, var(--clay-surface-top), var(--clay-surface-bottom));
+    --surface-primary: linear-gradient(to bottom, var(--clay-primary-top), var(--clay-primary-bottom));
+    --control-indicator-size: 14px;
+    --control-indicator-icon-size: 10px;
+    --sidebar-item-height: 29px;
+    --sidebar-item-height-active: 31px;
+    --sidebar-item-padding-x: 6px;
+    --sidebar-item-gap: 7px;
+    --sidebar-item-icon-size: 13px;
+    --sidebar-item-spacing: 0px;
+    --sidebar-item-font-size: 13px;
+    --sidebar-item-line-height: 19px;
+    --sidebar-item-font-weight: 400;
+    --sidebar-badge-height: 15px;
+    --sidebar-badge-padding-x: 5px;
+    --sidebar-badge-radius: 5px;
+    --sidebar-badge-inset-end: 8px;
+    --sidebar-badge-line-height: 13px;
+    --sidebar-group-label-height: 21px;
+    --sidebar-group-label-padding-x: 0px;
+    --sidebar-group-label-letter-spacing: 0.08em;
+    --sidebar-sub-rail-offset: 13px;
+    --sidebar-sub-item-indent: 13px;
+    --ui-font-weight-regular: 400;
+    --table-head-height-default: 37px;
+    --table-row-height: 41px;
+    --table-cell-padding-x: 7px;
+    --table-checkbox-inset: 11px;
+    --table-font-size: 13px;
+    --table-line-height: 19px;
+    --table-head-font-size: 11px;
+    --table-head-line-height: 15px;
+    --tag-radius: 9px;
+    --tag-padding-x: 9px;
+    --tag-line-height: 17px;
+    --tabs-line-height: 44px;
+    --avatar-size-sm: 20px;
+    --avatar-font-size-sm: 9px;
+    --avatar-font-weight: 600;
+}
