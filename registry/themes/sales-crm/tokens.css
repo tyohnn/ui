@@ -60,4 +60,27 @@
     --avatar-size-sm: 20px;
     --avatar-font-size-sm: 9px;
     --avatar-font-weight: 600;
+
+    /* ---- Slot overrides (axis contract v2) ---- */
+    --button-icon-start-padding-start-md: var(--control-padding-x-md);
+    --button-icon-start-padding-end-md: var(--control-padding-x-icon-md);
+    --button-round-radius: 50%;
+    --button-pill-radius: 9999px;
+    --checkbox-indeterminate-shadow: none;
+    --tag-font-size: var(--ui-text-sm);
+    --tabs-line-divider-width: var(--surface-border-width);
+    --tabs-line-trigger-padding-x: 0px;
+    --tabs-line-trigger-padding-x-icon: 0px;
+    --tabs-line-trigger-border-width: 0px;
+    --tabs-line-trigger-radius: 0px;
+    --table-checkbox-inset-end: var(--table-cell-padding-x);
+    --avatar-line-height-sm: 1;
+    --sidebar-item-border-width: var(--control-border-width);
+    --sidebar-item-font-weight-idle: var(--sidebar-item-font-weight);
+    --sidebar-group-label-font-size: var(--ui-text-xs);
+    --sidebar-group-label-line-height: var(--ui-line-height-xs);
+    --sidebar-group-label-font-weight: var(--ui-font-weight);
+    --sidebar-group-label-text-transform: uppercase;
+    --sidebar-badge-min-width: 0px;
+    --sidebar-badge-font-size: var(--ui-text-xs);
 }

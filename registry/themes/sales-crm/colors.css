@@ -56,6 +56,24 @@
     --avatar-tone-navy: oklch(0.9 0.03 255);
     --avatar-tone-moss: oklch(0.9 0.03 150);
     --avatar-tone-mauve: oklch(0.9 0.03 350);
+    /* ---- Slot overrides (axis contract v2): the looks that used to need replaced layer-3 files ---- */
+    --button-secondary-border: var(--border-strong);
+    --button-outline-border: var(--input);
+    --button-ghost-foreground: var(--muted-foreground);
+    --checkbox-fill: transparent;
+    --checkbox-indeterminate-fill: var(--selection);
+    --checkbox-indeterminate-border: var(--selection);
+    --checkbox-indeterminate-foreground: var(--selection-foreground);
+    --table-row-divider: var(--border-subtle);
+    --table-head-foreground: var(--muted-foreground);
+    --sidebar-item-border: transparent;
+    --sidebar-item-active-border: var(--border-strong);
+    --sidebar-item-hover-background: transparent;
+    --sidebar-group-label-foreground: var(--foreground-subtle);
+    --sidebar-badge-background: var(--sidebar-accent);
+    --sidebar-badge-active-background: var(--sidebar);
+    --sidebar-badge-hover-foreground: var(--sidebar-badge-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-badge-foreground);
 }
 
 .dark {
@@ -147,4 +165,22 @@
     --avatar-tone-navy: #2c3a57;
     --avatar-tone-moss: #34483a;
     --avatar-tone-mauve: #4d3a44;
+    /* ---- Slot overrides (axis contract v2): the looks that used to need replaced layer-3 files ---- */
+    --button-secondary-border: var(--border-strong);
+    --button-outline-border: var(--input);
+    --button-ghost-foreground: var(--muted-foreground);
+    --checkbox-fill: transparent;
+    --checkbox-indeterminate-fill: var(--selection);
+    --checkbox-indeterminate-border: var(--selection);
+    --checkbox-indeterminate-foreground: var(--selection-foreground);
+    --table-row-divider: var(--border-subtle);
+    --table-head-foreground: var(--muted-foreground);
+    --sidebar-item-border: transparent;
+    --sidebar-item-active-border: var(--border-strong);
+    --sidebar-item-hover-background: transparent;
+    --sidebar-group-label-foreground: var(--foreground-subtle);
+    --sidebar-badge-background: var(--sidebar-accent);
+    --sidebar-badge-active-background: var(--sidebar);
+    --sidebar-badge-hover-foreground: var(--sidebar-badge-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-badge-foreground);
 }
