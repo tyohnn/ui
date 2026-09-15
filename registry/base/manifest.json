@@ -1,6 +1,6 @@
 {
     "name": "base",
-    "axisContractVersion": 1,
+    "axisContractVersion": 2,
     "aliases": {
         "@ds/components/*": "components/*",
         "@ds/lib/*": "lib/*",

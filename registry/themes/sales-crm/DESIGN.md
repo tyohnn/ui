@@ -77,7 +77,8 @@ for state.
 
 ## Files
 
-- `colors.css` — layer-1 values that differ from base (`:root` and `.dark`).
+- `colors.css` — layer-1 values that differ from base (`:root` and `.dark`), including slot values.
 - `tokens.css` — layer-2 values that differ from base.
-- `styles/*.css` + `style.css` — layer-3 files this theme replaces or adds; each file says why.
+- `style.css` — layer 3. The theme replaces and adds no layer-3 files; its button, checkbox, tag, table,
+  line-tab and sidebar looks are values of base slots (contract v2).
 - `reference/` — the written specification and canvas stylesheet the values came from.
