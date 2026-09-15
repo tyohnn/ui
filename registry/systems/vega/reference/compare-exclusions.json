@@ -1,0 +1,7 @@
+[
+    {
+        "key": "^dropdown:(root|dropdown-menu-group#0|dropdown-menu-item#0)$",
+        "props": ["height", "rect-height"],
+        "reason": "TSX drift, not a system value: shadcn 4.21 DropdownMenuContent carries w-(--anchor-width), registry/ui does not, so the upstream menu is as narrow as its trigger (min-w-32) and 'Move to review ⌘D' wraps to two lines"
+    }
+]
