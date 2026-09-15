@@ -1,11 +1,11 @@
 # sales-crm
 
-A dark, dense dashboard theme. It was built from one reference screenshot of a Sales CRM
+A dark, dense dashboard design system. It was built from one reference screenshot of a Sales CRM
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,
 compact rows, and a few saturated accents that carry meaning.
 
-`extends: foundation` — the tyohnn foundation layer (shadcn components on Base UI primitives plus the default
-three CSS layers). Everything not listed here comes from foundation.
+A complete, frozen snapshot forked from foundation (shadcn components on Base UI primitives plus the
+three CSS layers). Every file under `styles/` is this system's own; nothing is composed at runtime.
 
 ## Character
 
@@ -73,13 +73,15 @@ for state.
 - Do not put elevation shadows (`--shadow-float`) on in-page surfaces; separate planes by colour.
 - Do not raise the clay strength back toward the reference canvas without an owner decision.
 - Do not add hover backgrounds to sidebar items; hover only brightens the text.
-- Do not introduce new layer-1/2 variable names here. Ask foundation for a new slot (axis contract).
+- Prefer tuning an existing slot over editing a layer-3 rule; a new slot belongs in foundation first.
 - Do not use weights other than 400 and 500 in UI text; 600 is reserved for small initials.
 
 ## Files
 
-- `colors.css` — layer-1 values that differ from foundation (`:root` and `.dark`), including slot values.
-- `tokens.css` — layer-2 values that differ from foundation.
-- `style.css` — layer 3. The theme replaces and adds no layer-3 files; its button, checkbox, tag, table,
-  line-tab and sidebar looks are values of foundation slots (contract v2).
+- `system.json` — name, description, `forkedFrom`, fonts, tags, source.
+- `styles/globals.css` — layer 1, complete (`:root` and `.dark`).
+- `styles/tokens.css` — layer 2, complete.
+- `styles/typeset.css`, `styles/typeset-preset.css` — long-form typesetting.
+- `styles/style.css` + `styles/components/*.css` — layer 3, complete. Its button, checkbox, tag, table,
+  line-tab and sidebar looks are values of the foundation slots, so the rule files equal foundation's.
 - `reference/` — the written specification and canvas stylesheet the values came from.

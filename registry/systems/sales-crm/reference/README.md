@@ -2,7 +2,7 @@
 
 - `crm-spec.md` — the written specification extracted from the reference screenshot
   (scale, CSS-pixel measurements, palette, type ramp, anatomy). Written in Korean.
-- `style.css` — the canvas stylesheet built from that specification (the design canvas the theme
+- `style.css` — the canvas stylesheet built from that specification (the design canvas the system
   values were read from).
 
 The original screenshot (a 2000×1511 PNG of a dark "Sales CRM / Companies" dashboard, provided by
