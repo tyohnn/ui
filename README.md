@@ -2,25 +2,28 @@
 
 tyohnn = shadcn + Base UI + a three-layer CSS architecture.
 
-A design-system registry: shadcn components on Base UI primitives whose look lives entirely in three
-CSS layers (colours, tokens, `cn-*` rules), plus themes that override those layers. That combination is the
-foundation layer (`registry/foundation`); every theme is an overlay on it.
+A design-system registry. Each design system is a complete, frozen folder of CSS (colours, tokens,
+`cn-*` rules) over one shared set of shadcn components on Base UI primitives. The CLI copies a system
+folder plus the shared TSX into a project as they are.
 
 ```
-registry/foundation      components · hooks · lib · styles (the default of every layer)
-registry/themes/<name>   overlays on foundation (colors.css · tokens.css · replaced/added layer-3 files)
-tooling/compose-theme    foundation + theme → dist/themes/<name>/{index,compiled}.css
-tooling/scan-tokens      undefined tokens · axis contract · dead tokens · fractional px
-tooling/snapshot         computed-style comparison between two renders
-apps/preview             Vite app: ?theme=<name>&mode=dark|light renders a template
+registry/ui                  the one set of component TSX (components · hooks · lib)
+registry/systems/<name>      complete design systems (system.json · styles · DESIGN.md · reference)
+registry/foundation          maintainer master copy of the three layers (mira values) that systems fork
+tooling/build-system         system → dist/systems/<name>/compiled.css for the preview
+tooling/new-system           fork foundation or a system into registry/systems/<name>
+tooling/backfill-component   copy a new foundation component stylesheet and token defaults into every system
+tooling/scan-tokens          undefined tokens · foundation token set · component stylesheets
+tooling/snapshot             computed-style comparison between two renders
+apps/preview                 Vite app: ?system=<name>&mode=dark|light renders a template
 ```
 
 ```sh
 npm install
 npx turbo typecheck
-node tooling/compose-theme --all
+node tooling/build-system --all
 node tooling/scan-tokens
-npm run dev -w @tyohnn/preview   # http://localhost:5173/?theme=sales-crm&mode=dark
+npm run dev -w @tyohnn/preview   # http://localhost:5173/?system=sales-crm&mode=dark
 ```
 
-Read [DESIGN.md](DESIGN.md) before adding a component or a theme.
+Read [DESIGN.md](DESIGN.md) before adding a component or a design system.

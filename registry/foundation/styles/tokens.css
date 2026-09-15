@@ -117,8 +117,8 @@
     --button-round-radius: initial;
     --button-pill-radius: initial;
 
-    /* Control shadows and surfaces. Themes compose them from the layer-1 --clay-* materials
-       (see themes/sales-crm/tokens.css). mira controls are flat: no shadow, no gradient. */
+    /* Control shadows and surfaces. Systems build them from the layer-1 --clay-* materials
+       (see systems/sales-crm/styles/tokens.css). mira controls are flat: no shadow, no gradient. */
     --shadow-control: none;
     --shadow-control-primary: none;
     --shadow-raised: none;

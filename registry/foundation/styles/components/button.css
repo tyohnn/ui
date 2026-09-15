@@ -2,7 +2,7 @@
    3층 — Button 규칙
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
-   Theme slots: variant surfaces (--surface-*), shadows (--shadow-control*), the primary border,
+   Token slots: variant surfaces (--surface-*), shadows (--shadow-control*), the primary border,
    the quieter weight (--control-font-weight-regular) and the icon-button axis.
    Foundation values keep all of them at the mira look (flat, no gradient, 500).
 
@@ -149,7 +149,7 @@
 
 /* 모양 — <Button data-shape="round|pill">. The attribute only sets --button-shape-radius, which the
    radius declarations above read with the size radius as fallback. Foundation slot values are `initial`, so
-   foundation buttons keep their size radius (mira has no shapes); a theme gives the shapes a radius. */
+   foundation buttons keep their size radius (mira has no shapes); a system gives the shapes a radius. */
 .cn-button[data-shape="round"] {
     --button-shape-radius: var(--button-round-radius);
 }

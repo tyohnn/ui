@@ -1,5 +1,5 @@
 /* Pretendard (SIL Open Font License 1.1 — see LICENSE in this folder).
-   The preview owns the font, like an app would; themes only name it (theme.json fonts.sans).
+   The preview owns the font, like an app would; systems only name it (system.json fonts.sans).
    Layer 1 maps Tailwind's font-sans to var(--font-sans), which this file provides. */
 @font-face {
     font-family: "Pretendard";

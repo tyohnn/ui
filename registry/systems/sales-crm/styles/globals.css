@@ -144,7 +144,7 @@
      chip    floating sidebar 의 shadow-sm
 
    ⚠ --shadow-raised is not a static theme shadow any more. The name belongs to the layer-2 control
-      shadow axis (tokens.css), which themes compose from the --clay-* materials below. sheet.css
+      shadow axis (tokens.css), which systems build from the --clay-* materials below. sheet.css
       reads --shadow-float instead.
 
    ⚠ --ease-out 은 Tailwind 기본값을 덮어쓴 것이다. 브라우저·Tailwind 기본 이징은
@@ -285,8 +285,8 @@
     /* 사이드바 안의 검색 칸. mira: bg-muted/20 dark:bg-muted/30 */
     --sidebar-input-fill: oklch(0.97 0 0 / 20%);
 
-    /* ---- Theme slots (axis contract v1) ------------------------------------------------
-       Colours that only some themes give a distinct look. Foundation keeps every one of them
+    /* ---- Token slots (axis contract v1) ------------------------------------------------
+       Colours that only some systems give a distinct look. Foundation keeps every one of them
        neutral, so foundation renders exactly like the mira preset: each slot either aliases the
        semantic colour the rule used before the slot existed, or is transparent.
        The same block is repeated in .dark so the aliases resolve against the dark values
@@ -328,7 +328,7 @@
     --checkbox-indeterminate-foreground: var(--selection-foreground);
 
     /* Clay materials. Layer 2 composes them into --shadow-control · --shadow-raised ·
-       --surface-control … when a theme opts into raised controls. Foundation is flat. */
+       --surface-control … when a system opts into raised controls. Foundation is flat. */
     --clay-highlight: rgb(255 255 255 / 0.55);
     --clay-shade: transparent;
     --clay-shade-soft: transparent;
@@ -469,8 +469,8 @@
     --drawer-border: #262626;
     --sidebar-input-fill: oklch(0.269 0 0 / 30%);
 
-    /* ---- Theme slots (axis contract v1) ------------------------------------------------
-       Colours that only some themes give a distinct look. Foundation keeps every one of them
+    /* ---- Token slots (axis contract v1) ------------------------------------------------
+       Colours that only some systems give a distinct look. Foundation keeps every one of them
        neutral, so foundation renders exactly like the mira preset: each slot either aliases the
        semantic colour the rule used before the slot existed, or is transparent.
        The same block is repeated in .dark so the aliases resolve against the dark values
@@ -512,7 +512,7 @@
     --checkbox-indeterminate-foreground: var(--selection-foreground);
 
     /* Clay materials. Layer 2 composes them into --shadow-control · --shadow-raised ·
-       --surface-control … when a theme opts into raised controls. Foundation is flat. */
+       --surface-control … when a system opts into raised controls. Foundation is flat. */
     --clay-highlight: rgb(255 255 255 / 0.03);
     --clay-shade: transparent;
     --clay-shade-soft: transparent;
