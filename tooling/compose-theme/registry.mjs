@@ -1,6 +1,7 @@
 // Reads the registry layout: where base and themes live, the base layer-3 barrel,
 // and the per-file layer-3 overlay of each theme.
 
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,19 +36,31 @@ export const listThemes = () => [
         : []),
 ];
 
-/** Reads the `tyohnn:replaces components/x.css` / `tyohnn:adds` marker from a theme layer-3 file */
+/**
+ * Reads the layer-3 marker from the first comment of a theme file:
+ *   replaces: base/styles/components/<file>.css@sha256:<hex>   (the hash of the base file it was forked from)
+ *   tyohnn:adds
+ */
 const readMarker = (file) =>
 {
     const head = /^\s*\/\*([\s\S]*?)\*\//.exec(readFileSync(file, "utf8"));
-    const marker = head && /tyohnn:(replaces\s+(\S+)|adds)\b/.exec(head[1]);
+    const replaces = head && /replaces:\s*base\/styles\/(\S+?\.css)(?:@sha256:([0-9a-f]{64}))?(?=\s|$)/.exec(head[1]);
 
-    if (!marker)
+    if (replaces)
     {
-        throw new Error(`${relative(repoRoot, file)}: the first comment must say "tyohnn:replaces components/<file>.css" or "tyohnn:adds"`);
+        return { kind: "replaces", target: join(baseRoot, "styles", replaces[1]), sha256: replaces[2] ?? null };
     }
 
-    return marker[2] ? { kind: "replaces", target: join(baseRoot, "styles", marker[2]) } : { kind: "adds" };
+    if (head && /\btyohnn:adds\b/.test(head[1]))
+    {
+        return { kind: "adds" };
+    }
+
+    throw new Error(`${relative(repoRoot, file)}: the first comment must say "replaces: base/styles/components/<file>.css@sha256:<hash>" or "tyohnn:adds"`);
 };
+
+/** sha256 of a file, hex */
+export const sha256 = (file) => createHash("sha256").update(readFileSync(file)).digest("hex");
 
 /**
  * One theme's own files (not its ancestors). Missing optional files are null.
@@ -58,7 +71,7 @@ export const readTheme = (name) =>
 {
     if (name === "base")
     {
-        return { name, root: baseRoot, extends: null, colors: null, tokens: null, replaces: new Map(), adds: [], style: null };
+        return { name, root: baseRoot, extends: null, colors: null, tokens: null, replaces: new Map(), replaceHashes: new Map(), adds: [], style: null };
     }
 
     const root = join(themesRoot, name);
@@ -76,6 +89,7 @@ export const readTheme = (name) =>
         ? readdirSync(stylesDir).filter((file) => file.endsWith(".css")).sort().map((file) => join(stylesDir, file))
         : [];
     const replaces = new Map();
+    const replaceHashes = new Map();
     const adds = [];
     const baseBarrel = new Set(readImports(baseFiles.barrel));
 
@@ -95,6 +109,7 @@ export const readTheme = (name) =>
         }
 
         replaces.set(marker.target, file);
+        replaceHashes.set(file, { target: marker.target, sha256: marker.sha256 });
     }
 
     const style = optional("style.css");
@@ -124,6 +139,7 @@ export const readTheme = (name) =>
         colors: optional("colors.css"),
         tokens: optional("tokens.css"),
         replaces,
+        replaceHashes,
         adds,
         style,
     };

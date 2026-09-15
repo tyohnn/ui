@@ -8,6 +8,8 @@
 //                     .dark itself (the later :root would win over base .dark)             → FAIL
 //   4. dead           a defined token nobody reads anywhere in the registry                 → warning
 //   5. fractional px  a token value with a non-integer px length                            → warning
+//   6. stale fork     a theme layer-3 replacement whose recorded base sha256 differs from the current
+//                     base file (or records none): base changed and the fork did not follow   → warning
 //
 // Tokens live only in the top-level :root / .dark blocks of layer-1 (globals.css, colors.css) and
 // layer-2 (tokens.css) files. Custom properties inside rules are local geometry, not tokens.
@@ -17,7 +19,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 
-import { baseFiles, composeOrder, listThemes, readChain, readImports, repoRoot } from "@tyohnn/compose-theme/registry";
+import { baseFiles, composeOrder, listThemes, readChain, readImports, repoRoot, sha256 } from "@tyohnn/compose-theme/registry";
 
 const EXTERNAL_PREFIXES = ["--tw-", "--radix-", "--scroll-fade-", "--drawer-", "--toast-"];
 const EXTERNAL_NAMES = new Set([
@@ -25,6 +27,8 @@ const EXTERNAL_NAMES = new Set([
     "--transform-origin", "--positioner-width", "--positioner-height", "--collapsible-panel-height",
     "--collapsible-panel-width", "--accordion-panel-height", "--accordion-panel-width", "--nested-drawers",
     "--font-mono",
+    // Base UI Positioner sizes set at runtime (navigation-menu reads them as w-(--popup-width)).
+    "--popup-width", "--popup-height",
 ]);
 const isExternal = (name) => EXTERNAL_NAMES.has(name) || EXTERNAL_PREFIXES.some((prefix) => name.startsWith(prefix));
 
@@ -122,9 +126,13 @@ const readUsage = (path) =>
 
     return {
         declared: [...clean.matchAll(/["']?(--[A-Za-z0-9_-]+)["']?\s*:/g)].map((match) => match[1]),
-        reads: [...clean.matchAll(/var\(\s*(--[A-Za-z0-9_-]+)\s*(,)?/g)].map((match) => ({
+        reads: [
+            ...[...clean.matchAll(/var\(\s*(--[A-Za-z0-9_-]+)\s*(,)?/g)].map((match) => ({ match, hasFallback: Boolean(match[2]) })),
+            // Tailwind v4 variable shorthand in @apply / class names: text-(color:--x) · bg-(--x)
+            ...[...clean.matchAll(/-\((?:[a-z-]+:)?(--[A-Za-z0-9_-]+)\)/g)].map((match) => ({ match, hasFallback: false })),
+        ].map(({ match, hasFallback }) => ({
             name: match[1],
-            hasFallback: Boolean(match[2]),
+            hasFallback,
             file: shown,
             line: clean.slice(0, match.index).split("\n").length,
         })),
@@ -219,6 +227,18 @@ const scanTheme = (name) =>
             if (!baseTokenNames.has(row.name))
             {
                 failures.push(`axis contract: ${row.name} is not a base layer-2 name  (${row.file}:${row.line})`);
+            }
+        }
+
+        for (const [file, { target, sha256: recorded }] of theme.replaceHashes)
+        {
+            const current = sha256(target);
+
+            if (recorded !== current)
+            {
+                warnings.push(recorded
+                    ? `replacement stale: ${relative(repoRoot, file)} was forked from ${relative(repoRoot, target)}@sha256:${recorded.slice(0, 12)}…, base is now ${current.slice(0, 12)}… — port the base change or turn the difference into a slot`
+                    : `replacement stale: ${relative(repoRoot, file)} records no base sha256 (current ${relative(repoRoot, target)}@sha256:${current})`);
             }
         }
 
