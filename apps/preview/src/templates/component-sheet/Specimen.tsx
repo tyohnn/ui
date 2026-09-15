@@ -288,7 +288,7 @@ export const Specimen = () => (
         <Card>
             <CardHeader>
                 <CardTitle>디자인 시스템 표본</CardTitle>
-                <CardDescription>@the original app/ui 의 세 층이 mira 규칙으로 이어졌는지 확인하는 자리입니다.</CardDescription>
+                <CardDescription>Checks that the three tyohnn CSS layers are wired to the components.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center gap-2">
