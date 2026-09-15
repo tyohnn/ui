@@ -5,20 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>tyohnn preview</title>
         <script>
-            // One composed theme per page. ?theme=<name> (default foundation) · ?mode=dark|light (default dark).
+            // One design system per page. ?system=<name> (default foundation) · ?mode=dark|light (default dark).
             // `dark` must sit on <html>: layer-2 clay compositions resolve on :root.
             (() => {
                 const params = new URLSearchParams(location.search);
-                const theme = (params.get("theme") || "foundation").replace(/[^a-z0-9-]/gi, "");
+                const system = (params.get("system") || "foundation").replace(/[^a-z0-9-]/gi, "");
                 const mode = params.get("mode") === "light" ? "light" : "dark";
 
                 document.documentElement.classList.toggle("dark", mode === "dark");
-                document.documentElement.dataset.theme = theme;
+                document.documentElement.dataset.system = system;
 
                 const link = document.createElement("link");
                 link.rel = "stylesheet";
-                link.href = `/themes/${theme}/compiled.css`;
-                link.id = "theme-css";
+                link.href = `/systems/${system}/compiled.css`;
+                link.id = "system-css";
                 document.head.appendChild(link);
             })();
         </script>

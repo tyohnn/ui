@@ -4,7 +4,7 @@
 // visual computed properties plus the bounding-box height, element by element.
 //
 // Usage:
-//   node tooling/snapshot/compare-computed.mjs --a <url> --b <url> [--label name] [--light]
+//   node tooling/snapshot/compare-computed.mjs --a <url> (--b <url> | --system <name> [--mode dark|light]) [--label name] [--light]
 //        [--root '[data-specimen="canvas"]' --root-up 1] [--shots dir] [--out file.json]
 // --light removes `dark` from <html> on both pages after load (for apps that hard-code it).
 
@@ -20,7 +20,9 @@ const arg = (name, fallback) =>
 };
 
 const A = arg("a");
-const B = arg("b");
+// --system <name> [--mode dark|light] [--preview http://localhost:5173] is shorthand for the preview URL as --b
+const system = arg("system");
+const B = arg("b") ?? (system ? `${arg("preview", "http://localhost:5173")}/?system=${encodeURIComponent(system)}&mode=${arg("mode", "dark")}` : undefined);
 const label = arg("label", "pair");
 const rootSelector = arg("root", '[data-specimen="canvas"]');
 const rootUp = Number(arg("root-up", "1"));
@@ -30,7 +32,7 @@ const light = process.argv.includes("--light");
 
 if (!A || !B)
 {
-    console.error("usage: compare-computed.mjs --a <url> --b <url> [--label] [--light] [--shots dir] [--out file]");
+    console.error("usage: compare-computed.mjs --a <url> (--b <url> | --system <name> [--mode dark|light]) [--label] [--light] [--shots dir] [--out file]");
     process.exit(2);
 }
 

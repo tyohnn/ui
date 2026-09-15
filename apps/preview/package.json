@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "description": "Renders a template with one composed theme stylesheet: ?theme=<name>&mode=dark|light&template=<name>.",
+    "description": "Renders a template with one design system stylesheet: ?system=<name>&mode=dark|light&template=<name>.",
     "scripts": {
         "build-systems": "node ../../tooling/build-system --all",
         "dev": "npm run build-systems && vite --port 5173 --strictPort",

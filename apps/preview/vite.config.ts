@@ -6,9 +6,9 @@ import { defineConfig } from "vite";
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 
 /**
- * The page loads exactly one stylesheet: dist/themes/<theme>/compiled.css, built by
- * tooling/compose-theme. `dist/` is served as the public directory, so the file lives at
- * /themes/<theme>/compiled.css. The app bundles no Tailwind of its own.
+ * The page loads exactly one stylesheet: dist/systems/<system>/compiled.css, built by
+ * tooling/build-system. `dist/` is served as the public directory, so the file lives at
+ * /systems/<system>/compiled.css. The app bundles no Tailwind of its own.
  */
 export default defineConfig({
     plugins: [react()],
