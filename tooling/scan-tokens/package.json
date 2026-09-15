@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/scan-tokens",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Per composed theme: undefined tokens, dead tokens, fractional px and axis-contract violations.",
+    "main": "index.mjs",
+    "dependencies": {
+        "@tyohnn/compose-theme": "*"
+    }
+}

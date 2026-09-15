@@ -1,0 +1,19 @@
+{
+    "name": "@tyohnn/compose-theme",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Compose base + a theme overlay into one CSS entry and compile it with the Tailwind CLI.",
+    "main": "index.mjs",
+    "exports": {
+        ".": "./index.mjs",
+        "./registry": "./registry.mjs"
+    },
+    "bin": {
+        "tyohnn-compose-theme": "./cli.mjs"
+    },
+    "dependencies": {
+        "@tailwindcss/cli": "4.3.3",
+        "tailwindcss": "4.3.3"
+    }
+}
