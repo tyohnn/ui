@@ -11,7 +11,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@tyohnn/foundation": "*",
+        "@tyohnn/ui": "*",
         "lucide-react": "^1.41.0",
         "react": "^19.2.1",
         "react-dom": "^19.2.1"

@@ -60,7 +60,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@tyohnn/components/tab
  * — 버튼 · 체크박스 · 태그 · 아바타 · 밑줄 탭 · 표 · 사이드바 항목. 아래 카드는 나머지 컴포넌트의 밀도를 본다.
  * 화면이 붙기 시작하면 이 파일과 랜딩의 호출을 함께 지운다.
  *
- * ⚠ 색 · 크기 · 그림자는 전부 @tyohnn/foundation 의 3층이 정한다. 여기서는 조립과 레이아웃 유틸리티만 쓴다.
+ * ⚠ 색 · 크기 · 그림자는 전부 tyohnn 디자인 시스템의 3층이 정한다. 여기서는 조립과 레이아웃 유틸리티만 쓴다.
  */
 /** 셀렉트가 고른 값 대신 라벨을 보이려면 Base UI Select 에 items 를 넘겨야 한다 */
 const STATES = [

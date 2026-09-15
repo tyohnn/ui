@@ -1,13 +1,12 @@
 {
-    "name": "@tyohnn/foundation",
+    "name": "@tyohnn/ui",
     "version": "0.0.0",
     "private": true,
-    "description": "tyohnn foundation: shadcn components on Base UI primitives with cn-* hooks, plus the default three-layer CSS (colours, tokens, rules).",
+    "description": "tyohnn ui: the one set of shadcn components on Base UI primitives (cn-* hooks, no visual values) shared by every design system.",
     "exports": {
         "./components/*": "./components/*.tsx",
         "./lib/*": "./lib/*.ts",
         "./hooks/*": "./hooks/*.ts",
-        "./styles/*": "./styles/*",
         "./manifest.json": "./manifest.json"
     },
     "scripts": {

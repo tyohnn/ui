@@ -6,9 +6,9 @@
         "types": ["vite/client"],
         "baseUrl": ".",
         "paths": {
-            "@tyohnn/components/*": ["../../registry/foundation/components/*"],
-            "@tyohnn/lib/*": ["../../registry/foundation/lib/*"],
-            "@tyohnn/hooks/*": ["../../registry/foundation/hooks/*"]
+            "@tyohnn/components/*": ["../../registry/ui/components/*"],
+            "@tyohnn/lib/*": ["../../registry/ui/lib/*"],
+            "@tyohnn/hooks/*": ["../../registry/ui/hooks/*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]

@@ -15,7 +15,7 @@ const require = createRequire(import.meta.url);
 
 /** Folders Tailwind scans for utility class names */
 export const SOURCES = [
-    join(repoRoot, "registry/foundation/components"),
+    join(repoRoot, "registry/ui/components"),
     join(repoRoot, "apps/preview/src"),
     join(repoRoot, "apps/preview/index.html"),
 ];

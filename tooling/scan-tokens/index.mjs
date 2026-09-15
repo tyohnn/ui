@@ -164,9 +164,9 @@ const scanTheme = (name) =>
         ...order.typeset,
         ...order.rules,
         ...additions,
-        ...collect(join(repoRoot, "registry/foundation/components")),
-        ...collect(join(repoRoot, "registry/foundation/hooks")),
-        ...collect(join(repoRoot, "registry/foundation/lib")),
+        ...collect(join(repoRoot, "registry/ui/components")),
+        ...collect(join(repoRoot, "registry/ui/hooks")),
+        ...collect(join(repoRoot, "registry/ui/lib")),
         ...collect(join(repoRoot, "apps/preview/src")),
     ];
     const declaredAnywhere = new Set();

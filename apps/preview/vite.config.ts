@@ -14,9 +14,9 @@ export default defineConfig({
     plugins: [react()],
     publicDir: `${repoRoot}dist`,
     resolve: {
-        // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/foundation/…
-        // (@tyohnn/foundation and the tooling packages are untouched by this pattern).
-        alias: [{ find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/foundation/$1/` }],
+        // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/ui/…
+        // (@tyohnn/ui and the tooling packages are untouched by this pattern).
+        alias: [{ find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` }],
     },
     server: {
         fs: { allow: [repoRoot] },
