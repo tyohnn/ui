@@ -1,0 +1,8 @@
+{
+    "name": "@tyohnn/scaffold-prototype",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Prototype of the tyohnn CLI: scaffold packages/ui with one or more design systems into a monorepo and wire one system per Next app (init · add-system · doctor).",
+    "main": "index.mjs"
+}

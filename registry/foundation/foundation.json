@@ -11,6 +11,7 @@
     "icons": {
         "library": "hugeicons"
     },
+    "defaultMode": "light",
     "styles": {
         "colors": "styles/globals.css",
         "tokens": "styles/tokens.css",

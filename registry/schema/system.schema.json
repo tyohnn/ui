@@ -55,6 +55,13 @@
         "icons": {
             "$ref": "#/$defs/icons"
         },
+        "defaultMode": {
+            "enum": [
+                "light",
+                "dark"
+            ],
+            "description": "Colour mode an app renders by default: dark puts the `dark` class on <html>. When absent the CLI infers dark from a `dark` tag, otherwise light"
+        },
         "tags": {
             "type": "array",
             "items": {

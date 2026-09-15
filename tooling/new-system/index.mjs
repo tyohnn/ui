@@ -52,6 +52,7 @@ writeFileSync(join(target, "system.json"), `${JSON.stringify({
     forkedFrom: { source: from, commit: currentCommit() },
     fonts: readSystemMeta(from).fonts,
     icons: readSystemMeta(from).icons,
+    ...(readSystemMeta(from).defaultMode ? { defaultMode: readSystemMeta(from).defaultMode } : {}),
     tags: [],
     source: { kind: "", note: "" },
 }, null, 4)}\n`);
