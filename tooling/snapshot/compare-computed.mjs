@@ -9,8 +9,11 @@
 //
 // Usage:
 //   node tooling/snapshot/compare-computed.mjs --a <url> (--b <url> | --system <name> [--mode dark|light]) [--label name] [--light]
-//        [--root '[data-specimen="canvas"]' --root-up 1] [--svg box|full] [--shots dir] [--out file.json]
+//        [--root '[data-specimen="canvas"]' --root-up 1] [--svg box|full] [--mode-a dark|light] [--icons] [--shots dir] [--out file.json]
 // --light removes `dark` from <html> on both pages after load (for apps that hard-code it).
+// --mode-a dark|light sets `dark` on page a's <html> only (an app whose default mode differs from the compared preview mode).
+// --icons prints the first <svg> under the root on each page (class and the first drawing element) and how many
+// svgs carry lucide's class, to show which icon library each page draws with; --svg box compares their boxes only.
 
 import { writeFileSync } from "node:fs";
 
@@ -33,6 +36,8 @@ const rootUp = Number(arg("root-up", "1"));
 const shots = arg("shots");
 const out = arg("out");
 const light = process.argv.includes("--light");
+const modeA = arg("mode-a");
+const icons = process.argv.includes("--icons");
 const svgMode = arg("svg", "box");
 
 if (!A || !B)
@@ -60,7 +65,7 @@ export const PROPS = [
 
 const BLOCK_DISPLAYS = new Set(["block", "flex", "grid", "table", "list-item", "flow-root"]);
 
-const snapshot = async (browser, url) =>
+const snapshot = async (browser, url, mode) =>
 {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 
@@ -71,6 +76,11 @@ const snapshot = async (browser, url) =>
     if (light)
     {
         await page.evaluate(() => document.documentElement.classList.remove("dark"));
+    }
+
+    if (mode)
+    {
+        await page.evaluate((dark) => document.documentElement.classList.toggle("dark", dark), mode === "dark");
     }
 
     await page.evaluate(() => document.fonts.ready);
@@ -152,11 +162,25 @@ const snapshot = async (browser, url) =>
         await handle.asElement().screenshot({ path });
     };
 
-    return { rows, screenshot, close: () => page.close() };
+    const iconSignature = await page.evaluate((rootSelector) =>
+    {
+        const svgs = [...document.querySelector(rootSelector).parentElement.querySelectorAll("svg")];
+        const first = svgs[0];
+        const drawing = first?.querySelector("path, circle, rect, line, polyline");
+
+        return {
+            count: svgs.length,
+            lucide: svgs.filter((svg) => (svg.getAttribute("class") ?? "").split(/\s+/).includes("lucide")).length,
+            class: first?.getAttribute("class") ?? null,
+            first: drawing ? `<${drawing.tagName.toLowerCase()} ${[...drawing.attributes].map((attr) => `${attr.name}="${attr.value.slice(0, 32)}"`).join(" ")}>` : null,
+        };
+    }, rootSelector);
+
+    return { rows, iconSignature, screenshot, close: () => page.close() };
 };
 
 const browser = await chromium.launch();
-const left = await snapshot(browser, A);
+const left = await snapshot(browser, A, modeA);
 const right = await snapshot(browser, B);
 
 if (shots)
@@ -193,11 +217,19 @@ await left.close();
 await right.close();
 await browser.close();
 
-const result = { label, a: A, b: B, svg: svgMode, elements: { a: left.rows.length, b: right.rows.length }, structural, mismatches };
+const result = { label, a: A, b: B, svg: svgMode, elements: { a: left.rows.length, b: right.rows.length }, icons: { a: left.iconSignature, b: right.iconSignature }, structural, mismatches };
 
 if (out) writeFileSync(out, JSON.stringify(result, null, 2));
 
 console.log(`${label} (svg ${svgMode}): elements a=${left.rows.length} b=${right.rows.length} · structural ${structural.length} · property mismatches ${mismatches.length}`);
+
+if (icons)
+{
+    for (const [side, signature] of [["a", left.iconSignature], ["b", right.iconSignature]])
+    {
+        console.log(`icons ${side}: ${signature.lucide}/${signature.count} svg with class lucide · first class="${signature.class}" ${signature.first}`);
+    }
+}
 
 const top = mismatches.slice(0, 25);
 

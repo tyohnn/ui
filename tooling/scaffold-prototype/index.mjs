@@ -5,6 +5,7 @@
 //        [--icons <library>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>] [--mode dark|light]
 //        [--port 3201] [--example component-sheet] [--source <tyohnn checkout>]
 //   node tooling/scaffold-prototype add-system --target <monorepo> --system foundation --app apps/admin [same options]
+//   node tooling/scaffold-prototype doctor --target <monorepo> [--built]
 //
 // init creates the monorepo root (npm workspaces + Turborepo) and the app when they do not exist, copies
 // packages/ui (one set of TSX, the chosen icon library, one system folder), wires the app and writes
@@ -16,6 +17,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { wireNextApp } from "./lib/app-next.mjs";
+import { doctor } from "./lib/doctor.mjs";
 import { resolveFonts } from "./lib/fonts.mjs";
 import { openSource } from "./lib/source.mjs";
 import { addIconLibrary, addSystem, writeUiBase } from "./lib/ui.mjs";
@@ -43,7 +45,7 @@ for (let index = 0; index < rest.length; index += 1)
 
 const usage = () =>
 {
-    console.error("usage: scaffold-prototype init|add-system --target <monorepo> [options] (see the header of index.mjs)");
+    console.error("usage: scaffold-prototype init|add-system|doctor --target <monorepo> [options] (see the header of index.mjs)");
     process.exit(2);
 };
 
@@ -169,12 +171,13 @@ const scaffold = (mode) =>
 
     console.log(`${mode} ${meta.name} → ${options.app} (${relative(process.cwd(), target) || "."}) from ${source.commit ?? "?"}${source.dirty ? " (dirty)" : ""}`);
     log.print();
-    console.log("next: npm install, then npx turbo typecheck build");
+    console.log("next: npm install, then npx turbo typecheck build, then doctor");
 };
 
 try
 {
     if (command === "init" || command === "add-system") scaffold(command);
+    else if (command === "doctor") process.exit(doctor({ target: resolve(need("target")), built: Boolean(options.built) }));
     else usage();
 }
 catch (error)
