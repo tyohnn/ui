@@ -1,7 +1,8 @@
 // Fonts for a Next app (DESIGN.md §8–9): next/font loads the files, the layer-1 stacks read its variables.
 //
-// next/font registers each font under a hashed family name ("__Inter_3f2a1c"), so the family names in a
-// system's layer-1 stacks ("Inter", "Pretendard") never match. The app's globals.css therefore redeclares
+// next/font registers each font under a family name of its own: the declaring identifier for local fonts
+// ("fontPretendard" in Next 16, a hashed name in older releases), so the family names in a system's layer-1
+// stacks ("Pretendard") cannot be relied on. The app's globals.css therefore redeclares
 // the three stacks after the system imports, with each catalog font's `next.variable` in place of its
 // family names. The system's own files stay byte-identical to the registry snapshot.
 
@@ -49,7 +50,8 @@ const identifier = (id) => `font${id.split("-").map((part) => part[0].toUpperCas
  *
  * `adjustFontFallback: false`: next/font would otherwise append a metric-adjusted Arial/Times family to the
  * variable, which sits between the font and the Hangul fallback in the stack. The stack's own fallbacks are
- * the design's, so the variable carries only the font.
+ * the design's. (Next 16.3 webpack honours it; Turbopack still appends "Inter Fallback" for Google fonts —
+ * a local Arial without Hangul, so Hangul still reaches the fallback font.)
  *
  * Google variable fonts load their default axis (wght) only, like the fontsource CSS entry the preview uses.
  */

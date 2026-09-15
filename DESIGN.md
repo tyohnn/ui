@@ -273,9 +273,10 @@ names (`SYSTEM=<name>`), through the `virtual:tyohnn-fonts` module.
     `wght` axis like the fontsource entry); the variable class goes on `<html>`.
   - `provider: local` — `next/font/local` with `local.files`, as paths into the hoisted `node_modules` package.
   - `adjustFontFallback: false`, so the variable holds the font and not a metric-adjusted Arial between it and the
-    Hangul fallback.
-  - The family next/font registers never equals the catalog `family` (webpack hashes it, Turbopack names local
-    fonts after the variable's identifier, e.g. `fontPretendard`), so the app's `globals.css` redeclares the three
+    Hangul fallback. (Next 16.3: webpack honours it; Turbopack still appends `"Inter Fallback"` for Google fonts, a
+    local Arial with no Hangul, so Hangul still reaches the fallback font and computed styles are unaffected.)
+  - The family next/font registers is not the catalog `family` (Next 16 names local fonts after the declaring
+    identifier, e.g. `fontPretendard`; older releases hashed names), so the app's `globals.css` redeclares the three
     layer-1 stacks after the system imports, with each `var(<next.variable>)` in place of the family names and
     the same order and fallbacks. The system's own files stay identical to the snapshot.
 - **Everything else (Vite and others)** — install the `fontsource.package` / `npm.package` and add

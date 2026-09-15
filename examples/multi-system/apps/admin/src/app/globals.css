@@ -13,8 +13,8 @@
 @source "../../../../packages/ui/src";
 @source not "../../../../packages/ui/src/systems";
 
-/* Layer-1 font stacks on the next/font variables from layout.tsx: next/font hashes family names, so the
-   system's "Inter" stack would never match. Same order and fallbacks as the system. */
+/* Layer-1 font stacks on the next/font variables from layout.tsx: next/font registers its own family names,
+   so the system's "Inter" stack would not match. Same order and fallbacks as the system. */
 :root {
     --font-sans: var(--font-sans-inter), var(--font-sans-pretendard), ui-sans-serif, system-ui, sans-serif;
     --font-heading: var(--font-sans);
