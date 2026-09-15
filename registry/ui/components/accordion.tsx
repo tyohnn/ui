@@ -40,13 +40,13 @@ function AccordionTrigger({
       >
         {children}
         <ChevronDown
-  data-slot="accordion-trigger-icon"
-  className="cn-accordion-trigger-icon pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
-/>
+          data-slot="accordion-trigger-icon"
+          className="cn-accordion-trigger-icon pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
+        />
         <ChevronUp
-  data-slot="accordion-trigger-icon"
-  className="cn-accordion-trigger-icon pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
-/>
+          data-slot="accordion-trigger-icon"
+          className="cn-accordion-trigger-icon pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
+        />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )

@@ -167,11 +167,16 @@ Hangul — add the new string to the map.
   hand-written rule does not need to imitate them.
 - **Fractional values** such as vega's 18.4px switch track are the preset's; scan-tokens' fractional-px
   warning is expected.
-- **TSX drift is not a system value.** shadcn 4.21's `DropdownMenuContent` has `w-(--anchor-width)`;
-  `registry/ui` does not. Exclude with the reason; fixing it belongs to `registry/ui` for every system.
+- **TSX drift is not a system value.** `registry/ui` follows the shadcn 4.21.0 base sources (synced 2026-09-15)
+  except where a visual utility would beat a layer-3 rule: no `text-sm`/`text-xs` on `AvatarFallback`, no
+  `text-xs` on `ChartContainer`, `cn-separator` instead of `bg-border h-px …` on `Separator`, `cn-calendar-weekday` ·
+  `cn-calendar-week-number` instead of `text-[0.8rem]`, no `[&_svg]:size-4` on `SidebarMenuButton`, and
+  `InputGroupButton` passing `size` to `Button`. A preset reproduces those values in its layer 3. Any other
+  difference from the shadcn component is drift: exclude it with the reason and fix it in `registry/ui`.
 - **Regression baselines.** A second checkout of main with a symlinked `node_modules` serves no fonts (Vite
-  `server.fs.allow` stops at the checkout), so its text widths differ. Compare `dist/systems/<name>/compiled.css`
-  hashes instead, or install that checkout's own dependencies.
+  `server.fs.allow` stops at the checkout), so its text widths differ. Dump the same checkout before and after
+  (`compare-computed.mjs --dump` / `--diff`), compare `dist/systems/<name>/compiled.css` hashes, or install that
+  checkout's own dependencies.
 
 ## Remaining presets
 

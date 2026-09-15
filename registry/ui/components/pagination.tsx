@@ -77,10 +77,7 @@ function PaginationPrevious({
       className={cn("cn-pagination-previous", className)}
       {...props}
     >
-      <ChevronLeft
-  data-icon="inline-start"
-  className="cn-rtl-flip"
-/>
+      <ChevronLeft data-icon="inline-start" className="cn-rtl-flip" />
       <span className="cn-pagination-previous-text hidden sm:block">
         {text}
       </span>
@@ -101,10 +98,7 @@ function PaginationNext({
       {...props}
     >
       <span className="cn-pagination-next-text hidden sm:block">{text}</span>
-      <ChevronRight
-  data-icon="inline-end"
-  className="cn-rtl-flip"
-/>
+      <ChevronRight data-icon="inline-end" className="cn-rtl-flip" />
     </PaginationLink>
   )
 }

@@ -62,14 +62,13 @@ missing from shadcn 4.21.0 and the copy type-checks against the shadcn component
 | 4 | outline badge and tags unfilled in dark | 0 · dark 0 |
 | 5 | open states added to the comparison | 62 |
 | 6 | menu family, select items, dialog and popover surfaces | 6 |
-| 7 | dropdown width excluded (below) | 0 + 6 excluded · dark 0 + 6 excluded |
+| 7 | dropdown width excluded (TSX drift, see below) | 0 + 6 excluded · dark 0 + 6 excluded |
+| 8 | `registry/ui` synced with shadcn 4.21.0 base components; exclusion removed | 0 · dark 0 (no exclusions) |
 
-Exclusions (`compare-exclusions.json`):
-
-- `dropdown:root`, `dropdown-menu-group#0`, `dropdown-menu-item#0` height — shadcn 4.21's
-  `DropdownMenuContent` carries `w-(--anchor-width)`, `registry/ui` does not. The upstream menu is as
-  narrow as its trigger (min-w-32) and "Move to review ⌘D" wraps to two lines. This is shared TSX drift,
-  not a vega value.
+Exclusions (`compare-exclusions.json`): none. Until iteration 7 the heights of `dropdown:root`,
+`dropdown-menu-group#0` and `dropdown-menu-item#0` were excluded: shadcn 4.21's `DropdownMenuContent` carries
+`w-(--anchor-width)` and `registry/ui` did not, so only the upstream menu wrapped "Move to review ⌘D". The
+sync of `registry/ui` with the shadcn 4.21.0 sources restored the utility.
 
 Not covered by the comparison (ported from `style-diff.mjs mira vega` by reading, not measured): accordion,
 alert dialog, breadcrumb, button group, calendar, chart tooltip, combobox, command, context menu, drawer,

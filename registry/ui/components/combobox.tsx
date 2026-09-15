@@ -31,9 +31,7 @@ function ComboboxTrigger({
       {...props}
     >
       {children}
-      <ChevronDown
-  className="cn-combobox-trigger-icon pointer-events-none"
-/>
+      <ChevronDown className="cn-combobox-trigger-icon pointer-events-none" />
     </ComboboxPrimitive.Trigger>
   )
 }
@@ -46,9 +44,7 @@ function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
       className={cn("cn-combobox-clear", className)}
       {...props}
     >
-      <X
-  className="cn-combobox-clear-icon pointer-events-none"
-/>
+      <X className="cn-combobox-clear-icon pointer-events-none" />
     </ComboboxPrimitive.Clear>
   )
 }
@@ -157,8 +153,8 @@ function ComboboxItem({
         render={<span className="cn-combobox-item-indicator" />}
       >
         <Check
-  className="cn-combobox-item-indicator-icon pointer-events-none"
-/>
+          className="cn-combobox-item-indicator-icon pointer-events-none"
+        />
       </ComboboxPrimitive.ItemIndicator>
     </ComboboxPrimitive.Item>
   )
@@ -254,9 +250,7 @@ function ComboboxChip({
           className="cn-combobox-chip-remove"
           data-slot="combobox-chip-remove"
         >
-          <X
-  className="cn-combobox-chip-indicator-icon pointer-events-none"
-/>
+          <X className="cn-combobox-chip-indicator-icon pointer-events-none" />
         </ComboboxPrimitive.ChipRemove>
       )}
     </ComboboxPrimitive.Chip>

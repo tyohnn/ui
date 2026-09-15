@@ -134,9 +134,7 @@ function ContextMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRight
-  className="cn-rtl-flip ml-auto"
-/>
+      <ChevronRight className="cn-rtl-flip ml-auto" />
     </ContextMenuPrimitive.SubmenuTrigger>
   )
 }

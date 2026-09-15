@@ -28,10 +28,10 @@ function NativeSelect({
         {...props}
       />
       <SelectIndicator
-  className="cn-native-select-icon pointer-events-none absolute select-none"
-  aria-hidden="true"
-  data-slot="native-select-icon"
-/>
+        className="cn-native-select-icon pointer-events-none absolute select-none"
+        aria-hidden="true"
+        data-slot="native-select-icon"
+      />
     </div>
   )
 }
