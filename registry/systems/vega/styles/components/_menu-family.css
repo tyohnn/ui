@@ -48,8 +48,10 @@
     /* vega: menus are rounded-md; the command palette stays rounded-xl (below). */
     border-radius: var(--surface-radius-sm);
     min-width: var(--menu-min-width);
+    /* 안쪽 링은 v4 의 --menu-ring 이다. 기본값이 --ring-subtle 이라 화면은 같고,
+       카드의 링과 메뉴의 링을 갈라 쓰는 시스템만 값이 달라진다. */
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--shadow-float);
 }
 
@@ -71,8 +73,8 @@
 /* --------------------------------------------------------
    항목 — menu 축
    mira: min-h-7 gap-2 rounded-md px-2 text-xs/relaxed [&_svg:not([class*='size-'])]:size-3.5
-   ⚠ 세로 여백(py-1 · 체크·라디오 py-1.5)은 옮기지 않았다. 높이는 세로 패딩이 아니라
-      --menu-item-height 가 정하고 세로 가운데는 컴포넌트의 items-center 가 맡는다.
+   세로 여백은 --menu-item-padding-y(체크·라디오·팔레트는 -check)가 갖는다. 높이의 바닥은
+   --menu-item-height 가, 세로 가운데는 컴포넌트의 items-center 가 맡는다.
    -------------------------------------------------------- */
 
 .cn-dropdown-menu-item,
@@ -92,13 +94,16 @@
     position: relative;
     min-height: var(--menu-item-height);
     border-radius: var(--menu-item-radius);
-    /* vega: py-1.5 and no min-height — the row is the text plus this padding. */
-    padding-block: var(--menu-item-padding-y);
     padding-inline: var(--menu-item-padding-x);
+    padding-block: var(--menu-item-padding-y);
     gap: var(--menu-item-gap);
     font-size: var(--ui-text-md);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-item-letter-spacing);
     line-height: var(--ui-line-height-md);
+    /* 행의 글자 축도 v4 슬롯이다. 대소문자와 굵기는 mira 가 주지 않으므로 기본값이
+       `initial` — 계산 시점에 무효가 되어 지금처럼 물려받는다(DESIGN.md §5). */
+    text-transform: var(--menu-item-text-transform);
+    font-weight: var(--menu-item-font-weight);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-md);
@@ -219,7 +224,9 @@
    -------------------------------------------------------- */
 
 /* mira: text-muted-foreground px-2 py-1.5 text-xs — 굵기를 주지 않는다.
-   ⚠ 세로 6px 은 리터럴이다. 2층에 6px 여백 단계가 없다(--menu-padding 은 4).
+   ⚠ 세로 6px 리터럴은 v4 에서 --menu-label-padding-y 로 옮겼다(기본값이 체크 행의
+      세로 여백 6px 이라 값은 그대로다). 글자 축도 --menu-label-* 를 읽는다 —
+      라벨 띠만 대문자로 세우거나 자간을 벌리는 시스템이 규칙을 고치지 않게 하려는 것이다.
       Command 의 그룹 제목만 mira 가 font-medium 을 더 주며 command.css 가 갖는다. */
 .cn-dropdown-menu-label,
 .cn-context-menu-label,
@@ -228,10 +235,11 @@
 .cn-combobox-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);
-    padding-block: 6px;
+    padding-block: var(--menu-label-padding-y);
     font-size: var(--ui-text-sm);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-label-letter-spacing);
     line-height: var(--ui-line-height-sm);
+    text-transform: var(--menu-label-text-transform);
     font-weight: var(--ui-font-weight);   /* vega: font-medium */
 }
 
@@ -239,7 +247,12 @@
     font-weight: inherit;   /* vega: the combobox label is not font-medium */
 }
 
-/* mira: bg-border/50 -mx-1 my-1 h-px */
+/* mira: bg-border/50 -mx-1 my-1 h-px
+   ⚠ v4 부터 구분선의 여백은 --menu-padding 에서 계산하지 않고 제 슬롯
+      (--menu-separator-margin-inline · --menu-separator-margin-block)을 읽는다.
+      기본값이 예전 식 그대로라 화면은 같다. 둘을 떼어 둔 이유는, 면의 여백을
+      0 으로 눕히는 시스템도 구분선이 면 끝까지 번지는 것은 그대로 원하기
+      때문이다. 예전에는 면의 여백이 사라지면 그 번짐도 같이 사라졌다. */
 .cn-dropdown-menu-separator,
 .cn-context-menu-separator,
 .cn-menubar-separator,
@@ -247,8 +260,8 @@
 .cn-combobox-separator {
     background-color: var(--border-subtle);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 /* mira: ml-auto text-[0.625rem] tracking-widest */
@@ -285,4 +298,7 @@
 /* 팔레트 항목의 좌우 여백 축(foundation 슬롯). 이 시스템은 보통 항목과 같은 값이다. */
 .cn-command-item {
     padding-inline: var(--command-item-padding-x);
+    padding-block: var(--menu-item-padding-y-check);
+    border-radius: var(--command-item-radius);
+    gap: var(--command-item-gap);
 }

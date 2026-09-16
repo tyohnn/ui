@@ -18,7 +18,11 @@
 
 .cn-input-group {
     height: var(--control-height-md);
-    border: var(--control-border-width) solid var(--input);
+    /* 테두리 색은 v4 의 --input-border 가 갖는다(foundation 값은 --input 의 별칭). */
+    border: var(--control-border-width) solid var(--input-border);
+    /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
+       foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     --control-shadow: var(--shadow-control);
@@ -99,19 +103,21 @@
 }
 
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
-   ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
+   ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다.
+   ⚠ addon 의 좌우 패딩은 「묶음 안 컨트롤」 축(axis contract v4 의 --control-padding-x-grouped)이다.
+      foundation 값은 --control-padding-x-md 의 별칭이라 지금 값과 같다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: 8px;   /* vega: pl-2 -ml-1 beside a button, -0.15rem beside a kbd */
+    padding-inline-start: var(--control-padding-x-grouped);   /* vega: pl-2 -ml-1 beside a button, -0.15rem beside a kbd */
     &:has(> button) {
         margin-inline-start: -4px;
     }
     &:has(> kbd) {
-        margin-inline-start: -0.15rem;
+        margin-inline-start: -0.275rem;
     }
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: 8px;   /* vega: pr-2 -mr-1 beside a button, -0.15rem beside a kbd */
+    padding-inline-end: var(--control-padding-x-grouped);   /* vega: pr-2 -mr-1 beside a button, -0.15rem beside a kbd */
     &:has(> button) {
         margin-inline-end: -4px;
     }
@@ -141,10 +147,12 @@
 }
 
 /* mira: gap-2 rounded-md text-xs/relaxed
-   ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다. */
+   ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다.
+   ⚠ 이 칸은 Button 의 sm 단계(글자·행간이 sm 이다)라 모서리도 axis contract v4 의
+      --control-radius-sm 을 읽는다. foundation 값은 --control-radius 의 별칭이다. */
 .cn-input-group-button {
     gap: 8px;
-    border-radius: var(--control-radius);
+    border-radius: var(--control-radius-sm);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 }

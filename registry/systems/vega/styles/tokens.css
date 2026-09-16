@@ -44,12 +44,16 @@
     /* 여러 줄 입력(Textarea)의 세로 패딩. 한 줄 컨트롤은 높이가 정본이라 세로 패딩이 없고,
        Textarea 만 줄 수에 따라 자라므로 세로 패딩이 정본이다. mira: py-2 (인풋 그룹 안에서도 같다) */
     --control-padding-y-multiline: 8px;
+    /* 입력 계열(field 하위 축)의 세로 여백. vega: input · native select py-1 */
+    --control-padding-y-field: 4px;
 
     /* 좌우 패딩 — mira 는 xs~md 가 px-2 이고 lg 만 px-2.5 다 */
     --control-padding-x-xs: 8px;
     --control-padding-x-sm: 10px;
     --control-padding-x-md: 10px;
     --control-padding-x-lg: 10px;
+    /* A control inside a group (input-group inline addon · joined toggle-group item). vega: px-2 */
+    --control-padding-x-grouped: 8px;
 
     /* 아이콘이 붙은 쪽의 좌우 패딩 — has-data-[icon=inline-start]:pl-1.5 (lg 는 pl-2) */
     --control-padding-x-icon-xs: 6px;
@@ -136,6 +140,8 @@
     --control-indicator-dot-size: 8px;
     /* 키캡의 모서리(foundation 슬롯). vega: rounded-sm */
     --kbd-radius: calc(var(--radius) * 0.6);   /* vega: rounded-sm */
+    /* vega: the keycap is h-5 · min-w-5, no longer the xs control (h-6). */
+    --kbd-height: 20px;
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
@@ -149,6 +155,8 @@
     /* 손잡이 크기(foundation 슬롯). vega: size-4 · size-3 */
     --switch-thumb-size-md: 16px;
     --switch-thumb-size-sm: 12px;
+    /* Slider track. vega: h-1.5 · w-1.5 */
+    --slider-track-thickness: 6px;
 
     /* 포커스 링 — mira: focus-visible:ring-2 ring-ring/30. 테두리 바깥에 간격 없이 box-shadow 한 겹으로 그린다.
        링의 색은 1층의 --ring-focus(30%) · --ring-focus-strong(50%) · --ring-invalid 가 갖는다.
@@ -174,14 +182,22 @@
     /* Sheet 의 그림자(foundation 슬롯). vega (and mira): shadow-lg */
     --sheet-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --surface-radius-lg: 14px;   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
+    --card-radius: var(--surface-radius-lg);   /* card rounded-xl */
+    --empty-radius: var(--surface-radius);     /* empty rounded-lg */
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
     --surface-padding-lg: 24px;  /* sheet header p-6 · empty p-6 */
+    --sheet-padding: var(--surface-padding-md);   /* sheet header · footer p-4 */
     --surface-panel-width: 384px; /* sheet 의 sm:max-w-sm */
     --surface-gap: 4px;          /* dialog-header gap-1 · card-header gap-1 */
     --surface-gap-lg: 16px;      /* dialog-content gap-4 · popover gap-4 */
     --surface-icon-gap: 6px;     /* alert has-[>svg]:gap-x-1.5 · tooltip gap-1.5 */
     --surface-border-width: 1px;
+    /* Chat bubble. vega: rounded-xl px-3 py-2 leading-relaxed */
+    --bubble-radius: var(--surface-radius-lg);
+    --bubble-padding-x: 12px;
+    --bubble-padding-y: 8px;
+    --bubble-line-height: 1.625;
 
     /* 모달 뒤에 까는 막. 색은 1층의 --overlay-backdrop 이 갖는다. mira: backdrop-blur-xs = 4px */
     --overlay-backdrop-blur: 4px;
@@ -210,6 +226,8 @@
     --menu-shortcut-line-height: var(--ui-line-height-xs);
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
+    /* The menubar bar. vega: gap-1 */
+    --menubar-gap: 4px;
 
     /* --------------------------------------------------------
        sidebar-item — 사이드바의 항목
@@ -263,6 +281,9 @@
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */
     --sidebar-item-action-size: 20px;
     --sidebar-item-action-icon-size: 16px;
+
+    /* The shell (v4). vega: the search box is h-8 */
+    --sidebar-input-height: var(--control-height-sm);
 
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
@@ -335,6 +356,20 @@
     --tag-font-size: var(--ui-text-xs);
 
     /* --------------------------------------------------------
+       tabs — the default variant (v4). vega: h-9 bar, px-2 py-1 triggers, the active one raised (shadow-sm).
+       -------------------------------------------------------- */
+    --tabs-list-height: var(--control-height-md);
+    --tabs-trigger-padding-x: 8px;
+    --tabs-trigger-padding-y: 4px;
+    --tabs-trigger-active-shadow: var(--shadow-chip);
+
+    /* --------------------------------------------------------
+       badge — its own axis (v4). vega: h-5 · rounded-4xl, no longer the xs control (h-6).
+       -------------------------------------------------------- */
+    --badge-height: 20px;
+    --badge-radius: var(--tag-radius);   /* rounded-4xl */
+
+    /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
        mira: the same h-8 bar as the default tabs.
        -------------------------------------------------------- */
@@ -404,20 +439,17 @@
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
 :root {
-    --badge-height: var(--control-height-xs);
     --badge-padding-x: var(--control-padding-x-xs);
     --badge-padding-x-icon: var(--control-padding-x-icon-xs);
     --badge-padding-y: 2px;
     --badge-gap: var(--control-gap-xs);
     --badge-icon-size: var(--control-icon-size-xs);
     --badge-border-width: var(--control-border-width);
-    --badge-radius: 9999px;
     --badge-font-size: var(--ui-text-xs);
     --badge-line-height: var(--ui-line-height-xs);
     --badge-letter-spacing: var(--ui-letter-spacing);
     --badge-font-weight: var(--ui-font-weight);
     --badge-text-transform: initial;
-    --kbd-height: var(--control-height-xs);
     --kbd-min-width: var(--kbd-height);
     --kbd-padding-x: 4px;
     --kbd-gap: var(--control-gap-xs);
@@ -428,10 +460,8 @@
     --kbd-icon-size: var(--control-icon-size-sm);
     --control-radius-sm: var(--control-radius);
     --control-text-transform: initial;
-    --control-padding-x-grouped: var(--control-padding-x-md);
     --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
     --control-padding-x-field: var(--control-padding-x-md);
-    --control-padding-y-field: 2px;
     --control-font-size-field: var(--control-font-size-md);
     --control-line-height-field: var(--control-line-height-md);
     --control-letter-spacing-field: var(--control-letter-spacing);
@@ -460,31 +490,17 @@
     --command-item-gap: var(--menu-item-gap);
     --select-item-gap: var(--menu-item-gap);
     --menubar-padding: var(--menu-padding);
-    --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
-    --card-radius: var(--surface-radius);
-    --bubble-radius: var(--surface-radius);
-    --bubble-padding-x: var(--surface-padding-sm);
-    --bubble-padding-y: 6px;
-    --bubble-line-height: var(--ui-line-height-md);
     --chart-tooltip-radius: var(--surface-radius);
-    --empty-radius: var(--surface-radius-lg);
-    --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
-    --tabs-list-height: var(--control-height-lg);
     --tabs-list-padding: 3px;
     --tabs-trigger-gap: 6px;
-    --tabs-trigger-padding-x: 6px;
-    --tabs-trigger-padding-y: 2px;
-    --tabs-trigger-active-shadow: none;
     --item-gap: var(--menu-item-gap);
     --item-media-icon-size: var(--control-icon-size-lg);
-    --slider-track-thickness: 4px;
     --avatar-font-size: var(--ui-text-lg);
     --avatar-line-height: var(--ui-line-height-lg);
     --sidebar-surface-padding: var(--menu-item-padding-x);
     --sidebar-surface-gap: var(--menu-item-gap);
-    --sidebar-input-height: var(--control-height-lg);
     --sidebar-item-padding-y: var(--sidebar-item-padding-x);
     --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
     --sidebar-badge-font-weight: var(--ui-font-weight);

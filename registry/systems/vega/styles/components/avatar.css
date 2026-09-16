@@ -33,15 +33,18 @@
     }
 }
 
-/* 글자 크기는 컴포넌트가 아니라 여기서 준다. shadcn 의 AvatarFallback 은 text-sm
-   (sm 아바타는 text-xs)을 유틸리티로 갖는데 registry/ui 는 그 유틸리티를 빼 두었다
-   (유틸리티가 3층 규칙을 이기기 때문 — tooling/preset/README.md). 값은 프리셋의 것이다. */
+/* 글자 크기는 컴포넌트가 아니라 여기서 준다. mira 의 AvatarFallback 은 `text-sm`
+   (sm 아바타는 `text-xs`)을 유틸리티로 갖는데 registry/ui 는 그 유틸리티를 빼 두었다
+   (유틸리티가 3층 규칙을 이기기 때문 — tooling/preset/README.md). 값은 ui 축의 lg · sm 과 같다. */
 .cn-avatar-fallback {
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: 9999px;
-    font-size: 14px;     /* vega: text-sm */
-    line-height: 20px;
+    /* md · lg 의 이니셜 타입은 아바타 자신의 축이다 — v4 슬롯 --avatar-font-size ·
+       --avatar-line-height(foundation 은 --ui-text-lg · --ui-line-height-lg 의 별칭). mira: text-sm
+       sm 쌍은 기존 --avatar-font-size-sm · --avatar-line-height-sm 그대로다. */
+    font-size: var(--avatar-font-size);
+    line-height: var(--avatar-line-height);
 }
 
 .cn-avatar-image {

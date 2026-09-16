@@ -198,6 +198,7 @@
     --muted-soft: oklch(0.97 0 0 / 50%);
     /* mira 의 bg-muted-foreground/10 — 콤보박스 칩과 인풋 그룹 안의 키캡. */
     --chip: oklch(0.556 0 0 / 10%);
+    --combobox-chip-fill: var(--muted);   /* combobox chip bg-muted */
     /* 고스트 버튼 · 고스트 배지의 hover. mira: hover:bg-muted dark:hover:bg-muted/50 — 밝은 쪽은 muted 그대로다. */
     --ghost-hover: oklch(0.97 0 0);
 
@@ -242,6 +243,8 @@
     /* 셀렉트 트리거 · 네이티브 셀렉트의 hover. mira: dark:hover:bg-input/50 — 밝은 쪽에는 hover 가 없으므로
        --input-fill 과 같은 값이다. */
     --select-hover: transparent;
+    /* The command palette search box. vega: bg-input/30 in both modes. */
+    --command-input-fill: color-mix(in oklab, var(--input) 30%, transparent);
     --ring: oklch(0.708 0 0);                /* neutral-400 */
     /* 포커스 링의 색. --ring 은 테두리(focus-visible:border-ring)로도 읽혀 불투명이어야 하므로 링만 따로 둔다.
        mira: 컨트롤 대부분 ring-ring/30 · 라디오와 토글 ring-ring/50 · 검증 실패 ring-destructive/20 (다크 /40) */
@@ -289,8 +292,12 @@
     --switch-thumb-on: oklch(1 0 0);
     /* 드로어 틀의 테두리. mira: border-popover dark:border-border — 밝은 쪽은 판과 같은 색이라 보이지 않는다. */
     --drawer-border: oklch(1 0 0);
-    /* 사이드바 안의 검색 칸. mira: bg-muted/20 dark:bg-muted/30 */
-    --sidebar-input-fill: oklch(0.97 0 0 / 20%);
+    /* 사이드바 안의 검색 칸. vega: bg-background (mira: bg-muted/20 dark:bg-muted/30) */
+    --sidebar-input-fill: var(--background);
+    /* 설문 선택지의 평소 바탕. vega: 밝은 쪽은 바탕이 없다 */
+    --questionnaire-choice-fill: transparent;
+    /* 켜진 선택 카드(FieldLabel)의 테두리. vega: border-primary/30 */
+    --field-label-checked-border: color-mix(in oklab, var(--primary) 30%, transparent);
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -392,9 +399,7 @@
        2층의 --control-radius 8px(mira 의 rounded-md)과 같은 계열이다. */
     --radius: 0.625rem;
 
-    /* ---- vega-only (layer-3 rules of this system read them; candidates for foundation slots) ----
-       Outline button hover. vega: hover:bg-muted, dark:hover:bg-input/50.
-       (--button-outline-fill became a foundation slot in axis contract 3 and is declared above.) */
+    /* Outline button hover (foundation slot since axis contract v4). vega: hover:bg-muted, dark:hover:bg-input/50. */
     --button-outline-hover-fill: var(--muted);
 }
 
@@ -425,6 +430,7 @@
     --muted-foreground: oklch(0.708 0 0);    /* neutral-400 */
     --muted-soft: oklch(0.269 0 0 / 50%);
     --chip: oklch(0.708 0 0 / 10%);
+    --combobox-chip-fill: var(--muted);   /* combobox chip bg-muted */
     --ghost-hover: oklch(0.269 0 0 / 50%);
     --skeleton: oklch(0.269 0 0);            /* vega: bg-muted */
     --foreground-subtle: oklch(0.556 0 0);
@@ -451,6 +457,8 @@
     --input-fill: oklch(1 0 0 / 4.5%);
     --input-fill-hover: oklch(1 0 0 / 7.5%);
     --select-hover: oklch(1 0 0 / 7.5%);
+    /* The command palette search box. vega: bg-input/30 in both modes. */
+    --command-input-fill: color-mix(in oklab, var(--input) 30%, transparent);
     --ring: oklch(0.556 0 0);                /* neutral-500 */
     --ring-focus: oklch(0.556 0 0 / 50%);
     --ring-focus-strong: oklch(0.556 0 0 / 50%);
@@ -484,7 +492,11 @@
     --switch-thumb-off: oklch(0.985 0 0);    /* foreground */
     --switch-thumb-on: oklch(0.205 0 0);     /* primary-foreground */
     --drawer-border: oklch(1 0 0 / 10%);     /* border */
-    --sidebar-input-fill: oklch(0.269 0 0 / 30%);
+    --sidebar-input-fill: var(--background);
+    /* 설문 선택지의 평소 바탕. vega: dark:bg-input/20 */
+    --questionnaire-choice-fill: color-mix(in oklab, var(--input) 20%, transparent);
+    /* 켜진 선택 카드(FieldLabel)의 테두리. vega: dark:border-primary/20 */
+    --field-label-checked-border: color-mix(in oklab, var(--primary) 20%, transparent);
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -582,7 +594,7 @@
     --avatar-tone-moss: var(--muted);
     --avatar-tone-mauve: var(--muted);
 
-    /* ---- vega-only (see :root) ---- */
+    /* Outline button hover (foundation slot, see :root). */
     --button-outline-hover-fill: var(--input-fill-hover);
 }
 
@@ -619,15 +631,11 @@
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--input-fill);
-    --command-input-fill: var(--input-fill);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;
-    --field-label-checked-border: var(--border);
-    --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
     --checkbox-invalid-checked-border: var(--selection);
@@ -637,15 +645,11 @@
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--input-fill);
-    --command-input-fill: var(--input-fill);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;
-    --field-label-checked-border: var(--border);
-    --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
     --checkbox-invalid-checked-border: var(--selection);

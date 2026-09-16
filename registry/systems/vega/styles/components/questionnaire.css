@@ -77,10 +77,9 @@
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     box-shadow: var(--shadow-control);
-
-    .dark & {
-        background-color: color-mix(in oklab, var(--input) 20%, transparent);
-    }
+    /* 평소 바탕은 v4 슬롯 --questionnaire-choice-fill 이 갖는다(1층, foundation: transparent
+       = mira 처럼 바탕 없음). hover · 켜짐은 아래에서 덮는다. */
+    background-color: var(--questionnaire-choice-fill);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -109,13 +108,14 @@
     }
 }
 
-/* mira: border-input dark:bg-input/30 … size-4 rounded-[4px] — 바탕은 Checkbox 와 같은 --input-fill 이다. */
+/* mira: border-input dark:bg-input/30 … size-4 rounded-[4px] — 바탕은 Checkbox 와 같은 축을 읽는다
+   (밝은 쪽엔 바탕이 없고 어두운 쪽만 dark:bg-input/30). */
 .cn-questionnaire-choice-indicator {
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
     border-radius: var(--control-indicator-radius);
     border-color: var(--input);
-    background-color: var(--input-fill);
+    background-color: var(--checkbox-fill);
     /* ⚠ 켜졌을 때의 색은 유틸리티로 남긴다. `data-checked` 변형이
        [data-state=checked] 와 [data-checked]:not([data-checked=false]) 둘을
        함께 매치하는데, 손으로 옮겨 적으면 그중 하나가 빠져 라디오·체크박스
@@ -151,7 +151,7 @@
     /* vega: size-5 rounded-md text-[0.625rem] shadow-xs */
     width: 20px;
     height: 20px;
-    border: var(--control-border-width) solid var(--input);
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
     border-radius: var(--control-radius);
     box-shadow: var(--shadow-control);
     background-color: var(--background);

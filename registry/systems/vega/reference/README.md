@@ -105,3 +105,51 @@ and `InputGroupButton` passing `size` to `Button`. Only the disabled Checkbox ·
 
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and the
 comparison pairs every one that carries a `data-slot`.
+
+## Axis contract v4, stage 2 — layer-3 literals moved into slots (2026-09-17)
+
+`tooling/preset/slot-migration.md` listed 43 declarations where vega wrote a value into a rule that foundation
+now reads from a v4 slot. 42 moved: the rule is foundation's again and the value sits in layer 1 or 2.
+
+| Slot | vega value | Layer |
+|---|---|---|
+| `--badge-height` · `--badge-radius` | `20px` · `var(--tag-radius)` | 2 |
+| `--kbd-height` | `20px` (`--kbd-min-width` follows it) | 2 |
+| `--bubble-radius` · `-padding-x` · `-padding-y` · `-line-height` | `var(--surface-radius-lg)` · `12px` · `8px` · `1.625` | 2 |
+| `--card-radius` · `--empty-radius` · `--sheet-padding` | `var(--surface-radius-lg)` · `var(--surface-radius)` · `var(--surface-padding-md)` | 2 |
+| `--control-padding-x-grouped` · `--control-padding-y-field` | `8px` · `4px` | 2 |
+| `--menubar-gap` · `--slider-track-thickness` · `--sidebar-input-height` | `4px` · `6px` · `var(--control-height-sm)` | 2 |
+| `--tabs-list-height` · `--tabs-trigger-padding-x` · `-padding-y` · `--tabs-trigger-active-shadow` | `var(--control-height-md)` · `8px` · `4px` · `var(--shadow-chip)` | 2 |
+| `--combobox-chip-fill` · `--command-input-fill` | `var(--muted)` · `color-mix(in oklab, var(--input) 30%, transparent)`, both modes | 1 |
+
+Rows whose value already equalled foundation's default (the menu label's 6px, the accordion item's border, the
+avatar's 14/20 initials, the badge border and icon, the keycap's min width) took foundation's rule with no token.
+
+**Not moved (1):** `.cn-select-trigger[data-size="default"]` `padding-inline: var(--control-padding-x-md) 8px`.
+The table offered `--control-padding-x-field`, but that slot is also read by `.cn-input` and as the longhand
+`padding-inline-start` of `.cn-native-select`; a two-value shorthand there would give the input an 8px end and
+make the native select's declaration invalid. The trigger keeps its literal (its type now reads the field
+sub-axis). A `--select-trigger-padding-end` slot would express it.
+
+Beyond the table (vega was ported before foundation was corrected to mira, so its layer 3 carried more forks):
+
+- Every other v4 slot foundation reads is now read by vega too — `scan-tokens vega` reports no v4 name as dead
+  (98 were before). The ones with a vega value: `--field-label-checked-border`
+  (`primary/30`, dark `/20`, replacing a `.dark &` nest in `field.css`), `--questionnaire-choice-fill`
+  (`transparent`, dark `input/20`, same), and the v3 `--sidebar-input-fill` set to `var(--background)` (it was
+  still mira's value and unread). `--button-outline-hover-fill`'s comment no longer calls it vega-only.
+- Title and label bands (`--title-*`, `--ui-label-*`), switch, textarea, item, the menu ring and separator,
+  the sidebar parts, the sm control radius, the joined toggle-group radius and the disabled field fill all read
+  their slots; the dropdown and menubar sub-menus read `--menu-ring` · `--menu-sub-shadow` instead of the literal.
+- Comment-only forks were dropped.
+
+Layer 3 against foundation: **12 of 62 files byte-identical** (was 6: `_shared` · `kbd` · `label` · `radio-group` ·
+`separator` · `sonner` joined), differing lines 1552 → 933. The 50 that still differ carry declarations no slot
+expresses — vega's `shadow-xs` on outline controls composed into the focus ring through `--control-shadow`,
+its own sizes and gaps (dialog close offset, hover-card width, empty and item boxes, field and questionnaire
+gaps, calendar cell, progress, pagination, navigation menu), text-sm where mira is text-xs, the accordion
+without a frame, the context-menu indicator box, selectors vega narrows or widens (sub-trigger highlight,
+checkbox-item end padding on the combobox) — the DESIGN.md §5 shapes.
+
+Check: a keyed dump of every coverage section in both modes before and after — **0 computed-value
+differences**; `compare-shadcn.mjs` light 0 mismatches · 28 excluded, dark 0 · 52 excluded (unchanged).

@@ -22,7 +22,10 @@
 /* 표면 슬롯 — 바탕 --surface-control · 그림자 --shadow-control · 누르면 눌린 그림자(foundation 은 모두 none).
    ⚠ 바탕이 background-image 라 hover 의 background-color(--select-hover)는 그 아래에 깔린다. */
 .cn-select-trigger {
-    border: var(--control-border-width) solid var(--input);
+    border: var(--control-border-width) solid var(--input-border);
+    /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
+       foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-image: var(--surface-control);
@@ -51,15 +54,17 @@
     &[data-size="default"] {
         height: var(--control-height-md);   /* vega: h-9 is a height, and py-2 fits inside it */
         padding-inline: var(--control-padding-x-md) 8px;
-        font-size: var(--control-font-size-md);
-        line-height: var(--control-line-height-md);
+        font-size: var(--control-font-size-field);
+        line-height: var(--control-line-height-field);
     }
 
+    /* v4: sm 컨트롤의 모서리는 제 슬롯을 갖는다(foundation 은 --control-radius 의 별칭). */
     &[data-size="sm"] {
         height: var(--control-height-sm);
         padding-inline: var(--control-padding-x-md) 8px;
         font-size: var(--control-font-size-sm);
         line-height: var(--control-line-height-sm);
+        border-radius: var(--control-radius-sm);
     }
 
     /* 아직 고르지 않았다는 표시. mira: data-placeholder:text-muted-foreground */
@@ -95,9 +100,11 @@
     background-color: var(--popover);
     color: var(--popover-foreground);
     border-radius: var(--surface-radius-sm);   /* vega: rounded-md */
-    min-width: var(--menu-min-width);
+    /* 좁은 팝업 축(v4) — 고른 값 하나를 담는 목록이라 드롭다운 메뉴와 최소 너비를
+       갈라 쓸 수 있다. 기본값이 --menu-min-width 라 지금은 같은 값이다. */
+    min-width: var(--menu-narrow-min-width);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--shadow-float);
 
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;
@@ -134,7 +141,8 @@
     /* vega: py-1.5 pr-8 pl-2 */
     padding-inline: var(--menu-item-padding-x) var(--menu-item-padding-end);
     padding-block: 6px;
-    gap: var(--menu-item-gap);
+    /* v4: 행의 간격은 --select-item-gap 이다(기본값이 --menu-item-gap). */
+    gap: var(--select-item-gap);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -180,8 +188,9 @@
 .cn-select-separator {
     background-color: var(--border-subtle);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    /* v4: 구분선의 여백은 면의 안쪽 여백에서 파생되지 않고 제 슬롯을 갖는다(_menu-family.css 와 같다). */
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 .cn-select-scroll-up-button,
