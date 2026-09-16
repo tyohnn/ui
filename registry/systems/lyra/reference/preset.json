@@ -1,0 +1,22 @@
+{
+    "shadcnVersion": "4.21.0",
+    "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+    "config": {
+        "name": "base-lyra",
+        "title": "Lyra (Base)",
+        "description": "Lyra / Tabler / JetBrains Mono",
+        "base": "base",
+        "style": "lyra",
+        "baseColor": "neutral",
+        "theme": "neutral",
+        "chartColor": "neutral",
+        "iconLibrary": "phosphor",
+        "font": "jetbrains-mono",
+        "fontHeading": "inherit",
+        "item": "Item",
+        "rtl": false,
+        "menuAccent": "subtle",
+        "menuColor": "default",
+        "radius": "default"
+    }
+}
