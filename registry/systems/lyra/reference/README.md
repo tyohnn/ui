@@ -188,10 +188,10 @@ The badge border and icon rows already equalled foundation's defaults and took t
   `--menu-label-padding-y` (8px, `py-2`) for every menu label, and the palette heading is the one label a step
   lower — the slot cannot hold both.
 
-**Not moved (1):** `.cn-accordion-item:not(:last-child)` `border-bottom`. `--accordion-border-width` is 0px in
+**Not moved (1) — resolved in v5:** `.cn-accordion-item:not(:last-child)` `border-bottom`. `--accordion-border-width` is 0px in
 lyra because the group has no frame, so the item rule keeps `--surface-border-width`.
 
-Slot-meaning conflicts left as rules (one value cannot serve every reader): `--accordion-border-width` (above);
+Slot-meaning conflicts left as rules (one value cannot serve every reader) — **all resolved in v5**, see below: `--accordion-border-width` (above);
 `--badge-height` (the plain badge is `h-5` = 20px, the toned `[data-tone]` badge follows the xs control, 24px);
 `--control-padding-x-grouped` (8px for the toggle-group item, select trigger end and inline addons, while the
 block-start/end input-group addons keep `--control-padding-x-md`, 10px); `--input-fill-disabled` (lyra fills a
@@ -214,3 +214,15 @@ differences**; `compare-shadcn.mjs` light 0 mismatches · 38 excluded, dark 0 ·
 Nothing. The coverage template renders all 62 `registry/ui` components and the comparison pairs every one
 that carries a `data-slot`. `check-coverage.mjs --system lyra` passes in both modes: no console errors,
 no page errors, no empty sections, every popup present.
+
+## Axis contract v5 (2026-09-17)
+
+Every slot-meaning conflict above is a value now: `--accordion-item-border-width: var(--surface-border-width)` ·
+`--tag-height: var(--control-height-xs)` · `--input-group-addon-padding-x-block: var(--control-padding-x-md)` ·
+`--select-fill-disabled: var(--input-fill)` (both scopes). `_control-family.css`, `input.css` and `textarea.css`
+take foundation's rules back — the `:not([data-slot="input-group-control"])` exclusion is unnecessary because the
+input group's own reset comes later in the barrel — and are byte-identical to foundation. The command group
+heading's `py-1.5` is a different case (one label a step lower than the rest) and stays a rule.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 38 excluded**, dark **0 / 61** —
+unchanged. `scan-tokens` · `validate-system` pass.

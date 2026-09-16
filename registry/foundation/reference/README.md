@@ -122,6 +122,60 @@ layer 3 by `.dark`: `--button-outline-fill` and `--slider-thumb-fill`. `foundati
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and the
 comparison pairs every one that carries a `data-slot`.
 
+## Axis contract v5 — one slot, one meaning (2026-09-17)
+
+Stage 2 of v4 moved each system's layer-3 literals into the slots and recorded, under "slot-meaning
+conflicts", the places where **one slot was read by several elements and the system gave those elements
+different values** — so the system kept a rule. The ten approved splits below give the second reader a name
+of its own. Every new default is an **alias of the slot it split from**, so foundation and `mira` (byte
+identical) render exactly as under v4; the systems that had kept a rule now set the value instead.
+Principle added to DESIGN.md §5: a slot carries one meaning — when its readers need different values, split it.
+
+### Layer 2 (`styles/tokens.css`, the `Axis contract v5` block) — 14 names
+
+| # | v4 slot | New slot | Read by | Default | Asked by (value) |
+|---|---|---|---|---|---|
+| 1 | `--control-padding-x-grouped` | `--input-group-addon-padding-x` | `.cn-input-group-addon-align-inline-start/-end` | `var(--control-padding-x-grouped)` | — (the inline addons keep the grouped step everywhere) |
+| 1 | | `--input-group-addon-padding-x-block` | `.cn-input-group-addon-align-block-start/-end` | `var(--input-group-addon-padding-x)` | rhea (`--control-padding-x-field`, 10) · nova · lyra · vega (`--control-padding-x-md`, 10) |
+| 1 | | `--toggle-group-item-padding-x` | joined `.cn-toggle-group-item` | `var(--control-padding-x-grouped)` | sera (`--control-padding-x-md`; its addons take the field's 0) |
+| 2 | `--accordion-border-width` | `--accordion-item-border-width` | `.cn-accordion-item:not(:last-child)` border-bottom | `var(--accordion-border-width)` | sera · nova (group `0px`, item `--surface-border-width`) · lyra (item `--surface-border-width`) |
+| 3 | `--badge-height` | `--tag-height` | `.cn-badge[data-tone]` | `var(--badge-height)` | luma · sera · lyra (`--control-height-xs`) |
+| 4 | `--card-radius` | `--card-part-radius` | `.cn-card-header` · `.cn-card-footer` corners | `var(--card-radius)` | maia (`14px`) |
+| 4 | | `--card-image-radius` | `.cn-card > img:first-child/:last-child` corners | `var(--card-radius)` | nova (`--surface-radius`) |
+| 5 | `--card-ring` (the declaration) | `--card-shadow` | `.cn-card` box-shadow, after the ring | `var(--shadow-card)` (empty in foundation) | rhea (`--shadow-chip`); sera · vega · luma read their own `--shadow-card` through the default |
+| 6 | `--control-padding-x-field` | `--select-trigger-padding-start` | `.cn-select-trigger[data-size="default"]` | `var(--control-padding-x-field)` | rhea (`--control-padding-x-md`, px-3) |
+| 6 | | `--select-trigger-padding-end` | the same | `var(--select-trigger-padding-start)` | vega (`8px` — `pl-2.5 pr-2`) |
+| 7 | `--control-padding-y-field` | `--native-select-padding-y` | `.cn-native-select` | `var(--control-padding-y-field)` | sera (`8px`); graphite takes the default, with `--control-padding-y-field: 0px` |
+| 8 | `--control-radius-sm` | `--input-group-button-radius` | `.cn-input-group-button` | `var(--control-radius-sm)` | luma · nova (`--control-radius`) |
+| 9 | `--toggle-group-joined-radius` | `--toggle-group-item-radius` | joined item corners | `var(--toggle-group-joined-radius)` | rhea (`--control-radius`, with the group at `0px`) |
+| 9 | | `--toggle-group-joined-radius-sm` | `.cn-toggle-group[data-size="sm"]` (new declaration) | `var(--toggle-group-joined-radius)` | nova (`--control-radius-sm`) |
+
+### Layer 1 (`styles/globals.css`, `:root` **and** `.dark`) — 1 name
+
+| # | v4 slot | New slot | Read by | Default | Asked by (value) |
+|---|---|---|---|---|---|
+| 10 | `--input-fill-disabled` | `--select-fill-disabled` | `.cn-native-select:disabled` · `.cn-select-trigger[data-disabled]` (split out of the one `_control-family.css` rule) | `var(--input-fill-disabled)` | nova · lyra (`var(--input-fill)` in both scopes) |
+
+Split 1 needed three names, not two: the block addons differ from the inline ones in four systems, and the
+toggle item from the addons in sera. Split 4 needed two: maia's header and footer and nova's image each step
+away from the card on their own. Split 9 needed the sm step: nova's conflict was the sm group root, which the
+item split alone does not reach. `--control-padding-x-grouped` stays the shared step the three names alias.
+
+**Proof it changes nothing:** every coverage section of foundation and all nine systems was dumped with
+`collect.mjs`'s `coveragePage` before the change and after the last system took its values, light and dark, and
+compared with `compare-computed.mjs --diff`: **0 differences in all 20 pairs** (2530 elements each). The seven
+systems that set values compare against their reference apps with **0 mismatches** in both modes and the same
+exclusions as before — rhea 50 / 65 · sera 25 / 25 · vega 28 / 52 · nova 46 / 69 · lyra 38 / 61 · luma 28 / 43 ·
+maia 28 / 32 (light / dark).
+
+**Layer-3 files byte-identical to foundation** (of 62), before → after v5: mira 62 → 62 · graphite 39 → 39 ·
+luma 16 → 16 · lyra 24 → 27 · maia 24 → 24 · nova 21 → 23 · rhea 22 → 22 · sera 15 → 16 · vega 12 → 12.
+
+**Still rules, by decision:** maia's dark `--menu-ring` on two menus; sera's menu-row case, label tracking and
+select-row gap; rhea's sidebar radius scope. **Still rules, beyond the ten splits:** luma's sm button corner
+(`--control-radius-sm` is its input family's 22 and the sm button's 26 at once), vega's sm select trigger
+padding (v5 split the default size only), rhea's and luma's / maia's outline-only joined toggle-group selector.
+
 ## Axis contract v4 — the slots the nine ports asked for (2026-09-16)
 
 Eight preset ports (`vega` · `nova` · `maia` · `lyra` · `luma` · `rhea` · `sera`, plus `mira` which is this

@@ -228,11 +228,11 @@ was removed from input · textarea · select · native select · input group.
 
 | Where | Why it stays a rule |
 |---|---|
-| `accordion.css` `.cn-accordion` `border: 0 solid` | the item divider reads the same `--accordion-border-width` at 1px; sera's list has no outer frame |
-| `badge.css` `.cn-badge[data-tone]` `height: var(--control-height-xs)` | the plain badge's `--badge-height` is `auto`; the tone tag keeps the xs height |
-| `card.css` `box-shadow` | reads `--card-ring` plus `--shadow-card`, a declaration mira does not make |
-| `toggle-group.css` joined item `padding-inline: var(--control-padding-x-md)` | `--control-padding-x-grouped` is the input-group addon's 0 |
-| `native-select.css` `padding-block: 8px` | `--control-padding-y-field` is the input's 4px |
+| `accordion.css` `.cn-accordion` `border: 0 solid` | the item divider reads the same `--accordion-border-width` at 1px; sera's list has no outer frame — **resolved in v5** (`--accordion-item-border-width`) |
+| `badge.css` `.cn-badge[data-tone]` `height: var(--control-height-xs)` | the plain badge's `--badge-height` is `auto`; the tone tag keeps the xs height — **resolved in v5** (`--tag-height`) |
+| `card.css` `box-shadow` | reads `--card-ring` plus `--shadow-card`, a declaration mira does not make — **resolved in v5** (`--card-shadow`, whose default reads `--shadow-card`) |
+| `toggle-group.css` joined item `padding-inline: var(--control-padding-x-md)` | `--control-padding-x-grouped` is the input-group addon's 0 — **resolved in v5** (`--toggle-group-item-padding-x`) |
+| `native-select.css` `padding-block: 8px` | `--control-padding-y-field` is the input's 4px — **resolved in v5** (`--native-select-padding-y`) |
 | `select.css` `.cn-select-item` `gap: var(--menu-item-gap)` | `--select-item-gap` is the 8px of Command and Item rows; the select row keeps the menu's 10 |
 | `_menu-family.css` row case · tracking · weight | sera's rows are uppercase in the four menu families only, not in Command and Combobox (a selector) |
 | field legend · popover title `letter-spacing: var(--ui-letter-spacing)` | the rest of the quiet label band tracks at `--ui-label-letter-spacing` (0.025em); these two do not |
@@ -242,3 +242,15 @@ has no slot for or by the rule shapes recorded above ("Layer-3 rules that could 
 
 **Check:** coverage-template dumps before and after, **0 differences** in light and dark. `compare-shadcn`:
 light **0 mismatches / 25 excluded**, dark **0 / 25** — unchanged. `scan-tokens` · `validate-system` pass.
+
+## Axis contract v5 (2026-09-17)
+
+Five of the rows above became values: `--accordion-border-width: 0px` with `--accordion-item-border-width:
+var(--surface-border-width)` · `--tag-height: var(--control-height-xs)` · `--toggle-group-item-padding-x:
+var(--control-padding-x-md)` · `--native-select-padding-y: 8px`; the card reads `--card-shadow` at its default
+(sera's own `--shadow-card`). `toggle-group.css` is now byte-identical to foundation. **Not adopted, and kept as
+sera's rules:** the select row's gap, the menu rows' case · tracking · weight, and the legend / popover title
+tracking.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 25 excluded**, dark **0 / 25** —
+unchanged. `scan-tokens` · `validate-system` pass.

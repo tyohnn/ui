@@ -111,7 +111,7 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    and check the preview: `SYSTEM=<name> npm run dev -w @tyohnn/preview`, then
    `http://localhost:5173/?system=<name>&mode=dark`.
 
-### Token slots (axis contract version 4)
+### Token slots (axis contract version 5)
 
 The names defined in foundation `styles/globals.css` (layer 1) and `styles/tokens.css` (layer 2) are the
 whole vocabulary; every system defines all of them. A **slot** is a name a layer-3 rule reads where a
@@ -133,6 +133,9 @@ system may want a different look, so a system tunes the value instead of editing
   foundation value changes nothing (for example a border always drawn with
   `--sidebar-item-border-width: 0px`).
 - Every slot must be read by a rule.
+- **One slot, one meaning.** When several elements read one slot and a system needs different values
+  for them, the slot is two slots: split it, alias the new name to the old one, and let each reader take
+  its own.
 
 #### What a value changes, and what needs a rule
 
@@ -196,6 +199,27 @@ define the names but still carry their own fork of the layer-3 rules with the va
 their render did not move (checked: 0 computed-value differences in both modes on the coverage template).
 **Stage 2** puts each system's value into the slot and takes foundation's rule back;
 `tooling/preset/slot-migration.md` lists, per system, which declaration moves into which slot.
+
+**Version 5 (2026-09-17)** split the ten v4 slots that stage 2 found carrying two meanings: one slot read
+by several elements while a system gave those elements different values, so the system had to keep a rule
+(recorded as "slot-meaning conflicts" in each system's `reference/README.md`). Each split adds the name the
+second reader needed, **defaulting to an alias of the slot it came from**, so foundation and mira render
+unchanged; the systems that had kept a rule now set a value instead. 14 layer-2 names and 1 layer-1 name:
+
+| v4 slot | Read by | Split into | Why |
+|---|---|---|---|
+| `--control-padding-x-grouped` | inline addons · block addons · joined toggle item | `--input-group-addon-padding-x` · `--input-group-addon-padding-x-block` · `--toggle-group-item-padding-x` | rhea · nova · lyra · vega keep the block addons at px-2.5 while the rest go to px-2; sera zeroes the addons but not the toggle |
+| `--accordion-border-width` | group frame · rule between items | `--accordion-item-border-width` | sera · nova · lyra draw no frame but keep the rules |
+| `--badge-height` | plain badge · toned badge | `--tag-height` | luma · sera · lyra keep the tag at the xs step while the badge is h-5 or auto |
+| `--card-radius` | card · header/footer · edge image | `--card-part-radius` · `--card-image-radius` | maia rounds header and footer one step below the card; nova gives the image the popover corner |
+| `--card-ring` (with no shadow slot) | the card's box-shadow | `--card-shadow` | rhea · sera (and vega · luma) draw a shadow after the ring |
+| `--control-padding-x-field` | inputs · select trigger | `--select-trigger-padding-start` · `-end` | rhea's trigger is px-3 against px-2.5 inputs; vega's is `pl-2.5 pr-2` |
+| `--control-padding-y-field` | input · native select | `--native-select-padding-y` | sera pads the native select py-2 against the input's py-1 (graphite, which asked too, measured 0 on both) |
+| `--control-radius-sm` | sm button · toggle · select trigger · input-group button | `--input-group-button-radius` | luma · nova step the sm control down but not the grouped button |
+| `--toggle-group-joined-radius` | group corner · joined item corners | `--toggle-group-item-radius` · `--toggle-group-joined-radius-sm` | rhea squares the group and rounds the items; nova steps only the sm group down |
+| `--input-fill-disabled` (layer 1) | input · textarea · native select · select trigger | `--select-fill-disabled` | nova · lyra fill a disabled input and textarea, not a select |
+
+`registry/foundation/reference/README.md` §"Axis contract v5" has the defaults and the per-system values.
 
 Version 3's slots:
 

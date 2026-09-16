@@ -125,7 +125,7 @@ now reads from a v4 slot. 42 moved: the rule is foundation's again and the value
 Rows whose value already equalled foundation's default (the menu label's 6px, the accordion item's border, the
 avatar's 14/20 initials, the badge border and icon, the keycap's min width) took foundation's rule with no token.
 
-**Not moved (1):** `.cn-select-trigger[data-size="default"]` `padding-inline: var(--control-padding-x-md) 8px`.
+**Not moved (1) — resolved in v5:** `.cn-select-trigger[data-size="default"]` `padding-inline: var(--control-padding-x-md) 8px`.
 The table offered `--control-padding-x-field`, but that slot is also read by `.cn-input` and as the longhand
 `padding-inline-start` of `.cn-native-select`; a two-value shorthand there would give the input an 8px end and
 make the native select's declaration invalid. The trigger keeps its literal (its type now reads the field
@@ -153,3 +153,15 @@ checkbox-item end padding on the combobox) — the DESIGN.md §5 shapes.
 
 Check: a keyed dump of every coverage section in both modes before and after — **0 computed-value
 differences**; `compare-shadcn.mjs` light 0 mismatches · 28 excluded, dark 0 · 52 excluded (unchanged).
+
+## Axis contract v5 (2026-09-17)
+
+The select trigger row above is a value now: foundation's rule reads `--select-trigger-padding-start` ·
+`--select-trigger-padding-end`, and vega sets `--select-trigger-padding-end: 8px` (the start keeps the field
+padding). The block input-group addons, which kept `--control-padding-x-md` while the inline ones read the
+grouped 8px, read `--input-group-addon-padding-x-block: var(--control-padding-x-md)`; the card reads
+`--card-shadow` at its default (vega's `--shadow-card`). The **sm** trigger's `pl-2.5 pr-2` is still vega's own
+rule — v5 split only the default size.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 28 excluded**, dark **0 / 52** —
+unchanged. `scan-tokens` · `validate-system` pass.

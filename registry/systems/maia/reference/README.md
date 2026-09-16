@@ -193,7 +193,7 @@ row's radius and gap (only the dialog-scoped `rounded-2xl` stays, as `.cn-comman
 
 **Not applied — slot collisions.** Two v4 slots are read by more elements than maia gives one value:
 
-- `--card-radius`: the list asked for `14px` on `.cn-card-header` / `.cn-card-footer`, but foundation's
+- `--card-radius` (**resolved in v5**: `--card-part-radius: 14px`): the list asked for `14px` on `.cn-card-header` / `.cn-card-footer`, but foundation's
   `.cn-card` and its images read the same slot, and maia's card is `rounded-2xl` (18, the `--surface-radius`
   default). The header and footer keep `14px` in `card.css` (`rounded-t-xl` / `rounded-b-xl`, one step below
   the card).
@@ -226,3 +226,13 @@ dumped before and after in both modes: **0 differences**. Against the reference 
   message-scroller · native-select · navigation-menu · pagination · progress · questionnaire · resizable ·
   sidebar · skeleton · slider · table · tabs · textarea · toggle. None of these is a slot today; they stay
   maia's own rules.
+
+## Axis contract v5 (2026-09-17)
+
+The card collision is a value now: `.cn-card-header` / `.cn-card-footer` read `--card-part-radius`, which maia sets
+to `14px`, while the card and its edge images keep `--card-radius`. `card.css` differs from foundation only in
+the sm card's `--spacing(4)`. **Not adopted, still maia's rule:** the dark `--menu-ring` on the Dropdown Menu and
+Menubar only.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 28 excluded**, dark **0 / 32** —
+unchanged. `scan-tokens` · `validate-system` pass.

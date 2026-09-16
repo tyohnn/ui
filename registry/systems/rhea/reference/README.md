@@ -133,10 +133,10 @@ value stays.
 
 | Where | Why it stays a rule |
 |---|---|
-| `input-group.css` block-start/-end addon `padding-inline: 10px` | the inline addons and the grouped toggle are px-2 (8) and share `--control-padding-x-grouped`; the block addons are px-2.5 |
-| `toggle-group.css` `.cn-toggle-group` `border-radius: 0` | rhea rounds the group only at `data-spacing=0` + `data-variant=outline` (a selector); that rule now reads `--toggle-group-joined-radius`, whose default keeps the joined items' corners |
-| `select.css` default trigger `padding-inline: var(--control-padding-x-md)` | rhea's select trigger is px-3 while the inputs' field sub-axis (`--control-padding-x-field`) is px-2.5 |
-| `card.css` `box-shadow` | reads `--card-ring`, plus rhea's `shadow-sm` — a declaration mira does not make |
+| `input-group.css` block-start/-end addon `padding-inline: 10px` | the inline addons and the grouped toggle are px-2 (8) and share `--control-padding-x-grouped`; the block addons are px-2.5 — **resolved in v5** (`--input-group-addon-padding-x-block`) |
+| `toggle-group.css` `.cn-toggle-group` `border-radius: 0` | rhea rounds the group only at `data-spacing=0` + `data-variant=outline` (a selector); that rule now reads `--toggle-group-joined-radius`, whose default keeps the joined items' corners — **resolved in v5** (`--toggle-group-joined-radius: 0px` · `--toggle-group-item-radius`; the outline selector itself stays a rule) |
+| `select.css` default trigger `padding-inline: var(--control-padding-x-md)` | rhea's select trigger is px-3 while the inputs' field sub-axis (`--control-padding-x-field`) is px-2.5 — **resolved in v5** (`--select-trigger-padding-start`) |
+| `card.css` `box-shadow` | reads `--card-ring`, plus rhea's `shadow-sm` — a declaration mira does not make — **resolved in v5** (`--card-shadow`) |
 | `switch.css` `border` | reads `--switch-track-border-off`, but the 2px width has no slot (and the padding is 0) |
 | `sidebar.css` header/content scope | rhea re-declares the radius scope (`[--radius:var(--radius-xl)]`), so the scope now sets `--sidebar-part-radius: 19.6px` beside `--sidebar-item-radius` |
 | `_menu-family.css` labels | foundation's rule is taken back; which label is text-xs or text-sm and which keeps py-1.5 is a selector, kept as two small rules after it |
@@ -149,3 +149,15 @@ popup radii …) or by the rule shapes above.
 **Check:** `compare-computed` dumps of the coverage template (every section opened alone) before and
 after: **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0
 mismatches / 50 excluded**, dark **0 / 65** — unchanged. `scan-tokens` · `validate-system` pass.
+
+## Axis contract v5 (2026-09-17)
+
+Four of the rows above became values (`registry/foundation/reference/README.md` § "Axis contract v5"):
+`--input-group-addon-padding-x-block: var(--control-padding-x-field)` · `--toggle-group-joined-radius: 0px` with
+`--toggle-group-item-radius: var(--control-radius)` (the `data-spacing=0` + `data-variant=outline` rule stays, as a
+selector, and reads the item corner) · `--select-trigger-padding-start: var(--control-padding-x-md)` ·
+`--card-shadow: var(--shadow-chip)`. Still rules: the switch's 2px border, the sidebar radius scope and the menu
+label split (not slot conflicts).
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 50 excluded**, dark **0 / 65** —
+unchanged. `scan-tokens` · `validate-system` pass.

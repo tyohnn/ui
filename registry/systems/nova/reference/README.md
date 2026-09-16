@@ -139,11 +139,11 @@ now reads from a v4 slot. 37 moved; the rule is foundation's again and the value
 The badge border and icon and the accordion item's rule already equalled foundation's defaults and took the
 rule with no token; the item separator reads `--item-gap`, which nova already set to 8px.
 
-**Not moved (1):** `.cn-accordion` `border: 0 solid transparent`. `--accordion-border-width` is also read by
+**Not moved (1) — resolved in v5:** `.cn-accordion` `border: 0 solid transparent`. `--accordion-border-width` is also read by
 the item's `border-bottom`, which nova keeps at 1px, so a 0 would erase the rules between items. The group
 keeps its own declaration (no frame, no radius, `overflow: visible`).
 
-Slot-meaning conflicts left as rules (the slot exists, but one value cannot serve every reader): the
+Slot-meaning conflicts left as rules (the slot exists, but one value cannot serve every reader) — **all resolved in v5**, see below: the
 `.cn-card > img` corners (`--surface-radius`, while the card, header and footer read `--card-radius` =
 `surface-radius-lg`),
 `--control-radius-sm` (nova's input-group sm button keeps `--control-radius` while nova's sm button, toggle
@@ -164,3 +164,18 @@ expresses (see "Layer-3 rules that had to change" above).
 
 Check: a keyed dump of every coverage section in both modes before and after — **0 computed-value
 differences**; `compare-shadcn.mjs` light 0 mismatches · 46 excluded, dark 0 · 69 excluded (unchanged).
+
+## Axis contract v5 (2026-09-17)
+
+Every slot-meaning conflict above is a value now: `--accordion-border-width: 0px` with
+`--accordion-item-border-width: var(--surface-border-width)` · `--card-image-radius: var(--surface-radius)` ·
+`--input-group-button-radius: var(--control-radius)` · `--toggle-group-joined-radius-sm: var(--control-radius-sm)` ·
+`--input-group-addon-padding-x-block: var(--control-padding-x-md)` · `--select-fill-disabled: var(--input-fill)`
+(both scopes). `_control-family.css`, `input.css` and `textarea.css` take foundation's rules back (the disabled
+input and textarea fills come from `_control-family.css` again); `_control-family.css` and `textarea.css` are
+byte-identical to foundation (`input.css` keeps nova's file-button size). What
+remains in `accordion.css` (no radius, `overflow: visible`, the trigger box) and `input-group.css` (the grouped
+button's md type) is not a slot conflict.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 46 excluded**, dark **0 / 69** —
+unchanged. `scan-tokens` · `validate-system` pass.

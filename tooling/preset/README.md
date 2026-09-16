@@ -96,7 +96,7 @@ Then by hand (or by an agent), in this order:
 3. **Layer 3 rules** — only where no value gets there. **Since axis contract 4 this step should be nearly
    empty.** Work it in this order, and do not skip to the last one:
 
-   1. **Look for the slot.** v4 added 85 layer-2 and 16 layer-1 names, and the areas the last nine ports
+   1. **Look for the slot.** v4 added 85 layer-2 and 16 layer-1 names (v5 split ten of them into 15 more), and the areas the last nine ports
       kept editing by hand are now values: the badge box (`--badge-*`), the keycap box (`--kbd-*`), the
       menu separator's margins, the field sub-axis (`--control-*-field`), the control's `sm` radius, case
       and grouped padding, the label · title · menu-row · menu-label · table-head type bands, the default
@@ -110,6 +110,10 @@ Then by hand (or by an agent), in this order:
       lists the only four shapes that genuinely need a rule: a declaration foundation never makes, a
       different selector, a box that must disappear, and a locally re-declared variable. If your difference
       is not one of those four, it is a missing slot, not a rule.
+   2a. **The slot exists but its readers need different values?** When one slot is read by several elements
+      and this system gives them different values, do not keep a rule and do not bend the value: treat it as a
+      **split candidate** — record it under "Foundation slot candidates" as the new name (aliasing the old
+      slot as its foundation default) and which readers take it. Axis contract v5 was ten such splits.
    3. **No slot, and it is a value?** Add a **system-only** token in this system's layer 1 or 2 with the
       v4 name shape (`--<component-or-axis>-<part>-<property>`), read it from layer 3, and **record it under
       "Foundation slot candidates"** in `reference/README.md` with three columns: the name, the foundation

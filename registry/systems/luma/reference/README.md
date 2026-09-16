@@ -162,7 +162,7 @@ dumped before and after in both modes: **0 differences**. Against the reference 
 **Layer 3 against foundation:** 16 of 62 files are byte-identical (12 before; `_control-family.css`,
 `context-menu.css`, `kbd.css` and `label.css` joined). 46 still differ:
 
-- **v4 slot meanings that do not fit luma (3 places).** luma proposed `--control-radius-sm` for the input
+- **v4 slot meanings that do not fit luma (3 places) — two resolved in v5** (`input-group.css`, `badge.css`; below). luma proposed `--control-radius-sm` for the input
   family's `rounded-3xl` (22); v4 adopted the name as the *sm control's* corner and made the sm button,
   the sm icon button and `.cn-input-group-button` read it. luma's sm buttons are `rounded-4xl` (26), so
   `button.css` (two rules — its only difference) and `input-group.css` keep `var(--control-radius)`.
@@ -183,3 +183,14 @@ dumped before and after in both modes: **0 differences**. Against the reference 
   pagination · popover · progress · questionnaire · resizable · select · sidebar · skeleton · slider ·
   switch (`border-2`) · table · tabs · textarea · toggle, and the input family's `--control-radius-sm` /
   `--input-border` reads. None of these is a slot today; they stay luma's own rules.
+
+## Axis contract v5 (2026-09-17)
+
+Two of the three slot-meaning places are values now: `--tag-height: var(--control-height-xs)` (the toned tag) and
+`--input-group-button-radius: var(--control-radius)`. The card reads `--card-shadow` at its default (luma's
+`--shadow-card`). **Still a rule:** `button.css`'s sm button and sm icon button keep `var(--control-radius)`,
+because luma's `--control-radius-sm` (22) is the input family's corner and v5 split only the input-group button
+off that slot — the sm button and the sm select trigger still share it.
+
+**Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 28 excluded**, dark **0 / 43** —
+unchanged. `scan-tokens` · `validate-system` pass.

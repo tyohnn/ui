@@ -33,7 +33,7 @@ menubar gap, the questionnaire choice fill, the disabled field fill, the active 
 The other six listed rows (accordion borders, badge border and icon size, keycap min-width) equal
 foundation's default.
 
-**Not moved:** `.cn-input` has no `padding-block` in graphite (its height is a `min-height`, and the input
+**Not moved — resolved in v5:** `.cn-input` has no `padding-block` in graphite (its height is a `min-height`, and the input
 group's control inherits from it), while `--control-padding-y-field` is also read by the native select, which
 keeps foundation's 2px. One slot cannot hold both, so graphite's input rule stays without that declaration.
 
@@ -44,3 +44,12 @@ is a v4 slot.
 
 **Check:** coverage-template dumps before and after: **0 differences** in light and dark (2530 elements
 each). `scan-tokens` · `validate-system` pass.
+
+## Axis contract v5 (2026-09-17)
+
+The input row above is a value now. Measured before the change, graphite's input **and** its native select both
+compute `padding-block: 0` (neither rule declared one), so the v4 note that the native select kept 2px was not
+what rendered. graphite sets `--control-padding-y-field: 0px`; `.cn-input` and `.cn-native-select` take
+foundation's declarations, the native select reading `--native-select-padding-y` at its default.
+
+**Check:** coverage-template dumps before and after, **0 differences** in light and dark (2530 elements each).
