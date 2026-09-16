@@ -24,10 +24,12 @@
    ⚠ 컴포넌트별 파일에는 그 컨트롤에만 있는 것(모양·밀도·변형)만 남긴다.
       포커스·검증·전환을 컴포넌트별 파일에 다시 적으면 드리프트가 되살아난다.
 
-   ⚠ 비활성 바탕은 두지 않는다. nova 는 Input·Textarea·Native Select 에
+   ⚠ 비활성 바탕은 mira 에서 제 값을 갖지 않는다. nova 는 Input·Textarea·Native Select 에
       disabled:bg-input/50 을 주었고 이 파일이 그것을 --muted 로 옮겨 갖고 있었는데,
       mira 는 그 규칙을 뺐다 — 비활성은 컴포넌트가 가진 disabled:opacity-50 하나로
       알린다. 채움(--input-fill)이 이미 있어 바탕까지 갈 필요가 없다.
+      axis contract v4 부터 선언 자체는 남기되 값을 --input-fill-disabled 슬롯이 갖는다
+      (foundation 값은 --input-fill 의 별칭이라 화면은 그대로다). 아래 "비활성 채움" 절.
    ============================================================ */
 
 /* --------------------------------------------------------
@@ -98,6 +100,25 @@
 
 .cn-radio-group-item[aria-invalid="true"][data-checked] {
     border-color: var(--primary);
+}
+
+/* --------------------------------------------------------
+   비활성 채움 — 입력 계열(Input · Textarea · Native Select · Select 트리거)
+   axis contract v4. mira 는 비활성에 바탕을 따로 주지 않으므로
+   --input-fill-disabled 의 foundation 값은 --input-fill 의 별칭이다. 즉 이
+   선언은 계산값을 바꾸지 않고, 비활성 칸을 한 단 눌러 두려는 시스템이 3층
+   규칙을 고치지 않고 슬롯만 바꾸도록 자리를 만들어 둔다(DESIGN.md 5절).
+
+   ⚠ 이 파일이 배럴에서 가장 먼저 읽힌다. 그래서 통 안에서 껍데기를 벗는
+      `.cn-input-group .cn-input-group-input`(0,2,0)과 native-select·select 트리거의
+      :hover(0,2,0)가 뒤에 와서 그대로 이긴다 — 지금 보이는 화면은 달라지지 않는다.
+   -------------------------------------------------------- */
+
+.cn-input:disabled,
+.cn-textarea:disabled,
+.cn-native-select:disabled,
+.cn-select-trigger[data-disabled] {
+    background-color: var(--input-fill-disabled);
 }
 
 /* --------------------------------------------------------

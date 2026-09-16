@@ -631,3 +631,24 @@
     @apply font-sans;
     }
 }
+
+/* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
+:root {
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    --button-outline-hover-fill: var(--input-fill-hover);
+    --menu-ring: var(--ring-subtle);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
+}
+
+.dark {
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    --button-outline-hover-fill: var(--input-fill-hover);
+    --menu-ring: var(--ring-subtle);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
+}

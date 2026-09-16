@@ -612,3 +612,40 @@
     @apply font-sans;
     }
 }
+
+/* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
+:root {
+    --input-border: var(--input);
+    --input-border-bottom: var(--input-border);
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    --button-outline-hover-fill: var(--input-fill-hover);
+    --card-ring: var(--ring-subtle);
+    --menu-ring: var(--ring-subtle);
+    --combobox-chip-fill: var(--chip);
+    --slider-track-fill: var(--muted);
+    --switch-track-border-off: transparent;
+    --switch-track-border-on: transparent;
+    --field-label-checked-border: var(--border);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
+}
+
+.dark {
+    --input-border: var(--input);
+    --input-border-bottom: var(--input-border);
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    --button-outline-hover-fill: var(--input-fill-hover);
+    --card-ring: var(--ring-subtle);
+    --menu-ring: var(--ring-subtle);
+    --combobox-chip-fill: var(--chip);
+    --slider-track-fill: var(--muted);
+    --switch-track-border-off: transparent;
+    --switch-track-border-on: transparent;
+    --field-label-checked-border: var(--border);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
+}

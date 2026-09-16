@@ -121,3 +121,98 @@ layer 3 by `.dark`: `--button-outline-fill` and `--slider-thumb-fill`. `foundati
 
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and the
 comparison pairs every one that carries a `data-slot`.
+
+## Axis contract v4 — the slots the nine ports asked for (2026-09-16)
+
+Eight preset ports (`vega` · `nova` · `maia` · `lyra` · `luma` · `rhea` · `sera`, plus `mira` which is this
+folder's own run) and one screenshot system (`graphite`) each recorded, in their `reference/README.md`, the
+places where **foundation had no slot and a layer-3 rule had to be edited**. Version 4 lifts the repeated ones
+into foundation: **85 layer-2 names and 15 layer-1 names**, every default an alias of what the rule already
+read, `initial`, `transparent`, `none`, or the literal the rule carried.
+
+Adoption rule: a candidate is adopted when **two or more systems asked for it**, or when one system asked and
+the name completes an axis foundation already has (a missing size step, a second half of an existing pair).
+A value only one system wants and that no axis is missing stays that system's own.
+
+**Proof it changes nothing:** foundation and `registry/systems/mira` both compare **0 mismatches in light and
+0 in dark** against the mira reference app after the change, with the same 55 / 70 exclusions as before, and
+the seven systems not yet migrated (`graphite` · `vega` · `nova` · `luma` · `rhea` · `maia` · `lyra`) dump
+**0 computed-value differences** against their pre-change dumps in both modes
+(`compare-computed.mjs --dump` / `--diff`).
+
+### The two structural problems v4 solves
+
+1. **`--control-height-xs` was three things at once** — the xs button, the badge and the keycap. Every port
+   that grew its xs control grew badges and keycaps with it, and had to edit `badge.css` and `kbd.css` to put
+   them back (lyra · maia · nova; sera rewrote the badge box entirely). The badge and the keycap now have
+   **their own axes** (`--badge-*`, `--kbd-*`), whose foundation defaults alias the xs control step — so mira
+   is unchanged and the three components are free of one another.
+2. **The menu separator's bleed was derived from `--menu-padding`** (`calc(var(--menu-padding) * -1)`). lyra
+   flattened its popup padding to 0 and lost the separator's `-mx-1` with it, because one value carried two
+   meanings. `--menu-separator-margin-inline` and `--menu-separator-margin-block` are now slots of their own
+   (defaults: exactly the two expressions the rule carried), in `_menu-family.css` **and** `select.css`.
+
+### Layer 2 (`styles/tokens.css`) — 85 names
+
+| Area | Slots | Default | Why · who asked |
+|---|---|---|---|
+| badge | `--badge-height` · `-padding-x` · `-padding-x-icon` · `-padding-y` · `-gap` · `-icon-size` · `-border-width` · `-radius` · `-font-size` · `-line-height` · `-letter-spacing` · `-font-weight` · `-text-transform` | the xs control step; `2px`; `9999px`; the xs UI type; `initial` | the badge was the xs control's twin — lyra · maia · nova (height · radius · paddings · glyph), sera (the whole box, which it strips to plain text) |
+| kbd | `--kbd-height` · `-min-width` · `-padding-x` · `-gap` · `-font-size` · `-line-height` · `-letter-spacing` · `-font-weight` · `-icon-size` | the xs control step; `4px`; the xs UI type | a keycap is not an xs button — lyra · maia · nova · sera. `--kbd-letter-spacing` also closes sera's last keycap mismatch (upstream the keycap *inherits* its tracking) |
+| control | `--control-radius-sm` · `--control-text-transform` · `--control-padding-x-grouped` · `--control-icon-button-icon-size-sm` | `--control-radius`; `initial`; the md padding; the sm glyph | nova · luma split the sm corner; sera uppercases every control; lyra keeps `px-2` inside a group while the standalone control grows, and keeps `size-4` on the sm icon button |
+| control · field sub-axis | `--control-padding-x-field` · `-padding-y-field` · `-font-size-field` · `-line-height-field` · `-letter-spacing-field` | the md step; `2px` | the input family and the button family stop sharing one step — rhea · sera · lyra |
+| toggle | `--toggle-gap` · `--toggle-group-joined-radius` | the md gap; `--control-radius` | lyra (Toggle keeps `gap-1`), maia (a joined group rounds one step below its buttons) |
+| switch | `--switch-thumb-width-md` · `-width-sm` · `--switch-radius` | the thumb sizes; `9999px` | luma's thumb is not square; sera squares the track |
+| ui text | `--label-font-weight` · `--ui-label-text-transform` · `--ui-label-letter-spacing` · `--title-text-transform` · `--title-letter-spacing` | the UI weight; `initial`; `--ui-letter-spacing` | lyra's Label carries no weight; sera uppercases the quiet label band and the surface titles as two separate bands |
+| table | `--table-head-text-transform` · `--table-head-letter-spacing` | `initial`; `--ui-letter-spacing` | sera's head is uppercase and tracked |
+| menu | `--menu-separator-margin-inline` · `-margin-block` · `--menu-label-padding-y` · `-text-transform` · `-letter-spacing` · `--menu-item-text-transform` · `-letter-spacing` · `-font-weight` · `--menu-narrow-min-width` | the expressions the rule carried; the check row's 6px; `initial` | structural problem 2 (lyra); the command heading's `py-1.5` (lyra · sera); sera's uppercase rows and labels; maia's narrow select · combobox · sub-menus |
+| command · select · menubar | `--command-item-radius` · `--command-item-gap` · `--select-item-gap` · `--menubar-padding` · `--menubar-gap` · `--menubar-item-padding-inset` | the menu row's values; `normal` | maia · nova split the palette row from the menu row; sera the select row; lyra's menubar bar keeps `p-1` where the popups went to 0 |
+| surfaces | `--card-radius` · `--bubble-radius` · `-padding-x` · `-padding-y` · `-line-height` · `--chart-tooltip-radius` · `--empty-radius` · `--sheet-padding` · `--accordion-border-width` | the `--surface-*` step the rule read; `6px` | luma (card ≠ popover), maia (bubble · chart tooltip · empty each one step off), lyra (the sheet's own `p-4`; a borderless accordion group), sera (the bubble box) |
+| tabs (default variant) | `--tabs-list-height` · `-list-padding` · `--tabs-trigger-gap` · `-padding-x` · `-padding-y` · `-active-shadow` | the lg control height; `3px`; `6px`; `6px`; `2px`; `none` | the line variant already had an axis; sera's bar is `h-10 p-1` with `px-4 py-1.5` triggers, and nova's selected tab carries `shadow-sm` |
+| item · slider · avatar | `--item-gap` · `--item-media-icon-size` · `--slider-track-thickness` · `--avatar-font-size` · `--avatar-line-height` | the menu row's gap; the lg glyph; `4px`; the lg UI type | nova splits Item from the menu row; sera moves the media glyph and the track; maia's lg UI step is `text-base` while the fallback stays `text-sm` |
+| sidebar | `--sidebar-surface-padding` · `-surface-gap` · `--sidebar-input-height` · `--sidebar-item-padding-y` · `--sidebar-separator-margin-inline` · `--sidebar-badge-font-weight` · `--sidebar-part-radius` | the menu axis; the lg control height; the item's side padding; the UI weight; the item radius | sera keeps the shell at 8 while the menu row grows to 12; rhea gives the separator its own inset; maia rounds the menu button one step above every other part |
+
+### Layer 1 (`styles/globals.css`, `:root` **and** `.dark`) — 15 names
+
+| Slot | Default | Why · who asked |
+|---|---|---|
+| `--input-border` · `--input-border-bottom` | `var(--input)` · `var(--input-border)` | luma draws no edge on the input family, sera draws only the bottom one, rhea gives it a colour of its own (3 systems) |
+| `--input-fill-disabled` | `var(--input-fill)` | a disabled field takes a fill mira does not give it — lyra · nova |
+| `--command-input-fill` | `var(--input-fill)` | the palette's search box splits from the sidebar's — lyra · nova |
+| `--button-outline-hover-fill` | `var(--input-fill-hover)` | vega: the outline button's hover is not the Input's |
+| `--card-ring` · `--menu-ring` | `var(--ring-subtle)` | maia · sera keep the card at `foreground/10` while the floating surfaces drop to `/5` (maia only in dark) |
+| `--combobox-chip-fill` | `var(--chip)` | luma · rhea · sera fill the chip themselves |
+| `--slider-track-fill` | `var(--muted)` | luma · sera |
+| `--switch-track-border-off` · `-on` | `transparent` | sera draws the track's edge |
+| `--field-label-checked-border` | `var(--border)` | a checked selection card outlines in `primary/30` (dark `/20`) — maia · nova · sera · lyra. ⚠ It is read inside `:has(> [data-slot="field"])` and **before** the focus rule, so the focus ring still wins |
+| `--questionnaire-choice-fill` · `--questionnaire-shortcut-border` | `transparent` · `var(--input)` | nova's choice has a dark fill of its own; rhea gives the shortcut keycap its own edge |
+| `--radio-indicator-dot-size` | `var(--control-indicator-dot-size)` | luma's dot is `size-2` in light and `size-2.5` in dark. **A size in layer 1**: layer 2 has no `.dark` scope, and a value that differs by mode has no other home |
+
+### Candidates not adopted
+
+| Candidate | Asked by | Why not |
+|---|---|---|
+| `--control-height-2xs` | rhea | A fifth height step below `xs` that **no foundation rule reads** — rhea uses it only for its own input-group buttons. Every slot must be read by a rule (§5); a system wanting a smaller grouped control sizes it in its own layer 3. |
+| `--surface-radius-xl` | rhea | Same shape: a fourth surface step no foundation rule reads. foundation's surfaces use three. |
+| `--ui-line-height-relaxed` | lyra | The split is real (rows `text-xs` against descriptions `text-xs/relaxed`), but adopting it means deciding, for ~20 rules that read `--ui-line-height-md` today, which of them are "descriptions". That judgement belongs to the port that wants the split, not to the contract. lyra keeps it as a system-only name. |
+| `--input-fill-strong` | nova | Introduced and then removed: `--command-input-fill` is the only place nova used it, and two names for one fill is worse than one. |
+| `--sidebar-rail-size` | sera | foundation's rail carries **no size declaration** — its width is an upstream utility in `sidebar.tsx`. There is no rule to read the slot. |
+| `--button-outline-hover-fill` beyond the outline button | vega | Adopted as written (the outline button only); vega asked for nothing wider. |
+| sera's `--tag-height` · `-padding-y` · `-gap` · `-border-width` · `-icon-size` · `-padding-x-icon` | sera | **Adopted under other names.** foundation's `--tag-*` axis is the *toned* badge (`[data-tone]`); the plain badge box is `--badge-*`. sera's names were the plain badge's, so they merged into the badge axis and `.cn-badge[data-tone]` now reads `--badge-height` too. |
+| lyra's `--field-checked-border` | lyra | **Adopted as `--field-label-checked-border`** — the name maia · nova · sera all used for the same element. |
+| luma's `--radio-indicator-dot-size` / rhea's `--radio-dot-size` | luma · rhea | **Adopted as `--radio-indicator-dot-size`**, matching the existing `--control-indicator-dot-size`. |
+
+### `registry/ui` — checked, nothing to fix
+
+The three ports that blamed the shared TSX (`sera` · `lyra` · `rhea`) were re-checked against the shadcn 4.21.0
+generated sources (`~/projects/shadcn-ref/*/components/ui/*.tsx`):
+
+- **Structure is identical.** Across all 62 components, the set of literal `data-*` attributes (the contract
+  layer 3 selects on) is the same on both sides — no additions, no omissions.
+- **`InputGroupButton`** already matches upstream exactly: `size` goes to `inputGroupButtonVariants` and
+  `data-size`, never to `Button`. (`tooling/preset/README.md`'s pitfall list said the opposite; the list was
+  stale and is corrected.) sera's `input-group/button#3` residue is sera's own layer 3, not drift.
+- **The Switch thumb's `ring-0`** is upstream's own utility, kept deliberately. It composes an empty
+  `box-shadow` in the *utilities* layer, so no layer-3 rule can put a shadow on the thumb — which is rhea's
+  exclusion. Ours does not differ from the base component, so it is not drift and was not changed.
+- The three items an earlier pass fixed (`cn-context-menu-sub-content`, `FieldDescription`'s
+  `[[data-variant=legend]+&]:-mt-1.5`, `QuestionnaireActions`' `sm:min-h-9`) are all still in place.

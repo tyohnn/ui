@@ -471,3 +471,55 @@
     --typeset-space-h3: 1.8;
     --typeset-tracking: -0.01em;
 }
+
+/* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
+:root {
+    --badge-height: var(--control-height-xs);
+    --badge-padding-x: var(--control-padding-x-xs);
+    --badge-padding-x-icon: var(--control-padding-x-icon-xs);
+    --badge-padding-y: 2px;
+    --badge-gap: var(--control-gap-xs);
+    --badge-icon-size: var(--control-icon-size-xs);
+    --badge-border-width: var(--control-border-width);
+    --badge-radius: 9999px;
+    --badge-font-size: var(--ui-text-xs);
+    --badge-line-height: var(--ui-line-height-xs);
+    --badge-letter-spacing: var(--ui-letter-spacing);
+    --badge-font-weight: var(--ui-font-weight);
+    --badge-text-transform: initial;
+    --kbd-min-width: var(--kbd-height);
+    --kbd-gap: var(--control-gap-xs);
+    --kbd-font-size: var(--ui-text-xs);
+    --kbd-line-height: var(--ui-line-height-xs);
+    --kbd-letter-spacing: var(--ui-letter-spacing);
+    --kbd-font-weight: var(--ui-font-weight);
+    --kbd-icon-size: var(--control-icon-size-sm);
+    --control-radius-sm: var(--control-radius);
+    --control-padding-x-grouped: var(--control-padding-x-md);
+    --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
+    --toggle-gap: var(--control-gap-md);
+    --toggle-group-joined-radius: var(--control-radius);
+    --switch-thumb-width-md: var(--switch-thumb-size-md);
+    --switch-thumb-width-sm: var(--switch-thumb-size-sm);
+    --label-font-weight: var(--ui-font-weight);
+    --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
+    --menu-separator-margin-block: var(--menu-padding);
+    --menu-narrow-min-width: var(--menu-min-width);
+    --command-item-radius: var(--menu-item-radius);
+    --command-item-gap: var(--menu-item-gap);
+    --menubar-padding: var(--menu-padding);
+    --menubar-gap: normal;
+    --menubar-item-padding-inset: var(--menu-item-padding-inset);
+    --card-radius: var(--surface-radius);
+    --bubble-radius: var(--surface-radius);
+    --chart-tooltip-radius: var(--surface-radius);
+    --empty-radius: var(--surface-radius-lg);
+    --sheet-padding: var(--surface-padding-lg);
+    --accordion-border-width: var(--surface-border-width);
+    --tabs-trigger-active-shadow: none;
+    --item-gap: var(--menu-item-gap);
+    --avatar-font-size: var(--ui-text-lg);
+    --avatar-line-height: var(--ui-line-height-lg);
+    --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
+    --sidebar-part-radius: var(--sidebar-item-radius);
+}
