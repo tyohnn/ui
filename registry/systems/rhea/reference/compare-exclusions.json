@@ -1,0 +1,55 @@
+[
+    {
+        "key": "/(checkbox|radio-group-item)#\\d+$",
+        "props": [
+            "opacity"
+        ],
+        "reason": "Base UI draws Checkbox and Radio as a span, so shadcn's disabled:opacity-50 (a :disabled selector) never matches and a disabled control stays fully opaque upstream; rhea reads [data-disabled] instead, which is what the utility means. An upstream defect, not a rhea value. Same as foundation's."
+    },
+    {
+        "key": "^direction/",
+        "props": "*",
+        "reason": "The preset is generated with rtl:false, so its paddings and radii are physical (pl-/pr-, rounded-l-) and do not mirror under dir=rtl; the layer-3 rules are logical. The section proves DirectionProvider renders, not a value. Same as foundation's."
+    },
+    {
+        "key": "^input-otp/root>div#\\d+$",
+        "props": [
+            "row-gap",
+            "column-gap"
+        ],
+        "reason": "A preset app's globals.css carries no .cn-* rules, so the cn-input-otp class the shadcn component keeps is unstyled there; style-rhea.css's `.cn-input-otp { gap-2 }` is rhea's own value and the system keeps it. Same as foundation's."
+    },
+    {
+        "key": "-shortcut#\\d+$",
+        "props": [
+            "margin-left"
+        ],
+        "reason": "The shortcuts contain ⌘, which is in neither Inter build: the reference app falls back through next/font's Inter Fallback and the preview through Inter Variable plus the Pretendard Hangul fallback, so the glyph advance differs by ~0.5px. Font stack, not a value. Same as foundation's."
+    },
+    {
+        "key": "^questionnaire/(root(>div#\\d+)?|questionnaire#\\d+|questionnaire-actions#\\d+)$",
+        "props": [
+            "height",
+            "rect-height"
+        ],
+        "reason": "rhea's generated questionnaire.tsx carries `sm:min-h-8` on QuestionnaireActions while the shadcn base component (which registry/ui follows) carries `sm:min-h-9`. The preset bakes the value into the component as a utility, so no layer-3 rule can reach it and one shared set of TSX cannot hold both. The row and everything it stretches are 4px taller here. Same shape as foundation's, with rhea's number."
+    },
+    {
+        "key": "/switch-thumb#\\d+$",
+        "props": [
+            "box-shadow"
+        ],
+        "reason": "rhea gives the switch thumb `shadow-sm`, which the preset's own switch.tsx carries as a utility next to `ring-0`; Tailwind composes both into one box-shadow. registry/ui's Switch keeps shadcn's `ring-0` but has no shadow utility (TSX holds no visual values), and `ring-0` alone composes box-shadow in the utilities layer, which beats any layer-3 rule in layer(base). The cause is the shared TSX, not a rhea value, and this run does not change registry/ui."
+    },
+    {
+        "key": "-trigger#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "props": [
+            "background-color",
+            "border-top-color",
+            "border-right-color",
+            "border-bottom-color",
+            "border-left-color"
+        ],
+        "reason": "Dark mode only: Tailwind sorts rhea's dark: colours (dark:bg-transparent on the outline button, dark:aria-invalid:border-destructive/50 on the checkbox) after the state utilities that have no dark counterpart (aria-expanded:bg-muted, aria-invalid:aria-checked:border-primary), so upstream an open outline trigger and an invalid checked checkbox lose their state colour in dark. rhea keeps the state colours; reproducing the ordering would delete the signal. Same as foundation's."
+    }
+]
