@@ -32,16 +32,19 @@
     margin-block-end: 6px;   /* nova: mb-1.5 */
     font-weight: var(--ui-font-weight);
 
+    /* v4: 조용한 라벨 띠의 자간·대소문자는 슬롯(--ui-label-*)이 갖는다. foundation 값은 mira 그대로다. */
     &[data-variant="label"] {
         font-size: var(--ui-text-md);
         line-height: var(--ui-line-height-md);
-        letter-spacing: var(--ui-letter-spacing);
+        letter-spacing: var(--ui-label-letter-spacing);
+        text-transform: var(--ui-label-text-transform);
     }
 
     &[data-variant="legend"] {
         font-size: var(--ui-text-lg);
         line-height: var(--ui-line-height-lg);
-        letter-spacing: var(--ui-letter-spacing);
+        letter-spacing: var(--ui-label-letter-spacing);
+        text-transform: var(--ui-label-text-transform);
     }
 }
 
@@ -92,8 +95,6 @@
 
     &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         background-color: var(--primary-soft);
-        /* nova: has-data-checked:border-primary/30 (dark: /20) */
-        border-color: var(--field-label-checked-border);
     }
 
     /* ⚠ 안쪽 여백 8px 은 리터럴이다. 카드 안의 여백이라 control 축(높이가 정본)에도
@@ -105,6 +106,13 @@
     &:has(> [data-slot="field"]) {
         border: var(--control-border-width) solid var(--border);
         border-radius: var(--control-radius);
+
+        /* v4: 켜진 선택 카드의 테두리는 1층 슬롯이다(--field-label-checked-border). mira 는 켜져도
+           테두리 색을 바꾸지 않으므로 foundation 기본값이 --border 라 지금과 같다. 포커스 링의
+           border-color 가 뒤에 와서 이긴다 — 순서를 바꾸지 말 것. */
+        &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
+            border-color: var(--field-label-checked-border);
+        }
 
         &:not(:has(:disabled, [data-disabled])):hover {
             background-color: var(--input-fill-hover);
@@ -130,7 +138,9 @@
     gap: 8px;
     font-size: var(--ui-text-md);
     line-height: var(--ui-line-height-md);
-    letter-spacing: var(--ui-letter-spacing);
+    /* v4: 조용한 라벨 띠의 자간·대소문자 슬롯. */
+    letter-spacing: var(--ui-label-letter-spacing);
+    text-transform: var(--ui-label-text-transform);
     font-weight: var(--ui-font-weight);
 
     .group\/field[data-disabled="true"] & {

@@ -44,12 +44,16 @@
     /* 여러 줄 입력(Textarea)의 세로 패딩. 한 줄 컨트롤은 높이가 정본이라 세로 패딩이 없고,
        Textarea 만 줄 수에 따라 자라므로 세로 패딩이 정본이다. mira: py-2 (인풋 그룹 안에서도 같다) */
     --control-padding-y-multiline: 8px;
+    /* 입력 계열(field 하위 축)의 세로 여백. nova: input · native select py-1 */
+    --control-padding-y-field: 4px;
 
     /* 좌우 패딩 — mira 는 xs~md 가 px-2 이고 lg 만 px-2.5 다 */
     --control-padding-x-xs: 8px;
     --control-padding-x-sm: 10px;
     --control-padding-x-md: 10px;
     --control-padding-x-lg: 10px;
+    /* A control inside a group (input-group inline addon pl-2 · joined toggle-group item px-2). */
+    --control-padding-x-grouped: 8px;
 
     /* 아이콘이 붙은 쪽의 좌우 패딩 — has-data-[icon=inline-start]:pl-1.5 (lg 는 pl-2) */
     --control-padding-x-icon-xs: 6px;
@@ -62,6 +66,8 @@
     --control-gap-sm: 4px;
     --control-gap-md: 6px;
     --control-gap-lg: 6px;
+    /* Toggle keeps gap-1 at the default size. */
+    --toggle-gap: var(--control-gap-xs);
 
     /* 타이포 — 행간을 px 로 고정한다. mira 는 xs 만 text-[0.625rem](10px) 이고 나머지는
        text-xs/relaxed(12px · 1.625 = 19.5px)다. xs 는 글자만 줄이고 행간 배수는 그대로라
@@ -91,7 +97,7 @@
     --control-radius-xs: 8px;
     /* nova: the sm control is one radius step down too (rounded-[min(var(--radius-md),12px)] = 8px on
        buttons · toggles · the sm select trigger · the sm native select). mira has no such step, so this
-       name is nova's own; it is a foundation slot candidate (--control-radius-sm: var(--control-radius)). */
+       step is the v4 slot --control-radius-sm (foundation: var(--control-radius)). */
     --control-radius-sm: 8px;
     /* ⚠ 1px 미만으로 내리지 말 것. 하위픽셀 테두리는 축소 렌더링에서 한 변이 사라진다.
        ⚠ 올릴 때는 2px 이 상한이다. --switch-thumb-inset 과 switch.css 의 계산이 음수가 된다. */
@@ -114,6 +120,8 @@
     /* Icon button box and glyph. mira sizes the md icon button from the control height axis. */
     --control-icon-button-size-md: var(--control-height-md);
     --control-icon-button-icon-size-md: var(--control-icon-size-md);
+    /* nova: the sm icon button draws a size-4 glyph, like md. */
+    --control-icon-button-icon-size-sm: var(--control-icon-size-md);
 
     /* md button with a leading icon. mira: the icon side is the narrow one (6) and the far side keeps
        the md padding (8). */
@@ -145,14 +153,14 @@
     --kbd-radius: 6px;
     /* nova: kbd and badge are h-5 (20) while the xs control is h-6 (24). mira has both at h-5, so
        foundation reads --control-height-xs for them; nova needs the two apart.
-       Foundation slot candidates: --badge-height · --kbd-height. */
+       The v4 slots --badge-height · --kbd-height hold them. */
     --kbd-height: 20px;
+    --kbd-icon-size: var(--control-icon-size-xs);   /* nova: the keycap glyph is size-3 */
     --badge-height: 20px;
-    /* nova: rounded-4xl (radius × 2.6 = 26px); mira: rounded-full. Foundation slot candidate. */
+    /* nova: rounded-4xl (radius × 2.6 = 26px); mira: rounded-full. */
     --badge-radius: 26px;
     /* nova: Item's own gap (gap-2 on media · title · actions · header · footer) is a step above the
-       menu item's gap-1.5. mira has both at 8, so foundation reads --menu-item-gap.
-       Foundation slot candidate: --item-gap. */
+       menu item's gap-1.5. mira has both at 8, so foundation's --item-gap aliases --menu-item-gap. */
     --item-gap: 8px;
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
@@ -196,11 +204,19 @@
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
     --surface-padding-lg: 24px;  /* sheet header p-6 · empty p-6 */
+    --sheet-padding: var(--surface-padding-md);   /* sheet header · footer p-4 */
     --surface-panel-width: 384px; /* sheet 의 sm:max-w-sm */
     --surface-gap: 4px;          /* dialog-header gap-1 · card-header gap-1 */
     --surface-gap-lg: 16px;      /* dialog-content gap-4 · popover gap-4 */
     --surface-icon-gap: 6px;     /* alert has-[>svg]:gap-x-1.5 · tooltip gap-1.5 */
     --surface-border-width: 1px;
+    /* nova: the card is rounded-xl while popovers stay rounded-lg. */
+    --card-radius: var(--surface-radius-lg);
+    /* Chat bubble. nova: rounded-xl px-3 py-2 leading-relaxed */
+    --bubble-radius: var(--surface-radius-lg);
+    --bubble-padding-x: 12px;
+    --bubble-padding-y: 8px;
+    --bubble-line-height: 1.625;
 
     /* 모달 뒤에 까는 막. 색은 1층의 --overlay-backdrop 이 갖는다. mira: backdrop-blur-xs = 4px */
     --overlay-backdrop-blur: 4px;
@@ -219,12 +235,13 @@
     /* 세로 여백 — mira: 보통 항목 py-1, 체크·라디오·팔레트 항목 py-1.5. 높이는 --menu-item-height 가
        바닥을 잡고, 글이 길어지면 이 여백이 행을 키운다(2026-09-16 mira 대조에서 추가). */
     --menu-item-padding-y: 4px;
+    /* Group label. nova: the plain row padding (py-1). */
+    --menu-label-padding-y: var(--menu-item-padding-y);
     --menu-item-padding-y-check: 6px;
     /* 팔레트(Command) 항목만 좌우가 한 단 넓다. mira: px-2.5 */
     --command-item-padding-x: 8px;
     /* nova: the palette row (Command · Combobox) is rounded-sm and gap-2 where the menu row is
-       rounded-md and gap-1.5. mira has both alike, so foundation reads the menu values.
-       Foundation slot candidates: --command-item-radius · --command-item-gap. */
+       rounded-md and gap-1.5. mira has both alike, so foundation's slots alias the menu values. */
     --command-item-radius: 6px;
     --command-item-gap: 8px;
 
@@ -237,6 +254,9 @@
     --menu-shortcut-line-height: 16px;
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
+    /* The menubar bar. nova: p-[3px] gap-0.5 */
+    --menubar-padding: 3px;
+    --menubar-gap: 2px;
 
     /* --------------------------------------------------------
        sidebar-item — 사이드바의 항목
@@ -290,6 +310,11 @@
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */
     --sidebar-item-action-size: 20px;
     --sidebar-item-action-icon-size: 16px;
+
+    /* The shell (v4). nova: h-8 search box, header · footer gap-2 p-2 */
+    --sidebar-input-height: var(--control-height-md);
+    --sidebar-surface-gap: 8px;
+    --sidebar-surface-padding: 8px;
 
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
@@ -363,11 +388,16 @@
     --tag-font-size: var(--ui-text-xs);
 
     /* --------------------------------------------------------
+       tabs — the default variant (v4). nova: the bar is h-8.
+       -------------------------------------------------------- */
+    --tabs-list-height: var(--control-height-md);
+
+    /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
        mira: the same h-8 bar as the default tabs.
        -------------------------------------------------------- */
     /* nova: the selected tab of the default list carries shadow-sm; mira's is flat.
-       Foundation slot candidate: --tabs-trigger-active-shadow (foundation: none). */
+       v4 slot (foundation: none). */
     --tabs-trigger-active-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --tabs-line-height: 32px;
     /* Divider under the line bar and the trigger box inside it. mira: no divider, and the default
@@ -392,6 +422,9 @@
     --avatar-font-size-sm: var(--ui-text-xs);       /* nova: group-data-[size=sm]/avatar:text-xs */
     --avatar-font-weight: initial;
     --avatar-line-height-sm: var(--ui-line-height-xs);
+    /* md · lg initials. nova: text-sm (the ui md step). */
+    --avatar-font-size: var(--ui-text-md);
+    --avatar-line-height: var(--ui-line-height-md);
     --avatar-size-md: 32px;
     --avatar-size-lg: 40px;
 
@@ -453,16 +486,11 @@
     --kbd-line-height: var(--ui-line-height-xs);
     --kbd-letter-spacing: var(--ui-letter-spacing);
     --kbd-font-weight: var(--ui-font-weight);
-    --kbd-icon-size: var(--control-icon-size-sm);
     --control-text-transform: initial;
-    --control-padding-x-grouped: var(--control-padding-x-md);
-    --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
     --control-padding-x-field: var(--control-padding-x-md);
-    --control-padding-y-field: 2px;
     --control-font-size-field: var(--control-font-size-md);
     --control-line-height-field: var(--control-line-height-md);
     --control-letter-spacing-field: var(--control-letter-spacing);
-    --toggle-gap: var(--control-gap-md);
     --toggle-group-joined-radius: var(--control-radius);
     --switch-thumb-width-md: var(--switch-thumb-size-md);
     --switch-thumb-width-sm: var(--switch-thumb-size-sm);
@@ -476,7 +504,6 @@
     --table-head-letter-spacing: var(--ui-letter-spacing);
     --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
     --menu-separator-margin-block: var(--menu-padding);
-    --menu-label-padding-y: var(--menu-item-padding-y-check);
     --menu-label-text-transform: initial;
     --menu-label-letter-spacing: var(--ui-letter-spacing);
     --menu-item-text-transform: initial;
@@ -484,30 +511,16 @@
     --menu-item-font-weight: initial;
     --menu-narrow-min-width: var(--menu-min-width);
     --select-item-gap: var(--menu-item-gap);
-    --menubar-padding: var(--menu-padding);
-    --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
-    --card-radius: var(--surface-radius);
-    --bubble-radius: var(--surface-radius);
-    --bubble-padding-x: var(--surface-padding-sm);
-    --bubble-padding-y: 6px;
-    --bubble-line-height: var(--ui-line-height-md);
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
-    --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
-    --tabs-list-height: var(--control-height-lg);
     --tabs-list-padding: 3px;
     --tabs-trigger-gap: 6px;
     --tabs-trigger-padding-x: 6px;
     --tabs-trigger-padding-y: 2px;
     --item-media-icon-size: var(--control-icon-size-lg);
     --slider-track-thickness: 4px;
-    --avatar-font-size: var(--ui-text-lg);
-    --avatar-line-height: var(--ui-line-height-lg);
-    --sidebar-surface-padding: var(--menu-item-padding-x);
-    --sidebar-surface-gap: var(--menu-item-gap);
-    --sidebar-input-height: var(--control-height-lg);
     --sidebar-item-padding-y: var(--sidebar-item-padding-x);
     --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
     --sidebar-badge-font-weight: var(--ui-font-weight);
