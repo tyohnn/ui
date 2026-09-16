@@ -29,7 +29,7 @@
 
 /* mira: mb-2 font-medium data-[variant=label]:text-xs/relaxed data-[variant=legend]:text-sm */
 .cn-field-legend {
-    margin-block-end: 8px;
+    margin-block-end: 12px;   /* luma: mb-3 */
     font-weight: var(--ui-font-weight);
 
     &[data-variant="label"] {
@@ -91,7 +91,7 @@
     }
 
     &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
-        background-color: var(--primary-soft);
+        background-color: color-mix(in oklab, var(--input) 30%, transparent);   /* luma: has-data-checked:bg-input/30 */
     }
 
     /* ⚠ 안쪽 여백 8px 은 리터럴이다. 카드 안의 여백이라 control 축(높이가 정본)에도
@@ -118,7 +118,7 @@
 /* mira: has-data-selected:bg-primary/5 dark:has-data-selected:bg-primary/10 */
 .cn-field-label-aria {
     &:has([data-selected="true"]) {
-        background-color: var(--primary-soft);
+        background-color: color-mix(in oklab, var(--input) 30%, transparent);   /* luma: has-data-selected:bg-input/30 */
     }
 }
 

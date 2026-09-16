@@ -42,7 +42,7 @@
 /* mira: rounded-lg px-2.5 — 10px 좌우 여백은 control 축의 lg 단이 같은 값이다. */
 .cn-navigation-menu-trigger {
     border-radius: var(--surface-radius);
-    padding-inline: var(--control-padding-x-lg);
+    padding-inline: 18px;   /* luma: px-4.5 */
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 
@@ -52,7 +52,7 @@
     /* ⚠ 세로 여백 6px 은 리터럴이다. control 축은 높이가 정본이라 세로
        패딩 단계를 갖지 않는데, 이 트리거는 TSX 가 h-9 를 주므로 이 값은
        글줄이 두 줄이 될 때만 드러나는 보정이다. */
-    @apply py-1.5 font-medium transition-all disabled:opacity-50;
+    @apply py-2.5 font-medium transition-all disabled:opacity-50;   /* luma: py-2.5 */
 
     &[data-open],
     &[data-popup-open] {
@@ -84,8 +84,8 @@
        요소에 붙고, 배럴 안에서 링크 규칙이 뒤에 온다. 트리거의 여백이 이기도록 명시도를
        (0,2,0) 으로 올린다 — mira: px-2.5 py-1.5 (2026-09-16 실측). */
     &.cn-navigation-menu-trigger {
-        padding-inline: var(--control-padding-x-lg);
-        padding-block: 6px;
+        padding-inline: 18px;   /* luma: px-4.5 */
+        padding-block: 10px;   /* luma: py-2.5 */
     }
     gap: 6px;
     font-size: var(--ui-text-md);
@@ -125,8 +125,8 @@
 
 /* mira: size-3 — 여닫힘을 알리는 꺾쇠라 항목 아이콘(14)보다 한 단 작다. */
 .cn-navigation-menu-trigger-icon {
-    width: var(--control-icon-size-sm);
-    height: var(--control-icon-size-sm);
+    width: 12px;   /* luma: the chevron keeps size-3 while the control icon is 16 */
+    height: 12px;
 
     @apply relative top-px ml-1 transition duration-300 group-data-open/navigation-menu-trigger:rotate-180 group-data-popup-open/navigation-menu-trigger:rotate-180;
 }
@@ -134,7 +134,8 @@
 /* ⚠ 판의 안쪽 여백 6px 은 리터럴이다. mira 의 p-1.5 이고, 메뉴 목록의 --menu-padding(4)과
    다른 값이라 그 토큰을 읽지 않는다. 2층에 6px 여백 단계가 없다. */
 .cn-navigation-menu-content {
-    padding: 6px;
+    padding: 10px;   /* luma: p-2.5 */
+    padding-inline-end: 12px;   /* luma: pr-3 */
 
     --tw-ease: var(--control-ease);
 
@@ -157,7 +158,7 @@
 .cn-navigation-menu-popup {
     background-color: var(--popover);
     color: var(--popover-foreground);
-    border-radius: var(--surface-radius-lg);
+    border-radius: var(--surface-radius);   /* luma: rounded-3xl */
 }
 
 .cn-navigation-menu-viewport {
@@ -169,7 +170,7 @@
 .cn-navigation-menu-popup {
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),
-        var(--shadow-chip);
+        var(--shadow-float);   /* luma: shadow-lg, the same as the viewport */
 }
 
 .cn-navigation-menu-viewport {

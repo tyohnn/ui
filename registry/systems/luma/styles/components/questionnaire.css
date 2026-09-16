@@ -19,7 +19,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 16px;
+    gap: 24px;   /* luma: gap-6 */
 }
 
 .cn-questionnaire-progress {
@@ -32,7 +32,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;   /* luma: gap-5 */
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
@@ -44,7 +44,7 @@
     font-weight: 600;
 
     &:not(:has(~ [data-slot="questionnaire-description"])) {
-        margin-block-end: 12px;
+        margin-block-end: 20px;   /* luma: mb-5 */
     }
 }
 
@@ -56,7 +56,7 @@
 }
 
 .cn-questionnaire-choices {
-    gap: 6px;
+    gap: 12px;   /* luma: gap-3 */
 }
 
 /* 선택지 카드. 링은 _control-family.css 와 같은 한 겹(ring-2 ring-ring/30)이다 — 카드
@@ -71,10 +71,10 @@
       [data-checked]). 손으로 옮기면서 하나를 빠뜨리면 구현에 따라 색이 안 켜진다. */
 .cn-questionnaire-choice {
     gap: 10px;
-    padding-inline: 12px;
-    padding-block: 10px;
+    padding-inline: 16px;   /* luma: px-4 */
+    padding-block: 12px;   /* luma: py-3 */
     border: var(--control-border-width) solid var(--input);
-    border-radius: var(--surface-radius-lg);
+    border-radius: var(--control-radius-sm);   /* luma: rounded-3xl */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -109,7 +109,7 @@
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
     border-radius: var(--control-indicator-radius);
-    border-color: var(--input);
+    border-color: var(--input-border);   /* luma: border-transparent */
     background-color: var(--checkbox-fill);
     /* ⚠ 켜졌을 때의 색은 유틸리티로 남긴다. `data-checked` 변형이
        [data-state=checked] 와 [data-checked]:not([data-checked=false]) 둘을
@@ -119,8 +119,8 @@
 }
 
 .cn-questionnaire-choice-indicator-dot {
-    width: var(--control-indicator-dot-size);
-    height: var(--control-indicator-dot-size);
+    width: var(--radio-indicator-dot-size);
+    height: var(--radio-indicator-dot-size);
     background-color: var(--primary-foreground);
 }
 
@@ -130,7 +130,7 @@
 }
 
 .cn-questionnaire-choice-content {
-    gap: 2px;
+    gap: 4px;   /* luma: gap-1 */
 }
 
 .cn-questionnaire-choice-description {
@@ -143,14 +143,14 @@
       글자는 ui 축의 xs(10)보다도 작은 mira 의 값이다 — 16px 상자 안에 들어가는 한 자리
       숫자라 축에 올릴 값이 아니다. 바탕의 /80 은 토큰이 없어 --background 로 둔다. */
 .cn-questionnaire-shortcut {
-    width: 16px;
-    height: 16px;
-    border: var(--control-border-width) solid var(--input-border);
+    width: 20px;   /* luma: size-5 */
+    height: 20px;
+    border: var(--control-border-width) solid color-mix(in oklab, var(--primary) 10%, transparent);   /* luma: border-primary/10 */
     border-radius: 9999px;   /* luma: rounded-full */
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: color-mix(in oklab, var(--background) 80%, transparent);
     color: var(--muted-foreground);
-    font-size: 9px;
+    font-size: 10px;   /* luma: text-[0.625rem] */
     font-weight: var(--ui-font-weight);
     line-height: 1;
     @apply translate-y-[--spacing(0.45)] group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 items-center justify-center font-mono;
@@ -166,7 +166,7 @@
 .cn-questionnaire-input {
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
-    padding-block: 2px;   /* mira: py-0.5, Input 과 같다 */
+    padding-block: 4px;   /* luma: py-1, Input 과 같다 */
     border: var(--control-border-width) solid var(--input-border);
     border-radius: var(--control-radius-sm);   /* luma: rounded-3xl */
     background-color: var(--input-fill);
@@ -200,7 +200,7 @@
    mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
    실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
 .cn-questionnaire-actions {
-    gap: 6px;
+    gap: 8px;   /* luma: gap-2 */
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

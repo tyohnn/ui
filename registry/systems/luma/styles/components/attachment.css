@@ -50,18 +50,18 @@
 }
 
 .cn-attachment-size-sm {
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-xs);   /* luma: the smaller chips keep text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
     @apply gap-2.5 has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5;
 }
 
 /* 가장 작은 단계만 모서리를 한 단계 줄인다. mira: rounded-md */
 .cn-attachment-size-xs {
     border-radius: 18px;   /* luma: rounded-2xl */
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-xs);   /* luma: text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
     @apply gap-1.5 has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1;
 }
 

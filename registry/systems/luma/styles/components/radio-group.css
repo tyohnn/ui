@@ -32,7 +32,7 @@
 
     &[data-checked] {
         background-color: var(--primary);
-        border-color: var(--primary);
+        /* luma: no data-checked:border-primary — the radio keeps its transparent border. */
         color: var(--primary-foreground);
     }
 
@@ -49,7 +49,7 @@
         border-color: var(--input);
 
         &[data-checked] {
-            border-color: var(--primary);
+            border-color: var(--input-border);
         }
     }
 }
@@ -68,8 +68,8 @@
     inset-inline-start: 50%;
     translate: -50% -50%;
 
-    width: var(--control-indicator-dot-size);
-    height: var(--control-indicator-dot-size);
+    width: var(--radio-indicator-dot-size);
+    height: var(--radio-indicator-dot-size);
     border-radius: 9999px;
     background-color: var(--primary-foreground);
 }

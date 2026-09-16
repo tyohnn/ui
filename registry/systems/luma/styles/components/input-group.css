@@ -22,6 +22,16 @@
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
 
+    /* luma: has-[textarea]:rounded-2xl · has-data-[align=block-*]:rounded-3xl */
+    &:has(textarea) {
+        border-radius: 18px;
+    }
+
+    &:has(> [data-align="block-start"]),
+    &:has(> [data-align="block-end"]) {
+        border-radius: var(--control-radius-sm);
+    }
+
     transition-property: color, background-color, border-color, box-shadow;
     transition-duration: var(--control-duration);
     transition-timing-function: var(--control-ease);
@@ -93,8 +103,8 @@
        지시자 축(--control-indicator-radius 4px)과 함께 움직일 이유가 없다. */
     & [data-slot="kbd"] {
         background-color: var(--chip);
-        border-radius: 4px;
-        padding-inline: 4px;
+        border-radius: var(--control-radius-sm);   /* luma: **:data-[slot=kbd]:rounded-3xl */
+        padding-inline: 6px;   /* luma: **:data-[slot=kbd]:px-1.5 */
         font-size: var(--ui-text-xs);
     }
 }
@@ -123,19 +133,19 @@
    통 안의 세로 리듬이라 축이 없다. */
 .cn-input-group-addon-align-block-start {
     padding-inline: var(--control-padding-x-md);
-    padding-block-start: 8px;
+    padding-block-start: 12px;   /* luma: pt-3 */
 
     &.border-b {
-        padding-block-end: 8px;
+        padding-block-end: 14px;   /* luma: [.border-b]:pb-3.5 */
     }
 }
 
 .cn-input-group-addon-align-block-end {
     padding-inline: var(--control-padding-x-md);
-    padding-block-end: 8px;
+    padding-block-end: 12px;   /* luma: pb-3 */
 
     &.border-t {
-        padding-block-start: 8px;
+        padding-block-start: 14px;   /* luma: [.border-t]:pt-3.5 */
     }
 }
 
@@ -160,7 +170,7 @@
     min-height: 0;
     gap: var(--control-gap-xs);
     border-radius: 14px;   /* luma: rounded-xl */
-    padding-inline: 4px;
+    padding-inline: 6px;   /* luma: px-1.5 */
 
     & > svg:not([class*="size-"]) {
         width: var(--control-icon-size-sm);
@@ -170,22 +180,25 @@
 
 /* mira 는 gap-1 만 준다. 높이·패딩·글자는 Button 의 sm(24)이 그대로 온다 —
    컴포넌트가 size 를 Button 에 넘기기 때문이다(input-group.tsx 의 주석). */
+/* luma: the sm input-group button adds nothing of its own — the base gap-2 and the
+   Button's own size reach it. */
 .cn-input-group-button-size-sm {
-    gap: var(--control-gap-sm);
+    gap: 8px;
 }
 
 /* 아이콘 버튼은 Button 의 같은 이름보다 한 단 크다. mira: icon-xs 가 size-6, icon-sm 이 size-7 —
    통(28) 안에서 xs 는 한 단 아래(24), sm 은 통과 같은 높이(28)다. */
 .cn-input-group-button-size-icon-xs {
-    width: var(--control-height-sm);
-    height: var(--control-height-sm);
+    width: var(--control-height-xs);   /* luma: size-6 */
+    height: var(--control-height-xs);
     min-height: 0;
     padding: 0;
+    border-radius: 14px;   /* luma: rounded-xl */
 }
 
 .cn-input-group-button-size-icon-sm {
-    width: var(--control-height-md);
-    height: var(--control-height-md);
+    width: var(--control-height-sm);   /* luma: size-8 */
+    height: var(--control-height-sm);
     min-height: 0;
     padding: 0;
 }
@@ -228,4 +241,9 @@
     &[aria-invalid="true"] {
         box-shadow: none;
     }
+}
+
+/* luma: the textarea inside a group keeps py-2.5 while the input keeps the Input's own py-1. */
+.cn-input-group .cn-input-group-textarea {
+    padding-block: 10px;
 }

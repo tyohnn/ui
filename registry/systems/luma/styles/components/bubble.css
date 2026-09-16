@@ -115,7 +115,7 @@
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-sm);
-    @apply rounded-full ring-2 ring-card shrink-0 gap-1 px-1.5 py-0.5 has-[button]:p-0;
+    @apply rounded-full ring-3 ring-card shrink-0 gap-1 px-1.5 py-0.5 has-[button]:p-0;
 }
 
 .cn-bubble-reactions-side-top {

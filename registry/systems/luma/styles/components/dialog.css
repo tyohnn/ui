@@ -19,12 +19,17 @@
 }
 
 .cn-dialog-content {
-    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 max-w-[calc(100%-2rem)] duration-100 sm:max-w-sm;
+    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 max-w-[calc(100%-2rem)] duration-100 sm:max-w-md;   /* luma: sm:max-w-md */
 }
 
 /* 닫기 버튼 — 면의 오른쪽 위 모서리에 앉는다. mira: top-2 right-2
    ⚠ 8px 은 리터럴이다. surface 축의 여백 단계(10 · 16 · 24)에 없는 값이고,
       Sheet 의 닫기(16)와 다르므로 계열에서 하나로 묶지 않는다. */
+/* luma: text-base leading-none — the dialog title alone drops to a 1:1 line box. */
+.cn-dialog-title {
+    line-height: var(--ui-text-lg);
+}
+
 .cn-dialog-close {
     position: absolute;
     inset-block-start: 16px;   /* luma: top-4 */

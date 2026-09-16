@@ -77,8 +77,8 @@
         height: var(--avatar-size-sm);
 
         & > svg {
-            width: var(--control-icon-size-sm);
-            height: var(--control-icon-size-sm);
+            width: 12px;   /* luma: group-has-data-[size=sm]:[&>svg]:size-3 */
+            height: 12px;
         }
     }
 

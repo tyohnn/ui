@@ -19,7 +19,7 @@
 .cn-accordion {
     overflow: hidden;
     border: var(--surface-border-width) solid var(--border);
-    border-radius: var(--surface-radius-sm);
+    border-radius: 18px;   /* luma: rounded-2xl */
 }
 
 .cn-accordion-item {
@@ -64,5 +64,5 @@
 /* 안쪽 아래 여백은 surface 축의 md(16)와 같은 단이다 — 묶음이 면이므로 그 축을 읽는다. */
 .cn-accordion-content-inner {
     padding-top: 0;
-    padding-bottom: var(--surface-padding-md);
+    padding-bottom: 16px;   /* luma: the component's own pb-4 */
 }

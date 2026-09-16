@@ -122,7 +122,7 @@
 
 /* ⚠ 10·8px 은 리터럴이다. 항목 크기에 따라 묶음의 간격을 한 단씩 줄이는 자리라 위의 리듬과 같다. */
 .cn-item-group {
-    gap: var(--surface-gap-lg);
+    gap: 16px;   /* luma: the group keeps gap-4 while the dialog gap grew to 24 */
 
     &:has([data-size="sm"]) {
         gap: 10px;
@@ -134,5 +134,5 @@
 }
 
 .cn-item-separator {
-    margin-block: var(--menu-item-gap);
+    margin-block: 8px;   /* luma: the separator keeps my-2 */
 }

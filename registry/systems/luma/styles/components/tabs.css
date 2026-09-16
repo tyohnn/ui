@@ -52,7 +52,9 @@
    6px 간격은 control 축의 gap(4)에 없다. */
 .cn-tabs-trigger {
     gap: 8px;   /* luma: gap-2 */
-    border: var(--control-border-width) solid transparent;
+    /* luma: border-transparent! — the utility is important upstream, so the trigger keeps a
+       transparent border even where the TSX asks for dark:data-active:border-input. */
+    border: var(--control-border-width) solid transparent !important;
     border-radius: 9999px;   /* luma: rounded-full */
     padding-inline: 12px;   /* luma: px-3 */
     padding-block: 4px;   /* luma: py-1 */
@@ -102,4 +104,9 @@
     &:has([data-icon="inline-end"]) {
         padding-inline-end: var(--tabs-line-trigger-padding-x-icon);
     }
+}
+
+/* luma: the vertical list rounds its triggers to rounded-2xl even in the line variant. */
+.cn-tabs-list[data-variant="line"] .cn-tabs-trigger:where(.group\/tabs[data-orientation="vertical"] *) {
+    border-radius: 18px;
 }

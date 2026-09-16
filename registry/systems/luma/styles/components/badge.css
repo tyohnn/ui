@@ -42,11 +42,11 @@
     }
 
     &:has([data-icon="inline-start"]) {
-        padding-inline-start: var(--control-padding-x-icon-xs);
+        padding-inline-start: 6px;   /* luma: pl-1.5 */
     }
 
     &:has([data-icon="inline-end"]) {
-        padding-inline-end: var(--control-padding-x-icon-xs);
+        padding-inline-end: 6px;   /* luma: pr-1.5 */
     }
 }
 

@@ -25,7 +25,7 @@
 }
 
 .cn-command-input-wrapper {
-    padding: var(--menu-padding);
+    padding: 4px;   /* luma: the palette keeps p-1 around its search box */
     padding-bottom: 0;
 }
 
@@ -35,7 +35,7 @@
       배럴이 알파벳 순서라 input-group.css 가 이 파일보다 **뒤에** 읽히고, 같은
       (0,1,0)이면 `.cn-input-group` 의 height 가 이긴다. mira 의 `h-8!` 이 같은 사정이다. */
 .cn-command-input-wrapper > .cn-command-input-group {
-    height: var(--control-height-lg);
+    height: var(--control-height-md);   /* luma: h-9 */
     background-color: var(--input-fill);
 }
 
@@ -95,6 +95,12 @@
 }
 
 /* 대화상자 안에 들어갈 때는 대화상자가 면을 이미 그리므로 모서리만 맞춘다. mira: rounded-xl! p-0 */
+/* luma: in-data-[slot=dialog-content]:rounded-3xl — the palette row keeps the surface radius
+   when the palette is a dialog. */
+[data-slot="dialog-content"] .cn-command-item {
+    border-radius: var(--surface-radius);
+}
+
 .cn-command-dialog {
     border-radius: var(--surface-radius-lg);
 }

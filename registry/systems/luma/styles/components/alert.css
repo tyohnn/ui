@@ -98,7 +98,7 @@
     @apply text-balance md:text-pretty;
 
     & p:not(:last-child) {
-        margin-block-end: var(--surface-padding-md);
+        margin-block-end: 16px;   /* luma: the alert body keeps mb-4 */
     }
 }
 

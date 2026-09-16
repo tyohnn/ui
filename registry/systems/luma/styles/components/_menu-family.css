@@ -227,13 +227,19 @@
    꺼져 있는 항목에서는 안의 표시가 그려지지 않아 상자도 0 이어야 한다(크기를 주면 빈 상자가
    14px 로 남는다). 켜졌을 때의 크기는 안의 svg 가 항목 규칙으로 받는다. */
 .cn-dropdown-menu-item-indicator,
-.cn-context-menu-item-indicator,
 .cn-combobox-item-indicator {
     position: absolute;
     inset-inline-end: var(--menu-item-padding-x);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* luma: the context-menu indicator is a bare positioned span — no flex box, so the check
+   inside it stays inline and keeps its own size. */
+.cn-context-menu-item-indicator {
+    position: absolute;
+    inset-inline-end: var(--menu-item-padding-x);
 }
 
 /* --------------------------------------------------------
@@ -243,6 +249,17 @@
 /* mira: text-muted-foreground px-2 py-1.5 text-xs — 굵기를 주지 않는다.
    ⚠ 세로 6px 은 리터럴이다. 2층에 6px 여백 단계가 없다(--menu-padding 은 4).
       Command 의 그룹 제목만 mira 가 font-medium 을 더 주며 command.css 가 갖는다. */
+/* luma: the sub-trigger keeps the component's gap-2, not the row gap-2.5. */
+.cn-dropdown-menu-sub-trigger,
+.cn-menubar-sub-trigger {
+    gap: 8px;
+}
+
+/* luma: the context-menu sub-trigger has no gap of its own at all. */
+.cn-context-menu-sub-trigger {
+    gap: normal;
+}
+
 .cn-dropdown-menu-label,
 .cn-context-menu-label,
 .cn-menubar-label,
@@ -260,9 +277,21 @@
 .cn-dropdown-menu-separator,
 .cn-context-menu-separator,
 .cn-menubar-separator,
-.cn-command-separator,
-.cn-combobox-separator {
+.cn-command-separator {
     background-color: var(--border-subtle);
+    height: var(--surface-border-width);
+    margin-inline: calc(var(--menu-padding) * -1);
+    margin-block: var(--menu-padding);
+}
+
+/* luma: the Command separator has no negative inline margin (my-1.5 only). */
+.cn-command-separator {
+    margin-inline: 0;
+}
+
+/* luma: the combobox separator is bg-border, not bg-border/50. */
+.cn-combobox-separator {
+    background-color: var(--border);
     height: var(--surface-border-width);
     margin-inline: calc(var(--menu-padding) * -1);
     margin-block: var(--menu-padding);

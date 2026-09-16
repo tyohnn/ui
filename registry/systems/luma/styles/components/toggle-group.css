@@ -17,8 +17,13 @@
    ============================================================ */
 
 .cn-toggle-group {
-    /* luma: only the joined outline group carries a radius; the item corners do the rest. */
+    /* luma: only the joined outline group carries a radius of its own
+       (data-[spacing=0]:data-[variant=outline]:rounded-3xl); the item corners do the rest. */
     border-radius: 0;
+
+    &[data-spacing="0"][data-variant="outline"] {
+        border-radius: var(--control-radius-sm);
+    }
 }
 
 .cn-toggle-group-item {

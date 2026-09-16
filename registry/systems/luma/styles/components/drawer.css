@@ -40,6 +40,7 @@
 
     border-radius: var(--surface-radius-lg);
     border: var(--surface-border-width) solid var(--drawer-border);
+    box-shadow: var(--dialog-shadow);   /* luma: shadow-xl */
 }
 
 /* vaul 판. 판 자체는 투명하고, 8px 안쪽에 ::before 가 틀을 그린다. */
@@ -90,14 +91,14 @@
    -------------------------------------------------------- */
 
 .cn-drawer-header-base {
-    padding: var(--surface-padding-md);
+    padding: 16px;   /* luma: the drawer keeps p-4 while dialogs grew to p-6 */
     padding-block-end: 0;
 
     @apply md:text-left;
 }
 
 .cn-drawer-footer-base {
-    padding: var(--surface-padding-md);
+    padding: 16px;   /* luma: p-4 */
     padding-block-start: 0;
     gap: 8px;
 }

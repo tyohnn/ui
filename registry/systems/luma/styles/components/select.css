@@ -157,7 +157,7 @@
     & > span:last-child {
         display: flex;
         align-items: center;
-        gap: var(--menu-item-gap);
+        gap: 8px;   /* luma: the row's own gap-2, not the menu family's gap-2.5 */
     }
 }
 
@@ -174,7 +174,7 @@
 .cn-select-item-text {
     display: flex;
     flex: 1;
-    gap: var(--menu-item-gap);
+    gap: 8px;   /* luma: the row's own gap-2, not the menu family's gap-2.5 */
 }
 
 /* mira: bg-border/50 -mx-1 my-1 h-px */

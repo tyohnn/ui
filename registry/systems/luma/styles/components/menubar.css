@@ -22,7 +22,7 @@
     height: 36px;
     border: var(--control-border-width) solid var(--border);
     border-radius: var(--surface-radius);
-    padding: var(--menu-padding);
+    padding: 4px;   /* luma: the bar keeps p-1 */
 }
 
 /* mira: rounded-[calc(var(--radius-md)-2px)] = 6px. --control-radius-xs 가 같은 6px 이다
@@ -33,8 +33,8 @@
     /* mira: rounded-[calc(var(--radius-md)-2px)] px-2 py-[calc(--spacing(0.85))] text-xs/relaxed
        ⚠ 3.4px 과 6px 은 mira 의 값 그대로다(0.85 × 4 = 3.4). 축에 없는 단이다. */
     border-radius: 18px;   /* luma: rounded-2xl */
-    padding-inline: var(--menu-item-padding-x);
-    padding-block: 3.4px;
+    padding-inline: 8px;   /* luma: px-2 */
+    padding-block: 3px;   /* luma: py-0.75 */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -48,6 +48,11 @@
 
 /* 체크·라디오는 표시가 왼쪽이므로 시작 쪽을 비우고 끝쪽은 보통 값으로 둔다.
    mira: pl-7.5 pr-2 */
+/* luma: the menubar label is px-3.5, one step wider than the other menu labels. */
+.cn-menubar-label {
+    padding-inline: 14px;
+}
+
 .cn-menubar-checkbox-item,
 .cn-menubar-radio-item {
     padding-inline-start: var(--menu-item-padding-inset);

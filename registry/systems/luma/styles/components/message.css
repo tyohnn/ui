@@ -35,7 +35,7 @@
 
 .cn-message-header,
 .cn-message-footer {
-    padding-inline: var(--surface-padding-sm);
+    padding-inline: 14px;   /* luma: px-3.5 */
     color: var(--muted-foreground);
     font-size: var(--ui-text-xs);
     letter-spacing: var(--ui-letter-spacing);

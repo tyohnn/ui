@@ -26,11 +26,17 @@
 /* ⚠ 글자는 계열(_surface-family)이 주는 ui 축을 되돌리고 바깥을 그대로 물려받는다.
    mira 의 AlertDialogContent 에는 text-* 가 없어 본문 크기(16 · 1.5)로 그려진다(2026-09-16 대조). */
 .cn-alert-dialog-content {
-    gap: 12px;
+    gap: var(--surface-gap-lg);   /* luma: gap-6, the same as the dialog */
     font-size: inherit;
     line-height: inherit;
 
-    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-64 data-[size=default]:sm:max-w-sm;
+    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-md;
+}
+
+/* luma: text-lg — one step above the other surface titles. */
+.cn-alert-dialog-title {
+    font-size: var(--heading-font-size-sm);
+    line-height: var(--heading-line-height-sm);
 }
 
 .cn-alert-dialog-header {
@@ -47,17 +53,17 @@
       읽지 않고, surface 축에는 32·8 단계가 없다. 이 한 자리만 쓴다. */
 .cn-alert-dialog-media {
     background-color: var(--muted);
-    border-radius: var(--surface-radius-sm);
+    border-radius: 9999px;   /* luma: rounded-full */
     margin-block-end: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 64px;   /* luma: size-16 */
+    height: 64px;
 
     & svg:not([class*="size-"]) {
-        width: var(--control-icon-size-lg);
-        height: var(--control-icon-size-lg);
+        width: 32px;   /* luma: size-8 */
+        height: 32px;
     }
 
     @apply sm:group-data-[size=default]/alert-dialog-content:row-span-2;

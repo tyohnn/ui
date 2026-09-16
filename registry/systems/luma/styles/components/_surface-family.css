@@ -128,9 +128,13 @@
     padding: var(--surface-padding-md);
 }
 
-.cn-dialog-content,
-.cn-popover-content {
+.cn-dialog-content {
     gap: var(--surface-gap-lg);
+}
+
+/* luma: the popover keeps gap-4 while the dialog gap grew to 24. */
+.cn-popover-content {
+    gap: 16px;
 }
 
 .cn-popover-content,
@@ -236,10 +240,10 @@
     border-radius: var(--surface-radius-sm);
     padding-inline: 12px;
     padding-block: 6px;
-    gap: var(--surface-icon-gap);
-    font-size: var(--ui-text-sm);
+    gap: 6px;   /* luma: the tooltip keeps gap-1.5 */
+    font-size: var(--ui-text-xs);   /* luma: the tooltip keeps text-xs (12/16) */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
 }
 
 /* ⚠ transform 이 아니라 translate·rotate 개별 속성이다. 컴포넌트가 방향별로
