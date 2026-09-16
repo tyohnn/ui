@@ -75,6 +75,7 @@
     padding-block: 12px;   /* rhea: py-3 */
     border: var(--control-border-width) solid var(--input);   /* rhea keeps border-input on the choice */
     border-radius: var(--surface-radius);   /* rhea: rounded-2xl */
+    background-color: var(--questionnaire-choice-fill);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -119,8 +120,8 @@
 }
 
 .cn-questionnaire-choice-indicator-dot {
-    width: var(--radio-dot-size);
-    height: var(--radio-dot-size);
+    width: var(--radio-indicator-dot-size);
+    height: var(--radio-indicator-dot-size);
     background-color: var(--primary-foreground);
 }
 

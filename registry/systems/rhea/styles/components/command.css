@@ -36,7 +36,7 @@
       (0,1,0)이면 `.cn-input-group` 의 height 가 이긴다. mira 의 `h-8!` 이 같은 사정이다. */
 .cn-command-input-wrapper > .cn-command-input-group {
     height: var(--control-height-md);
-    background-color: var(--input-fill);
+    background-color: var(--command-input-fill);
 }
 
 .cn-command-input {

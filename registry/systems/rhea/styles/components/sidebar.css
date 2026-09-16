@@ -81,7 +81,7 @@
 /* 검색칸. Input 컴포넌트 위에 얹는 예외다 — mira 는 h-8 에 bg-muted/20(1층이 --muted-soft 로
    푼 단)이고 테두리는 --input 이다. 사이드바 안에서 인풋(h-7)보다 한 단 크다. */
 .cn-sidebar-input {
-    height: var(--control-height-md);   /* rhea: the sidebar input is h-8 */
+    height: var(--sidebar-input-height);
     /* mira: bg-muted/20 dark:bg-muted/30 border-input */
     background-color: var(--sidebar-input-fill);
     border-color: var(--input-border);
@@ -91,8 +91,8 @@
 
 .cn-sidebar-header,
 .cn-sidebar-footer {
-    gap: var(--menu-item-gap);
-    padding: 8px;   /* rhea: group p-2 */
+    gap: var(--sidebar-surface-gap);
+    padding: var(--sidebar-surface-padding);
 }
 
 .cn-sidebar-content {
@@ -129,7 +129,7 @@
    접힌 모드에서는 제 높이만큼 위로 올려 숨긴다(mira: -mt-8 opacity-0). */
 .cn-sidebar-group-label {
     height: var(--sidebar-group-label-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-group-label-padding-x);
     color: var(--sidebar-group-label-foreground);
     font-size: var(--sidebar-group-label-font-size);
@@ -159,7 +159,7 @@
       계산되는 값이 아니라 mira 가 손으로 맞춘 자리다. */
 .cn-sidebar-group-action {
     width: var(--sidebar-item-action-size);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     color: var(--sidebar-foreground);
     @apply absolute top-3.5 right-3 p-0;
 
@@ -181,7 +181,7 @@
 .cn-sidebar-menu-button {
     border-radius: var(--sidebar-item-radius);
     padding-inline: var(--sidebar-item-padding-x);
-    padding-block: 8px;   /* rhea: py-2 */
+    padding-block: var(--sidebar-item-padding-y);
 
     &:has(> svg:first-child) { padding-inline-start: 10px; }   /* rhea: pl-2.5 */
     &:has(> svg:last-child)  { padding-inline-end: 10px; }    /* rhea: pr-2.5 */
@@ -357,7 +357,7 @@
     font-size: var(--sidebar-badge-font-size);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--sidebar-badge-line-height);
-    font-weight: var(--ui-font-weight);
+    font-weight: var(--sidebar-badge-font-weight);
     @apply peer-hover/menu-button:text-(color:--sidebar-badge-hover-foreground) peer-data-active/menu-button:text-(color:--sidebar-badge-active-foreground) pointer-events-none absolute flex;
 
     .peer\/menu-button[data-active] ~ & {
@@ -377,14 +377,14 @@
 .cn-sidebar-menu-skeleton {
     height: var(--sidebar-item-height);
     gap: var(--sidebar-item-gap);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: 8px;   /* rhea: the skeleton keeps px-2 */
 }
 
 .cn-sidebar-menu-skeleton-icon {
     width: var(--sidebar-item-icon-size);
     height: var(--sidebar-item-icon-size);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
 }
 
 .cn-sidebar-menu-skeleton-text {
@@ -397,6 +397,7 @@
 .cn-sidebar-header,
 .cn-sidebar-content {
     --sidebar-item-radius: 19.6px;
+    --sidebar-part-radius: 19.6px;
     --sidebar-badge-radius: 19.6px;
 
     /* A bare Skeleton inside the scope is rounded-2xl of it (18 × 1.4); the
@@ -431,7 +432,7 @@
    data-[size=md]:text-xs data-[size=sm]:text-xs · 굵기를 주지 않는다(선택도 색만 바뀐다). */
 .cn-sidebar-menu-sub-button {
     height: var(--sidebar-sub-item-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-item-padding-x);
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);

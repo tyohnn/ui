@@ -26,14 +26,14 @@
    surface 축을 읽는다. ⚠ 3px 은 리터럴이다 — 어느 축에도 없는 안쪽 여백이고 이 한 곳뿐이다. */
 .cn-tabs-list {
     border-radius: var(--surface-radius);
-    padding: 3px;
+    padding: var(--tabs-list-padding);
 
     &:where(.group\/tabs[data-orientation="vertical"] *) {
         padding: 4px;   /* rhea: group-data-vertical/tabs:p-1 */
     }
 
     &:where(.group\/tabs[data-orientation="horizontal"] *) {
-        height: var(--control-height-md);   /* rhea: h-8 */
+        height: var(--tabs-list-height);
     }
 
     &[data-variant="line"] {
@@ -50,13 +50,13 @@
    막대에서 오므로(컴포넌트의 calc(100% - 1px)) control 축의 패딩 단계에 걸리지 않고,
    6px 간격은 control 축의 gap(4)에 없다. */
 .cn-tabs-trigger {
-    gap: 6px;
+    gap: var(--tabs-trigger-gap);
     /* rhea writes this as `border-transparent!`: registry/ui's Tabs carries
        `dark:data-active:border-input`, a utility that would otherwise win over layer(base). */
     border: var(--control-border-width) solid transparent !important;
     border-radius: var(--control-radius);
-    padding-inline: 6px;
-    padding-block: 2px;
+    padding-inline: var(--tabs-trigger-padding-x);
+    padding-block: var(--tabs-trigger-padding-y);
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-sm);
@@ -80,6 +80,14 @@
     &:has([data-icon="inline-end"]) {
         padding-inline-end: 4px;
     }
+}
+
+/* 선택된 트리거 — mira 의 선택 탭은 평평하다(nova 의 data-active:shadow-sm 은 없다).
+   v4 슬롯 --tabs-trigger-active-shadow 가 그 자리를 갖는다(foundation: none = 화면 변화 없음).
+   ⚠ 기본 변형에만 준다. 밑줄 탭은 자기 축(--tabs-line-trigger-*)이 따로 있다.
+   ⚠ 선택 색(data-active:bg-background)은 컴포넌트의 유틸리티가 갖는다 — 그 자리는 손대지 않았다. */
+.cn-tabs-list:not([data-variant="line"]) .cn-tabs-trigger[data-active] {
+    box-shadow: var(--tabs-trigger-active-shadow);
 }
 
 .cn-tabs-content {

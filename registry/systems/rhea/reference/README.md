@@ -99,3 +99,53 @@ no rules at all (see the `input-otp` exclusion).
 
 Nothing. The coverage template renders all 62 `registry/ui` components and the comparison pairs every one
 that carries a `data-slot`; everything the comparison could not decide is an exclusion above, with a reason.
+
+## Axis contract v4, stage 2 (2026-09-17)
+
+`tooling/preset/slot-migration.md` § rhea: the layer-3 rules were taken back from foundation and rhea's
+values moved into the v4 slots. 131 declaration sites read a v4 slot in foundation and were written
+differently here (the 126 of the list plus the menu ring, the invalid checked checkbox edge and the
+separator insets); 27 declarations foundation gained in v4 (label and title case, the field's bottom
+edge, the command row's radius and gap, the disabled field fill, the checked field-card edge, the
+active tab shadow …) were added at foundation's defaults.
+
+**Values now in slots** — layer 2 (`tokens.css`, in the axis block each name belongs to):
+`--control-padding-x-grouped` `var(--menu-item-padding-x)` · `--toggle-gap` `var(--control-gap-sm)` ·
+`--kbd-height` `var(--control-height-2xs)` · `--switch-radius` `var(--control-radius)` ·
+`--card-radius` `var(--surface-radius-lg)` · `--chart-tooltip-radius` `var(--surface-radius-sm)` ·
+`--empty-radius` / `--bubble-radius` `var(--surface-radius-xl)` · `--bubble-padding-x` 12px ·
+`--bubble-padding-y` 10px · `--bubble-line-height` 22.75px · `--menubar-padding` 3px ·
+`--menu-label-padding-y` 4px · `--sidebar-item-padding-y` 8px · `--sidebar-input-height`
+`var(--control-height-md)` · `--badge-height` `var(--control-height-2xs)` · `--badge-padding-x` 8px ·
+`--badge-padding-x-icon` 6px · `--badge-radius` `var(--control-radius)` · `--tabs-list-height`
+`var(--control-height-md)` · `--avatar-font-size` / `--avatar-line-height` the sm UI step.
+Layer 1 (`globals.css`, both scopes): `--switch-track-border-on` `var(--primary)` ·
+`--slider-track-fill` `var(--switch-track-off)` · `--radio-indicator-dot-size` 8px / 10px.
+The other listed rows (accordion and badge borders, badge and kbd icon sizes, `--item-gap`,
+`--sidebar-surface-padding`, `--kbd-min-width`) already equal foundation's default, so the backfilled
+value stays.
+
+**Rename:** `--radio-dot-size` → `--radio-indicator-dot-size` (readers: `radio-group.css`,
+`questionnaire.css`). `--questionnaire-shortcut-border` was already the v4 name.
+`--control-height-2xs` and `--surface-radius-xl` stay rhea's own.
+
+**Rows not moved**, because one slot cannot hold two values or the rule is a different shape (DESIGN.md §5):
+
+| Where | Why it stays a rule |
+|---|---|
+| `input-group.css` block-start/-end addon `padding-inline: 10px` | the inline addons and the grouped toggle are px-2 (8) and share `--control-padding-x-grouped`; the block addons are px-2.5 |
+| `toggle-group.css` `.cn-toggle-group` `border-radius: 0` | rhea rounds the group only at `data-spacing=0` + `data-variant=outline` (a selector); that rule now reads `--toggle-group-joined-radius`, whose default keeps the joined items' corners |
+| `select.css` default trigger `padding-inline: var(--control-padding-x-md)` | rhea's select trigger is px-3 while the inputs' field sub-axis (`--control-padding-x-field`) is px-2.5 |
+| `card.css` `box-shadow` | reads `--card-ring`, plus rhea's `shadow-sm` — a declaration mira does not make |
+| `switch.css` `border` | reads `--switch-track-border-off`, but the 2px width has no slot (and the padding is 0) |
+| `sidebar.css` header/content scope | rhea re-declares the radius scope (`[--radius:var(--radius-xl)]`), so the scope now sets `--sidebar-part-radius: 19.6px` beside `--sidebar-item-radius` |
+| `_menu-family.css` labels | foundation's rule is taken back; which label is text-xs or text-sm and which keeps py-1.5 is a selector, kept as two small rules after it |
+
+**Layer-3 files:** 22 of 62 are now byte-identical to foundation (14 before). The other 40 still differ
+by values v4 has no slot for (progress `h-2`, calendar `--cell-size`, breadcrumb · pagination · field ·
+message · alert · drawer spacing, avatar group count, slider thumb, tabs vertical padding, command and
+popup radii …) or by the rule shapes above.
+
+**Check:** `compare-computed` dumps of the coverage template (every section opened alone) before and
+after: **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0
+mismatches / 50 excluded**, dark **0 / 65** — unchanged. `scan-tokens` · `validate-system` pass.

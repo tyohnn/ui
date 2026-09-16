@@ -36,6 +36,7 @@
 
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
+    text-transform: var(--control-text-transform);
 
     --tw-ring-color: var(--ring-focus-strong);
 
@@ -102,7 +103,7 @@
     min-height: var(--control-height-md);
     min-width: var(--control-height-md);
     padding-inline: var(--control-padding-x-field);
-    gap: var(--control-gap-sm);   /* rhea: the toggle keeps gap-1 at every size */
+    gap: var(--toggle-gap);
     font-size: var(--ui-text-sm);
     line-height: var(--ui-line-height-sm);
 

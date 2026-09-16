@@ -81,7 +81,9 @@
     color: var(--table-head-foreground);
     font-size: var(--table-head-font-size);
     line-height: var(--table-head-line-height);
+    letter-spacing: var(--table-head-letter-spacing);
     font-weight: var(--ui-font-weight-regular);
+    text-transform: var(--table-head-text-transform);
     @apply text-left align-middle whitespace-nowrap;
 }
 

@@ -20,32 +20,33 @@
    xs 버튼과 같은 h-5 · px-2 · size-2.5 로 두므로 같은 축이다. Kbd 도 같다.
    ⚠ 세로 2px 은 리터럴이다. 높이가 정본이라 세로 여백은 글줄을 가운데 두는 보정일 뿐이다. */
 .cn-badge {
-    height: var(--control-height-2xs);
-    gap: var(--control-gap-xs);
-    padding-inline: 8px;   /* rhea: px-2 */
-    padding-block: 2px;
-    border: var(--control-border-width) solid transparent;
-    border-radius: var(--control-radius);   /* rhea: rounded-2xl */
-    font-size: var(--ui-text-xs);
-    letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-xs);
-    font-weight: var(--ui-font-weight);
+    height: var(--badge-height);
+    gap: var(--badge-gap);
+    padding-inline: var(--badge-padding-x);
+    padding-block: var(--badge-padding-y);
+    border: var(--badge-border-width) solid transparent;
+    border-radius: var(--badge-radius);
+    font-size: var(--badge-font-size);
+    letter-spacing: var(--badge-letter-spacing);
+    line-height: var(--badge-line-height);
+    font-weight: var(--badge-font-weight);
+    text-transform: var(--badge-text-transform);
     transition-property: all;
     transition-duration: var(--control-duration);
     transition-timing-function: var(--control-ease);
 
     /* 아이콘은 호출부의 size 유틸리티보다 이겨야 하는 자리라(mira: [&>svg]:size-2.5!) !important 다. */
     & > svg {
-        width: var(--control-icon-size-xs) !important;
-        height: var(--control-icon-size-xs) !important;
+        width: var(--badge-icon-size) !important;
+        height: var(--badge-icon-size) !important;
     }
 
     &:has([data-icon="inline-start"]) {
-        padding-inline-start: 6px;   /* rhea: pl-1.5 */
+        padding-inline-start: var(--badge-padding-x-icon);
     }
 
     &:has([data-icon="inline-end"]) {
-        padding-inline-end: 6px;   /* rhea: pr-1.5 */
+        padding-inline-end: var(--badge-padding-x-icon);
     }
 }
 
@@ -96,7 +97,7 @@
    ⚠ 컴포넌트가 가진 overflow-hidden 은 자기 그림자를 자르지 않는다.
    -------------------------------------------------------- */
 .cn-badge[data-tone] {
-    height: var(--control-height-2xs);
+    height: var(--badge-height);
     padding-inline: var(--tag-padding-x);
     border-radius: var(--tag-radius);
     font-size: var(--tag-font-size);

@@ -18,13 +18,13 @@
 /* 묶음은 테두리를 두른 하나의 면이다. 모서리는 surface 축의 작은 단(rounded-md = 8)을 읽는다. */
 .cn-accordion {
     overflow: hidden;
-    border: var(--surface-border-width) solid var(--border);
+    border: var(--accordion-border-width) solid var(--border);
     border-radius: var(--surface-radius);   /* rhea: rounded-2xl */
 }
 
 .cn-accordion-item {
     &:not(:last-child) {
-        border-bottom: var(--surface-border-width) solid var(--border);
+        border-bottom: var(--accordion-border-width) solid var(--border);
     }
 
     /* 열린 항목은 바탕이 한 단 옅게 깔린다. mira: data-open:bg-muted/50 */
