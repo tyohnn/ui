@@ -1,0 +1,35 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "maia",
+    "description": "Round and roomy: neutral greys on 36px controls with 14px text, 26px-rounded buttons and inputs, 18px cards and a three-pixel focus ring.",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "22b2874",
+        "note": "Created by tooling/preset/port.mjs from foundation (mira values) and ported to the shadcn maia preset on 2026-09-16."
+    },
+    "fonts": {
+        "sans": "figtree",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "hugeicons"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "light",
+        "dark",
+        "neutral",
+        "rounded",
+        "roomy",
+        "shadcn-preset"
+    ],
+    "source": {
+        "kind": "shadcn-preset",
+        "note": "shadcn create preset base-maia (npx shadcn@4.21.0 init -t next -b base -p maia); values checked against the reference app with tooling/snapshot/compare-shadcn.mjs.",
+        "preset": "maia",
+        "shadcnVersion": "4.21.0",
+        "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d"
+    }
+}
