@@ -41,6 +41,7 @@
 
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
+    text-transform: var(--control-text-transform);
 
     /* 눌림 — mira: active:not-aria-[haspopup]:translate-y-px. 줄어드는 것이 아니라
        1px 내려앉는다. 메뉴를 여는 버튼(aria-haspopup)은 눌린 채로 머무르므로 뺀다. */
@@ -92,7 +93,7 @@
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
-        background-color: var(--input-fill-hover);
+        background-color: var(--button-outline-hover-fill);
         color: var(--foreground);
     }
 
@@ -186,6 +187,7 @@
     min-height: var(--control-height-sm);
     padding-inline: var(--control-padding-x-sm);
     gap: var(--control-gap-sm);
+    border-radius: var(--button-shape-radius, var(--control-radius-sm));
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 
@@ -252,8 +254,9 @@
     width: var(--control-height-sm);
     height: var(--control-height-sm);
     padding-inline: 0;
+    border-radius: var(--button-shape-radius, var(--control-radius-sm));
 
-    & svg:not([class*="size-"]) { width: var(--control-icon-size-sm); height: var(--control-icon-size-sm); }
+    & svg:not([class*="size-"]) { width: var(--control-icon-button-icon-size-sm); height: var(--control-icon-button-icon-size-sm); }
 }
 
 /* 라벨 버튼 높이와 갈라 둔 아이콘 버튼 축을 읽는다(tokens.css; foundation 은 같은 값). */

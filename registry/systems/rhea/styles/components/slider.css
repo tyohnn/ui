@@ -30,17 +30,17 @@
       서는 일이 없어 함께 움직일 이유가 없다 — 축에 걸치지 않는 값은 토큰으로
       만들지 않는다는 규칙을 따른다. */
 .cn-slider-track {
-    background-color: var(--switch-track-off);   /* rhea: bg-input/90 */
+    background-color: var(--slider-track-fill);
     border-radius: var(--control-radius);
 
     &[data-orientation="horizontal"] {
-        height: 4px;
+        height: var(--slider-track-thickness);
         width: 100%;
     }
 
     &[data-orientation="vertical"] {
         height: 100%;
-        width: 4px;
+        width: var(--slider-track-thickness);
     }
 }
 

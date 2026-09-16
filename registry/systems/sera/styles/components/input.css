@@ -24,7 +24,7 @@
     padding-block: var(--control-padding-y-field);
 
     border: var(--control-border-width) solid var(--input-border);
-    border-block-end-color: var(--input-border-bottom);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     /* ⚠ 글자색을 적지 않는다. mira 의 Input 에는 text-* 가 없어 바깥 색을 물려받고,

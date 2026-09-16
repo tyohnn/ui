@@ -35,13 +35,15 @@
     &[data-variant="label"] {
         font-size: var(--ui-text-md);
         line-height: var(--ui-line-height-md);
-        letter-spacing: var(--ui-letter-spacing);
+        letter-spacing: var(--ui-label-letter-spacing);
+        text-transform: var(--ui-label-text-transform);
     }
 
     &[data-variant="legend"] {
         font-size: var(--ui-text-lg);
         line-height: var(--ui-line-height-lg);
-        letter-spacing: var(--ui-letter-spacing);
+        letter-spacing: var(--ui-label-letter-spacing);
+        text-transform: var(--ui-label-text-transform);
     }
 }
 
@@ -123,7 +125,8 @@
     gap: 8px;
     font-size: var(--ui-text-md);
     line-height: var(--ui-line-height-md);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--ui-label-letter-spacing);
+    text-transform: var(--ui-label-text-transform);
     font-weight: var(--ui-font-weight);
 
     .group\/field[data-disabled="true"] & {

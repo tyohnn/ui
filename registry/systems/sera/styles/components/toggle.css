@@ -104,7 +104,7 @@
     min-height: var(--control-height-md);
     min-width: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
-    gap: var(--control-gap-md);
+    gap: var(--toggle-gap);
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
 

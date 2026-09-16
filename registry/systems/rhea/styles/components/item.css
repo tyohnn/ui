@@ -62,7 +62,7 @@
 }
 
 .cn-item-media {
-    gap: 8px;   /* rhea: xs gap-2 */
+    gap: var(--item-gap);
     @apply group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start;
 }
 
@@ -71,8 +71,8 @@
 }
 
 .cn-item-media-variant-icon svg:not([class*="size-"]) {
-    width: var(--control-icon-size-lg);
-    height: var(--control-icon-size-lg);
+    width: var(--item-media-icon-size);
+    height: var(--item-media-icon-size);
 }
 
 /* ⚠ 32·32·24 는 리터럴이다. avatar 축과 값이 겹치지만 같은 축이 아니다 —
@@ -99,7 +99,7 @@
 
 /* 제목의 행간만 text-xs/relaxed 가 아니라 leading-snug(1.375)다 — mira 그대로. */
 .cn-item-title {
-    gap: var(--menu-item-gap);
+    gap: var(--item-gap);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: 1.375;
@@ -118,7 +118,7 @@
 .cn-item-actions,
 .cn-item-header,
 .cn-item-footer {
-    gap: var(--menu-item-gap);
+    gap: var(--item-gap);
 }
 
 /* ⚠ 10·8px 은 리터럴이다. 항목 크기에 따라 묶음의 간격을 한 단씩 줄이는 자리라 위의 리듬과 같다. */
@@ -135,5 +135,5 @@
 }
 
 .cn-item-separator {
-    margin-block: var(--menu-item-gap);
+    margin-block: var(--item-gap);
 }

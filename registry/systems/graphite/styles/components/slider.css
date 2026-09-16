@@ -26,21 +26,22 @@
 
 /* mira: bg-muted rounded-md data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1
    모서리는 full 이 아니라 rounded-md 다 — 4px 막대에서는 같아 보이지만 규칙이 다르다.
-   ⚠ 막대 두께 4px 은 리터럴이다. Progress 도 같은 값이지만 둘이 나란히
-      서는 일이 없어 함께 움직일 이유가 없다 — 축에 걸치지 않는 값은 토큰으로
-      만들지 않는다는 규칙을 따른다. */
+   ⚠ 막대 두께는 axis contract v4 부터 --slider-track-thickness 가 갖는다(종전 4px 리터럴이
+      그대로 슬롯의 값이다). Progress 는 같은 값이지만 제 축에 남는다 — 둘이 나란히 서는
+      일이 없어 함께 움직일 이유가 없다.
+   ⚠ 바탕도 v4 의 --slider-track-fill 이 갖는다(foundation 값은 --muted 의 별칭). */
 .cn-slider-track {
-    background-color: var(--muted);
+    background-color: var(--slider-track-fill);
     border-radius: var(--control-radius);
 
     &[data-orientation="horizontal"] {
-        height: 4px;
+        height: var(--slider-track-thickness);
         width: 100%;
     }
 
     &[data-orientation="vertical"] {
         height: 100%;
-        width: 4px;
+        width: var(--slider-track-thickness);
     }
 }
 

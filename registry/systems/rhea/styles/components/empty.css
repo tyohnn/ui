@@ -14,7 +14,7 @@
    테두리 두께는 주지 않는다 — 호출부가 `border` 를 붙였을 때만 점선이 보인다. */
 .cn-empty {
     gap: var(--surface-gap-lg);
-    border-radius: var(--surface-radius-xl);   /* rhea: rounded-3xl */
+    border-radius: var(--empty-radius);
     border-style: dashed;
     padding: 48px;   /* rhea: p-12 */
 }

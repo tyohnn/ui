@@ -197,3 +197,48 @@ indicator's dropped flex box — a rule shape, like lyra's and maia's).
 
 Nothing. The coverage template renders all 62 `registry/ui` components and the comparison pairs every one
 that carries a `data-slot`.
+
+## Axis contract v4, stage 2 (2026-09-17)
+
+`tooling/preset/slot-migration.md` § sera, continuing from iteration 54. The layer-3 rules were taken back
+from foundation wherever they read a v4 slot: 76 declaration sites (of 86 where foundation reads a slot and
+sera wrote something else — the list's 81 plus the menu rings and separator insets; the ten below stay
+rules) and 15 declarations foundation gained in v4 (the field's bottom edge on input · textarea · select ·
+native select · input group, the command row's radius and gap, the button and select-trigger `sm` corner,
+the menubar gap, the questionnaire choice fill, the disabled field fill, the active tab shadow).
+
+**Renames** (in place in `tokens.css`, backfilled defaults deleted): `--tag-height` → `--badge-height` ·
+`--tag-padding-y` → `--badge-padding-y` · `--tag-gap` → `--badge-gap` · `--tag-border-width` →
+`--badge-border-width` · `--tag-icon-size` → `--badge-icon-size` · `--tag-padding-x-icon` →
+`--badge-padding-x-icon` · `--tag-text-transform` → `--badge-text-transform` · `--tag-letter-spacing` →
+`--badge-letter-spacing`. The "Foundation slot candidates" table above keeps the names sera proposed.
+
+**Values now in slots:** `--badge-padding-x` · `--badge-radius` · `--badge-font-size` ·
+`--badge-line-height` alias the tone tag's `--tag-padding-x` · `--tag-radius` · `--tag-font-size` ·
+`--tag-line-height` (the plain badge wears the tag's box) · `--control-padding-x-grouped`
+`var(--control-padding-x-field)` · `--item-gap` 8px · `--menubar-padding` 4px ·
+`--sidebar-separator-margin-inline` `var(--sidebar-surface-padding)` · `--avatar-font-size` /
+`--avatar-line-height` the sm UI step. The other listed rows equal foundation's default once the renames
+are in (`--bubble-radius`, `--card-radius`, the radio dot, the questionnaire keycap edge …).
+
+A `border-block-end-color` that duplicated foundation's new `border-bottom-color: var(--input-border-bottom)`
+was removed from input · textarea · select · native select · input group.
+
+**Rows not moved:**
+
+| Where | Why it stays a rule |
+|---|---|
+| `accordion.css` `.cn-accordion` `border: 0 solid` | the item divider reads the same `--accordion-border-width` at 1px; sera's list has no outer frame |
+| `badge.css` `.cn-badge[data-tone]` `height: var(--control-height-xs)` | the plain badge's `--badge-height` is `auto`; the tone tag keeps the xs height |
+| `card.css` `box-shadow` | reads `--card-ring` plus `--shadow-card`, a declaration mira does not make |
+| `toggle-group.css` joined item `padding-inline: var(--control-padding-x-md)` | `--control-padding-x-grouped` is the input-group addon's 0 |
+| `native-select.css` `padding-block: 8px` | `--control-padding-y-field` is the input's 4px |
+| `select.css` `.cn-select-item` `gap: var(--menu-item-gap)` | `--select-item-gap` is the 8px of Command and Item rows; the select row keeps the menu's 10 |
+| `_menu-family.css` row case · tracking · weight | sera's rows are uppercase in the four menu families only, not in Command and Combobox (a selector) |
+| field legend · popover title `letter-spacing: var(--ui-letter-spacing)` | the rest of the quiet label band tracks at `--ui-label-letter-spacing` (0.025em); these two do not |
+
+**Layer-3 files:** 15 of 62 are byte-identical to foundation (10 before). The rest differ by values v4
+has no slot for or by the rule shapes recorded above ("Layer-3 rules that could not be reached by a value").
+
+**Check:** coverage-template dumps before and after, **0 differences** in light and dark. `compare-shadcn`:
+light **0 mismatches / 25 excluded**, dark **0 / 25** — unchanged. `scan-tokens` · `validate-system` pass.

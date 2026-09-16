@@ -19,6 +19,7 @@
 .cn-input-group {
     height: var(--control-height-md);
     border: var(--control-border-width) solid var(--input-border);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
 
@@ -102,14 +103,14 @@
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--menu-item-padding-x);   /* rhea: px-2 */
+    padding-inline-start: var(--control-padding-x-grouped);
 
     &:has(> button) { margin-inline-start: -0.3rem; }   /* rhea: -ml-[0.3rem] */
     &:has(> kbd)    { margin-inline-start: -0.15rem; }  /* rhea: -ml-[0.15rem] */
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--menu-item-padding-x);   /* rhea: px-2 */
+    padding-inline-end: var(--control-padding-x-grouped);
 
     &:has(> button) { margin-inline-end: -0.3rem; }   /* rhea: -mr-[0.3rem] */
     &:has(> kbd)    { margin-inline-end: -0.15rem; }  /* rhea: -mr-[0.15rem] */
@@ -139,7 +140,7 @@
    ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다. */
 .cn-input-group-button {
     gap: var(--menu-item-gap);   /* rhea: gap-2 */
-    border-radius: var(--control-radius);
+    border-radius: var(--control-radius-sm);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 }

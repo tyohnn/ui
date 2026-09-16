@@ -22,18 +22,18 @@
 .cn-badge {
     /* sera strips the badge to text: no box, no border, no radius, no padding.
        The tag axis carries every value (height auto · padding 0 · radius 0). */
-    height: var(--tag-height);
-    gap: var(--tag-gap);
-    padding-inline: var(--tag-padding-x);
-    padding-block: var(--tag-padding-y);
-    border: var(--tag-border-width) solid transparent;
-    border-radius: var(--tag-radius);
+    height: var(--badge-height);
+    gap: var(--badge-gap);
+    padding-inline: var(--badge-padding-x);
+    padding-block: var(--badge-padding-y);
+    border: var(--badge-border-width) solid transparent;
+    border-radius: var(--badge-radius);
     background-color: transparent;
-    font-size: var(--tag-font-size);
-    letter-spacing: var(--tag-letter-spacing);
-    line-height: var(--tag-line-height);
-    font-weight: var(--ui-font-weight);
-    text-transform: var(--tag-text-transform);
+    font-size: var(--badge-font-size);
+    letter-spacing: var(--badge-letter-spacing);
+    line-height: var(--badge-line-height);
+    font-weight: var(--badge-font-weight);
+    text-transform: var(--badge-text-transform);
 
     /* sera: transition-colors (mira: transition-all) */
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
@@ -42,16 +42,16 @@
 
     /* 아이콘은 호출부의 size 유틸리티보다 이겨야 하는 자리라(sera: [&>svg]:size-3!) !important 다. */
     & > svg {
-        width: var(--tag-icon-size) !important;
-        height: var(--tag-icon-size) !important;
+        width: var(--badge-icon-size) !important;
+        height: var(--badge-icon-size) !important;
     }
 
     &:has([data-icon="inline-start"]) {
-        padding-inline-start: var(--tag-padding-x-icon);
+        padding-inline-start: var(--badge-padding-x-icon);
     }
 
     &:has([data-icon="inline-end"]) {
-        padding-inline-end: var(--tag-padding-x-icon);
+        padding-inline-end: var(--badge-padding-x-icon);
     }
 }
 

@@ -32,18 +32,19 @@
     user-select: none;
 
     border: var(--control-border-width) solid var(--input-border);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     color: var(--foreground);
-    letter-spacing: var(--control-letter-spacing);
+    letter-spacing: var(--control-letter-spacing-field);
 
     &[data-size="default"] {
         height: var(--control-height-md);
         padding-inline-start: var(--control-padding-x-field);
         /* mira: pr-6 — 화살표 자리를 계산이 아니라 한 값으로 준다(24px). */
         padding-inline-end: var(--menu-item-padding-end);   /* rhea: pr-8 */
-        font-size: var(--control-font-size-md);
-        line-height: var(--control-line-height-md);
+        font-size: var(--control-font-size-field);
+        line-height: var(--control-line-height-field);
     }
 
     &[data-size="sm"] {

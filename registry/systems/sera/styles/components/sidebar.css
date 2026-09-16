@@ -104,7 +104,7 @@
    갖고 있어 읽는 자리를 남긴다 — 읽지 않으면 사문 토큰이 된다. 0 으로 두려면 토큰 값을 고칠 것. */
 .cn-sidebar-separator {
     background-color: var(--sidebar-border);
-    margin-inline: var(--sidebar-surface-padding);
+    margin-inline: var(--sidebar-separator-margin-inline);
     margin-block: var(--sidebar-separator-margin-block);
 }
 
@@ -128,7 +128,7 @@
    접힌 모드에서는 제 높이만큼 위로 올려 숨긴다(mira: -mt-8 opacity-0). */
 .cn-sidebar-group-label {
     height: var(--sidebar-group-label-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-group-label-padding-x);
     color: var(--sidebar-group-label-foreground);
     font-size: var(--sidebar-group-label-font-size);
@@ -158,7 +158,7 @@
       계산되는 값이 아니라 mira 가 손으로 맞춘 자리다. */
 .cn-sidebar-group-action {
     width: var(--sidebar-item-action-size);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     color: var(--sidebar-foreground);
     @apply absolute top-3.5 right-3 p-0;
 
@@ -381,7 +381,7 @@
 .cn-sidebar-menu-skeleton-icon {
     width: var(--control-icon-size-sm);
     height: var(--control-icon-size-sm);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
 }
 
 .cn-sidebar-menu-skeleton-text {
@@ -409,7 +409,7 @@
    data-[size=md]:text-xs data-[size=sm]:text-xs · 굵기를 주지 않는다(선택도 색만 바뀐다). */
 .cn-sidebar-menu-sub-button {
     height: var(--sidebar-sub-item-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-item-padding-x);
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);

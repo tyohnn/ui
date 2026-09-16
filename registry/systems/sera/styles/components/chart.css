@@ -29,7 +29,7 @@
     /* mira: border-border/50 shadow-xl */
     /* sera: bg-popover ring-1 ring-foreground/10 shadow-sm — a ring, not a border. */
     border: 0 solid transparent;
-    border-radius: var(--surface-radius);
+    border-radius: var(--chart-tooltip-radius);
     background-color: var(--popover);
     color: var(--popover-foreground);
     box-shadow: 0 0 0 var(--surface-border-width) var(--ring-subtle), var(--shadow-card);

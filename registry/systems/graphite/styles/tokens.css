@@ -207,6 +207,8 @@
     /* graphite: 항목 높이는 --menu-item-height 하나가 정한다(세로 여백 없음). */
     --menu-item-padding-y: 0px;
     --menu-item-padding-y-check: 0px;
+    /* Group label. graphite's rows have no vertical padding, but the label band keeps mira's py-1.5. */
+    --menu-label-padding-y: 6px;
     --command-item-padding-x: 8px;
 
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
@@ -329,6 +331,8 @@
     --table-line-height: 19px;
     --table-head-font-size: 11px;
     --table-head-line-height: 15px;
+    /* The head sets no tracking of its own; `initial` = inherit the table's. */
+    --table-head-letter-spacing: initial;
     /* Right padding of a cell holding a checkbox. mira: pr-0. */
     --table-checkbox-inset-end: var(--table-cell-padding-x);
 
@@ -366,6 +370,9 @@
     --avatar-size-sm: 20px;
     /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
     --avatar-font-size-sm: 9px;
+    /* md/lg initials set no type of their own: `initial` = inherit. */
+    --avatar-font-size: initial;
+    --avatar-line-height: initial;
     --avatar-font-weight: 600;
     --avatar-line-height-sm: 1;
     --avatar-size-md: 32px;
@@ -453,10 +460,8 @@
     --title-text-transform: initial;
     --title-letter-spacing: var(--ui-letter-spacing);
     --table-head-text-transform: initial;
-    --table-head-letter-spacing: var(--ui-letter-spacing);
     --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
     --menu-separator-margin-block: var(--menu-padding);
-    --menu-label-padding-y: var(--menu-item-padding-y-check);
     --menu-label-text-transform: initial;
     --menu-label-letter-spacing: var(--ui-letter-spacing);
     --menu-item-text-transform: initial;
@@ -487,8 +492,6 @@
     --item-gap: var(--menu-item-gap);
     --item-media-icon-size: var(--control-icon-size-lg);
     --slider-track-thickness: 4px;
-    --avatar-font-size: var(--ui-text-lg);
-    --avatar-line-height: var(--ui-line-height-lg);
     --sidebar-surface-padding: var(--menu-item-padding-x);
     --sidebar-surface-gap: var(--menu-item-gap);
     --sidebar-input-height: var(--control-height-lg);

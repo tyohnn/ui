@@ -25,7 +25,7 @@
     /* mira: py-1.5 — 높이(h-7)는 크기 클래스가 잡고, 이 여백이 글자 자리를 정한다. */
     padding-block: 8px;
     border: var(--control-border-width) solid var(--input-border);
-    border-block-end-color: var(--input-border-bottom);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-image: var(--surface-control);
@@ -61,6 +61,7 @@
         padding-inline: var(--control-padding-x-field);
         font-size: var(--control-font-size-field);
         line-height: var(--control-line-height-field);
+        border-radius: var(--control-radius-sm);
     }
 
     /* 아직 고르지 않았다는 표시. mira: data-placeholder:text-muted-foreground */
@@ -96,9 +97,9 @@
     background-color: var(--popover);
     color: var(--popover-foreground);
     border-radius: var(--surface-radius);
-    min-width: var(--menu-min-width);
+    min-width: var(--menu-narrow-min-width);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--shadow-float);
 
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;
@@ -185,8 +186,8 @@
 .cn-select-separator {
     background-color: var(--border-subtle);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 .cn-select-scroll-up-button,

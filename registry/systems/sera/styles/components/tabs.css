@@ -76,6 +76,14 @@
     }
 }
 
+/* 선택된 트리거 — mira 의 선택 탭은 평평하다(nova 의 data-active:shadow-sm 은 없다).
+   v4 슬롯 --tabs-trigger-active-shadow 가 그 자리를 갖는다(foundation: none = 화면 변화 없음).
+   ⚠ 기본 변형에만 준다. 밑줄 탭은 자기 축(--tabs-line-trigger-*)이 따로 있다.
+   ⚠ 선택 색(data-active:bg-background)은 컴포넌트의 유틸리티가 갖는다 — 그 자리는 손대지 않았다. */
+.cn-tabs-list:not([data-variant="line"]) .cn-tabs-trigger[data-active] {
+    box-shadow: var(--tabs-trigger-active-shadow);
+}
+
 .cn-tabs-content {
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);

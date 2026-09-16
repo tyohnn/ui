@@ -31,13 +31,13 @@
     height: var(--switch-track-height-md);
     padding: 0;   /* rhea: the 2px border is the inset */
 
-    border: 2px solid transparent;   /* rhea: border-2 */
-    border-radius: var(--control-radius);   /* rhea: rounded-2xl */
+    border: 2px solid var(--switch-track-border-off);   /* rhea: border-2 — the width is a literal: v4 has no switch border-width slot */
+    border-radius: var(--switch-radius);
     background-color: var(--switch-track-off);
 
     &[data-checked] {
         background-color: var(--primary);
-        border-color: var(--primary);   /* rhea: data-checked:border-primary */
+        border-color: var(--switch-track-border-on);
     }
 
     &[data-size="sm"] {
@@ -55,10 +55,10 @@
 }
 
 .cn-switch-thumb {
-    width: var(--switch-thumb-size-md);
+    width: var(--switch-thumb-width-md);
     height: var(--switch-thumb-size-md);
     box-shadow: var(--shadow-chip);   /* rhea: shadow-sm */
-    border-radius: var(--control-radius);   /* rhea: rounded-2xl */
+    border-radius: var(--switch-radius);
     background-color: var(--switch-thumb-off);
     translate: 0;
 
@@ -68,7 +68,7 @@
     }
 
     .cn-switch[data-size="sm"] & {
-        width: var(--switch-thumb-size-sm);
+        width: var(--switch-thumb-width-sm);
         height: var(--switch-thumb-size-sm);
 
         &[data-checked] {

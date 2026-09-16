@@ -40,8 +40,8 @@
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: 9999px;
-    font-size: var(--ui-text-sm);       /* rhea: text-sm */
-    line-height: var(--ui-line-height-sm);
+    font-size: var(--avatar-font-size);
+    line-height: var(--avatar-line-height);
 }
 
 .cn-avatar-image {
