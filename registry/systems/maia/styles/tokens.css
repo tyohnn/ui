@@ -547,7 +547,7 @@
     /* Card parts. The header and footer corners, and an edge image's corners. mira: the card's
        corner. maia rounds the header and footer one step below the card (14 in an 18 card); nova
        gives the image the popover corner while the card and its parts take the dialog one. */
-    --card-part-radius: var(--card-radius);
+    --card-part-radius: 14px;   /* maia: rounded-t-xl / rounded-b-xl, one step below the card */
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
