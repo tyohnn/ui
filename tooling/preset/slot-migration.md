@@ -12,12 +12,12 @@ foundation's.
 | `mira` | **converted** — `styles/` is byte-identical to foundation's, so it already reads every slot. Nothing to do. | 0 | 0 | 0 |
 | `sera` | **partly converted** — its port proposed most of the v4 names under the spelling foundation adopted and already reads them; iteration 54 moved the keycap (`--kbd-*`) and `.cn-field-title` onto their slots. What is left is below. | 81 | 29 | 8 |
 | `graphite` | not started | 129 | 7 | 0 |
-| `vega` | not started | 132 | 43 | 0 |
-| `nova` | not started | 126 | 38 | 0 (1 name dropped) |
+| `vega` | **converted** (2026-09-17) — 42 of 43 rows; the select trigger's two-value inline padding stays literal. 12 of 62 layer-3 files byte-identical to foundation. See `registry/systems/vega/reference/README.md`. | 132 | 43 | 0 |
+| `nova` | **converted** (2026-09-17) — 37 of 38 rows, `--input-fill-strong` dropped; the accordion group keeps its own zero border. 21 of 62 files byte-identical. See `registry/systems/nova/reference/README.md`. | 126 | 38 | 0 (1 name dropped) |
 | `luma` | not started | 118 | 52 | 0 |
 | `rhea` | not started | 126 | 49 | 1 |
 | `maia` | not started | 105 | 28 | 0 |
-| `lyra` | not started | 110 | 10 | 1 |
+| `lyra` | **converted** (2026-09-17) — 9 of 10 rows and the rename; the accordion item keeps `--surface-border-width`. 24 of 62 files byte-identical. See `registry/systems/lyra/reference/README.md`. | 110 | 10 | 1 |
 
 Stage 1 was checked to change no render: foundation, mira and sera compare 0 mismatches against their
 reference apps in both modes, and the seven unconverted systems dump 0 computed-value differences on the
