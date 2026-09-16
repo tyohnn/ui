@@ -504,3 +504,52 @@
     --item-media-icon-size: var(--control-icon-size-lg);
     --sidebar-badge-font-weight: var(--ui-font-weight);
 }
+
+:root {
+    /* ========================================================
+       Axis contract v5 — one slot, one meaning
+       --------------------------------------------------------
+       Stage 2 of v4 found slots that several elements read while a system gave
+       those elements different values. Each split below adds the name the
+       second reader needed; its default is an alias of the slot it came from,
+       so foundation renders exactly as it did under v4.
+       ======================================================== */
+
+    /* The grouped control padding, split per reader. --control-padding-x-grouped stays the shared
+       step; the inline addons, the block (top · bottom) addons and the joined toggle-group item each
+       read their own name. rhea · nova · lyra · vega keep the block addons at the md step while the
+       inline ones and the toggle item go to px-2; sera zeroes the addons and keeps the toggle's md. */
+    --input-group-addon-padding-x: var(--control-padding-x-grouped);
+    --input-group-addon-padding-x-block: var(--input-group-addon-padding-x);
+    --toggle-group-item-padding-x: var(--control-padding-x-grouped);
+    /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
+       down but keep the grouped button at the control radius. */
+    --input-group-button-radius: var(--control-radius-sm);
+    /* A joined toggle group: the group's own corner (--toggle-group-joined-radius), its sm step,
+       and the corners of the joined items. rhea squares the group and rounds only the items;
+       nova steps the sm group down while the items keep the control radius. */
+    --toggle-group-joined-radius-sm: var(--toggle-group-joined-radius);
+    --toggle-group-item-radius: var(--toggle-group-joined-radius);
+    /* The select trigger's side padding, start and end apart (default size). mira: the field
+       padding on both sides. rhea gives the trigger px-3 where the inputs are px-2.5; vega's
+       trigger is `pl-2.5 pr-2`. */
+    --select-trigger-padding-start: var(--control-padding-x-field);
+    --select-trigger-padding-end: var(--select-trigger-padding-start);
+    /* The native select's vertical padding. mira: the field's py-0.5. sera gives it py-2 while the
+       input stays py-1; graphite's input has none while the native select keeps 2px. */
+    --native-select-padding-y: var(--control-padding-y-field);
+    /* The toned badge (`[data-tone]`, the tag) height. mira: the badge height. luma · sera · lyra
+       keep the tag at the xs control step while the plain badge shrinks to h-5 (or auto). */
+    --tag-height: var(--badge-height);
+    /* The accordion's rules between items. mira: the group's own border width. sera · nova · lyra
+       draw no frame around the group but keep the rule between items. */
+    --accordion-item-border-width: var(--accordion-border-width);
+    /* Card parts. The header and footer corners, and an edge image's corners. mira: the card's
+       corner. maia rounds the header and footer one step below the card (14 in an 18 card); nova
+       gives the image the popover corner while the card and its parts take the dialog one. */
+    --card-part-radius: var(--card-radius);
+    --card-image-radius: var(--card-radius);
+    /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
+       rhea adds shadow-sm, sera · vega · luma their own card shadow. */
+    --card-shadow: var(--shadow-card);
+}

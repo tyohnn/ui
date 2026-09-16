@@ -103,21 +103,22 @@
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-grouped);
+    padding-inline-start: var(--input-group-addon-padding-x);
 
     &:has(> button) { margin-inline-start: -0.3rem; }   /* rhea: -ml-[0.3rem] */
     &:has(> kbd)    { margin-inline-start: -0.15rem; }  /* rhea: -ml-[0.15rem] */
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-grouped);
+    padding-inline-end: var(--input-group-addon-padding-x);
 
     &:has(> button) { margin-inline-end: -0.3rem; }   /* rhea: -mr-[0.3rem] */
     &:has(> kbd)    { margin-inline-end: -0.15rem; }  /* rhea: -mr-[0.15rem] */
 }
 
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
-   통 안의 세로 리듬이라 축이 없다. */
+   통 안의 세로 리듬이라 축이 없다. 좌우 패딩은 v5 의 --input-group-addon-padding-x-block
+   (foundation 값은 인라인 addon 슬롯의 별칭)이다. */
 .cn-input-group-addon-align-block-start {
     padding-inline: 10px;   /* rhea: px-2.5 */
     padding-block-start: 8px;

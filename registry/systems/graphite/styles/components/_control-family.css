@@ -100,7 +100,8 @@
 /* --------------------------------------------------------
    비활성 채움 — 입력 계열(Input · Textarea · Native Select · Select 트리거)
    axis contract v4. mira 는 비활성에 바탕을 따로 주지 않으므로
-   --input-fill-disabled 의 foundation 값은 --input-fill 의 별칭이다. 즉 이
+   --input-fill-disabled 의 foundation 값은 --input-fill 의 별칭이다(v5: Select 트리거와
+   Native Select 는 --select-fill-disabled 를 읽고, 그 기본값이 --input-fill-disabled 다). 즉 이
    선언은 계산값을 바꾸지 않고, 비활성 칸을 한 단 눌러 두려는 시스템이 3층
    규칙을 고치지 않고 슬롯만 바꾸도록 자리를 만들어 둔다(DESIGN.md 5절).
 
@@ -110,10 +111,13 @@
    -------------------------------------------------------- */
 
 .cn-input:disabled,
-.cn-textarea:disabled,
+.cn-textarea:disabled {
+    background-color: var(--input-fill-disabled);
+}
+
 .cn-native-select:disabled,
 .cn-select-trigger[data-disabled] {
-    background-color: var(--input-fill-disabled);
+    background-color: var(--select-fill-disabled);
 }
 
 /* --------------------------------------------------------

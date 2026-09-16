@@ -24,7 +24,8 @@
 
     background-color: var(--card);
     color: var(--card-foreground);
-    /* 모서리는 카드 자신의 축이다 — v4 슬롯 --card-radius(foundation 은 --surface-radius 의 별칭). */
+    /* 모서리는 카드 자신의 축이다 — v4 슬롯 --card-radius(foundation 은 --surface-radius 의 별칭).
+       머리·바닥은 v5 의 --card-part-radius, 가장자리 이미지는 --card-image-radius(둘 다 그 별칭)다. */
     border-radius: var(--card-radius);
     overflow: hidden;
 
@@ -45,8 +46,9 @@
        ⚠ 1층의 --shadow-card 는 이제 읽는 곳이 없다. 값이 이미 「없음」(0 0 #0000)이라
           화면은 같다. 카드에 그림자를 되살리려면 여기 box-shadow 에 그 이름을 다시 잇고
           globals.css 의 값을 함께 볼 것 — 한쪽만 고치면 드리프트가 재발한다.
-       링의 색은 v4 슬롯 --card-ring 이다(1층, foundation 은 --ring-subtle 의 별칭). */
-    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring);
+       링의 색은 v4 슬롯 --card-ring 이다(1층, foundation 은 --ring-subtle 의 별칭).
+       링 뒤의 그림자는 v5 슬롯 --card-shadow 다(foundation 은 비어 있는 --shadow-card 의 별칭). */
+    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring), var(--card-shadow);
 
     /* ⚠ sm 의 12px 은 리터럴이다. mira 의 --spacing(3)인데 surface 축의 sm 여백은
        10px(popover p-2.5)이라 걸치지 않는다. 카드 한 곳에만 쓰는 값이라 토큰을 만들지 않았다. */
@@ -60,21 +62,21 @@
     }
 
     & > img:first-child {
-        border-start-start-radius: var(--card-radius);
-        border-start-end-radius: var(--card-radius);
+        border-start-start-radius: var(--card-image-radius);
+        border-start-end-radius: var(--card-image-radius);
     }
 
     & > img:last-child {
-        border-end-start-radius: var(--card-radius);
-        border-end-end-radius: var(--card-radius);
+        border-end-start-radius: var(--card-image-radius);
+        border-end-end-radius: var(--card-image-radius);
     }
 }
 
 .cn-card-header {
     gap: var(--surface-gap);
     padding-inline: var(--card-spacing);
-    border-start-start-radius: var(--card-radius);
-    border-start-end-radius: var(--card-radius);
+    border-start-start-radius: var(--card-part-radius);
+    border-start-end-radius: var(--card-part-radius);
 
     &:is(.border-b) {
         padding-bottom: var(--card-spacing);
@@ -109,6 +111,6 @@
     padding-inline: var(--card-spacing);
     padding-block: var(--card-spacing);
     border-top: var(--surface-border-width) solid var(--border);
-    border-end-start-radius: var(--card-radius);
-    border-end-end-radius: var(--card-radius);
+    border-end-start-radius: var(--card-part-radius);
+    border-end-end-radius: var(--card-part-radius);
 }

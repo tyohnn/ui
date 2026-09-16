@@ -53,21 +53,21 @@
     }
 
     & > img:first-child {
-        border-start-start-radius: var(--card-radius);
-        border-start-end-radius: var(--card-radius);
+        border-start-start-radius: var(--card-image-radius);
+        border-start-end-radius: var(--card-image-radius);
     }
 
     & > img:last-child {
-        border-end-start-radius: var(--card-radius);
-        border-end-end-radius: var(--card-radius);
+        border-end-start-radius: var(--card-image-radius);
+        border-end-end-radius: var(--card-image-radius);
     }
 }
 
 .cn-card-header {
     gap: 6px;   /* sera: gap-1.5 */
     padding-inline: var(--card-spacing);
-    border-start-start-radius: var(--card-radius);
-    border-start-end-radius: var(--card-radius);
+    border-start-start-radius: var(--card-part-radius);
+    border-start-end-radius: var(--card-part-radius);
 
     &:is(.border-b) {
         padding-bottom: var(--card-spacing);
@@ -98,8 +98,8 @@
    그 선 위로 여백을 더한다 — 위쪽 선의 색은 그 유틸리티(--border)가 정한다. */
 .cn-card-footer {
     padding-inline: var(--card-spacing);
-    border-end-start-radius: var(--card-radius);
-    border-end-end-radius: var(--card-radius);
+    border-end-start-radius: var(--card-part-radius);
+    border-end-end-radius: var(--card-part-radius);
 
     &:is(.border-t) {
         padding-top: var(--card-spacing);

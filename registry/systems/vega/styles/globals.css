@@ -631,6 +631,9 @@
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--input-fill);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
     --slider-track-fill: var(--muted);
@@ -645,6 +648,9 @@
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--input-fill);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
     --slider-track-fill: var(--muted);

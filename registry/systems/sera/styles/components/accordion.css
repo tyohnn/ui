@@ -24,7 +24,7 @@
 
 .cn-accordion-item {
     &:not(:last-child) {
-        border-bottom: var(--accordion-border-width) solid var(--border);
+        border-bottom: var(--accordion-item-border-width) solid var(--border);
     }
 
 }

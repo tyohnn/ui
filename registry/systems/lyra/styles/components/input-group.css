@@ -106,7 +106,7 @@
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-grouped);   /* lyra: px-2 */
+    padding-inline-start: var(--input-group-addon-padding-x);   /* lyra: px-2 */
 
     &:has(> button) {
         margin-inline-start: -0.3rem;
@@ -118,7 +118,7 @@
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-grouped);   /* lyra: px-2 */
+    padding-inline-end: var(--input-group-addon-padding-x);   /* lyra: px-2 */
 
     /* lyra: has-[>button]:mr-[-0.3rem] · has-[>kbd]:mr-[-0.15rem] — the keycap pulls back half as far. */
     &:has(> button) {
@@ -131,7 +131,8 @@
 }
 
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
-   통 안의 세로 리듬이라 축이 없다. */
+   통 안의 세로 리듬이라 축이 없다. 좌우 패딩은 v5 의 --input-group-addon-padding-x-block
+   (foundation 값은 인라인 addon 슬롯의 별칭)이다. */
 .cn-input-group-addon-align-block-start {
     padding-inline: var(--control-padding-x-md);   /* lyra: the block addon keeps px-2.5 */
     padding-block-start: 8px;
@@ -152,11 +153,11 @@
 
 /* mira: gap-2 rounded-md text-xs/relaxed
    ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다.
-   ⚠ 이 칸은 Button 의 sm 단계(글자·행간이 sm 이다)라 모서리도 axis contract v4 의
-      --control-radius-sm 을 읽는다. foundation 값은 --control-radius 의 별칭이다. */
+   ⚠ 모서리는 axis contract v5 의 --input-group-button-radius 다. foundation 값은 이 칸이 속한
+      Button sm 단계(글자·행간이 sm 이다)의 --control-radius-sm 별칭이다. */
 .cn-input-group-button {
     gap: 8px;
-    border-radius: var(--control-radius-sm);
+    border-radius: var(--input-group-button-radius);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 }

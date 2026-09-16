@@ -25,7 +25,7 @@
 
 .cn-native-select {
     /* mira: py-0.5 */
-    padding-block: var(--control-padding-y-field);   /* rhea: py-1 */
+    padding-block: var(--native-select-padding-y);   /* rhea: py-1 */
     width: 100%;
     min-width: 0;
     appearance: none;

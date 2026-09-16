@@ -22,7 +22,7 @@
 
 .cn-accordion-item {
     &:not(:last-child) {
-        border-bottom: var(--accordion-border-width) solid var(--border);
+        border-bottom: var(--accordion-item-border-width) solid var(--border);
     }
 
     /* 열린 항목은 바탕이 한 단 옅게 깔린다. mira: data-open:bg-muted/50 */

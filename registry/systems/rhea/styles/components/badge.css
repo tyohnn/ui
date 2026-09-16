@@ -94,10 +94,11 @@
    명시도를 한 단 올린다(0,2,0 > variant 의 0,1,0).
    모양은 2층 tag 축, 색은 1층 --tag-* 슬롯이 갖는다. foundation 의 태그는 아웃라인 배지와 같게 보인다.
    글자 크기는 --tag-font-size(foundation 은 배지와 같은 --ui-text-xs).
+   높이는 v5 의 --tag-height(foundation 은 --badge-height 의 별칭)다.
    ⚠ 컴포넌트가 가진 overflow-hidden 은 자기 그림자를 자르지 않는다.
    -------------------------------------------------------- */
 .cn-badge[data-tone] {
-    height: var(--badge-height);
+    height: var(--tag-height);
     padding-inline: var(--tag-padding-x);
     border-radius: var(--tag-radius);
     font-size: var(--tag-font-size);

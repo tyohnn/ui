@@ -106,10 +106,10 @@
 
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다.
-   ⚠ addon 의 좌우 패딩은 「묶음 안 컨트롤」 축(axis contract v4 의 --control-padding-x-grouped)이다.
-      foundation 값은 --control-padding-x-md 의 별칭이라 지금 값과 같다. */
+   ⚠ addon 의 좌우 패딩은 제 슬롯(axis contract v5 의 --input-group-addon-padding-x)이다.
+      foundation 값은 「묶음 안 컨트롤」 축 --control-padding-x-grouped 의 별칭이라 지금 값과 같다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-grouped);
+    padding-inline-start: var(--input-group-addon-padding-x);
 
     &:has(> button) {
         margin-inline-start: -0.3rem;
@@ -121,7 +121,7 @@
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-grouped);
+    padding-inline-end: var(--input-group-addon-padding-x);
 
     &:has(> button) {
         margin-inline-end: -0.3rem;
@@ -133,7 +133,8 @@
 }
 
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
-   통 안의 세로 리듬이라 축이 없다. */
+   통 안의 세로 리듬이라 축이 없다. 좌우 패딩은 v5 의 --input-group-addon-padding-x-block
+   (foundation 값은 인라인 addon 슬롯의 별칭)이다. */
 .cn-input-group-addon-align-block-start {
     padding-inline: var(--control-padding-x-md);
     padding-block-start: 8px;

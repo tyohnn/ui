@@ -52,7 +52,8 @@
     /* ⚠ 높이는 min-height 가 아니라 height 다. mira 의 트리거는 `h-7 py-1.5` — 고정 높이 안에
        여백이 들어앉는다. min-height 로 두면 여백이 높이를 밀어 올려 33.5px 가 된다(2026-09-16 실측). */
     /* v4: 기본 크기의 트리거는 인풋 계열(field 하위 축)이다. foundation 기본값이 md 단의
-       별칭이라 지금 값은 그대로다 — sera·rhea 처럼 인풋 계열만 갈라 쓰는 시스템이 이 슬롯을 내린다. */
+       별칭이라 지금 값은 그대로다 — sera·rhea 처럼 인풋 계열만 갈라 쓰는 시스템이 이 슬롯을 내린다.
+       v5: 좌우 패딩은 트리거 자신의 시작·끝 슬롯이다(기본값은 field 패딩의 별칭). */
     &[data-size="default"] {
         height: var(--control-height-md);
         /* nova: pl-2.5 pr-2 — the trigger's icon side is the narrow one. */

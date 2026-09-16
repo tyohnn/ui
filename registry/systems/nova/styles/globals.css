@@ -251,6 +251,9 @@
     /* nova: disabled:bg-input/50 (dark: /80) — mira leaves a disabled control its normal fill.
        v4 slot. */
     --input-fill-disabled: oklch(0.922 0 0 / 50%);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --input-fill-hover: oklch(0.922 0 0 / 50%);
     /* 셀렉트 트리거 · 네이티브 셀렉트의 hover. mira: dark:hover:bg-input/50 — 밝은 쪽에는 hover 가 없으므로
        --input-fill 과 같은 값이다. */
@@ -466,6 +469,9 @@
     --input-fill: oklch(1 0 0 / 4.5%);
     --command-input-fill: oklch(1 0 0 / 4.5%);
     --input-fill-disabled: oklch(1 0 0 / 12%);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --input-fill-hover: oklch(1 0 0 / 7.5%);
     --select-hover: oklch(1 0 0 / 7.5%);
     --ring: oklch(0.556 0 0);                /* neutral-500 */
