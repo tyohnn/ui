@@ -101,9 +101,7 @@
    ⚠ 컴포넌트가 가진 overflow-hidden 은 자기 그림자를 자르지 않는다.
    -------------------------------------------------------- */
 .cn-badge[data-tone] {
-    /* luma: the toned tag keeps the xs control height (24) it had before axis contract v4; the plain
-       badge's --badge-height (20) would shrink it. luma's upstream has no tones, so nothing decides it. */
-    height: var(--control-height-xs);
+    height: var(--tag-height);
     padding-inline: var(--tag-padding-x);
     border-radius: var(--tag-radius);
     font-size: var(--tag-font-size);

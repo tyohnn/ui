@@ -162,7 +162,7 @@
       Button sm 단계(글자·행간이 sm 이다)의 --control-radius-sm 별칭이다. */
 .cn-input-group-button {
     gap: 8px;
-    border-radius: var(--control-radius);   /* luma: rounded-4xl — --control-radius-sm is the input family's 22 */
+    border-radius: var(--input-group-button-radius);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 }

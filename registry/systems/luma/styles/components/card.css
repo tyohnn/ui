@@ -43,9 +43,7 @@
           globals.css 의 값을 함께 볼 것 — 한쪽만 고치면 드리프트가 재발한다.
        링의 색은 v4 슬롯 --card-ring 이다(1층, foundation 은 --ring-subtle 의 별칭).
        링 뒤의 그림자는 v5 슬롯 --card-shadow 다(foundation 은 비어 있는 --shadow-card 의 별칭). */
-    box-shadow:
-        0 0 0 var(--surface-border-width) var(--card-ring),
-        var(--shadow-card);   /* luma: shadow-md under the ring */
+    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring), var(--card-shadow);   /* luma: shadow-md under the ring (--shadow-card) */
 
     /* ⚠ sm 의 12px 은 리터럴이다. mira 의 --spacing(3)인데 surface 축의 sm 여백은
        10px(popover p-2.5)이라 걸치지 않는다. 카드 한 곳에만 쓰는 값이라 토큰을 만들지 않았다. */

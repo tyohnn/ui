@@ -536,7 +536,7 @@
     --toggle-group-item-padding-x: var(--control-padding-x-grouped);
     /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
        down but keep the grouped button at the control radius. */
-    --input-group-button-radius: var(--control-radius-sm);
+    --input-group-button-radius: var(--control-radius);   /* luma: rounded-4xl — --control-radius-sm is the input family's 22 */
     /* A joined toggle group: the group's own corner (--toggle-group-joined-radius), its sm step,
        and the corners of the joined items. rhea squares the group and rounds only the items;
        nova steps the sm group down while the items keep the control radius. */
@@ -552,7 +552,7 @@
     --native-select-padding-y: var(--control-padding-y-field);
     /* The toned badge (`[data-tone]`, the tag) height. mira: the badge height. luma · sera · lyra
        keep the tag at the xs control step while the plain badge shrinks to h-5 (or auto). */
-    --tag-height: var(--badge-height);
+    --tag-height: var(--control-height-xs);   /* luma: the toned tag keeps the xs control height (24); the plain badge is 20. luma's upstream has no tones, so nothing decides it */
     /* The accordion's rules between items. mira: the group's own border width. sera · nova · lyra
        draw no frame around the group but keep the rule between items. */
     --accordion-item-border-width: var(--accordion-border-width);
