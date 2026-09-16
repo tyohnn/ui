@@ -1,0 +1,51 @@
+/* ============================================================
+   3층 — calendar 규칙
+   ------------------------------------------------------------
+   2026-09-13 mira 규칙으로 옮김.
+
+   ⚠ 클래스 이름은 업스트림과 같은 계약이다. 바꾸면 `shadcn add` 로 받은
+      컴포넌트가 스타일 없이 렌더된다.
+
+   ⚠ 날짜 칸의 크기·모서리는 react-day-picker 가 읽는 지역 변수
+      (--cell-size · --cell-radius)로 여기서 한 번만 정한다. 크기 24px 은
+      --control-height-sm 과 같기는 해도 우연이라 축에 붙이지 않는다. 달력 칸은
+      손으로 누르는 컨트롤의 높이 축을 따라야 할 물건이 아니라 7×6 격자의 한 칸이고,
+      컨트롤 축을 키우면 달력만 격자가 깨진다. 모서리는 mira 의 --radius-md(8) 인데
+      그 변수는 @theme inline 이라 순수 CSS 가 읽을 수 없어 같은 값인 --control-radius 를 읽는다.
+   ============================================================ */
+
+/* mira: p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(6)]
+   ⚠ 안쪽 여백 12px 은 리터럴이다. 면 축(10·16·24)의 어느 단에도 없다. */
+.cn-calendar {
+    padding: 12px;
+    --cell-radius: 0px;   /* sera: [--cell-radius:0] */
+    --cell-size: 32px;   /* sera: [--cell-size:--spacing(8)] */
+}
+
+/* 연·월 고르는 셀렉트. 포커스 링만 갖는다.
+   ⚠ style-mira.css 의 .cn-calendar-dropdown-root 에는 `border` 가 있지만, shadcn 이 내놓는
+      calendar.tsx 는 그 클래스를 달지 않아 참조 앱에는 테두리가 없다. 정본은 참조 앱이다. */
+.cn-calendar-dropdown-root {
+    &:has(:focus) {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+    }
+}
+
+/* 요일 머리글과 주 번호. mira 의 text-[0.8rem](12.8px)을 그대로 적는다 — 2026-09-06 에
+   ui-text 의 xs 로 옮겼다가 2026-09-16 mira 대조에서 되돌렸다. 0.8rem 은 어느 축에도 없는
+   임의값이라 축으로 옮기면 반드시 어긋난다. 행간은 본문의 1.5 를 그대로 받는다.
+   ⚠ 그때 cn-calendar-weekday · cn-calendar-week-number 두 이름을 새로 붙였다.
+      react-day-picker 의 슬롯에는 업스트림 클래스가 없어서 3층이 잡을 자리가
+      아예 없었기 때문이다. */
+.cn-calendar-weekday,
+.cn-calendar-week-number {
+    font-size: 0.8rem;   /* mira: text-[0.8rem] */
+    letter-spacing: var(--ui-letter-spacing);
+    line-height: 1.5;
+}
+
+/* 연·월 셀렉트 위에 보이는 글자 자리. mira 의 calendar.tsx 는 이 자리에 칸 높이만 준다 —
+   `style-mira.css` 의 `h-7 pr-1.5 pl-2 bg-input/20` 은 컴포넌트가 그 클래스를 달지 않아
+   참조 앱에 닿지 않는다. 정본은 참조 앱이다(tooling/preset/README.md 2절). */
+ /* (규칙 없음 — 높이도 여백도 없다. 글자 크기가 줄상자를 정한다.) */
