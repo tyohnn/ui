@@ -22,7 +22,8 @@
     height: 36px;
     border: var(--control-border-width) solid var(--border);
     border-radius: var(--surface-radius);
-    padding: var(--menu-padding);
+    padding: var(--menubar-padding);
+    gap: var(--menubar-gap);
 }
 
 /* mira: rounded-[calc(var(--radius-md)-2px)] = 6px. --control-radius-xs 가 같은 6px 이다
@@ -48,7 +49,7 @@
    mira: pl-7.5 pr-2 */
 .cn-menubar-checkbox-item,
 .cn-menubar-radio-item {
-    padding-inline-start: var(--menu-item-padding-inset);
+    padding-inline-start: var(--menubar-item-padding-inset);
     padding-inline-end: var(--menu-item-padding-x);
 }
 

@@ -24,7 +24,8 @@
 
     background-color: var(--card);
     color: var(--card-foreground);
-    border-radius: var(--surface-radius);
+    /* 모서리는 카드 자신의 축이다 — v4 슬롯 --card-radius(foundation 은 --surface-radius 의 별칭). */
+    border-radius: var(--card-radius);
     overflow: hidden;
 
     gap: var(--card-spacing);
@@ -38,8 +39,9 @@
        그림자가 없다(ring-1 ring-foreground/10).
        ⚠ 1층의 --shadow-card 는 이제 읽는 곳이 없다. 값이 이미 「없음」(0 0 #0000)이라
           화면은 같다. 카드에 그림자를 되살리려면 여기 box-shadow 에 그 이름을 다시 잇고
-          globals.css 의 값을 함께 볼 것 — 한쪽만 고치면 드리프트가 재발한다. */
-    box-shadow: 0 0 0 var(--surface-border-width) var(--ring-subtle);
+          globals.css 의 값을 함께 볼 것 — 한쪽만 고치면 드리프트가 재발한다.
+       링의 색은 v4 슬롯 --card-ring 이다(1층, foundation 은 --ring-subtle 의 별칭). */
+    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring);
 
     /* ⚠ sm 의 12px 은 리터럴이다. mira 의 --spacing(3)인데 surface 축의 sm 여백은
        10px(popover p-2.5)이라 걸치지 않는다. 카드 한 곳에만 쓰는 값이라 토큰을 만들지 않았다. */
@@ -53,21 +55,21 @@
     }
 
     & > img:first-child {
-        border-start-start-radius: var(--surface-radius);
-        border-start-end-radius: var(--surface-radius);
+        border-start-start-radius: var(--card-radius);
+        border-start-end-radius: var(--card-radius);
     }
 
     & > img:last-child {
-        border-end-start-radius: var(--surface-radius);
-        border-end-end-radius: var(--surface-radius);
+        border-end-start-radius: var(--card-radius);
+        border-end-end-radius: var(--card-radius);
     }
 }
 
 .cn-card-header {
     gap: var(--surface-gap);
     padding-inline: var(--card-spacing);
-    border-start-start-radius: var(--surface-radius);
-    border-start-end-radius: var(--surface-radius);
+    border-start-start-radius: var(--card-radius);
+    border-start-end-radius: var(--card-radius);
 
     &:is(.border-b) {
         padding-bottom: var(--card-spacing);
@@ -75,11 +77,14 @@
 }
 
 /* 제목은 크기와 무관하게 text-sm font-medium 이다. nova 의 sm 카드 제목 축소는 없다. */
+/* 자간과 대소문자는 면 제목 축(v4 슬롯 --title-letter-spacing · --title-text-transform)이다.
+   foundation 은 각각 --ui-letter-spacing 의 별칭과 `initial`(= 물려받음)이라 화면은 같다. */
 .cn-card-title {
     font-size: var(--ui-text-lg);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--title-letter-spacing);
     line-height: var(--ui-line-height-lg);
     font-weight: var(--ui-font-weight);
+    text-transform: var(--title-text-transform);
 }
 
 .cn-card-description {
@@ -97,8 +102,8 @@
    그 선 위로 여백을 더한다 — 위쪽 선의 색은 그 유틸리티(--border)가 정한다. */
 .cn-card-footer {
     padding-inline: var(--card-spacing);
-    border-end-start-radius: var(--surface-radius);
-    border-end-end-radius: var(--surface-radius);
+    border-end-start-radius: var(--card-radius);
+    border-end-end-radius: var(--card-radius);
 
     &:is(.border-t) {
         padding-top: var(--card-spacing);

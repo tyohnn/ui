@@ -75,6 +75,7 @@
     padding-block: 10px;
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--surface-radius-lg);
+    background-color: var(--questionnaire-choice-fill);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -144,7 +145,7 @@
 .cn-questionnaire-shortcut {
     width: 16px;
     height: 16px;
-    border: var(--control-border-width) solid var(--input);
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
     border-radius: var(--control-radius-xs);
     background-color: var(--background);
     color: var(--muted-foreground);

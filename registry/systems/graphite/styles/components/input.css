@@ -17,16 +17,17 @@
 
 .cn-input {
     min-height: var(--control-height-md);
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: var(--control-padding-x-field);
 
-    border: var(--control-border-width) solid var(--input);
+    border: var(--control-border-width) solid var(--input-border);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     color: var(--foreground);
 
-    font-size: var(--control-font-size-md);
-    line-height: var(--control-line-height-md);
-    letter-spacing: var(--control-letter-spacing);
+    font-size: var(--control-font-size-field);
+    line-height: var(--control-line-height-field);
+    letter-spacing: var(--control-letter-spacing-field);
 
     /* 파일 선택 버튼은 인풋 안에 들어앉는 작은 컨트롤이라 한 단계 아래를 읽는다.
        mira: file:h-6 file:text-xs/relaxed file:font-medium */
