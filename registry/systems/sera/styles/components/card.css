@@ -39,7 +39,7 @@
        ⚠ 1층의 --shadow-card 는 이제 읽는 곳이 없다. 값이 이미 「없음」(0 0 #0000)이라
           화면은 같다. 카드에 그림자를 되살리려면 여기 box-shadow 에 그 이름을 다시 잇고
           globals.css 의 값을 함께 볼 것 — 한쪽만 고치면 드리프트가 재발한다. */
-    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring), var(--shadow-card);
+    box-shadow: 0 0 0 var(--surface-border-width) var(--card-ring), var(--card-shadow);
 
     /* ⚠ sm 의 12px 은 리터럴이다. mira 의 --spacing(3)인데 surface 축의 sm 여백은
        10px(popover p-2.5)이라 걸치지 않는다. 카드 한 곳에만 쓰는 값이라 토큰을 만들지 않았다. */

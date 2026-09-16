@@ -18,7 +18,7 @@
 /* 묶음은 테두리를 두른 하나의 면이다. 모서리는 surface 축의 작은 단(rounded-md = 8)을 읽는다. */
 /* sera drops mira's `overflow-hidden rounded-md border` — the group is only its rows. */
 .cn-accordion {
-    border: 0 solid var(--border);
+    border: var(--accordion-border-width) solid var(--border);
     border-radius: var(--surface-radius-sm);
 }
 

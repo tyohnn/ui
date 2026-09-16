@@ -517,7 +517,7 @@
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
     --sheet-padding: var(--surface-padding-lg);
-    --accordion-border-width: var(--surface-border-width);
+    --accordion-border-width: 0px;   /* sera: no frame around the group */
     --tabs-trigger-active-shadow: none;
     --sidebar-part-radius: var(--sidebar-item-radius);
 }
@@ -538,7 +538,7 @@
        inline ones and the toggle item go to px-2; sera zeroes the addons and keeps the toggle's md. */
     --input-group-addon-padding-x: var(--control-padding-x-grouped);
     --input-group-addon-padding-x-block: var(--input-group-addon-padding-x);
-    --toggle-group-item-padding-x: var(--control-padding-x-grouped);
+    --toggle-group-item-padding-x: var(--control-padding-x-md);   /* sera: the joined toggle keeps the md padding; the addons take the field's 0 */
     /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
        down but keep the grouped button at the control radius. */
     --input-group-button-radius: var(--control-radius-sm);
@@ -554,13 +554,13 @@
     --select-trigger-padding-end: var(--select-trigger-padding-start);
     /* The native select's vertical padding. mira: the field's py-0.5. sera gives it py-2 while the
        input stays py-1; graphite's input has none while the native select keeps 2px. */
-    --native-select-padding-y: var(--control-padding-y-field);
+    --native-select-padding-y: 8px;   /* sera: py-2, while the input is py-1 */
     /* The toned badge (`[data-tone]`, the tag) height. mira: the badge height. luma · sera · lyra
        keep the tag at the xs control step while the plain badge shrinks to h-5 (or auto). */
-    --tag-height: var(--badge-height);
+    --tag-height: var(--control-height-xs);   /* sera: the toned tag keeps the xs control height; the plain badge is auto */
     /* The accordion's rules between items. mira: the group's own border width. sera · nova · lyra
        draw no frame around the group but keep the rule between items. */
-    --accordion-item-border-width: var(--accordion-border-width);
+    --accordion-item-border-width: var(--surface-border-width);   /* sera: the rule between items stays */
     /* Card parts. The header and footer corners, and an edge image's corners. mira: the card's
        corner. maia rounds the header and footer one step below the card (14 in an 18 card); nova
        gives the image the popover corner while the card and its parts take the dialog one. */

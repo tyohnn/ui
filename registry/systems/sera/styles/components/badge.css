@@ -100,7 +100,7 @@
    ⚠ 컴포넌트가 가진 overflow-hidden 은 자기 그림자를 자르지 않는다.
    -------------------------------------------------------- */
 .cn-badge[data-tone] {
-    height: var(--control-height-xs);
+    height: var(--tag-height);
     padding-inline: var(--tag-padding-x);
     border-radius: var(--tag-radius);
     font-size: var(--tag-font-size);
