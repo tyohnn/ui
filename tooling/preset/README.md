@@ -180,12 +180,15 @@ Hangul — add the new string to the map.
   script passes an array.
 - **Ports.** Another local app may hold 3000 and another session may hold the preview's 5173: run the reference on 3100
   and the preview with `--port`, and pass `--preview` to the comparison.
-- **foundation is not exactly mira.** Porting "the diff from mira" leaves foundation's own deviations in the
-  new system. vega's comparison found: letter-spacing `-0.01em` (Pretendard-era) where shadcn has none;
-  avatar fallback type inherited instead of text-sm / text-xs; sidebar section label colour opaque
-  `--sidebar-icon` instead of `sidebar-foreground/70`; dialogs with a drop shadow (shadcn: ring only); menu
-  items without their vertical padding (hidden by min-height); chart colours from the legacy coloured ramp
-  (every 4.21 preset uses `chartColor` of its base colour). Expect them in every preset.
+- **foundation is mira now (2026-09-16).** It used to carry its own deviations — letter-spacing `-0.01em`
+  from the Pretendard era, rounded line heights, `min-height` control sizes, the legacy coloured chart ramp,
+  a drop shadow under dialogs, menu items without vertical padding, an inherited avatar fallback type, an
+  opaque sidebar group label — and "the diff from mira" carried them into every new system. All of them were
+  corrected against the mira reference app; `registry/foundation/reference/README.md` has the table.
+  A port that starts from foundation today starts from verified mira values, so the diff you apply really is
+  the preset's diff. Two consequences: **re-read that table before trusting an older port's notes**, and when
+  foundation needed a value a preset does not share, it is now a **slot** (axis contract 3), so tune the slot
+  rather than editing the layer-3 rule.
 - **Shared tokens move several components.** `--control-height-xs` also sizes badges and kbd,
   `--menu-item-radius` also rounds `Item`, `--surface-radius` is read by a dozen rules, `--ui-text-md` by most
   text. After changing a token, `grep -rl "var(--<token>" registry/systems/$PRESET/styles/components` and
@@ -217,7 +220,7 @@ Selectors that differ from mira (`style-diff.mjs mira <preset>`, of 422) give th
 | nova | 247 | nova · neutral | lucide | geist | h-8 controls; inputs `rounded-lg` while buttons stay `rounded-md` (split the control radius); disabled inputs get a fill |
 | maia | 249 | maia · neutral | hugeicons | figtree | h-9 with px-3; cards `rounded-2xl`; hugeicons compare by box only |
 | lyra | 245 | lyra · neutral | phosphor | jetbrains-mono (sans) | `rounded-none` nearly everywhere, text-xs controls, 1px focus rings; a monospace **sans**: the sans stack takes the mono platform fallbacks and every text width changes |
-| mira | — | mira · neutral | hugeicons | inter | the port of foundation itself: its comparison is the list of foundation's own deviations (pitfalls above) |
+| mira | — | mira · neutral | hugeicons | inter | **done** (2026-09-16). `registry/systems/mira` is `new-system mira --from foundation` and nothing else; the porting work is foundation's correction, in `registry/foundation/reference/README.md` |
 | luma | 274 | luma · neutral | lucide | inter | h-9 px-3; cards `rounded-4xl` with shadow-md and a `foreground/5` ring (10% in dark) |
 | rhea | 272 | rhea · neutral | lucide | inter | h-8 px-3; cards `min(radius-4xl, 24px)` with shadow-sm and `--spacing(5)` |
 | sera | 293 | sera · **taupe** | lucide | noto-sans + **playfair-display** heading | the largest diff; every derived layer-1 literal is neutral grey and must be recomputed from taupe; `fonts.heading` is a catalog id, so `--font-heading` gets its own stack and `cn-font-heading` titles change metrics |

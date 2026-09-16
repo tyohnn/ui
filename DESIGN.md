@@ -73,7 +73,13 @@ snapshot is exactly what was reviewed; changes reach a system only when someone 
 ## 4. foundation is the maintainer master copy
 
 `registry/foundation` is shadcn + Base UI + the three layers with the shadcn mira preset values. It holds
-only `styles/`, `DESIGN.template.md` and `foundation.json` (file list, `axisContractVersion`, `fonts`, `icons`).
+only `styles/`, `DESIGN.template.md`, `foundation.json` (file list, `axisContractVersion`, `fonts`, `icons`)
+and `reference/` (the mira reference app it was proved against, and the exclusions of that comparison).
+
+Its values are **verified**, not merely intended: `registry/foundation/reference/README.md` records the
+comparison against a real `shadcn init -p mira` app (light 0 mismatches, dark 0, exclusions with reasons).
+`registry/systems/mira` is the same snapshot published for users, since the CLI does not list foundation;
+the two `styles/` folders must stay identical.
 
 - It is for maintainers and the theme-from-image skill; the CLI does not list it.
 - It owns the token vocabulary: every name a system must define (section 5).
@@ -229,7 +235,7 @@ removing one always bumps it.
 | `mono` | `system` or catalog id | `font-mono` (chart values, questionnaire keys) and typeset code; `system` = the platform monospace stack |
 | `hangulFallback` | catalog id with `hangul: true` | Hangul glyphs for every role; Latin fonts have none |
 
-Ids name files in `registry/fonts/` (section 9). foundation (mira) and vega are `inter`; graphite is `pretendard`
+Ids name files in `registry/fonts/` (section 9). foundation, mira and vega are `inter`; graphite is `pretendard`
 for every role (its reference app used Pretendard). shadcn presets set no mono font, so all three use `system`.
 
 ### Stacks (layer 1)
@@ -334,7 +340,7 @@ registry/ui/icons/
 `lucide` (lucide-react) · `tabler` (@tabler/icons-react) · `hugeicons` (@hugeicons/react `HugeiconsIcon` +
 @hugeicons/core-free-icons) · `phosphor` (@phosphor-icons/react) · `remixicon` (@remixicon/react) · `radix`
 (@radix-ui/react-icons). `registry/ui/manifest.json` `iconLibraries` lists each library's file and packages.
-foundation (mira) uses hugeicons; graphite and vega use lucide.
+foundation and mira use hugeicons; graphite and vega use lucide.
 
 Every icon takes SVG props (`className`, `data-*`, `aria-*`, and `strokeWidth` where the library draws
 strokes) and renders a 24px box with lucide's stroke weight; CSS sizes it (`size-*`, `[&_svg]` rules), so the

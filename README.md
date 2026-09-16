@@ -9,7 +9,7 @@ folder plus the shared TSX into a project as they are.
 ```
 registry/ui                  the one set of component TSX (components · hooks · lib · icons for six libraries)
 registry/systems/<name>      complete design systems (system.json · styles · DESIGN.md · reference)
-registry/foundation          maintainer master copy of the three layers (mira values) that systems fork
+registry/foundation          maintainer master copy of the three layers (mira values, verified against a real mira app) that systems fork
 registry/fonts               font catalog (one JSON per font: family · packages · next/font · licence)
 registry/schema              JSON Schemas for system.json and font entries
 tooling/build-system         system → dist/systems/<name>/compiled.css for the preview
