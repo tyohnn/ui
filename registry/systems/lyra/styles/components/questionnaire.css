@@ -110,7 +110,7 @@
     height: var(--control-indicator-size);
     border-radius: var(--control-indicator-radius);
     border-color: var(--input);
-    background-color: var(--checkbox-fill);
+    background-color: transparent;   /* lyra: the choice indicator takes no fill */
     /* ⚠ 켜졌을 때의 색은 유틸리티로 남긴다. `data-checked` 변형이
        [data-state=checked] 와 [data-checked]:not([data-checked=false]) 둘을
        함께 매치하는데, 손으로 옮겨 적으면 그중 하나가 빠져 라디오·체크박스

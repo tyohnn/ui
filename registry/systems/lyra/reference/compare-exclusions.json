@@ -33,5 +33,16 @@
             "rect-height"
         ],
         "reason": "lyra's generated questionnaire.tsx carries `sm:min-h-8` on QuestionnaireActions while the shadcn base component (which registry/ui follows) carries `sm:min-h-9`. The preset bakes the value into the component as a utility, so no layer-3 rule can reach it and one shared set of TSX cannot hold both. The row and everything it stretches are 4px taller here. Same shape as foundation's, with lyra's number."
+    },
+    {
+        "key": "-trigger#\\d+$|-cancel#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "props": [
+            "background-color",
+            "border-top-color",
+            "border-right-color",
+            "border-bottom-color",
+            "border-left-color"
+        ],
+        "reason": "Dark mode only: Tailwind sorts lyra's dark: colours (dark:bg-input/30 on the outline button, dark:border-input, dark:aria-invalid:border-destructive/50 on the checkbox) after the state utilities that have no dark counterpart (aria-expanded:bg-muted, aria-invalid:aria-checked:border-primary), so upstream an open outline trigger, an alert-dialog cancel button and an invalid checked checkbox lose their state colour in dark. lyra keeps the state colours; reproducing the ordering would delete the signal. Same as foundation's."
     }
 ]

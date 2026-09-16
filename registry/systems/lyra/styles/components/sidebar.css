@@ -82,8 +82,8 @@
    푼 단)이고 테두리는 --input 이다. 사이드바 안에서 인풋(h-7)보다 한 단 크다. */
 .cn-sidebar-input {
     height: var(--control-height-md);   /* lyra: h-8 */
-    /* lyra: the sidebar search box is the plain page background. */
-    background-color: var(--background);
+    /* lyra: the sidebar search box is the page background in light and input/30 in dark. */
+    background-color: var(--sidebar-input-fill);
     border-color: var(--input);
     @apply w-full;
 }
