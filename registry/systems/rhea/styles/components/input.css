@@ -1,0 +1,44 @@
+/* ============================================================
+   3층 — Input 규칙
+   ------------------------------------------------------------
+   2026-09-13 mira 규칙으로 옮김.
+
+   Input 은 사이즈 속성이 없다. 폼에서 Button 과 나란히 서므로
+   control 축의 md 단계(= Button 의 default)를 그대로 읽는다.
+   두 컴포넌트가 다른 단계를 읽으면 같은 줄에서 높이가 어긋난다.
+
+   ⚠ 바탕은 투명이 아니라 채움이다. mira: bg-input/20 dark:bg-input/30 — 1층의
+      --input-fill 이 두 값을 갖는다. 비활성 바탕은 두지 않는다(_control-family.css).
+
+   ⚠ 컴포넌트가 이미 갖고 있어 여기서 손댈 수 없는 것들:
+      w-full, min-w-0, outline-none, placeholder:text-muted-foreground,
+      disabled:pointer-events-none, disabled:cursor-not-allowed, disabled:opacity-50.
+   ============================================================ */
+
+.cn-input {
+    /* ⚠ 높이는 min-height 가 아니라 height 다. mira 의 인풋은 `h-7 py-0.5` — 고정 높이 안에
+       여백이 들어앉는다. 인풋 그룹 안의 칸도 이 높이를 그대로 써야 통(h-7)을 채운다. */
+    height: var(--control-height-md);
+    padding-inline: var(--control-padding-x-field);
+    /* mira: py-0.5. 2px 은 리터럴이다 — 컨트롤 세로 여백은 아직 축이 아니다. */
+    padding-block: var(--control-padding-y-field);
+
+    border: var(--control-border-width) solid var(--input-border);
+    border-radius: var(--control-radius);
+    background-color: var(--input-fill);
+    /* ⚠ 글자색을 적지 않는다. mira 의 Input 에는 text-* 가 없어 바깥 색을 물려받고,
+       검증 실패한 Field 안에서는 Field 의 text-destructive 를 따라 붉어진다. */
+
+    font-size: var(--control-font-size-md);
+    line-height: var(--control-line-height-md);
+    letter-spacing: var(--control-letter-spacing);
+
+    /* 파일 선택 버튼은 인풋 안에 들어앉는 작은 컨트롤이라 한 단계 아래를 읽는다.
+       mira: file:h-6 file:text-xs/relaxed file:font-medium */
+    &::file-selector-button {
+        height: var(--control-height-sm);
+        font-size: var(--control-font-size-sm);
+        line-height: var(--control-line-height-sm);
+        font-weight: var(--control-font-weight);
+    }
+}
