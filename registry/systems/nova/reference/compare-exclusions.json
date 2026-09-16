@@ -1,0 +1,71 @@
+[
+    {
+        "key": "^(checkbox-radio-switch|kbd-spinner-separator)/(checkbox|radio-group-item)#",
+        "props": [
+            "opacity"
+        ],
+        "reason": "disabled Checkbox \u00b7 Radio opacity: Base UI draws them as a span, so shadcn's disabled:opacity-50 never matches upstream"
+    },
+    {
+        "key": "^direction/",
+        "props": "*",
+        "reason": "the whole direction section: the preset is generated with rtl:false, so its paddings and radii are physical"
+    },
+    {
+        "key": "^input-otp/",
+        "props": [
+            "row-gap",
+            "column-gap"
+        ],
+        "reason": "input-otp group gaps: a preset app's globals.css carries no .cn-* rules, so .cn-input-otp { gap-2 } never reaches the reference"
+    },
+    {
+        "key": "-shortcut#[0-9]+$",
+        "props": [
+            "margin-left"
+        ],
+        "reason": "menu shortcut widths: the command glyph is in neither Geist build and the two font stacks fall back differently (~0.5px)"
+    },
+    {
+        "key": "^(card|item)/button#[0-9]+$",
+        "props": [
+            "line-height"
+        ],
+        "reason": "nova's sm control type (text-[0.8rem]) carries no line height of its own, so upstream it inherits the container's ratio (1.42857 inside a text-sm card or item, 1.5 on the page); foundation fixes line heights in px per axis"
+    },
+    {
+        "key": "^questionnaire/(root|questionnaire#|questionnaire-actions#)",
+        "props": [
+            "height",
+            "rect-height"
+        ],
+        "reason": "questionnaire action row height: nova's generated TSX carries sm:min-h-8 where the shadcn base component (which registry/ui follows) carries sm:min-h-9; a utility, so no layer-3 rule can reach it"
+    },
+    {
+        "key": "/(dialog|alert-dialog|sheet|drawer|popover|dropdown-menu)-trigger#[0-9]+$",
+        "props": [
+            "background-color"
+        ],
+        "reason": "dark state colours on open triggers, the focused outline Cancel and the invalid checked checkbox: Tailwind sorts nova's dark: colours after state utilities that have no dark counterpart, so upstream those states lose their colour in dark"
+    },
+    {
+        "key": "/alert-dialog-cancel#[0-9]+$",
+        "props": [
+            "border-top-color",
+            "border-right-color",
+            "border-bottom-color",
+            "border-left-color"
+        ],
+        "reason": "dark state colours on open triggers, the focused outline Cancel and the invalid checked checkbox: Tailwind sorts nova's dark: colours after state utilities that have no dark counterpart, so upstream those states lose their colour in dark"
+    },
+    {
+        "key": "^checkbox-radio-switch/checkbox#6$",
+        "props": [
+            "border-top-color",
+            "border-right-color",
+            "border-bottom-color",
+            "border-left-color"
+        ],
+        "reason": "dark state colours on open triggers, the focused outline Cancel and the invalid checked checkbox: Tailwind sorts nova's dark: colours after state utilities that have no dark counterpart, so upstream those states lose their colour in dark"
+    }
+]
