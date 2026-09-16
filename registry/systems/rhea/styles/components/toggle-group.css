@@ -17,7 +17,12 @@
    ============================================================ */
 
 .cn-toggle-group {
-    border-radius: var(--control-radius);
+    /* rhea: only data-[spacing=0]:data-[variant=outline] rounds the group (mira rounds it always). */
+    border-radius: 0;
+
+    &[data-spacing="0"][data-variant="outline"] {
+        border-radius: var(--control-radius);
+    }
 }
 
 .cn-toggle-group-item {

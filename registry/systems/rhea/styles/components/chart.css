@@ -29,7 +29,7 @@
     /* mira: border-border/50 shadow-xl */
     border: 0 solid transparent;   /* rhea: the tooltip is a ring, not a border */
     border-radius: var(--surface-radius-sm);   /* rhea: rounded-xl */
-    background-color: var(--background);   /* mira: bg-background */
+    background-color: var(--popover);   /* rhea: bg-popover */   /* mira: bg-background */
     color: var(--popover-foreground);
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),

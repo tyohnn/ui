@@ -238,7 +238,7 @@
        -------------------------------------------------------- */
     --sidebar-item-height: 32px;
     /* rhea scopes the sidebar to [--radius:var(--radius-xl)], so its rounded-xl is 14 × 1.4. */
-    --sidebar-item-radius: 19.6px;   /* rhea: rounded-xl inside the sidebar radius scope */       /* radius-sm(6) + 2 */
+    --sidebar-item-radius: 14px;   /* rhea: rounded-xl */       /* radius-sm(6) + 2 */
     --sidebar-item-padding-x: 12px;   /* rhea: px-3 */
     --sidebar-item-gap: 8px;
     --sidebar-item-icon-size: 16px;

@@ -312,6 +312,11 @@
     --checkbox-border: transparent;   /* rhea: border-transparent */
     /* The keycap on a questionnaire choice. mira: --input; rhea: border-primary/10. */
     --questionnaire-shortcut-border: oklch(0.205 0 0 / 10%);
+    /* The radio / choice dot. rhea: size-2 in light and dark:size-2.5, a size that differs by
+       mode, so it is declared here rather than splitting a layer-3 rule on .dark. */
+    --radio-dot-size: 8px;
+    /* rhea: bg-input, and dark:bg-input/60. */
+    --combobox-chip-fill: var(--input);
     /* Border of the filled field controls (input · textarea · select · native-select · input-group ·
        input-otp · combobox chips · toggle outline · sidebar input). rhea draws them with a fill and no
        border; mira reads --input here. */
@@ -491,7 +496,7 @@
     --switch-thumb-off: oklch(0.985 0 0);    /* foreground */
     --switch-thumb-on: oklch(0.205 0 0);     /* primary-foreground */
     --drawer-border: oklch(1 0 0 / 10%);     /* border */
-    --sidebar-input-fill: oklch(0.269 0 0 / 30%);
+    --sidebar-input-fill: var(--input-fill);   /* rhea: bg-input/50 */
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -506,7 +511,9 @@
     --selection: var(--primary);
     --selection-foreground: var(--primary-foreground);
     /* Unchecked checkbox border. mira: --input. */
-    --questionnaire-shortcut-border: oklch(0.985 0 0 / 10%);   /* rhea: border-primary/10 */
+    --questionnaire-shortcut-border: oklch(0.922 0 0 / 10%);   /* rhea: border-primary/10 */
+    --radio-dot-size: 10px;   /* rhea: dark:size-2.5 */
+    --combobox-chip-fill: oklch(1 0 0 / 9%);   /* rhea: dark:bg-input/60 */
     --checkbox-border: transparent;   /* rhea: border-transparent */
     /* Border of the filled field controls (input · textarea · select · native-select · input-group ·
        input-otp · combobox chips · toggle outline · sidebar input). rhea draws them with a fill and no

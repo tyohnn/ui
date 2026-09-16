@@ -77,8 +77,8 @@
         height: var(--avatar-size-sm);
 
         & > svg {
-            width: var(--control-icon-size-sm);
-            height: var(--control-icon-size-sm);
+            width: 12px;   /* rhea: the avatar glyph steps are 12 · 16 · 20, not the control axis */
+            height: 12px;
         }
     }
 

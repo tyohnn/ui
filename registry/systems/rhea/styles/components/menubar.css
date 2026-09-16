@@ -32,7 +32,7 @@
 .cn-menubar-trigger {
     /* mira: rounded-[calc(var(--radius-md)-2px)] px-2 py-[calc(--spacing(0.85))] text-xs/relaxed
        ⚠ 3.4px 과 6px 은 mira 의 값 그대로다(0.85 × 4 = 3.4). 축에 없는 단이다. */
-    border-radius: 6px;
+    border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     padding-inline: 6px;   /* rhea: px-1.5 */
     padding-block: 2px;   /* rhea: py-[2px] */
     font-size: var(--ui-text-md);

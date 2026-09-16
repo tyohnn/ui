@@ -85,6 +85,7 @@
     /* mira: bg-muted/20 dark:bg-muted/30 border-input */
     background-color: var(--sidebar-input-fill);
     border-color: var(--input-border);
+    border-radius: 25.2px;   /* rhea: rounded-2xl inside the sidebar radius scope (18 × 1.4) */
     @apply w-full;
 }
 
@@ -314,7 +315,7 @@
     height: var(--sidebar-item-action-size);
     inset-inline-end: 4px;
     top: calc((var(--sidebar-item-height) - var(--sidebar-item-action-size)) / 2);
-    border-radius: var(--control-indicator-radius);
+    border-radius: var(--sidebar-item-radius);   /* rhea: rounded-xl */
     color: var(--sidebar-foreground);
     @apply peer-hover/menu-button:text-sidebar-accent-foreground absolute p-0;
 
@@ -390,6 +391,25 @@
     height: 16px;
 }
 
+/* rhea scopes the sidebar's header and content to [--radius:var(--radius-xl)], so every
+   rounded-* inside them resolves against 14 instead of 10: rounded-xl is 19.6 and
+   rounded-2xl 25.2. tyohnn's radii are px tokens, so the scope is written out here. */
+.cn-sidebar-header,
+.cn-sidebar-content {
+    --sidebar-item-radius: 19.6px;
+    --sidebar-badge-radius: 19.6px;
+
+    /* A bare Skeleton inside the scope is rounded-2xl of it (18 × 1.4); the
+       SidebarMenuSkeleton's own parts are rounded-xl. */
+    & .cn-skeleton {
+        border-radius: 25.2px;
+    }
+
+    & .cn-sidebar-menu-skeleton-icon {
+        border-radius: var(--sidebar-item-radius);
+    }
+}
+
 /* 하위 목록은 왼쪽 선 하나로 깊이를 나타낸다. 선은 상위 항목 아이콘의 가운데에 서고
    (--sidebar-sub-rail-offset), 거기서 --sidebar-sub-item-indent 만큼 들어간 자리에 글자가 앉아
    상위 라벨의 왼쪽과 맞는다. mira 의 mx-3.5 + px-2.5 + 하위 버튼 px-2 (14+10+8 = 32)와 같은 셈이다.
@@ -422,11 +442,16 @@
         color: var(--sidebar-accent-foreground);
     }
 
-    &[data-size="md"],
-    &[data-size="sm"] {
-        font-size: var(--ui-text-sm);
+    &[data-size="md"] {
+        font-size: var(--ui-text-sm);   /* rhea: data-[size=md]:text-sm */
         letter-spacing: var(--ui-letter-spacing);
         line-height: var(--ui-line-height-sm);
+    }
+
+    &[data-size="sm"] {
+        font-size: var(--ui-text-xs);   /* rhea leaves the sm row at text-xs */
+        letter-spacing: var(--ui-letter-spacing);
+        line-height: var(--ui-line-height-xs);
     }
 
     &:hover,

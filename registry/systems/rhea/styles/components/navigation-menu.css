@@ -131,8 +131,8 @@
 
 /* mira: size-3 — 여닫힘을 알리는 꺾쇠라 항목 아이콘(14)보다 한 단 작다. */
 .cn-navigation-menu-trigger-icon {
-    width: var(--control-icon-size-sm);
-    height: var(--control-icon-size-sm);
+    width: 12px;   /* rhea: size-3 — the caret stays a step below the item glyph */
+    height: 12px;
 
     @apply relative top-px ml-1 transition duration-300 group-data-open/navigation-menu-trigger:rotate-180 group-data-popup-open/navigation-menu-trigger:rotate-180;
 }
@@ -163,7 +163,11 @@
 .cn-navigation-menu-popup {
     background-color: var(--popover);
     color: var(--popover-foreground);
-    border-radius: var(--surface-radius-lg);
+    border-radius: var(--surface-radius);   /* rhea: the viewport is rounded-2xl */
+}
+
+.cn-navigation-menu-popup {
+    border-radius: var(--surface-radius-xl);   /* rhea: the popup is rounded-3xl */
 }
 
 .cn-navigation-menu-viewport {

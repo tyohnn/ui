@@ -93,8 +93,8 @@
        지시자 축(--control-indicator-radius 4px)과 함께 움직일 이유가 없다. */
     & [data-slot="kbd"] {
         background-color: var(--chip);
-        border-radius: 4px;
-        padding-inline: 4px;
+        border-radius: var(--control-radius);   /* rhea: rounded-2xl */
+        padding-inline: 6px;   /* rhea: px-1.5 */
         font-size: var(--ui-text-xs);
     }
 }
@@ -104,19 +104,15 @@
 .cn-input-group-addon-align-inline-start {
     padding-inline-start: var(--menu-item-padding-x);   /* rhea: px-2 */
 
-    &:has(> button),
-    &:has(> kbd) {
-        margin-inline-start: -0.275rem;
-    }
+    &:has(> button) { margin-inline-start: -0.3rem; }   /* rhea: -ml-[0.3rem] */
+    &:has(> kbd)    { margin-inline-start: -0.15rem; }  /* rhea: -ml-[0.15rem] */
 }
 
 .cn-input-group-addon-align-inline-end {
     padding-inline-end: var(--menu-item-padding-x);   /* rhea: px-2 */
 
-    &:has(> button),
-    &:has(> kbd) {
-        margin-inline-end: -0.275rem;
-    }
+    &:has(> button) { margin-inline-end: -0.3rem; }   /* rhea: -mr-[0.3rem] */
+    &:has(> kbd)    { margin-inline-end: -0.15rem; }  /* rhea: -mr-[0.15rem] */
 }
 
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
@@ -142,7 +138,7 @@
 /* mira: gap-2 rounded-md text-xs/relaxed
    ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다. */
 .cn-input-group-button {
-    gap: 8px;
+    gap: var(--menu-item-gap);   /* rhea: gap-2 */
     border-radius: var(--control-radius);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
@@ -170,21 +166,23 @@
 
 /* mira 는 gap-1 만 준다. 높이·패딩·글자는 Button 의 sm(24)이 그대로 온다 —
    컴포넌트가 size 를 Button 에 넘기기 때문이다(input-group.tsx 의 주석). */
+/* rhea drops mira's `gap-1` from the sm button, so it takes the group button's own gap-2. */
 .cn-input-group-button-size-sm {
-    gap: var(--control-gap-sm);
+    gap: var(--menu-item-gap);
 }
 
 /* 아이콘 버튼은 Button 의 같은 이름보다 한 단 크다. mira: icon-xs 가 size-6, icon-sm 이 size-7 —
    통(28) 안에서 xs 는 한 단 아래(24), sm 은 통과 같은 높이(28)다. */
 .cn-input-group-button-size-icon-xs {
-    width: var(--control-height-sm);
-    height: var(--control-height-sm);
+    width: var(--control-height-xs);   /* rhea: size-6 */
+    height: var(--control-height-xs);
+    border-radius: var(--surface-radius-sm);   /* rhea: rounded-xl */
     min-height: 0;
     padding: 0;
 }
 
 .cn-input-group-button-size-icon-sm {
-    width: var(--control-height-md);
+    width: var(--control-height-md);   /* rhea: size-8 */
     height: var(--control-height-md);
     min-height: 0;
     padding: 0;

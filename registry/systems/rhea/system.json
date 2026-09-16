@@ -1,7 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "rhea",
-    "description": "shadcn rhea preset (rhea · neutral · lucide · inter). TODO: one line on its mood.",
+    "description": "Soft and roomy: 16px corners, a filled field with no border, and a light shadow under every card.",
     "forkedFrom": {
         "source": "foundation",
         "commit": "4b51482"
@@ -17,7 +17,10 @@
     },
     "defaultMode": "light",
     "tags": [
-        "shadcn-preset"
+        "shadcn-preset",
+        "light",
+        "rounded",
+        "soft"
     ],
     "source": {
         "kind": "shadcn-preset",

@@ -51,7 +51,9 @@
    6px 간격은 control 축의 gap(4)에 없다. */
 .cn-tabs-trigger {
     gap: 6px;
-    border: var(--control-border-width) solid transparent;
+    /* rhea writes this as `border-transparent!`: registry/ui's Tabs carries
+       `dark:data-active:border-input`, a utility that would otherwise win over layer(base). */
+    border: var(--control-border-width) solid transparent !important;
     border-radius: var(--control-radius);
     padding-inline: 6px;
     padding-block: 2px;
@@ -89,6 +91,10 @@
 /* 밑줄 탭의 트리거 — box and weight slots (foundation values repeat the default trigger). */
 .cn-tabs-list[data-variant="line"] .cn-tabs-trigger {
     padding-inline: var(--tabs-line-trigger-padding-x);
+
+    &:where(.group\/tabs[data-orientation="vertical"] *) {
+        padding-inline: 12px;   /* rhea: vertical px-3 */
+    }
     border-width: var(--tabs-line-trigger-border-width);
     border-radius: var(--tabs-line-trigger-radius);
     font-weight: var(--ui-font-weight-regular);

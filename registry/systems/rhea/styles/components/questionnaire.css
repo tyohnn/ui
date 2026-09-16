@@ -119,8 +119,8 @@
 }
 
 .cn-questionnaire-choice-indicator-dot {
-    width: var(--control-indicator-dot-size);
-    height: var(--control-indicator-dot-size);
+    width: var(--radio-dot-size);
+    height: var(--radio-dot-size);
     background-color: var(--primary-foreground);
 }
 

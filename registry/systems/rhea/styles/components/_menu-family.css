@@ -117,6 +117,12 @@
     outline-style: none;   /* ⚠ `outline: none` 은 base 의 outline-ring/50 색까지 지운다 */
 }
 
+/* rhea: in-data-[slot=dialog-content]:rounded-2xl — a palette row inside the command
+   dialog takes the control radius instead of the menu item's. */
+[data-slot="dialog-content"] .cn-command-item {
+    border-radius: var(--control-radius);
+}
+
 /* 강조 — 키보드 이동과 마우스 올림.
    mira: 메뉴 넷은 focus:bg-accent focus:text-accent-foreground,
    Command 만 data-selected:bg-muted data-selected:text-foreground (cmdk 의 방식).
@@ -287,6 +293,18 @@
     margin-inline: 0;
 }
 
+
+/* rhea drops `gap-2` from the context-menu sub trigger and the flex box from its
+   check/radio indicators. */
+.cn-context-menu-sub-trigger {
+    gap: normal;
+}
+
+.cn-context-menu-item-indicator {
+    /* rhea drops `pointer-events-none flex items-center justify-center` from it. */
+    display: revert;
+    pointer-events: revert;
+}
 
 /* mira: ml-auto text-[0.625rem] tracking-widest */
 .cn-dropdown-menu-shortcut,

@@ -15,6 +15,6 @@
 .cn-resizable-handle-icon {
     width: 4px;
     height: 24px;
-    border-radius: var(--control-radius);
+    border-radius: 10px;   /* rhea: rounded-lg */
     background-color: var(--border);
 }
