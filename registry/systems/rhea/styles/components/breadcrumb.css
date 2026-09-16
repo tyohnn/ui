@@ -13,7 +13,7 @@
 
 /* ⚠ 6px 간격은 리터럴이다. control 축의 gap 은 4 하나뿐이고 mira 의 gap-1.5 는 그 사이 값이다. */
 .cn-breadcrumb-list {
-    gap: 6px;
+    gap: 10px;   /* rhea: sm:gap-2.5 */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -21,7 +21,7 @@
 }
 
 .cn-breadcrumb-item {
-    gap: var(--control-gap-xs);
+    gap: var(--control-gap-md);   /* rhea: gap-1.5 */
 }
 
 .cn-breadcrumb-link {
@@ -43,14 +43,14 @@
 
 /* 구분자와 접힘 표시의 아이콘은 컨트롤의 md 아이콘(14)과 같은 단이다. mira: [&>svg]:size-3.5 */
 .cn-breadcrumb-separator > svg {
-    width: var(--control-icon-size-md);
-    height: var(--control-icon-size-md);
+    width: 14px;   /* rhea: size-3.5 */
+    height: 14px;
 }
 
 /* ⚠ 16px 은 리터럴이다. 접힘 표시(…)의 상자라 lg 아이콘(16)과 값만 같고 아이콘이 아니다. */
 .cn-breadcrumb-ellipsis {
-    width: 16px;
-    height: 16px;
+    width: 20px;   /* rhea: size-5 */
+    height: 20px;
 
     & > svg {
         width: var(--control-icon-size-md);

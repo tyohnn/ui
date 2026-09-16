@@ -19,7 +19,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 16px;
+    gap: 24px;   /* rhea: gap-6 */
 }
 
 .cn-questionnaire-progress {
@@ -32,7 +32,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;   /* rhea: gap-5 */
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
@@ -44,7 +44,7 @@
     font-weight: 600;
 
     &:not(:has(~ [data-slot="questionnaire-description"])) {
-        margin-block-end: 12px;
+        margin-block-end: 20px;   /* rhea: mb-5 */
     }
 }
 
@@ -56,7 +56,7 @@
 }
 
 .cn-questionnaire-choices {
-    gap: 6px;
+    gap: 12px;   /* rhea: choices gap-3 */
 }
 
 /* 선택지 카드. 링은 _control-family.css 와 같은 한 겹(ring-2 ring-ring/30)이다 — 카드
@@ -70,10 +70,10 @@
    ⚠ 켜짐은 shadcn 의 data-checked 변형과 같은 두 형태를 본다([data-state=checked] ·
       [data-checked]). 손으로 옮기면서 하나를 빠뜨리면 구현에 따라 색이 안 켜진다. */
 .cn-questionnaire-choice {
-    gap: 10px;
-    padding-inline: 12px;
-    padding-block: 10px;
-    border: var(--control-border-width) solid var(--input-border);
+    gap: 12px;   /* rhea: gap-3 */
+    padding-inline: 16px;   /* rhea: px-4 */
+    padding-block: 12px;   /* rhea: py-3 */
+    border: var(--control-border-width) solid var(--input);   /* rhea keeps border-input on the choice */
     border-radius: var(--surface-radius);   /* rhea: rounded-2xl */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
@@ -130,7 +130,7 @@
 }
 
 .cn-questionnaire-choice-content {
-    gap: 2px;
+    gap: 4px;   /* rhea: gap-1 */
 }
 
 .cn-questionnaire-choice-description {
@@ -143,14 +143,14 @@
       글자는 ui 축의 xs(10)보다도 작은 mira 의 값이다 — 16px 상자 안에 들어가는 한 자리
       숫자라 축에 올릴 값이 아니다. 바탕의 /80 은 토큰이 없어 --background 로 둔다. */
 .cn-questionnaire-shortcut {
-    width: 16px;
-    height: 16px;
-    border: var(--control-border-width) solid var(--input-border);
-    border-radius: var(--control-radius-xs);
+    width: 20px;   /* rhea: size-5 */
+    height: 20px;
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
+    border-radius: 9999px;   /* rhea: rounded-full */
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: color-mix(in oklab, var(--background) 80%, transparent);
     color: var(--muted-foreground);
-    font-size: 9px;
+    font-size: 10px;   /* rhea: text-[0.625rem] */
     font-weight: var(--ui-font-weight);
     line-height: 1;
     @apply translate-y-[--spacing(0.45)] group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 items-center justify-center font-mono;
@@ -166,7 +166,7 @@
 .cn-questionnaire-input {
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-field);
-    padding-block: 2px;   /* mira: py-0.5, Input 과 같다 */
+    padding-block: var(--control-padding-y-field);   /* rhea: py-1 */
     border: var(--control-border-width) solid var(--input-border);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
@@ -200,7 +200,7 @@
    mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
    실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
 .cn-questionnaire-actions {
-    gap: 6px;
+    gap: 8px;   /* rhea: gap-2 */
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

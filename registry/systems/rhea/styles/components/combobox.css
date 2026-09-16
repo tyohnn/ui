@@ -47,7 +47,8 @@
    ⚠ 세로 4px 은 리터럴이다. 항목 높이는 계열이 min-height 로 정하고, 이
       값은 글줄이 두 줄이 될 때만 드러나는 보정이라 축이 아니다. */
 .cn-combobox-item {
-    padding-block: 4px;
+    padding-block: var(--menu-item-padding-y);   /* rhea: py-1.5 */
+    padding-inline-end: var(--menu-item-padding-end);   /* rhea: pr-8 */
 
     &[data-highlighted]:not([data-variant="destructive"]) * {
         color: var(--accent-foreground);
@@ -114,10 +115,10 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--control-gap-md);
+    gap: var(--control-gap-sm);   /* rhea: gap-1 */
     min-height: var(--control-height-md);
     padding-inline: var(--control-padding-x-field);
-    padding-block: 2px;
+    padding-block: var(--control-padding-y-field);   /* rhea: py-1 */
 
     border: var(--control-border-width) solid var(--input-border);
     border-radius: var(--control-radius);
@@ -157,28 +158,30 @@
 .cn-combobox-chip {
     display: flex;
     width: fit-content;
-    height: 19px;
+    height: 21px;   /* rhea: h-[calc(--spacing(5.25))] */
     align-items: center;
     justify-content: center;
     gap: 4px;
-    border-radius: 4px;
+    border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     padding-inline: 6px;
-    background-color: var(--chip);
+    background-color: var(--input);   /* rhea: bg-input */
     color: var(--foreground);
-    font-size: var(--ui-text-md);
+    font-size: var(--ui-text-xs);   /* rhea: the chip keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-md);
+    line-height: var(--ui-line-height-xs);
     font-weight: var(--ui-font-weight);
     white-space: nowrap;
 
     &:has([data-slot="combobox-chip-remove"]) {
-        padding-inline-end: 0;
+        padding-inline-end: 2px;   /* rhea: pr-0.5 */
     }
 }
 
 /* mira: -ml-1 opacity-50 hover:opacity-100 */
 .cn-combobox-chip-remove {
-    margin-inline-start: -4px;
+    margin-inline-start: -2px;   /* rhea: -ml-0.5 */
+    width: 18px;   /* rhea: size-4.5 */
+    height: 18px;
     opacity: 0.5;
 
     &:hover {

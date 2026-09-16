@@ -42,7 +42,7 @@
 /* mira: rounded-lg px-2.5 — 10px 좌우 여백은 control 축의 lg 단이 같은 값이다. */
 .cn-navigation-menu-trigger {
     border-radius: var(--surface-radius);
-    padding-inline: var(--control-padding-x-lg);
+    padding-inline: 10px;   /* rhea: px-2.5 */
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 
@@ -78,16 +78,22 @@
       불리언 상태를 빈 값(data-active="")으로 내보내므로 값을 비교하면 맞지 않는다. */
 .cn-navigation-menu-link {
     border-radius: var(--surface-radius);
-    padding: var(--menu-item-padding-x);   /* mira: p-2 */
+    padding-inline: 10px;   /* rhea: px-2.5 */
+    padding-block: 6px;   /* rhea: py-1.5 */
+
+    /* rhea: in-data-[slot=navigation-menu-content]:p-2 */
+    [data-slot="navigation-menu-content"] & {
+        padding: var(--menu-item-padding-x);
+    }
 
     /* ⚠ 링크가 트리거 꼴을 입을 수 있다(`navigationMenuTriggerStyle()`): 두 클래스가 한
        요소에 붙고, 배럴 안에서 링크 규칙이 뒤에 온다. 트리거의 여백이 이기도록 명시도를
        (0,2,0) 으로 올린다 — mira: px-2.5 py-1.5 (2026-09-16 실측). */
     &.cn-navigation-menu-trigger {
-        padding-inline: var(--control-padding-x-lg);
-        padding-block: 6px;
+        padding-inline: 10px;   /* rhea: px-2.5 */
+        padding-block: 6px;   /* rhea: py-1.5 */
     }
-    gap: 6px;
+    gap: 8px;   /* rhea: gap-2 */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -169,7 +175,7 @@
 .cn-navigation-menu-popup {
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),
-        var(--shadow-chip);
+        var(--shadow-float);   /* rhea: shadow-lg */
 }
 
 .cn-navigation-menu-viewport {

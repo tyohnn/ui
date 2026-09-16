@@ -59,9 +59,14 @@
    ⚠ 링은 계열과 같은 한 겹이다. mira: hover·focus-visible·active:ring-2 ring-ring/30 */
 .cn-slider-thumb {
     position: relative;
-    width: 12px;
-    height: 12px;
-    border: var(--control-border-width) solid var(--ring);
+    width: 16px;   /* rhea: size-4 */
+    height: 16px;
+    /* rhea: the thumb is a black/10 ring plus shadow-md, not a ring-coloured border. */
+    border: 0 solid transparent;
+    box-shadow:
+        0 0 0 1px rgb(0 0 0 / 0.1),
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
     border-radius: var(--control-radius);
     background-color: var(--slider-thumb-fill);
 

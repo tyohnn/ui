@@ -146,7 +146,7 @@
       UI 에 약하다(emil-design-eng / apple-design). `ease-in` 은 UI 에 쓰지 말 것. */
 @theme static {
     --shadow-card: 0 0 #0000;
-    --shadow-float: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-float: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);   /* rhea: shadow-lg */
     --shadow-chip: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -183,7 +183,7 @@
     --primary-foreground: oklch(0.985 0 0);  /* neutral-50 */
     --primary-hover: oklch(0.205 0 0 / 80%);        /* hover:bg-primary/80 */
     /* 켜진 체크박스를 감싼 필드 라벨. mira: has-data-checked:bg-primary/5 dark:has-data-checked:bg-primary/10 */
-    --primary-soft: oklch(0.205 0 0 / 5%);
+    --primary-soft: oklch(0.922 0 0 / 30%);   /* rhea: a checked field row is bg-input/30 */
     /* 설문의 고른 선택지. mira: data-checked:bg-primary/10 (두 모드 같다) */
     --primary-soft-strong: oklch(0.205 0 0 / 10%);
 
@@ -259,7 +259,7 @@
 
     /* 떠 있는 면(카드·팝오버·드롭다운)의 테두리와 모달 뒤에 까는 막.
        mira: ring-1 ring-foreground/10 · bg-black/80 supports-backdrop-filter:backdrop-blur-xs */
-    --ring-subtle: oklch(0.145 0 0 / 10%);
+    --ring-subtle: oklch(0.145 0 0 / 5%);   /* rhea: ring-foreground/5 */
     --overlay-backdrop: oklch(0 0 0 / 30%);   /* rhea: bg-black/30 */
 
     /* neutral 테마의 차트 램프 그대로다. */
@@ -294,7 +294,7 @@
     /* 드로어 틀의 테두리. mira: border-popover dark:border-border — 밝은 쪽은 판과 같은 색이라 보이지 않는다. */
     --drawer-border: oklch(1 0 0);
     /* 사이드바 안의 검색 칸. mira: bg-muted/20 dark:bg-muted/30 */
-    --sidebar-input-fill: oklch(0.97 0 0 / 20%);
+    --sidebar-input-fill: var(--input-fill);   /* rhea: bg-input/50 */
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -310,6 +310,8 @@
     --selection-foreground: var(--primary-foreground);
     /* Unchecked checkbox border. mira: --input. */
     --checkbox-border: transparent;   /* rhea: border-transparent */
+    /* The keycap on a questionnaire choice. mira: --input; rhea: border-primary/10. */
+    --questionnaire-shortcut-border: oklch(0.205 0 0 / 10%);
     /* Border of the filled field controls (input · textarea · select · native-select · input-group ·
        input-otp · combobox chips · toggle outline · sidebar input). rhea draws them with a fill and no
        border; mira reads --input here. */
@@ -419,7 +421,7 @@
     --primary: oklch(0.922 0 0);             /* neutral-200 */
     --primary-foreground: oklch(0.205 0 0);
     --primary-hover: oklch(0.922 0 0 / 80%);
-    --primary-soft: oklch(0.922 0 0 / 10%);
+    --primary-soft: oklch(1 0 0 / 4.5%);   /* rhea: a checked field row is bg-input/30 */
     --primary-soft-strong: oklch(0.922 0 0 / 10%);
 
     --secondary: oklch(0.269 0 0);           /* neutral-800 */
@@ -504,6 +506,7 @@
     --selection: var(--primary);
     --selection-foreground: var(--primary-foreground);
     /* Unchecked checkbox border. mira: --input. */
+    --questionnaire-shortcut-border: oklch(0.985 0 0 / 10%);   /* rhea: border-primary/10 */
     --checkbox-border: transparent;   /* rhea: border-transparent */
     /* Border of the filled field controls (input · textarea · select · native-select · input-group ·
        input-otp · combobox chips · toggle outline · sidebar input). rhea draws them with a fill and no

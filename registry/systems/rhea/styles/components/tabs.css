@@ -28,6 +28,10 @@
     border-radius: var(--surface-radius);
     padding: 3px;
 
+    &:where(.group\/tabs[data-orientation="vertical"] *) {
+        padding: 4px;   /* rhea: group-data-vertical/tabs:p-1 */
+    }
+
     &:where(.group\/tabs[data-orientation="horizontal"] *) {
         height: var(--control-height-md);   /* rhea: h-8 */
     }

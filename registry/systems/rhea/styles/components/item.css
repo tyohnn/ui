@@ -41,22 +41,28 @@
 
 /* ⚠ default 와 sm 의 값이 같다. 업스트림이 그렇게 정의했고, 값을 바꾸면
    size prop 의 의미가 코드와 갈린다 — 고치려면 컴포넌트 cva 부터 봐야 한다. */
-.cn-item-size-default,
-.cn-item-size-sm {
+.cn-item-size-default {
     gap: 14px;   /* rhea: gap-3.5 */
     padding-inline: 16px;   /* rhea: px-4 */
     padding-block: 14px;   /* rhea: py-3.5 */
 }
 
-.cn-item-size-xs {
+/* rhea parts the sm row from the default one (mira gives both the same box). */
+.cn-item-size-sm {
     gap: 14px;   /* rhea: gap-3.5 */
     padding-inline: 14px;   /* rhea: px-3.5 */
     padding-block: 12px;   /* rhea: py-3 */
+}
+
+.cn-item-size-xs {
+    gap: 8px;   /* rhea: gap-2 */
+    padding-inline: 10px;
+    padding-block: 8px;
     @apply in-data-[slot=dropdown-menu-content]:p-0;
 }
 
 .cn-item-media {
-    gap: var(--menu-item-gap);
+    gap: 8px;   /* rhea: xs gap-2 */
     @apply group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start;
 }
 

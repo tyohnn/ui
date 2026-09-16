@@ -29,7 +29,7 @@
 
 /* mira: mb-2 font-medium data-[variant=label]:text-xs/relaxed data-[variant=legend]:text-sm */
 .cn-field-legend {
-    margin-block-end: 8px;
+    margin-block-end: 12px;   /* rhea: mb-3 */
     font-weight: var(--ui-font-weight);
 
     &[data-variant="label"] {

@@ -19,7 +19,7 @@
 .cn-chart {
     font-size: var(--ui-text-xs);   /* rhea: the chart keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
 }
 
 /* mira: gap-1.5 rounded-lg px-2.5 py-1.5 text-xs/relaxed.
@@ -31,8 +31,10 @@
     border-radius: var(--surface-radius-sm);   /* rhea: rounded-xl */
     background-color: var(--background);   /* mira: bg-background */
     color: var(--popover-foreground);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    padding-inline: var(--surface-padding-sm);
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        var(--shadow-float);   /* rhea: ring-1 + shadow-lg */
+    padding-inline: 10px;   /* rhea: px-2.5 */
     padding-block: 6px;
     gap: 6px;
     font-size: var(--ui-text-xs);   /* rhea: text-xs */

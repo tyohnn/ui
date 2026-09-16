@@ -241,12 +241,28 @@
 .cn-context-menu-label,
 .cn-menubar-label,
 .cn-command-group [cmdk-group-heading],
+.cn-dropdown-menu-label,
+.cn-context-menu-label,
+.cn-menubar-label,
+.cn-command-group [cmdk-group-heading],
 .cn-combobox-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);
-    padding-block: 6px;
-    font-size: var(--ui-text-sm);
+    padding-block: 4px;   /* rhea: py-1 */
+    font-size: var(--ui-text-xs);   /* rhea: the menu label keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
+    line-height: var(--ui-line-height-xs);
+}
+
+/* rhea leaves the combobox label and the command group heading at py-1.5, and makes the
+   menubar label text-sm while the other menu labels stay text-xs. */
+.cn-command-group [cmdk-group-heading],
+.cn-combobox-label {
+    padding-block: 6px;
+}
+
+.cn-menubar-label {
+    font-size: var(--ui-text-sm);
     line-height: var(--ui-line-height-sm);
 }
 
@@ -261,6 +277,16 @@
     margin-inline: calc(var(--menu-padding) * -1);
     margin-block: var(--menu-padding);
 }
+
+/* rhea: the combobox separator is bg-border and the command separator drops -mx-1. */
+.cn-combobox-separator {
+    background-color: var(--border);
+}
+
+.cn-command-separator {
+    margin-inline: 0;
+}
+
 
 /* mira: ml-auto text-[0.625rem] tracking-widest */
 .cn-dropdown-menu-shortcut,

@@ -65,8 +65,8 @@
     color: var(--muted-foreground);
 
     & > svg {
-        width: var(--control-icon-size-lg);
-        height: var(--control-icon-size-lg);
+        width: var(--control-icon-size-xs);   /* rhea: size-3 */
+        height: var(--control-icon-size-xs);
     }
 
     /* ⚠ 아이콘 크기는 아바타 크기에서 계산되지 않는다. 12·16·20 은 아이콘

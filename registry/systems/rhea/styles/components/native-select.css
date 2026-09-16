@@ -25,7 +25,7 @@
 
 .cn-native-select {
     /* mira: py-0.5 */
-    padding-block: 2px;
+    padding-block: var(--control-padding-y-field);   /* rhea: py-1 */
     width: 100%;
     min-width: 0;
     appearance: none;
@@ -41,17 +41,17 @@
         height: var(--control-height-md);
         padding-inline-start: var(--control-padding-x-field);
         /* mira: pr-6 — 화살표 자리를 계산이 아니라 한 값으로 준다(24px). */
-        padding-inline-end: 24px;
+        padding-inline-end: var(--menu-item-padding-end);   /* rhea: pr-8 */
         font-size: var(--control-font-size-md);
         line-height: var(--control-line-height-md);
     }
 
     &[data-size="sm"] {
         height: var(--control-height-sm);
-        padding-inline-start: var(--control-padding-x-sm);
-        padding-inline-end: 24px;   /* mira: pr-6 — 크기가 달라도 화살표 자리는 같다 */
-        font-size: var(--control-font-size-xs);
-        line-height: var(--ui-line-height-xs);
+        padding-inline-start: var(--control-padding-x-field);   /* rhea: px-2.5 */
+        padding-inline-end: var(--menu-item-padding-end);   /* rhea: pr-8 */   /* mira: pr-6 — 크기가 달라도 화살표 자리는 같다 */
+        font-size: var(--control-font-size-sm);   /* rhea: the sm select keeps text-sm */
+        line-height: var(--control-line-height-sm);
     }
 
     &:hover {

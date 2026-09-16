@@ -35,7 +35,7 @@
       배럴이 알파벳 순서라 input-group.css 가 이 파일보다 **뒤에** 읽히고, 같은
       (0,1,0)이면 `.cn-input-group` 의 height 가 이긴다. mira 의 `h-8!` 이 같은 사정이다. */
 .cn-command-input-wrapper > .cn-command-input-group {
-    height: var(--control-height-lg);
+    height: var(--control-height-md);
     background-color: var(--input-fill);
 }
 

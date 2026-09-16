@@ -118,8 +118,8 @@
 .cn-toggle-size-lg {
     min-height: var(--control-height-lg);
     min-width: var(--control-height-lg);
-    padding-inline: var(--control-padding-x-lg);
-    gap: var(--control-gap-lg);
+    padding-inline: var(--control-padding-x-field);   /* rhea: px-2.5 */
+    gap: var(--control-gap-sm);   /* rhea: gap-1 at every size */
     font-size: var(--ui-text-sm);
     line-height: var(--ui-line-height-sm);
 

@@ -128,9 +128,12 @@
     padding: var(--surface-padding-md);
 }
 
-.cn-dialog-content,
-.cn-popover-content {
+.cn-dialog-content {
     gap: 24px;   /* rhea: dialog gap-6 */
+}
+
+.cn-popover-content {
+    gap: var(--surface-gap-lg);
 }
 
 .cn-popover-content,
@@ -155,6 +158,11 @@
     flex-direction: column;
 }
 
+.cn-dialog-close,
+.cn-sheet-close {
+    background-color: var(--secondary);   /* rhea: bg-secondary */
+}
+
 .cn-tooltip-content {
     display: inline-flex;
     align-items: center;
@@ -168,14 +176,17 @@
 .cn-dialog-header,
 .cn-alert-dialog-header,
 .cn-drawer-header,
-.cn-drawer-header-base,
-.cn-popover-header {
+.cn-drawer-header-base {
     gap: var(--surface-gap);
 }
 
-/* mira: text-sm font-medium — Popover 의 제목도 같은 단이다. */
+.cn-popover-header {
+    gap: 4px;   /* rhea: the popover header keeps gap-1 */
+}
+
+/* mira: text-sm font-medium — Popover 의 제목도 같은 단이다.
+   rhea: text-base; the Dialog adds leading-none and the AlertDialog takes text-lg (alert-dialog.css). */
 .cn-dialog-title,
-.cn-alert-dialog-title,
 .cn-sheet-title,
 .cn-drawer-title,
 .cn-popover-title {
@@ -184,6 +195,10 @@
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-lg);
     font-weight: var(--ui-font-weight);
+}
+
+.cn-dialog-title {
+    line-height: 1;   /* rhea: leading-none */
 }
 
 /* mira: text-muted-foreground text-xs/relaxed */
@@ -236,10 +251,10 @@
     border-radius: var(--surface-radius-sm);
     padding-inline: 12px;
     padding-block: 6px;
-    gap: var(--surface-icon-gap);
-    font-size: var(--ui-text-sm);
+    gap: 6px;   /* rhea: gap-1.5 */
+    font-size: var(--ui-text-xs);   /* rhea: the tooltip keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
 }
 
 /* ⚠ transform 이 아니라 translate·rotate 개별 속성이다. 컴포넌트가 방향별로

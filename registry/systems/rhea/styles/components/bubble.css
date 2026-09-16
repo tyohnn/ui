@@ -30,12 +30,12 @@
    ⚠ 상하 6px 은 리터럴이다. 글줄을 감싸는 말풍선이라 surface 축의 여백(10·16·24)은 위아래가 과하다. */
 .cn-bubble-content {
     border: var(--surface-border-width) solid transparent;
-    border-radius: var(--surface-radius);
-    padding-inline: var(--surface-padding-sm);
-    padding-block: 6px;
+    border-radius: var(--surface-radius-xl);   /* rhea: rounded-3xl */
+    padding-inline: 12px;   /* rhea: px-3 */
+    padding-block: 10px;   /* rhea: py-2.5 */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-md);
+    line-height: 22.75px;   /* rhea: leading-relaxed (14 × 1.625) */
     @apply group-data-[align=end]/bubble:self-end;
 
     /* 누를 수 있는 말풍선만 링을 받는다. 계열(_control-family.css)과 같은 한 겹이다. */
@@ -111,10 +111,10 @@
    한다 — ring-2 는 포커스 링이 아니라 테두리 두께라 --focus-ring-width 와 무관하다. mira: ring-2 */
 .cn-bubble-reactions {
     background-color: var(--muted);
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-sm);
-    @apply rounded-full ring-2 ring-card shrink-0 gap-1 px-1.5 py-0.5 has-[button]:p-0;
+    @apply rounded-full ring-3 ring-card shrink-0 gap-1 px-1.5 py-0.5 has-[button]:p-0;
 }
 
 .cn-bubble-reactions-side-top {

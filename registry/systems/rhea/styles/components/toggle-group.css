@@ -26,7 +26,7 @@
     /* mira: group-data-[spacing=0]/toggle-group:rounded-none …:px-2 …:has-data-[icon=inline-end]:pr-1.5 …:pl-1.5 */
     .cn-toggle-group[data-spacing="0"] > & {
         border-radius: 0;
-        padding-inline: var(--control-padding-x-field);
+        padding-inline: var(--menu-item-padding-x);   /* rhea: grouped toggles keep px-2 */
 
         &:has([data-icon="inline-start"]) { padding-inline-start: var(--control-padding-x-icon-md); }
         &:has([data-icon="inline-end"])   { padding-inline-end: var(--control-padding-x-icon-md); }

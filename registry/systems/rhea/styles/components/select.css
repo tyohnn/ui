@@ -117,7 +117,7 @@
 .cn-select-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);
-    padding-block: var(--menu-item-padding-y);   /* rhea: label py-1 */
+    padding-block: 4px;   /* rhea: label py-1 */
     font-size: var(--ui-text-xs);   /* rhea: the menu label keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-xs);
@@ -178,7 +178,7 @@
 
 /* mira: bg-border/50 -mx-1 my-1 h-px */
 .cn-select-separator {
-    background-color: var(--border-subtle);
+    background-color: var(--border);   /* rhea: bg-border */
     height: var(--surface-border-width);
     margin-inline: calc(var(--menu-padding) * -1);
     margin-block: var(--menu-padding);

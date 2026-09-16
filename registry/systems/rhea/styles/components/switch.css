@@ -29,14 +29,15 @@
     flex-shrink: 0;
     width: var(--switch-track-width-md);
     height: var(--switch-track-height-md);
-    padding: calc(var(--switch-thumb-inset) - var(--control-border-width));
+    padding: 0;   /* rhea: the 2px border is the inset */
 
-    border: var(--control-border-width) solid transparent;
+    border: 2px solid transparent;   /* rhea: border-2 */
     border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     background-color: var(--switch-track-off);
 
     &[data-checked] {
         background-color: var(--primary);
+        border-color: var(--primary);   /* rhea: data-checked:border-primary */
     }
 
     &[data-size="sm"] {
@@ -56,6 +57,7 @@
 .cn-switch-thumb {
     width: var(--switch-thumb-size-md);
     height: var(--switch-thumb-size-md);
+    box-shadow: var(--shadow-chip);   /* rhea: shadow-sm */
     border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     background-color: var(--switch-thumb-off);
     translate: 0;

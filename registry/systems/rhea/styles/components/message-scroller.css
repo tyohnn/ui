@@ -10,5 +10,5 @@
    ============================================================ */
 
 .cn-message-scroller-content {
-    @apply gap-6;
+    @apply gap-8;   /* rhea: gap-8 */
 }

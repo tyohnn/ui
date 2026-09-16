@@ -63,7 +63,7 @@
 
 /* 아웃라인은 투명이 아니라 인풋과 같은 옅은 채움이다. mira: bg-input/20 dark:bg-input/30 */
 .cn-badge-variant-outline {
-    background-color: var(--input-fill);
+    background-color: transparent;   /* rhea drops the outline badge's fill */
     border-color: var(--border);
     color: var(--foreground);
     @apply [a]:hover:bg-muted [a]:hover:text-muted-foreground;

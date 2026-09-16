@@ -40,6 +40,7 @@
 
     border-radius: var(--surface-radius-lg);
     border: var(--surface-border-width) solid var(--drawer-border);
+    box-shadow: var(--dialog-shadow);   /* rhea: shadow-xl */
 }
 
 /* vaul 판. 판 자체는 투명하고, 8px 안쪽에 ::before 가 틀을 그린다. */

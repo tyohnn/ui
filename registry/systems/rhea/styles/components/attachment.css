@@ -43,32 +43,37 @@
 }
 
 .cn-attachment-size-default {
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-md);   /* rhea: text-sm */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
-    @apply gap-2 has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5;
+    line-height: var(--ui-line-height-md);
+    @apply gap-2 has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2;
 }
 
+/* rhea lifts only the default box to text-sm; sm and xs keep mira's text-xs. */
 .cn-attachment-size-sm {
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-xs);
+    line-height: var(--ui-line-height-xs);
+    font-size: var(--ui-text-md);   /* rhea: text-sm */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
-    @apply gap-2.5 has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1;
+    line-height: var(--ui-line-height-md);
+    @apply gap-2.5 has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5;
 }
 
 /* 가장 작은 단계만 모서리를 한 단계 줄인다. mira: rounded-md */
 .cn-attachment-size-xs {
+    font-size: var(--ui-text-xs);
+    line-height: var(--ui-line-height-xs);
     border-radius: var(--surface-radius-sm);
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-md);   /* rhea: text-sm */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-md);
     @apply gap-1.5 has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1;
 }
 
 .cn-attachment-media {
     background-color: var(--muted);
     color: var(--foreground);
-    @apply w-10 rounded-md group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-sm [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6!;
+    @apply w-10 rounded-lg group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6!;
 }
 
 .cn-attachment-media-variant-image {
@@ -84,9 +89,9 @@
 }
 
 .cn-attachment-description {
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-xs);   /* rhea: the description keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-md);
     @apply mt-0.5;
 }
 

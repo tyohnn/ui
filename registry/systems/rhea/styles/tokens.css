@@ -207,7 +207,7 @@
        -------------------------------------------------------- */
     --menu-padding: 4px;              /* content p-1 */
     --menu-min-width: 144px;   /* rhea: min-w-36 */          /* min-w-32 */
-    --menu-item-height: 32px;   /* rhea: min-h-8 */         /* item min-h-7 */
+    --menu-item-height: 28px;         /* item min-h-7 */
     --menu-item-radius: 14px;   /* rhea: rounded-xl */          /* item rounded-md */
     --menu-item-padding-x: 8px;       /* item px-2 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
@@ -248,8 +248,8 @@
     --sidebar-item-font-weight: 500;
     /* Active item height. mira: the same row height. */
     --sidebar-item-height-active: var(--sidebar-item-height);
-    --sidebar-item-font-size: var(--ui-text-xs);   /* rhea: text-xs */
-    --sidebar-item-line-height: var(--ui-line-height-xs);
+    --sidebar-item-font-size: var(--ui-text-sm);
+    --sidebar-item-line-height: var(--ui-line-height-sm);
     /* Item border width and the weight of a non-active item. mira: no border, weight inherits
        (`initial`); only the active item sets --sidebar-item-font-weight. */
     --sidebar-item-border-width: 0px;
@@ -278,7 +278,7 @@
     /* 하위 항목. 하위 라벨의 왼쪽이 상위 라벨의 왼쪽(안쪽 여백 8 + 아이콘 16 + 간격 8 = 32)과
        맞아야 한다. 아래 두 값을 더하면 그 32 가 나온다. 한쪽을 고치면 다른 쪽도 함께 고칠 것. */
     --sidebar-sub-rail-offset: 14px;  /* 상위 항목 아이콘의 가운데. 왼쪽 선이 서는 자리. mira: mx-3.5 */
-    --sidebar-sub-item-indent: 18px;  /* 선에서 글자까지. mira: px-2.5 (18 - 항목 좌우 8) */
+    --sidebar-sub-item-indent: 22px;   /* rhea: px-2.5 on top of the sub button's px-3 */  /* 선에서 글자까지. mira: px-2.5 (18 - 항목 좌우 8) */
     --sidebar-sub-item-height: 28px;  /* sub-button h-7 */
 
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */

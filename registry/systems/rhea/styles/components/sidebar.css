@@ -81,7 +81,7 @@
 /* 검색칸. Input 컴포넌트 위에 얹는 예외다 — mira 는 h-8 에 bg-muted/20(1층이 --muted-soft 로
    푼 단)이고 테두리는 --input 이다. 사이드바 안에서 인풋(h-7)보다 한 단 크다. */
 .cn-sidebar-input {
-    height: var(--control-height-lg);
+    height: var(--control-height-md);   /* rhea: the sidebar input is h-8 */
     /* mira: bg-muted/20 dark:bg-muted/30 border-input */
     background-color: var(--sidebar-input-fill);
     border-color: var(--input-border);
@@ -91,11 +91,12 @@
 .cn-sidebar-header,
 .cn-sidebar-footer {
     gap: var(--menu-item-gap);
-    padding: var(--menu-item-padding-x);
+    padding: 8px;   /* rhea: group p-2 */
 }
 
 .cn-sidebar-content {
-    @apply no-scrollbar gap-0;
+    @apply no-scrollbar;
+    gap: 8px;   /* rhea: content gap-2 */
 }
 
 /* ⚠ 세로 여백은 mira 에 없다(mx-2 뿐). 2층의 --sidebar-separator-margin-block 이 그 값을
@@ -108,8 +109,8 @@
 
 /* mira: px-2 py-1. 세로 4px 은 menu 축의 목록 여백(--menu-padding)과 같은 단이다. */
 .cn-sidebar-group {
-    padding-inline: var(--menu-item-padding-x);
-    padding-block: var(--menu-padding);
+    padding-inline: 8px;
+    padding-block: 8px;   /* rhea: group p-2 */
 }
 
 .cn-sidebar-menu {
@@ -180,6 +181,9 @@
     border-radius: var(--sidebar-item-radius);
     padding-inline: var(--sidebar-item-padding-x);
     padding-block: 8px;   /* rhea: py-2 */
+
+    &:has(> svg:first-child) { padding-inline-start: 10px; }   /* rhea: pl-2.5 */
+    &:has(> svg:last-child)  { padding-inline-end: 10px; }    /* rhea: pr-2.5 */
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);
     /* The border is always drawn (width 0 in foundation) so an active border never shifts the label. */
@@ -258,16 +262,17 @@
     }
 }
 
-/* 테두리를 box-shadow 로 그린다. 실제 border 를 쓰면 행 높이가 2px 늘어
-   같은 목록의 default 변형과 줄이 어긋난다. mira: shadow-[0_0_0_1px_var(--sidebar-border)] */
+/* rhea writes this shadow as `shadow-[0_0_0_1px_hsl(var(--sidebar-border))]`, and
+   --sidebar-border is an oklch() colour, so hsl() of it is invalid and the outline row
+   draws no border at all upstream. rhea's own output is the answer key, so neither does this. */
 .cn-sidebar-menu-button-variant-outline {
     background-color: var(--background);
-    box-shadow: 0 0 0 var(--surface-border-width) var(--sidebar-border);
+    box-shadow: none;
 
     &:hover {
         background-color: var(--sidebar-accent);
         color: var(--sidebar-accent-foreground);
-        box-shadow: 0 0 0 var(--surface-border-width) var(--sidebar-accent);
+        box-shadow: none;
     }
 }
 
@@ -281,9 +286,9 @@
 
 .cn-sidebar-menu-button-size-sm {
     height: 28px;
-    font-size: var(--ui-text-sm);
+    font-size: var(--ui-text-xs);   /* rhea: the sm row keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-xs);
 }
 
 .cn-sidebar-menu-button-size-lg {
@@ -372,7 +377,7 @@
     height: var(--sidebar-item-height);
     gap: var(--sidebar-item-gap);
     border-radius: var(--sidebar-item-radius);
-    padding-inline: var(--sidebar-item-padding-x);
+    padding-inline: 8px;   /* rhea: the skeleton keeps px-2 */
 }
 
 .cn-sidebar-menu-skeleton-icon {

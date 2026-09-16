@@ -72,8 +72,8 @@
    ⚠ 세로 패딩 8px 은 리터럴이다. 높이를 풀어 둔(h-auto) 칸이라 세로 패딩이 정본인데
       control 축은 높이가 정본이라 세로 패딩 단계를 갖지 않는다. */
 .cn-input-group-addon {
-    gap: var(--control-gap-md);
-    padding-block: 8px;
+    gap: var(--menu-item-gap);   /* rhea: gap-2 */
+    padding-block: 6px;   /* rhea: py-1.5 */
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
     font-weight: var(--control-font-weight);
@@ -102,7 +102,7 @@
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-md);
+    padding-inline-start: var(--menu-item-padding-x);   /* rhea: px-2 */
 
     &:has(> button),
     &:has(> kbd) {
@@ -111,7 +111,7 @@
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-md);
+    padding-inline-end: var(--menu-item-padding-x);   /* rhea: px-2 */
 
     &:has(> button),
     &:has(> kbd) {
@@ -122,7 +122,7 @@
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
    통 안의 세로 리듬이라 축이 없다. */
 .cn-input-group-addon-align-block-start {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: 10px;   /* rhea: px-2.5 */
     padding-block-start: 8px;
 
     &.border-b {
@@ -131,7 +131,7 @@
 }
 
 .cn-input-group-addon-align-block-end {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: 10px;   /* rhea: px-2.5 */
     padding-block-end: 8px;
 
     &.border-t {
@@ -159,12 +159,12 @@
     height: var(--control-height-xs);
     min-height: 0;
     gap: var(--control-gap-xs);
-    border-radius: 4px;
-    padding-inline: 4px;
+    border-radius: var(--surface-radius-sm);   /* rhea: rounded-xl */
+    padding-inline: 6px;   /* rhea: px-1.5 */
 
     & > svg:not([class*="size-"]) {
-        width: var(--control-icon-size-sm);
-        height: var(--control-icon-size-sm);
+        width: 14px;   /* rhea: size-3.5 */
+        height: 14px;
     }
 }
 
