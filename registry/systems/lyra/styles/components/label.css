@@ -14,9 +14,11 @@
 .cn-label {
     gap: 8px;
     font-size: var(--ui-text-md);
-    letter-spacing: var(--ui-letter-spacing);
+    /* v4: 조용한 라벨 띠(Label · 필드 제목 · 아이템 제목 …)의 자간·대소문자 슬롯. */
+    letter-spacing: var(--ui-label-letter-spacing);
+    text-transform: var(--ui-label-text-transform);
     line-height: 1;
-    font-weight: var(--label-font-weight);   /* lyra: the Label has no weight utility */
+    font-weight: var(--label-font-weight);
 
     .group[data-disabled="true"] & {
         opacity: 0.5;

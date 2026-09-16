@@ -16,36 +16,39 @@
       만큼 걸치지 않는다. Button 처럼 실사용이 잦아지면 그때 토큰으로 올린다.
    ============================================================ */
 
-/* 높이·좌우 여백·아이콘은 control 축의 xs 를 읽는다. 배지는 컨트롤이 아니지만 mira 가
-   xs 버튼과 같은 h-5 · px-2 · size-2.5 로 두므로 같은 축이다. Kbd 도 같다.
-   ⚠ 세로 2px 은 리터럴이다. 높이가 정본이라 세로 여백은 글줄을 가운데 두는 보정일 뿐이다. */
+/* v4: 배지는 자기 축(--badge-*)을 갖는다. v3 까지는 control 축의 xs 단을 빌려 읽어,
+   xs 버튼을 키운 시스템이 배지까지 함께 키웠다. mira 의 숫자는 그대로다 —
+   기본값이 control 축 xs 의 별칭이라 계산 결과가 바뀌지 않는다. Kbd 도 같은 방식이다.
+   ⚠ 세로 여백(mira: py-0.5 = 2px)과 모서리(rounded-full)는 리터럴이었다.
+      이제 --badge-padding-y · --badge-radius 슬롯이 그 값을 갖는다. */
 .cn-badge {
-    height: var(--badge-height);   /* lyra: h-5 */
-    gap: var(--control-gap-xs);
-    padding-inline: var(--control-padding-x-xs);
-    padding-block: 2px;
-    border: var(--control-border-width) solid transparent;
-    border-radius: var(--badge-radius);   /* lyra: rounded-none */
-    font-size: var(--ui-text-xs);
-    letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-xs);
-    font-weight: var(--ui-font-weight);
+    height: var(--badge-height);
+    gap: var(--badge-gap);
+    padding-inline: var(--badge-padding-x);
+    padding-block: var(--badge-padding-y);
+    border: var(--badge-border-width) solid transparent;
+    border-radius: var(--badge-radius);
+    font-size: var(--badge-font-size);
+    letter-spacing: var(--badge-letter-spacing);
+    line-height: var(--badge-line-height);
+    font-weight: var(--badge-font-weight);
+    text-transform: var(--badge-text-transform);
     transition-property: all;
     transition-duration: var(--control-duration);
     transition-timing-function: var(--control-ease);
 
     /* 아이콘은 호출부의 size 유틸리티보다 이겨야 하는 자리라(mira: [&>svg]:size-2.5!) !important 다. */
     & > svg {
-        width: var(--control-icon-size-xs) !important;
-        height: var(--control-icon-size-xs) !important;
+        width: var(--badge-icon-size) !important;
+        height: var(--badge-icon-size) !important;
     }
 
     &:has([data-icon="inline-start"]) {
-        padding-inline-start: var(--control-padding-x-icon-xs);
+        padding-inline-start: var(--badge-padding-x-icon);
     }
 
     &:has([data-icon="inline-end"]) {
-        padding-inline-end: var(--control-padding-x-icon-xs);
+        padding-inline-end: var(--badge-padding-x-icon);
     }
 }
 
