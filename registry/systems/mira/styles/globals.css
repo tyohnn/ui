@@ -394,6 +394,41 @@
     --avatar-tone-moss: var(--muted);
     --avatar-tone-mauve: var(--muted);
 
+    /* ========================================================
+       Axis contract v4 — layer-1 slots
+       Values that differ by mode, lifted out of layer-3 rules. Every default is
+       the value the rule carried, so foundation renders unchanged.
+       ⚠ Declared in both :root and .dark, like every other layer-1 name.
+       ======================================================== */
+    /* The input family's edge. mira: --input on all four sides. luma draws none, sera draws only
+       the bottom one, rhea gives it a colour of its own. */
+    --input-border: var(--input);
+    --input-border-bottom: var(--input-border);
+    /* A disabled control's fill and the command palette search box's own fill.
+       mira: the normal input fill in both. */
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    /* The outline button's hover fill. mira: the input hover fill; vega gives it its own. */
+    --button-outline-hover-fill: var(--input-fill-hover);
+    /* Inner rings. mira draws the card and the menu with the one subtle ring; maia and sera split them. */
+    --card-ring: var(--ring-subtle);
+    --menu-ring: var(--ring-subtle);
+    /* Combobox chip and slider track fills. */
+    --combobox-chip-fill: var(--chip);
+    --slider-track-fill: var(--muted);
+    /* The switch track's edge. mira draws none; sera draws it. */
+    --switch-track-border-off: transparent;
+    --switch-track-border-on: transparent;
+    /* A checked selection card's edge and a questionnaire choice's own fill. mira leaves the card's
+       edge at --border and gives the choice no fill of its own; maia · nova · sera · lyra all want a
+       colour here that differs by mode. */
+    --field-label-checked-border: var(--border);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    /* The radio dot's size — a size, not a colour. It lives in layer 1 because luma gives it one
+       value in light and another in dark, and layer 2 has no `.dark` scope. */
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
+
     /* shadcn create 의 radius "default". 10px. --radius-md 8px · --radius-lg 10px · --radius-xl 14px 를 낳는다.
        2층의 --control-radius 8px(mira 의 rounded-md)과 같은 계열이다. */
     --radius: 0.625rem;
@@ -581,6 +616,41 @@
     --avatar-tone-navy: var(--muted);
     --avatar-tone-moss: var(--muted);
     --avatar-tone-mauve: var(--muted);
+
+    /* ========================================================
+       Axis contract v4 — layer-1 slots
+       Values that differ by mode, lifted out of layer-3 rules. Every default is
+       the value the rule carried, so foundation renders unchanged.
+       ⚠ Declared in both :root and .dark, like every other layer-1 name.
+       ======================================================== */
+    /* The input family's edge. mira: --input on all four sides. luma draws none, sera draws only
+       the bottom one, rhea gives it a colour of its own. */
+    --input-border: var(--input);
+    --input-border-bottom: var(--input-border);
+    /* A disabled control's fill and the command palette search box's own fill.
+       mira: the normal input fill in both. */
+    --input-fill-disabled: var(--input-fill);
+    --command-input-fill: var(--input-fill);
+    /* The outline button's hover fill. mira: the input hover fill; vega gives it its own. */
+    --button-outline-hover-fill: var(--input-fill-hover);
+    /* Inner rings. mira draws the card and the menu with the one subtle ring; maia and sera split them. */
+    --card-ring: var(--ring-subtle);
+    --menu-ring: var(--ring-subtle);
+    /* Combobox chip and slider track fills. */
+    --combobox-chip-fill: var(--chip);
+    --slider-track-fill: var(--muted);
+    /* The switch track's edge. mira draws none; sera draws it. */
+    --switch-track-border-off: transparent;
+    --switch-track-border-on: transparent;
+    /* A checked selection card's edge and a questionnaire choice's own fill. mira leaves the card's
+       edge at --border and gives the choice no fill of its own; maia · nova · sera · lyra all want a
+       colour here that differs by mode. */
+    --field-label-checked-border: var(--border);
+    --questionnaire-choice-fill: transparent;
+    --questionnaire-shortcut-border: var(--input);
+    /* The radio dot's size — a size, not a colour. It lives in layer 1 because luma gives it one
+       value in light and another in dark, and layer 2 has no `.dark` scope. */
+    --radio-indicator-dot-size: var(--control-indicator-dot-size);
 }
 
 /* 접근성 — apple-design 요구.

@@ -409,3 +409,178 @@
     --typeset-space-h3: 1.8;
     --typeset-tracking: -0.01em;
 }
+
+:root {
+    /* ========================================================
+       Axis contract v4 — slots lifted out of layer 3
+       --------------------------------------------------------
+       Every value below was a literal in a layer-3 rule, or a step several
+       components had to share because no name separated them. Each default
+       reproduces mira exactly (an alias, `initial`, or the literal the rule
+       carried), so foundation renders identically to axis contract 3.
+
+       `registry/foundation/reference/README.md` records which system asked for
+       each one. Tune the value; do not edit the rule.
+       ======================================================== */
+
+    /* --------------------------------------------------------
+       badge — its own axis (v4)
+       Until v3 the badge borrowed the xs control step, so a system that grew
+       its xs button grew every badge with it. mira's numbers are unchanged;
+       they are simply written here instead of being read from --control-*-xs.
+       Asked for by lyra · maia · nova (height · radius) and sera (the whole box).
+       -------------------------------------------------------- */
+    --badge-height: var(--control-height-xs);
+    --badge-padding-x: var(--control-padding-x-xs);
+    --badge-padding-x-icon: var(--control-padding-x-icon-xs);
+    --badge-padding-y: 2px;                              /* mira: py-0.5 — was a literal */
+    --badge-gap: var(--control-gap-xs);
+    --badge-icon-size: var(--control-icon-size-xs);
+    --badge-border-width: var(--control-border-width);
+    --badge-radius: 9999px;                              /* mira: rounded-full — was a literal */
+    --badge-font-size: var(--ui-text-xs);
+    --badge-line-height: var(--ui-line-height-xs);
+    --badge-letter-spacing: var(--ui-letter-spacing);
+    --badge-font-weight: var(--ui-font-weight);
+    --badge-text-transform: initial;                     /* `initial` = inherit (mira sets none) */
+
+    /* --------------------------------------------------------
+       kbd — its own axis (v4)
+       A keycap is not an xs button; mira only gave the two the same number.
+       Asked for by lyra · maia · nova · sera.
+       -------------------------------------------------------- */
+    --kbd-height: var(--control-height-xs);
+    --kbd-min-width: var(--kbd-height);
+    --kbd-padding-x: 4px;                                /* mira: px-1 — was a literal */
+    --kbd-gap: var(--control-gap-xs);
+    --kbd-font-size: var(--ui-text-xs);
+    --kbd-line-height: var(--ui-line-height-xs);
+    --kbd-letter-spacing: var(--ui-letter-spacing);
+    --kbd-font-weight: var(--ui-font-weight);
+    --kbd-icon-size: var(--control-icon-size-sm);
+
+    /* --------------------------------------------------------
+       control (v4 additions)
+       -------------------------------------------------------- */
+    /* The sm control's corner. mira gives it the same radius as md; nova and luma split them. */
+    --control-radius-sm: var(--control-radius);
+    /* Case of a control's label (button · toggle · tab). `initial` = inherit. sera uppercases them. */
+    --control-text-transform: initial;
+    /* Side padding of a control inside a group (button group · toggle group · input-group addon).
+       mira: the md padding. lyra keeps px-2 here while the standalone control grows. */
+    --control-padding-x-grouped: var(--control-padding-x-md);
+    /* sm icon button glyph — the md pair already exists. lyra splits the two. */
+    --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
+    /* The field sub-axis: input · textarea · select trigger. mira gives them the md step; sera and
+       rhea give the field family its own padding and type while the button family moves elsewhere. */
+    --control-padding-x-field: var(--control-padding-x-md);
+    --control-padding-y-field: 2px;                      /* mira: py-0.5 — was a literal */
+    --control-font-size-field: var(--control-font-size-md);
+    --control-line-height-field: var(--control-line-height-md);
+    --control-letter-spacing-field: var(--control-letter-spacing);
+    /* Toggle keeps its own gap at every size in lyra; mira shares the md control gap. */
+    --toggle-gap: var(--control-gap-md);
+    /* A joined toggle group's outer corner. mira: the control radius. */
+    --toggle-group-joined-radius: var(--control-radius);
+
+    /* switch (v4): the thumb need not be square, and the track's corner is a value.
+       luma gives the thumb a width of its own; sera squares the track. */
+    --switch-thumb-width-md: var(--switch-thumb-size-md);
+    --switch-thumb-width-sm: var(--switch-thumb-size-sm);
+    --switch-radius: 9999px;
+
+    /* --------------------------------------------------------
+       ui text (v4 additions)
+       -------------------------------------------------------- */
+    /* Label weight. mira: the UI weight (500). lyra's Label carries no weight utility. */
+    --label-font-weight: var(--ui-font-weight);
+    /* The quiet label band — Label · field title · item title · popover title · progress label ·
+       questionnaire title. `initial` = inherit. sera uppercases the band. */
+    --ui-label-text-transform: initial;
+    --ui-label-letter-spacing: var(--ui-letter-spacing);
+    /* Surface titles — card · dialog · sheet · drawer · alert-dialog. sera uppercases them.
+       (Empty's title keeps its own tracking; mira gives only that one `tracking-tight`.) */
+    --title-text-transform: initial;
+    --title-letter-spacing: var(--ui-letter-spacing);
+
+    /* table head (v4): sera's head is uppercase and tracked. */
+    --table-head-text-transform: initial;
+    --table-head-letter-spacing: var(--ui-letter-spacing);
+
+    /* --------------------------------------------------------
+       menu (v4 additions)
+       -------------------------------------------------------- */
+    /* Separator insets. Until v4 the rule computed them from --menu-padding, so a system that
+       flattened its popup padding also lost the separator's bleed (lyra). They are values now. */
+    --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
+    --menu-separator-margin-block: var(--menu-padding);
+    /* Group label. mira: the check row's vertical padding (6px), no case or tracking of its own. */
+    --menu-label-padding-y: var(--menu-item-padding-y-check);
+    --menu-label-text-transform: initial;
+    --menu-label-letter-spacing: var(--ui-letter-spacing);
+    /* Row type. mira sets neither case nor weight on a row (`initial` = inherit). */
+    --menu-item-text-transform: initial;
+    --menu-item-letter-spacing: var(--ui-letter-spacing);
+    --menu-item-font-weight: initial;
+    /* Narrow popups (select · combobox · sub-menus). mira gives them the dropdown's min width. */
+    --menu-narrow-min-width: var(--menu-min-width);
+    /* The palette row and the select row split from the menu row in maia · nova · sera. */
+    --command-item-radius: var(--menu-item-radius);
+    --command-item-gap: var(--menu-item-gap);
+    --select-item-gap: var(--menu-item-gap);
+    /* The menubar bar is not a popup surface. mira gives it the popup's padding and no gap
+       (`normal`, the initial value — not 0px, which the comparison reads as a value). */
+    --menubar-padding: var(--menu-padding);
+    --menubar-gap: normal;
+    --menubar-item-padding-inset: var(--menu-item-padding-inset);
+
+    /* --------------------------------------------------------
+       surfaces (v4 additions) — each was --surface-radius* in the rule
+       -------------------------------------------------------- */
+    --card-radius: var(--surface-radius);
+    --bubble-radius: var(--surface-radius);
+    --bubble-padding-x: var(--surface-padding-sm);
+    --bubble-padding-y: 6px;                             /* was a literal */
+    --bubble-line-height: var(--ui-line-height-md);
+    --chart-tooltip-radius: var(--surface-radius);
+    --empty-radius: var(--surface-radius-lg);
+    --sheet-padding: var(--surface-padding-lg);
+    --accordion-border-width: var(--surface-border-width);
+
+    /* --------------------------------------------------------
+       tabs — the default variant (v4). The line variant already had its axis.
+       -------------------------------------------------------- */
+    --tabs-list-height: var(--control-height-lg);
+    --tabs-list-padding: 3px;                            /* mira: p-[3px] — was a literal */
+    --tabs-trigger-gap: 6px;                             /* mira: gap-1.5 — was a literal */
+    --tabs-trigger-padding-x: 6px;                       /* mira: px-1.5 — was a literal */
+    --tabs-trigger-padding-y: 2px;                       /* mira: py-0.5 — was a literal */
+    --tabs-trigger-active-shadow: none;                  /* mira's selected tab is flat; nova's is not */
+
+    /* --------------------------------------------------------
+       item · slider · avatar (v4)
+       -------------------------------------------------------- */
+    /* Item's gap equals the menu row's in mira; nova splits them. */
+    --item-gap: var(--menu-item-gap);
+    --item-media-icon-size: var(--control-icon-size-lg);
+    /* Track thickness. mira: h-1 — was a literal in slider.css. */
+    --slider-track-thickness: 4px;
+    /* The md/lg initials type. The sm pair already exists. maia's lg UI step is text-base. */
+    --avatar-font-size: var(--ui-text-lg);
+    --avatar-line-height: var(--ui-line-height-lg);
+
+    /* --------------------------------------------------------
+       sidebar (v4 additions)
+       -------------------------------------------------------- */
+    /* The shell's own padding and gap (header · footer). mira borrows the menu axis; sera keeps
+       the shell at 8 while the menu row grows to 12. */
+    --sidebar-surface-padding: var(--menu-item-padding-x);
+    --sidebar-surface-gap: var(--menu-item-gap);
+    --sidebar-input-height: var(--control-height-lg);
+    --sidebar-item-padding-y: var(--sidebar-item-padding-x);
+    --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
+    --sidebar-badge-font-weight: var(--ui-font-weight);
+    /* Every sidebar part that is not the menu button (group action · menu action · sub button …).
+       mira: the same radius; maia rounds the menu button one step further. */
+    --sidebar-part-radius: var(--sidebar-item-radius);
+}
