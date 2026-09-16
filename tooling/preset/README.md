@@ -15,6 +15,7 @@ The pinned shadcn version is `SHADCN_VERSION` in `shared.mjs` (4.21.0). Bump it 
 | `port.mjs <preset>` | `new-system` from foundation plus everything mechanical: `system.json` fonts · icons · source, layer-1 shadcn colours and radius scale from the reference app, `reference/` |
 | `style-diff.mjs <from> <to>` | utility-level difference of two `style-<name>.css` files, per `cn-*` selector |
 | `specimen-text.json` | the component sheet's Korean strings in English (see Text) |
+| `slot-migration.md` | stage 2 of the v4 slot cleanup: per system, which layer-3 rule's value moves into which slot |
 | `../snapshot/compare-shadcn.mjs --system <preset>` | computed-style comparison of the tyohnn preview against the reference app (default template `coverage`) |
 | `../snapshot/check-coverage.mjs --system <name>` | render check only: does a system draw the coverage template without console errors, page errors or empty sections |
 
@@ -92,11 +93,34 @@ Then by hand (or by an agent), in this order:
 2. **Layer 2 values** — the axes the diff moves as a whole: control heights · paddings · gaps · font sizes ·
    icon sizes · radii, `--focus-ring-width`, `--ui-text-*`, `--menu-*`, `--sidebar-*`, `--table-*`,
    `--tabs-line-*`, `--shadow-*`, `--avatar-*`, `--switch-*`, letter-spacing.
-3. **Layer 3 rules** — only where no value gets there: a rule that reads the wrong step of an axis (a card
-   that is `rounded-xl` while the axis gives 10px), a declaration the preset adds (shadow-xs), a literal the
-   preset changes. Mark each changed declaration with a `<preset>: <utility>` comment. When light and dark
-   need different values and no slot exists, add a system-only layer-1 token in both scopes and read it
-   (scan-tokens warns; list it as a foundation slot candidate) rather than splitting `.dark` in layer 3.
+3. **Layer 3 rules** — only where no value gets there. **Since axis contract 4 this step should be nearly
+   empty.** Work it in this order, and do not skip to the last one:
+
+   1. **Look for the slot.** v4 added 85 layer-2 and 16 layer-1 names, and the areas the last nine ports
+      kept editing by hand are now values: the badge box (`--badge-*`), the keycap box (`--kbd-*`), the
+      menu separator's margins, the field sub-axis (`--control-*-field`), the control's `sm` radius, case
+      and grouped padding, the label · title · menu-row · menu-label · table-head type bands, the default
+      tabs bar, the per-component radii (card · bubble · chart tooltip · empty · command row · sidebar
+      parts · joined toggle group), the sidebar shell's padding and gap, and in layer 1 the input edge, the
+      disabled and palette fills, the card and menu rings, the chip · slider · switch-track · checked-field
+      colours, and the invalid + checked Checkbox edge. `grep -n '<the-property>' registry/foundation/styles/components/<component>.css`
+      shows what the rule actually reads; `registry/foundation/reference/README.md` §"Axis contract v4"
+      is the index.
+   2. **Decide whether it is a value at all.** DESIGN.md §5 "What a value changes, and what needs a rule"
+      lists the only four shapes that genuinely need a rule: a declaration foundation never makes, a
+      different selector, a box that must disappear, and a locally re-declared variable. If your difference
+      is not one of those four, it is a missing slot, not a rule.
+   3. **No slot, and it is a value?** Add a **system-only** token in this system's layer 1 or 2 with the
+      v4 name shape (`--<component-or-axis>-<part>-<property>`), read it from layer 3, and **record it under
+      "Foundation slot candidates"** in `reference/README.md` with three columns: the name, the foundation
+      default that would reproduce mira (an alias · `initial` · `transparent` · `0px` · `none`), and why
+      this system needs it. `scan-tokens` warns about the system-only name; that warning is the paper
+      trail. Do not change foundation during a port.
+   4. **Only then edit the rule**, and mark each changed declaration with a `<preset>: <utility>` comment
+      saying which upstream utility it reproduces. List every such rule in `reference/README.md`.
+
+   When light and dark need different values and no slot exists, the system-only token goes in **layer 1**,
+   declared in both `:root` and `.dark` — never split `.dark` in layer 3.
 4. `DESIGN.md` from the template: character, key values, combination rules, do-nots. `system.json`
    description in mood terms, tags.
 
@@ -203,9 +227,19 @@ Hangul — add the new string to the map.
 - **TSX drift is not a system value.** `registry/ui` follows the shadcn 4.21.0 base sources (synced 2026-09-15)
   except where a visual utility would beat a layer-3 rule: no `text-sm`/`text-xs` on `AvatarFallback`, no
   `text-xs` on `ChartContainer`, `cn-separator` instead of `bg-border h-px …` on `Separator`, `cn-calendar-weekday` ·
-  `cn-calendar-week-number` instead of `text-[0.8rem]`, no `[&_svg]:size-4` on `SidebarMenuButton`, and
-  `InputGroupButton` passing `size` to `Button`. A preset reproduces those values in its layer 3. Any other
-  difference from the shadcn component is drift: exclude it with the reason and fix it in `registry/ui`.
+  `cn-calendar-week-number` instead of `text-[0.8rem]`, and no `[&_svg]:size-4` on `SidebarMenuButton`.
+  A preset reproduces those values in its layer 3. Any other difference from the shadcn component is drift:
+  exclude it with the reason and fix it in `registry/ui`.
+  - `InputGroupButton` is **not** one of them (this list said the opposite until 2026-09-16, and the code
+    never did): it matches upstream exactly — `size` goes to `inputGroupButtonVariants` and `data-size`,
+    never to `Button`, and upstream's `sm` variant is the empty string, so a `size="sm"` button takes
+    `Button`'s own default size plus `text-sm`. A system reproduces that in `.cn-input-group-button-size-sm`.
+  - The Switch thumb's `ring-0` is upstream's own too. It composes an empty `box-shadow` in the
+    **utilities** layer, so no layer-3 rule can put a shadow on the thumb — a preset whose own `switch.tsx`
+    adds `shadow-sm` (rhea) excludes it with that reason. Matching upstream is not drift, so it is not fixed.
+  - How to check quickly: the contract layer 3 selects on is the set of literal `data-*` attributes. Compare
+    that set across all 62 components against a generated app's `components/ui/*.tsx` — equal sets mean no
+    structural drift, and what remains is class-string drift you read per component (2026-09-16: equal).
 - **Regression baselines.** A second checkout of main with a symlinked `node_modules` serves no fonts (Vite
   `server.fs.allow` stops at the checkout), so its text widths differ. Dump the same checkout before and after
   (`compare-computed.mjs --dump` / `--diff`), compare `dist/systems/<name>/compiled.css` hashes, or install that

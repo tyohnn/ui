@@ -111,15 +111,20 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    and check the preview: `SYSTEM=<name> npm run dev -w @tyohnn/preview`, then
    `http://localhost:5173/?system=<name>&mode=dark`.
 
-### Token slots (axis contract version 3)
+### Token slots (axis contract version 4)
 
 The names defined in foundation `styles/globals.css` (layer 1) and `styles/tokens.css` (layer 2) are the
 whole vocabulary; every system defines all of them. A **slot** is a name a layer-3 rule reads where a
 system may want a different look, so a system tunes the value instead of editing the rule.
 
-- Name: `--<component>-<part>-<property>` (`--sidebar-group-label-font-size`, `--button-outline-border`,
-  `--tabs-line-trigger-radius`). Colours go in layer 1, declared in both `:root` and `.dark`;
-  everything else goes in layer 2.
+- Name: `--<component-or-axis>-<part>-<property>` (`--sidebar-group-label-font-size`,
+  `--button-outline-border`, `--tabs-line-trigger-radius`, `--badge-padding-x-icon`). The first segment is
+  a component when the slot belongs to one and the shared axis when several read it
+  (`--control-*`, `--menu-*`, `--surface-*`, `--ui-*`).
+- Colours go in layer 1, declared in both `:root` and `.dark`; dimensions, shape and motion go in layer 2.
+  The one exception is a **non-colour value that differs by mode**: layer 2 has no `.dark` scope, so it
+  lives in layer 1 with a comment saying why (`--radio-indicator-dot-size`, `size-2` in light and
+  `size-2.5` in dark for luma).
 - The foundation value reproduces mira exactly: an alias of the variable mira reads, `transparent`,
   `0px`, `none`, or `initial`. `initial` means "no value": the declaration becomes invalid at
   computed-value time, so an inherited property (colour, font-weight, font-size, line-height,
@@ -129,11 +134,70 @@ system may want a different look, so a system tunes the value instead of editing
   `--sidebar-item-border-width: 0px`).
 - Every slot must be read by a rule.
 
+#### What a value changes, and what needs a rule
+
+The line between the two is what the contract is for. Use it before reaching for a layer-3 edit.
+
+**A value gets there** when the difference is a *number, colour, corner, case, weight or shadow on an
+element that already has that declaration*. Every such difference is a slot, or should become one. Nine
+ports' worth of evidence says this covers almost everything: the badge's box, the keycap's box, a
+separator's bleed, a surface's corner, the case of a label band, the fill of a disabled field.
+
+**A rule has to change** in four shapes, and only these:
+
+1. **A declaration the preset adds that foundation never makes** — a border on a side foundation leaves
+   bare, a `shadow` on an element foundation draws flat. (Prefer to add the declaration to foundation
+   reading a slot whose default is `transparent` · `none` · `0px`, so the next system only sets a value.)
+2. **A different selector** — maia rounds a toggle group only at `data-spacing="0"` where mira rounds it
+   at every spacing; sera's drawer borders one side per `data-swipe-direction`. No value expresses *which
+   elements* a rule reaches.
+3. **A box that must disappear** — lyra's and sera's context-menu indicator, where mira's
+   `display: flex` blockifies an inline child. Removing a box is not sizing it.
+4. **A locally re-declared variable** — maia scopes `[--radius:var(--radius-xl)]` to the sidebar header,
+   which a `:root` `calc()` has already resolved past.
+
+Anything else that made you edit a rule is a **missing slot**. Record it under "Foundation slot candidates"
+in the system's `reference/README.md` (name · what foundation's default would be · why this system needs
+it), and it is considered for the next contract version.
+
 Version 1 was the mira token set plus slots for selection, clay materials, tag and avatar tones, control
-shadows and surfaces, and the sidebar, table, tag and line-tab axes. Version 2 added the slots below, so
-the graphite look needs no layer-3 rule edits. Version 3 added the slots the **mira reference-app
-correction** needed (`registry/foundation/reference/README.md`), all of them places where the foundation
-rule had baked in a value a system may legitimately want elsewhere:
+shadows and surfaces, and the sidebar, table, tag and line-tab axes. Version 2 added the slots in the last
+table below, so the graphite look needs no layer-3 rule edits. Version 3 added the slots the **mira
+reference-app correction** needed (`registry/foundation/reference/README.md`), all of them places where the
+foundation rule had baked in a value a system may legitimately want elsewhere.
+
+**Version 4 (2026-09-16)** collected the slot candidates of all nine systems and adopted the repeated ones:
+**85 layer-2 names and 16 layer-1 names**. `registry/foundation/reference/README.md` has the full table
+(name · default · why · which system asked) and a reason for every candidate that was *not* adopted.
+A candidate is adopted when two or more systems asked for it, or when one asked and the name completes an
+axis foundation already has; a value only one system wants, where no axis is missing, stays that system's
+own. Two structural faults were fixed:
+
+- **`--control-height-xs` was three things** (xs button · badge · keycap), so growing the control grew the
+  other two. The badge (`--badge-*`, 13 names) and the keycap (`--kbd-*`, 9 names) now have their own axes,
+  defaulting to the xs control step.
+- **The menu separator's bleed was derived from `--menu-padding`**, so flattening a popup's padding
+  silently removed the separator's `-mx-1`. `--menu-separator-margin-inline` and `-margin-block` are slots.
+
+The other v4 areas: the control's `sm` radius, case and grouped padding; a **field sub-axis**
+(`--control-*-field`) that splits the input family from the button family; the quiet-label, surface-title,
+menu-row, menu-label and table-head type bands; the default tabs bar; per-component radii for card, bubble,
+chart tooltip, empty, command row, sidebar parts and joined toggle groups; the sidebar shell's own padding
+and gap; and in layer 1 the input edge, the disabled and palette fills, the card and menu rings, the chip,
+slider, switch-track and checked-field colours, the invalid + checked Checkbox edge, and the radio dot's
+size.
+
+v4 landed in two stages. **Stage 1** added every name to foundation, rewired foundation's rules to read
+them, and backfilled the names into every system at foundation's values. `registry/systems/mira` mirrors
+foundation byte for byte, so it reads the slots already. sera proposed most of the v4 names under the
+spelling foundation adopted and already reads them; what it still writes into its rules (its `--tag-*`
+badge names among them) is listed for stage 2 like any other system. The other seven systems (graphite · vega · nova · luma · rhea · maia · lyra)
+define the names but still carry their own fork of the layer-3 rules with the value written in the rule, so
+their render did not move (checked: 0 computed-value differences in both modes on the coverage template).
+**Stage 2** puts each system's value into the slot and takes foundation's rule back;
+`tooling/preset/slot-migration.md` lists, per system, which declaration moves into which slot.
+
+Version 3's slots:
 
 | Area | Layer 1 (colours) | Layer 2 (tokens) |
 |---|---|---|
@@ -169,6 +233,18 @@ removing one always bumps it.
    only. Update `registry/ui/manifest.json` (files, npm dependencies).
 2. `registry/foundation/styles/components/<name>.css`, imported from foundation `styles/style.css`.
 3. Foundation defaults for any new layer-1 slot (`:root` and `.dark`) or layer-2 token it reads.
+
+   **A new value goes in a slot, never in the rule.** Every number, colour, corner, case, weight and
+   shadow the stylesheet needs gets a name in layer 1 or layer 2, even when the component is the only
+   thing that will ever read it — a literal in a `cn-*` rule is a value no system can change without
+   editing the rule, which is exactly the debt axis contract 4 was spent paying off (a badge that could
+   not stop being an xs button, a separator that could not keep its bleed). Name it
+   `--<component-or-axis>-<part>-<property>`, give it the mira value, and let the rule read it.
+
+   Two literals are still allowed, and both must carry a `⚠` comment saying why: a value that is
+   **structural rather than stylistic** (`width: 100%`, `inset: -8px` to widen a hit target), and a
+   **shared constant no axis owns** that would be actively misleading as a slot. If you are writing the
+   comment and it reads like an excuse, add the slot.
 4. A section in the `component-sheet` template (`apps/preview/src/templates/component-sheet`).
 5. Backfill every system:
 
