@@ -21,11 +21,16 @@
    ============================================================ */
 
 .cn-toggle-group {
-    /* rhea: only data-[spacing=0]:data-[variant=outline] rounds the group (mira rounds it always). */
-    border-radius: 0;
+    border-radius: var(--toggle-group-joined-radius);
 
+    &[data-size="sm"] {
+        border-radius: var(--toggle-group-joined-radius-sm);
+    }
+
+    /* rhea: only data-[spacing=0]:data-[variant=outline] rounds the group (mira rounds it always) —
+       a selector, so it stays a rule; it takes the joined items' corner. */
     &[data-spacing="0"][data-variant="outline"] {
-        border-radius: var(--toggle-group-joined-radius);
+        border-radius: var(--toggle-group-item-radius);
     }
 }
 
