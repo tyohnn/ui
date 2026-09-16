@@ -78,7 +78,6 @@
       불리언 상태를 빈 값(data-active="")으로 내보내므로 값을 비교하면 맞지 않는다. */
 .cn-navigation-menu-link {
     border-radius: var(--surface-radius);
-    gap: var(--menu-item-gap);   /* lyra: gap-2 */
     padding: var(--menu-item-padding-x);   /* mira: p-2 */
 
     /* ⚠ 링크가 트리거 꼴을 입을 수 있다(`navigationMenuTriggerStyle()`): 두 클래스가 한
@@ -88,7 +87,7 @@
         padding-inline: var(--control-padding-x-lg);
         padding-block: 6px;
     }
-    gap: 6px;
+    gap: var(--menu-item-gap);   /* lyra: gap-2 */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -135,7 +134,7 @@
 /* ⚠ 판의 안쪽 여백 6px 은 리터럴이다. mira 의 p-1.5 이고, 메뉴 목록의 --menu-padding(4)과
    다른 값이라 그 토큰을 읽지 않는다. 2층에 6px 여백 단계가 없다. */
 .cn-navigation-menu-content {
-    padding: 6px;
+    padding: 4px;   /* lyra: p-1 */
 
     --tw-ease: var(--control-ease);
 

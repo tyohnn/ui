@@ -90,8 +90,8 @@
     line-height: var(--ui-line-height-xs);
 
     & svg:not([class*="size-"]) {
-        width: var(--control-icon-size-sm);
-        height: var(--control-icon-size-sm);
+        width: var(--control-icon-size-md);   /* lyra: the toggle keeps size-4 at every size */
+        height: var(--control-icon-size-md);
     }
 
     &:has([data-icon="inline-start"]) { padding-inline-start: var(--control-padding-x-icon-sm); }

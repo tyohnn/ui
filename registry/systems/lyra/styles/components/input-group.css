@@ -92,8 +92,8 @@
        calc(--radius-sm − 2px) 이고 콤보박스 칩과 값이 같지만, 통 안에 맞춘 조각이라
        지시자 축(--control-indicator-radius 4px)과 함께 움직일 이유가 없다. */
     & [data-slot="kbd"] {
-        background-color: var(--chip);
-        border-radius: 4px;
+        background-color: var(--muted);   /* lyra: the plain keycap fill */
+        border-radius: var(--kbd-radius);
         padding-inline: 4px;
         font-size: var(--ui-text-xs);
     }
@@ -102,27 +102,27 @@
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
    ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-md);
+    padding-inline-start: var(--control-padding-x-grouped);   /* lyra: px-2 */
 
     &:has(> button),
     &:has(> kbd) {
-        margin-inline-start: -0.275rem;
+        margin-inline-start: -0.3rem;   /* lyra: -4.8px */
     }
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-md);
+    padding-inline-end: var(--control-padding-x-grouped);   /* lyra: px-2 */
 
     &:has(> button),
     &:has(> kbd) {
-        margin-inline-end: -0.275rem;
+        margin-inline-end: -0.3rem;   /* lyra: -4.8px */
     }
 }
 
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
    통 안의 세로 리듬이라 축이 없다. */
 .cn-input-group-addon-align-block-start {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: var(--control-padding-x-md);   /* lyra: the block addon keeps px-2.5 */
     padding-block-start: 8px;
 
     &.border-b {

@@ -54,8 +54,8 @@
     height: var(--control-icon-size-sm);
 
     & svg:not([class*="size-"]) {
-        width: var(--control-icon-size-md);
-        height: var(--control-icon-size-md);
+        width: var(--control-icon-size-sm);
+        height: var(--control-icon-size-sm);
     }
 }
 

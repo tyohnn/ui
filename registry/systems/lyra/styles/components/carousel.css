@@ -12,5 +12,5 @@
 
 .cn-carousel-previous,
 .cn-carousel-next {
-    @apply rounded-full;
+    @apply rounded-none;   /* lyra */
 }

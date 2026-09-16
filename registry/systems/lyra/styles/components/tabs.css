@@ -29,7 +29,7 @@
     padding: 3px;
 
     &:where(.group\/tabs[data-orientation="horizontal"] *) {
-        height: var(--control-height-lg);
+        height: var(--control-height-md);   /* lyra: h-8 */
     }
 
     &[data-variant="line"] {

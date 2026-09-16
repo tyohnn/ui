@@ -18,5 +18,5 @@
 }
 
 .cn-scroll-area-thumb {
-    @apply rounded-full;
+    @apply rounded-none;   /* lyra */
 }

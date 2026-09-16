@@ -194,7 +194,7 @@
     --surface-radius-lg: 0px;   /* lyra: rounded-none */
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
-    --surface-padding-lg: 16px;  /* lyra: sheet header · footer p-4 */
+    --surface-padding-lg: 24px;  /* empty p-6 · command empty py-6 */
     --surface-panel-width: 384px; /* sheet 의 sm:max-w-sm */
     --surface-gap: 4px;          /* dialog-header gap-1 · card-header gap-1 */
     --surface-gap-lg: 16px;      /* dialog-content gap-4 · popover gap-4 */
@@ -212,6 +212,9 @@
     /* The menubar bar keeps its p-1 while the popup surfaces drop to 0.
        Slot candidate (foundation: var(--menu-padding)). */
     --menubar-padding: 4px;
+    /* The sheet header and footer are p-4 while empty and the command panel keep p-6.
+       Slot candidate (foundation: var(--surface-padding-lg)). */
+    --sheet-padding: 16px;
     /* Grouped controls (toggle group item · select trigger end · input-group addon) keep px-2
        while the standalone control moved to px-2.5.
        Slot candidate (foundation: var(--control-padding-x-md)). */

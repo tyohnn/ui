@@ -30,7 +30,7 @@
 
     /* 열린 항목은 바탕이 한 단 옅게 깔린다. mira: data-open:bg-muted/50 */
     &[data-open] {
-        background-color: var(--muted-soft);
+        background-color: transparent;   /* lyra: an open item takes no fill */
     }
 }
 
@@ -56,7 +56,7 @@
 }
 
 .cn-accordion-content {
-    padding-inline: 8px;
+    padding-inline: 0;   /* lyra: the panel runs to the edge */
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -66,5 +66,5 @@
 /* 안쪽 아래 여백은 surface 축의 md(16)와 같은 단이다 — 묶음이 면이므로 그 축을 읽는다. */
 .cn-accordion-content-inner {
     padding-top: 0;
-    padding-bottom: var(--surface-padding-md);
+    padding-bottom: 10px;   /* lyra: pb-2.5 */
 }

@@ -32,7 +32,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;   /* lyra: gap-4 */
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
@@ -41,7 +41,7 @@
     font-size: var(--ui-text-lg);
     line-height: var(--ui-line-height-lg);
     letter-spacing: var(--ui-letter-spacing);
-    font-weight: 600;
+    font-weight: var(--ui-font-weight);   /* lyra: font-medium */
 
     &:not(:has(~ [data-slot="questionnaire-description"])) {
         margin-block-end: 12px;
@@ -56,7 +56,7 @@
 }
 
 .cn-questionnaire-choices {
-    gap: 6px;
+    gap: 8px;   /* lyra: gap-2 */
 }
 
 /* 선택지 카드. 링은 _control-family.css 와 같은 한 겹(ring-2 ring-ring/30)이다 — 카드
@@ -200,7 +200,7 @@
    mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
    실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
 .cn-questionnaire-actions {
-    gap: 6px;
+    gap: 8px;   /* lyra: gap-2 */
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

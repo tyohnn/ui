@@ -30,6 +30,11 @@
     gap: var(--card-spacing);
     padding-block: var(--card-spacing);
 
+    /* lyra: has-data-[slot=card-footer]:pb-0 — the banded footer supplies the bottom edge. */
+    &:has(> [data-slot="card-footer"]) {
+        padding-bottom: 0;
+    }
+
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
@@ -93,14 +98,12 @@
     padding-inline: var(--card-spacing);
 }
 
-/* 푸터는 띠를 두르지 않는다. 좌우 여백만 갖고, 호출부가 `border-t` 를 붙였을 때만
-   그 선 위로 여백을 더한다 — 위쪽 선의 색은 그 유틸리티(--border)가 정한다. */
+/* lyra: the footer is a banded row — it draws its own top rule and takes the card's spacing on
+   both sides, and the card gives up its bottom padding to it (has-data-[slot=card-footer]:pb-0). */
 .cn-card-footer {
     padding-inline: var(--card-spacing);
+    padding-block: var(--card-spacing);
+    border-top: var(--surface-border-width) solid var(--border);
     border-end-start-radius: var(--surface-radius);
     border-end-end-radius: var(--surface-radius);
-
-    &:is(.border-t) {
-        padding-top: var(--card-spacing);
-    }
 }

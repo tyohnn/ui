@@ -19,7 +19,7 @@
 
 /* mira: gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 */
 .cn-field-set {
-    gap: 16px;
+    gap: 20px;   /* lyra: gap-5 */
 
     &:has(> [data-slot="checkbox-group"]),
     &:has(> [data-slot="radio-group"]) {
@@ -29,7 +29,7 @@
 
 /* mira: mb-2 font-medium data-[variant=label]:text-xs/relaxed data-[variant=legend]:text-sm */
 .cn-field-legend {
-    margin-block-end: 8px;
+    margin-block-end: 10px;   /* lyra: mb-2.5 */
     font-weight: var(--ui-font-weight);
 
     &[data-variant="label"] {
@@ -47,14 +47,14 @@
 
 /* mira: gap-4 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4 */
 .cn-field-group {
-    gap: 16px;
+    gap: 20px;   /* lyra: gap-5 */
 
     &[data-slot="checkbox-group"] {
         gap: 12px;
     }
 
     & > [data-slot="field-group"] {
-        gap: 16px;
+        gap: 16px;   /* lyra: gap-4 */
     }
 }
 
@@ -84,7 +84,7 @@
 .cn-label.cn-field-label,
 .cn-field-label {
     gap: 8px;
-    line-height: 1.375;
+    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
 
     .group\/field[data-disabled="true"] & {
         opacity: 0.5;
@@ -126,9 +126,9 @@
 .cn-field-title {
     gap: 8px;
     font-size: var(--ui-text-md);
-    line-height: var(--ui-line-height-md);
+    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed font-normal */
     letter-spacing: var(--ui-letter-spacing);
-    font-weight: var(--ui-font-weight);
+    font-weight: var(--label-font-weight);
 
     .group\/field[data-disabled="true"] & {
         opacity: 0.5;
