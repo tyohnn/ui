@@ -1,0 +1,57 @@
+[
+    {
+        "key": "/(checkbox|radio-group-item)#\\d+$",
+        "props": [
+            "opacity"
+        ],
+        "reason": "Base UI draws Checkbox and Radio as a span, so shadcn's disabled:opacity-50 (a :disabled selector) never matches and a disabled control stays fully opaque upstream; foundation reads [data-disabled] instead, which is what the utility means. An upstream defect, not a foundation value."
+    },
+    {
+        "key": "^direction/",
+        "props": "*",
+        "reason": "The preset is generated with rtl:false, so its paddings and radii are physical (pl-/pr-, rounded-l-) and do not mirror under dir=rtl; the layer-3 rules are logical. The section proves DirectionProvider renders, not a value."
+    },
+    {
+        "key": "^input-otp/root>div#\\d+$",
+        "props": [
+            "row-gap",
+            "column-gap"
+        ],
+        "reason": "A preset app's globals.css carries no .cn-* rules, so the cn-input-otp class the shadcn component keeps is unstyled there; style-mira.css's `.cn-input-otp { gap-2 }` is mira's own value and foundation keeps it."
+    },
+    {
+        "key": "-shortcut#\\d+$",
+        "props": [
+            "margin-left"
+        ],
+        "reason": "The shortcuts contain ⌘, which is in neither Inter build: the reference app falls back through next/font's Inter Fallback and the preview through Inter Variable plus the Pretendard Hangul fallback, so the glyph advance differs by ~0.5px. Font stack, not a value."
+    },
+    {
+        "key": "^questionnaire/",
+        "props": [
+            "height",
+            "rect-height"
+        ],
+        "reason": "mira's generated questionnaire.tsx carries `sm:min-h-7` on QuestionnaireActions while the shadcn base component (which registry/ui follows) carries `sm:min-h-9`. The preset bakes the value into the component as a utility, so no layer-3 rule can reach it and one shared set of TSX cannot hold both. The row and everything it stretches are 8px taller here."
+    },
+    {
+        "key": "^(alert/(alert-action#0|button#0)|item/badge#0|input-group/kbd#0|kbd-spinner-separator/kbd#4|native-select/(native-select#1|native-select-option#\\d+|native-select-wrapper#1))$",
+        "props": [
+            "line-height",
+            "height",
+            "rect-height"
+        ],
+        "reason": "mira writes these types as `text-[0.625rem]`, which sets a font size and lets the line height inherit as a unitless ratio, so the same badge, kbd, xs button or <option> is 15px tall on the page (body 1.5) and 16.25px inside a `text-xs/relaxed` container. foundation fixes every line height in px per axis (tokens.css, `--ui-line-height-*`), so one value cannot follow its container. Keeping the ratio would make an axis value depend on where the component is used; the deliberate choice is the px axis."
+    },
+    {
+        "key": "-trigger#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "props": [
+            "background-color",
+            "border-top-color",
+            "border-right-color",
+            "border-bottom-color",
+            "border-left-color"
+        ],
+        "reason": "Dark mode only: Tailwind sorts mira's dark: colours (dark:bg-input/30, dark:aria-invalid:border-destructive/50) after the state utilities that have no dark counterpart (aria-expanded:bg-muted, aria-invalid:aria-checked:border-primary), so upstream an open outline trigger and an invalid checked checkbox lose their state colour in dark. foundation keeps the state colours; reproducing the ordering would delete the signal."
+    }
+]
