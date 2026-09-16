@@ -1,0 +1,29 @@
+[
+    {
+        "key": "/(checkbox|radio-group-item)#\\d+$",
+        "props": [
+            "opacity"
+        ],
+        "reason": "Base UI draws Checkbox and Radio as a span, so shadcn's disabled:opacity-50 (a :disabled selector) never matches and a disabled control stays fully opaque upstream; sera reads [data-disabled] instead, which is what the utility means. An upstream defect, not a sera value. Same as foundation's."
+    },
+    {
+        "key": "^direction/",
+        "props": "*",
+        "reason": "The preset is generated with rtl:false, so its paddings and radii are physical (pl-/pr-, rounded-l-) and do not mirror under dir=rtl; the layer-3 rules are logical. The section proves DirectionProvider renders, not a value. Same as foundation's."
+    },
+    {
+        "key": "^input-otp/root>div#\\d+$",
+        "props": [
+            "row-gap",
+            "column-gap"
+        ],
+        "reason": "A preset app's globals.css carries no .cn-* rules, so the cn-input-otp class the shadcn component keeps is unstyled there; style-sera.css's `.cn-input-otp { gap-2 }` is sera's own value and the system keeps it. Same as foundation's."
+    },
+    {
+        "key": "-shortcut#\\d+$",
+        "props": [
+            "margin-left"
+        ],
+        "reason": "The shortcuts contain ⌘, which is in neither Noto Sans build: the reference app falls back through next/font's Noto Sans Fallback and the preview through Noto Sans Variable plus the Pretendard Hangul fallback, so the glyph advance differs by 0.3–1.8px. Font stack, not a value."
+    }
+]
