@@ -63,9 +63,12 @@
     padding: var(--menu-padding);
 }
 
-/* ⚠ 하위 목록의 그림자를 한 겹 올리지 않는다. nova 는 sub-content 에 shadow-lg 를
-   줬지만 mira 는 부모 목록과 같은 shadow-md 다. 위 면 규칙이 그대로 하위 목록에도
-   먹으므로 따로 적을 것이 없다. */
+/* lyra: the submenu sits one shadow step deeper than its parent list (shadow-lg vs shadow-md). */
+.cn-dropdown-menu-sub-content,
+.cn-context-menu-sub-content,
+.cn-menubar-sub-content {
+    box-shadow: 0 0 0 1px var(--ring-subtle), var(--menu-sub-shadow);
+}
 
 /* --------------------------------------------------------
    항목 — menu 축

@@ -75,7 +75,7 @@
     /* ⚠ sm 의 −5px 은 리터럴이다. 12px 아이콘의 절반(6)이 아니라 mira 가 둔 광학 보정값이다. */
     [data-slot="native-select-wrapper"][data-size="sm"] & {
         inset-inline-end: var(--control-padding-x-icon-sm);
-        width: var(--control-icon-size-sm);
+        width: var(--control-icon-size-md);
         height: var(--control-icon-size-sm);
         translate: 0 -5px;
     }

@@ -240,6 +240,7 @@
     /* mira 의 인풋 · 셀렉트 · 텍스트에어리어 · 아웃라인 배지 · OTP 칸은 투명이 아니라 bg-input/20 이고
        (다크 input/30), 아웃라인 버튼의 hover 는 bg-input/50 이다. */
     --input-fill: transparent;   /* lyra: the input family is bg-transparent in light (dark:bg-input/30) */
+    --input-fill-disabled: oklch(0.922 0 0 / 50%);   /* lyra: disabled:bg-input/50 */
     --input-fill-hover: oklch(0.922 0 0 / 50%);
     /* 셀렉트 트리거 · 네이티브 셀렉트의 hover. mira: dark:hover:bg-input/50 — 밝은 쪽에는 hover 가 없으므로
        --input-fill 과 같은 값이다. */
@@ -450,6 +451,7 @@
     --input: oklch(1 0 0 / 15%);
     /* --input 이 15% 알파라 input/30 은 4.5%, input/50 은 7.5% 다 */
     --input-fill: oklch(1 0 0 / 4.5%);
+    --input-fill-disabled: oklch(1 0 0 / 12%);   /* lyra: dark:disabled:bg-input/80 */
     --input-fill-hover: oklch(1 0 0 / 7.5%);
     --select-hover: oklch(1 0 0 / 7.5%);
     --ring: oklch(0.556 0 0);                /* neutral-500 */

@@ -171,7 +171,10 @@
 
 /* mira 는 gap-1 만 준다. 높이·패딩·글자는 Button 의 sm(24)이 그대로 온다 —
    컴포넌트가 size 를 Button 에 넘기기 때문이다(input-group.tsx 의 주석). */
+/* lyra: the sm button inside a group is the same h-6 box as the xs one. */
 .cn-input-group-button-size-sm {
+    height: var(--control-height-xs);
+    min-height: 0;
     gap: var(--control-gap-sm);
 }
 
@@ -229,4 +232,10 @@
     &[aria-invalid="true"] {
         box-shadow: none;
     }
+}
+
+/* lyra: a disabled field takes a fill (disabled:bg-input/50 · dark:disabled:bg-input/80). */
+.cn-input-group:has(:disabled) {
+    background-color: var(--input-fill-disabled);
+    opacity: 0.5;
 }

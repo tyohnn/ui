@@ -42,6 +42,10 @@
     /* lyra: the drawer is flush (no inset) and draws only the edge facing the page. */
     border: 0 solid var(--drawer-border);
     border-block-start-width: var(--surface-border-width);
+
+    &[data-swipe-direction="right"] { border-block-start-width: 0; border-inline-start-width: var(--surface-border-width); }
+    &[data-swipe-direction="left"]  { border-block-start-width: 0; border-inline-end-width: var(--surface-border-width); }
+    &[data-swipe-direction="up"]    { border-block-start-width: 0; border-block-end-width: var(--surface-border-width); }
 }
 
 /* vaul 판. 판 자체는 투명하고, 8px 안쪽에 ::before 가 틀을 그린다. */
@@ -94,6 +98,7 @@
 .cn-drawer-header-base {
     padding: var(--surface-padding-md);
     padding-block-end: 0;
+    gap: 2px;   /* lyra: gap-0.5 */
 
     @apply md:text-left;
 }
@@ -107,6 +112,7 @@
 /* vaul 판 — 손잡이가 따로 없어 사방 여백을 그대로 둔다. */
 .cn-drawer-header {
     padding: var(--surface-padding-md);
+    gap: 2px;   /* lyra: gap-0.5 */
 
     @apply md:text-left;
 }

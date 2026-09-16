@@ -31,3 +31,8 @@
     line-height: var(--control-line-height-md);
     letter-spacing: var(--control-letter-spacing);
 }
+
+/* lyra: a disabled field takes a fill (disabled:bg-input/50 · dark:disabled:bg-input/80). */
+.cn-textarea:disabled {
+    background-color: var(--input-fill-disabled);
+}

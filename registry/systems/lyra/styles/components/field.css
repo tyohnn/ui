@@ -19,7 +19,7 @@
 
 /* mira: gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 */
 .cn-field-set {
-    gap: 20px;   /* lyra: gap-5 */
+    gap: 16px;   /* lyra: gap-4 */
 
     &:has(> [data-slot="checkbox-group"]),
     &:has(> [data-slot="radio-group"]) {
@@ -84,7 +84,7 @@
 .cn-label.cn-field-label,
 .cn-field-label {
     gap: 8px;
-    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
+    line-height: 1.375;
 
     .group\/field[data-disabled="true"] & {
         opacity: 0.5;
@@ -92,6 +92,7 @@
 
     &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         background-color: var(--primary-soft);
+        border-color: var(--border-strong);   /* lyra: a checked row outlines in foreground/30 */
     }
 
     /* ⚠ 안쪽 여백 8px 은 리터럴이다. 카드 안의 여백이라 control 축(높이가 정본)에도
@@ -119,6 +120,7 @@
 .cn-field-label-aria {
     &:has([data-selected="true"]) {
         background-color: var(--primary-soft);
+        border-color: var(--border-strong);   /* lyra: a checked row outlines in foreground/30 */
     }
 }
 

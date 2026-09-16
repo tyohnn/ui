@@ -48,9 +48,10 @@
 }
 
 /* ⚠ 16px 은 리터럴이다. 접힘 표시(…)의 상자라 lg 아이콘(16)과 값만 같고 아이콘이 아니다. */
+/* lyra: size-5 with a size-4 glyph */
 .cn-breadcrumb-ellipsis {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
 
     & > svg {
         width: var(--control-icon-size-md);

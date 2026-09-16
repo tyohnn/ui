@@ -50,6 +50,12 @@
     background-color: var(--overlay-backdrop);
 }
 
+/* lyra: only the sheet's scrim carries text-xs/relaxed. */
+.cn-sheet-overlay {
+    font-size: var(--ui-text-md);
+    line-height: var(--ui-line-height-relaxed);
+}
+
 @supports (backdrop-filter: blur(1px)) {
     .cn-dialog-overlay,
     .cn-alert-dialog-overlay,
@@ -89,7 +95,7 @@
 .cn-popover-content {
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
 }
 
 /* 모달 면은 링만 갖는다(그림자는 --dialog-shadow 슬롯). */
@@ -128,9 +134,13 @@
     padding: var(--surface-padding-md);
 }
 
-.cn-dialog-content,
-.cn-popover-content {
+.cn-dialog-content {
     gap: var(--surface-gap-lg);
+}
+
+/* lyra: the popover panel is gap-2.5, one step under the dialog. */
+.cn-popover-content {
+    gap: var(--surface-padding-sm);
 }
 
 .cn-popover-content,
@@ -239,7 +249,7 @@
     gap: var(--surface-icon-gap);
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-sm);
+    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
 }
 
 /* ⚠ transform 이 아니라 translate·rotate 개별 속성이다. 컴포넌트가 방향별로
@@ -249,7 +259,7 @@
 .cn-tooltip-arrow {
     width: 10px;
     height: 10px;
-    border-radius: 2px;
+    border-radius: var(--surface-radius-sm);   /* lyra: rounded-none */
     translate: 0 calc(-50% - 2px);
     rotate: 45deg;
 }

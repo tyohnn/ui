@@ -26,7 +26,7 @@
 /* ⚠ 글자는 계열(_surface-family)이 주는 ui 축을 되돌리고 바깥을 그대로 물려받는다.
    mira 의 AlertDialogContent 에는 text-* 가 없어 본문 크기(16 · 1.5)로 그려진다(2026-09-16 대조). */
 .cn-alert-dialog-content {
-    gap: 12px;
+    gap: var(--surface-gap-lg);   /* lyra: gap-4 */
     font-size: inherit;
     line-height: inherit;
 
@@ -34,6 +34,7 @@
 }
 
 .cn-alert-dialog-header {
+    row-gap: var(--surface-icon-gap);   /* lyra: gap-1.5 */
     @apply grid grid-rows-[auto_1fr] place-items-center text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-left sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr];
 
     /* 배지가 제목 왼쪽에 서는 배치에서는 가로 간격만 한 단계 넓힌다. mira: gap-x-4 */
@@ -52,12 +53,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    /* lyra: size-10 with a size-6 glyph */
+    width: 40px;
+    height: 40px;
 
     & svg:not([class*="size-"]) {
-        width: var(--control-icon-size-lg);
-        height: var(--control-icon-size-lg);
+        width: 24px;   /* lyra: size-6 */
+        height: 24px;
     }
 
     @apply sm:group-data-[size=default]/alert-dialog-content:row-span-2;

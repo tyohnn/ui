@@ -54,7 +54,9 @@
     @apply ring-background;
 }
 
+/* lyra: the overflow chip draws a size-3 glyph. */
 .cn-avatar-group-count {
+    & > svg:not([class*="size-"]) { width: 12px; height: 12px; }
     width: var(--avatar-size-md);
     height: var(--avatar-size-md);
     border-radius: 9999px;

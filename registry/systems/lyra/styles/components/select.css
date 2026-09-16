@@ -59,7 +59,8 @@
 
     &[data-size="sm"] {
         height: var(--control-height-sm);
-        padding-inline: var(--control-padding-x-sm);
+        padding-inline-start: var(--control-padding-x-sm);
+        padding-inline-end: var(--control-padding-x-grouped);
         font-size: var(--control-font-size-sm);
         line-height: var(--control-line-height-sm);
     }
@@ -181,10 +182,11 @@
 
 /* mira: bg-border/50 -mx-1 my-1 h-px */
 .cn-select-separator {
-    background-color: var(--border-subtle);
+    /* lyra: -mx-1 h-px bg-border */
+    background-color: var(--border);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 .cn-select-scroll-up-button,

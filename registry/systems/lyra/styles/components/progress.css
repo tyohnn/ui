@@ -27,7 +27,7 @@
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
-    font-weight: var(--ui-font-weight);
+    font-weight: var(--label-font-weight);   /* lyra: the label carries no weight utility */
 }
 
 /* mira: text-muted-foreground ml-auto text-xs/relaxed tabular-nums */

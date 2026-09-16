@@ -43,13 +43,13 @@
    size prop 의 의미가 코드와 갈린다 — 고치려면 컴포넌트 cva 부터 봐야 한다. */
 .cn-item-size-default,
 .cn-item-size-sm {
-    gap: 10px;
+    gap: 10px;   /* lyra: gap-2.5 */
     padding-inline: 12px;
     padding-block: 10px;
 }
 
 .cn-item-size-xs {
-    gap: 10px;
+    gap: 8px;   /* lyra: gap-2 */
     padding-inline: 10px;
     padding-block: 8px;
     @apply in-data-[slot=dropdown-menu-content]:p-0;
@@ -73,8 +73,8 @@
    여기는 항목의 썸네일이라 아바타 크기를 바꿨다고 따라 움직이면 안 된다.
    모서리는 rounded-sm(6)이라 control 축의 xs 반경을 읽는다. */
 .cn-item-media-variant-image {
-    width: 32px;
-    height: 32px;
+    width: 40px;   /* lyra: size-10 */
+    height: 40px;
     border-radius: var(--control-radius-xs);
     @apply overflow-hidden [&_img]:size-full [&_img]:object-cover;
 
@@ -87,7 +87,7 @@
 
     /* ⚠ 2px 은 리터럴이다. mira 의 gap-0.5 로, 어느 축에도 없는 가장 좁은 단이다. */
     .group\/item[data-size="xs"] & {
-        gap: 2px;
+        gap: 0;   /* lyra: the content stack has no gap */
     }
 }
 
@@ -120,7 +120,7 @@
     gap: var(--surface-gap-lg);
 
     &:has([data-size="sm"]) {
-        gap: 10px;
+        gap: 8px;   /* lyra: gap-2 */
     }
 
     &:has([data-size="xs"]) {
