@@ -23,9 +23,8 @@
 .cn-toggle-group {
     border-radius: var(--toggle-group-joined-radius);
 
-    /* nova: data-[size=sm]:rounded-[min(var(--radius-md),10px)] */
     &[data-size="sm"] {
-        border-radius: var(--control-radius-sm);
+        border-radius: var(--toggle-group-joined-radius-sm);
     }
 }
 

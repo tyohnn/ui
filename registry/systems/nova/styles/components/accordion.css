@@ -19,7 +19,7 @@
 /* nova 는 바깥 테두리를 두르지 않는다 — 항목 사이 선만 남는다(style-nova.css 에 .cn-accordion 규칙이 없다). */
 .cn-accordion {
     overflow: visible;
-    border: 0 solid transparent;
+    border: var(--accordion-border-width) solid var(--border);
     border-radius: 0;
 }
 

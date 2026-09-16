@@ -39,8 +39,3 @@
     line-height: var(--control-line-height-field);
     letter-spacing: var(--control-letter-spacing-field);
 }
-
-/* nova: disabled:bg-input/50 dark:disabled:bg-input/80 — 잠긴 칸만 바탕이 드러난다. */
-.cn-textarea:disabled {
-    background-color: var(--input-fill-disabled);
-}

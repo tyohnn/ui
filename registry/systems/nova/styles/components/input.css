@@ -47,8 +47,3 @@
         font-weight: var(--control-font-weight);
     }
 }
-
-/* nova: disabled:bg-input/50 dark:disabled:bg-input/80 — 잠긴 칸만 바탕이 드러난다. */
-.cn-input:disabled {
-    background-color: var(--input-fill-disabled);
-}

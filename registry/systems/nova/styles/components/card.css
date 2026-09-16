@@ -57,13 +57,13 @@
     }
 
     & > img:first-child {
-        border-start-start-radius: var(--surface-radius);
-        border-start-end-radius: var(--surface-radius);
+        border-start-start-radius: var(--card-image-radius);
+        border-start-end-radius: var(--card-image-radius);
     }
 
     & > img:last-child {
-        border-end-start-radius: var(--surface-radius);
-        border-end-end-radius: var(--surface-radius);
+        border-end-start-radius: var(--card-image-radius);
+        border-end-end-radius: var(--card-image-radius);
     }
 }
 
