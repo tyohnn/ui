@@ -20,6 +20,15 @@
         "reason": "A preset app's globals.css carries no .cn-* rules, so the cn-input-otp class the shadcn component keeps is unstyled there; style-sera.css's `.cn-input-otp { gap-2 }` is sera's own value and the system keeps it. Same as foundation's."
     },
     {
+        "key": "^item/badge#0$",
+        "props": [
+            "height",
+            "line-height",
+            "rect-height"
+        ],
+        "reason": "Upstream the Badge declares no line height of its own, so inside a text-sm Item it inherits the unitless 1.0204… of the surrounding type and resolves to 14.2857px. sera fixes line heights in px per type step (--badge-line-height reads --ui-line-height-xs, 15px), which is the whole point of the type axis: a badge is the same height wherever it sits. Layer 3 cannot win here — the only way to reproduce the inherited value is to drop the declaration (`initial`), which would make every badge in the system take its container's leading instead of the axis's. Exactly the same shape as foundation's `text-[0.625rem]` line-height row."
+    },
+    {
         "key": "-shortcut#\\d+$",
         "props": [
             "margin-left"

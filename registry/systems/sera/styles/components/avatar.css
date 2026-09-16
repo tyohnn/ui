@@ -64,9 +64,11 @@
     background-color: var(--muted);
     color: var(--muted-foreground);
 
+    /* sera: [&>svg]:size-4 · group-has-data-[size=sm]:[&>svg]:size-3 ·
+       group-has-data-[size=lg]:[&>svg]:size-5 — 글리프는 그룹 크기마다 갈린다. */
     & > svg {
-        width: 12px;
-        height: 12px;
+        width: 16px;
+        height: 16px;
     }
 
     /* ⚠ 아이콘 크기는 아바타 크기에서 계산되지 않는다. 12·16·20 은 아이콘
@@ -77,8 +79,8 @@
         height: var(--avatar-size-sm);
 
         & > svg {
-            width: var(--control-icon-size-sm);
-            height: var(--control-icon-size-sm);
+            width: 12px;   /* sera: size-3 — control 축의 아이콘 단(14)이 아니다 */
+            height: 12px;
         }
     }
 

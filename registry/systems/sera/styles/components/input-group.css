@@ -190,11 +190,16 @@
     padding: 0;
 }
 
+/* sera: `inputGroupButtonVariants` gives icon-sm `size-8 p-0 text-sm` — a fixed 32px square that
+   does **not** follow the group's height (40), and the base `text-sm` of the variants, which the
+   field step carries. 32 은 리터럴이다: control 축의 높이 단(28·36·40·44)에 없는 값이다. */
 .cn-input-group-button-size-icon-sm {
-    width: var(--control-height-md);
-    height: var(--control-height-md);
+    width: 32px;
+    height: 32px;
     min-height: 0;
     padding: 0;
+    font-size: var(--control-font-size-field);
+    line-height: var(--control-line-height-field);
 }
 
 /* mira: text-muted-foreground gap-2 text-xs/relaxed [&_svg]:size-4
@@ -235,4 +240,12 @@
     &[aria-invalid="true"] {
         box-shadow: none;
     }
+}
+
+/* sera: InputGroupTextarea 는 py-2.5(10) 다 — 통 밖의 Textarea 가 읽는
+   --control-padding-y-multiline(12)과 다른 자리라 통 안에서만 되돌린다.
+   ⚠ `.cn-textarea` 와 같은 (0,1,0) 이면 배럴 순서상 textarea.css 가 이기므로
+      `.cn-input-group` 후손으로 적어 (0,2,0) 으로 올린다. */
+.cn-input-group .cn-input-group-textarea {
+    padding-block: 10px;
 }

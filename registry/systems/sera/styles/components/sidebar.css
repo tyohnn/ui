@@ -376,9 +376,11 @@
     border-radius: var(--sidebar-item-radius);
 }
 
+/* sera: SidebarMenuSkeleton 의 아이콘 자리는 size-3.5 다 — 메뉴 버튼의 아이콘
+   (--sidebar-item-icon-size, 16)보다 한 단 작은 자리 표시자다. */
 .cn-sidebar-menu-skeleton-icon {
-    width: var(--sidebar-item-icon-size);
-    height: var(--sidebar-item-icon-size);
+    width: var(--control-icon-size-sm);
+    height: var(--control-icon-size-sm);
     border-radius: var(--sidebar-item-radius);
 }
 

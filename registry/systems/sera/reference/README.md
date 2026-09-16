@@ -85,42 +85,64 @@ Template `coverage`, viewport 1440×900, DPR 1: 57 sections, each opened alone s
 | 34–45 | the field/label bands, the sidebar surface paddings and the collapsed icon rail, input-group text and buttons, the underline focus/invalid rules | 99 | — |
 | 46–52 | the tail: tooltip arrow, indicators, sub-triggers, skeleton rows, drawer edge per swipe direction | 24 | 28 |
 | 53 | exclusions written | **24** (22 excluded) | **28** (22 excluded) |
+| 54 (2026-09-16) | the residue closed against **axis contract v4**: the keycap and the FieldTitle moved onto their v4 slots, four layer-3 rules were corrected against the reference app's own TSX (input-group icon-sm · input-group textarea · avatar group count glyph · sidebar skeleton icon · navigation-menu popup shadow), the context-menu indicator dropped its flex box, and the invalid+checked checkbox border became a mode-split layer-1 token | **0** (25 excluded) | **0** (25 excluded) |
 
-Final: **light 24 mismatches / 22 excluded · dark 28 / 22**. The port did **not** reach zero; the residue is
-listed under "Not resolved" below and each item is a single element.
+Final: **light 0 mismatches / 25 excluded · dark 0 / 25**. Nothing is left unexplained.
 
 ## Exclusions
 
-`compare-exclusions.json`, 22 rows in each mode, one reason each. All four are foundation's, kept for the
-same reasons, with the shortcut row rewritten for Noto Sans.
+`compare-exclusions.json`, 25 rows in each mode, one reason each. Four are foundation's, kept for the
+same reasons, with the shortcut row rewritten for Noto Sans; the fifth is sera's own.
 
 | What | Why |
 |---|---|
 | disabled Checkbox · Radio opacity | Base UI draws them as a span, so shadcn's `disabled:opacity-50` never matches upstream |
 | the whole `direction` section | the preset is generated with `rtl:false`, so its paddings and radii are physical |
 | `input-otp` group gaps | a preset app's `globals.css` carries no `.cn-*` rules, so `.cn-input-otp { gap-2 }` never reaches the reference |
+| `item/badge#0` height · line-height · rect-height (2026-09-16) | Upstream the Badge declares no line height, so inside a `text-sm` Item it inherits the unitless 1.0204… and resolves to 14.2857px; sera fixes line heights in px per type step (`--badge-line-height` = `--ui-line-height-xs`, 15px). Layer 3 cannot win: the only way to reproduce the inherited value is to drop the declaration (`initial`), which would make **every** badge take its container's leading instead of the axis's. The same shape as foundation's `text-[0.625rem]` row |
 | menu · command · menubar shortcut widths | ⌘ is in neither Noto Sans build and the two font stacks fall back differently (0.3–1.8px) |
 
-Of foundation's seven rows, three do not apply to sera and were dropped rather than carried: the
+Of foundation's seven rows, two do not apply to sera and were dropped rather than carried: the
 questionnaire action row (sera's generated TSX carries `sm:min-h-10`, and the system reproduces it with a
-value), the `text-[0.625rem]` line-height row (sera writes those types as `text-xs`), and the dark
-`dark:`-ordering row (sera's dark colours do not sit after the state utilities the way mira's do — the dark
-run has no state-colour mismatch at all).
+value) and the dark `dark:`-ordering row. The `text-[0.625rem]` line-height row was dropped as written (sera
+writes those types as `text-xs`) and came back in 2026-09-16 as the `item/badge#0` row above — the same
+cause at a different type step.
 
-## Not resolved
+⚠ The `dark:`-ordering shape **does** reach sera in one place, and it is a value, not an exclusion: the
+invalid + checked Checkbox. Upstream's `aria-invalid:aria-checked:border-primary` wins in light, and
+`dark:aria-invalid:border-destructive/50`, which Tailwind emits after it, wins in dark. Layer 2 has no
+`.dark` scope, so the two values live in a system-only layer-1 token (below).
 
-24 light / 28 dark, all single elements, all measured but not yet traced to a rule:
+## The residue, closed (2026-09-16, iteration 54)
 
-| Where | What |
-|---|---|
-| `field/field-label#5` | `letter-spacing` 0.3px upstream, normal here — the peer rule that gives a control's label sentence case also clears its track on one label the reference does not treat as a peer |
-| `item/badge#0` | the badge inherits a unitless line height inside a `text-sm` Item (14.28px) while the system fixes it in px (15px) — the same shape as foundation's `text-[0.625rem]` row |
-| `input-group/button#3` | one `InputGroupButton` is `h-8 text-sm` upstream; `inputGroupButtonVariants` sizes it as a utility, and the two sizes the system can express do not split there |
-| `context-menu/{checkbox,radio}-item#0>span#1` | the empty indicator box is `auto` upstream and 14px here |
-| `avatar/avatar-group-count#1>svg#0` | one of the two group counts wants a 14px glyph and the other 12px |
-| `sidebar/skeleton#0` | one placeholder bar is 14px upstream, 16px here |
-| `kbd-spinner-separator/kbd#4` | one keycap inherits the control track instead of `normal` |
-| `navigation-menu/root1` | the viewport-less panel carries `shadow-md` upstream and `shadow-sm` here |
+The eight items the port left open were each traced to a rule or a slot. Nothing here needed a change to
+`registry/foundation`, `registry/ui` or another system; the reference app's own `components/ui/*.tsx` was the
+answer key in every case.
+
+| Where | Cause | What changed |
+|---|---|---|
+| `kbd-spinner-separator/kbd#4` `letter-spacing` | upstream `Kbd` declares no tracking, so a keycap **inherits** it from wherever it sits; sera pinned `normal` in `kbd.css` | `styles/tokens.css`: `--kbd-letter-spacing: initial` (and `--kbd-font-weight: var(--ui-font-weight-regular)`). `kbd.css` now reads the whole v4 `--kbd-*` axis instead of the xs control axis |
+| `field/field-label#5` · `#7` `letter-spacing` | the two elements are **`FieldTitle`**, not a peer label. sera's `.cn-field-title` read `--ui-letter-spacing` (normal) while reading `--ui-label-text-transform` for its case — half of the quiet label band | `field.css`: `.cn-field-title` reads `--ui-label-letter-spacing`, the v4 slot foundation's own rule reads |
+| `input-group/button#3` | the element is `<InputGroupButton size="icon-sm" variant="outline">`, not the `sm` one. Upstream `inputGroupButtonVariants` gives it `size-8 p-0 text-sm` — a fixed 32px square that does **not** follow the group's height, plus the variants' base `text-sm` | `input-group.css`: `.cn-input-group-button-size-icon-sm` is `32px` square and reads the field type step. (`registry/ui`'s `InputGroupButton` matches upstream; nothing in the TSX changed) |
+| `input-group/input-group-control#5` padding | `InputGroupTextarea` is `py-2.5` (10px) upstream, while `.cn-textarea`'s `--control-padding-y-multiline` (12px) reached it inside the group | `input-group.css`: `.cn-input-group .cn-input-group-textarea { padding-block: 10px }` — written as a descendant so it beats `textarea.css`, which the barrel reads later |
+| `avatar/avatar-group-count#1>svg#0` | upstream splits the glyph per group size (`[&>svg]:size-4`, `…size=sm…:size-3`, `…size=lg…:size-5`); sera's sm branch read the 14px icon step | `avatar.css`: 16 · 12 · 20 per group size |
+| `sidebar/skeleton#0` | the element is the **skeleton icon**, `size-3.5` upstream; sera sized it with `--sidebar-item-icon-size` (16), the menu button's glyph | `sidebar.css`: `.cn-sidebar-menu-skeleton-icon` reads `--control-icon-size-sm` (14) |
+| `context-menu/{checkbox,radio}-item#0>span#1` | `display: flex` on the indicator **blockifies** the `<span>` inside it, which upstream stays `inline`. The fix is to drop the box, not resize it (the trap lyra and maia recorded) | `_menu-family.css`: `.cn-context-menu-item-indicator` alone goes `display: block` with `width/height: auto`. Dropdown and combobox keep their flex box |
+| `navigation-menu/root1` | upstream's `NavigationMenuPopup` carries `shadow-md`, not mira's `shadow` — sera does not split the viewport from the panel the way mira does | `navigation-menu.css`: `.cn-navigation-menu-popup` reads `--shadow-float` |
+| `item/badge#0` | see the exclusions table — the badge's inherited unitless line height | **excluded**, with the reason |
+
+The dark run then showed its own four (the invalid + checked Checkbox border, `checkbox#6`), which the light
+run cannot see: upstream emits `dark:aria-invalid:border-destructive/50` after
+`aria-invalid:aria-checked:border-primary`, so the red edge wins in dark and the primary edge in light. Layer 2
+has no `.dark` scope, so this is a **system-only layer-1 token** in both scopes, as the porting procedure
+prescribes, read by `_control-family.css`:
+
+```css
+:root  { --checkbox-invalid-checked-border: var(--selection); }
+.dark  { --checkbox-invalid-checked-border: var(--border-invalid); }
+```
+
+`scan-tokens` warns about it as a system-only name; it is listed as a foundation slot candidate below.
 
 ## Values the style file has but the app does not render
 
@@ -152,12 +174,23 @@ candidate for the next axis-contract version; **foundation was not changed in th
 | `--sidebar-surface-padding` · `--sidebar-surface-gap` · `--sidebar-input-height` · `--sidebar-rail-size` · `--sidebar-item-padding-y` · `--sidebar-badge-font-weight` | the menu axis | the sidebar's own 8px shell padding stays while the menu row padding grows to 12 |
 | `--item-media-icon-size` · `--slider-track-thickness` · `--bubble-padding-{x,y}` · `--bubble-line-height` · `--kbd-height` · `--kbd-padding-x` · `--select-item-gap` | literals in foundation | one-place values sera moves |
 
-Three layer-3 rules could not be reached by a value and were changed directly, each marked with a `sera:`
+Most of that table was adopted into **axis contract v4** (see `registry/foundation/reference/README.md`); sera
+now reads those slots, and iteration 54 moved two more of its rules onto them (`--kbd-*`,
+`--ui-label-letter-spacing`). One candidate is new:
+
+| Name | Foundation would be | Why sera needs it |
+|---|---|---|
+| `--checkbox-invalid-checked-border` (layer 1) | `var(--selection)` | upstream's `dark:aria-invalid:border-destructive/50` is emitted after `aria-invalid:aria-checked:border-primary`, so an invalid + checked Checkbox outlines in primary in light and in `destructive/50` in dark. A value that differs by mode has no home in layer 2 — the same argument v4 used for `--radio-indicator-dot-size` |
+
+Layer-3 rules that could not be reached by a value and were changed directly, each marked with a `sera:`
 comment: the split focus/invalid rules for the input family in `_control-family.css` (foundation draws a
 ring; sera moves one edge and draws none — this is a rule shape, not a value), the `.cn-menubar-item`
 step back up to `text-sm` in `menubar.css` (MenubarItem renders `cn-dropdown-menu-item cn-menubar-item`, so
-the four-family rule reaches it and the barrel order decides), and the drawer's per-`data-swipe-direction`
-edge in `drawer.css` (one border side per direction has no token form).
+the four-family rule reaches it and the barrel order decides), the drawer's per-`data-swipe-direction`
+edge in `drawer.css` (one border side per direction has no token form), and the five of iteration 54 listed
+under "The residue, closed" (the input-group icon-sm square and textarea padding, the avatar group count's
+per-size glyph, the sidebar skeleton icon, the navigation-menu popup shadow, and the context-menu
+indicator's dropped flex box — a rule shape, like lyra's and maia's).
 
 ## Not measured
 

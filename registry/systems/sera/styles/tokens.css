@@ -491,8 +491,10 @@
     --kbd-gap: var(--control-gap-xs);
     --kbd-font-size: var(--ui-text-xs);
     --kbd-line-height: var(--ui-line-height-xs);
-    --kbd-letter-spacing: var(--ui-letter-spacing);
-    --kbd-font-weight: var(--ui-font-weight);
+    /* `initial` = 값 없음: 업스트림 Kbd 는 tracking 을 선언하지 않아 담긴 자리의 자간을
+       그대로 물려받는다(툴팁·입력 통·메뉴 단축키의 자간이 저마다 다르다). */
+    --kbd-letter-spacing: initial;
+    --kbd-font-weight: var(--ui-font-weight-regular);
     --kbd-icon-size: var(--control-icon-size-sm);
     --control-radius-sm: var(--control-radius);
     --control-padding-x-grouped: var(--control-padding-x-md);

@@ -15,24 +15,26 @@
    ⚠ 좌우 4px 은 리터럴이다. control 축의 xs 패딩(8)의 절반이고 이 한 곳뿐이다. */
 .cn-kbd {
     height: var(--kbd-height);
-    min-width: var(--kbd-height);
-    gap: var(--control-gap-xs);
+    min-width: var(--kbd-min-width);
+    gap: var(--kbd-gap);
     padding-inline: var(--kbd-padding-x);
-    font-size: var(--ui-text-xs);
-    letter-spacing: normal;
-    line-height: var(--ui-line-height-xs);
-    font-weight: var(--ui-font-weight-regular);
+    font-size: var(--kbd-font-size);
+    /* v4: 키캡은 제 축을 읽는다. sera 의 --kbd-letter-spacing 은 `initial` 이라
+       업스트림처럼 담긴 자리의 자간을 물려받는다(Kbd 는 tracking 을 선언하지 않는다). */
+    letter-spacing: var(--kbd-letter-spacing);
+    line-height: var(--kbd-line-height);
+    font-weight: var(--kbd-font-weight);
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: var(--kbd-radius);
     @apply w-fit font-sans in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10;
 
     & svg:not([class*="size-"]) {
-        width: var(--control-icon-size-sm);
-        height: var(--control-icon-size-sm);
+        width: var(--kbd-icon-size);
+        height: var(--kbd-icon-size);
     }
 }
 
 .cn-kbd-group {
-    gap: var(--control-gap-xs);
+    gap: var(--kbd-gap);
 }

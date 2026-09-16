@@ -168,10 +168,12 @@
         var(--shadow-float);
 }
 
+/* sera: 판(Popup)도 shadow-md 다 — mira 와 달리 뷰포트와 같은 깊이를 쓴다
+   (navigation-menu.tsx 의 Popup: `shadow-md ring-1 ring-foreground/10`). */
 .cn-navigation-menu-popup {
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),
-        var(--shadow-chip);
+        var(--shadow-float);
 }
 
 .cn-navigation-menu-viewport {
