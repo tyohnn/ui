@@ -1,0 +1,33 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "sera",
+    "description": "Editorial taupe: square corners, uppercase labels and a Playfair Display serif for every title.",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "22b2874"
+    },
+    "fonts": {
+        "sans": "noto-sans",
+        "heading": "playfair-display",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "shadcn-preset",
+        "editorial",
+        "serif",
+        "uppercase",
+        "taupe"
+    ],
+    "source": {
+        "kind": "shadcn-preset",
+        "note": "shadcn create preset base-sera (npx shadcn@4.21.0 init -t next -b base -p sera); values checked against the reference app with tooling/snapshot/compare-shadcn.mjs.",
+        "preset": "sera",
+        "shadcnVersion": "4.21.0",
+        "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d"
+    }
+}
