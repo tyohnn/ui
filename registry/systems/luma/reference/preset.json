@@ -1,0 +1,22 @@
+{
+    "shadcnVersion": "4.21.0",
+    "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+    "config": {
+        "name": "base-luma",
+        "title": "Luma (Base)",
+        "description": "Luma / Lucide / Inter",
+        "base": "base",
+        "style": "luma",
+        "baseColor": "neutral",
+        "theme": "neutral",
+        "chartColor": "neutral",
+        "iconLibrary": "lucide",
+        "font": "inter",
+        "fontHeading": "inherit",
+        "item": "Item",
+        "rtl": false,
+        "menuAccent": "subtle",
+        "menuColor": "default",
+        "radius": "default"
+    }
+}
