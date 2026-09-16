@@ -11,11 +11,12 @@ The pinned shadcn version is `SHADCN_VERSION` in `shared.mjs` (4.21.0). Bump it 
 
 | File | Does |
 |---|---|
-| `make-reference.mjs <preset>` | the reference Next app (the answer key): `shadcn init` with the preset on Base UI, `shadcn add` of every `registry/ui` component, the component sheet copied in, type-check |
+| `make-reference.mjs <preset>` | the reference Next app (the answer key): `shadcn init` with the preset on Base UI, `shadcn add` of every `registry/ui` component, the component sheet **and the coverage template** copied in, type-check |
 | `port.mjs <preset>` | `new-system` from foundation plus everything mechanical: `system.json` fonts · icons · source, layer-1 shadcn colours and radius scale from the reference app, `reference/` |
 | `style-diff.mjs <from> <to>` | utility-level difference of two `style-<name>.css` files, per `cn-*` selector |
 | `specimen-text.json` | the component sheet's Korean strings in English (see Text) |
-| `../snapshot/compare-shadcn.mjs --system <preset>` | computed-style comparison of the tyohnn preview against the reference app |
+| `../snapshot/compare-shadcn.mjs --system <preset>` | computed-style comparison of the tyohnn preview against the reference app (default template `coverage`) |
+| `../snapshot/check-coverage.mjs --system <name>` | render check only: does a system draw the coverage template without console errors, page errors or empty sections |
 
 Downloads and generated apps live in a work directory outside the repository: `--workdir <dir>`, else
 `TYOHNN_PRESET_WORKDIR`, else `<os tmpdir>/tyohnn-preset`. Use the same one for every step.
@@ -39,9 +40,10 @@ The script:
 2. runs `npx shadcn@<version> init -t next -b base -p <preset> -n <preset> --no-monorepo -y` (a Next app with
    the preset's style, base colour, theme, icon library, fonts through `next/font`, radius);
 3. runs `npx shadcn@<version> add <every registry/ui component> --overwrite -y`;
-4. copies `apps/preview/src/templates/component-sheet` to `components/component-sheet` with
+4. copies `apps/preview/src/templates/component-sheet` and `.../coverage` to `components/<template>` with
    `@tyohnn/components/*` → `@/components/ui/*`, `@tyohnn/icons` → a copy of `registry/ui/icons` for the
-   preset's icon library, Korean → English, comments removed, `"use client"` added; `app/page.tsx` renders it;
+   preset's icon library, Korean → English, comments removed, `"use client"` added; `app/page.tsx` reads the
+   same query the preview does and renders the Specimen or `?template=coverage[&section=<name>]`;
 5. type-checks the app and prints any error: an error is an API difference between `registry/ui` and the
    shadcn component. Record it in the system's `reference/README.md` and exclude that part (step 4);
 6. writes `<app>/tyohnn-reference.json` (config, version, commit, command, missing components, type errors).
@@ -107,17 +109,28 @@ node tooling/snapshot/compare-shadcn.mjs --system $PRESET --preview http://local
 node tooling/snapshot/compare-shadcn.mjs --system $PRESET --preview http://localhost:5190 --mode dark
 ```
 
+The default template is **coverage**: `apps/preview/src/templates/coverage` renders every `registry/ui`
+component, section by section, at a fixed width with fixed dates and no randomness. Each section declares
+`data-coverage-section`, `data-coverage-components` and `data-coverage-portals`; the comparison reads that list
+from the reference app, then opens each section **alone** (`&section=<name>`) on both pages, which renders that
+section's popups open (`defaultOpen`), and measures the section element together with the popups it declares.
+Keys are reported as `<section>/<key>`, so a difference in one section never shifts another. A portal selector
+may end in `^<n>` to measure the n-th ancestor of the match (a popup surface that carries no `data-slot`).
+`--sections a,b` narrows a run while iterating; `--template component-sheet` runs the older Specimen comparison
+(the Specimen's second select, its dropdown menu and its dialog, `--states closed` to skip them).
+
 - Both pages: 1440×900, DPR 1, reduced motion, the same colour scheme and `dark` class on `<html>`.
 - Pairs by `data-slot` and order (an element without a slot is keyed under its nearest slotted ancestor),
   so a DOM difference inside one component shifts only that component.
 - Compares the properties of `tooling/snapshot/props.mjs` plus box height; `<svg>` by box only.
 - Normalises what paints the same: colours as rendered 8-bit pixels, Tailwind's empty ring/shadow layers,
   zero-width border sides, pill radii (`rounded-full` vs 9999px).
-- After the sheet it opens the Specimen's second select, its dropdown menu and its dialog and compares the
-  popups (`select:` · `dropdown:` · `dialog:` keys); `--states closed` skips them.
-- Prints pairs, mismatches grouped by component and property, exclusions with reasons, and crops both sides
-  of the first mismatching element per component into `tooling/snapshot/out/shadcn-<preset>-<mode>/`
-  (gitignored) plus one screenshot per open popup.
+- Prints pairs, a **per-component coverage table** (slots compared · mismatches, or `no slots` for a component
+  that renders no `data-slot` of its own), mismatches grouped by component and property, exclusions with
+  reasons, and a screenshot of both sides of every section that differs, into
+  `tooling/snapshot/out/shadcn-<preset>-<template>-<mode>/` (gitignored).
+- **A new component belongs in the coverage template first.** `registry/ui/components/*` and the components the
+  sections declare must be the same 62 names; nothing else keeps the comparison honest.
 - Exits 0 when only exclusions remain. Exclusions go in `registry/systems/<preset>/reference/compare-exclusions.json`:
   `[{ "key": "<regex>", "props": [...] | "*", "reason": "…" }]` — one reason each, never a system value.
 
@@ -132,8 +145,25 @@ node tooling/scan-tokens
 node tooling/validate-system
 ```
 
-The comparison covers the component sheet and three popups. Components it does not render are ported by
-reading `style-diff.mjs`; list them as "not covered" in `reference/README.md`.
+The coverage template renders every component, so nothing needs to be ported by reading alone. Record what the
+comparison could not decide as an exclusion with its reason, not as "not covered".
+
+Read the reference app's `components/ui/*.tsx`, not only `style-<style>.css`: the style file is a **separate
+distribution** and the two disagree in both directions. shadcn's `calendar.tsx` never applies
+`.cn-calendar-dropdown-root` or `.cn-calendar-caption-label`, so those rules do nothing upstream; conversely
+`input-otp.tsx` and `sonner.tsx` keep `cn-*` names for which a preset app has no rules at all. The rendered app
+is the answer key; when the style file says more than the app renders, say so in `reference/README.md`.
+
+Also check the two systems the comparison never touches:
+
+```sh
+node tooling/snapshot/check-coverage.mjs --system graphite --preview http://localhost:5190
+node tooling/snapshot/check-coverage.mjs --system foundation --preview http://localhost:5190 --mode dark
+```
+
+That is a render check, not a value comparison: console errors, page errors, empty sections, missing popups.
+Restart the preview with `SYSTEM=<name>` for each one — the preview warns when the query asks for a system
+other than the one it was started for, because fonts and icons are chosen at start.
 
 ## Text
 
