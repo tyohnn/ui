@@ -5,14 +5,20 @@ import { join } from "node:path";
 
 import { BLOCK_DISPLAYS, PROPS } from "./props.mjs";
 
-/** Runs in the page: computed values of every element under the roots, keyed by data-slot and order. */
+/**
+ * Runs in the page: computed values of every element under the roots, keyed by data-slot and order.
+ * A selector may end in `^<n>` to take the n-th ancestor of the match instead (a popup surface that
+ * carries no data-slot is reached through a slotted descendant); otherwise `up` applies to all of them.
+ */
 export const collectInPage = ({ selectors, up, prefix, PROPS, BLOCK }) =>
 {
     const roots = selectors.map((selector) =>
     {
-        let element = document.querySelector(selector);
+        const ancestor = /\^(\d+)$/.exec(selector);
+        const steps = ancestor ? Number(ancestor[1]) : up;
+        let element = document.querySelector(ancestor ? selector.slice(0, ancestor.index) : selector);
 
-        for (let step = 0; element && step < up; step += 1) element = element.parentElement;
+        for (let step = 0; element && step < steps; step += 1) element = element.parentElement;
 
         return element;
     });
@@ -194,6 +200,64 @@ export const STATES = [
     { name: "dialog", trigger: '[data-slot="dialog-trigger"]', index: 0, roots: ['[data-slot="dialog-overlay"]', '[data-slot="dialog-content"]'] },
 ];
 
+
+/** Runs in the page: what every coverage section declares (see apps/preview/src/templates/coverage). */
+export const coverageSectionsInPage = () => [...document.querySelectorAll("[data-coverage-section]")].map((node) => ({
+    name: node.getAttribute("data-coverage-section"),
+    components: (node.getAttribute("data-coverage-components") ?? "").split(" ").filter(Boolean),
+    portals: (node.getAttribute("data-coverage-portals") ?? "").split("|").filter(Boolean),
+}));
+
+/**
+ * The coverage template on one app. `url(section)` builds the address (the preview and the reference app
+ * take the same `?template=coverage[&section=<name>]`); `swap` (Korean → English) is applied before every
+ * measurement.
+ *
+ * - `sections()` opens the whole template and returns what it declares.
+ * - `measure(section)` opens one section, which renders its popups open, and measures the section element
+ *   together with its portalled popups as further roots — so an open dialog is compared with its trigger.
+ * - `shot(path)` saves the section as it currently stands, `close()` ends the page.
+ */
+export const coveragePage = async (browser, { url, mode, swap, side = "page" }) =>
+{
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, colorScheme: mode });
+
+    await page.emulateMedia({ reducedMotion: "reduce", colorScheme: mode });
+
+    const open = async (section) =>
+    {
+        await page.goto(url(section), { waitUntil: "networkidle" });
+        await page.evaluate((dark) => document.documentElement.classList.toggle("dark", dark), mode === "dark");
+        await page.waitForSelector('[data-specimen="coverage"]');
+        if (swap) await page.evaluate(swapTextInPage, swap);
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForTimeout(section ? 300 : 700);
+    };
+
+    return {
+        side,
+        sections: async () =>
+        {
+            await open(null);
+
+            return page.evaluate(coverageSectionsInPage);
+        },
+        measure: async (section) =>
+        {
+            await open(section.name);
+
+            // The section element first, then each open popup: one call, so slot counters run across them.
+            const roots = [`[data-coverage-section="${section.name}"]`, ...section.portals];
+            const result = await page.evaluate(collectInPage, { selectors: roots, up: 0, prefix: "", PROPS, BLOCK: BLOCK_DISPLAYS });
+
+            if (result.missing) throw new Error(`${side}: section ${section.name} rendered without ${result.missing.join(", ")}`);
+
+            return result;
+        },
+        shot: (path) => page.screenshot({ path, timeout: 5000 }).then(() => path).catch(() => null),
+        close: () => page.close(),
+    };
+};
 
 /**
  * Opens `url` at 1440×900 · DPR 1 · reduced motion in `mode`, measures the sheet under `rootSelector`

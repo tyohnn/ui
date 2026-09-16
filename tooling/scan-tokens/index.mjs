@@ -25,6 +25,9 @@ const EXTERNAL_NAMES = new Set([
     "--collapsible-panel-width", "--accordion-panel-height", "--accordion-panel-width", "--nested-drawers",
     // Base UI Positioner sizes set at runtime (navigation-menu reads them as w-(--popup-width)).
     "--popup-width", "--popup-height",
+    // Chart series colours: ChartStyle writes `--color-<config key>` into a <style> tag at runtime,
+    // so a chart's `fill="var(--color-desktop)"` has no static definition. Add the key of a new series.
+    "--color-desktop", "--color-mobile",
 ]);
 const isExternal = (name) => EXTERNAL_NAMES.has(name) || EXTERNAL_PREFIXES.some((prefix) => name.startsWith(prefix));
 

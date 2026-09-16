@@ -6,9 +6,10 @@
 //   2. `npx shadcn@<version> init -t next -b base -p <preset> -n <preset>`: a Next app on Base UI with the
 //      preset's style, base colour, theme, icon library, fonts and radius.
 //   3. `shadcn add` every component registry/ui has (`--overwrite -y`).
-//   4. Copies the component sheet template (Specimen + frame) into the app with import paths rewritten
-//      to `@/components/ui/*`, the Korean strings swapped for English (specimen-text.json) and
-//      `@tyohnn/icons` pointed at a copy of registry/ui/icons for the preset's icon library.
+//   4. Copies the component sheet and coverage templates (apps/preview/src/templates/{component-sheet,coverage})
+//      into the app with import paths rewritten to `@/components/ui/*`, the Korean strings swapped for English
+//      (specimen-text.json) and `@tyohnn/icons` pointed at a copy of registry/ui/icons for the preset's icon
+//      library. `app/page.tsx` renders the sheet, or the coverage template for `?template=coverage[&section=<name>]`.
 //   5. Type-checks the app. Errors there are API differences between registry/ui and shadcn: record them
 //      in the system's reference/README.md and exclude those parts from the comparison.
 //   6. Writes <app>/tyohnn-reference.json (preset config, shadcn version and commit, what was rewritten).
@@ -84,8 +85,7 @@ if (missingPackages.length) run("npm", ["install", ...missingPackages.map((name)
 // 4. the component sheet
 const { strings } = JSON.parse(readFileSync(join(repoRoot, "tooling/preset/specimen-text.json"), "utf8"));
 const byLength = Object.entries(strings).sort((a, b) => b[0].length - a[0].length);
-const sheetDir = join(repoRoot, "apps/preview/src/templates/component-sheet");
-const outDir = join(app, "components/component-sheet");
+const TEMPLATES = ["component-sheet", "coverage"];
 
 const rewrite = (source) =>
 {
@@ -102,14 +102,33 @@ const rewrite = (source) =>
     return `"use client"\n\n${code}`;
 };
 
-mkdirSync(outDir, { recursive: true });
-
-for (const file of readdirSync(sheetDir))
+for (const template of TEMPLATES)
 {
-    writeFileSync(join(outDir, file), rewrite(readFileSync(join(sheetDir, file), "utf8")));
+    const from = join(repoRoot, "apps/preview/src/templates", template);
+    const outDir = join(app, "components", template);
+
+    mkdirSync(outDir, { recursive: true });
+
+    for (const file of readdirSync(from))
+    {
+        writeFileSync(join(outDir, file), rewrite(readFileSync(join(from, file), "utf8")));
+    }
 }
 
-writeFileSync(join(app, "app/page.tsx"), `import { ComponentSheet } from "@/components/component-sheet"\n\nexport default function Page() {\n  return <ComponentSheet />\n}\n`);
+// The same query the preview reads: ?template=coverage[&section=<name>] (sections open their popups).
+writeFileSync(join(app, "app/page.tsx"), [
+    `import { ComponentSheet } from "@/components/component-sheet"`,
+    `import { Coverage } from "@/components/coverage"`,
+    ``,
+    `export default async function Page({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {`,
+    `  const { template, section } = await searchParams`,
+    ``,
+    `  if (template === "coverage") return <Coverage section={typeof section === "string" ? section : null} />`,
+    ``,
+    `  return <ComponentSheet />`,
+    `}`,
+    ``,
+].join("\n"));
 
 // 5. type-check: API differences between registry/ui and the shadcn components show up here
 const typecheck = spawnSync("npx", ["tsc", "--noEmit", "--pretty", "false"], { cwd: app, encoding: "utf8" });
@@ -124,7 +143,7 @@ const record = {
     command: `npx ${shadcn} init -t next -b base -p ${preset} -n ${preset} --no-monorepo -y && npx ${shadcn} add <${components.length} registry/ui components> --overwrite -y`,
     styleSource: `https://github.com/shadcn-ui/ui/blob/${shadcnCommit()}/apps/v4/registry/styles/style-${config.style}.css`,
     componentsMissing: missing,
-    specimen: { from: "apps/preview/src/templates/component-sheet", imports: "@tyohnn/components/* → @/components/ui/*", icons: `@tyohnn/icons → components/tyohnn-icons (${iconLibrary})`, text: "tooling/preset/specimen-text.json" },
+    specimen: { from: TEMPLATES.map((template) => `apps/preview/src/templates/${template}`), imports: "@tyohnn/components/* → @/components/ui/*", icons: `@tyohnn/icons → components/tyohnn-icons (${iconLibrary})`, text: "tooling/preset/specimen-text.json" },
     typeErrors,
 };
 
