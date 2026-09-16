@@ -18,7 +18,11 @@
 
 .cn-input-group {
     height: var(--control-height-md);
-    border: var(--control-border-width) solid var(--input);
+    /* 테두리 색은 v4 의 --input-border 가 갖는다(foundation 값은 --input 의 별칭). */
+    border: var(--control-border-width) solid var(--input-border);
+    /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
+       foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
 
@@ -105,9 +109,11 @@
 }
 
 /* 버튼·키캡은 제 여백을 갖고 있어 그만큼 당겨 통의 테두리에 붙인다.
-   ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다. */
+   ⚠ −0.275rem 은 리터럴이다. mira 의 광학 보정값이라 어느 축에도 없다.
+   ⚠ addon 의 좌우 패딩은 「묶음 안 컨트롤」 축(axis contract v4 의 --control-padding-x-grouped)이다.
+      foundation 값은 --control-padding-x-md 의 별칭이라 지금 값과 같다. */
 .cn-input-group-addon-align-inline-start {
-    padding-inline-start: var(--control-padding-x-md);
+    padding-inline-start: var(--control-padding-x-grouped);
 
     &:has(> button) {
         margin-inline-start: -4px;      /* maia: has-[>button]:-ml-1 */
@@ -119,7 +125,7 @@
 }
 
 .cn-input-group-addon-align-inline-end {
-    padding-inline-end: var(--control-padding-x-md);
+    padding-inline-end: var(--control-padding-x-grouped);
 
     &:has(> button) {
         margin-inline-end: -4px;        /* maia: has-[>button]:-mr-1 */
@@ -133,7 +139,7 @@
 /* 위아래로 붙는 addon. ⚠ 8px 은 리터럴이다(mira px-2 pt-2 · pb-2 · [.border-*]:p*-2).
    통 안의 세로 리듬이라 축이 없다. */
 .cn-input-group-addon-align-block-start {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: var(--control-padding-x-grouped);
     padding-block-start: 12px;   /* maia: pt-3 */
 
     &.border-b {
@@ -142,7 +148,7 @@
 }
 
 .cn-input-group-addon-align-block-end {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: var(--control-padding-x-grouped);
     padding-block-end: 12px;   /* maia: pb-3 */
 
     &.border-t {
@@ -151,10 +157,12 @@
 }
 
 /* mira: gap-2 rounded-md text-xs/relaxed
-   ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다. */
+   ⚠ 간격 8px 은 리터럴이다. xs·sm 이 gap-1 로 덮어 실제로는 아이콘 버튼에만 남는 값이다.
+   ⚠ 이 칸은 Button 의 sm 단계(글자·행간이 sm 이다)라 모서리도 axis contract v4 의
+      --control-radius-sm 을 읽는다. foundation 값은 --control-radius 의 별칭이다. */
 .cn-input-group-button {
-    gap: 8px;   /* maia: gap-2 on the base variant */
-    border-radius: var(--control-radius);
+    gap: 8px;
+    border-radius: var(--control-radius-sm);
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 }

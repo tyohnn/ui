@@ -61,8 +61,10 @@
     @apply in-data-[slot=dropdown-menu-content]:p-0;
 }
 
+/* 간격은 항목 자신의 축이다 — v4 슬롯 --item-gap(foundation 은 --menu-item-gap 의 별칭).
+   이 파일의 gap · --cn-item-separator 의 margin-block 이 모두 이 이름을 읽는다. */
 .cn-item-media {
-    gap: 8px;   /* maia: gap-2 — the menu row's gap moved to 10 */
+    gap: var(--item-gap);
     @apply group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start;
 }
 
@@ -70,9 +72,11 @@
     background-color: transparent;
 }
 
+/* 아이콘 썸네일의 글리프는 항목 자신의 축이다 — v4 슬롯 --item-media-icon-size
+   (foundation 은 --control-icon-size-lg 의 별칭). */
 .cn-item-media-variant-icon svg:not([class*="size-"]) {
-    width: var(--control-icon-size-lg);
-    height: var(--control-icon-size-lg);
+    width: var(--item-media-icon-size);
+    height: var(--item-media-icon-size);
 }
 
 /* ⚠ 32·32·24 는 리터럴이다. avatar 축과 값이 겹치지만 같은 축이 아니다 —
@@ -99,7 +103,7 @@
 
 /* 제목의 행간만 text-xs/relaxed 가 아니라 leading-snug(1.375)다 — mira 그대로. */
 .cn-item-title {
-    gap: 8px;   /* maia: gap-2 */
+    gap: var(--item-gap);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: 1.375;
@@ -118,7 +122,7 @@
 .cn-item-actions,
 .cn-item-header,
 .cn-item-footer {
-    gap: 8px;   /* maia: gap-2 */
+    gap: var(--item-gap);
 }
 
 /* ⚠ 10·8px 은 리터럴이다. 항목 크기에 따라 묶음의 간격을 한 단씩 줄이는 자리라 위의 리듬과 같다. */
@@ -135,5 +139,5 @@
 }
 
 .cn-item-separator {
-    margin-block: 8px;   /* maia: my-2 */
+    margin-block: var(--item-gap);
 }

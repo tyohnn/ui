@@ -134,8 +134,8 @@ carries a `data-slot`; everything the comparison could not decide is an exclusio
 
 ## Foundation slot candidates
 
-maia needed twelve system-only names because foundation has one value where maia wants two. Foundation is not
-changed by this run; each is a candidate for the next axis-contract version. The foundation default that
+maia needed twelve system-only names because foundation has one value where maia wants two. Axis contract v4
+adopted every one of them under the same name; the table is kept as the record of why. The foundation default that
 reproduces mira is written next to each name in `styles/tokens.css` / `styles/globals.css`.
 
 | Name | Layer | Foundation would be | Why maia needs it |
@@ -167,3 +167,62 @@ Four places still needed a layer-3 edit that no slot expresses, each marked with
   rounded the group at every spacing; the selector had to change, not a value.
 - **the vertical line tab** — maia has no line variant, so upstream both vertical lists are the plain trigger;
   a scoped rule gives the vertical line trigger the plain vertical padding.
+
+## Axis contract v4 slot migration (stage 2, 2026-09-17)
+
+`tooling/preset/slot-migration.md` listed **28 rows** for maia (105 declaration sites, 77 adopting foundation's
+rule unchanged). Each layer-3 file was rebuilt as foundation's current rule plus maia's remaining edits (a
+three-way merge from foundation at `ab3c807`), and the values moved into `styles/tokens.css`, next to the
+component slots maia had already proposed (the block's header now says they are v4 slots). **24 rows were
+applied; the 4 card rows were not** (below).
+
+| Slot | maia value |
+|---|---|
+| `--menu-label-padding-y` | `10px` |
+| `--bubble-padding-x` · `-padding-y` · `-line-height` | `14px` · `10px` · `22.75px` |
+| `--control-padding-y-field` | `4px` |
+| `--item-gap` | `8px` |
+| `--sidebar-input-height` · `-surface-gap` · `-surface-padding` · `-item-padding-y` · `-separator-margin-inline` | `32px` · `8px` · `8px` · `8px` · `8px` |
+| `--slider-track-thickness` | `12px` |
+| `--tabs-list-height` · `--tabs-trigger-padding-x` · `-padding-y` | `var(--control-height-md)` · `8px` · `4px` |
+| `--toggle-gap` | `4px` |
+
+The accordion (×2) and badge-border rows carry foundation's default and needed no token. One slot the list did
+not name also took maia's value: `--command-item-gap: 8px`, so `command.css` no longer re-declares the palette
+row's radius and gap (only the dialog-scoped `rounded-2xl` stays, as `.cn-command-item:where([data-slot="dialog-content"] *)`).
+
+**Not applied — slot collisions.** Two v4 slots are read by more elements than maia gives one value:
+
+- `--card-radius`: the list asked for `14px` on `.cn-card-header` / `.cn-card-footer`, but foundation's
+  `.cn-card` and its images read the same slot, and maia's card is `rounded-2xl` (18, the `--surface-radius`
+  default). The header and footer keep `14px` in `card.css` (`rounded-t-xl` / `rounded-b-xl`, one step below
+  the card).
+- `--menu-ring`: maia sets it to `foreground/10` in dark for the Dropdown Menu and the Menubar only. v4's
+  foundation reads it on every floating menu surface (the shared `_menu-family.css` rule, `select.css`,
+  `context-menu.css`), which moved the Select, Context Menu (and its sub-menu), Command and Combobox rings in
+  dark. Those three places keep `var(--ring-subtle)` (a `maia:` comment each); maia's own narrower rule for the
+  two menus stays.
+
+**Check.** Computed values of every coverage section (2530 elements) and of the component sheet (307) were
+dumped before and after in both modes: **0 differences**. Against the reference app (3122, preview 5191):
+**light 0 mismatches / 28 excluded · dark 0 / 32** — the same as before the migration.
+
+**Layer 3 against foundation:** 24 of 62 files are byte-identical (15 before; `_control-family.css`,
+`badge.css`, `button.css`, `input.css`, `kbd.css`, `label.css`, `radio-group.css`, `sheet.css` and
+`switch.css` joined). 38 still differ:
+
+- **Slot collisions (above):** `card.css` (with the sm card's `--spacing(4)`), `context-menu.css` (its only
+  difference), `select.css` and `_menu-family.css` in part.
+- **Structure (DESIGN.md §5's four shapes):** the sidebar's local `--radius`, the joined toggle group's
+  `[data-spacing="0"][data-variant="outline"]` selector, the Context Menu indicator without its flex box, the
+  vertical line tab rule, and declarations foundation never makes (the dialog and alert-dialog title type, the
+  slider thumb's `shadow-sm`, the widened menubar · combobox labels, sub-trigger and check-row gaps, the
+  Dropdown Menu · Menubar ring rule, the palette separator without `-mx-1`, the dialog-scoped palette row
+  radius, the select indicator span's `gap-2`, the input-group textarea's `py-2`, the sm Item split).
+- **Values with no v4 slot**, where foundation writes a literal or reads a shared axis step maia does not
+  share: paddings · gaps · radii · type in `_surface-family` (header gaps per surface, the tooltip, the popover
+  gap) · accordion · alert · alert-dialog · attachment · avatar · breadcrumb · bubble (`ring-3`) · calendar ·
+  chart · combobox · command · drawer · empty · field · input-group · item · menubar · message ·
+  message-scroller · native-select · navigation-menu · pagination · progress · questionnaire · resizable ·
+  sidebar · skeleton · slider · table · tabs · textarea · toggle. None of these is a slot today; they stay
+  maia's own rules.

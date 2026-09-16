@@ -28,13 +28,10 @@
     margin-inline: 0;   /* maia drops mira's -mx-1 on the palette's separator only */
 }
 
-.cn-command-item {
-    border-radius: var(--command-item-radius);   /* maia: rounded-lg, a step below the menu row */
-    gap: 8px;                                    /* maia: gap-2 */
-
-    &:where([data-slot="dialog-content"] *) {
-        border-radius: var(--surface-radius);     /* maia: in-data-[slot=dialog-content]:rounded-2xl */
-    }
+/* maia: in-data-[slot=dialog-content]:rounded-2xl — inside a dialog the palette row takes the surface
+   corner instead of --command-item-radius. */
+.cn-command-item:where([data-slot="dialog-content"] *) {
+    border-radius: var(--surface-radius);
 }
 
 .cn-command-input-wrapper {
@@ -49,7 +46,9 @@
       (0,1,0)이면 `.cn-input-group` 의 height 가 이긴다. mira 의 `h-8!` 이 같은 사정이다. */
 .cn-command-input-wrapper > .cn-command-input-group {
     height: var(--control-height-md);   /* maia: h-9 — the palette's search box is the plain md control */
-    background-color: var(--input-fill);
+    /* 바탕은 v4 의 --command-input-fill 이다. 기본값이 --input-fill 이라 값은 그대로이고,
+       팔레트의 검색칸만 폼 입력과 다른 채움을 주는 시스템이 규칙을 고치지 않아도 된다. */
+    background-color: var(--command-input-fill);
 }
 
 .cn-command-input {
