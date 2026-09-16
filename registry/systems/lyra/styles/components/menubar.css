@@ -49,10 +49,17 @@
 
 /* 체크·라디오는 표시가 왼쪽이므로 시작 쪽을 비우고 끝쪽은 보통 값으로 둔다.
    mira: pl-7.5 pr-2 */
+/* lyra: every menubar row is pl-8 (data-inset:pl-8); the checkbox row also reserves a pr-28
+   gutter. */
+.cn-menubar-item[data-inset],
 .cn-menubar-checkbox-item,
 .cn-menubar-radio-item {
-    padding-inline-start: var(--menubar-item-padding-inset);   /* lyra: pl-8 */
+    padding-inline-start: var(--menubar-item-padding-inset);
     padding-inline-end: var(--menu-item-padding-x);
+}
+
+.cn-menubar-checkbox-item {
+    padding-inline-end: 112px;   /* lyra: pr-28 */
 }
 
 /* mira: left-2 size-4 [&_svg:not([class*='size-'])]:size-4 — 오른쪽 표시(14)보다 한 단 크다. */

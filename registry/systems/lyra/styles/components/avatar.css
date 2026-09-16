@@ -56,7 +56,6 @@
 
 /* lyra: the overflow chip draws a size-3 glyph. */
 .cn-avatar-group-count {
-    & > svg:not([class*="size-"]) { width: 12px; height: 12px; }
     width: var(--avatar-size-md);
     height: var(--avatar-size-md);
     border-radius: 9999px;
@@ -66,9 +65,10 @@
     background-color: var(--muted);
     color: var(--muted-foreground);
 
+    /* lyra: the overflow chip draws a size-3 glyph at every avatar size. */
     & > svg {
-        width: var(--control-icon-size-lg);
-        height: var(--control-icon-size-lg);
+        width: var(--control-icon-size-xs);
+        height: var(--control-icon-size-xs);
     }
 
     /* ⚠ 아이콘 크기는 아바타 크기에서 계산되지 않는다. 12·16·20 은 아이콘
@@ -79,8 +79,8 @@
         height: var(--avatar-size-sm);
 
         & > svg {
-            width: var(--control-icon-size-sm);
-            height: var(--control-icon-size-sm);
+            width: var(--control-icon-size-xs);
+            height: var(--control-icon-size-xs);
         }
     }
 
@@ -89,8 +89,8 @@
         height: var(--avatar-size-lg);
 
         & > svg {
-            width: 20px;
-            height: 20px;
+            width: var(--control-icon-size-xs);
+            height: var(--control-icon-size-xs);
         }
     }
 }

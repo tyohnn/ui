@@ -95,7 +95,7 @@
 .cn-popover-content {
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
+    line-height: var(--ui-line-height-md);   /* lyra: a plain text-xs */
 }
 
 /* 모달 면은 링만 갖는다(그림자는 --dialog-shadow 슬롯). */
@@ -207,9 +207,10 @@
     line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
 }
 
-/* Popover 의 설명은 색만 준다. 크기는 면의 text-xs 를 물려받는다. */
+/* lyra: the popover description is the relaxed reading step on an otherwise text-xs panel. */
 .cn-popover-description {
     color: var(--muted-foreground);
+    line-height: var(--ui-line-height-relaxed);
 }
 
 /* 설명 안의 링크는 밑줄로만 구분한다. 색까지 바꾸면 문단이 얼룩진다. */
@@ -249,7 +250,7 @@
     gap: var(--surface-icon-gap);
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
+    line-height: var(--ui-line-height-md);   /* lyra: a plain text-xs */
 }
 
 /* ⚠ transform 이 아니라 translate·rotate 개별 속성이다. 컴포넌트가 방향별로

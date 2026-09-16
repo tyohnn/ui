@@ -68,9 +68,11 @@ Two things about this preset specifically:
   two builds measure the same advance width to within 0.02px over 16 characters, so no text width in
   this comparison is a font artefact.
 
-The one place the two `--font-sans` values still differ is `Kbd`, whose `font-sans` utility resolves to
-Geist upstream and to JetBrains Mono here. lyra's layer 3 keeps `font-sans` so the keycap follows the
-system's own sans; the preset's Geist is a leftover of the Next template, not a value lyra declares.
+**Known divergence, no measured failure:** `Kbd` carries a `font-sans` utility, which upstream resolves
+to the Next template's leftover **Geist** on `--font-sans` — a font the preset never declares in its
+config. lyra's layer 3 keeps `font-sans`, so the keycap follows this system's own sans (JetBrains Mono).
+Nothing in the comparison fails on it, so it is not an exclusion; it is recorded here because a future
+reader comparing the two `--font-sans` values will otherwise think one of them is wrong.
 
 ## Results (2026-09-16)
 
@@ -90,11 +92,13 @@ Template `coverage`, viewport 1440×900, DPR 1: 57 sections, each opened alone s
 | 12–14 | square carousel · scrollbar · tooltip arrow · reaction row, the sheet's own p-4, the banded card footer with the card's dropped bottom padding, the disabled field fill, message and questionnaire type | 425 | — |
 | 15–17 | the flush drawer with a rule only on the edge facing the page, accordion panel px-0 pb-2.5, questionnaire and alert-dialog boxes, pagination px-1.5, popover gap-2.5, the size-10 alert-dialog media | 262 | — |
 | 18–21 | the per-element line-height split (rows text-xs, descriptions text-xs/relaxed), the menubar's deeper inset, combobox chips, the submenu shadow step, drawer and sheet header gaps | 128 | — |
-| 22 | exclusions written; dark: `--button-outline-border` = input, the 10% scrim in dark, the outline badge and questionnaire indicator without a dark fill, the sidebar search box fill | **128** | **123** |
+| 22 | exclusions written; dark: `--button-outline-border` = input, the 10% scrim in dark, the outline badge and questionnaire indicator without a dark fill, the sidebar search box fill | 128 | 123 |
+| 23 | the input-group family: the sm button taking the forwarded Button size, icon-xs/icon-sm a step down (24 · 28), the addon's kbd pull-back at half the button's, the command palette's own fill, the combobox chip and chip row | 74 | — |
+| 24 | the flush drawer's edge colour, the 10px questionnaire keycap, native select `py-0.5` at sm with a size-4 chevron at both, the size-3 navigation chevron, the menubar's `pr-28` checkbox gutter | 36 | — |
+| 25 | the context menu's indicator box, the popover and tooltip back on a plain text-xs, the count chip's size-3 glyph, `--field-checked-border` | 10 | — |
+| 26 | the `sm` alert dialog's `max-w-xs`, the menubar's inset rows, and in dark the checked field row dropping to primary/20 | **0** | **0** |
 
-**This run did not reach 0.** Light stands at 128 mismatches over 38 exclusions and dark at 123 over 61.
-The two counts are now almost the same set: only 31 of dark's were dark-only before the layer-1 pass
-above, so what remains is one shared geometry tail, not a mode problem. See "What is left" below.
+Final: **light 0 mismatches / 38 excluded · dark 0 / 61**.
 
 ## Exclusions
 
@@ -121,24 +125,22 @@ advance on both sides, so the one non-monospace glyph carries the entire differe
 spread over the string. The two sides fall back differently (next/font's "JetBrains Mono Fallback"
 against the preview's Pretendard), which is a font-stack fact and not a lyra value.
 
-## What is left
+## Notes from the tail
 
-128 mismatches in light, 123 in dark, over roughly 98 unique element/property signatures. They are a
-long tail of single-component values, not a missing axis — the largest cluster is 4 elements. Known
-groups, with what each needs:
+Nothing was parked and nothing became an exclusion beyond the six below. Three of the last group were
+`@apply`/cascade traps rather than values, and are worth carrying forward:
 
-| Where | What |
-|---|---|
-| `input-group` | the button sizes inside a group (24 / 28 against our 28 / 32), the addon's block height and its −2.4px end margin, and the control keeping the group's disabled fill instead of staying transparent |
-| `menubar` | the checkbox/radio rows (`pr-28 pl-8`, and the wrapped 80px height that follows), and the content height that follows from them |
-| `alert-dialog-sm` | the `sm` size's title and description type — the title is `text-sm`, not the heading step |
-| `field` | the checked row's border (`foreground/30`, currently `--border-strong`) |
-| `drawer` | the remaining popup height/margin deltas after the flush inset |
-| `context-menu` | the checkbox and radio indicators still draw a box where lyra leaves them `auto` |
-| `combobox` · `questionnaire` · `avatar` | the clear button box, the number keycap's 10px type and opaque fill, the overflow chip's size-3 glyph |
-
-None of these needs a new axis; each is one declaration in the component's layer-3 file, checkable
-against the reference app the same way the rest were.
+- **`input.css` loads *after* `input-group.css`.** The barrel sorts alphabetically and `-` (0x2D) sorts
+  before `.` (0x2E), so `input-group.css` comes first. An override of equal specificity placed there
+  loses to `input.css`. The disabled-field exclusion therefore lives on the `.cn-input` rule itself
+  (`:not([data-slot="input-group-control"])`), not in a later file.
+- **`display: flex` on a menu indicator blockifies its child.** lyra's context-menu indicator holds a
+  `<span>` that stays `inline` upstream; any flex box here turns it into a 16px block and every
+  indicator child differs by box. The fix is to drop the box, not to resize it. The dropdown and
+  combobox indicators *do* keep their flex box — only the context menu differs.
+- **A wrapped-text height difference is usually a width difference.** The `sm` alert dialog's title and
+  description measured 2× and 3× their line height against the reference's 1× and 2×; the type matched
+  exactly and the cause was `max-w-64` where lyra writes `max-w-xs`.
 
 ## Foundation slot candidates
 
@@ -162,6 +164,8 @@ Each is a candidate for the next axis-contract version; foundation is not change
 | `--sheet-padding` | `var(--surface-padding-lg)` | the sheet header and footer are `p-4` while empty and the command panel keep `p-6` |
 | `--accordion-border-width` | `var(--surface-border-width)` | lyra draws no box around an accordion group, only the per-item bottom rule |
 | `--input-fill-disabled` | `transparent` | a disabled field takes a fill (`input/50` light, `input/80` dark) that no existing name carries |
+| `--command-input-fill` | `var(--sidebar-input-fill)` | the command palette's search box is `bg-input/30` while the sidebar's is the page background; foundation reads one name for both |
+| `--field-checked-border` | `transparent` | a checked field row outlines in `primary/30` (light) and `primary/20` (dark) — a colour that differs by mode, so it has no layer-2 home |
 
 ## Not measured
 

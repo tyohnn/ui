@@ -116,7 +116,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--control-gap-md);
+    gap: var(--control-gap-xs);   /* lyra: gap-1 */
     min-height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
     padding-block: var(--control-padding-y-field);   /* lyra: py-1 */
@@ -133,7 +133,7 @@
     transition-timing-function: var(--control-ease);
 
     &:has([data-slot="combobox-chip"]) {
-        padding-inline: 6px;   /* lyra: px-1.5 */
+        padding-inline: 4px;   /* lyra: has-data-[slot=combobox-chip]:px-1 */
     }
 
     /* mira: focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 */
@@ -163,9 +163,9 @@
     align-items: center;
     justify-content: center;
     gap: 4px;
-    border-radius: 4px;
+    border-radius: var(--control-radius);   /* lyra: rounded-none */
     padding-inline: 6px;
-    background-color: var(--chip);
+    background-color: var(--muted);   /* lyra: bg-muted */
     color: var(--foreground);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);

@@ -30,11 +30,11 @@
     font-size: inherit;
     line-height: inherit;
 
-    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-64 data-[size=default]:sm:max-w-sm;
+    @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm;
 }
 
 .cn-alert-dialog-header {
-    row-gap: var(--surface-icon-gap);   /* lyra: gap-1.5 */
+    gap: var(--surface-icon-gap);   /* lyra: gap-1.5 */
     @apply grid grid-rows-[auto_1fr] place-items-center text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-left sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr];
 
     /* 배지가 제목 왼쪽에 서는 배치에서는 가로 간격만 한 단계 넓힌다. mira: gap-x-4 */

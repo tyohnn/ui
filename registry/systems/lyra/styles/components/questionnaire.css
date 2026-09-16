@@ -148,11 +148,11 @@
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius-xs);
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
-    background-color: color-mix(in oklab, var(--background) 80%, transparent);
+    background-color: var(--background);   /* lyra: bg-background, not /80 */
     color: var(--muted-foreground);
-    font-size: 9px;
+    font-size: 10px;   /* lyra: text-[0.625rem] */
     font-weight: var(--ui-font-weight);
-    line-height: 1;
+    line-height: 10px;
     @apply translate-y-[--spacing(0.45)] group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 items-center justify-center font-mono;
 }
 
@@ -166,7 +166,7 @@
 .cn-questionnaire-input {
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
-    padding-block: 2px;   /* mira: py-0.5, Input 과 같다 */
+    padding-block: var(--control-padding-y-field);   /* lyra: py-1, like the Input */
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
@@ -191,7 +191,7 @@
     margin-block-start: 8px;
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-relaxed);   /* lyra: text-xs/relaxed */
+    line-height: var(--ui-line-height-md);   /* lyra: a plain text-xs */
 }
 
 /* ⚠ 이 규칙은 2026-09-05 토큰화 4차에서 실수로 빠졌다가 되살렸다. 컴포넌트가
@@ -200,7 +200,7 @@
    mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
    실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
 .cn-questionnaire-actions {
-    gap: 8px;   /* lyra: gap-2 */
+    gap: var(--surface-icon-gap);   /* lyra: gap-1.5 */
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

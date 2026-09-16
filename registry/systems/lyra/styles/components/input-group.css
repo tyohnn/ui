@@ -104,18 +104,25 @@
 .cn-input-group-addon-align-inline-start {
     padding-inline-start: var(--control-padding-x-grouped);   /* lyra: px-2 */
 
-    &:has(> button),
+    &:has(> button) {
+        margin-inline-start: -0.3rem;
+    }
+
     &:has(> kbd) {
-        margin-inline-start: -0.3rem;   /* lyra: -4.8px */
+        margin-inline-start: -0.15rem;
     }
 }
 
 .cn-input-group-addon-align-inline-end {
     padding-inline-end: var(--control-padding-x-grouped);   /* lyra: px-2 */
 
-    &:has(> button),
+    /* lyra: has-[>button]:mr-[-0.3rem] · has-[>kbd]:mr-[-0.15rem] — the keycap pulls back half as far. */
+    &:has(> button) {
+        margin-inline-end: -0.3rem;
+    }
+
     &:has(> kbd) {
-        margin-inline-end: -0.3rem;   /* lyra: -4.8px */
+        margin-inline-end: -0.15rem;
     }
 }
 
@@ -171,25 +178,23 @@
 
 /* mira 는 gap-1 만 준다. 높이·패딩·글자는 Button 의 sm(24)이 그대로 온다 —
    컴포넌트가 size 를 Button 에 넘기기 때문이다(input-group.tsx 의 주석). */
-/* lyra: the sm button inside a group is the same h-6 box as the xs one. */
+/* lyra gives the sm button no box of its own (`sm: "gap-1"`), so the Button size the component
+   forwards decides the height. */
 .cn-input-group-button-size-sm {
-    height: var(--control-height-xs);
-    min-height: 0;
     gap: var(--control-gap-sm);
 }
 
-/* 아이콘 버튼은 Button 의 같은 이름보다 한 단 크다. mira: icon-xs 가 size-6, icon-sm 이 size-7 —
-   통(28) 안에서 xs 는 한 단 아래(24), sm 은 통과 같은 높이(28)다. */
+/* lyra: icon-xs is size-6 (24) and icon-sm size-7 (28) — both a step under the h-8 group box. */
 .cn-input-group-button-size-icon-xs {
-    width: var(--control-height-sm);
-    height: var(--control-height-sm);
+    width: var(--control-height-xs);
+    height: var(--control-height-xs);
     min-height: 0;
     padding: 0;
 }
 
 .cn-input-group-button-size-icon-sm {
-    width: var(--control-height-md);
-    height: var(--control-height-md);
+    width: var(--control-height-sm);
+    height: var(--control-height-sm);
     min-height: 0;
     padding: 0;
 }
@@ -239,3 +244,4 @@
     background-color: var(--input-fill-disabled);
     opacity: 0.5;
 }
+

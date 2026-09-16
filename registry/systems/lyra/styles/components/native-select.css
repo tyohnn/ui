@@ -48,6 +48,7 @@
 
     &[data-size="sm"] {
         height: var(--control-height-sm);
+        padding-block: 2px;   /* lyra: data-[size=sm]:py-0.5 */
         padding-inline-start: var(--control-padding-x-sm);
         padding-inline-end: 32px;   /* lyra: pr-8 — 크기가 달라도 화살표 자리는 같다 */
         font-size: var(--control-font-size-xs);
@@ -61,22 +62,24 @@
 
 /* mira: text-muted-foreground top-1/2 right-1.5 size-3.5 -translate-y-1/2
          group-data-[size=sm]/native-select:size-3 …:-translate-y-[calc(--spacing(1.25))] */
+/* lyra: right-2.5 size-4 at both sizes. */
 .cn-native-select-icon {
+    width: var(--control-icon-size-md);
+    height: var(--control-icon-size-md);
     color: var(--muted-foreground);
     inset-block-start: 50%;
     translate: 0 -50%;
 
     [data-slot="native-select-wrapper"][data-size="default"] & {
-        inset-inline-end: var(--control-padding-x-icon-md);
+        inset-inline-end: var(--control-padding-x-md);
         width: var(--control-icon-size-md);
         height: var(--control-icon-size-md);
     }
 
     /* ⚠ sm 의 −5px 은 리터럴이다. 12px 아이콘의 절반(6)이 아니라 mira 가 둔 광학 보정값이다. */
     [data-slot="native-select-wrapper"][data-size="sm"] & {
-        inset-inline-end: var(--control-padding-x-icon-sm);
+        inset-inline-end: var(--control-padding-x-md);
         width: var(--control-icon-size-md);
-        height: var(--control-icon-size-sm);
-        translate: 0 -5px;
+        height: var(--control-icon-size-md);
     }
 }

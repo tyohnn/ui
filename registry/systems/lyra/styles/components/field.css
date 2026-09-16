@@ -92,7 +92,7 @@
 
     &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         background-color: var(--primary-soft);
-        border-color: var(--border-strong);   /* lyra: a checked row outlines in foreground/30 */
+        border-color: var(--field-checked-border);   /* lyra: primary/30 */
     }
 
     /* ⚠ 안쪽 여백 8px 은 리터럴이다. 카드 안의 여백이라 control 축(높이가 정본)에도
@@ -120,7 +120,7 @@
 .cn-field-label-aria {
     &:has([data-selected="true"]) {
         background-color: var(--primary-soft);
-        border-color: var(--border-strong);   /* lyra: a checked row outlines in foreground/30 */
+        border-color: var(--field-checked-border);   /* lyra: primary/30 */
     }
 }
 

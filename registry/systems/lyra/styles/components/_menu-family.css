@@ -223,6 +223,9 @@
 /* mira: absolute right-2 flex items-center justify-center — 상자에 크기를 주지 않는다.
    꺼져 있는 항목에서는 안의 표시가 그려지지 않아 상자도 0 이어야 한다(크기를 주면 빈 상자가
    14px 로 남는다). 켜졌을 때의 크기는 안의 svg 가 항목 규칙으로 받는다. */
+/* lyra's indicator is a positioned block, not a flex box. ⚠ `display: flex` blockifies the inner
+   <span> that carries the glyph; upstream that span stays `inline`, so a flex box here makes every
+   indicator child differ by box. */
 .cn-dropdown-menu-item-indicator,
 .cn-context-menu-item-indicator,
 .cn-combobox-item-indicator {
@@ -231,6 +234,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* lyra: the context menu alone drops the flex box. ⚠ `display: flex` blockifies the inner <span>
+   that carries the glyph; upstream that span stays `inline`, so the box has to go, not just its size. */
+.cn-context-menu-item-indicator {
+    width: auto;
+    height: auto;
+    display: block;
 }
 
 /* --------------------------------------------------------
