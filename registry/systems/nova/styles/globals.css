@@ -639,6 +639,7 @@
     --switch-track-border-on: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    --checkbox-invalid-checked-border: var(--selection);
 }
 
 .dark {
@@ -654,4 +655,5 @@
     --switch-track-border-on: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    --checkbox-invalid-checked-border: var(--selection);
 }

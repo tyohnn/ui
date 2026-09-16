@@ -428,6 +428,11 @@
     /* The radio dot's size — a size, not a colour. It lives in layer 1 because luma gives it one
        value in light and another in dark, and layer 2 has no `.dark` scope. */
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    /* An invalid + checked Checkbox's edge. mira: --selection in both scopes. Every 4.21 preset emits
+       `dark:aria-invalid:border-destructive/50` after `aria-invalid:aria-checked:border-primary`, so
+       upstream the edge is primary in light and destructive/50 in dark; a system that reproduces that
+       (sera) sets the two scopes apart here. */
+    --checkbox-invalid-checked-border: var(--selection);
 
     /* shadcn create 의 radius "default". 10px. --radius-md 8px · --radius-lg 10px · --radius-xl 14px 를 낳는다.
        2층의 --control-radius 8px(mira 의 rounded-md)과 같은 계열이다. */
@@ -651,6 +656,11 @@
     /* The radio dot's size — a size, not a colour. It lives in layer 1 because luma gives it one
        value in light and another in dark, and layer 2 has no `.dark` scope. */
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    /* An invalid + checked Checkbox's edge. mira: --selection in both scopes. Every 4.21 preset emits
+       `dark:aria-invalid:border-destructive/50` after `aria-invalid:aria-checked:border-primary`, so
+       upstream the edge is primary in light and destructive/50 in dark; a system that reproduces that
+       (sera) sets the two scopes apart here. */
+    --checkbox-invalid-checked-border: var(--selection);
 }
 
 /* 접근성 — apple-design 요구.

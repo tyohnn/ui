@@ -647,6 +647,7 @@
     --field-label-checked-border: var(--border);
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
+    --checkbox-invalid-checked-border: var(--selection);
 }
 
 .dark {
@@ -661,4 +662,5 @@
     --field-label-checked-border: var(--border);
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
+    --checkbox-invalid-checked-border: var(--selection);
 }

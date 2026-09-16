@@ -630,6 +630,7 @@
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    --checkbox-invalid-checked-border: var(--selection);
 }
 
 .dark {
@@ -647,4 +648,5 @@
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
+    --checkbox-invalid-checked-border: var(--selection);
 }

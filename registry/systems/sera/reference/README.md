@@ -142,7 +142,8 @@ prescribes, read by `_control-family.css`:
 .dark  { --checkbox-invalid-checked-border: var(--border-invalid); }
 ```
 
-`scan-tokens` warns about it as a system-only name; it is listed as a foundation slot candidate below.
+It was adopted into axis contract v4 as a foundation slot the same day (foundation: `var(--selection)` in both
+scopes), so `scan-tokens` no longer warns about it; sera's two values are the system's own.
 
 ## Values the style file has but the app does not render
 
@@ -176,11 +177,11 @@ candidate for the next axis-contract version; **foundation was not changed in th
 
 Most of that table was adopted into **axis contract v4** (see `registry/foundation/reference/README.md`); sera
 now reads those slots, and iteration 54 moved two more of its rules onto them (`--kbd-*`,
-`--ui-label-letter-spacing`). One candidate is new:
+`--ui-label-letter-spacing`). One candidate was new, and was adopted into v4 after this run:
 
 | Name | Foundation would be | Why sera needs it |
 |---|---|---|
-| `--checkbox-invalid-checked-border` (layer 1) | `var(--selection)` | upstream's `dark:aria-invalid:border-destructive/50` is emitted after `aria-invalid:aria-checked:border-primary`, so an invalid + checked Checkbox outlines in primary in light and in `destructive/50` in dark. A value that differs by mode has no home in layer 2 — the same argument v4 used for `--radio-indicator-dot-size` |
+| `--checkbox-invalid-checked-border` (layer 1) | `var(--selection)` | upstream's `dark:aria-invalid:border-destructive/50` is emitted after `aria-invalid:aria-checked:border-primary`, so an invalid + checked Checkbox outlines in primary in light and in `destructive/50` in dark. A value that differs by mode has no home in layer 2 — the same argument v4 used for `--radio-indicator-dot-size`. **Adopted** (2026-09-16): every 4.21 preset carries the same ordering, and the other seven exclude it instead of reproducing it, so a slot lets any of them choose |
 
 Layer-3 rules that could not be reached by a value and were changed directly, each marked with a `sera:`
 comment: the split focus/invalid rules for the input family in `_control-family.css` (foundation draws a

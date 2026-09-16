@@ -127,7 +127,7 @@ comparison pairs every one that carries a `data-slot`.
 Eight preset ports (`vega` · `nova` · `maia` · `lyra` · `luma` · `rhea` · `sera`, plus `mira` which is this
 folder's own run) and one screenshot system (`graphite`) each recorded, in their `reference/README.md`, the
 places where **foundation had no slot and a layer-3 rule had to be edited**. Version 4 lifts the repeated ones
-into foundation: **85 layer-2 names and 15 layer-1 names**, every default an alias of what the rule already
+into foundation: **85 layer-2 names and 16 layer-1 names**, every default an alias of what the rule already
 read, `initial`, `transparent`, `none`, or the literal the rule carried.
 
 Adoption rule: a candidate is adopted when **two or more systems asked for it**, or when one system asked and
@@ -136,9 +136,11 @@ A value only one system wants and that no axis is missing stays that system's ow
 
 **Proof it changes nothing:** foundation and `registry/systems/mira` both compare **0 mismatches in light and
 0 in dark** against the mira reference app after the change, with the same 55 / 70 exclusions as before, and
-the seven systems not yet migrated (`graphite` · `vega` · `nova` · `luma` · `rhea` · `maia` · `lyra`) dump
-**0 computed-value differences** against their pre-change dumps in both modes
-(`compare-computed.mjs --dump` / `--diff`).
+sera compares 0 / 0 against its own reference app with 25 / 25 exclusions, and the seven systems not yet
+migrated (`graphite` · `vega` · `nova` · `luma` · `rhea` · `maia` · `lyra`) show **0 computed-value
+differences** in both modes against a checkout of `ab3c807` (the commit before v4, with its own
+`npm install`): every coverage section opened alone, measured with `collect.mjs`'s `coveragePage` in each
+tree, and compared by key with `compare-computed.mjs --diff`.
 
 ### The two structural problems v4 solves
 
@@ -171,7 +173,7 @@ the seven systems not yet migrated (`graphite` · `vega` · `nova` · `luma` · 
 | item · slider · avatar | `--item-gap` · `--item-media-icon-size` · `--slider-track-thickness` · `--avatar-font-size` · `--avatar-line-height` | the menu row's gap; the lg glyph; `4px`; the lg UI type | nova splits Item from the menu row; sera moves the media glyph and the track; maia's lg UI step is `text-base` while the fallback stays `text-sm` |
 | sidebar | `--sidebar-surface-padding` · `-surface-gap` · `--sidebar-input-height` · `--sidebar-item-padding-y` · `--sidebar-separator-margin-inline` · `--sidebar-badge-font-weight` · `--sidebar-part-radius` | the menu axis; the lg control height; the item's side padding; the UI weight; the item radius | sera keeps the shell at 8 while the menu row grows to 12; rhea gives the separator its own inset; maia rounds the menu button one step above every other part |
 
-### Layer 1 (`styles/globals.css`, `:root` **and** `.dark`) — 15 names
+### Layer 1 (`styles/globals.css`, `:root` **and** `.dark`) — 16 names
 
 | Slot | Default | Why · who asked |
 |---|---|---|
@@ -186,6 +188,7 @@ the seven systems not yet migrated (`graphite` · `vega` · `nova` · `luma` · 
 | `--field-label-checked-border` | `var(--border)` | a checked selection card outlines in `primary/30` (dark `/20`) — maia · nova · sera · lyra. ⚠ It is read inside `:has(> [data-slot="field"])` and **before** the focus rule, so the focus ring still wins |
 | `--questionnaire-choice-fill` · `--questionnaire-shortcut-border` | `transparent` · `var(--input)` | nova's choice has a dark fill of its own; rhea gives the shortcut keycap its own edge |
 | `--radio-indicator-dot-size` | `var(--control-indicator-dot-size)` | luma's dot is `size-2` in light and `size-2.5` in dark. **A size in layer 1**: layer 2 has no `.dark` scope, and a value that differs by mode has no other home |
+| `--checkbox-invalid-checked-border` | `var(--selection)` | added after sera closed its residue. Every 4.21 preset emits `dark:aria-invalid:border-destructive/50` after `aria-invalid:aria-checked:border-primary`, so upstream an invalid + checked Checkbox is primary-edged in light and `destructive/50` in dark. sera reproduces it; foundation (this folder's dark exclusion row) and the other six presets exclude it to keep the checked signal. One system set a value, but all eight carry the upstream shape, and a colour that splits by mode has no home short of a slot — so it is one. `.cn-checkbox[aria-invalid="true"][data-checked]` reads it; foundation, mira and the seven unmigrated systems keep `--selection` in both scopes |
 
 ### Candidates not adopted
 
