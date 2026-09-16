@@ -10,12 +10,12 @@ foundation's.
 | System | State | Declaration sites written differently from foundation | Rows carrying a value | Renames |
 |---|---|---|---|---|
 | `mira` | **converted** — `styles/` is byte-identical to foundation's, so it already reads every slot. Nothing to do. | 0 | 0 | 0 |
-| `sera` | **partly converted** — its port proposed most of the v4 names under the spelling foundation adopted and already reads them; iteration 54 moved the keycap (`--kbd-*`) and `.cn-field-title` onto their slots. What is left is below. | 81 | 29 | 8 |
-| `graphite` | not started | 129 | 7 | 0 |
+| `sera` | **converted** (2026-09-17) — the `--tag-*` badge names renamed to `--badge-*`; 15 layer-3 files byte-identical; the rows that stay rules are listed in `reference/README.md`. Dumps 0 differences, reference 0 / 25 in both modes. | 81 | 29 | 8 |
+| `graphite` | **converted** (2026-09-17) — 39 layer-3 files byte-identical; dumps 0 differences in both modes (see `reference/README.md`). | 129 | 7 | 0 |
 | `vega` | not started | 132 | 43 | 0 |
 | `nova` | not started | 126 | 38 | 0 (1 name dropped) |
 | `luma` | not started | 118 | 52 | 0 |
-| `rhea` | not started | 126 | 49 | 1 |
+| `rhea` | **converted** (2026-09-17) — `--radio-dot-size` renamed; 22 layer-3 files byte-identical; the rows that stay rules are listed in `reference/README.md`. Dumps 0 differences, reference 0 / 50 light · 0 / 65 dark. | 126 | 49 | 1 |
 | `maia` | not started | 105 | 28 | 0 |
 | `lyra` | not started | 110 | 10 | 1 |
 
