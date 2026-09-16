@@ -91,15 +91,12 @@ function InputGroupButton({
     type?: "button" | "submit" | "reset"
   }) {
   return (
-    // ⚠ size 를 Button 에 그대로 넘긴다. 업스트림은 클래스에만 쓰고 넘기지 않아 Button 이
-    //    자기 기본값(default)으로 떴고, 그러면 높이 38px 뿐 아니라 글자 크기·행간·간격·
-    //    아이콘 크기까지 md 단계가 따라온다. 위 네 사이즈는 Button 의 size 축에 같은 이름으로
-    //    있으므로 그대로 대응된다. (2026-09-11 — `shadcn add input-group` 으로 다시 받으면
-    //    이 줄이 사라지니 주의할 것.)
+    // ⚠ size 는 클래스(`inputGroupButtonVariants`)와 `data-size` 에만 쓰고 Button 에는
+    //    넘기지 않는다 — 업스트림(shadcn 4.21.0 `input-group.tsx` InputGroupButton)과 같다.
+    //    Button 은 자기 기본 size 로 뜨고, 높이·간격·아이콘 크기는 위 클래스가 덮는다.
     <Button
       type={type}
       data-size={size}
-      size={size}
       variant={variant}
       className={cn(inputGroupButtonVariants({ size }), className)}
       {...props}

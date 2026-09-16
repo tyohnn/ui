@@ -6,7 +6,7 @@
    ⚠ 목록 면·항목·라벨·구분선·단축키는 여기가 아니라 `_menu-family.css` 에 있다.
       Dropdown Menu · Menubar · Command 과 같은 축을 공유한다.
 
-   하위 목록(`cn-context-menu-subcontent`)은 `ContextMenuContent` 를 감싸므로
+   하위 목록(`cn-context-menu-sub-content`)은 `ContextMenuContent` 를 감싸므로
    면 규칙을 이미 물려받는다. mira 원문은 이 이름에 shadow-lg 를 따로 얹지만
    하위 목록도 부모와 같은 shadow-md 로 두기로 했으므로(계열 파일 참조) 규칙을 두지 않는다.
    ============================================================ */

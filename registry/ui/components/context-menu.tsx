@@ -145,7 +145,7 @@ function ContextMenuSubContent({
   return (
     <ContextMenuContent
       data-slot="context-menu-sub-content"
-      className="cn-context-menu-subcontent cn-menu-target cn-menu-translucent"
+      className="cn-context-menu-sub-content cn-menu-target cn-menu-translucent"
       side="right"
       {...props}
     />

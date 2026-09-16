@@ -85,23 +85,23 @@ render no `data-slot` of their own).
 | 2 | calendar `text-[0.8rem]` weekdays, `--cell-size` nav buttons (button sizes are `height`, not `min-height`), no border or padding on the dropdown root and caption label; `outline-style: none` so the base `outline-ring/50` survives; cmdk's `data-selected="false"` / `data-disabled="false"`; command panel `rounded-xl!` without a shadow; combobox item `py-1.5`; DialogTitle inherits its size; alert dialog content inherits `text-base`; menubar `min-w-36` and its label colour; menu indicators without a box; context menu sub-trigger and indicator; sidebar separator and sub-rail; sonner keeps its own type | 62 | 66 |
 | 3 | exclusions written (see below) | 0 | 24 |
 | 4 | dark: `color-scheme` on `:root` / `.dark` (native `<option>` colours), sidebar input border, button group separator `bg-input` | 0 | 0 |
+| 5 | `registry/ui` drift fixed (see below); `.cn-input-group-button-size-sm` dropped, since `style-vega.css` has no such selector and Button's own size now reaches the element | 0 | 0 |
 
-Exclusions (`compare-exclusions.json`), 62 rows in light and 86 in dark, with one reason each:
+Exclusions (`compare-exclusions.json`), 28 rows in light and 52 in dark, with one reason each:
 
 | What | Why |
 |---|---|
 | disabled Checkbox · Radio opacity | Base UI draws them as a span, so shadcn's `disabled:opacity-50` never matches upstream |
 | the whole `direction` section | the preset is generated with `rtl:false`, so its paddings and radii are physical |
-| `field-description` top margin | registry/ui keeps `nth-last-2:-mt-1` but not shadcn's `[[data-variant=legend]+&]:-mt-1.5` |
-| input group buttons, the combobox clear icon | registry/ui's `InputGroupButton` passes `size` to `Button`; shadcn's does not |
 | `input-otp` group gaps | a preset app's `globals.css` carries no `.cn-*` rules, so `.cn-input-otp { gap-2 }` never reaches the reference |
 | menu shortcut widths | ⌘ is in neither Inter build and the two font stacks fall back differently (0.5px) |
-| context menu sub-content shadow | registry/ui carries `cn-context-menu-subcontent`; the upstream name is `cn-context-menu-sub-content` |
-| questionnaire action row height | registry/ui dropped shadcn's `sm:min-h-9` |
 | dark state colours on open triggers, the focused outline button, the invalid checked checkbox and the sidebar search box | Tailwind sorts the preset's `dark:` colours after state utilities that have no dark counterpart, so upstream those states lose their colour in dark |
 
-Five of those are differences in `registry/ui` rather than in vega; they are the list to hand to the next
-`registry/ui` pass (the class-name typo is a plain bug).
+Four exclusions of the 2026-09-16 run were `registry/ui` drift, not vega values, and are **gone** since that
+pass fixed the components against shadcn 4.21.0: the `cn-context-menu-subcontent` typo, the missing
+`[[data-variant=legend]+&]:-mt-1.5` on `FieldDescription`, the missing `sm:min-h-9` on `QuestionnaireActions`,
+and `InputGroupButton` passing `size` to `Button`. Only the disabled Checkbox · Radio opacity row remains a
+`registry/ui` difference, and that one is upstream's own (Base UI renders a span).
 
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and the
 comparison pairs every one that carries a `data-slot`.
