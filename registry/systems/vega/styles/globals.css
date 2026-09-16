@@ -197,9 +197,9 @@
     /* 고스트 버튼 · 고스트 배지의 hover. mira: hover:bg-muted dark:hover:bg-muted/50 — 밝은 쪽은 muted 그대로다. */
     --ghost-hover: oklch(0.97 0 0);
 
-    /* 로딩 자리표시. mira 는 bg-muted 를 쓰지만 흰 카드 위 대비가 1.08 이라 형태가 보이지
-       않는다(원본 앱 실측). 한 단 진한 neutral-200 으로 둔다. 읽는 곳은 skeleton.css 하나다. */
-    --skeleton: oklch(0.922 0 0);
+    /* 로딩 자리표시. vega 는 bg-muted 라, foundation 이 한 단 진하게 둔 neutral-200 대신
+       --muted 와 같은 값을 갖는다. 읽는 곳은 skeleton.css 하나다. */
+    --skeleton: oklch(0.97 0 0);            /* vega: bg-muted */
 
     /* 글자 세기의 셋째 단. "지금은 아니다"를 알리는 자리에만 쓴다 — 본문과 라벨에는 대비가
        모자란다. mira 가 아이콘과 자리표시자에 쓰는 neutral-400 이다. */
@@ -417,7 +417,7 @@
     --muted-soft: oklch(0.269 0 0 / 50%);
     --chip: oklch(0.708 0 0 / 10%);
     --ghost-hover: oklch(0.269 0 0 / 50%);
-    --skeleton: oklch(0.32 0 0);
+    --skeleton: oklch(0.269 0 0);            /* vega: bg-muted */
     --foreground-subtle: oklch(0.556 0 0);
 
     --accent: oklch(0.269 0 0);
@@ -589,6 +589,15 @@
 }
 
 @layer base {
+  /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이
+     정한다. shadcn 앱은 `shadcn/tailwind.css` 가 이것을 깔아 주므로, 프리셋과 같은 화면이 되려면
+     시스템이 두 모드에서 직접 적어야 한다(2026-09-16 native select 의 <option> 대조에서 실측). */
+  :root {
+    color-scheme: light;
+    }
+  .dark {
+    color-scheme: dark;
+    }
   * {
     @apply border-border outline-ring/50;
     }

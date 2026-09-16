@@ -84,7 +84,7 @@
     /* vega: bg-background h-8 shadow-none, the default border colour (mira: bg-muted/20 dark:bg-muted/30 border-input) */
     height: var(--control-height-sm);
     background-color: var(--background);
-    border-color: var(--border);
+    border-color: var(--input);   /* vega: 통은 Input 의 테두리 색을 그대로 둔다 */
     box-shadow: none;
     @apply w-full;
 }

@@ -55,6 +55,9 @@
     }
 }
 
-.cn-button-group-separator {
+/* vega: bg-input — 계열의 구분선(--border)보다 한 단 진하다. separator.css 가 뒤에 읽히므로
+   두 클래스를 함께 잡아 명시도를 올린다. */
+.cn-button-group-separator,
+.cn-button-group-separator.cn-separator {
     background-color: var(--input);
 }

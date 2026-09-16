@@ -118,6 +118,13 @@
 }
 
 /* mira: size-3 — 여닫힘을 알리는 꺾쇠라 항목 아이콘(14)보다 한 단 작다. */
+/* navigationMenuTriggerStyle() 로 그린 링크는 두 클래스를 함께 갖는다. Tailwind 에서는 px-4 가
+   p-2 를 이기므로 가로 패딩은 트리거의 것이 남는데, 여기서는 규칙 순서가 정하므로 다시 적는다.
+   vega: 트리거 px-4 py-2 · 링크 p-2 */
+.cn-navigation-menu-link.cn-navigation-menu-trigger {
+    padding-inline: 16px;
+}
+
 .cn-navigation-menu-trigger-icon {
     width: 12px;   /* vega: size-3 */
     height: 12px;

@@ -124,11 +124,18 @@
     }
 }
 
-/* mira: gap-2 text-xs/relaxed font-medium group-data-[disabled=true]/field:opacity-50 */
+/* FieldLabel 은 Label 클래스도 함께 갖는다. label.css 가 뒤에 오므로 행간을 다시 적는다.
+   vega: leading-snug */
+.cn-field-label.cn-label {
+    line-height: 1.375;
+}
+
+/* vega: gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50 — 제목에는
+   leading-snug 이 없다(라벨과 다른 점). text-sm 의 기본 행간 20px 이다. */
 .cn-field-title {
     gap: 8px;
     font-size: var(--ui-text-md);
-    line-height: 1.375;   /* vega: leading-snug */
+    line-height: var(--ui-line-height-md);
     letter-spacing: var(--ui-letter-spacing);
     font-weight: var(--ui-font-weight);
 

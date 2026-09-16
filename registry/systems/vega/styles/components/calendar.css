@@ -22,16 +22,14 @@
     --cell-size: 32px;   /* vega: --spacing(8) */
 }
 
-/* 연·월 고르는 셀렉트. 링은 _control-family.css 와 같은 한 겹(ring-2 ring-ring/30)이다 —
-   달력 머리에 홀로 서 있어 옆을 지울 걱정이 없다.
-   mira: has-focus:border-ring border-input border has-focus:ring-2 */
+/* 연·월 고르는 셀렉트. 포커스 링만 갖는다.
+   ⚠ style-vega.css 의 .cn-calendar-dropdown-root 에는 `border shadow-xs` 가 있지만,
+      shadcn 이 내놓는 calendar.tsx 는 그 클래스를 달지 않아 참조 앱에는 테두리도 그림자도
+      없다. 정본은 참조 앱이다(tooling/preset/README.md 2절의 "Baked components"). */
 .cn-calendar-dropdown-root {
-    border: var(--control-border-width) solid var(--input);
-    box-shadow: var(--shadow-control);   /* vega: shadow-xs */
-
     &:has(:focus) {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus), var(--shadow-control);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
     }
 }
 
@@ -43,17 +41,14 @@
       아예 없었기 때문이다. */
 .cn-calendar-weekday,
 .cn-calendar-week-number {
-    font-size: var(--ui-text-xs);
+    font-size: 0.8rem;   /* vega: text-[0.8rem] — 축에 없는 임의값이라 프리셋 값 그대로 적는다 */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: var(--ui-line-height-xs);
+    line-height: 1.5;
 }
 
 /* 연·월 셀렉트 위에 보이는 글자 자리. mira: bg-input/20 dark:bg-input/30 h-7 pr-1.5 pl-2
    ⚠ 28px 과 좌우 8·6px 은 리터럴이다. 달력 머리의 글자 자리라 control 축과 성격이
       다르다 — 값이 md 와 같은 것은 우연이고, md 를 옮겨도 이 글자 자리는 따라가면 안 된다. */
-.cn-calendar-caption-label {
-    /* vega: h-8 pr-1 pl-2, no fill */
-    height: 32px;
-    padding-inline-start: 8px;
-    padding-inline-end: 4px;
-}
+/* ⚠ style-vega.css 의 .cn-calendar-caption-label 은 `h-8 pr-1 pl-2` 지만, 달력 컴포넌트가
+   그 클래스를 달지 않아 참조 앱의 글자 자리에는 높이도 좌우 여백도 없다(위와 같은 사유). */
+/* (규칙 없음 — 값이 필요해지면 참조 앱의 caption_label 유틸리티를 먼저 확인할 것.) */

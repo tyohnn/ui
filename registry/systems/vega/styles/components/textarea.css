@@ -25,6 +25,7 @@
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
+    --control-shadow: var(--shadow-control);
     box-shadow: var(--shadow-control);   /* vega: shadow-xs */
     color: var(--foreground);
 

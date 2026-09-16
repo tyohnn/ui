@@ -29,12 +29,15 @@
       결정이기 때문이다. 서리유리로 갈 거면 계열에서 메뉴 면의 불투명 배경을 빼야 하고,
       아니라면 여기 `bg-popover/70` 과 `before:*` 를 지워야 한다. 둘 중 하나를 고를 것.
 
-   ⚠ 트리거(`**:…-trigger:…`)는 남겨 두었다. 계열이 트리거의 바탕을 정하지 않아
-      지우면 열린 메뉴바 트리거의 강조가 통째로 사라진다.
+   ⚠ 트리거(`**:…-trigger:…`)도 지웠다. `cn-menu-translucent` 는 면과 하위 면에만 붙으므로
+      그 후손 중 `-trigger` 로 끝나는 것은 **하위 메뉴 트리거뿐**이고, 그것은 항목이라
+      바탕을 계열이 정한다. 남겨 두면 열린 하위 메뉴 트리거가 --accent 대신 foreground/10
+      으로 떴다(2026-09-16, vega coverage 대조에서 실측). 메뉴바 트리거는 면 바깥이라
+      이 규칙이 닿은 적이 없다.
    ============================================================ */
 
 .cn-menu-translucent {
-    @apply animate-none! relative bg-popover/70 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150 **:data-[slot$=-trigger]:focus:bg-foreground/10 **:data-[slot$=-trigger]:aria-expanded:bg-foreground/10!;
+    @apply animate-none! relative bg-popover/70 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150;
 }
 
 .cn-menu-translucent-aria {

@@ -43,12 +43,8 @@
     @apply data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2;
 }
 
-/* mira: data-highlighted:bg-accent … not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground py-1
-   ⚠ 세로 4px 은 리터럴이다. 항목 높이는 계열이 min-height 로 정하고, 이
-      값은 글줄이 두 줄이 될 때만 드러나는 보정이라 축이 아니다. */
+/* vega: data-highlighted:bg-accent … py-1.5 — 세로 여백은 계열(_menu-family)의 6px 과 같다. */
 .cn-combobox-item {
-    padding-block: 4px;
-
     &[data-highlighted]:not([data-variant="destructive"]) * {
         color: var(--accent-foreground);
     }
@@ -138,14 +134,14 @@
     /* mira: focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 */
     &:focus-within {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus), var(--shadow-control);
     }
 
     /* 검증 실패는 포커스와 무관하게 늘 그리고, 포커스보다 뒤에 두어 이긴다.
        mira: has-aria-invalid:border-destructive dark:…/50 has-aria-invalid:ring-2 ring-destructive/20 dark:…/40 */
     &:has([aria-invalid="true"]) {
         border-color: var(--border-invalid);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid), var(--shadow-control);
     }
 }
 

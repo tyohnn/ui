@@ -34,6 +34,21 @@
    포커스 링
    -------------------------------------------------------- */
 
+/* vega: ring-[3px] 와 shadow-xs 는 Tailwind 에서 서로 다른 겹이라 함께 그려진다. 링을 box-shadow 하나로
+   그리는 여기서는 컨트롤이 제 그림자를 --control-shadow 에 담아 두고, 링 규칙이 그 뒤에 다시 깐다.
+   기본값은 그림자 없음(`0 0 #0000` — 목록 안의 `none` 은 선언 전체를 무효로 만든다)이고, 제 그림자를
+   그리는 컨트롤이 제 파일에서 box-shadow 옆에 같은 값을 적는다. */
+.cn-button,
+.cn-input,
+.cn-textarea,
+.cn-select-trigger,
+.cn-native-select,
+.cn-checkbox,
+.cn-radio-group-item,
+.cn-switch {
+    --control-shadow: 0 0 #0000;
+}
+
 .cn-button,
 .cn-input,
 .cn-textarea,
@@ -43,14 +58,14 @@
 .cn-switch {
     &:focus-visible {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus), var(--control-shadow);
     }
 }
 
 /* 라디오만 한 단 굵고 진하다. mira: focus-visible:ring-3 focus-visible:ring-ring/50 */
 .cn-radio-group-item:focus-visible {
     border-color: var(--ring);
-    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-focus-strong);
+    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-focus-strong), var(--control-shadow);
 }
 
 /* ⚠ Toggle 은 이 목록에 없다. 컴포넌트 cva 에 focus-visible:ring-[3px] 가 박혀 있어
@@ -60,7 +75,7 @@
    mira: focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40 */
 .cn-button-variant-destructive:focus-visible {
     border-color: var(--destructive-focus-border);
-    box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid), var(--control-shadow);
 }
 
 /* --------------------------------------------------------
@@ -76,13 +91,13 @@
 .cn-switch {
     &[aria-invalid="true"] {
         border-color: var(--border-invalid);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid), var(--control-shadow);
     }
 }
 
 .cn-radio-group-item[aria-invalid="true"] {
     border-color: var(--border-invalid);
-    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-invalid);
+    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-invalid), var(--control-shadow);
 }
 
 /* 이미 켜져 있는 체크박스·라디오는 테두리를 그대로 둔다.

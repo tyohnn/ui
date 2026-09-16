@@ -33,7 +33,7 @@
     @apply grid grid-rows-[auto_1fr] place-items-center text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-left sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr];
 
     /* 배지가 제목 왼쪽에 서는 배치에서는 가로 간격만 한 단계 넓힌다. mira: gap-x-4 */
-    row-gap: 6px;   /* vega: gap-1.5 */
+    gap: 6px;   /* vega: gap-1.5 */
 
     &:has([data-slot="alert-dialog-media"]) {
         column-gap: var(--surface-padding-lg);   /* vega: gap-x-6 */

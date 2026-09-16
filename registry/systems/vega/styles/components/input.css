@@ -16,25 +16,28 @@
    ============================================================ */
 
 .cn-input {
-    min-height: var(--control-height-md);
+    /* vega: h-9 — 높이가 정본이라 min-height 로 늘어나지 않는다(파일 선택 버튼이 있어도 36px). */
+    height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
 
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     /* vega: py-1 · shadow-xs */
     padding-block: 4px;
+    --control-shadow: var(--shadow-control);
     box-shadow: var(--shadow-control);
     background-color: var(--input-fill);
-    color: var(--foreground);
+    /* 글자색은 주지 않는다 — vega 의 Input 에는 text- 유틸리티가 없고, 검증에 실패한 Field 안에서는
+       그 색(text-destructive)을 물려받아야 한다. */
 
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
     letter-spacing: var(--control-letter-spacing);
 
     /* 파일 선택 버튼은 인풋 안에 들어앉는 작은 컨트롤이라 한 단계 아래를 읽는다.
-       mira: file:h-6 file:text-xs/relaxed file:font-medium */
+       vega: file:h-7 file:text-sm file:font-medium — 28px 는 축의 어느 단도 아니라 값으로 적는다. */
     &::file-selector-button {
-        height: var(--control-height-sm);
+        height: 28px;   /* vega: file:h-7 */
         font-size: var(--control-font-size-sm);
         line-height: var(--control-line-height-sm);
         font-weight: var(--control-font-weight);

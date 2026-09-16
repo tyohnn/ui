@@ -30,13 +30,15 @@
     border: var(--control-border-width) solid var(--checkbox-border);
     border-radius: var(--control-indicator-radius);
     background-color: var(--checkbox-fill);
+    --control-shadow: var(--shadow-recessed);
     box-shadow: var(--shadow-recessed);
 
+    /* ⚠ 그림자는 다시 적지 않는다. 기본 규칙이 이미 주고 있고, 여기서 다시 적으면 같은
+       명시도의 검증 실패 링(_control-family)을 덮어 켜진 채 검증에 실패한 상자에서 링이 사라진다. */
     &[data-checked] {
         background-color: var(--selection);
         border-color: var(--selection);
         color: var(--selection-foreground);
-        box-shadow: var(--shadow-recessed);   /* vega: shadow-xs stays when checked */
     }
 
     /* Indeterminate — foundation slots repeat the unchecked look (mira); a system may fill it like checked. */

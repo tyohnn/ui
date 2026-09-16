@@ -31,6 +31,7 @@
     height: var(--switch-track-height-md);
     /* vega: no padding; items-center centres a size-4 (sm size-3) thumb in the 18.4px (14px) track. */
     padding: 0;
+    --control-shadow: var(--shadow-control);
     box-shadow: var(--shadow-control);
 
     border: var(--control-border-width) solid transparent;

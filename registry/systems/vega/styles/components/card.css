@@ -83,7 +83,7 @@
 
     .cn-card[data-size="sm"] & {
         font-size: var(--ui-text-lg);
-        line-height: var(--ui-line-height-lg);
+        line-height: 1.5;   /* vega: leading-normal — text-sm 에서 21px */
     }
     font-weight: var(--ui-font-weight);
 }
@@ -95,7 +95,12 @@
     line-height: var(--ui-line-height-md);
 }
 
+/* 세로 쌓기와 사이 여백은 여기가 갖는다 — registry/ui 의 CardContent 는 레이아웃 유틸리티를
+   달지 않는다. vega: flex flex-col gap-3 px-(--card-spacing) */
 .cn-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     padding-inline: var(--card-spacing);
 }
 
@@ -111,9 +116,3 @@
     }
 }
 
-/* vega: a card content that holds questionnaire choices stacks them with gap-3. */
-.cn-card-content:has(> [data-slot="questionnaire-choices"]) {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}

@@ -15,11 +15,25 @@
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;
 }
 
-/* vega: the submenu is a bordered panel with shadow-lg, not the ring of the menu */
+/* vega: min-w-32 shadow-lg — 계열의 링은 그대로 두고 그림자만 한 단 깊다.
+   ⚠ registry/ui 의 ContextMenuSubContent 는 `cn-context-menu-subcontent` 를 달고 있어
+      (업스트림 이름은 `cn-context-menu-sub-content`) 이 규칙이 아직 닿지 않는다. */
 .cn-context-menu-sub-content {
     min-width: 128px;
-    border: var(--surface-border-width) solid var(--border);
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* vega: 하위 메뉴 트리거에는 gap 이 없다(Dropdown 의 sub-trigger 와 다른 점). */
+.cn-context-menu-sub-trigger {
+    gap: normal;
+}
+
+/* vega: 항목의 체크 표시 자리는 `absolute right-2` 뿐이다 — Dropdown 과 달리 flex 정렬이 없어
+   안의 표시가 흐름대로 놓인다(계열 규칙이 주는 flex 를 되돌린다). */
+.cn-context-menu-item-indicator {
+    display: block;
 }
 
 .cn-context-menu-content-logical {

@@ -76,7 +76,6 @@
 
 /* 본문 글자. mira: text-xs/relaxed — Popover 만 text-xs(12/16)다. */
 .cn-dialog-content,
-.cn-alert-dialog-content,
 .cn-sheet-content,
 .cn-drawer-content,
 .cn-drawer-popup,
@@ -189,7 +188,6 @@
 }
 
 /* mira: text-sm font-medium — Popover 의 제목도 같은 단이다. */
-.cn-dialog-title,
 .cn-alert-dialog-title,
 .cn-sheet-title,
 .cn-drawer-title,
@@ -269,8 +267,13 @@
     rotate: 45deg;
 }
 
-/* vega: the dialog title is leading-none at the content's text-sm; the alert dialog title is text-lg. */
+/* vega: DialogTitle 에는 글자 크기가 없다 — 면의 text-sm 을 물려받는다. CommandDialog 처럼
+   제목이 면 밖에 sr-only 로 놓이면 바깥 크기를 그대로 써야 하므로 여기서 주면 안 된다.
+   alert dialog 의 제목만 text-lg 로 한 단 크다(위). */
 .cn-dialog-title {
+    color: var(--popover-foreground);
+    font-weight: var(--ui-font-weight);
+    letter-spacing: var(--ui-letter-spacing);
     line-height: 1;
 }
 

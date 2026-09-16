@@ -93,6 +93,7 @@
     background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
     border-color: var(--button-outline-border);
+    --control-shadow: var(--shadow-control);
     box-shadow: var(--shadow-control);
     font-weight: var(--control-font-weight-regular);
 
@@ -167,11 +168,14 @@
    size — 밀도
    높이가 정본이고 세로 패딩은 두지 않는다. 세로 가운데 정렬은
    컴포넌트의 items-center 가 이미 담당하므로, 높이 하나로 결정된다.
+
+   ⚠ vega 는 h-9 처럼 고정 높이다(min-height 가 아니다). 호출부가 size-(--cell-size) 같은
+      유틸리티로 높이를 다시 줄 때(달력의 이전·다음 버튼) min-height 가 그 값을 이겨 버린다.
    -------------------------------------------------------- */
 
 /* xs 만 모서리가 한 단 작다. mira: rounded-sm */
 .cn-button-size-xs {
-    min-height: var(--control-height-xs);
+    height: var(--control-height-xs);
     padding-inline: var(--control-padding-x-xs);
     gap: var(--control-gap-xs);
     border-radius: var(--button-shape-radius, var(--control-radius-xs));
@@ -188,7 +192,7 @@
 }
 
 .cn-button-size-sm {
-    min-height: var(--control-height-sm);
+    height: var(--control-height-sm);
     padding-inline: var(--control-padding-x-sm);
     gap: var(--control-gap-sm);
     font-size: var(--control-font-size-sm);
@@ -204,7 +208,7 @@
 }
 
 .cn-button-size-default {
-    min-height: var(--control-height-md);
+    height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
     gap: var(--control-gap-md);
     font-size: var(--control-font-size-md);
@@ -224,7 +228,7 @@
 }
 
 .cn-button-size-lg {
-    min-height: var(--control-height-lg);
+    height: var(--control-height-lg);
     padding-inline: var(--control-padding-x-lg);
     gap: var(--control-gap-lg);
     font-size: var(--control-font-size-lg);

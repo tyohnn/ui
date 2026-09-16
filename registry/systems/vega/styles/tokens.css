@@ -235,12 +235,12 @@
     /* `initial` = inherit (mira sets neither on the label). */
     --sidebar-group-label-font-weight: 500;
     --sidebar-group-label-text-transform: initial;
-    --sidebar-separator-margin-block: 8px;
+    --sidebar-separator-margin-block: 0;   /* vega: mx-2 뿐, 세로 여백 없음 */
 
     /* 하위 항목. 하위 라벨의 왼쪽이 상위 라벨의 왼쪽(안쪽 여백 8 + 아이콘 16 + 간격 8 = 32)과
        맞아야 한다. 아래 두 값을 더하면 그 32 가 나온다. 한쪽을 고치면 다른 쪽도 함께 고칠 것. */
-    --sidebar-sub-rail-offset: 16px;  /* 상위 항목 아이콘의 가운데. 왼쪽 선이 서는 자리 */
-    --sidebar-sub-item-indent: 16px;  /* 선에서 글자까지 */
+    --sidebar-sub-rail-offset: 14px;  /* 상위 항목 아이콘의 가운데. 왼쪽 선이 서는 자리. vega: mx-3.5 */
+    --sidebar-sub-item-indent: 18px;  /* 선에서 글자까지. vega: px-2.5 (18 - 항목 좌우 8) */
     --sidebar-sub-item-height: 28px;  /* sub-button h-7 */
 
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */

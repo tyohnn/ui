@@ -16,9 +16,11 @@
       항목의 좌우 여백을 하나로 정하는 자리라, 여기서 다시 적으면 드리프트가 되살아난다.
    ============================================================ */
 
-/* mira: rounded-xl */
+/* vega: rounded-xl! bg-popover p-1 — 그림자도 링도 없다. 팔레트는 대화상자 안에 들어앉거나
+   호출부가 테두리를 두르는 면이라, 계열(_menu-family)이 메뉴 면에 주는 띄움 그림자를 되돌린다. */
 .cn-command {
     border-radius: var(--surface-radius-lg);
+    box-shadow: none;
 }
 
 .cn-command-input-wrapper {
@@ -62,7 +64,7 @@
 .cn-command-list {
     max-height: var(--menu-list-max-height);
     scroll-padding-block: var(--menu-padding);
-    outline: none;
+    outline-style: none;   /* ⚠ `outline: none` 은 base 의 outline-ring/50 색까지 지운다 */
 
     /* 스크롤바를 숨기는 유틸리티는 shadcn 이 정의한 것이라 그대로 쓴다. */
     @apply no-scrollbar;

@@ -26,6 +26,7 @@
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-image: var(--surface-control);
+    --control-shadow: var(--shadow-control);
     box-shadow: var(--shadow-control);
     color: var(--foreground);
 

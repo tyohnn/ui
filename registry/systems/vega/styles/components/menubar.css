@@ -56,8 +56,9 @@
 }
 
 /* vega: the menubar label is text-sm font-medium in the foreground colour */
+/* vega: px-2 py-1.5 text-sm font-medium — 색은 주지 않는다. 메뉴바의 라벨은 Dropdown 의
+   라벨 규칙(muted-foreground)을 그대로 물려받고 글자 크기만 한 단 크다. */
 .cn-menubar-label {
-    color: inherit;
     font-size: var(--ui-text-md);
     line-height: var(--ui-line-height-md);
 }
@@ -83,6 +84,11 @@
         width: var(--control-icon-size-lg);
         height: var(--control-icon-size-lg);
     }
+}
+
+/* vega: min-w-36 — Dropdown 의 면(min-w-32)보다 한 단 넓다. */
+.cn-menubar-content {
+    min-width: 144px;
 }
 
 .cn-menubar-content,
