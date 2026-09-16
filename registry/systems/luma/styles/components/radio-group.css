@@ -68,6 +68,9 @@
     inset-inline-start: 50%;
     translate: -50% -50%;
 
+    /* 점의 크기는 axis contract v4 의 --radio-indicator-dot-size 가 갖는다. 1층에 있는 이유는
+       luma 가 밝은 쪽과 어두운 쪽에 다른 값을 주기 때문이고, foundation 값은
+       --control-indicator-dot-size 의 별칭이라 체크박스 축과 같은 값 그대로다. */
     width: var(--radio-indicator-dot-size);
     height: var(--radio-indicator-dot-size);
     border-radius: 9999px;

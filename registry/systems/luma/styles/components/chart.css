@@ -29,7 +29,8 @@
 .cn-chart-tooltip {
     /* luma: ring-1 ring-foreground/5 (dark /10) instead of a border, rounded-xl, shadow-lg. */
     border: 0 solid transparent;
-    border-radius: 14px;
+    /* 모서리는 툴팁 자신의 축이다 — v4 슬롯 --chart-tooltip-radius(--surface-radius 의 별칭). */
+    border-radius: var(--chart-tooltip-radius);
     background-color: var(--popover);
     color: var(--popover-foreground);
     box-shadow:

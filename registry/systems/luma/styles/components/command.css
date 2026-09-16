@@ -36,7 +36,9 @@
       (0,1,0)이면 `.cn-input-group` 의 height 가 이긴다. mira 의 `h-8!` 이 같은 사정이다. */
 .cn-command-input-wrapper > .cn-command-input-group {
     height: var(--control-height-md);   /* luma: h-9 */
-    background-color: var(--input-fill);
+    /* 바탕은 v4 의 --command-input-fill 이다. 기본값이 --input-fill 이라 값은 그대로이고,
+       팔레트의 검색칸만 폼 입력과 다른 채움을 주는 시스템이 규칙을 고치지 않아도 된다. */
+    background-color: var(--command-input-fill);
 }
 
 .cn-command-input {
@@ -52,11 +54,6 @@
     height: var(--control-icon-size-md);
     flex-shrink: 0;
     opacity: 0.5;
-}
-
-/* luma: the command row keeps the component's gap-2, not the menu family's gap-2.5. */
-.cn-command-item {
-    gap: 8px;
 }
 
 .cn-command-list {

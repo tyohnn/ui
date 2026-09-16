@@ -24,26 +24,32 @@
    ============================================================ */
 
 .cn-native-select {
-    /* mira: py-0.5 */
-    padding-block: 4px;   /* luma: py-1 */
+    /* mira: py-0.5. 종전 2px 리터럴이 v4 의 --control-padding-y-field 로 올라갔다. */
+    padding-block: var(--control-padding-y-field);
     width: 100%;
     min-width: 0;
     appearance: none;
     user-select: none;
 
+    /* 테두리 색은 v4 의 --input-border 가 갖는다(foundation 값은 --input 의 별칭). */
     border: var(--control-border-width) solid var(--input-border);
+    /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
+       foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius-sm);   /* luma: rounded-3xl */
     background-color: var(--input-fill);
     color: var(--foreground);
-    letter-spacing: var(--control-letter-spacing);
+    letter-spacing: var(--control-letter-spacing-field);
 
+    /* default 만 입력 계열 축(axis contract v4)을 읽는다 — foundation 값은 control 축 md 의
+       별칭이다. sm 은 원래 sm · xs 단계를 읽으므로 계열 축이 아니다(머리말 참고). */
     &[data-size="default"] {
         height: var(--control-height-md);
-        padding-inline-start: var(--control-padding-x-md);
+        padding-inline-start: var(--control-padding-x-field);
         /* luma: pr-8 — 화살표 자리를 계산이 아니라 한 값으로 준다(32px). */
         padding-inline-end: 32px;
-        font-size: var(--control-font-size-md);
-        line-height: var(--control-line-height-md);
+        font-size: var(--control-font-size-field);
+        line-height: var(--control-line-height-field);
     }
 
     &[data-size="sm"] {

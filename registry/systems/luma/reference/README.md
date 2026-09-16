@@ -111,8 +111,9 @@ comparison pairs every one that carries a `data-slot`.
 
 ## Foundation slot candidates
 
-Four places needed a system-only name because foundation has one value where luma wants two. Each is a
-candidate for the next axis-contract version:
+Four places needed a system-only name because foundation has one value where luma wants two. All of them
+(and the two colours below) were adopted by axis contract v4 under the same names; the table is kept as the
+record of why:
 
 | Name | Foundation would be | Why luma needs it |
 |---|---|---|
@@ -123,3 +124,62 @@ candidate for the next axis-contract version:
 
 `--slider-track-fill` and `--combobox-chip-fill` are two more, both layer-1 colours foundation currently takes
 from `--muted` and `--input` directly.
+
+## Axis contract v4 slot migration (stage 2, 2026-09-17)
+
+`tooling/preset/slot-migration.md` listed **52 rows** for luma (118 declaration sites, 66 adopting foundation's
+rule unchanged). Every row was applied: each layer-3 file was rebuilt as foundation's current rule plus luma's
+remaining edits (a three-way merge from foundation at `ab3c807`), and the value moved into the slot in place
+in `styles/tokens.css` / `styles/globals.css` (and out of the backfill block).
+
+| Slot | luma value |
+|---|---|
+| `--menu-item-font-weight` · `--menu-label-padding-y` | `var(--ui-font-weight)` · `10px` |
+| `--avatar-font-size` · `--avatar-line-height` | `var(--ui-text-sm)` · `var(--ui-line-height-sm)` |
+| `--badge-height` · `-padding-x` · `-padding-x-icon` · `-radius` | `20px` · `var(--tag-padding-x)` · `6px` · `var(--tag-radius)` |
+| `--bubble-padding-x` · `-padding-y` · `-line-height` | `14px` · `10px` · `22.75px` |
+| `--chart-tooltip-radius` · `--empty-radius` | `14px` · `18px` |
+| `--control-padding-y-field` | `4px` |
+| `--item-gap` | `8px` |
+| `--kbd-height` · `--kbd-padding-x` | `22px` · `6px` (`--kbd-min-width` keeps its `var(--kbd-height)` default) |
+| `--menubar-padding` | `4px` |
+| `--sidebar-input-height` · `-surface-gap` · `-surface-padding` · `-separator-margin-inline` · `-item-padding-y` | `32px` · `8px` · `8px` · `8px` · `8px` |
+| `--slider-track-thickness` | `8px` |
+| `--tabs-list-height` · `-list-padding` · `--tabs-trigger-gap` · `-padding-x` · `-padding-y` | `var(--control-height-md)` · `4px` · `8px` · `12px` · `4px` |
+| `--toggle-group-joined-radius` · `--toggle-gap` | `var(--control-radius-sm)` · `4px` |
+| `--switch-track-border-on` (layer 1, both scopes) | `var(--primary)` |
+
+Rows whose value is foundation's default (`--accordion-border-width` ×2, `--badge-border-width`, the badge
+glyph) needed no token. Two slots the list did not name also took luma's value, removing a layer-3 edit
+each: `--command-item-gap: 8px` (the added `.cn-command-item { gap: 8px }` rule is gone) and
+`--questionnaire-shortcut-border` = `primary/10` in both scopes. `--radio-indicator-dot-size`,
+`--control-radius-sm`, `--card-radius` and `--input-border` lost their "Foundation slot candidate" comments.
+
+**Check.** Computed values of every coverage section (2530 elements) and of the component sheet (307) were
+dumped before and after in both modes: **0 differences**. Against the reference app (3121, preview 5191):
+**light 0 mismatches / 28 excluded · dark 0 / 43** — the same as before the migration.
+
+**Layer 3 against foundation:** 16 of 62 files are byte-identical (12 before; `_control-family.css`,
+`context-menu.css`, `kbd.css` and `label.css` joined). 46 still differ:
+
+- **v4 slot meanings that do not fit luma (3 places).** luma proposed `--control-radius-sm` for the input
+  family's `rounded-3xl` (22); v4 adopted the name as the *sm control's* corner and made the sm button,
+  the sm icon button and `.cn-input-group-button` read it. luma's sm buttons are `rounded-4xl` (26), so
+  `button.css` (two rules — its only difference) and `input-group.css` keep `var(--control-radius)`.
+  `.cn-badge[data-tone]` now reads `--badge-height` in foundation; luma's toned tag was the xs control's 24px
+  while the plain badge is 20, so `badge.css` keeps `var(--control-height-xs)` there (luma's upstream has no
+  tones to decide it — the component sheet shows it).
+- **Structure (DESIGN.md §5's four shapes):** the sidebar's local `--radius` (now re-declaring
+  `--sidebar-part-radius` too, so the skeleton rules read foundation's slot), the joined toggle group's
+  `data-spacing="0"][data-variant="outline"]` selector, the context-menu indicator without a flex box,
+  added declarations foundation never makes (the card's `shadow-md`, bg-secondary close buttons, the drawer
+  shadow, the switch thumb's `--tw-shadow`, alert-dialog and dialog title type, popover header gap, menubar
+  label padding, sub-trigger gaps, the Command panel's `p-1`, the Command and combobox separators, the
+  input-group textarea's `py-2.5`, the dialog-scoped command row radius, the vertical line-tab corners).
+- **Values with no v4 slot**, where foundation writes a literal or reads a shared axis step luma does not
+  share: paddings · gaps · radii · type in `_menu-family` (label text-xs) · `_surface-family` (tooltip, popover gap) · accordion · alert · alert-dialog · attachment · avatar ·
+  breadcrumb · bubble (`ring-3`) · calendar · chart · combobox · dialog · drawer · empty · field · input ·
+  input-group · input-otp · item · menubar · message · message-scroller · native-select · navigation-menu ·
+  pagination · popover · progress · questionnaire · resizable · select · sidebar · skeleton · slider ·
+  switch (`border-2`) · table · tabs · textarea · toggle, and the input family's `--control-radius-sm` /
+  `--input-border` reads. None of these is a slot today; they stay luma's own rules.

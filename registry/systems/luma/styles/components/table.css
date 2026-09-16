@@ -81,7 +81,10 @@
     color: var(--table-head-foreground);
     font-size: var(--table-head-font-size);
     line-height: var(--table-head-line-height);
+    letter-spacing: var(--table-head-letter-spacing);
     font-weight: var(--ui-font-weight-regular);
+    /* v4: 머리글의 자간과 대소문자는 슬롯이다. foundation 은 mira 그대로(normal · initial). */
+    text-transform: var(--table-head-text-transform);
     @apply text-left align-middle whitespace-nowrap;
 }
 
