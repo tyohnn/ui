@@ -1,0 +1,32 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "nova",
+    "description": "Geist on a neutral ramp: soft 10px corners, roomy 32px controls at 14px, and depth drawn with a hairline ring and a muted footer band.",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "4b51482"
+    },
+    "fonts": {
+        "sans": "geist",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "shadcn-preset",
+        "neutral",
+        "light",
+        "rounded"
+    ],
+    "source": {
+        "kind": "shadcn-preset",
+        "note": "shadcn create preset base-nova (npx shadcn@4.21.0 init -t next -b base -p nova); values checked against the reference app with tooling/snapshot/compare-shadcn.mjs.",
+        "preset": "nova",
+        "shadcnVersion": "4.21.0",
+        "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d"
+    }
+}
