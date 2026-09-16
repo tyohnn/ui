@@ -407,6 +407,9 @@
     /* A disabled control's fill and the command palette search box's own fill.
        mira: the normal input fill in both. */
     --input-fill-disabled: var(--input-fill);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --command-input-fill: var(--input-fill);
     /* The outline button's hover fill. mira: the input hover fill; vega gives it its own. */
     --button-outline-hover-fill: var(--input-fill-hover);
@@ -635,6 +638,9 @@
     /* A disabled control's fill and the command palette search box's own fill.
        mira: the normal input fill in both. */
     --input-fill-disabled: var(--input-fill);
+    /* v5: the Select family's disabled fill (select trigger · native select), split from the input
+       family's. mira: the same fill. nova · lyra fill a disabled input and textarea, not a select. */
+    --select-fill-disabled: var(--input-fill-disabled);
     --command-input-fill: var(--input-fill);
     /* The outline button's hover fill. mira: the input hover fill; vega gives it its own. */
     --button-outline-hover-fill: var(--input-fill-hover);
