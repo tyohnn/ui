@@ -17,7 +17,7 @@
    ============================================================ */
 
 .cn-toggle-group {
-    border-radius: var(--control-radius);
+    border-radius: var(--toggle-group-joined-radius);
 }
 
 .cn-toggle-group-item {
@@ -33,22 +33,22 @@
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="horizontal"] > &:first-child {
-        border-start-start-radius: var(--control-radius);
-        border-end-start-radius: var(--control-radius);
+        border-start-start-radius: var(--toggle-group-joined-radius);
+        border-end-start-radius: var(--toggle-group-joined-radius);
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="horizontal"] > &:last-child {
-        border-start-end-radius: var(--control-radius);
-        border-end-end-radius: var(--control-radius);
+        border-start-end-radius: var(--toggle-group-joined-radius);
+        border-end-end-radius: var(--toggle-group-joined-radius);
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="vertical"] > &:first-child {
-        border-start-start-radius: var(--control-radius);
-        border-start-end-radius: var(--control-radius);
+        border-start-start-radius: var(--toggle-group-joined-radius);
+        border-start-end-radius: var(--toggle-group-joined-radius);
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="vertical"] > &:last-child {
-        border-end-start-radius: var(--control-radius);
-        border-end-end-radius: var(--control-radius);
+        border-end-start-radius: var(--toggle-group-joined-radius);
+        border-end-end-radius: var(--toggle-group-joined-radius);
     }
 }

@@ -30,7 +30,7 @@
    ⚠ 상하 6px 은 리터럴이다. 글줄을 감싸는 말풍선이라 surface 축의 여백(10·16·24)은 위아래가 과하다. */
 .cn-bubble-content {
     border: var(--surface-border-width) solid transparent;
-    border-radius: var(--surface-radius);
+    border-radius: var(--bubble-radius);
     padding-inline: var(--bubble-padding-x);
     padding-block: var(--bubble-padding-y);
     font-size: var(--ui-text-sm);

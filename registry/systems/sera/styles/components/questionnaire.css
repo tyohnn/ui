@@ -77,6 +77,7 @@
     padding-block: 16px;
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--surface-radius-lg);
+    background-color: var(--questionnaire-choice-fill);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -147,7 +148,7 @@
 .cn-questionnaire-shortcut {
     width: 20px;
     height: 20px;
-    border: var(--control-border-width) solid var(--input);
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
     border-radius: var(--control-radius-xs);
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: var(--background);   /* sera: bg-background (mira: /80) */

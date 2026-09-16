@@ -32,7 +32,7 @@
     user-select: none;
 
     border: var(--control-border-width) solid var(--input-border);
-    border-block-end-color: var(--input-border-bottom);
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     color: var(--foreground);

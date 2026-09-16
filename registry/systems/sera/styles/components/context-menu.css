@@ -17,7 +17,7 @@
 /* mira: shadow-lg — 하위 목록만 부모보다 한 단 깊다. */
 .cn-context-menu-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--menu-sub-shadow);
 }
 

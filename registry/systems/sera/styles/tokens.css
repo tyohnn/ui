@@ -209,6 +209,7 @@
     --menu-item-gap: 10px;
     /* Command · Select · Item rows keep the 8px gap the four menu families widen to 10. */
     --select-item-gap: 8px;             /* item gap-2 */
+    --item-gap: 8px;   /* Item's media · title · actions gap and separator margin */
     /* 세로 여백 — mira: 보통 항목 py-1, 체크·라디오·팔레트 항목 py-1.5. 높이는 --menu-item-height 가
        바닥을 잡고, 글이 길어지면 이 여백이 행을 키운다(2026-09-16 mira 대조에서 추가). */
     --menu-item-padding-y: 8px;
@@ -225,6 +226,8 @@
     --menu-shortcut-line-height: 16px;
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
+    /* The menubar bar keeps p-1 while the popups widen to 6. */
+    --menubar-padding: 4px;
 
     /* --------------------------------------------------------
        sidebar-item — 사이드바의 항목
@@ -234,6 +237,8 @@
     --sidebar-item-height: 36px;
     --sidebar-surface-padding: 8px;
     --sidebar-surface-gap: 8px;
+    /* The separator bleeds to the shell's padding, not the item's. */
+    --sidebar-separator-margin-inline: var(--sidebar-surface-padding);
     --sidebar-input-height: 32px;
     /* sera keeps the collapsed icon rail at the 32px square the h-9 row grew out of. */
     --sidebar-rail-size: 32px;
@@ -327,6 +332,8 @@
     --control-font-size-field: 14px;
     --control-line-height-field: 20px;
     --control-letter-spacing-field: normal;
+    /* An input-group addon lines up with the underline field it sits in (px-0). */
+    --control-padding-x-grouped: var(--control-padding-x-field);
     --menu-item-text-transform: uppercase;
     --menu-item-font-weight: 500;
     --menu-item-letter-spacing: 0.05em;
@@ -337,8 +344,8 @@
     --title-letter-spacing: 0.05em;
     --ui-label-text-transform: uppercase;
     --ui-label-letter-spacing: 0.025em;
-    --tag-text-transform: uppercase;
-    --tag-letter-spacing: 0.1em;
+    --badge-text-transform: uppercase;
+    --badge-letter-spacing: 0.1em;
     --table-head-text-transform: uppercase;
     --table-head-letter-spacing: 0.05em;
 
@@ -387,15 +394,20 @@
        mira has no tag; foundation tags keep the badge shape (rounded-full · px-2 · 10/14).
        -------------------------------------------------------- */
     --tag-radius: 0px;
-    --tag-height: auto;
-    --tag-padding-y: 0px;
-    --tag-gap: 6px;
-    --tag-border-width: 0px;
-    --tag-icon-size: 12px;
-    --tag-padding-x-icon: 0px;
+    --badge-height: auto;
+    --badge-padding-y: 0px;
+    --badge-gap: 6px;
+    --badge-border-width: 0px;
+    --badge-icon-size: 12px;
+    --badge-padding-x-icon: 0px;
     --tag-padding-x: 0px;
     --tag-line-height: 15px;
     --tag-font-size: 10px;
+    /* The plain badge wears the tone tag's box: flat, unpadded, 10/15. */
+    --badge-padding-x: var(--tag-padding-x);
+    --badge-radius: var(--tag-radius);
+    --badge-font-size: var(--tag-font-size);
+    --badge-line-height: var(--tag-line-height);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
@@ -431,6 +443,8 @@
     --avatar-font-size-sm: var(--ui-text-xs);       /* mira: group-data-[size=sm]/avatar:text-xs */
     --avatar-font-weight: initial;
     --avatar-line-height-sm: var(--ui-line-height-xs);
+    --avatar-font-size: var(--ui-text-sm);
+    --avatar-line-height: var(--ui-line-height-sm);
     --avatar-size-md: 32px;
     --avatar-size-lg: 40px;
 
@@ -474,19 +488,7 @@
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
 :root {
-    --badge-height: var(--control-height-xs);
-    --badge-padding-x: var(--control-padding-x-xs);
-    --badge-padding-x-icon: var(--control-padding-x-icon-xs);
-    --badge-padding-y: 2px;
-    --badge-gap: var(--control-gap-xs);
-    --badge-icon-size: var(--control-icon-size-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-radius: 9999px;
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
     --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;
     --kbd-min-width: var(--kbd-height);
     --kbd-gap: var(--control-gap-xs);
     --kbd-font-size: var(--ui-text-xs);
@@ -497,7 +499,6 @@
     --kbd-font-weight: var(--ui-font-weight-regular);
     --kbd-icon-size: var(--control-icon-size-sm);
     --control-radius-sm: var(--control-radius);
-    --control-padding-x-grouped: var(--control-padding-x-md);
     --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
     --toggle-gap: var(--control-gap-md);
     --toggle-group-joined-radius: var(--control-radius);
@@ -509,7 +510,6 @@
     --menu-narrow-min-width: var(--menu-min-width);
     --command-item-radius: var(--menu-item-radius);
     --command-item-gap: var(--menu-item-gap);
-    --menubar-padding: var(--menu-padding);
     --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
     --card-radius: var(--surface-radius);
@@ -519,9 +519,5 @@
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
     --tabs-trigger-active-shadow: none;
-    --item-gap: var(--menu-item-gap);
-    --avatar-font-size: var(--ui-text-lg);
-    --avatar-line-height: var(--ui-line-height-lg);
-    --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
     --sidebar-part-radius: var(--sidebar-item-radius);
 }
