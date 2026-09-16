@@ -33,12 +33,15 @@
     }
 }
 
-/* 글자 크기를 주지 않는다. mira 는 fallback 이 둘레의 글자 크기를 그대로 물려받는다 —
-   원본 앱 가 두었던 14/12 분기는 nova 의 TSX 에서 옮긴 것이라 걷어냈다. */
+/* 글자 크기는 컴포넌트가 아니라 여기서 준다. mira 의 AvatarFallback 은 `text-sm`
+   (sm 아바타는 `text-xs`)을 유틸리티로 갖는데 registry/ui 는 그 유틸리티를 빼 두었다
+   (유틸리티가 3층 규칙을 이기기 때문 — tooling/preset/README.md). 값은 ui 축의 lg · sm 과 같다. */
 .cn-avatar-fallback {
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: 9999px;
+    font-size: var(--ui-text-lg);       /* mira: text-sm */
+    line-height: var(--ui-line-height-lg);
 }
 
 .cn-avatar-image {

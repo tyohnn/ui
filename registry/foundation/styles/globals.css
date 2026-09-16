@@ -161,6 +161,11 @@
     --font-heading: var(--font-sans);
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Pretendard", monospace;
 
+    /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이
+       정한다. 아래 `@layer base` 의 `:root` 가 이 슬롯을 읽는다 — 어두운 모드에서 native select 의
+       <option> 목록이 밝게 남던 문제(2026-09-16 실측). 두 모드의 값이 여기서 갈린다. */
+    --color-scheme: light;
+
     --background: oklch(1 0 0);              /* neutral-50 */
     --foreground: oklch(0.145 0 0);          /* neutral-950 */
     --card: oklch(1 0 0);
@@ -197,9 +202,10 @@
     /* 고스트 버튼 · 고스트 배지의 hover. mira: hover:bg-muted dark:hover:bg-muted/50 — 밝은 쪽은 muted 그대로다. */
     --ghost-hover: oklch(0.97 0 0);
 
-    /* 로딩 자리표시. mira 는 bg-muted 를 쓰지만 흰 카드 위 대비가 1.08 이라 형태가 보이지
-       않는다(원본 앱 실측). 한 단 진한 neutral-200 으로 둔다. 읽는 곳은 skeleton.css 하나다. */
-    --skeleton: oklch(0.922 0 0);
+    /* 로딩 자리표시. mira 는 bg-muted 를 쓴다 — 한 단 진하게 두던 원본 앱 시절의 값은
+       2026-09-16 mira 대조에서 되돌렸다. 축(슬롯)은 남긴다: 흰 면 위 대비가 모자란
+       시스템은 이 한 줄만 내리면 되고, 읽는 곳은 skeleton.css 하나다. */
+    --skeleton: var(--muted);
 
     /* 글자 세기의 셋째 단. "지금은 아니다"를 알리는 자리에만 쓴다 — 본문과 라벨에는 대비가
        모자란다. mira 가 아이콘과 자리표시자에 쓰는 neutral-400 이다. */
@@ -257,11 +263,13 @@
     --overlay-backdrop: oklch(0 0 0 / 80%);
 
     /* neutral 테마의 차트 램프 그대로다. */
-    --chart-1: oklch(0.646 0.222 41.116);    /* orange-600 */
-    --chart-2: oklch(0.6 0.118 184.704);     /* teal-600 */
-    --chart-3: oklch(0.398 0.07 227.392);    /* cyan-900 */
-    --chart-4: oklch(0.828 0.189 84.429);    /* amber-400 */
-    --chart-5: oklch(0.769 0.188 70.08);     /* amber-500 */
+    /* mira 는 chartColor 가 baseColor(neutral)와 같아서 차트도 무채색 한 줄이다. 밝고 어두운 쪽이
+       같은 값이다(2026-09-16 참조 앱 대조 — 종전의 컬러 램프는 4.21 이전 프리셋의 것이었다). */
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
 
     --sidebar: oklch(0.985 0 0);             /* neutral-50 */
     --sidebar-foreground: oklch(0.145 0 0);
@@ -310,7 +318,7 @@
     --sidebar-item-border: var(--border);
     --sidebar-item-active-border: var(--border);
     --sidebar-item-hover-background: var(--sidebar-accent);
-    --sidebar-group-label-foreground: var(--sidebar-icon);
+    --sidebar-group-label-foreground: oklch(0.145 0 0 / 70%);   /* mira: text-sidebar-foreground/70 */
     --sidebar-badge-background: transparent;
     --sidebar-badge-active-background: transparent;
     --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
@@ -322,10 +330,15 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: transparent;
     --button-outline-border: var(--border);
+    /* outline 버튼의 바탕. mira 는 밝은 쪽에 아무 색도 두지 않고 어두운 쪽만 bg-input/30 이다 —
+       Input 의 bg-input/20 과 다른 자리라 --input-fill 을 그대로 읽을 수 없다. */
+    --button-outline-fill: transparent;
     --button-ghost-foreground: initial;
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
-    --checkbox-fill: var(--input-fill);
+    /* 슬라이더 손잡이의 바탕. mira: bg-white — 두 모드에서 같은 흰색이다(--background 가 아니다). */
+    --slider-thumb-fill: #fff;
+    --checkbox-fill: transparent;   /* mira: 밝은 쪽엔 바탕이 없고 어두운 쪽만 dark:bg-input/30 */
     --checkbox-indeterminate-fill: var(--checkbox-fill);
     --checkbox-indeterminate-border: var(--checkbox-border);
     --checkbox-indeterminate-foreground: initial;
@@ -387,6 +400,8 @@
 }
 
 .dark {
+    --color-scheme: dark;
+
     --background: oklch(0.145 0 0);          /* neutral-950 */
     --foreground: oklch(0.985 0 0);          /* neutral-50 */
     --card: oklch(0.205 0 0);                /* neutral-900 */
@@ -412,7 +427,7 @@
     --muted-soft: oklch(0.269 0 0 / 50%);
     --chip: oklch(0.708 0 0 / 10%);
     --ghost-hover: oklch(0.269 0 0 / 50%);
-    --skeleton: oklch(0.32 0 0);
+    --skeleton: var(--muted);
     --foreground-subtle: oklch(0.556 0 0);
 
     --accent: oklch(0.269 0 0);
@@ -448,11 +463,11 @@
     --ring-subtle: oklch(0.985 0 0 / 10%);
     --overlay-backdrop: oklch(0 0 0 / 80%);
 
-    --chart-1: oklch(0.488 0.243 264.376);   /* blue-700 */
-    --chart-2: oklch(0.696 0.17 162.48);     /* emerald-500 */
-    --chart-3: oklch(0.769 0.188 70.08);     /* amber-500 */
-    --chart-4: oklch(0.627 0.265 303.9);     /* purple-500 */
-    --chart-5: oklch(0.645 0.246 16.439);    /* rose-500 */
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
 
     --sidebar: oklch(0.205 0 0);             /* neutral-900 */
     --sidebar-foreground: oklch(0.985 0 0);
@@ -494,7 +509,7 @@
     --sidebar-item-border: var(--border);
     --sidebar-item-active-border: var(--border);
     --sidebar-item-hover-background: var(--sidebar-accent);
-    --sidebar-group-label-foreground: var(--sidebar-icon);
+    --sidebar-group-label-foreground: oklch(0.985 0 0 / 70%);   /* mira: text-sidebar-foreground/70 */
     --sidebar-badge-background: transparent;
     --sidebar-badge-active-background: transparent;
     --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
@@ -506,9 +521,11 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: transparent;
     --button-outline-border: var(--border);
+    --button-outline-fill: var(--input-fill);
     --button-ghost-foreground: initial;
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
+    --slider-thumb-fill: #fff;
     --checkbox-fill: var(--input-fill);
     --checkbox-indeterminate-fill: var(--checkbox-fill);
     --checkbox-indeterminate-border: var(--checkbox-border);
@@ -580,6 +597,9 @@
 }
 
 @layer base {
+  :root {
+    color-scheme: var(--color-scheme);
+    }
   * {
     @apply border-border outline-ring/50;
     }

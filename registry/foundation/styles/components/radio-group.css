@@ -27,7 +27,8 @@
     height: var(--control-indicator-size);
     border-color: var(--input);
     border-radius: 9999px;
-    background-color: var(--input-fill);
+    /* Checkbox 와 같은 축을 읽는다 — mira 는 밝은 쪽에 바탕이 없고 어두운 쪽만 dark:bg-input/30 이다. */
+    background-color: var(--checkbox-fill);
 
     &[data-checked] {
         background-color: var(--primary);

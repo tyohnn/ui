@@ -23,8 +23,12 @@
 
 /* ⚠ 간격 12px 은 리터럴이다. Dialog 의 gap-4(--surface-gap-lg 16)보다 한 단 좁은
    mira 의 gap-3 인데, surface 축의 간격 단계(4 · 16)에 없는 값이다. */
+/* ⚠ 글자는 계열(_surface-family)이 주는 ui 축을 되돌리고 바깥을 그대로 물려받는다.
+   mira 의 AlertDialogContent 에는 text-* 가 없어 본문 크기(16 · 1.5)로 그려진다(2026-09-16 대조). */
 .cn-alert-dialog-content {
     gap: 12px;
+    font-size: inherit;
+    line-height: inherit;
 
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-100 data-[size=default]:max-w-xs data-[size=sm]:max-w-64 data-[size=default]:sm:max-w-sm;
 }

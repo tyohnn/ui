@@ -78,6 +78,10 @@
          …:has-[:focus-visible]:border-ring …:ring-2 *:data-[slot=field]:p-2
    ⚠ 켜짐은 shadcn 의 data-checked 변형과 같은 두 형태를 본다 — Base UI 는 [data-checked]
       불리언, Radix 계열은 [data-state=checked] 를 내보낸다. */
+/* ⚠ `.cn-label` 과 함께 붙는다(FieldLabel 은 Label 이다). 배럴이 알파벳 순서라 label.css 가
+   뒤에 읽히므로, 같은 명시도로는 `.cn-label { line-height: 1 }` 이 이긴다. 두 클래스를 함께
+   적어 (0,2,0) 으로 올린다 — mira: leading-snug(1.375) (2026-09-16 실측). */
+.cn-label.cn-field-label,
 .cn-field-label {
     gap: 8px;
     line-height: 1.375;

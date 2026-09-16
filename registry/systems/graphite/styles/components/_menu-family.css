@@ -92,6 +92,7 @@
     min-height: var(--menu-item-height);
     border-radius: var(--menu-item-radius);
     padding-inline: var(--menu-item-padding-x);
+    padding-block: var(--menu-item-padding-y);
     gap: var(--menu-item-gap);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
@@ -194,6 +195,7 @@
 .cn-context-menu-checkbox-item,
 .cn-context-menu-radio-item,
 .cn-combobox-item {
+    padding-block: var(--menu-item-padding-y-check);
     padding-inline-end: var(--menu-item-padding-end);
 }
 
@@ -251,7 +253,7 @@
     margin-inline-start: auto;
     color: var(--muted-foreground);
     font-size: var(--ui-text-xs);
-    line-height: var(--ui-line-height-xs);
+    line-height: var(--menu-shortcut-line-height);
     /* ⚠ 단축키만 --ui-letter-spacing 을 읽지 않는다. 키캡이 서로 붙어 읽히지
        않도록 자간을 넓히는 자리라 방향이 반대다. */
     letter-spacing: var(--menu-shortcut-letter-spacing);
@@ -267,4 +269,9 @@
 
 .cn-command-item[data-selected] .cn-command-shortcut {
     color: var(--foreground);
+}
+
+/* 팔레트 항목의 좌우 여백 축(foundation 슬롯). 이 시스템은 보통 항목과 같은 값이다. */
+.cn-command-item {
+    padding-inline: var(--command-item-padding-x);
 }

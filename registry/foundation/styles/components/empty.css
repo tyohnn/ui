@@ -51,7 +51,8 @@
 /* ⚠ mira 의 tracking-tight 는 옮기지 않았다. 자간은 글꼴의 것이라 2층이 mira 를 따르지 않는다(tokens.css). */
 .cn-empty-title {
     font-size: var(--ui-text-lg);
-    letter-spacing: var(--ui-letter-spacing);
+    /* mira: tracking-tight — 제목만 한 단 좁다(−0.025em). ui 축의 자간(normal)과 다르다. */
+    letter-spacing: -0.025em;
     line-height: var(--ui-line-height-lg);
     font-weight: var(--ui-font-weight);
 }

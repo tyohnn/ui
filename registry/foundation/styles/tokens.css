@@ -63,18 +63,20 @@
     --control-gap-md: 4px;
     --control-gap-lg: 4px;
 
-    /* 타이포 — 행간을 px 로 고정한다. mira 는 xs 만 text-[0.625rem] 이고 나머지는
-       text-xs/relaxed(12px · 1.625 = 19.5px)다. 정수로 맞추려고 20 으로 둔다.
+    /* 타이포 — 행간을 px 로 고정한다. mira 는 xs 만 text-[0.625rem](10px) 이고 나머지는
+       text-xs/relaxed(12px · 1.625 = 19.5px)다. xs 는 글자만 줄이고 행간 배수는 그대로라
+       행간은 본문의 1.5 를 그대로 받아 10 × 1.5 = 15px 가 된다(Tailwind 의 임의값 text-[…] 는
+       행간 배수를 다시 주지 않는다). 19.5 · 15 둘 다 소수점 값이며 mira 의 값이다(반올림하면 어긋난다).
        ⚠ sm · md · lg 의 글자가 같다. mira 는 컨트롤 크기를 높이와 여백으로만 가른다. */
     --control-font-size-xs: 10px;
     --control-font-size-sm: 12px;
     --control-font-size-md: 12px;
     --control-font-size-lg: 12px;
 
-    --control-line-height-xs: 16px;
-    --control-line-height-sm: 20px;
-    --control-line-height-md: 20px;
-    --control-line-height-lg: 20px;
+    --control-line-height-xs: 15px;
+    --control-line-height-sm: 19.5px;
+    --control-line-height-md: 19.5px;
+    --control-line-height-lg: 19.5px;
 
     /* 아이콘 크기 — [&_svg:not([class*='size-'])]:size-2.5 · 3 · 3.5 · 4 */
     --control-icon-size-xs: 10px;
@@ -91,12 +93,13 @@
        ⚠ 올릴 때는 2px 이 상한이다. --switch-thumb-inset 과 switch.css 의 계산이 음수가 된다. */
     --control-border-width: 1px;
 
-    /* 글자 굵기·자간 — mira 는 font-medium(500)이다. 자간은 글꼴(Pretendard)의 것이라
-       mira 를 따르지 않는다. Pretendard 는 기본 자간이 넓어 UI 글자에서 -0.01em 을 준다. */
+    /* 글자 굵기·자간 — mira 는 font-medium(500)이고 자간은 건드리지 않는다(normal).
+       -0.01em 은 Pretendard 를 쓰던 시절의 값이었고, mira 참조 앱 대조에서 전 컴포넌트가
+       어긋나 2026-09-16 에 mira 로 되돌렸다. Pretendard 계열 시스템은 이 슬롯만 내리면 된다. */
     --control-font-weight: 500;
     /* Weight of the quieter control variants (outline · secondary · ghost). mira: the same 500. */
     --control-font-weight-regular: var(--control-font-weight);
-    --control-letter-spacing: -0.01em;
+    --control-letter-spacing: normal;
 
     /* 모션 — mira 의 오버레이는 duration-100, 컨트롤은 transition-all 기본(150ms)이다. */
     --control-duration: 150ms;
@@ -134,16 +137,21 @@
     --control-indicator-radius: 4px;
     --control-indicator-icon-size: 14px;
     --control-indicator-dot-size: 8px;
+    /* 키캡의 모서리. mira: rounded-xs(2px) — 지시자(4)보다 한 단 작다. */
+    --kbd-radius: 2px;
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
        mira: default w-[28px] h-[16.6px] 손잡이 size-3.5(14) · sm w-[24px] h-[14px] 손잡이 size-3(12).
        16.6 은 하위픽셀이라 16 으로 두고 안쪽 여백 1 로 손잡이 14 를 만든다. */
     --switch-track-width-md: 28px;
-    --switch-track-height-md: 16px;
+    --switch-track-height-md: 16.6px;   /* mira: h-[16.6px] — 프리셋의 소수점 값이다 */
     --switch-track-width-sm: 24px;
     --switch-track-height-sm: 14px;
     --switch-thumb-inset: 1px;
+    /* 손잡이 크기 — mira 는 궤도에서 빼지 않고 고정 크기를 준다(size-3.5 · size-3). */
+    --switch-thumb-size-md: 14px;
+    --switch-thumb-size-sm: 12px;
 
     /* 포커스 링 — mira: focus-visible:ring-2 ring-ring/30. 테두리 바깥에 간격 없이 box-shadow 한 겹으로 그린다.
        링의 색은 1층의 --ring-focus(30%) · --ring-focus-strong(50%) · --ring-invalid 가 갖는다.
@@ -162,6 +170,13 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 10px;
     --surface-radius-sm: 8px;    /* tooltip 의 rounded-md */
+    /* 모달 면(dialog · alert-dialog · command-dialog)의 그림자 — mira 는 링만 두고 그림자가 없다.
+       80% 막 위라 보이지 않는 값이지만, 시스템이 얹고 싶으면 이 슬롯만 채우면 된다. */
+    --dialog-shadow: 0 0 #0000;
+    /* 메뉴의 하위 목록만 한 단 깊다. mira: shadow-lg */
+    --menu-sub-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    /* Sheet 의 그림자 — mira: shadow-lg. 다른 띄운 면(popover · dropdown)의 shadow-md 보다 한 단 깊다. */
+    --sheet-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --surface-radius-lg: 14px;   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
@@ -186,11 +201,20 @@
     --menu-item-padding-x: 8px;       /* item px-2 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
     --menu-item-gap: 8px;             /* item gap-2 */
+    /* 세로 여백 — mira: 보통 항목 py-1, 체크·라디오·팔레트 항목 py-1.5. 높이는 --menu-item-height 가
+       바닥을 잡고, 글이 길어지면 이 여백이 행을 키운다(2026-09-16 mira 대조에서 추가). */
+    --menu-item-padding-y: 4px;
+    --menu-item-padding-y-check: 6px;
+    /* 팔레트(Command) 항목만 좌우가 한 단 넓다. mira: px-2.5 */
+    --command-item-padding-x: 10px;
 
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
     --menu-item-padding-inset: 30px;
     /* 단축키는 자간을 넓혀 키캡이 서로 떨어져 읽히게 한다. mira: tracking-widest */
     --menu-shortcut-letter-spacing: 0.1em;
+    /* 단축키의 행간 — mira 는 text-[0.625rem] 이 바깥의 text-xs/relaxed 배수(1.625)를 받아
+       10 × 1.625 = 16.25px 가 된다. ui 축의 어느 단과도 다르다. */
+    --menu-shortcut-line-height: 16.25px;
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
 
@@ -235,12 +259,12 @@
     /* `initial` = inherit (mira sets neither on the label). */
     --sidebar-group-label-font-weight: initial;
     --sidebar-group-label-text-transform: initial;
-    --sidebar-separator-margin-block: 8px;
+    --sidebar-separator-margin-block: 0;   /* mira: mx-2 뿐, 세로 여백 없음 */
 
     /* 하위 항목. 하위 라벨의 왼쪽이 상위 라벨의 왼쪽(안쪽 여백 8 + 아이콘 16 + 간격 8 = 32)과
        맞아야 한다. 아래 두 값을 더하면 그 32 가 나온다. 한쪽을 고치면 다른 쪽도 함께 고칠 것. */
-    --sidebar-sub-rail-offset: 16px;  /* 상위 항목 아이콘의 가운데. 왼쪽 선이 서는 자리 */
-    --sidebar-sub-item-indent: 16px;  /* 선에서 글자까지 */
+    --sidebar-sub-rail-offset: 14px;  /* 상위 항목 아이콘의 가운데. 왼쪽 선이 서는 자리. mira: mx-3.5 */
+    --sidebar-sub-item-indent: 18px;  /* 선에서 글자까지. mira: px-2.5 (18 - 항목 좌우 8) */
     --sidebar-sub-item-height: 28px;  /* sub-button h-7 */
 
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */
@@ -250,23 +274,24 @@
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
        mira 의 UI 글자는 셋뿐이다. 배지·키캡·단축키의 text-[0.625rem](10),
-       본문의 text-xs(12 · relaxed 는 20), 제목의 text-sm(14).
-       sm 과 md 는 크기가 같고 행간만 다르다(16 · 20).
+       본문의 text-xs(12 · relaxed 는 19.5), 제목의 text-sm(14).
+       sm 과 md 는 크기가 같고 행간만 다르다(text-xs 16 · text-xs/relaxed 19.5).
+       xs(10)의 행간 15 는 본문의 1.5 를 그대로 받은 값이다.
        -------------------------------------------------------- */
     --ui-text-xs: 10px;
     --ui-text-sm: 12px;
     --ui-text-md: 12px;
     --ui-text-lg: 14px;
-    --ui-line-height-xs: 14px;
+    --ui-line-height-xs: 15px;
     --ui-line-height-sm: 16px;
-    --ui-line-height-md: 20px;
+    --ui-line-height-md: 19.5px;
     --ui-line-height-lg: 20px;
     --ui-font-weight: 500;            /* mira 의 제목·라벨은 font-medium */
     /* Weight of quiet UI text (tags · line tabs · table head). mira: the same 500. */
     --ui-font-weight-regular: var(--ui-font-weight);
 
-    /* 자간 — 글꼴의 것이다. control 축과 같은 값. */
-    --ui-letter-spacing: -0.01em;
+    /* 자간 — 글꼴의 것이다. control 축과 같은 값(mira: normal). */
+    --ui-letter-spacing: normal;
 
     /* --------------------------------------------------------
        heading — 화면과 구역의 제목
@@ -341,9 +366,9 @@
        -------------------------------------------------------- */
     --avatar-size-sm: 24px;
     /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
-    --avatar-font-size-sm: initial;
+    --avatar-font-size-sm: var(--ui-text-sm);       /* mira: group-data-[size=sm]/avatar:text-xs */
     --avatar-font-weight: initial;
-    --avatar-line-height-sm: initial;
+    --avatar-line-height-sm: var(--ui-line-height-sm);
     --avatar-size-md: 32px;
     --avatar-size-lg: 40px;
 

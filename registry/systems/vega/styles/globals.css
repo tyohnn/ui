@@ -161,6 +161,10 @@
     --font-heading: var(--font-sans);
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Pretendard", monospace;
 
+    /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이
+       정한다. 아래 `@layer base` 의 `:root` 가 이 슬롯을 읽는다. */
+    --color-scheme: light;
+
     --background: oklch(1 0 0);              /* neutral-50 */
     --foreground: oklch(0.145 0 0);          /* neutral-950 */
     --card: oklch(1 0 0);
@@ -322,9 +326,12 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: transparent;
     --button-outline-border: var(--border);
+    --button-outline-fill: var(--background);   /* vega: bg-background */
     --button-ghost-foreground: initial;
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
+    /* 슬라이더 손잡이의 바탕(foundation 슬롯). vega (and mira): bg-white */
+    --slider-thumb-fill: #fff;
     --checkbox-fill: var(--input-fill);
     --checkbox-indeterminate-fill: var(--checkbox-fill);
     --checkbox-indeterminate-border: var(--checkbox-border);
@@ -386,12 +393,14 @@
     --radius: 0.625rem;
 
     /* ---- vega-only (layer-3 rules of this system read them; candidates for foundation slots) ----
-       Outline button fill and hover. vega: bg-background hover:bg-muted, dark:bg-input/30 dark:hover:bg-input/50. */
-    --button-outline-fill: var(--background);
+       Outline button hover. vega: hover:bg-muted, dark:hover:bg-input/50.
+       (--button-outline-fill became a foundation slot in axis contract 3 and is declared above.) */
     --button-outline-hover-fill: var(--muted);
 }
 
 .dark {
+    --color-scheme: dark;
+
     --background: oklch(0.145 0 0);          /* neutral-950 */
     --foreground: oklch(0.985 0 0);          /* neutral-50 */
     --card: oklch(0.205 0 0);                /* neutral-900 */
@@ -511,9 +520,12 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: transparent;
     --button-outline-border: var(--input);
+    --button-outline-fill: var(--input-fill);
     --button-ghost-foreground: initial;
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
+    /* 슬라이더 손잡이의 바탕(foundation 슬롯). vega (and mira): bg-white */
+    --slider-thumb-fill: #fff;
     --checkbox-fill: var(--input-fill);
     --checkbox-indeterminate-fill: var(--checkbox-fill);
     --checkbox-indeterminate-border: var(--checkbox-border);
@@ -571,7 +583,6 @@
     --avatar-tone-mauve: var(--muted);
 
     /* ---- vega-only (see :root) ---- */
-    --button-outline-fill: var(--input-fill);
     --button-outline-hover-fill: var(--input-fill-hover);
 }
 
@@ -589,14 +600,8 @@
 }
 
 @layer base {
-  /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이
-     정한다. shadcn 앱은 `shadcn/tailwind.css` 가 이것을 깔아 주므로, 프리셋과 같은 화면이 되려면
-     시스템이 두 모드에서 직접 적어야 한다(2026-09-16 native select 의 <option> 대조에서 실측). */
   :root {
-    color-scheme: light;
-    }
-  .dark {
-    color-scheme: dark;
+    color-scheme: var(--color-scheme);
     }
   * {
     @apply border-border outline-ring/50;

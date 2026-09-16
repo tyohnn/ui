@@ -17,8 +17,11 @@
    ============================================================ */
 
 /* mira: rounded-xl */
+/* mira 의 팔레트는 띄운 면이 아니다 — 대화상자 안에 들어앉거나 호출부가 테두리를 두르므로
+   계열(_menu-family)이 메뉴 면에 주는 링과 그림자를 여기서 되돌린다. */
 .cn-command {
     border-radius: var(--surface-radius-lg);
+    box-shadow: none;
 }
 
 .cn-command-input-wrapper {
@@ -54,7 +57,7 @@
 .cn-command-list {
     max-height: var(--menu-list-max-height);
     scroll-padding-block: var(--menu-padding);
-    outline: none;
+    outline-style: none;   /* ⚠ `outline: none` 은 base 의 outline-ring/50 색까지 지운다 */
 
     /* 스크롤바를 숨기는 유틸리티는 shadcn 이 정의한 것이라 그대로 쓴다. */
     @apply no-scrollbar;
@@ -67,6 +70,9 @@
     color: var(--foreground);
 
     & [cmdk-group-heading] {
+        /* mira: **:[[cmdk-group-heading]]:px-2.5 py-1.5 — 항목과 같은 좌우 여백이다. */
+        padding-inline: var(--command-item-padding-x);
+        padding-block: var(--menu-item-padding-y-check);
         font-weight: var(--ui-font-weight);
     }
 }

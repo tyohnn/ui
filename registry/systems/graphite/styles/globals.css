@@ -168,6 +168,10 @@
     --font-heading: var(--font-sans);
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Pretendard", monospace;
 
+    /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이
+       정한다. 아래 `@layer base` 의 `:root` 가 이 슬롯을 읽는다. */
+    --color-scheme: light;
+
     --background: oklch(1 0 0);              /* neutral-50 */
     --foreground: oklch(0.145 0 0);          /* neutral-950 */
     --card: oklch(1 0 0);
@@ -329,9 +333,12 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: var(--border-strong);
     --button-outline-border: var(--input);
+    --button-outline-fill: var(--input-fill);
     --button-ghost-foreground: var(--muted-foreground);
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
+    /* 슬라이더 손잡이의 바탕(foundation 슬롯). 이 시스템은 면 색을 그대로 쓴다. */
+    --slider-thumb-fill: var(--background);
     --checkbox-fill: transparent;
     --checkbox-indeterminate-fill: var(--selection);
     --checkbox-indeterminate-border: var(--selection);
@@ -394,6 +401,8 @@
 }
 
 .dark {
+    --color-scheme: dark;
+
     --background: #151515;
     --foreground: #f2f2f2;
     --card: #1f1f1f;
@@ -513,9 +522,12 @@
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
     --button-secondary-border: var(--border-strong);
     --button-outline-border: var(--input);
+    --button-outline-fill: var(--input-fill);
     --button-ghost-foreground: var(--muted-foreground);
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
+    /* 슬라이더 손잡이의 바탕(foundation 슬롯). 이 시스템은 면 색을 그대로 쓴다. */
+    --slider-thumb-fill: var(--background);
     --checkbox-fill: transparent;
     --checkbox-indeterminate-fill: var(--selection);
     --checkbox-indeterminate-border: var(--selection);
@@ -587,6 +599,9 @@
 }
 
 @layer base {
+  :root {
+    color-scheme: var(--color-scheme);
+    }
   * {
     @apply border-border outline-ring/50;
     }

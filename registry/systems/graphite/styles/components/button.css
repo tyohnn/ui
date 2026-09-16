@@ -85,7 +85,7 @@
    hover 는 테두리를 진하게 하는 것이 아니라 바탕을 채운다. 글자색은 바탕(foreground)을
    그대로 물려받는다 — 종전의 --muted-foreground 는 nova 에도 mira 에도 없는 규칙이었다. */
 .cn-button-variant-outline {
-    background-color: var(--input-fill);
+    background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
     border-color: var(--button-outline-border);
     box-shadow: var(--shadow-control);

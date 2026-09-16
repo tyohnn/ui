@@ -89,7 +89,8 @@
    hover 는 테두리를 진하게 하는 것이 아니라 바탕을 채운다. 글자색은 바탕(foreground)을
    그대로 물려받는다 — 종전의 --muted-foreground 는 nova 에도 mira 에도 없는 규칙이었다. */
 .cn-button-variant-outline {
-    /* vega: bg-background (dark input/30), hover bg-muted (dark input/50) — vega-only layer-1 slots. */
+    /* vega: bg-background (dark input/30), hover bg-muted (dark input/50).
+       --button-outline-fill is a foundation slot; --button-outline-hover-fill is still vega-only. */
     background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
     border-color: var(--button-outline-border);

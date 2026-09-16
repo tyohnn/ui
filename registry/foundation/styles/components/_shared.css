@@ -29,12 +29,14 @@
       결정이기 때문이다. 서리유리로 갈 거면 계열에서 메뉴 면의 불투명 배경을 빼야 하고,
       아니라면 여기 `bg-popover/70` 과 `before:*` 를 지워야 한다. 둘 중 하나를 고를 것.
 
-   ⚠ 트리거(`**:…-trigger:…`)는 남겨 두었다. 계열이 트리거의 바탕을 정하지 않아
-      지우면 열린 메뉴바 트리거의 강조가 통째로 사라진다.
+   ⚠ 트리거 유틸리티(`**:…-trigger:focus:bg-foreground/10` · `…:aria-expanded:bg-foreground/10!`)도
+      2026-09-16 에 지웠다. 프리셋 앱의 globals.css 에는 `.cn-*` 규칙이 아예 없어 업스트림에는
+      이 유틸리티가 닿지 않는데, 여기서는 (0,3,0) + !important 로 계열이 정한 하위 메뉴 트리거의
+      강조색(--accent)을 덮고 있었다. 트리거의 바탕은 menubar.css · _menu-family.css 가 정한다.
    ============================================================ */
 
 .cn-menu-translucent {
-    @apply animate-none! relative bg-popover/70 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150 **:data-[slot$=-trigger]:focus:bg-foreground/10 **:data-[slot$=-trigger]:aria-expanded:bg-foreground/10!;
+    @apply animate-none! relative bg-popover/70 before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150;
 }
 
 .cn-menu-translucent-aria {

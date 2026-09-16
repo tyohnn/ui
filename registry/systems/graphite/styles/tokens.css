@@ -141,6 +141,8 @@
     --control-indicator-radius: 4px;
     --control-indicator-icon-size: 10px;
     --control-indicator-dot-size: 8px;
+    /* 키캡의 모서리(foundation 슬롯). 이 시스템은 지시자와 같은 단이다. */
+    --kbd-radius: var(--control-indicator-radius);
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
@@ -151,6 +153,9 @@
     --switch-track-width-sm: 24px;
     --switch-track-height-sm: 14px;
     --switch-thumb-inset: 1px;
+    /* 손잡이 크기(foundation 슬롯). 이 시스템은 궤도에서 안쪽 여백을 뺀 값이다. */
+    --switch-thumb-size-md: calc(var(--switch-track-height-md) - var(--switch-thumb-inset) * 2);
+    --switch-thumb-size-sm: calc(var(--switch-track-height-sm) - var(--switch-thumb-inset) * 2);
 
     /* 포커스 링 — mira: focus-visible:ring-2 ring-ring/30. 테두리 바깥에 간격 없이 box-shadow 한 겹으로 그린다.
        링의 색은 1층의 --ring-focus(30%) · --ring-focus-strong(50%) · --ring-invalid 가 갖는다.
@@ -169,6 +174,12 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 10px;
     --surface-radius-sm: 8px;    /* tooltip 의 rounded-md */
+    /* 모달 면의 그림자(foundation 슬롯). 이 시스템은 다른 띄운 면과 같은 그림자를 얹는다. */
+    --dialog-shadow: var(--shadow-float);
+    /* 메뉴 하위 목록의 그림자(foundation 슬롯). */
+    --menu-sub-shadow: var(--shadow-float);
+    /* Sheet 의 그림자(foundation 슬롯). 이 시스템은 다른 띄운 면과 같은 단이다. */
+    --sheet-shadow: var(--shadow-float);
     --surface-radius-lg: 14px;   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
@@ -193,11 +204,17 @@
     --menu-item-padding-x: 8px;       /* item px-2 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
     --menu-item-gap: 8px;             /* item gap-2 */
+    /* graphite: 항목 높이는 --menu-item-height 하나가 정한다(세로 여백 없음). */
+    --menu-item-padding-y: 0px;
+    --menu-item-padding-y-check: 0px;
+    --command-item-padding-x: 8px;
 
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
     --menu-item-padding-inset: 30px;
     /* 단축키는 자간을 넓혀 키캡이 서로 떨어져 읽히게 한다. mira: tracking-widest */
     --menu-shortcut-letter-spacing: 0.1em;
+    /* 단축키의 행간(foundation 슬롯). 이 시스템은 ui 축의 xs 와 같다. */
+    --menu-shortcut-line-height: var(--ui-line-height-xs);
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
 

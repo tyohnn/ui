@@ -103,13 +103,14 @@
     }
 }
 
-/* mira: border-input dark:bg-input/30 … size-4 rounded-[4px] — 바탕은 Checkbox 와 같은 --input-fill 이다. */
+/* mira: border-input dark:bg-input/30 … size-4 rounded-[4px] — 바탕은 Checkbox 와 같은 축을 읽는다
+   (밝은 쪽엔 바탕이 없고 어두운 쪽만 dark:bg-input/30). */
 .cn-questionnaire-choice-indicator {
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
     border-radius: var(--control-indicator-radius);
     border-color: var(--input);
-    background-color: var(--input-fill);
+    background-color: var(--checkbox-fill);
     /* ⚠ 켜졌을 때의 색은 유틸리티로 남긴다. `data-checked` 변형이
        [data-state=checked] 와 [data-checked]:not([data-checked=false]) 둘을
        함께 매치하는데, 손으로 옮겨 적으면 그중 하나가 빠져 라디오·체크박스
@@ -146,7 +147,8 @@
     height: 16px;
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius-xs);
-    background-color: var(--background);
+    /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
+    background-color: color-mix(in oklab, var(--background) 80%, transparent);
     color: var(--muted-foreground);
     font-size: 9px;
     font-weight: var(--ui-font-weight);
@@ -164,6 +166,7 @@
 .cn-questionnaire-input {
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
+    padding-block: 2px;   /* mira: py-0.5, Input 과 같다 */
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);

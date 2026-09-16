@@ -64,7 +64,7 @@
     height: 16px;
     border: var(--control-border-width) solid var(--primary);
     border-radius: 9999px;
-    background-color: white;
+    background-color: var(--slider-thumb-fill);
     box-shadow: var(--shadow-chip);
 
     transition-property: color, box-shadow;

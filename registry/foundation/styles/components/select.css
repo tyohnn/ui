@@ -22,6 +22,8 @@
 /* 표면 슬롯 — 바탕 --surface-control · 그림자 --shadow-control · 누르면 눌린 그림자(foundation 은 모두 none).
    ⚠ 바탕이 background-image 라 hover 의 background-color(--select-hover)는 그 아래에 깔린다. */
 .cn-select-trigger {
+    /* mira: py-1.5 — 높이(h-7)는 크기 클래스가 잡고, 이 여백이 글자 자리를 정한다. */
+    padding-block: 6px;
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
@@ -44,15 +46,17 @@
         height: var(--control-icon-size-md);
     }
 
+    /* ⚠ 높이는 min-height 가 아니라 height 다. mira 의 트리거는 `h-7 py-1.5` — 고정 높이 안에
+       여백이 들어앉는다. min-height 로 두면 여백이 높이를 밀어 올려 33.5px 가 된다(2026-09-16 실측). */
     &[data-size="default"] {
-        min-height: var(--control-height-md);
+        height: var(--control-height-md);
         padding-inline: var(--control-padding-x-md);
         font-size: var(--control-font-size-md);
         line-height: var(--control-line-height-md);
     }
 
     &[data-size="sm"] {
-        min-height: var(--control-height-sm);
+        height: var(--control-height-sm);
         padding-inline: var(--control-padding-x-sm);
         font-size: var(--control-font-size-sm);
         line-height: var(--control-line-height-sm);

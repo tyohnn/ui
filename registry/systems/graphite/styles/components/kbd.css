@@ -24,7 +24,7 @@
     font-weight: var(--ui-font-weight);
     background-color: var(--muted);
     color: var(--muted-foreground);
-    border-radius: var(--control-indicator-radius);
+    border-radius: var(--kbd-radius);
     @apply w-fit font-sans in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10;
 
     & svg:not([class*="size-"]) {

@@ -16,13 +16,18 @@
    ============================================================ */
 
 .cn-input {
-    min-height: var(--control-height-md);
+    /* ⚠ 높이는 min-height 가 아니라 height 다. mira 의 인풋은 `h-7 py-0.5` — 고정 높이 안에
+       여백이 들어앉는다. 인풋 그룹 안의 칸도 이 높이를 그대로 써야 통(h-7)을 채운다. */
+    height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
+    /* mira: py-0.5. 2px 은 리터럴이다 — 컨트롤 세로 여백은 아직 축이 아니다. */
+    padding-block: 2px;
 
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
-    color: var(--foreground);
+    /* ⚠ 글자색을 적지 않는다. mira 의 Input 에는 text-* 가 없어 바깥 색을 물려받고,
+       검증 실패한 Field 안에서는 Field 의 text-destructive 를 따라 붉어진다. */
 
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);

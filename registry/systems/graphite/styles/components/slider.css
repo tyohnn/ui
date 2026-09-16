@@ -63,7 +63,7 @@
     height: 12px;
     border: var(--control-border-width) solid var(--ring);
     border-radius: var(--control-radius);
-    background-color: var(--background);
+    background-color: var(--slider-thumb-fill);
 
     transition-property: color, box-shadow;
     transition-duration: var(--control-duration);

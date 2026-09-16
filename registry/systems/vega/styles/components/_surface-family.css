@@ -101,10 +101,12 @@
         var(--shadow-float);
 }
 
-/* vega (and mira): dialogs draw the ring only, no shadow. */
+/* vega (and mira): dialogs draw the ring only, no shadow — --dialog-shadow 슬롯이 그 자리다. */
 .cn-dialog-content,
 .cn-alert-dialog-content {
-    box-shadow: 0 0 0 var(--surface-border-width) var(--ring-subtle);
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        var(--dialog-shadow);
 }
 
 /* 반경이 두 단이다. 모달은 rounded-xl, 팝오버 계열은 rounded-lg. */

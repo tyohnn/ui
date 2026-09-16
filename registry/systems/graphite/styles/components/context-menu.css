@@ -15,6 +15,13 @@
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;
 }
 
+/* 하위 목록의 그림자 축(foundation 슬롯). graphite 는 부모 면과 같은 단이다. */
+.cn-context-menu-sub-content {
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        var(--menu-sub-shadow);
+}
+
 .cn-context-menu-content-logical {
     @apply data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2;
 }

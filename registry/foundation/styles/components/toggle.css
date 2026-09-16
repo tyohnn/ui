@@ -30,7 +30,8 @@
 
 .cn-toggle {
     border-radius: var(--control-radius);
-    border: var(--control-border-width) solid transparent;
+    /* ⚠ 테두리는 outline 변형만 갖는다. mira 의 Toggle 바탕 클래스에는 border 가 없어서
+       투명 테두리조차 없다(2026-09-16 mira 대조). */
     background-clip: padding-box;
 
     font-weight: var(--control-font-weight);
@@ -69,11 +70,14 @@
 /* mira: border-input hover:bg-muted border bg-transparent */
 .cn-toggle-variant-outline {
     background-color: transparent;
-    border-color: var(--input);
+    border: var(--control-border-width) solid var(--input);
 }
 
 /* --------------------------------------------------------
    size — Button 과 같은 표를 읽는다.
+   ⚠ 글자만은 control 축이 아니라 ui 축을 읽는다. mira 의 Toggle 은 컨트롤 글자
+      (text-xs/relaxed)가 아니라 `text-xs`(12 · 16)를 쓰고, sm 만 text-[0.625rem](10 · 15)이다.
+      두 값이 ui 축의 sm · xs 와 정확히 같아서 슬롯을 새로 두지 않았다(2026-09-16 mira 대조).
    min-width 를 높이와 같게 두어 아이콘 하나짜리 토글이 납작해지지 않게 한다.
    -------------------------------------------------------- */
 
@@ -82,8 +86,8 @@
     min-width: var(--control-height-sm);
     padding-inline: var(--control-padding-x-sm);
     gap: var(--control-gap-sm);
-    font-size: var(--control-font-size-xs);
-    line-height: var(--control-line-height-xs);
+    font-size: var(--ui-text-xs);
+    line-height: var(--ui-line-height-xs);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-sm);
@@ -99,8 +103,8 @@
     min-width: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
     gap: var(--control-gap-md);
-    font-size: var(--control-font-size-md);
-    line-height: var(--control-line-height-md);
+    font-size: var(--ui-text-sm);
+    line-height: var(--ui-line-height-sm);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-lg);
@@ -116,8 +120,8 @@
     min-width: var(--control-height-lg);
     padding-inline: var(--control-padding-x-lg);
     gap: var(--control-gap-lg);
-    font-size: var(--control-font-size-lg);
-    line-height: var(--control-line-height-lg);
+    font-size: var(--ui-text-sm);
+    line-height: var(--ui-line-height-sm);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-lg);

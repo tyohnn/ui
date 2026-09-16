@@ -54,6 +54,7 @@
     }
 }
 
+.cn-separator.cn-button-group-separator,
 .cn-button-group-separator {
     background-color: var(--input);
 }

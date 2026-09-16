@@ -27,7 +27,7 @@
     background-clip: padding-box;
     /* 계열의 float 를 읽는다. mira 는 shadow-lg 인데, --shadow-raised 라는 이름을 2층의 컨트롤 그림자 축이
        가져가 계열 값(shadow-md)으로 합쳤다. */
-    box-shadow: var(--shadow-float);
+    box-shadow: var(--sheet-shadow);
 
     /* ⚠ 200ms 는 리터럴이다. mira 의 duration-200 이고 --control-duration(150)과 다른
        값인데 모션 축에 다른 단이 없다. 이징은 mira 의 ease-in-out 대신 계열의

@@ -26,9 +26,9 @@
           맞닿는 변에만 선이 필요하다. 방향 규칙은 각 파일에 있다.
         · tooltip 의 반전색 — 컴포넌트가 bg-foreground 로 직접 준다. 작고 잠깐
           뜨는 것이라 다른 면과 색을 맞추면 오히려 안 보인다.
-      mira 와 다르게 둔 것
-        · dialog · alert-dialog 의 그림자 — mira 는 링만 있고 그림자가 없다. 80% 막 위라
-          보이지 않는 값이지만 계열이 --shadow-float 하나로 서 있어 그대로 둔다.
+      슬롯으로 가른 것
+        · dialog · alert-dialog 의 그림자 — mira 는 링만 있고 그림자가 없다(2026-09-16 대조).
+          --dialog-shadow 가 그 자리다(foundation: 없음).
 
    ⚠ 컴포넌트별 파일에는 애니메이션·방향 규칙·그 컴포넌트에만 있는 것만 남긴다.
       값을 컴포넌트별 파일에 다시 적으면 드리프트가 되살아난다.
@@ -92,10 +92,16 @@
     line-height: var(--ui-line-height-sm);
 }
 
+/* 모달 면은 링만 갖는다(그림자는 --dialog-shadow 슬롯). */
+.cn-dialog-content,
+.cn-alert-dialog-content {
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        var(--dialog-shadow);
+}
+
 /* 화면 가운데 뜨는 것은 사방이 링이고 모서리도 사방이다.
    가장자리에 붙는 sheet·drawer 는 여기서 빠지고 각자 파일이 방향을 정한다. */
-.cn-dialog-content,
-.cn-alert-dialog-content,
 .cn-popover-content,
 .cn-hover-card-content {
     box-shadow:

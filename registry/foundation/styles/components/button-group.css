@@ -54,6 +54,10 @@
     }
 }
 
+/* ⚠ `.cn-separator` 와 함께 붙는다(ButtonGroupSeparator 는 Separator 다). 배럴이 알파벳
+   순서라 separator.css 가 뒤에 읽히므로, 같은 명시도로는 `.cn-separator` 의 --border 가
+   이긴다. 두 클래스를 함께 적어 (0,2,0) 으로 올린다 — mira: bg-input (2026-09-16 실측). */
+.cn-separator.cn-button-group-separator,
 .cn-button-group-separator {
     background-color: var(--input);
 }

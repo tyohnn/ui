@@ -30,9 +30,11 @@
    ⚠ 세로 3px 은 리터럴이다. mira 는 py-[calc(--spacing(0.85))] = 3.4px 인데 하위픽셀이라
       정수로 내렸다. control 축은 세로 패딩 단계를 갖지 않는다. */
 .cn-menubar-trigger {
-    border-radius: var(--control-radius-xs);
+    /* mira: rounded-[calc(var(--radius-md)-2px)] px-2 py-[calc(--spacing(0.85))] text-xs/relaxed
+       ⚠ 3.4px 과 6px 은 mira 의 값 그대로다(0.85 × 4 = 3.4). 축에 없는 단이다. */
+    border-radius: 6px;
     padding-inline: var(--menu-item-padding-x);
-    padding-block: 3px;
+    padding-block: 3.4px;
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);

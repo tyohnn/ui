@@ -105,7 +105,7 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    and check the preview: `SYSTEM=<name> npm run dev -w @tyohnn/preview`, then
    `http://localhost:5173/?system=<name>&mode=dark`.
 
-### Token slots (axis contract version 2)
+### Token slots (axis contract version 3)
 
 The names defined in foundation `styles/globals.css` (layer 1) and `styles/tokens.css` (layer 2) are the
 whole vocabulary; every system defines all of them. A **slot** is a name a layer-3 rule reads where a
@@ -125,7 +125,21 @@ system may want a different look, so a system tunes the value instead of editing
 
 Version 1 was the mira token set plus slots for selection, clay materials, tag and avatar tones, control
 shadows and surfaces, and the sidebar, table, tag and line-tab axes. Version 2 added the slots below, so
-the graphite look needs no layer-3 rule edits:
+the graphite look needs no layer-3 rule edits. Version 3 added the slots the **mira reference-app
+correction** needed (`registry/foundation/reference/README.md`), all of them places where the foundation
+rule had baked in a value a system may legitimately want elsewhere:
+
+| Area | Layer 1 (colours) | Layer 2 (tokens) |
+|---|---|---|
+| global | `--color-scheme` (read by `@layer base`'s `:root`, so native widgets — scrollbars, the `<option>` list — follow the mode) | — |
+| button | `--button-outline-fill` | — |
+| slider | `--slider-thumb-fill` | — |
+| menu | — | `--menu-item-padding-y` · `--menu-item-padding-y-check` · `--command-item-padding-x` · `--menu-shortcut-line-height` · `--menu-sub-shadow` |
+| kbd | — | `--kbd-radius` |
+| switch | — | `--switch-thumb-size-md` · `--switch-thumb-size-sm` |
+| surfaces | — | `--dialog-shadow` · `--sheet-shadow` |
+
+Version 2's slots:
 
 | Area | Layer 1 (colours) | Layer 2 (tokens) |
 |---|---|---|

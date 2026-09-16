@@ -42,6 +42,12 @@
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
 
+    /* mira 는 글자를 바탕 클래스에도 적어 둔다(text-xs/relaxed). 크기 클래스가 없는
+       아이콘 버튼(`.cn-button-size-icon*`)도 그래서 같은 글자를 쓴다 — 여기가 없으면
+       아이콘 버튼만 바깥 글자를 물려받는다(2026-09-16 mira 대조). */
+    font-size: var(--control-font-size-md);
+    line-height: var(--control-line-height-md);
+
     /* 눌림 — mira: active:not-aria-[haspopup]:translate-y-px. 줄어드는 것이 아니라
        1px 내려앉는다. 메뉴를 여는 버튼(aria-haspopup)은 눌린 채로 머무르므로 뺀다. */
     &:active:not([aria-haspopup]) {
@@ -85,7 +91,7 @@
    hover 는 테두리를 진하게 하는 것이 아니라 바탕을 채운다. 글자색은 바탕(foreground)을
    그대로 물려받는다 — 종전의 --muted-foreground 는 nova 에도 mira 에도 없는 규칙이었다. */
 .cn-button-variant-outline {
-    background-color: var(--input-fill);
+    background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
     border-color: var(--button-outline-border);
     box-shadow: var(--shadow-control);
@@ -162,11 +168,15 @@
    size — 밀도
    높이가 정본이고 세로 패딩은 두지 않는다. 세로 가운데 정렬은
    컴포넌트의 items-center 가 이미 담당하므로, 높이 하나로 결정된다.
+
+   ⚠ mira 는 h-7 처럼 **고정 높이**다(min-height 가 아니다). 호출부가 size-(--cell-size) 같은
+      유틸리티로 높이를 다시 줄 때(달력의 이전·다음 버튼) min-height 는 그 값을 이겨 버린다 —
+      2026-09-16 mira 대조에서 달력 버튼이 24 대신 28 로 나와 되돌렸다.
    -------------------------------------------------------- */
 
 /* xs 만 모서리가 한 단 작다. mira: rounded-sm */
 .cn-button-size-xs {
-    min-height: var(--control-height-xs);
+    height: var(--control-height-xs);
     padding-inline: var(--control-padding-x-xs);
     gap: var(--control-gap-xs);
     border-radius: var(--button-shape-radius, var(--control-radius-xs));
@@ -183,7 +193,7 @@
 }
 
 .cn-button-size-sm {
-    min-height: var(--control-height-sm);
+    height: var(--control-height-sm);
     padding-inline: var(--control-padding-x-sm);
     gap: var(--control-gap-sm);
     font-size: var(--control-font-size-sm);
@@ -199,7 +209,7 @@
 }
 
 .cn-button-size-default {
-    min-height: var(--control-height-md);
+    height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
     gap: var(--control-gap-md);
     font-size: var(--control-font-size-md);
@@ -219,7 +229,7 @@
 }
 
 .cn-button-size-lg {
-    min-height: var(--control-height-lg);
+    height: var(--control-height-lg);
     padding-inline: var(--control-padding-x-lg);
     gap: var(--control-gap-lg);
     font-size: var(--control-font-size-lg);

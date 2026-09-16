@@ -78,7 +78,15 @@
       불리언 상태를 빈 값(data-active="")으로 내보내므로 값을 비교하면 맞지 않는다. */
 .cn-navigation-menu-link {
     border-radius: var(--surface-radius);
-    padding: var(--menu-item-padding-x);
+    padding: var(--menu-item-padding-x);   /* mira: p-2 */
+
+    /* ⚠ 링크가 트리거 꼴을 입을 수 있다(`navigationMenuTriggerStyle()`): 두 클래스가 한
+       요소에 붙고, 배럴 안에서 링크 규칙이 뒤에 온다. 트리거의 여백이 이기도록 명시도를
+       (0,2,0) 으로 올린다 — mira: px-2.5 py-1.5 (2026-09-16 실측). */
+    &.cn-navigation-menu-trigger {
+        padding-inline: var(--control-padding-x-lg);
+        padding-block: 6px;
+    }
     gap: 6px;
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
@@ -143,17 +151,25 @@
     }
 }
 
-/* mira: 둘 다 rounded-xl ring-1. 그림자는 뷰포트가 shadow-md, 팝업이 shadow(= shadow-sm)로
-   갈려 있는데 같은 자리에 뜨는 하나의 면이라 --shadow-float 하나로 둔다. Dialog·Popover·
-   드롭다운과 같은 그림자다. */
+/* mira: 둘 다 rounded-xl ring-1. 그림자는 갈린다 — 뷰포트가 shadow-md, 팝업이 shadow(=shadow-sm)다.
+   (2026-09-16 대조 전까지 하나로 묶어 두었다.) */
 .cn-navigation-menu-viewport,
 .cn-navigation-menu-popup {
     background-color: var(--popover);
     color: var(--popover-foreground);
     border-radius: var(--surface-radius-lg);
+}
+
+.cn-navigation-menu-viewport {
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),
         var(--shadow-float);
+}
+
+.cn-navigation-menu-popup {
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        var(--shadow-chip);
 }
 
 .cn-navigation-menu-viewport {

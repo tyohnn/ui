@@ -70,8 +70,8 @@
 /* --------------------------------------------------------
    항목 — menu 축
    mira: min-h-7 gap-2 rounded-md px-2 text-xs/relaxed [&_svg:not([class*='size-'])]:size-3.5
-   ⚠ 세로 여백(py-1 · 체크·라디오 py-1.5)은 옮기지 않았다. 높이는 세로 패딩이 아니라
-      --menu-item-height 가 정하고 세로 가운데는 컴포넌트의 items-center 가 맡는다.
+   세로 여백은 --menu-item-padding-y(체크·라디오·팔레트는 -check)가 갖는다. 높이의 바닥은
+   --menu-item-height 가, 세로 가운데는 컴포넌트의 items-center 가 맡는다.
    -------------------------------------------------------- */
 
 .cn-dropdown-menu-item,
@@ -92,6 +92,7 @@
     min-height: var(--menu-item-height);
     border-radius: var(--menu-item-radius);
     padding-inline: var(--menu-item-padding-x);
+    padding-block: var(--menu-item-padding-y);
     gap: var(--menu-item-gap);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
@@ -113,7 +114,7 @@
     align-items: center;
     cursor: default;
     user-select: none;
-    outline: none;
+    outline-style: none;   /* ⚠ `outline: none` 은 base 의 outline-ring/50 색까지 지운다 */
 }
 
 /* 강조 — 키보드 이동과 마우스 올림.
@@ -125,22 +126,25 @@
 .cn-dropdown-menu-radio-item:focus,
 .cn-dropdown-menu-sub-trigger:focus,
 .cn-dropdown-menu-sub-trigger[data-open],
+.cn-dropdown-menu-sub-trigger[data-popup-open],
 .cn-context-menu-item:focus,
 .cn-context-menu-checkbox-item:focus,
 .cn-context-menu-radio-item:focus,
 .cn-context-menu-sub-trigger:focus,
 .cn-context-menu-sub-trigger[data-open],
+.cn-context-menu-sub-trigger[data-popup-open],
 .cn-menubar-item:focus,
 .cn-menubar-checkbox-item:focus,
 .cn-menubar-radio-item:focus,
 .cn-menubar-sub-trigger:focus,
 .cn-menubar-sub-trigger[data-open],
+.cn-menubar-sub-trigger[data-popup-open],
 .cn-combobox-item[data-highlighted] {
     background-color: var(--accent);
     color: var(--accent-foreground);
 }
 
-.cn-command-item[data-selected] {
+.cn-command-item[data-selected]:not([data-selected="false"]) {
     background-color: var(--muted);
     color: var(--foreground);
 }
@@ -167,7 +171,7 @@
 .cn-context-menu-item[data-disabled],
 .cn-menubar-item[data-disabled],
 .cn-menubar-radio-item[data-disabled],
-.cn-command-item[data-disabled] {
+.cn-command-item[data-disabled]:not([data-disabled="false"]) {
     opacity: 0.5;
 }
 
@@ -188,17 +192,34 @@
     padding-inline-start: var(--menu-item-padding-inset);
 }
 
-/* 오른쪽에 체크 표시가 앉는 항목은 그만큼 끝쪽을 비운다. mira: pr-8 */
+/* 오른쪽에 체크 표시가 앉는 항목은 그만큼 끝쪽을 비운다. mira: py-1.5 pr-8 pl-2.
+   ⚠ Combobox 항목은 여기 없다 — mira 의 combobox-item 은 px-2 py-1 로 보통 항목과 같다. */
 .cn-dropdown-menu-checkbox-item,
 .cn-dropdown-menu-radio-item,
 .cn-context-menu-checkbox-item,
 .cn-context-menu-radio-item,
-.cn-combobox-item {
+.cn-menubar-checkbox-item,
+.cn-menubar-radio-item {
+    padding-block: var(--menu-item-padding-y-check);
     padding-inline-end: var(--menu-item-padding-end);
+    /* mira 의 체크·라디오 항목은 text-xs(12 · 16)다 — 보통 항목의 text-xs/relaxed 와 행간이 다르다. */
+    line-height: var(--ui-line-height-sm);
+
+    & > [data-slot$="-item-indicator"] {
+        line-height: var(--ui-line-height-sm);
+    }
 }
 
-/* mira: absolute right-2 flex items-center justify-center. 크기는 안의 svg 가
-   항목 규칙(size-3.5)으로 받으므로 상자도 그 한 단으로 둔다. */
+/* 하위 메뉴를 여는 항목도 text-xs 다(보통 항목의 text-xs/relaxed 와 행간이 다르다). */
+.cn-dropdown-menu-sub-trigger,
+.cn-context-menu-sub-trigger,
+.cn-menubar-sub-trigger {
+    line-height: var(--ui-line-height-sm);
+}
+
+/* mira: absolute right-2 flex items-center justify-center — 상자에 크기를 주지 않는다.
+   꺼져 있는 항목에서는 안의 표시가 그려지지 않아 상자도 0 이어야 한다(크기를 주면 빈 상자가
+   14px 로 남는다). 켜졌을 때의 크기는 안의 svg 가 항목 규칙으로 받는다. */
 .cn-dropdown-menu-item-indicator,
 .cn-context-menu-item-indicator,
 .cn-combobox-item-indicator {
@@ -207,8 +228,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--control-icon-size-md);
-    height: var(--control-icon-size-md);
 }
 
 /* --------------------------------------------------------
@@ -251,7 +270,7 @@
     margin-inline-start: auto;
     color: var(--muted-foreground);
     font-size: var(--ui-text-xs);
-    line-height: var(--ui-line-height-xs);
+    line-height: var(--menu-shortcut-line-height);
     /* ⚠ 단축키만 --ui-letter-spacing 을 읽지 않는다. 키캡이 서로 붙어 읽히지
        않도록 자간을 넓히는 자리라 방향이 반대다. */
     letter-spacing: var(--menu-shortcut-letter-spacing);
@@ -265,6 +284,12 @@
     color: var(--accent-foreground);
 }
 
-.cn-command-item[data-selected] .cn-command-shortcut {
+.cn-command-item[data-selected]:not([data-selected="false"]) .cn-command-shortcut {
     color: var(--foreground);
+}
+
+/* 팔레트 항목만 좌우 여백과 세로 여백이 한 단 넓다. mira: px-2.5 py-1.5 */
+.cn-command-item {
+    padding-inline: var(--command-item-padding-x);
+    padding-block: var(--menu-item-padding-y-check);
 }
