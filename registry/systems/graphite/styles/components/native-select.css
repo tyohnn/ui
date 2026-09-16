@@ -24,6 +24,9 @@
    ============================================================ */
 
 .cn-native-select {
+    /* mira: py-0.5. 종전 2px 리터럴이 v4 의 --control-padding-y-field 로 올라갔고, v5 부터는
+       제 슬롯 --native-select-padding-y(그 별칭)를 읽는다. */
+    padding-block: var(--native-select-padding-y);
     width: 100%;
     min-width: 0;
     appearance: none;

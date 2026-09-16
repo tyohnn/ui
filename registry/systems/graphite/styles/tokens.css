@@ -445,7 +445,7 @@
     --control-padding-x-grouped: var(--control-padding-x-md);
     --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
     --control-padding-x-field: var(--control-padding-x-md);
-    --control-padding-y-field: 2px;
+    --control-padding-y-field: 0px;   /* graphite: fields carry no vertical padding; their height is a min-height */
     --control-font-size-field: var(--control-font-size-md);
     --control-line-height-field: var(--control-line-height-md);
     --control-letter-spacing-field: var(--control-letter-spacing);
