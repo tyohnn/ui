@@ -47,10 +47,3 @@
         font-weight: var(--control-font-weight);
     }
 }
-
-/* lyra: a disabled field takes a fill (disabled:bg-input/50 · dark:disabled:bg-input/80). */
-/* ⚠ the exclusion lives here, not in input-group.css: the barrel sorts input-group.css BEFORE
-   input.css (`-` < `.`), so a rule there of equal specificity would lose. */
-.cn-input:disabled:not([data-slot="input-group-control"]) {
-    background-color: var(--input-fill-disabled);
-}

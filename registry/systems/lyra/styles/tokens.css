@@ -546,7 +546,7 @@
        read their own name. rhea · nova · lyra · vega keep the block addons at the md step while the
        inline ones and the toggle item go to px-2; sera zeroes the addons and keeps the toggle's md. */
     --input-group-addon-padding-x: var(--control-padding-x-grouped);
-    --input-group-addon-padding-x-block: var(--input-group-addon-padding-x);
+    --input-group-addon-padding-x-block: var(--control-padding-x-md);   /* lyra: the block addons keep px-2.5; the inline ones are px-2 */
     --toggle-group-item-padding-x: var(--control-padding-x-grouped);
     /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
        down but keep the grouped button at the control radius. */
@@ -566,10 +566,10 @@
     --native-select-padding-y: var(--control-padding-y-field);
     /* The toned badge (`[data-tone]`, the tag) height. mira: the badge height. luma · sera · lyra
        keep the tag at the xs control step while the plain badge shrinks to h-5 (or auto). */
-    --tag-height: var(--badge-height);
+    --tag-height: var(--control-height-xs);   /* lyra: the toned tag follows the xs control (24); the plain badge is h-5 */
     /* The accordion's rules between items. mira: the group's own border width. sera · nova · lyra
        draw no frame around the group but keep the rule between items. */
-    --accordion-item-border-width: var(--accordion-border-width);
+    --accordion-item-border-width: var(--surface-border-width);   /* lyra: no frame (--accordion-border-width 0px), but the rule between items stays */
     /* Card parts. The header and footer corners, and an edge image's corners. mira: the card's
        corner. maia rounds the header and footer one step below the card (14 in an 18 card); nova
        gives the image the popover corner while the card and its parts take the dialog one. */

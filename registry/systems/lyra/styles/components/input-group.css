@@ -134,7 +134,7 @@
    통 안의 세로 리듬이라 축이 없다. 좌우 패딩은 v5 의 --input-group-addon-padding-x-block
    (foundation 값은 인라인 addon 슬롯의 별칭)이다. */
 .cn-input-group-addon-align-block-start {
-    padding-inline: var(--control-padding-x-md);   /* lyra: the block addon keeps px-2.5 */
+    padding-inline: var(--input-group-addon-padding-x-block);
     padding-block-start: 8px;
 
     &.border-b {
@@ -143,7 +143,7 @@
 }
 
 .cn-input-group-addon-align-block-end {
-    padding-inline: var(--control-padding-x-md);
+    padding-inline: var(--input-group-addon-padding-x-block);
     padding-block-end: 8px;
 
     &.border-t {
