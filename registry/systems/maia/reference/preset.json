@@ -1,0 +1,22 @@
+{
+    "shadcnVersion": "4.21.0",
+    "commit": "7c9eaba1c0a6404c990c144a654792e3313c650d",
+    "config": {
+        "name": "base-maia",
+        "title": "Maia (Base)",
+        "description": "Maia / Hugeicons / Figtree",
+        "base": "base",
+        "style": "maia",
+        "baseColor": "neutral",
+        "theme": "neutral",
+        "chartColor": "neutral",
+        "iconLibrary": "hugeicons",
+        "font": "figtree",
+        "fontHeading": "inherit",
+        "item": "Item",
+        "rtl": false,
+        "menuAccent": "subtle",
+        "menuColor": "default",
+        "radius": "default"
+    }
+}
