@@ -76,7 +76,7 @@
     & [cmdk-group-heading] {
         /* mira: **:[[cmdk-group-heading]]:px-2.5 py-1.5 — 항목과 같은 좌우 여백이다. */
         padding-inline: var(--command-item-padding-x);
-        padding-block: var(--menu-label-padding-y);   /* lyra: py-1.5 */
+        padding-block: 6px;   /* lyra: py-1.5 — one step under the menu label's py-2 */
         font-weight: var(--label-font-weight);   /* lyra: the heading carries no weight utility */
     }
 }

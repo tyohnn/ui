@@ -184,8 +184,9 @@
     --primary-hover: oklch(0.205 0 0 / 80%);        /* hover:bg-primary/80 */
     /* 켜진 체크박스를 감싼 필드 라벨. mira: has-data-checked:bg-primary/5 dark:has-data-checked:bg-primary/10 */
     --field-label-checked-border: color-mix(in oklab, var(--primary) 30%, transparent);   /* nova: has-data-checked:border-primary/30 */
+    --combobox-chip-fill: var(--muted);   /* combobox chip bg-muted */
     /* nova: the questionnaire choice is bg-transparent in light and dark:bg-input/20.
-       Foundation slot candidate: --questionnaire-choice-fill. */
+       v4 slot. */
     --questionnaire-choice-fill: transparent;
     --primary-soft: oklch(0.205 0 0 / 5%);
     /* 설문의 고른 선택지. mira: data-checked:bg-primary/10 (두 모드 같다) */
@@ -245,10 +246,10 @@
        (다크 input/30), 아웃라인 버튼의 hover 는 bg-input/50 이다. */
     --input-fill: transparent;
     /* nova: the command palette's search box is bg-input/30 (its own step above the plain
-       control fill, which nova leaves transparent in light). Foundation slot candidate. */
-    --input-fill-strong: oklch(0.922 0 0 / 30%);
+       control fill, which nova leaves transparent in light). v4 slot. */
+    --command-input-fill: oklch(0.922 0 0 / 30%);
     /* nova: disabled:bg-input/50 (dark: /80) — mira leaves a disabled control its normal fill.
-       Foundation slot candidate: --input-fill-disabled. */
+       v4 slot. */
     --input-fill-disabled: oklch(0.922 0 0 / 50%);
     --input-fill-hover: oklch(0.922 0 0 / 50%);
     /* 셀렉트 트리거 · 네이티브 셀렉트의 hover. mira: dark:hover:bg-input/50 — 밝은 쪽에는 hover 가 없으므로
@@ -426,6 +427,7 @@
     --primary-foreground: oklch(0.205 0 0);
     --primary-hover: oklch(0.922 0 0 / 80%);
     --field-label-checked-border: color-mix(in oklab, var(--primary) 20%, transparent);   /* nova: dark:has-data-checked:border-primary/20 */
+    --combobox-chip-fill: var(--muted);
     --questionnaire-choice-fill: oklch(1 0 0 / 3%);   /* nova: dark:bg-input/20 */
     --primary-soft: oklch(0.922 0 0 / 10%);
     --primary-soft-strong: oklch(0.922 0 0 / 10%);
@@ -462,7 +464,7 @@
     --input: oklch(1 0 0 / 15%);
     /* --input 이 15% 알파라 input/30 은 4.5%, input/50 은 7.5% 다 */
     --input-fill: oklch(1 0 0 / 4.5%);
-    --input-fill-strong: oklch(1 0 0 / 4.5%);
+    --command-input-fill: oklch(1 0 0 / 4.5%);
     --input-fill-disabled: oklch(1 0 0 / 12%);
     --input-fill-hover: oklch(1 0 0 / 7.5%);
     --select-hover: oklch(1 0 0 / 7.5%);
@@ -629,11 +631,9 @@
 :root {
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
-    --command-input-fill: var(--input-fill);
     --button-outline-hover-fill: var(--input-fill-hover);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;
@@ -645,11 +645,9 @@
 .dark {
     --input-border: var(--input);
     --input-border-bottom: var(--input-border);
-    --command-input-fill: var(--input-fill);
     --button-outline-hover-fill: var(--input-fill-hover);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;

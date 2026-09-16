@@ -183,15 +183,27 @@
     gap: var(--surface-gap);
 }
 
-/* mira: text-sm font-medium — Popover 의 제목도 같은 단이다. */
+/* mira: text-sm font-medium — Popover 의 제목도 같은 단이다.
+   v4: 면의 제목(dialog · alert-dialog · sheet · drawer, card.css 의 카드 제목도 같다)은
+   --title-* 축을, Popover 의 제목은 조용한 라벨 띠(--ui-label-*)를 읽는다. foundation 은 둘 다
+   --ui-letter-spacing 의 별칭이라 지금은 같은 값이다 — sera 가 면 제목만 대문자로 올린다. */
 .cn-dialog-title,
 .cn-alert-dialog-title,
 .cn-sheet-title,
-.cn-drawer-title,
+.cn-drawer-title {
+    color: var(--popover-foreground);
+    font-size: var(--ui-text-lg);
+    letter-spacing: var(--title-letter-spacing);
+    text-transform: var(--title-text-transform);
+    line-height: var(--ui-line-height-lg);
+    font-weight: var(--ui-font-weight);
+}
+
 .cn-popover-title {
     color: var(--popover-foreground);
     font-size: var(--ui-text-lg);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--ui-label-letter-spacing);
+    text-transform: var(--ui-label-text-transform);
     line-height: var(--ui-line-height-lg);
     font-weight: var(--ui-font-weight);
 }

@@ -167,6 +167,48 @@ Each is a candidate for the next axis-contract version; foundation is not change
 | `--command-input-fill` | `var(--sidebar-input-fill)` | the command palette's search box is `bg-input/30` while the sidebar's is the page background; foundation reads one name for both |
 | `--field-checked-border` | `transparent` | a checked field row outlines in `primary/30` (light) and `primary/20` (dark) — a colour that differs by mode, so it has no layer-2 home |
 
+## Axis contract v4, stage 2 — layer-3 literals moved into slots (2026-09-17)
+
+Most of the candidates above were adopted by v4 under the same names, so lyra already defined them in place;
+stage 2 takes foundation's rules back. `tooling/preset/slot-migration.md` listed 10 declarations; 9 moved:
+
+| Slot | lyra value | Layer |
+|---|---|---|
+| `--menu-label-padding-y` | `8px` (was 6px, read only by the command heading) | 2 |
+| `--bubble-padding-y` · `--bubble-line-height` | `8px` · `var(--ui-line-height-relaxed)` | 2 |
+| `--sidebar-input-height` · `--tabs-list-height` | `var(--control-height-md)` | 2 |
+| `--combobox-chip-fill` | `var(--muted)`, both modes | 1 |
+
+The badge border and icon rows already equalled foundation's defaults and took the rule with no token.
+
+- **Rename:** `--field-checked-border` → `--field-label-checked-border` (layer 1, both scopes); its readers in
+  `field.css` read the new name, and the backfilled default is gone.
+- **Stays lyra's own:** `--ui-line-height-relaxed` (not adopted in v4); `--bubble-line-height` points at it.
+- **The command group heading** keeps `py-1.5` as a literal in `command.css`: the menu label rule now reads
+  `--menu-label-padding-y` (8px, `py-2`) for every menu label, and the palette heading is the one label a step
+  lower — the slot cannot hold both.
+
+**Not moved (1):** `.cn-accordion-item:not(:last-child)` `border-bottom`. `--accordion-border-width` is 0px in
+lyra because the group has no frame, so the item rule keeps `--surface-border-width`.
+
+Slot-meaning conflicts left as rules (one value cannot serve every reader): `--accordion-border-width` (above);
+`--badge-height` (the plain badge is `h-5` = 20px, the toned `[data-tone]` badge follows the xs control, 24px);
+`--control-padding-x-grouped` (8px for the toggle-group item, select trigger end and inline addons, while the
+block-start/end input-group addons keep `--control-padding-x-md`, 10px); `--input-fill-disabled` (lyra fills a
+disabled input and textarea, not a disabled select trigger or native select, so foundation's rule for all four
+is not taken).
+
+Beyond the table: every v4 name is now read by a lyra rule; the menu, title and label bands, the menu ring
+(sub-menus included), the card ring and radius, empty and item axes, the field sub-axis and input edge, the
+sm control radius, switch, slider, toggle gap and sidebar parts read their slots, and the tokens' "Slot
+candidate" comments now say "v4 slot".
+
+Layer 3 against foundation: **24 of 62 files byte-identical** (was 15: `button` · `chart` · `context-menu` ·
+`kbd` · `label` · `slider` · `switch` · `table` · `toggle-group` joined), differing lines 932 → 459.
+
+Check: a keyed dump of every coverage section in both modes before and after — **0 computed-value
+differences**; `compare-shadcn.mjs` light 0 mismatches · 38 excluded, dark 0 · 61 excluded (unchanged).
+
 ## Not measured
 
 Nothing. The coverage template renders all 62 `registry/ui` components and the comparison pairs every one

@@ -111,7 +111,7 @@
     --control-icon-button-size-md: var(--control-height-md);
     --control-icon-button-icon-size-md: var(--control-icon-size-md);
     /* The sm icon button keeps the base size-4 glyph while the sm label button drops to size-3.5.
-       Slot candidate (foundation: var(--control-icon-size-sm)). */
+       v4 slot (foundation: var(--control-icon-size-sm)). */
     --control-icon-button-icon-size-sm: 16px;
 
     /* md button with a leading icon. mira: the icon side is the narrow one (6) and the far side keeps
@@ -143,15 +143,15 @@
     /* 키캡의 모서리. mira: rounded-xs(2px) — 지시자(4)보다 한 단 작다. */
     --kbd-radius: 0px;
     /* Badge and keycap stay h-5 while the xs button grows to h-6, so they no longer share
-       --control-height-xs. Slot candidates (foundation: var(--control-height-xs)). */
+       --control-height-xs. v4 slots (foundation: var(--control-height-xs)). */
     --badge-height: 20px;        /* lyra: h-5 */
     --kbd-height: 20px;          /* lyra: h-5 */
     --badge-radius: 0px;         /* lyra: rounded-none (the plain badge corner was a 9999px literal) */
     /* The field family carries real vertical padding (py-1); the control axis has no step for it.
-       Slot candidate (foundation: 2px). */
+       v4 slot (foundation: 2px). */
     --control-padding-y-field: 4px;
     /* Toggle keeps gap-1 at every size while the button family moves to gap-1.5.
-       Slot candidate (foundation: var(--control-gap-md)). */
+       v4 slot (foundation: var(--control-gap-md)). */
     --toggle-gap: 4px;
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
@@ -200,6 +200,9 @@
     --surface-gap-lg: 16px;      /* dialog-content gap-4 · popover gap-4 */
     --surface-icon-gap: 6px;     /* alert has-[>svg]:gap-x-1.5 · tooltip gap-1.5 */
     --surface-border-width: 1px;
+    /* Chat bubble. lyra: py-2 text-xs/relaxed */
+    --bubble-padding-y: 8px;
+    --bubble-line-height: var(--ui-line-height-relaxed);
 
     /* 모달 뒤에 까는 막. 색은 1층의 --overlay-backdrop 이 갖는다. mira: backdrop-blur-xs = 4px */
     --overlay-backdrop-blur: 4px;
@@ -210,23 +213,23 @@
        -------------------------------------------------------- */
     --menu-padding: 0px;              /* lyra: the popup surfaces have no padding; rows reach the edge */
     /* The menubar bar keeps its p-1 while the popup surfaces drop to 0.
-       Slot candidate (foundation: var(--menu-padding)). */
+       v4 slot (foundation: var(--menu-padding)). */
     --menubar-padding: 4px;
     /* The menubar bar is gap-0.5. */
     --menubar-gap: 2px;
     /* The sheet header and footer are p-4 while empty and the command panel keep p-6.
-       Slot candidate (foundation: var(--surface-padding-lg)). */
+       v4 slot (foundation: var(--surface-padding-lg)). */
     --sheet-padding: 16px;
     /* Grouped controls (toggle group item · select trigger end · input-group addon) keep px-2
        while the standalone control moved to px-2.5.
-       Slot candidate (foundation: var(--control-padding-x-md)). */
+       v4 slot (foundation: var(--control-padding-x-md)). */
     --control-padding-x-grouped: 8px;
     /* The separator keeps its -mx-1 even though the surface padding went to 0, so the two
-       no longer derive from one another. Slot candidate (foundation: var(--menu-padding)). */
+       no longer derive from one another. v4 slot (foundation: var(--menu-padding)). */
     --menu-separator-margin-inline: -4px;
     --menu-separator-margin-block: 0px;
     /* lyra draws no box around an accordion group (only the per-item bottom rule).
-       Slot candidate (foundation: var(--surface-border-width)). */
+       v4 slot (foundation: var(--surface-border-width)). */
     --accordion-border-width: 0px;
     --menu-min-width: 128px;          /* min-w-32 */
     --menu-item-height: 32px;         /* lyra: py-2 + a 16px line */
@@ -244,7 +247,7 @@
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
     --menu-item-padding-inset: 28px;   /* lyra: dropdown · context data-inset:pl-7 */
     /* The menubar indents one step further (pl-8) than the other menus.
-       Slot candidate (foundation: var(--menu-item-padding-inset)). */
+       v4 slot (foundation: var(--menu-item-padding-inset)). */
     --menubar-item-padding-inset: 32px;
     /* 단축키는 자간을 넓혀 키캡이 서로 떨어져 읽히게 한다. mira: tracking-widest */
     --menu-shortcut-letter-spacing: 0.1em;
@@ -307,6 +310,9 @@
     --sidebar-item-action-size: 20px;
     --sidebar-item-action-icon-size: 16px;
 
+    /* The shell (v4). lyra: the search box is h-8 */
+    --sidebar-input-height: var(--control-height-md);
+
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
        mira 의 UI 글자는 셋뿐이다. 배지·키캡·단축키의 text-[0.625rem](10),
@@ -323,14 +329,13 @@
     --ui-line-height-md: 16px;
     --ui-line-height-lg: 20px;
     /* The reading surfaces (card · bubble · item body) keep text-xs/relaxed while every other
-       UI string is a plain text-xs. Slot candidate (foundation: var(--ui-line-height-md)). */
+       UI string is a plain text-xs. lyra's own name — not adopted in axis contract v4. */
     --ui-line-height-relaxed: 19.5px;
     /* lyra's Label carries no weight of its own (the rest of the UI text is font-medium).
-       Slot candidate (foundation: var(--ui-font-weight)). */
+       v4 slot (foundation: var(--ui-font-weight)). */
     --label-font-weight: 400;
-    /* A menu/command group heading is py-1.5 where a check row is py-2.
-       Slot candidate (foundation: var(--menu-item-padding-y-check)). */
-    --menu-label-padding-y: 6px;
+    /* Menu group labels are py-2 like the check rows (the command heading's py-1.5 stays in command.css). */
+    --menu-label-padding-y: 8px;
     --ui-font-weight: 500;            /* mira 의 제목·라벨은 font-medium */
     /* Weight of quiet UI text (tags · line tabs · table head). mira: the same 500. */
     --ui-font-weight-regular: var(--ui-font-weight);
@@ -392,6 +397,8 @@
        mira: the same h-8 bar as the default tabs.
        -------------------------------------------------------- */
     --tabs-line-height: var(--control-height-md);
+    /* The default tabs bar (v4). lyra: h-8 */
+    --tabs-list-height: var(--control-height-md);
     /* Divider under the line bar and the trigger box inside it. mira: no divider, and the default
        trigger box (px 6 · icon side 4 · 1px transparent border · control radius). */
     --tabs-line-divider-width: 0px;
@@ -504,11 +511,8 @@
     --card-radius: var(--surface-radius);
     --bubble-radius: var(--surface-radius);
     --bubble-padding-x: var(--surface-padding-sm);
-    --bubble-padding-y: 6px;
-    --bubble-line-height: var(--ui-line-height-md);
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
-    --tabs-list-height: var(--control-height-lg);
     --tabs-list-padding: 3px;
     --tabs-trigger-gap: 6px;
     --tabs-trigger-padding-x: 6px;
@@ -521,7 +525,6 @@
     --avatar-line-height: var(--ui-line-height-lg);
     --sidebar-surface-padding: var(--menu-item-padding-x);
     --sidebar-surface-gap: var(--menu-item-gap);
-    --sidebar-input-height: var(--control-height-lg);
     --sidebar-item-padding-y: var(--sidebar-item-padding-x);
     --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
     --sidebar-badge-font-weight: var(--ui-font-weight);

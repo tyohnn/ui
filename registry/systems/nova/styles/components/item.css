@@ -55,6 +55,8 @@
     @apply in-data-[slot=dropdown-menu-content]:p-0;
 }
 
+/* 간격은 항목 자신의 축이다 — v4 슬롯 --item-gap(foundation 은 --menu-item-gap 의 별칭).
+   이 파일의 gap · --cn-item-separator 의 margin-block 이 모두 이 이름을 읽는다. */
 .cn-item-media {
     gap: var(--item-gap);
     @apply group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start;
@@ -64,9 +66,11 @@
     background-color: transparent;
 }
 
+/* 아이콘 썸네일의 글리프는 항목 자신의 축이다 — v4 슬롯 --item-media-icon-size
+   (foundation 은 --control-icon-size-lg 의 별칭). */
 .cn-item-media-variant-icon svg:not([class*="size-"]) {
-    width: var(--control-icon-size-lg);
-    height: var(--control-icon-size-lg);
+    width: var(--item-media-icon-size);
+    height: var(--item-media-icon-size);
 }
 
 /* ⚠ 32·32·24 는 리터럴이다. avatar 축과 값이 겹치지만 같은 축이 아니다 —
@@ -129,5 +133,5 @@
 }
 
 .cn-item-separator {
-    margin-block: 8px;   /* nova: my-2 */
+    margin-block: var(--item-gap);
 }

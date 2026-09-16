@@ -28,13 +28,17 @@
       hover 배경이 컴포넌트 소유라 여기서는 글자색만 바꾼다.
    ============================================================ */
 
-/* vega: 테두리는 outline 변형만 갖는다(mira 는 모든 토글에 투명 테두리를 둘렀다). */
 .cn-toggle {
     border-radius: var(--control-radius);
+    /* ⚠ 테두리는 outline 변형만 갖는다. mira 의 Toggle 바탕 클래스에는 border 가 없어서
+       투명 테두리조차 없다(2026-09-16 mira 대조). */
     background-clip: padding-box;
 
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
+    /* 라벨의 대소문자 — axis contract v4. foundation 값은 `initial` 이라 계산값 단계에서
+       무효가 되고, 라벨은 지금처럼 바깥 값을 그대로 물려받는다(DESIGN.md 5절). */
+    text-transform: var(--control-text-transform);
 
     --tw-ring-color: var(--ring-focus-strong);
 
@@ -103,7 +107,8 @@
     min-height: var(--control-height-md);
     min-width: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
-    gap: var(--control-gap-md);
+    /* Toggle 은 간격을 제 슬롯으로 갖는다(axis contract v4). foundation 값은 --control-gap-md 의 별칭이다. */
+    gap: var(--toggle-gap);
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
 

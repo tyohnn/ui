@@ -12,12 +12,12 @@ foundation's.
 | `mira` | **converted** — `styles/` is byte-identical to foundation's, so it already reads every slot. Nothing to do. | 0 | 0 | 0 |
 | `sera` | **converted** (2026-09-17) — the `--tag-*` badge names renamed to `--badge-*`; 15 layer-3 files byte-identical; the rows that stay rules are listed in `reference/README.md`. Dumps 0 differences, reference 0 / 25 in both modes. | 81 | 29 | 8 |
 | `graphite` | **converted** (2026-09-17) — 39 layer-3 files byte-identical; dumps 0 differences in both modes (see `reference/README.md`). | 129 | 7 | 0 |
-| `vega` | not started | 132 | 43 | 0 |
-| `nova` | not started | 126 | 38 | 0 (1 name dropped) |
+| `vega` | **converted** (2026-09-17) — 42 of 43 rows; the select trigger's two-value inline padding stays literal. 12 of 62 layer-3 files byte-identical to foundation. See `registry/systems/vega/reference/README.md`. | 132 | 43 | 0 |
+| `nova` | **converted** (2026-09-17) — 37 of 38 rows, `--input-fill-strong` dropped; the accordion group keeps its own zero border. 21 of 62 files byte-identical. See `registry/systems/nova/reference/README.md`. | 126 | 38 | 0 (1 name dropped) |
 | `luma` | **converted** (2026-09-17) — 52 rows applied; 16 of 62 layer-3 files equal foundation's; the rest and three `--control-radius-sm` / toned-badge reads it could not take are in `registry/systems/luma/reference/README.md`. | 118 | 52 | 0 |
 | `rhea` | **converted** (2026-09-17) — `--radio-dot-size` renamed; 22 layer-3 files byte-identical; the rows that stay rules are listed in `reference/README.md`. Dumps 0 differences, reference 0 / 50 light · 0 / 65 dark. | 126 | 49 | 1 |
 | `maia` | **converted** (2026-09-17) — 24 of 28 rows applied (the 4 card-header/footer rows collide with `.cn-card`'s own `--card-radius`; `--menu-ring` is kept off the Select · Context Menu · Command · Combobox); 24 of 62 layer-3 files equal foundation's. See `registry/systems/maia/reference/README.md`. | 105 | 28 | 0 |
-| `lyra` | not started | 110 | 10 | 1 |
+| `lyra` | **converted** (2026-09-17) — 9 of 10 rows and the rename; the accordion item keeps `--surface-border-width`. 24 of 62 files byte-identical. See `registry/systems/lyra/reference/README.md`. | 110 | 10 | 1 |
 
 Stage 1 was checked to change no render: foundation, mira and sera compare 0 mismatches against their
 reference apps in both modes, and the seven unconverted systems dump 0 computed-value differences on the

@@ -19,19 +19,24 @@
     /* ⚠ 높이는 min-height 가 아니라 height 다. mira 의 인풋은 `h-7 py-0.5` — 고정 높이 안에
        여백이 들어앉는다. 인풋 그룹 안의 칸도 이 높이를 그대로 써야 통(h-7)을 채운다. */
     height: var(--control-height-md);
-    padding-inline: var(--control-padding-x-md);
-    /* mira: py-0.5. 2px 은 리터럴이다 — 컨트롤 세로 여백은 아직 축이 아니다. */
-    padding-block: var(--control-padding-y-field);   /* lyra: py-1 */
+    /* 입력 계열 축(axis contract v4) — foundation 값은 control 축 md 의 별칭이다. */
+    padding-inline: var(--control-padding-x-field);
+    /* mira: py-0.5. 종전 2px 리터럴이 v4 의 --control-padding-y-field 로 올라갔다. */
+    padding-block: var(--control-padding-y-field);
 
-    border: var(--control-border-width) solid var(--input);
+    /* 테두리 색은 v4 의 --input-border 가 갖는다(foundation 값은 --input 의 별칭). */
+    border: var(--control-border-width) solid var(--input-border);
+    /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
+       foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
+    border-bottom-color: var(--input-border-bottom);
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     /* ⚠ 글자색을 적지 않는다. mira 의 Input 에는 text-* 가 없어 바깥 색을 물려받고,
        검증 실패한 Field 안에서는 Field 의 text-destructive 를 따라 붉어진다. */
 
-    font-size: var(--control-font-size-md);
-    line-height: var(--control-line-height-md);
-    letter-spacing: var(--control-letter-spacing);
+    font-size: var(--control-font-size-field);
+    line-height: var(--control-line-height-field);
+    letter-spacing: var(--control-letter-spacing-field);
 
     /* 파일 선택 버튼은 인풋 안에 들어앉는 작은 컨트롤이라 한 단계 아래를 읽는다.
        mira: file:h-6 file:text-xs/relaxed file:font-medium */

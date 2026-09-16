@@ -28,9 +28,10 @@
 .cn-chart-tooltip {
     /* vega: border-border/50 bg-background rounded-lg px-2.5 py-1.5 gap-1.5 text-xs shadow-xl */
     border: var(--surface-border-width) solid color-mix(in oklab, var(--border) 50%, transparent);
-    border-radius: var(--surface-radius);
-    background-color: var(--background);
-    color: var(--foreground);
+    /* 모서리는 툴팁 자신의 축이다 — v4 슬롯 --chart-tooltip-radius(--surface-radius 의 별칭). */
+    border-radius: var(--chart-tooltip-radius);
+    background-color: var(--background);   /* mira: bg-background */
+    color: var(--popover-foreground);
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     padding-inline: var(--surface-padding-sm);
     padding-block: 6px;

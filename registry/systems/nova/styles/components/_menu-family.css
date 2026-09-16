@@ -47,8 +47,10 @@
     color: var(--popover-foreground);
     border-radius: var(--surface-radius);
     min-width: var(--menu-min-width);
+    /* 안쪽 링은 v4 의 --menu-ring 이다. 기본값이 --ring-subtle 이라 화면은 같고,
+       카드의 링과 메뉴의 링을 갈라 쓰는 시스템만 값이 달라진다. */
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--shadow-float);
 }
 
@@ -95,8 +97,12 @@
     padding-block: var(--menu-item-padding-y);
     gap: var(--menu-item-gap);
     font-size: var(--ui-text-md);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-item-letter-spacing);
     line-height: var(--ui-line-height-md);
+    /* 행의 글자 축도 v4 슬롯이다. 대소문자와 굵기는 mira 가 주지 않으므로 기본값이
+       `initial` — 계산 시점에 무효가 되어 지금처럼 물려받는다(DESIGN.md §5). */
+    text-transform: var(--menu-item-text-transform);
+    font-weight: var(--menu-item-font-weight);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-md);
@@ -245,10 +251,11 @@
 .cn-combobox-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);
-    padding-block: var(--menu-item-padding-y);
+    padding-block: var(--menu-label-padding-y);
     font-size: var(--ui-text-xs);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-label-letter-spacing);
     line-height: var(--ui-line-height-xs);
+    text-transform: var(--menu-label-text-transform);
     font-weight: var(--ui-font-weight);
 }
 
@@ -267,8 +274,8 @@
 .cn-combobox-separator {
     background-color: var(--border-subtle);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 /* mira: ml-auto text-[0.625rem] tracking-widest */
@@ -320,6 +327,6 @@
 .cn-dropdown-menu-sub-content-aria,
 .cn-menubar-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--menu-ring),
         var(--menu-sub-shadow);
 }

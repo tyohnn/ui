@@ -40,8 +40,11 @@
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: 9999px;
-    font-size: var(--ui-text-md);       /* nova: text-sm */
-    line-height: var(--ui-line-height-md);
+    /* md · lg 의 이니셜 타입은 아바타 자신의 축이다 — v4 슬롯 --avatar-font-size ·
+       --avatar-line-height(foundation 은 --ui-text-lg · --ui-line-height-lg 의 별칭). mira: text-sm
+       sm 쌍은 기존 --avatar-font-size-sm · --avatar-line-height-sm 그대로다. */
+    font-size: var(--avatar-font-size);
+    line-height: var(--avatar-line-height);
 }
 
 .cn-avatar-image {

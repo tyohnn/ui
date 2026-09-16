@@ -77,7 +77,7 @@ and read by a nova layer-3 rule (`scan-tokens` lists them as system-only tokens)
 | `--item-gap` | 8px | Item's `gap-2` equals mira's `--menu-item-gap`; nova's menu row is `gap-1.5` |
 | `--command-item-radius` · `--command-item-gap` | 6px · 8px | the palette row equals the menu row in mira; nova splits them |
 | `--tabs-trigger-active-shadow` | `shadow-sm` | mira's selected tab is flat |
-| `--input-fill-strong` | `input/30` | the command palette's search box has its own fill step; mira reuses `--input-fill` |
+| `--input-fill-strong` | `input/30` | the command palette's search box has its own fill step; mira reuses `--input-fill` (dropped in stage 2: the value is now `--command-input-fill`) |
 | `--input-fill-disabled` | `input/50` · dark `input/80` | mira leaves a disabled control its normal fill |
 | `--field-label-checked-border` | `primary/30` · dark `/20` | mira's checked field label changes only its background |
 | `--questionnaire-choice-fill` | transparent · dark `input/20` | mira's choice has no fill of its own |
@@ -115,3 +115,52 @@ component difference that remains (disabled Checkbox · Radio) is upstream's own
 
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and
 the comparison pairs every one that carries a `data-slot`.
+
+## Axis contract v4, stage 2 — layer-3 literals moved into slots (2026-09-17)
+
+`tooling/preset/slot-migration.md` listed 38 declarations where nova wrote a value into a rule that foundation
+now reads from a v4 slot. 37 moved; the rule is foundation's again and the value is in layer 1 or 2:
+
+| Slot | nova value | Layer |
+|---|---|---|
+| `--menu-label-padding-y` | `var(--menu-item-padding-y)` | 2 |
+| `--avatar-font-size` · `--avatar-line-height` | `var(--ui-text-md)` · `var(--ui-line-height-md)` | 2 |
+| `--bubble-radius` · `-padding-x` · `-padding-y` · `-line-height` | `var(--surface-radius-lg)` · `12px` · `8px` · `1.625` | 2 |
+| `--control-icon-button-icon-size-sm` | `var(--control-icon-size-md)` | 2 |
+| `--card-radius` | `var(--surface-radius-lg)` | 2 |
+| `--control-padding-x-grouped` · `--control-padding-y-field` | `8px` (the addon's `icon-md` and the joined toggle's `xs` are both 8px) · `4px` | 2 |
+| `--kbd-icon-size` · `--menubar-padding` · `--menubar-gap` | `var(--control-icon-size-xs)` · `3px` · `2px` | 2 |
+| `--sheet-padding` · `--tabs-list-height` | `var(--surface-padding-md)` · `var(--control-height-md)` | 2 |
+| `--sidebar-input-height` · `--sidebar-surface-gap` · `--sidebar-surface-padding` | `var(--control-height-md)` · `8px` · `8px` | 2 |
+| `--toggle-gap` | `var(--control-gap-xs)` | 2 |
+| `--combobox-chip-fill` | `var(--muted)`, both modes | 1 |
+| `--command-input-fill` | `input/30` (dark `4.5%`) — **`--input-fill-strong` is deleted**; its two readers (the palette search box's fill and border) read the slot | 1 |
+
+The badge border and icon and the accordion item's rule already equalled foundation's defaults and took the
+rule with no token; the item separator reads `--item-gap`, which nova already set to 8px.
+
+**Not moved (1):** `.cn-accordion` `border: 0 solid transparent`. `--accordion-border-width` is also read by
+the item's `border-bottom`, which nova keeps at 1px, so a 0 would erase the rules between items. The group
+keeps its own declaration (no frame, no radius, `overflow: visible`).
+
+Slot-meaning conflicts left as rules (the slot exists, but one value cannot serve every reader): the
+`.cn-card > img` corners (`--surface-radius`, while the card, header and footer read `--card-radius` =
+`surface-radius-lg`),
+`--control-radius-sm` (nova's input-group sm button keeps `--control-radius` while nova's sm button, toggle
+and select trigger step down), `--toggle-group-joined-radius` (the sm group root steps down to
+`--control-radius-sm`, the joined item corners do not), `--control-padding-x-grouped` (the block-start/end
+input-group addons keep `--control-padding-x-md`, 10px), and `--input-fill-disabled` (nova fills a disabled
+input and textarea but not a disabled select trigger or native select, so the foundation rule that paints all
+four is not taken).
+
+Beyond the table: every v4 name is now read by a nova rule (`scan-tokens` lists none as dead); the menu, title
+and label bands, the menu ring and separator, the field sub-axis, the input edge, switch, slider, item,
+sidebar parts, tabs padding, the checked field-label border and the questionnaire shortcut read their slots;
+the "Foundation slot candidate" comments in layers 1 and 2 now name the adopted slots.
+
+Layer 3 against foundation: **21 of 62 files byte-identical** (was 16: `context-menu` · `kbd` · `label` ·
+`switch` · `table` joined), differing lines 1152 → 711. The rest carry declarations and selectors no slot
+expresses (see "Layer-3 rules that had to change" above).
+
+Check: a keyed dump of every coverage section in both modes before and after — **0 computed-value
+differences**; `compare-shadcn.mjs` light 0 mismatches · 46 excluded, dark 0 · 69 excluded (unchanged).

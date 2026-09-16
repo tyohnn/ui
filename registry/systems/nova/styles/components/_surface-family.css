@@ -181,27 +181,33 @@
     gap: 2px;
 }
 
-/* nova: text-base font-medium — Popover 의 제목만 본문과 같은 단(text-sm)이다. */
+/* nova: text-base font-medium — Popover 의 제목만 본문과 같은 단(text-sm)이다.
+   v4: 면의 제목(dialog · alert-dialog · sheet · drawer, card.css 의 카드 제목도 같다)은
+   --title-* 축을, Popover 의 제목은 조용한 라벨 띠(--ui-label-*)를 읽는다. */
 .cn-dialog-title,
 .cn-alert-dialog-title,
 .cn-sheet-title,
-.cn-drawer-title,
-.cn-popover-title {
+.cn-drawer-title {
     color: var(--popover-foreground);
     font-size: var(--ui-text-lg);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--title-letter-spacing);
+    text-transform: var(--title-text-transform);
     line-height: var(--ui-line-height-lg);
+    font-weight: var(--ui-font-weight);
+}
+
+.cn-popover-title {
+    color: var(--popover-foreground);
+    font-size: var(--ui-text-md);
+    letter-spacing: var(--ui-label-letter-spacing);
+    text-transform: var(--ui-label-text-transform);
+    line-height: var(--ui-line-height-md);
     font-weight: var(--ui-font-weight);
 }
 
 /* nova: leading-none */
 .cn-dialog-title {
     line-height: 1;
-}
-
-.cn-popover-title {
-    font-size: var(--ui-text-md);
-    line-height: var(--ui-line-height-md);
 }
 
 /* mira: text-muted-foreground text-xs/relaxed */

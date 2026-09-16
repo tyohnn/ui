@@ -18,12 +18,15 @@
 
 /* ⚠ 36px 은 리터럴이다. control 축(20 · 24 · 28 · 32)에 없는 값이고 메뉴바 한 자리만
    읽는다. mira 의 h-9 다. 4px 여백을 빼면 안에 28(--control-height-md)이 남는다. */
+/* ⚠ 막대는 떠 있는 면이 아니다. v4 부터 여백과 간격을 --menubar-* 로 갖는다
+   (--menubar-padding 의 기본값이 --menu-padding, --menubar-gap 은 0px 이라 값은 그대로다).
+   TSX 는 `flex items-center` 만 주고 gap 유틸리티가 없어 0px 은 지금의 계산값과 같다. */
 .cn-menubar {
     height: 36px;
     border: var(--control-border-width) solid var(--border);
     border-radius: var(--surface-radius-sm);   /* vega: rounded-md */
-    padding: var(--menu-padding);
-    gap: 4px;   /* vega: gap-1 */
+    padding: var(--menubar-padding);
+    gap: var(--menubar-gap);
     box-shadow: var(--shadow-control);   /* vega: shadow-xs */
 }
 
@@ -50,12 +53,12 @@
    mira: pl-7.5 pr-2 */
 .cn-menubar-checkbox-item,
 .cn-menubar-radio-item {
-    padding-inline-start: var(--menu-item-padding-inset);
+    /* v4: 시작 쪽은 --menubar-item-padding-inset 이다(기본값이 --menu-item-padding-inset). */
+    padding-inline-start: var(--menubar-item-padding-inset);
     padding-inline-end: var(--menu-item-padding-x);
     border-radius: var(--control-radius);   /* vega: rounded-md (the other menubar items are rounded-sm) */
 }
 
-/* vega: the menubar label is text-sm font-medium in the foreground colour */
 /* vega: px-2 py-1.5 text-sm font-medium — 색은 주지 않는다. 메뉴바의 라벨은 Dropdown 의
    라벨 규칙(muted-foreground)을 그대로 물려받고 글자 크기만 한 단 크다. */
 .cn-menubar-label {
@@ -65,8 +68,8 @@
 
 .cn-menubar-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
-        0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);   /* vega: shadow-lg */
+        0 0 0 var(--surface-border-width) var(--menu-ring),
+        var(--menu-sub-shadow);   /* vega: shadow-lg */
 }
 
 /* mira: left-2 size-4 [&_svg:not([class*='size-'])]:size-4 — 오른쪽 표시(14)보다 한 단 크다. */

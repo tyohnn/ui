@@ -161,7 +161,8 @@
     gap: 4px;
     border-radius: 6px;
     padding-inline: 6px;
-    background-color: var(--muted);
+    /* v4: 칩의 바탕은 --combobox-chip-fill 이다(기본값이 1층의 --chip). */
+    background-color: var(--combobox-chip-fill);
     color: var(--foreground);
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);

@@ -41,7 +41,13 @@
 
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
-    /* vega: text-sm on the base, so icon-only sizes (no font rule of their own) carry it too. */
+    /* 라벨의 대소문자 — axis contract v4. foundation 값은 `initial` 이라 계산값 단계에서
+       무효가 되고, 라벨은 지금처럼 바깥 값을 그대로 물려받는다(DESIGN.md 5절). */
+    text-transform: var(--control-text-transform);
+
+    /* mira 는 글자를 바탕 클래스에도 적어 둔다(text-xs/relaxed). 크기 클래스가 없는
+       아이콘 버튼(`.cn-button-size-icon*`)도 그래서 같은 글자를 쓴다 — 여기가 없으면
+       아이콘 버튼만 바깥 글자를 물려받는다(2026-09-16 mira 대조). */
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
 
@@ -89,8 +95,6 @@
    hover 는 테두리를 진하게 하는 것이 아니라 바탕을 채운다. 글자색은 바탕(foreground)을
    그대로 물려받는다 — 종전의 --muted-foreground 는 nova 에도 mira 에도 없는 규칙이었다. */
 .cn-button-variant-outline {
-    /* vega: bg-background (dark input/30), hover bg-muted (dark input/50).
-       --button-outline-fill is a foundation slot; --button-outline-hover-fill is still vega-only. */
     background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
     border-color: var(--button-outline-border);
@@ -99,6 +103,7 @@
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
+        /* axis contract v4 — 종전 --input-fill-hover. foundation 값은 그 별칭이다. */
         background-color: var(--button-outline-hover-fill);
         color: var(--foreground);
     }
@@ -192,10 +197,13 @@
     &:has([data-icon="inline-end"])   { padding-inline-end: var(--control-padding-x-icon-xs); }
 }
 
+/* sm 의 모서리는 axis contract v4 부터 제 슬롯을 읽는다. foundation 값은
+   --control-radius 의 별칭이라 바탕 클래스가 주던 값과 같다(mira 의 rounded-md). */
 .cn-button-size-sm {
     height: var(--control-height-sm);
     padding-inline: var(--control-padding-x-sm);
     gap: var(--control-gap-sm);
+    border-radius: var(--button-shape-radius, var(--control-radius-sm));
     font-size: var(--control-font-size-sm);
     line-height: var(--control-line-height-sm);
 
@@ -258,12 +266,15 @@
     & svg:not([class*="size-"]) { width: var(--control-icon-size-xs); height: var(--control-icon-size-xs); }
 }
 
+/* 모서리와 글리프 모두 axis contract v4 의 sm 슬롯을 읽는다 — foundation 값은
+   각각 --control-radius · --control-icon-size-sm 의 별칭이다. */
 .cn-button-size-icon-sm {
     width: var(--control-height-sm);
     height: var(--control-height-sm);
     padding-inline: 0;
+    border-radius: var(--button-shape-radius, var(--control-radius-sm));
 
-    & svg:not([class*="size-"]) { width: var(--control-icon-size-sm); height: var(--control-icon-size-sm); }
+    & svg:not([class*="size-"]) { width: var(--control-icon-button-icon-size-sm); height: var(--control-icon-button-icon-size-sm); }
 }
 
 /* 라벨 버튼 높이와 갈라 둔 아이콘 버튼 축을 읽는다(tokens.css; foundation 은 같은 값). */

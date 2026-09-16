@@ -81,17 +81,20 @@
 /* 검색칸. Input 컴포넌트 위에 얹는 예외다 — mira 는 h-8 에 bg-muted/20(1층이 --muted-soft 로
    푼 단)이고 테두리는 --input 이다. 사이드바 안에서 인풋(h-7)보다 한 단 크다. */
 .cn-sidebar-input {
-    height: var(--control-height-md);   /* lyra: h-8 */
-    /* lyra: the sidebar search box is the page background in light and input/30 in dark. */
+    /* v4 슬롯 --sidebar-input-height(foundation 은 --control-height-lg 의 별칭). */
+    height: var(--sidebar-input-height);
+    /* mira: bg-muted/20 dark:bg-muted/30 border-input */
     background-color: var(--sidebar-input-fill);
     border-color: var(--input);
     @apply w-full;
 }
 
+/* 껍데기(헤더 · 푸터)는 자기 축을 갖는다 — v4 슬롯 --sidebar-surface-gap ·
+   --sidebar-surface-padding(foundation 은 --menu-item-gap · --menu-item-padding-x 의 별칭). */
 .cn-sidebar-header,
 .cn-sidebar-footer {
-    gap: var(--menu-item-gap);
-    padding: var(--menu-item-padding-x);
+    gap: var(--sidebar-surface-gap);
+    padding: var(--sidebar-surface-padding);
 }
 
 .cn-sidebar-content {
@@ -102,7 +105,8 @@
    갖고 있어 읽는 자리를 남긴다 — 읽지 않으면 사문 토큰이 된다. 0 으로 두려면 토큰 값을 고칠 것. */
 .cn-sidebar-separator {
     background-color: var(--sidebar-border);
-    margin-inline: var(--sidebar-item-padding-x);
+    /* v4 슬롯 --sidebar-separator-margin-inline(foundation 은 --sidebar-item-padding-x 의 별칭). */
+    margin-inline: var(--sidebar-separator-margin-inline);
     margin-block: var(--sidebar-separator-margin-block);
 }
 
@@ -128,7 +132,7 @@
    접힌 모드에서는 제 높이만큼 위로 올려 숨긴다(mira: -mt-8 opacity-0). */
 .cn-sidebar-group-label {
     height: var(--sidebar-group-label-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-group-label-padding-x);
     color: var(--sidebar-group-label-foreground);
     font-size: var(--sidebar-group-label-font-size);
@@ -158,7 +162,7 @@
       계산되는 값이 아니라 mira 가 손으로 맞춘 자리다. */
 .cn-sidebar-group-action {
     width: var(--sidebar-item-action-size);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     color: var(--sidebar-foreground);
     @apply absolute top-3.5 right-3 p-0;
 
@@ -177,9 +181,14 @@
     }
 }
 
+/* ⚠ 메뉴 버튼만 --sidebar-item-radius 를 그대로 읽는다. 나머지 부속은 v4 슬롯
+   --sidebar-part-radius 로 갈라져 있다(foundation 은 같은 값의 별칭).
+   세로 여백은 v4 슬롯 --sidebar-item-padding-y 가 갖는다 — foundation 값이 좌우와 같은
+   --sidebar-item-padding-x 라 종전의 한 줄 shorthand 와 결과가 같다. */
 .cn-sidebar-menu-button {
     border-radius: var(--sidebar-item-radius);
-    padding: var(--sidebar-item-padding-x);
+    padding-inline: var(--sidebar-item-padding-x);
+    padding-block: var(--sidebar-item-padding-y);
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);
     /* The border is always drawn (width 0 in foundation) so an active border never shifts the label. */
@@ -351,7 +360,7 @@
     font-size: var(--sidebar-badge-font-size);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--sidebar-badge-line-height);
-    font-weight: var(--ui-font-weight);
+    font-weight: var(--sidebar-badge-font-weight);
     @apply peer-hover/menu-button:text-(color:--sidebar-badge-hover-foreground) peer-data-active/menu-button:text-(color:--sidebar-badge-active-foreground) pointer-events-none absolute flex;
 
     .peer\/menu-button[data-active] ~ & {
@@ -371,14 +380,14 @@
 .cn-sidebar-menu-skeleton {
     height: var(--sidebar-item-height);
     gap: var(--sidebar-item-gap);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-item-padding-x);
 }
 
 .cn-sidebar-menu-skeleton-icon {
     width: var(--sidebar-item-icon-size);
     height: var(--sidebar-item-icon-size);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
 }
 
 .cn-sidebar-menu-skeleton-text {
@@ -406,7 +415,7 @@
    data-[size=md]:text-xs data-[size=sm]:text-xs · 굵기를 주지 않는다(선택도 색만 바뀐다). */
 .cn-sidebar-menu-sub-button {
     height: var(--sidebar-sub-item-height);
-    border-radius: var(--sidebar-item-radius);
+    border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-item-padding-x);
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);

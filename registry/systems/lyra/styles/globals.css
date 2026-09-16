@@ -199,6 +199,7 @@
     --muted-soft: oklch(0.97 0 0 / 50%);
     /* mira 의 bg-muted-foreground/10 — 콤보박스 칩과 인풋 그룹 안의 키캡. */
     --chip: oklch(0.556 0 0 / 10%);
+    --combobox-chip-fill: var(--muted);   /* combobox chip bg-muted */
     /* 고스트 버튼 · 고스트 배지의 hover. mira: hover:bg-muted dark:hover:bg-muted/50 — 밝은 쪽은 muted 그대로다. */
     --ghost-hover: oklch(0.97 0 0);
 
@@ -299,7 +300,7 @@
     /* lyra: the command palette's search box is bg-input/30 in both modes. */
     --command-input-fill: oklch(0.922 0 0 / 30%);
     /* lyra: a checked field row outlines in primary/30. */
-    --field-checked-border: oklch(0.205 0 0 / 30%);
+    --field-label-checked-border: oklch(0.205 0 0 / 30%);
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -431,6 +432,7 @@
     --muted-foreground: oklch(0.708 0 0);    /* neutral-400 */
     --muted-soft: oklch(0.269 0 0 / 50%);
     --chip: oklch(0.708 0 0 / 10%);
+    --combobox-chip-fill: var(--muted);
     --ghost-hover: oklch(0.269 0 0 / 50%);
     --skeleton: var(--muted);
     --foreground-subtle: oklch(0.556 0 0);
@@ -493,7 +495,7 @@
     --drawer-border: oklch(1 0 0 / 10%);     /* border */
     --sidebar-input-fill: var(--input-fill);   /* lyra: dark:bg-input/30 */
     --command-input-fill: oklch(1 0 0 / 4.5%);
-    --field-checked-border: oklch(0.922 0 0 / 20%);   /* lyra: dark drops to primary/20 */
+    --field-label-checked-border: oklch(0.922 0 0 / 20%);   /* lyra: dark drops to primary/20 */
 
     /* ---- Token slots (axis contract v1) ------------------------------------------------
        Colours that only some systems give a distinct look. Foundation keeps every one of them
@@ -626,11 +628,9 @@
     --button-outline-hover-fill: var(--input-fill-hover);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;
-    --field-label-checked-border: var(--border);
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);
@@ -643,11 +643,9 @@
     --button-outline-hover-fill: var(--input-fill-hover);
     --card-ring: var(--ring-subtle);
     --menu-ring: var(--ring-subtle);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--muted);
     --switch-track-border-off: transparent;
     --switch-track-border-on: transparent;
-    --field-label-checked-border: var(--border);
     --questionnaire-choice-fill: transparent;
     --questionnaire-shortcut-border: var(--input);
     --radio-indicator-dot-size: var(--control-indicator-dot-size);

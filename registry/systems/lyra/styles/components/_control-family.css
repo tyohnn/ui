@@ -90,7 +90,7 @@
    무엇이 켜져 있는지가 안 보인다. mira: aria-invalid:aria-checked:border-primary
    체크박스의 켜진 색은 --selection 슬롯이 갖는다(foundation 에서는 --primary 와 같다). */
 .cn-checkbox[aria-invalid="true"][data-checked] {
-    border-color: var(--selection);
+    border-color: var(--checkbox-invalid-checked-border);
     /* ⚠ 링은 여기서 다시 적어야 한다. checkbox.css 의 `[data-checked] { box-shadow: none }` 이
        배럴에서 뒤에 오는데, 이 선택자는 (0,3,0) 이라 명시도로 이긴다. */
     box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid);

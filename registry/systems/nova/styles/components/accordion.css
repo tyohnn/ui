@@ -25,7 +25,7 @@
 
 .cn-accordion-item {
     &:not(:last-child) {
-        border-bottom: var(--surface-border-width) solid var(--border);
+        border-bottom: var(--accordion-border-width) solid var(--border);
     }
 
     /* nova: 열린 항목도 바탕을 깔지 않는다. */
