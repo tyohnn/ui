@@ -522,7 +522,7 @@
        read their own name. rhea · nova · lyra · vega keep the block addons at the md step while the
        inline ones and the toggle item go to px-2; sera zeroes the addons and keeps the toggle's md. */
     --input-group-addon-padding-x: var(--control-padding-x-grouped);
-    --input-group-addon-padding-x-block: var(--input-group-addon-padding-x);
+    --input-group-addon-padding-x-block: var(--control-padding-x-md);   /* vega: the block addons keep px-2.5; the inline ones are px-2 */
     --toggle-group-item-padding-x: var(--control-padding-x-grouped);
     /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
        down but keep the grouped button at the control radius. */
@@ -536,7 +536,7 @@
        padding on both sides. rhea gives the trigger px-3 where the inputs are px-2.5; vega's
        trigger is `pl-2.5 pr-2`. */
     --select-trigger-padding-start: var(--control-padding-x-field);
-    --select-trigger-padding-end: var(--select-trigger-padding-start);
+    --select-trigger-padding-end: 8px;   /* vega: pl-2.5 pr-2 — the start keeps the field padding */
     /* The native select's vertical padding. mira: the field's py-0.5. sera gives it py-2 while the
        input stays py-1; graphite's input has none while the native select keeps 2px. */
     --native-select-padding-y: var(--control-padding-y-field);

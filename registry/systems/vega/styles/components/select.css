@@ -53,7 +53,7 @@
 
     &[data-size="default"] {
         height: var(--control-height-md);   /* vega: h-9 is a height, and py-2 fits inside it */
-        padding-inline: var(--control-padding-x-md) 8px;
+        padding-inline: var(--select-trigger-padding-start) var(--select-trigger-padding-end);
         font-size: var(--control-font-size-field);
         line-height: var(--control-line-height-field);
     }
