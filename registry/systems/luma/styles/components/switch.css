@@ -31,13 +31,15 @@
     height: var(--switch-track-height-md);
     padding: calc(var(--switch-thumb-inset) - var(--control-border-width));
 
-    border: 2px solid transparent;   /* luma: border-2 */
-    border-radius: 9999px;
+    /* 테두리 색과 모서리는 axis contract v4 의 슬롯이 갖는다. foundation 값은 각각
+       transparent · 9999px 이라 종전 리터럴과 같다 — 두께는 여백 계산에 쓰이므로 그대로다. */
+    border: 2px solid var(--switch-track-border-off);   /* luma: border-2 */
+    border-radius: var(--switch-radius);
     background-color: var(--switch-track-off);
 
     &[data-checked] {
         background-color: var(--primary);
-        border-color: var(--primary);   /* luma: data-checked:border-primary */
+        border-color: var(--switch-track-border-on);
     }
 
     &[data-size="sm"] {
@@ -58,7 +60,7 @@
     /* luma: the thumb is a pill (h-4 w-6 · sm h-3 w-4) with shadow-sm. */
     width: var(--switch-thumb-width-md);
     height: var(--switch-thumb-size-md);
-    border-radius: 9999px;
+    border-radius: var(--switch-radius);
     /* ⚠ SwitchThumb carries `ring-0`, whose utility composes box-shadow in the utilities
        layer and would wipe a plain declaration here; the shadow goes in Tailwind's own slot. */
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);

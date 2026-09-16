@@ -28,6 +28,7 @@
 .cn-chart-tooltip {
     /* mira: border-border/50 shadow-xl */
     border: var(--surface-border-width) solid color-mix(in oklab, var(--border) 50%, transparent);
+    /* 모서리는 툴팁 자신의 축이다 — v4 슬롯 --chart-tooltip-radius(--surface-radius 의 별칭). */
     border-radius: var(--chart-tooltip-radius);
     background-color: var(--background);   /* mira: bg-background */
     color: var(--popover-foreground);

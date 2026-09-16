@@ -75,6 +75,9 @@
     padding-block: 14px;  /* maia: py-3.5 */
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--surface-radius-lg);
+    /* 평소 바탕은 v4 슬롯 --questionnaire-choice-fill 이 갖는다(1층, foundation: transparent
+       = mira 처럼 바탕 없음). hover · 켜짐은 아래에서 덮는다. */
+    background-color: var(--questionnaire-choice-fill);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
@@ -145,7 +148,8 @@
 .cn-questionnaire-shortcut {
     width: 20px;    /* maia: size-5 */
     height: 20px;
-    border: var(--control-border-width) solid var(--input);
+    /* 테두리 색은 v4 슬롯 --questionnaire-shortcut-border(1층, foundation 은 --input 의 별칭). */
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
     border-radius: 9999px;   /* maia: rounded-full */
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: color-mix(in oklab, var(--background) 80%, transparent);

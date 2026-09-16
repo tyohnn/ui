@@ -47,6 +47,10 @@
     color: var(--popover-foreground);
     border-radius: var(--surface-radius);
     min-width: var(--menu-min-width);
+    /* 안쪽 링은 v4 의 --menu-ring 이다. 기본값이 --ring-subtle 이라 화면은 같고,
+       카드의 링과 메뉴의 링을 갈라 쓰는 시스템만 값이 달라진다.
+       maia: only the Dropdown Menu and the Menubar read --menu-ring (the rule near the end of this
+       file); the Context Menu, the Command panel and the Combobox keep --ring-subtle in dark. */
     box-shadow:
         0 0 0 var(--surface-border-width) var(--ring-subtle),
         var(--shadow-float);
@@ -95,8 +99,12 @@
     padding-block: var(--menu-item-padding-y);
     gap: var(--menu-item-gap);
     font-size: var(--ui-text-md);
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-item-letter-spacing);
     line-height: var(--ui-line-height-md);
+    /* 행의 글자 축도 v4 슬롯이다. 대소문자와 굵기는 mira 가 주지 않으므로 기본값이
+       `initial` — 계산 시점에 무효가 되어 지금처럼 물려받는다(DESIGN.md §5). */
+    text-transform: var(--menu-item-text-transform);
+    font-weight: var(--menu-item-font-weight);
 
     & svg:not([class*="size-"]) {
         width: var(--control-icon-size-md);
@@ -235,7 +243,9 @@
    -------------------------------------------------------- */
 
 /* mira: text-muted-foreground px-2 py-1.5 text-xs — 굵기를 주지 않는다.
-   ⚠ 세로 6px 은 리터럴이다. 2층에 6px 여백 단계가 없다(--menu-padding 은 4).
+   ⚠ 세로 6px 리터럴은 v4 에서 --menu-label-padding-y 로 옮겼다(기본값이 체크 행의
+      세로 여백 6px 이라 값은 그대로다). 글자 축도 --menu-label-* 를 읽는다 —
+      라벨 띠만 대문자로 세우거나 자간을 벌리는 시스템이 규칙을 고치지 않게 하려는 것이다.
       Command 의 그룹 제목만 mira 가 font-medium 을 더 주며 command.css 가 갖는다. */
 .cn-dropdown-menu-label,
 .cn-context-menu-label,
@@ -244,10 +254,11 @@
 .cn-combobox-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);
-    padding-block: 10px;   /* maia: py-2.5 */
+    padding-block: var(--menu-label-padding-y);
     font-size: var(--ui-text-xs);   /* maia: the label stays text-xs while the row moved to text-sm */
-    letter-spacing: var(--ui-letter-spacing);
+    letter-spacing: var(--menu-label-letter-spacing);
     line-height: var(--ui-line-height-xs);
+    text-transform: var(--menu-label-text-transform);
 }
 
 /* maia widens two of the five labels. mira gave all five px-2. */
@@ -256,7 +267,12 @@
     padding-inline: 14px;   /* maia: px-3.5 */
 }
 
-/* mira: bg-border/50 -mx-1 my-1 h-px */
+/* mira: bg-border/50 -mx-1 my-1 h-px
+   ⚠ v4 부터 구분선의 여백은 --menu-padding 에서 계산하지 않고 제 슬롯
+      (--menu-separator-margin-inline · --menu-separator-margin-block)을 읽는다.
+      기본값이 예전 식 그대로라 화면은 같다. 둘을 떼어 둔 이유는, 면의 여백을
+      0 으로 눕히는 시스템도 구분선이 면 끝까지 번지는 것은 그대로 원하기
+      때문이다. 예전에는 면의 여백이 사라지면 그 번짐도 같이 사라졌다. */
 .cn-dropdown-menu-separator,
 .cn-context-menu-separator,
 .cn-menubar-separator,
@@ -264,8 +280,8 @@
 .cn-combobox-separator {
     background-color: var(--border-subtle);
     height: var(--surface-border-width);
-    margin-inline: calc(var(--menu-padding) * -1);
-    margin-block: var(--menu-padding);
+    margin-inline: var(--menu-separator-margin-inline);
+    margin-block: var(--menu-separator-margin-block);
 }
 
 /* mira: ml-auto text-[0.625rem] tracking-widest */
@@ -294,10 +310,16 @@
     color: var(--foreground);
 }
 
-/* 팔레트 항목만 좌우 여백과 세로 여백이 한 단 넓다. mira: px-2.5 py-1.5 */
+/* 팔레트 항목만 좌우 여백과 세로 여백이 한 단 넓다. mira: px-2.5 py-1.5
+   ⚠ 모서리와 간격도 v4 에서 팔레트의 제 슬롯(--command-item-radius · --command-item-gap)을
+      읽는다. 기본값이 메뉴 행의 값을 그대로 가리키므로 화면은 같다. 팔레트 항목의
+      예외는 이미 이 블록이 갖고 있어 command.css 에 다시 적지 않는다(같은 선택자를
+      두 파일에 나눠 쓰면 이 파일 머리말의 드리프트가 되살아난다). */
 .cn-command-item {
     padding-inline: var(--command-item-padding-x);
     padding-block: var(--menu-item-padding-y-check);
+    border-radius: var(--command-item-radius);
+    gap: var(--command-item-gap);
 }
 
 /* maia widens the plain menu row to gap-2.5 but leaves the rows that carry an indicator or open a

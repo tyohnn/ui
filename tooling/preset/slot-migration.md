@@ -14,9 +14,9 @@ foundation's.
 | `graphite` | not started | 129 | 7 | 0 |
 | `vega` | not started | 132 | 43 | 0 |
 | `nova` | not started | 126 | 38 | 0 (1 name dropped) |
-| `luma` | not started | 118 | 52 | 0 |
+| `luma` | **converted** (2026-09-17) — 52 rows applied; 16 of 62 layer-3 files equal foundation's; the rest and three `--control-radius-sm` / toned-badge reads it could not take are in `registry/systems/luma/reference/README.md`. | 118 | 52 | 0 |
 | `rhea` | not started | 126 | 49 | 1 |
-| `maia` | not started | 105 | 28 | 0 |
+| `maia` | **converted** (2026-09-17) — 24 of 28 rows applied (the 4 card-header/footer rows collide with `.cn-card`'s own `--card-radius`; `--menu-ring` is kept off the Select · Context Menu · Command · Combobox); 24 of 62 layer-3 files equal foundation's. See `registry/systems/maia/reference/README.md`. | 105 | 28 | 0 |
 | `lyra` | not started | 110 | 10 | 1 |
 
 Stage 1 was checked to change no render: foundation, mira and sera compare 0 mismatches against their

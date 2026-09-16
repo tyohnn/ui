@@ -137,10 +137,10 @@
     --control-indicator-radius: 6px;   /* maia: rounded-[6px] */
     --control-indicator-icon-size: 14px;
     --control-indicator-dot-size: 8px;
-    /* ── maia-only names ──────────────────────────────────────
+    /* ── component slots (axis contract v4) ─────────────────────
        Places where mira gives one value and maia gives two, so the value cannot move
-       in layer 2 alone. Each is a foundation slot candidate (see reference/README.md);
-       the foundation default that reproduces mira is written next to it. */
+       in a shared layer-2 axis alone. maia proposed the first group as slot candidates and v4
+       adopted them; the foundation default that reproduces mira is written next to each. */
     --badge-height: 20px;                       /* foundation: var(--control-height-xs) — maia's xs button is h-6, the badge stays h-5 */
     --badge-radius: var(--control-radius);      /* foundation: 9999px — maia: rounded-4xl */
     --badge-padding-x: 8px;                     /* foundation: var(--control-padding-x-xs) — maia: px-2 */
@@ -154,8 +154,26 @@
     --empty-radius: 10px;                       /* foundation: var(--surface-radius-lg) — maia: rounded-lg, below every other surface */
     --toggle-group-joined-radius: 22px;          /* foundation: var(--control-radius) — maia rounds a joined group rounded-3xl while its buttons are rounded-4xl */
     --command-item-radius: 10px;                /* foundation: var(--menu-item-radius) — maia: rounded-lg against the menu row's rounded-xl */
+    --command-item-gap: 8px;                    /* foundation: var(--menu-item-gap) — maia: the palette row keeps gap-2 */
     --sidebar-part-radius: 8px;                 /* foundation: var(--sidebar-item-radius) — maia rounds the menu button rounded-lg and every other sidebar part rounded-md */
     --menu-narrow-min-width: 144px;             /* foundation: var(--menu-min-width) — maia: select · combobox · sub-menus min-w-36 against min-w-48 */
+    /* Moved out of layer 3 in the stage-2 slot migration (2026-09-17). */
+    --menu-label-padding-y: 10px;               /* foundation: var(--menu-item-padding-y-check) — maia: py-2.5 */
+    --bubble-padding-x: 14px;                   /* foundation: var(--surface-padding-sm) — maia: px-3.5 */
+    --bubble-padding-y: 10px;                   /* foundation: 6px — maia: py-2.5 */
+    --bubble-line-height: 22.75px;              /* foundation: var(--ui-line-height-md) — maia: leading-relaxed on 14px */
+    --control-padding-y-field: 4px;             /* foundation: 2px — maia: input · native select py-1 */
+    --item-gap: 8px;                            /* foundation: var(--menu-item-gap) — maia: gap-2 · my-2, the menu row moved to 10 */
+    --sidebar-input-height: 32px;               /* foundation: var(--control-height-lg) — maia: h-8 */
+    --sidebar-surface-gap: 8px;                 /* foundation: var(--menu-item-gap) — maia: gap-2 */
+    --sidebar-surface-padding: 8px;             /* foundation: var(--menu-item-padding-x) — maia: p-2 */
+    --sidebar-item-padding-y: 8px;              /* foundation: var(--sidebar-item-padding-x) — maia: py-2 */
+    --sidebar-separator-margin-inline: 8px;     /* foundation: var(--sidebar-item-padding-x) — maia: mx-2 */
+    --slider-track-thickness: 12px;             /* foundation: 4px — maia: h-3 · w-3 */
+    --tabs-list-height: var(--control-height-md);   /* foundation: var(--control-height-lg) — maia: the bar is h-9 */
+    --tabs-trigger-padding-x: 8px;              /* foundation: 6px — maia: px-2 */
+    --tabs-trigger-padding-y: 4px;              /* foundation: 2px — maia: py-1 */
+    --toggle-gap: 4px;                          /* foundation: var(--control-gap-md) — maia: .cn-toggle's own gap-1 */
 
     /* 키캡의 모서리. mira: rounded-xs(2px) — 지시자(4)보다 한 단 작다. */
     --kbd-radius: 6px;   /* maia: rounded-sm = 10 * 0.6 */
@@ -453,11 +471,9 @@
     --control-padding-x-grouped: var(--control-padding-x-md);
     --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
     --control-padding-x-field: var(--control-padding-x-md);
-    --control-padding-y-field: 2px;
     --control-font-size-field: var(--control-font-size-md);
     --control-line-height-field: var(--control-line-height-md);
     --control-letter-spacing-field: var(--control-letter-spacing);
-    --toggle-gap: var(--control-gap-md);
     --switch-thumb-width-md: var(--switch-thumb-size-md);
     --switch-thumb-width-sm: var(--switch-thumb-size-sm);
     --switch-radius: 9999px;
@@ -470,36 +486,21 @@
     --table-head-letter-spacing: var(--ui-letter-spacing);
     --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
     --menu-separator-margin-block: var(--menu-padding);
-    --menu-label-padding-y: var(--menu-item-padding-y-check);
     --menu-label-text-transform: initial;
     --menu-label-letter-spacing: var(--ui-letter-spacing);
     --menu-item-text-transform: initial;
     --menu-item-letter-spacing: var(--ui-letter-spacing);
     --menu-item-font-weight: initial;
-    --command-item-gap: var(--menu-item-gap);
     --select-item-gap: var(--menu-item-gap);
     --menubar-padding: var(--menu-padding);
     --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
     --card-radius: var(--surface-radius);
-    --bubble-padding-x: var(--surface-padding-sm);
-    --bubble-padding-y: 6px;
-    --bubble-line-height: var(--ui-line-height-md);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
-    --tabs-list-height: var(--control-height-lg);
     --tabs-list-padding: 3px;
     --tabs-trigger-gap: 6px;
-    --tabs-trigger-padding-x: 6px;
-    --tabs-trigger-padding-y: 2px;
     --tabs-trigger-active-shadow: none;
-    --item-gap: var(--menu-item-gap);
     --item-media-icon-size: var(--control-icon-size-lg);
-    --slider-track-thickness: 4px;
-    --sidebar-surface-padding: var(--menu-item-padding-x);
-    --sidebar-surface-gap: var(--menu-item-gap);
-    --sidebar-input-height: var(--control-height-lg);
-    --sidebar-item-padding-y: var(--sidebar-item-padding-x);
-    --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
     --sidebar-badge-font-weight: var(--ui-font-weight);
 }

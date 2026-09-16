@@ -165,7 +165,8 @@
     gap: 4px;
     border-radius: var(--control-radius-sm);   /* luma: rounded-3xl */
     padding-inline: 8px;   /* luma: px-2 */
-    background-color: var(--combobox-chip-fill);   /* luma: bg-input, dark:bg-input/60 */
+    /* v4: 칩의 바탕은 --combobox-chip-fill 이다(기본값이 1층의 --chip). */
+    background-color: var(--combobox-chip-fill);
     color: var(--foreground);
     font-size: var(--ui-text-xs);   /* luma: text-xs */
     letter-spacing: var(--ui-letter-spacing);

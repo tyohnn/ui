@@ -26,17 +26,20 @@
     @apply gap-1 data-[align=end]:self-end max-w-[80%] data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end;
 }
 
-/* 좌우 10px 은 surface 축의 sm(popover p-2.5)과 같은 단이다.
-   ⚠ 상하 6px 은 리터럴이다. 글줄을 감싸는 말풍선이라 surface 축의 여백(10·16·24)은 위아래가 과하다. */
+/* 상자는 말풍선 자신의 축을 읽는다 — v4 슬롯 --bubble-radius · --bubble-padding-x ·
+   --bubble-padding-y · --bubble-line-height. foundation 값은 각각 --surface-radius ·
+   --surface-padding-sm(좌우 10px, surface 축의 sm = popover p-2.5 와 같은 단) · 6px ·
+   --ui-line-height-md 라 화면은 같다.
+   ⚠ 상하 6px 은 리터럴이었다. 글줄을 감싸는 말풍선이라 surface 축의 여백(10·16·24)은 위아래가 과하다 —
+      이제 --bubble-padding-y 에 들어 있다. */
 .cn-bubble-content {
     border: var(--surface-border-width) solid transparent;
-    border-radius: var(--surface-radius);
-    padding-inline: 14px;   /* luma: px-3.5 */
-    padding-block: 10px;   /* luma: py-2.5 */
+    border-radius: var(--bubble-radius);
+    padding-inline: var(--bubble-padding-x);
+    padding-block: var(--bubble-padding-y);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
-    /* luma: leading-relaxed on text-sm — 14 x 1.625, not the ui axis's 20. */
-    line-height: 22.75px;
+    line-height: var(--bubble-line-height);
     @apply group-data-[align=end]/bubble:self-end;
 
     /* 누를 수 있는 말풍선만 링을 받는다. 계열(_control-family.css)과 같은 한 겹이다. */

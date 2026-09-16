@@ -164,7 +164,8 @@
     gap: 4px;
     border-radius: var(--control-radius);   /* maia: rounded-4xl */
     padding-inline: 8px;                 /* maia: px-2 */
-    background-color: var(--chip);
+    /* v4: 칩의 바탕은 --combobox-chip-fill 이다(기본값이 1층의 --chip). */
+    background-color: var(--combobox-chip-fill);
     color: var(--foreground);
     font-size: var(--ui-text-xs);        /* maia: text-xs */
     letter-spacing: var(--ui-letter-spacing);
