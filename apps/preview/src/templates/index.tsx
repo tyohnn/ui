@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 
+import { BlockAiPlayground } from "./blocks/block-ai-playground";
 import { BlockPlaceholder } from "./blocks/placeholder";
 import { TEMPLATE_CATALOG, type TemplateId } from "./catalog";
 import { ComponentSheet } from "./component-sheet";
@@ -15,6 +16,7 @@ const CoverageTemplate = () => <Coverage section={new URLSearchParams(location.s
  * the placeholder page; an id here that the catalog does not list is a type error.
  */
 const BUILT: Partial<Record<TemplateId, ComponentType>> = {
+    "block-ai-playground": BlockAiPlayground,
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
     "crm-dashboard": CrmDashboard,

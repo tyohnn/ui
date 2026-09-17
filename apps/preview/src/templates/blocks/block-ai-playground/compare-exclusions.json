@@ -1,0 +1,7 @@
+[
+    {
+        "key": "^sidebar0/dropdown-menu-trigger#0>svg#0$",
+        "props": ["width", "height", "rect-width", "rect-height"],
+        "reason": "Team logo glyph nested in the switcher's div.size-8: upstream SidebarMenuButton sizes every descendant svg ([&_svg]:size-4), tyohnn's .cn-sidebar-menu-button rule (every system, from foundation) sizes direct-child svgs only (& > svg), so the nested logo keeps the icon's 24px box. A registry difference, not the template's; reported for foundation."
+    }
+]

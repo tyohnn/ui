@@ -51,7 +51,7 @@ export const TEMPLATE_CATALOG = [
     block("block-roadmap", "Roadmap", "04"),
     block("block-orders", "Orders", "05"),
     block("block-analytics", "Analytics", "06"),
-    block("block-ai-playground", "AI playground", "07"),
+    block("block-ai-playground", "AI playground", "07", true),
     block("block-project", "Project", "08"),
     block("block-inbox", "Inbox", "09"),
     block("block-editor", "Editor", "10"),
