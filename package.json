@@ -13,6 +13,7 @@
         "dev": "turbo dev",
         "build": "turbo build",
         "typecheck": "turbo typecheck",
+        "test": "turbo test",
         "build-systems": "node tooling/build-system --all",
         "scan": "node tooling/scan-tokens",
         "validate": "node tooling/validate-system"
