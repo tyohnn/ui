@@ -100,6 +100,15 @@
     gap: var(--sidebar-surface-gap);
 }
 
+/* sera: [--radius:0] on the header and the scroller, so a rounded-* utility drawn inside them (a block's team
+   logo `rounded-lg`) is square. `@theme inline` compiles rounded-* against var(--radius), so the local value
+   moves the utilities; the sidebar's own radius slots already hold sera's values (found by compare-blocks on
+   sidebar-07). The same shape as maia's local --radius. */
+.cn-sidebar-header,
+.cn-sidebar-content {
+    --radius: 0;
+}
+
 /* ⚠ 세로 여백은 mira 에 없다(mx-2 뿐). 2층의 --sidebar-separator-margin-block 이 그 값을
    갖고 있어 읽는 자리를 남긴다 — 읽지 않으면 사문 토큰이 된다. 0 으로 두려면 토큰 값을 고칠 것. */
 .cn-sidebar-separator {

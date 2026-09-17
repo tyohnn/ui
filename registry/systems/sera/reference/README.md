@@ -254,3 +254,12 @@ tracking.
 
 **Check:** coverage dumps before and after, **0 differences** in light and dark. `compare-shadcn` against the reference app: light **0 mismatches / 25 excluded**, dark **0 / 25** —
 unchanged. `scan-tokens` · `validate-system` pass.
+
+## Sidebar blocks (2026-09-17)
+
+`tooling/snapshot/compare-blocks.mjs` on `block-ai-playground` (shadcn `sidebar-07`) found one thing the coverage
+template never drew: a `rounded-*` utility **inside** the sidebar header. style-sera's `.cn-sidebar-header` and
+`.cn-sidebar-content` apply `[--radius:0]`, so the team switcher's `rounded-lg` logo square is square upstream and
+was 10px here. `styles/components/sidebar.css` now re-declares `--radius: 0` on both (a locally re-declared
+variable, DESIGN.md §5 shape 4, as maia does). Result: sidebar-07 chrome light **0 mismatches**, dark **0** (4
+exclusions, the nested-svg size every system shares); `compare-shadcn --sections sidebar` still light 0 · dark 0.
