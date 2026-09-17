@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 import { ComponentSheet } from "./component-sheet";
 import { Coverage } from "./coverage";
+import { CrmDashboard } from "./crm-dashboard";
 import { IconSheet } from "./icons";
 
 /** `?section=<name>` renders one coverage section with its popups open (see coverage/index.tsx). */
@@ -10,5 +11,6 @@ const CoverageTemplate = () => <Coverage section={new URLSearchParams(location.s
 export const templates: Record<string, ComponentType> = {
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
+    "crm-dashboard": CrmDashboard,
     icons: IconSheet,
 };
