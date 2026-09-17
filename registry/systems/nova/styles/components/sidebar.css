@@ -17,7 +17,7 @@
 
    mira 의 사이드바
      · 항목    menu-button h-8 · p-2 · gap-2 · rounded-[calc(var(--radius-sm)+2px)](8) · text-xs ·
-               [&>svg]:size-4 · 평소 400 이고 data-active 에서만 font-medium ·
+               [&_svg]:size-4 · 평소 400 이고 data-active 에서만 font-medium ·
                sm h-7 · lg h-12 · 접힌 모드(collapsible=icon)는 size-8 p-2 의 정사각.
      · 부속    menu-action w-5 aspect-square · rounded-[calc(var(--radius-sm)-2px)](4) · right-1 ·
                top 은 행 크기별(default 6 · sm 4 · lg 10) · badge 도 같은 자리, h-5 min-w-5 px-1.
@@ -196,12 +196,19 @@
 
     /* 아이콘 크기는 컴포넌트의 `[&_svg]:size-4` 리터럴이 아니라 여기서 정한다.
        하위 항목(cn-sidebar-menu-sub-button)과 오른쪽 부속(cn-sidebar-menu-action)이
-       같은 방식이라 셋의 자리를 맞춘 것이다. 직계 자식만 잡아, 라벨 뒤에
-       따라오는 표시가 함께 커지지 않게 한다. 색은 1층의 결정대로 한 단 옅은
-       --sidebar-icon 이다(머리말 참조). */
-    & > svg {
+       같은 방식이라 셋의 자리를 맞춘 것이다.
+       크기는 업스트림의 `[&_svg]` 처럼 자손 svg 전부에 준다 — 팀 전환기의 로고처럼
+       div.size-8 안에 든 글리프도 16 이 된다(sidebar-07 · 10 · 15). 선택자의 구체성은
+       종전의 `& > svg` 와 같다(0,1,1).
+       색은 직계 자식에만 준다. 1층의 결정대로 한 단 옅은 --sidebar-icon 이며(머리말 참조),
+       안에 든 글리프는 제 판(bg-sidebar-primary 의 text-sidebar-primary-foreground 등)의
+       색을 물려받아야 한다. */
+    & svg {
         width: var(--sidebar-item-icon-size);
         height: var(--sidebar-item-icon-size);
+    }
+
+    & > svg {
         color: var(--sidebar-icon);
     }
 
