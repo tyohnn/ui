@@ -16,6 +16,7 @@
     "icons": {
         "library": "lucide"
     },
+    "defaultMode": "light",
     "tags": [
         "light",
         "dark",

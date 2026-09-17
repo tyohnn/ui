@@ -11,7 +11,8 @@
         "fonts",
         "icons",
         "tags",
-        "source"
+        "source",
+        "defaultMode"
     ],
     "additionalProperties": false,
     "properties": {
