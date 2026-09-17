@@ -20,6 +20,13 @@
     padding: 12px;
     --cell-radius: 0px;   /* sera: [--cell-radius:0] */
     --cell-size: 32px;   /* sera: [--cell-size:--spacing(8)] */
+
+    /* 물려받은 행간을 비율로 바꿔 아래로 넘긴다. 자기 줄상자는 그대로다(1lh 는 부모의 행간, 1em 은
+       물려받은 글자 크기). 1층의 행간 축이 px 이라 그대로 물려주면 글자 크기가 다른 자손(요일
+       0.8rem)이 부모의 px 를 받지만, upstream 은 text-xs 같은 유틸리티가 비율을 남겨 자손이 제 크기에
+       그 비율을 곱한다 — 사이드바 안의 요일 칸이 그래서 12.8 × 16/12 = 17.07px 이다.
+       ⚠ 길이끼리 나누는 calc 를 못 읽는 브라우저는 이 줄을 버리고 px 를 물려받는다(1px 안팎). */
+    line-height: calc(1lh / 1em);
 }
 
 /* 연·월 고르는 셀렉트. 포커스 링만 갖는다.
@@ -34,7 +41,9 @@
 
 /* 요일 머리글과 주 번호. mira 의 text-[0.8rem](12.8px)을 그대로 적는다 — 2026-09-06 에
    ui-text 의 xs 로 옮겼다가 2026-09-16 mira 대조에서 되돌렸다. 0.8rem 은 어느 축에도 없는
-   임의값이라 축으로 옮기면 반드시 어긋난다. 행간은 본문의 1.5 를 그대로 받는다.
+   임의값이라 축으로 옮기면 반드시 어긋난다.
+   행간은 적지 않고 부모에게서 물려받는다 — upstream 도 text-[0.8rem] 뿐이라 사이드바 안(text-xs)
+   에서는 그 행간을 받는다. 1.5 를 적어 두었을 때는 거기서 칸이 2px 커졌다.
    ⚠ 그때 cn-calendar-weekday · cn-calendar-week-number 두 이름을 새로 붙였다.
       react-day-picker 의 슬롯에는 업스트림 클래스가 없어서 3층이 잡을 자리가
       아예 없었기 때문이다. */
@@ -42,7 +51,6 @@
 .cn-calendar-week-number {
     font-size: 0.8rem;   /* mira: text-[0.8rem] */
     letter-spacing: var(--ui-letter-spacing);
-    line-height: 1.5;
 }
 
 /* 연·월 셀렉트 위에 보이는 글자 자리. mira 의 calendar.tsx 는 이 자리에 칸 높이만 준다 —
