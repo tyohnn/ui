@@ -1,7 +1,1 @@
-[
-    {
-        "key": "^sidebar0/card#0$",
-        "props": ["box-shadow"],
-        "reason": "Opt-in card's upstream `shadow-none`: upstream Card draws its ring with Tailwind's ring utility (--tw-ring-shadow), which shadow-none leaves in the composed box-shadow; tyohnn's .cn-card (foundation card.css, every system) draws the ring as a literal box-shadow, so the shadow-none utility replaces it and the ring disappears. A registry difference, not the template's; reported for foundation."
-    }
-]
+[]
