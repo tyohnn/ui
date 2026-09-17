@@ -35,55 +35,6 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
             .filter((group) => group.sections.length > 0);
     }, [query]);
 
-    // Coverage frames render their popups open, and an open dialog or menu focuses itself. Focus moving into a
-    // frame scrolls the page to it, so when a frame takes focus without a click or key press on this page just
-    // before, the scroll that follows is undone and the frame let go.
-    useEffect(() =>
-    {
-        let intent = 0;
-        let stolen = 0;
-        let settled = window.scrollY;
-        const mark = () => { intent = Date.now(); };
-        const onBlur = () =>
-        {
-            // The window blurs when focus moves into a frame; activeElement is that frame by the next task.
-            setTimeout(() =>
-            {
-                const focused = document.activeElement;
-
-                if (focused?.tagName !== "IFRAME" || Date.now() - intent < 800) return;
-
-                stolen = Date.now();
-                window.scrollTo({ top: settled, behavior: "instant" });
-                (focused as HTMLIFrameElement).blur();
-            });
-        };
-        const onScroll = () =>
-        {
-            if (Date.now() - stolen < 300)
-            {
-                window.scrollTo({ top: settled, behavior: "instant" });
-
-                return;
-            }
-
-            settled = window.scrollY;
-        };
-
-        window.addEventListener("pointerdown", mark, { capture: true });
-        window.addEventListener("keydown", mark, { capture: true });
-        window.addEventListener("blur", onBlur);
-        window.addEventListener("scroll", onScroll, { passive: true });
-
-        return () =>
-        {
-            window.removeEventListener("pointerdown", mark, { capture: true });
-            window.removeEventListener("keydown", mark, { capture: true });
-            window.removeEventListener("blur", onBlur);
-            window.removeEventListener("scroll", onScroll);
-        };
-    }, []);
-
     // `/` focuses the filter, as the kbd hint says.
     useEffect(() =>
     {

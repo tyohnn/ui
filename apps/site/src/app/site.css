@@ -232,7 +232,6 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .ccard-top b { font-family: var(--mono); font-size: 13px; font-weight: 500; }
 .ccard-top .tag { margin-left: auto; }
 .ccard-top .pop { color: var(--glow); border-color: rgba(185, 194, 255, 0.35); }
-.ccard .scaled { max-height: 720px; }
 .empty-note { color: var(--fg-3); font-size: 14px; padding: 24px 0; }
 
 /* SYSTEM COMBOBOX (components/system-combobox.tsx) */

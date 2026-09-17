@@ -5,6 +5,9 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 /** Room kept around a cropped coverage section, in CSS px of the page inside */
 const CROP_PAD = 16;
 
+/** The page height a modal or viewport-anchored section is shown at: its popup centres or docks within it */
+const VIEWPORT_HEIGHT = 720;
+
 /**
  * A live preview iframe laid out at a desktop viewport (`width` × `height` CSS px) and scaled to the width of
  * its box. The box's height comes from CSS (an aspect ratio or a stretched cell); `fitContent` instead crops to
@@ -37,7 +40,8 @@ export const ScaledFrame = ({
     const box = useRef<HTMLDivElement>(null);
     const frame = useRef<HTMLIFrameElement>(null);
     const [boxWidth, setBoxWidth] = useState(0);
-    const [crop, setCrop] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+    const [crop, setCrop] = useState<{ left: number; top: number; width: number; height: number; viewport?: boolean } | null>(null);
+
 
     useEffect(() =>
     {
@@ -71,6 +75,17 @@ export const ScaledFrame = ({
 
             if (!doc || !section) return;
 
+            const portals = (section.dataset.coveragePortals ?? "").split("|").filter(Boolean);
+
+            // A modal (it brings an overlay) centres or docks in the page, and a toast docks to its corner: crop
+            // nothing, show the page at a fixed height so the popup sits where it would in an app.
+            if (portals.some((portal) => /-overlay"|toast/.test(portal)))
+            {
+                setCrop({ left: 0, top: 0, width, height: VIEWPORT_HEIGHT, viewport: true });
+
+                return;
+            }
+
             const body = section.querySelector<HTMLElement>(":scope > h2 + *") ?? section;
             const start = body.getBoundingClientRect();
             let left = start.left;
@@ -87,10 +102,14 @@ export const ScaledFrame = ({
                 bottom = Math.max(bottom, rect.bottom);
             };
 
-            // Leaves only: rows and grids stretch to the page width, the controls inside them do not.
+            // Leaves and component roots only: rows and grids stretch to the page width, the controls inside them
+            // do not, and a component's own box (a sidebar's border, a card's edge) has to fit whole. Component
+            // roots that size to the viewport (min-h-svh) stop at the frame's own height.
             body.querySelectorAll("*").forEach((node) =>
             {
-                if (node.childElementCount > 0 && node.tagName !== "svg" && node.tagName !== "BUTTON") return;
+                const leaf = node.childElementCount === 0 || node.tagName === "svg" || node.tagName === "BUTTON";
+
+                if (!leaf && !node.hasAttribute("data-slot")) return;
 
                 // Clamp to the section box: content scrolled or clipped inside it (a scroll area's list) is not drawn.
                 // (Hidden form inputs sit at the page origin; clamping drops them too.)
@@ -98,12 +117,12 @@ export const ScaledFrame = ({
                 const l = Math.max(rect.left, start.left);
                 const t = Math.max(rect.top, start.top);
                 const r = Math.min(rect.right, start.right);
-                const btm = Math.min(rect.bottom, start.bottom);
+                const btm = Math.min(rect.bottom, leaf ? start.bottom : Math.max(start.bottom, height));
 
                 if (r > l && btm > t) include(new DOMRect(l, t, r - l, btm - t));
             });
 
-            for (const portal of (section.dataset.coveragePortals ?? "").split("|").filter(Boolean))
+            for (const portal of portals)
             {
                 // `<selector>^<n>` names the n-th ancestor of the match (tooling/snapshot/collect.mjs).
                 const [, selector, up] = portal.match(/^(.*?)(?:\^(\d+))?$/) ?? [];
@@ -150,7 +169,7 @@ export const ScaledFrame = ({
     // A cropped section fills the card's width but never grows past its real size.
     const cropped = fitContent && crop ? crop : null;
     const scale = cropped ? Math.min(1, boxWidth / cropped.width) : boxWidth / width;
-    const frameHeight = cropped ? Math.max(height, cropped.top + cropped.height) : height;
+    const frameHeight = cropped?.viewport ? VIEWPORT_HEIGHT : cropped ? Math.max(height, cropped.top + cropped.height) : height;
     const transform = cropped ? `scale(${scale}) translate(${-cropped.left}px, ${-cropped.top}px)` : `scale(${scale})`;
     const boxStyle: CSSProperties = fitContent
         ? { height: boxWidth > 0 ? (cropped ? cropped.height * scale : height * scale) : undefined, aspectRatio: boxWidth > 0 ? undefined : `${width} / ${height}`, ...style }
