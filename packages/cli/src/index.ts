@@ -2,6 +2,8 @@
 
 import { parseArgs } from "node:util";
 
+import { doctor } from "./commands/doctor.js";
+import { diff, list } from "./commands/info.js";
 import { init } from "./commands/init.js";
 import { add, fonts, icons, use } from "./commands/modify.js";
 import type { GlobalOptions } from "./commands/context.js";
@@ -101,6 +103,9 @@ const main = async (): Promise<number> =>
         case "use": await use(argument, options); return 0;
         case "icons": await icons(argument, options); return 0;
         case "fonts": await fonts(options); return 0;
+        case "list": await list(options); return 0;
+        case "doctor": return doctor(options);
+        case "diff": return diff(options);
         default: throw new CliError(`unknown command "${command}"`, "Run `tyohnn --help`.");
     }
 };
