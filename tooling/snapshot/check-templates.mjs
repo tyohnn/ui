@@ -10,7 +10,8 @@
 //     (a fixed-width showcase window such as crm-dashboard is as wide as it is drawn, with its margin on both
 //     sides), or content spilling out of the root itself;
 //   - system-font fallback: text whose font stack starts with a web font but is drawn, in part, with a platform
-//     font (CDP CSS.getPlatformFontsForNode, as export-dc --verify does). Stacks that start with a platform family
+//     font (CDP CSS.getPlatformFontsForNode, as export-dc --verify does, asked per text node so each text is judged by
+//     its own element's font-family: an inline mono `code` in sans text is not the paragraph's fallback). Stacks that start with a platform family
 //     (`mono: system`) are skipped, and glyphs a Latin web font has no outline for (⌘ ↵ and other symbols) may fall back.
 //
 // The preview picks fonts and icons when it starts, so it is started once per system (like check-coverage's
@@ -155,7 +156,6 @@ const inspectInPage = (id) =>
         if (seen.has(signature) || probes >= 120) continue;
         seen.add(signature);
         element.setAttribute("data-font-probe", String(probes));
-        element.setAttribute("data-font-symbols", String([...symbols].length));
         probes += 1;
     }
 
@@ -169,6 +169,12 @@ const inspectInPage = (id) =>
     };
 };
 
+/** Non-Latin symbols in a text: glyphs a webfont may leave to a platform font. The page probe uses the same range. */
+const symbolCount = (text) => [...text.replace(/[\u0000-\u024f\u2000-\u206f]/g, "")].length;
+
+// CSS.getPlatformFontsForNode on an element counts the glyphs of every descendant, so a sans paragraph holding an inline
+// mono <code> (a platform stack in most systems) looked like a fallback. Each probe's own text nodes are asked instead:
+// a text node's fonts are the ones its element's own font-family rendered.
 const fallbackFonts = async (page) =>
 {
     const session = await page.context().newCDPSession(page);
@@ -179,25 +185,39 @@ const fallbackFonts = async (page) =>
         await session.send("DOM.enable");
         await session.send("CSS.enable");
         const { root } = await session.send("DOM.getDocument", { depth: -1 });
-        const { nodeIds } = await session.send("DOM.querySelectorAll", { nodeId: root.nodeId, selector: "[data-font-probe]" });
-
-        for (const nodeId of nodeIds)
+        const probes = [];
+        const walk = (node) =>
         {
-            const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
-            const local = fonts.filter((font) => !font.isCustomFont);
-            const localGlyphs = local.reduce((sum, font) => sum + font.glyphCount, 0);
+            if (node.attributes?.includes("data-font-probe")) probes.push(node);
+            (node.children ?? []).forEach(walk);
+            (node.shadowRoots ?? []).forEach(walk);
+            if (node.contentDocument) walk(node.contentDocument);
+        };
 
-            if (localGlyphs === 0) continue;
+        walk(root);
 
-            const { attributes } = await session.send("DOM.getAttributes", { nodeId });
-            const symbols = Number(attributes[attributes.indexOf("data-font-symbols") + 1] ?? 0);
+        for (const element of probes)
+        {
+            const fonts = new Map();
+            let symbols = 0;
+            let text = "";
+
+            for (const child of element.children ?? [])
+            {
+                if (child.nodeType !== 3 || !child.nodeValue.trim()) continue;
+
+                const { fonts: used } = await session.send("CSS.getPlatformFontsForNode", { nodeId: child.nodeId });
+
+                used.filter((font) => !font.isCustomFont).forEach((font) => fonts.set(font.familyName, (fonts.get(font.familyName) ?? 0) + font.glyphCount));
+                symbols += symbolCount(child.nodeValue);
+                text += child.nodeValue;
+            }
+
+            const localGlyphs = [...fonts.values()].reduce((sum, count) => sum + count, 0);
 
             if (localGlyphs > symbols)
             {
-                const { outerHTML } = await session.send("DOM.getOuterHTML", { nodeId });
-                const text = outerHTML.replace(/<[^>]+>/g, "").trim().slice(0, 40);
-
-                problems.push(`fallback font ${local.map((font) => `${font.familyName} ×${font.glyphCount}`).join(" + ")} for "${text}"`);
+                problems.push(`fallback font ${[...fonts].map(([family, count]) => `${family} ×${count}`).join(" + ")} for "${text.replace(/\s+/g, " ").trim().slice(0, 40)}"`);
             }
         }
     }
