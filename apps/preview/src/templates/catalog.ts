@@ -60,7 +60,7 @@ export const TEMPLATE_CATALOG = [
     block("block-settings-dialog", "Settings dialog", "13"),
     block("block-changelog", "Changelog", "14"),
     block("block-meeting-notes", "Meeting notes", "15"),
-    block("block-team", "Team", "16"),
+    block("block-team", "Team", "16", true),
 ] as const satisfies readonly TemplateEntry[];
 
 export type TemplateId = (typeof TEMPLATE_CATALOG)[number]["id"];
