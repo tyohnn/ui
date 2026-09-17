@@ -196,9 +196,14 @@
        색은 직계 자식에만 준다. 1층의 결정대로 한 단 옅은 --sidebar-icon 이며(머리말 참조),
        안에 든 글리프는 제 판(bg-sidebar-primary 의 text-sidebar-primary-foreground 등)의
        색을 물려받아야 한다. */
+    /* ⚠ 크기만은 !important 다 — 3층에서 유틸리티를 이기는 유일한 예외(DESIGN.md 1절).
+       upstream 의 `[&_svg]:size-4` 는 유틸리티 층에서 (0,1,1) 이라 호출부가 svg 에 붙인 크기
+       유틸리티(달력 목록의 체크 글리프 `size-3`)까지 덮어 16 으로 그린다. 여기는 layer(base) 라
+       그대로 두면 거꾸로 유틸리티에 진다. 이 파일 안의 `@layer utilities` 는 base 안에 중첩되어
+       (base.utilities) 이기지 못하므로 !important 로 그 자리를 잡는다. */
     & svg {
-        width: var(--sidebar-item-icon-size);
-        height: var(--sidebar-item-icon-size);
+        width: var(--sidebar-item-icon-size) !important;
+        height: var(--sidebar-item-icon-size) !important;
     }
 
     & > svg {

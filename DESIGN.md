@@ -35,7 +35,19 @@ The three layers:
 
 Layer 3 is imported into `layer(base)` (Tailwind's cascade layer) so utilities passed through
 `className` still win. Shared rules (`_control-family`, `_menu-family`, `_surface-family`, `_shared`)
-load first. Long-form typesetting (`typeset.css` vendor rules + `typeset-preset.css` values) is a
+load first.
+
+Layer 3 uses `!important` only where upstream itself beats the caller's utilities, usually where
+upstream writes `!` (the collapsed sidebar item's `size-8!`). One such place has no `!` upstream: the icon
+size of `.cn-sidebar-menu-button svg` (every system's `sidebar.css`). Upstream sizes it with `[&_svg]:size-4`,
+a utility-layer rule with specificity (0,1,1), so it beats a size utility the caller puts on a nested glyph (the `size-3` check in a
+calendar list is drawn at 16px). In `layer(base)` the rule would lose to that utility instead, and an
+`@layer utilities` block inside a layer-3 file nests as `base.utilities`, which still loses. `!important`
+puts the rule back above utilities, which is where upstream has it; the value stays the system's
+`--sidebar-item-icon-size`. The one thing it does not reproduce is a caller's own `!` size utility on such
+a svg, which upstream would let win.
+
+Long-form typesetting (`typeset.css` vendor rules + `typeset-preset.css` values) is a
 separate axis.
 
 ## 2. One set of TSX

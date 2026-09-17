@@ -6,15 +6,5 @@
             "rect-height"
         ],
         "reason": "The sidebar's in-flow wrapper stretches to the page height, which is the body's: upstream's grid of 20 placeholder squares makes the page 1014px tall, the week view fills the 900px viewport and scrolls inside. Not the sidebar's value."
-    },
-    {
-        "key": "^sidebar0/sidebar-menu-button#\\d+>svg#0$",
-        "props": [
-            "width",
-            "height",
-            "rect-width",
-            "rect-height"
-        ],
-        "reason": "pending foundation fix: nested svg size in sidebar menu button. The calendar item's Check (size-3) sits in a div inside SidebarMenuButton; upstream's [&_svg]:size-4 on the button overrides it to 16px, tyohnn's .cn-sidebar-menu-button sizes direct-child svgs only, so the nested glyph keeps its own 12px. Not the template's."
     }
 ]
