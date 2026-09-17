@@ -1,0 +1,7 @@
+[
+    {
+        "key": "^header0/sidebar-trigger#0$",
+        "props": ["margin-left"],
+        "reason": "The trigger's ml-auto computes to the space the breadcrumb leaves in the header, so it follows the breadcrumb's text width (upstream \"Build Your Application / Data Fetching\", here \"Changelog / Orbitly 4.0\"). Text-dependent; the trigger's size and position against the header's right edge are compared and match."
+    }
+]
