@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { HELP_CENTER_STYLE, HelpCenter } from "./help-center"
 
 export function BlockHelpCenter() {
   return (
     <div data-template="block-help-center">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{HELP_CENTER_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

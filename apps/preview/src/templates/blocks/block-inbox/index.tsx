@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Reader, READER_STYLE } from "./reader"
 
 export function BlockInbox() {
   return (
     <div data-template="block-inbox">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{READER_STYLE}</style>
       <SidebarProvider
         style={

@@ -7,13 +7,13 @@ import { AppSidebar } from "./app-sidebar"
 import { SiteHeader } from "./site-header"
 import { SidebarInset, SidebarProvider } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Team, TEAM_STYLE } from "./team"
 
 export function BlockTeam() {
   return (
     <div data-template="block-team" className="[--header-height:calc(--spacing(14))]">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{TEAM_STYLE}</style>
       <SidebarProvider className="flex flex-col">
         <SiteHeader />

@@ -172,7 +172,7 @@ const measure = async (browser, url, side) =>
 
 const browser = await chromium.launch();
 const referenceUrl = `${referenceOrigin}/blocks/${block}`;
-const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}&template=${encodeURIComponent(template)}`;
+const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}&template=${encodeURIComponent(template)}&motion=off`;
 const reference = await measure(browser, referenceUrl, "shadcn");
 const tyohnn = await measure(browser, previewUrl, "tyohnn");
 

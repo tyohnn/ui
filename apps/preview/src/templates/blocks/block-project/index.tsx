@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Overview, OVERVIEW_STYLE } from "./overview"
 
 export function BlockProject() {
   return (
     <div data-template="block-project">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{OVERVIEW_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

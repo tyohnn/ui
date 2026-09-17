@@ -39,7 +39,7 @@ const arg = (name, fallback) =>
 const A = arg("a");
 // --system <name> [--mode dark|light] [--preview http://localhost:5173] is shorthand for the preview URL as --b
 const system = arg("system");
-const B = arg("b") ?? (system ? `${arg("preview", "http://localhost:5173")}/?system=${encodeURIComponent(system)}&mode=${arg("mode", "dark")}` : undefined);
+const B = arg("b") ?? (system ? `${arg("preview", "http://localhost:5173")}/?system=${encodeURIComponent(system)}&mode=${arg("mode", "dark")}&motion=off` : undefined);
 const label = arg("label", "pair");
 const rootSelector = arg("root", '[data-specimen="canvas"]');
 const rootUp = Number(arg("root-up", "1"));

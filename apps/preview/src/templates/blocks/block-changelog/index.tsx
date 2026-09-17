@@ -18,13 +18,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { CHANGELOG_STYLE, ChangelogPost } from "./changelog-post"
 
 export function BlockChangelog() {
   return (
     <div data-template="block-changelog">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{CHANGELOG_STYLE}</style>
       <SidebarProvider>
         <SidebarInset>

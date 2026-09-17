@@ -47,7 +47,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
-import { NO_MOTION } from "../coverage/frame";
+import { NoMotion } from "../coverage/frame";
 
 import { avatarTone, COLUMN_WIDTHS, COLUMNS, CURRENT_USER, initials, ROWS, TAG_TONE } from "./data";
 import { CRM_STYLE, LastInteraction, PipelineDot, Sparkline, StatusDot, WinMeter } from "./parts";
@@ -285,7 +285,7 @@ const TableSummary = () => (
 
 export const CrmDashboard = () => (
     <div className="p-8">
-        <style>{NO_MOTION}</style>
+        <NoMotion />
         <div data-template="crm-dashboard" className="flex w-[1435px] overflow-hidden">
             <style>{CRM_STYLE}</style>
             <SidebarProvider className="min-h-0" style={{ "--sidebar-width": "246px" } as CSSProperties}>

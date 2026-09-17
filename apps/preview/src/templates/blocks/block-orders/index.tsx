@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Orders, ORDERS_STYLE } from "./orders"
 
 export function BlockOrders() {
   return (
     <div data-template="block-orders">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{ORDERS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

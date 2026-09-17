@@ -18,13 +18,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Document, DOCUMENT_STYLE } from "./document"
 
 export function BlockEditor() {
   return (
     <div data-template="block-editor">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{DOCUMENT_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

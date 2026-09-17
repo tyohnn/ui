@@ -43,7 +43,7 @@ const shots = arg("shots", join(repoRoot, "tooling/snapshot/out", `coverage-${sy
 
 mkdirSync(shots, { recursive: true });
 
-const url = (section) => `${origin}/?system=${encodeURIComponent(system)}&mode=${mode}&template=coverage${section ? `&section=${encodeURIComponent(section)}` : ""}`;
+const url = (section) => `${origin}/?system=${encodeURIComponent(system)}&mode=${mode}&motion=off&template=coverage${section ? `&section=${encodeURIComponent(section)}` : ""}`;
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, colorScheme: mode });
 const problems = [];

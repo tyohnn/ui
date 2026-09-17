@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Analytics, ANALYTICS_STYLE } from "./analytics"
 
 export function BlockAnalytics() {
   return (
     <div data-template="block-analytics">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{ANALYTICS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

@@ -671,7 +671,7 @@ try
 {
     const viewport = { width: 1600, height: 1200 };
     const page = await browser.newPage({ viewport });
-    const url = `${origin}/?system=${system}&mode=${mode}&template=${template}`;
+    const url = `${origin}/?system=${system}&mode=${mode}&template=${template}&motion=off`;
 
     await page.goto(url, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);

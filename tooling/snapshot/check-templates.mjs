@@ -258,7 +258,7 @@ try
 
                     try
                     {
-                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}`, { waitUntil: "networkidle", timeout: 90000 });
+                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}&motion=off`, { waitUntil: "networkidle", timeout: 90000 });
                         await page.waitForSelector(`[data-template="${entry.id}"]`, { timeout: 15000 }).catch(() => {});
                         await page.evaluate(() => document.fonts.ready);
                         await page.waitForTimeout(400);

@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { DOCS_STYLE, DocsPage } from "./docs-page"
 
 export function BlockDocs() {
   return (
     <div data-template="block-docs">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{DOCS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

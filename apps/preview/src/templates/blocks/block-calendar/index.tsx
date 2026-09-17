@@ -17,13 +17,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { WeekView, WEEK_STYLE } from "./week-view"
 
 export function BlockCalendar() {
   return (
     <div data-template="block-calendar">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{WEEK_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

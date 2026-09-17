@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Roadmap, ROADMAP_STYLE } from "./roadmap"
 
 export function BlockRoadmap() {
   return (
     <div data-template="block-roadmap">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{ROADMAP_STYLE}</style>
       <SidebarProvider
         style={

@@ -150,7 +150,7 @@ let sectionsCompared = [];
 if (template === "component-sheet")
 {
     const referenceUrl = referenceOrigin;
-    const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}`;
+    const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}&motion=off`;
     const reference = await measureSheet(browser, { url: referenceUrl, mode, states: states ? STATES : [], shots, side: "shadcn" });
     const tyohnn = await measureSheet(browser, { url: previewUrl, mode, states: states ? STATES : [], shots, side: "tyohnn", swap: strings });
 
@@ -192,7 +192,7 @@ if (template === "component-sheet")
 else
 {
     const url = (origin, extra) => (section) =>
-        `${origin}/?${extra}template=coverage${section ? `&section=${encodeURIComponent(section)}` : ""}`;
+        `${origin}/?${extra}motion=off&template=coverage${section ? `&section=${encodeURIComponent(section)}` : ""}`;
     const reference = await coveragePage(browser, { url: url(referenceOrigin, ""), mode, side: "shadcn" });
     const tyohnn = await coveragePage(browser, { url: url(previewOrigin, `system=${encodeURIComponent(system)}&mode=${mode}&`), mode, swap: strings, side: "tyohnn" });
     const declared = await reference.sections();

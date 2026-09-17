@@ -11,7 +11,7 @@ import { Button } from "@tyohnn/components/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@tyohnn/components/input-group";
 import { Separator } from "@tyohnn/components/separator";
 
-import { NO_MOTION } from "../../coverage/frame";
+import { NoMotion } from "../../coverage/frame";
 import { SETTINGS_STYLE } from "./notifications";
 import { SettingsDialog } from "./settings-dialog";
 
@@ -98,7 +98,7 @@ const PAGE_STYLE = `
 export function BlockSettingsDialog() {
     return (
         <div data-template="block-settings-dialog">
-            <style>{NO_MOTION}</style>
+            <NoMotion />
             <style>{PAGE_STYLE}</style>
             <style>{SETTINGS_STYLE}</style>
             <Page />

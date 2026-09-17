@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Playground, PLAYGROUND_STYLE } from "./playground"
 
 export function BlockAiPlayground() {
   return (
     <div data-template="block-ai-playground">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{PLAYGROUND_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

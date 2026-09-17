@@ -18,13 +18,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Notes, NOTES_STYLE } from "./notes"
 
 export function BlockMeetingNotes() {
   return (
     <div data-template="block-meeting-notes">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{NOTES_STYLE}</style>
       <SidebarProvider>
         <SidebarLeft />

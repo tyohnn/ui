@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { API_REFERENCE_STYLE, ApiReference } from "./api-reference"
 
 export function BlockApiReference() {
   return (
     <div data-template="block-api-reference">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{API_REFERENCE_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />

@@ -19,13 +19,13 @@ import {
   SidebarTrigger,
 } from "@tyohnn/components/sidebar"
 
-import { NO_MOTION } from "../../coverage/frame"
+import { NoMotion } from "../../coverage/frame"
 import { Review, REVIEW_STYLE } from "./review"
 
 export function BlockCodeReview() {
   return (
     <div data-template="block-code-review">
-      <style>{NO_MOTION}</style>
+      <NoMotion />
       <style>{REVIEW_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
