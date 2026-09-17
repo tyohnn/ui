@@ -1,7 +1,7 @@
 {
     "version": 1,
     "source": {
-        "commit": "bf270c689f82a070ef264c52eb7e934505c54a8a",
+        "commit": "8c83ace82630b75cef56e776fb40a5295c3c4b43",
         "kind": "local"
     },
     "project": "monorepo",
@@ -91,7 +91,7 @@
         },
         "apps/admin/src/app/tyohnn/component-sheet/_example/Specimen.tsx": {
             "from": "apps/preview/src/templates/component-sheet/Specimen.tsx",
-            "hash": "sha256-9270a338da628096"
+            "hash": "sha256-d92048eca04ac574"
         },
         "apps/admin/src/app/tyohnn/component-sheet/page.tsx": {
             "from": "generated:example-page/component-sheet",
@@ -103,7 +103,7 @@
         },
         "apps/crm/src/app/tyohnn/component-sheet/_example/Specimen.tsx": {
             "from": "apps/preview/src/templates/component-sheet/Specimen.tsx",
-            "hash": "sha256-9270a338da628096"
+            "hash": "sha256-d92048eca04ac574"
         },
         "apps/crm/src/app/tyohnn/component-sheet/page.tsx": {
             "from": "generated:example-page/component-sheet",
