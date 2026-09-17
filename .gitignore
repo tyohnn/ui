@@ -20,3 +20,8 @@ tooling/snapshot/out/
 *.log
 .env*
 !.env.example
+
+# site: generated preview builds and the static export
+apps/site/public/preview/
+apps/site/out/
+apps/site/next-env.d.ts
