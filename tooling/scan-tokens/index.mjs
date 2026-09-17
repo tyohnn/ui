@@ -4,7 +4,8 @@
 // nothing is composed):
 //   1. undefined       a var() (or Tailwind shorthand such as text-(color:--x)) read by the system's
 //                      styles, registry/ui or apps/preview that no top-level :root/.dark of the
-//                      system's globals.css / tokens.css defines and nothing declares locally  → FAIL
+//                      system's globals.css / tokens.css defines and nothing declares locally
+//                      (a ChartConfig key's runtime --color-<key> counts as declared)             → FAIL
 //   2. foundation set  a token name foundation defines (per scope) that the system lacks        → FAIL
 //   3. components      a registry/ui component without styles/components/<name>.css in the system,
 //                      or a stylesheet style.css does not import (skipped when foundation has none) → FAIL
@@ -25,11 +26,7 @@ const EXTERNAL_NAMES = new Set([
     "--collapsible-panel-width", "--accordion-panel-height", "--accordion-panel-width", "--nested-drawers",
     // Base UI Positioner sizes set at runtime (navigation-menu reads them as w-(--popup-width)).
     "--popup-width", "--popup-height",
-    // Chart series colours: ChartStyle writes `--color-<config key>` into a <style> tag at runtime,
-    // so a chart's `fill="var(--color-desktop)"` has no static definition. Add the key of a new series.
-    "--color-desktop", "--color-mobile",
 ]);
-const isExternal = (name) => EXTERNAL_NAMES.has(name) || EXTERNAL_PREFIXES.some((prefix) => name.startsWith(prefix));
 
 const SCANNED = new Set([".css", ".ts", ".tsx"]);
 const collect = (root) =>
@@ -86,9 +83,108 @@ const tokenScopes = (root) =>
     return map;
 };
 
+/**
+ * Chart series colours: ChartStyle (registry/ui/components/chart.tsx) writes `--color-<key>` into a <style> tag at
+ * runtime for every key of a ChartContainer config that has a `color` or `theme`, so a chart's
+ * `fill="var(--color-desktop)"` has no static definition. The keys are read from the config object literals of the
+ * scanned sources (`{ … } satisfies ChartConfig` or `const x: ChartConfig = { … }`), so a new series needs no entry here.
+ */
+const chartColorNames = (paths) =>
+{
+    const names = new Set();
+    const closing = { "{": "}", "(": ")", "[": "]" };
+
+    // The balanced body of the literal whose `{` is at `start`, skipping strings and template literals.
+    const literalAt = (source, start) =>
+    {
+        const stack = [];
+
+        for (let index = start; index < source.length; index += 1)
+        {
+            const char = source[index];
+
+            if (char === "\"" || char === "'" || char === "`")
+            {
+                for (index += 1; index < source.length && source[index] !== char; index += source[index] === "\\" ? 2 : 1);
+            }
+            else if (closing[char]) stack.push(closing[char]);
+            else if (char === stack.at(-1))
+            {
+                stack.pop();
+                if (stack.length === 0) return source.slice(start + 1, index);
+            }
+        }
+
+        return "";
+    };
+
+    // Top-level `key: value` entries of an object body.
+    const entries = (body) =>
+    {
+        const found = [];
+        let depth = 0;
+        let from = 0;
+
+        for (let index = 0; index <= body.length; index += 1)
+        {
+            const char = body[index];
+
+            if (char === "{" || char === "(" || char === "[") depth += 1;
+            else if (char === "}" || char === ")" || char === "]") depth -= 1;
+            else if (char === "\"" || char === "'" || char === "`")
+            {
+                for (index += 1; index < body.length && body[index] !== char; index += body[index] === "\\" ? 2 : 1);
+            }
+            else if ((char === "," && depth === 0) || index === body.length)
+            {
+                const match = body.slice(from, index).match(/^\s*["']?([A-Za-z0-9_-]+)["']?\s*:([\s\S]*)$/);
+
+                if (match) found.push({ key: match[1], value: match[2] });
+                from = index + 1;
+            }
+        }
+
+        return found;
+    };
+
+    for (const path of paths.filter((file) => /\.tsx?$/.test(file)))
+    {
+        const source = readFileSync(path, "utf8");
+
+        if (!source.includes("ChartConfig")) continue;
+
+        const starts = [...source.matchAll(/:\s*ChartConfig\s*=\s*\{/g)].map((match) => match.index + match[0].length - 1);
+
+        // `{ … } satisfies ChartConfig`: walk back from the closing brace to its opening one.
+        for (const match of source.matchAll(/\}\s*satisfies\s+ChartConfig\b/g))
+        {
+            for (let index = match.index, depth = 0; index >= 0; index -= 1)
+            {
+                if (source[index] === "}") depth += 1;
+                else if (source[index] === "{" && --depth === 0)
+                {
+                    starts.push(index);
+                    break;
+                }
+            }
+        }
+
+        for (const start of starts)
+        {
+            entries(literalAt(source, start))
+                .filter((entry) => /\b(color|theme)\s*:/.test(entry.value))
+                .forEach((entry) => names.add(`--color-${entry.key}`));
+        }
+    }
+
+    return names;
+};
+
 const foundationTokens = tokenScopes(foundationRoot);
 const uiComponents = readdirSync(join(uiRoot, "components")).filter((file) => file.endsWith(".tsx")).map((file) => basename(file, ".tsx"));
 const sharedReaders = [...collect(uiRoot), ...collect(join(repoRoot, "apps/preview/src"))];
+const CHART_COLORS = chartColorNames(sharedReaders);
+const isExternal = (name) => EXTERNAL_NAMES.has(name) || CHART_COLORS.has(name) || EXTERNAL_PREFIXES.some((prefix) => name.startsWith(prefix));
 
 const scan = (name) =>
 {
