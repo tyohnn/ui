@@ -1,0 +1,23 @@
+{
+  "name": "vite-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3142 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 3142 --strictPort"
+  },
+  "dependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "~5.9.3",
+    "vite": "8.3.0"
+  }
+}

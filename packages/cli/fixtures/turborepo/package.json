@@ -1,0 +1,17 @@
+{
+  "name": "turborepo-fixture",
+  "private": true,
+  "packageManager": "npm@11.6.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.13"
+  }
+}

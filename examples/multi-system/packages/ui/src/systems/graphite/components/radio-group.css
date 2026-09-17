@@ -67,8 +67,8 @@
     inset-inline-start: 50%;
     translate: -50% -50%;
 
-    width: var(--control-indicator-dot-size);
-    height: var(--control-indicator-dot-size);
+    width: var(--radio-indicator-dot-size);
+    height: var(--radio-indicator-dot-size);
     border-radius: 9999px;
     background-color: var(--primary-foreground);
 }

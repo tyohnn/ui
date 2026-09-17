@@ -72,9 +72,9 @@ function NavigationMenuTrigger({
     >
       {children}{" "}
       <ChevronDown
-  className="cn-navigation-menu-trigger-icon"
-  aria-hidden="true"
-/>
+        className="cn-navigation-menu-trigger-icon"
+        aria-hidden="true"
+      />
     </NavigationMenuPrimitive.Trigger>
   )
 }

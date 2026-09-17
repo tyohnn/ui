@@ -1,0 +1,33 @@
+{
+    "name": "tyohnn",
+    "version": "0.1.0",
+    "description": "Scaffold tyohnn design systems (shadcn components on Base UI with a three-layer CSS architecture) into Next.js and Vite apps and monorepos.",
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+        "tyohnn": "dist/index.js"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "build": "node build.mjs",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "e2e": "node build.mjs && node e2e/run.mjs"
+    },
+    "devDependencies": {
+        "@babel/parser": "^8.0.5",
+        "@babel/types": "^8.0.5",
+        "@clack/prompts": "^1.8.1",
+        "@types/node": "^20.19.43",
+        "esbuild": "^0.28.2",
+        "jsonc-parser": "^3.3.1",
+        "typescript": "^5.9.3",
+        "vitest": "^5.0.1"
+    }
+}

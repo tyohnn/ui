@@ -1,23 +1,28 @@
 /* tyohnn:begin system */
-/* One design system per app: graphite. The order is the cascade contract (tyohnn DESIGN.md §1):
-   tailwindcss → layer 1 colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className
-   utilities still win. Never import a second system: every system defines the same cn-* rules globally. */
+/* Design system graphite (tyohnn). One system per app; this order is the cascade contract: tailwindcss → layer 1
+   colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */
 @import "tailwindcss";
 @import "@acme/ui/systems/graphite/globals.css";
 @import "@acme/ui/systems/graphite/tokens.css";
 @import "@acme/ui/systems/graphite/typeset.css";
 @import "@acme/ui/systems/graphite/typeset-preset.css";
 @import "@acme/ui/systems/graphite/style.css" layer(base);
+/* tyohnn:end system */
 
-/* Tailwind does not scan workspace packages by itself; the system folders are CSS, not class sources. */
+/* tyohnn:begin theme */
+/* Tailwind does not scan workspace packages by itself; the system folders hold CSS, not class names. */
 @source "../../../../packages/ui/src";
 @source not "../../../../packages/ui/src/systems";
 
-/* Layer-1 font stacks on the next/font variables from layout.tsx: next/font registers its own family names,
-   so the system's "Pretendard" stack would not match. Same order and fallbacks as the system. */
+/* Font stacks on the next/font variables of the root layout (next/font registers its own family names). */
 :root {
     --font-sans: var(--font-sans-pretendard), ui-sans-serif, system-ui, sans-serif;
     --font-heading: var(--font-sans);
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", var(--font-sans-pretendard), monospace;
 }
-/* tyohnn:end system */
+/* tyohnn:end theme */
+
+/* The app's own rules. */
+.app-note {
+  font-style: italic;
+}

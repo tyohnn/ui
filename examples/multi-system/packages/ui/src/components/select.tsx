@@ -50,8 +50,8 @@ function SelectTrigger({
       <SelectPrimitive.Icon
         render={
           <SelectIndicator
-  className="cn-select-trigger-icon pointer-events-none"
-/>
+            className="cn-select-trigger-icon pointer-events-none"
+          />
         }
       />
     </SelectPrimitive.Trigger>
@@ -133,9 +133,7 @@ function SelectItem({
       <SelectPrimitive.ItemIndicator
         render={<span className="cn-select-item-indicator" />}
       >
-        <Check
-  className="cn-select-item-indicator-icon pointer-events-none"
-/>
+        <Check className="cn-select-item-indicator-icon pointer-events-none" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   )

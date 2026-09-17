@@ -42,13 +42,7 @@ function DropdownMenuContent({
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={cn(
-            // ⚠ 업스트림의 `w-(--anchor-width)` 를 걷어냈다(2026-09-11). 그 유틸리티가 목록 폭을
-          //    트리거 버튼 폭으로 못 박아, 2층의 `--menu-min-width`(144px)가 최소 폭이 아니라
-          //    사실상 고정 폭이 되고 한국어 라벨("내보내기"·"복제")이 줄바꿈됐다. 목록이 트리거와
-          //    폭을 맞춰야 하는 것은 Select·Combobox 이지 Dropdown 이 아니다(Context Menu·Menubar
-          //    도 그 유틸리티 없이 돈다). 대신 화면 밖으로 넘치지 않게 상한을 3층이 준다.
-          //    ⚠ `shadcn add dropdown-menu` 로 다시 받으면 이 유틸리티가 되살아난다.
-          "cn-dropdown-menu-content cn-dropdown-menu-content-logical cn-menu-target cn-menu-translucent z-50 max-h-(--available-height) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none data-closed:overflow-hidden",
+            "cn-dropdown-menu-content cn-dropdown-menu-content-logical cn-menu-target cn-menu-translucent z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none data-closed:overflow-hidden",
             className
           )}
           {...props}
@@ -125,9 +119,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRight
-  className="cn-rtl-flip ml-auto"
-/>
+      <ChevronRight className="cn-rtl-flip ml-auto" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

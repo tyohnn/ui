@@ -148,23 +148,26 @@ function Calendar({
           if (orientation === "left") {
             return (
               <CalendarChevronLeft
-  className={cn("cn-rtl-flip size-4", className)}
-/>
+                className={cn("cn-rtl-flip size-4", className)}
+                {...props}
+              />
             )
           }
 
           if (orientation === "right") {
             return (
               <CalendarChevronRight
-  className={cn("cn-rtl-flip size-4", className)}
-/>
+                className={cn("cn-rtl-flip size-4", className)}
+                {...props}
+              />
             )
           }
 
           return (
             <CalendarChevronDown
-  className={cn("size-4", className)}
-/>
+              className={cn("size-4", className)}
+              {...props}
+            />
           )
         },
         DayButton: ({ ...props }) => (

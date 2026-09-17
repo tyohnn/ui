@@ -129,9 +129,9 @@ function QuestionnaireChoice({
           className="cn-questionnaire-choice-indicator-dot hidden rounded-full group-data-[type=checkbox]/questionnaire-choice:hidden group-data-checked/questionnaire-choice:block"
         />
         <Check
-  data-slot="questionnaire-choice-indicator-check"
-  className="cn-questionnaire-choice-indicator-check hidden group-data-[type=radio]/questionnaire-choice:hidden group-data-checked/questionnaire-choice:block"
-/>
+          data-slot="questionnaire-choice-indicator-check"
+          className="cn-questionnaire-choice-indicator-check hidden group-data-[type=radio]/questionnaire-choice:hidden group-data-checked/questionnaire-choice:block"
+        />
       </span>
       <QuestionnairePrimitive.ChoiceLabel
         data-slot="questionnaire-choice-label"
@@ -203,7 +203,7 @@ function QuestionnaireActions({
     <div
       data-slot="questionnaire-actions"
       className={cn(
-        "cn-questionnaire-actions grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center",
+        "cn-questionnaire-actions grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center sm:min-h-9",
         className
       )}
       {...props}
