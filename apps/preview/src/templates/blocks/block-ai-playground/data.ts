@@ -7,9 +7,9 @@ export const MODELS = [
 ] as const;
 
 export const PARAMETERS = [
-    { id: "aip-temperature", label: "Temperature", value: 0.4, min: 0, max: 2, step: 0.1, hint: "Lower is more focused and repeatable" },
-    { id: "aip-top-p", label: "Top P", value: 0.9, min: 0, max: 1, step: 0.05, hint: "Share of likely tokens considered" },
-    { id: "aip-max-tokens", label: "Max output tokens", value: 2048, min: 256, max: 8192, step: 256, hint: "Hard limit per reply" },
+    { id: "aip-temperature", label: "Temperature", value: 0.4, min: 0, max: 2, step: 0.1 },
+    { id: "aip-top-p", label: "Top P", value: 0.9, min: 0, max: 1, step: 0.05 },
+    { id: "aip-max-tokens", label: "Max output tokens", value: 2048, min: 256, max: 8192, step: 256 },
 ];
 
 export const ATTACHMENTS = [

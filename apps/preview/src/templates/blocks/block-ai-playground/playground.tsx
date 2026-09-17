@@ -33,7 +33,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Bubble, BubbleContent } from "@tyohnn/components/bubble";
 import { Button } from "@tyohnn/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "@tyohnn/components/field";
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@tyohnn/components/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupTextarea } from "@tyohnn/components/input-group";
 import { Kbd } from "@tyohnn/components/kbd";
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup, MessageHeader } from "@tyohnn/components/message";
@@ -245,17 +245,19 @@ const Composer = () => (
     </div>
 );
 
-const ParameterSlider = ({ id, label, value, min, max, step, hint }: (typeof PARAMETERS)[number]) => (
+const ParameterSlider = ({ id, label, value, min, max, step }: (typeof PARAMETERS)[number]) => (
     <Field>
         <div className="flex items-center justify-between gap-2">
             <FieldLabel htmlFor={id}>{label}</FieldLabel>
             <span className="aip-value">{value}</span>
         </div>
         <Slider id={id} defaultValue={[value]} min={min} max={max} step={step} aria-label={label} />
-        <FieldDescription>{hint}</FieldDescription>
     </Field>
 );
 
+// The body is sized to fit the panel in every system (sera, luma and maia have the tallest controls): no per-slider
+// hints or dividers, and the system prompt's Textarea takes whatever height is left instead of a fixed one. The body
+// still scrolls on its own (the footer's usage bar stays put) if a system's controls ever outgrow it.
 const SettingsPanel = () => (
     <Card size="sm" className="aip-settings min-h-0 w-80 shrink-0">
         <CardHeader>
@@ -265,15 +267,16 @@ const SettingsPanel = () => (
                 <Button variant="ghost" size="icon-sm" aria-label="Reset to defaults"><RefreshCw /></Button>
             </CardAction>
         </CardHeader>
-        <CardContent className="min-h-0 flex-1 overflow-y-auto">
-            <FieldGroup className="gap-5">
+        <CardContent className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+            <FieldGroup className="flex-1 gap-4">
                 <Field>
-                    <FieldLabel htmlFor="aip-model">Model</FieldLabel>
+                    <div className="flex items-center justify-between gap-2">
+                        <FieldLabel htmlFor="aip-model">Model</FieldLabel>
+                        <span className="aip-value">200k · tools · vision</span>
+                    </div>
                     <ModelSelect id="aip-model" />
-                    <FieldDescription>200k context · tools · vision</FieldDescription>
                 </Field>
                 {PARAMETERS.map((parameter) => <ParameterSlider key={parameter.id} {...parameter} />)}
-                <FieldSeparator />
                 <Field orientation="horizontal">
                     <FieldContent>
                         <FieldLabel htmlFor="aip-stream">Stream tokens</FieldLabel>
@@ -294,12 +297,10 @@ const SettingsPanel = () => (
                         {TOOLS.map((tool) => <Badge key={tool} variant="outline"><Braces data-icon="inline-start" />{tool}</Badge>)}
                         <Button variant="ghost" size="xs">Add tool</Button>
                     </div>
-                    <FieldDescription>Called when the model decides it needs them</FieldDescription>
                 </Field>
-                <FieldSeparator />
-                <Field>
+                <Field className="min-h-0 flex-1">
                     <FieldLabel htmlFor="aip-system">System prompt</FieldLabel>
-                    <Textarea id="aip-system" className="min-h-24" defaultValue={SYSTEM_PROMPT} />
+                    <Textarea id="aip-system" className="min-h-16 flex-1 resize-none" defaultValue={SYSTEM_PROMPT} />
                 </Field>
             </FieldGroup>
         </CardContent>
