@@ -3,6 +3,7 @@
 import { parseArgs } from "node:util";
 
 import { init } from "./commands/init.js";
+import { add, fonts, icons, use } from "./commands/modify.js";
 import type { GlobalOptions } from "./commands/context.js";
 import { CliError, log } from "./lib/log.js";
 
@@ -96,6 +97,10 @@ const main = async (): Promise<number> =>
     switch (command)
     {
         case "init": await init(options); return 0;
+        case "add": await add(argument, options); return 0;
+        case "use": await use(argument, options); return 0;
+        case "icons": await icons(argument, options); return 0;
+        case "fonts": await fonts(options); return 0;
         default: throw new CliError(`unknown command "${command}"`, "Run `tyohnn --help`.");
     }
 };
