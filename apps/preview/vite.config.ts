@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import { fontIds, readFontCatalog, readSystemMeta } from "@tyohnn/build-system/registry";
@@ -23,8 +24,27 @@ const iconLibrary = process.env.ICONS || meta.icons?.library || "lucide";
 const FONTS_ID = "virtual:tyohnn-fonts";
 const SYSTEM_ID = "virtual:tyohnn-system";
 
+// PREVIEW_OWN_CSS=1 (scripts/vite-system.mjs --own-css): a build ships only the started system's stylesheet
+// instead of the whole repository dist/ (the site bundles one build per system under /preview/<system>/).
+const ownCss = process.env.PREVIEW_OWN_CSS === "1";
+let base = "/";
+
 const systemPlugin = (): Plugin => ({
     name: "tyohnn-system",
+    configResolved: (config) =>
+    {
+        base = config.base;
+    },
+    generateBundle()
+    {
+        if (!ownCss) return;
+
+        this.emitFile({
+            type: "asset",
+            fileName: `systems/${system}/compiled.css`,
+            source: readFileSync(`${repoRoot}dist/systems/${system}/compiled.css`),
+        });
+    },
     resolveId: (id) => (id === FONTS_ID || id === SYSTEM_ID ? `\0${id}` : null),
     load: (id) =>
     {
@@ -54,17 +74,19 @@ const systemPlugin = (): Plugin => ({
 
         return null;
     },
-    transformIndexHtml: (html) => html.replaceAll("__TYOHNN_SYSTEM__", system),
+    // __TYOHNN_BASE__ is Vite's `base` (`--base=/preview/<system>/`), so the stylesheet resolves under a sub-path.
+    transformIndexHtml: (html) => html.replaceAll("__TYOHNN_SYSTEM__", system).replaceAll("__TYOHNN_BASE__", base),
 });
 
 /**
  * The page loads exactly one system stylesheet: dist/systems/<system>/compiled.css, built by
  * tooling/build-system. The repository `dist/` is served as the public directory, so the file lives at
- * /systems/<system>/compiled.css. The app bundles no Tailwind of its own.
+ * <base>systems/<system>/compiled.css. The app bundles no Tailwind of its own.
+ * `--base=/preview/<system>/` builds for a sub-path; `--own-css` copies only this system's stylesheet.
  */
 export default defineConfig({
     plugins: [react(), systemPlugin()],
-    publicDir: `${repoRoot}dist`,
+    publicDir: ownCss ? false : `${repoRoot}dist`,
     build: { outDir: `dist/${process.env.ICONS ? `${system}-${iconLibrary}` : system}`, emptyOutDir: true },
     resolve: {
         // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/ui/…
