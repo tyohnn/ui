@@ -51,78 +51,104 @@ const VEGETABLES = [
 
 export const formSections: CoverageSection[] = [
     {
-        name: "input-textarea",
-        components: ["input", "textarea"],
+        name: "input",
+        components: ["input"],
         render: () => (
-            <>
-                <Row label="Input · default · value · disabled · invalid · file" className="grid w-[900px] grid-cols-3 gap-3">
-                    <Input placeholder="Placeholder" />
-                    <Input defaultValue="Filled value" />
-                    <Input type="password" defaultValue="secret" />
-                    <Input placeholder="Disabled" disabled />
-                    <Input defaultValue="Invalid" aria-invalid />
-                    <Input type="file" />
-                </Row>
-                <Row label="Textarea · default · disabled · invalid" className="grid w-[900px] grid-cols-3 gap-3">
-                    <Textarea placeholder="Type your message here." />
-                    <Textarea placeholder="Disabled" disabled />
-                    <Textarea defaultValue="Invalid" aria-invalid />
-                </Row>
-            </>
+            <Row label="Input · default · value · disabled · invalid · file" className="grid w-[900px] grid-cols-3 gap-3">
+                <Input placeholder="Placeholder" />
+                <Input defaultValue="Filled value" />
+                <Input type="password" defaultValue="secret" />
+                <Input placeholder="Disabled" disabled />
+                <Input defaultValue="Invalid" aria-invalid />
+                <Input type="file" />
+            </Row>
         ),
     },
     {
-        name: "checkbox-radio-switch",
-        components: ["checkbox", "radio-group", "switch", "slider", "progress"],
+        name: "textarea",
+        components: ["textarea"],
         render: () => (
-            <>
-                <Row label="Checkbox · unchecked · checked · indeterminate · disabled · invalid">
-                    <Checkbox aria-label="unchecked" />
-                    <Checkbox aria-label="checked" defaultChecked />
-                    <Checkbox aria-label="indeterminate" indeterminate />
-                    <Checkbox aria-label="disabled" disabled />
-                    <Checkbox aria-label="disabled checked" disabled defaultChecked />
-                    <Checkbox aria-label="invalid" aria-invalid />
-                    <Checkbox aria-label="invalid checked" aria-invalid defaultChecked />
-                </Row>
-                <Row label="Radio group · vertical · horizontal · disabled · invalid">
-                    <RadioGroup defaultValue="comfortable">
-                        <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="default" />Default</label>
-                        <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="comfortable" />Comfortable</label>
-                        <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="compact" disabled />Compact</label>
-                    </RadioGroup>
-                    <RadioGroup defaultValue="b" className="flex">
-                        <RadioGroupItem value="a" aria-label="a" />
-                        <RadioGroupItem value="b" aria-label="b" />
-                        <RadioGroupItem value="c" aria-label="c" aria-invalid />
-                    </RadioGroup>
-                    <RadioGroup defaultValue="x" disabled>
-                        <RadioGroupItem value="x" aria-label="x" />
-                    </RadioGroup>
-                </Row>
-                <Row label="Switch · sizes · checked · disabled · invalid">
-                    <Switch aria-label="off" />
-                    <Switch aria-label="on" defaultChecked />
-                    <Switch size="sm" aria-label="small off" />
-                    <Switch size="sm" aria-label="small on" defaultChecked />
-                    <Switch aria-label="disabled" disabled />
-                    <Switch aria-label="disabled on" disabled defaultChecked />
-                    <Switch aria-label="invalid" aria-invalid />
-                </Row>
-                <Row label="Slider · single · range · disabled · vertical" className="flex items-center gap-8">
-                    <div className="w-48"><Slider defaultValue={[40]} aria-label="single" /></div>
-                    <div className="w-48"><Slider defaultValue={[20, 70]} aria-label="range" /></div>
-                    <div className="w-48"><Slider defaultValue={[50]} disabled aria-label="disabled" /></div>
-                    <div className="h-32"><Slider defaultValue={[30]} orientation="vertical" aria-label="vertical" /></div>
-                </Row>
-                <Row label="Progress · plain · with label and value" className="flex w-[600px] flex-col gap-4">
-                    <Progress value={33} aria-label="Plain" />
-                    <Progress value={66}>
-                        <ProgressLabel>Upload</ProgressLabel>
-                        <ProgressValue />
-                    </Progress>
-                </Row>
-            </>
+            <Row label="Textarea · default · disabled · invalid" className="grid w-[900px] grid-cols-3 gap-3">
+                <Textarea placeholder="Type your message here." />
+                <Textarea placeholder="Disabled" disabled />
+                <Textarea defaultValue="Invalid" aria-invalid />
+            </Row>
+        ),
+    },
+    {
+        name: "checkbox",
+        components: ["checkbox"],
+        render: () => (
+            <Row label="Checkbox · unchecked · checked · indeterminate · disabled · invalid">
+                <Checkbox aria-label="unchecked" />
+                <Checkbox aria-label="checked" defaultChecked />
+                <Checkbox aria-label="indeterminate" indeterminate />
+                <Checkbox aria-label="disabled" disabled />
+                <Checkbox aria-label="disabled checked" disabled defaultChecked />
+                <Checkbox aria-label="invalid" aria-invalid />
+                <Checkbox aria-label="invalid checked" aria-invalid defaultChecked />
+            </Row>
+        ),
+    },
+    {
+        name: "radio-group",
+        components: ["radio-group"],
+        render: () => (
+            <Row label="Radio group · vertical · horizontal · disabled · invalid">
+                <RadioGroup defaultValue="comfortable">
+                    <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="default" />Default</label>
+                    <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="comfortable" />Comfortable</label>
+                    <label className="flex items-center gap-2 text-sm"><RadioGroupItem value="compact" disabled />Compact</label>
+                </RadioGroup>
+                <RadioGroup defaultValue="b" className="flex">
+                    <RadioGroupItem value="a" aria-label="a" />
+                    <RadioGroupItem value="b" aria-label="b" />
+                    <RadioGroupItem value="c" aria-label="c" aria-invalid />
+                </RadioGroup>
+                <RadioGroup defaultValue="x" disabled>
+                    <RadioGroupItem value="x" aria-label="x" />
+                </RadioGroup>
+            </Row>
+        ),
+    },
+    {
+        name: "switch",
+        components: ["switch"],
+        render: () => (
+            <Row label="Switch · sizes · checked · disabled · invalid">
+                <Switch aria-label="off" />
+                <Switch aria-label="on" defaultChecked />
+                <Switch size="sm" aria-label="small off" />
+                <Switch size="sm" aria-label="small on" defaultChecked />
+                <Switch aria-label="disabled" disabled />
+                <Switch aria-label="disabled on" disabled defaultChecked />
+                <Switch aria-label="invalid" aria-invalid />
+            </Row>
+        ),
+    },
+    {
+        name: "slider",
+        components: ["slider"],
+        render: () => (
+            <Row label="Slider · single · range · disabled · vertical" className="flex items-center gap-8">
+                <div className="w-48"><Slider defaultValue={[40]} aria-label="single" /></div>
+                <div className="w-48"><Slider defaultValue={[20, 70]} aria-label="range" /></div>
+                <div className="w-48"><Slider defaultValue={[50]} disabled aria-label="disabled" /></div>
+                <div className="h-32"><Slider defaultValue={[30]} orientation="vertical" aria-label="vertical" /></div>
+            </Row>
+        ),
+    },
+    {
+        name: "progress",
+        components: ["progress"],
+        render: () => (
+            <Row label="Progress · plain · with label and value" className="flex w-[600px] flex-col gap-4">
+                <Progress value={33} aria-label="Plain" />
+                <Progress value={66}>
+                    <ProgressLabel>Upload</ProgressLabel>
+                    <ProgressValue />
+                </Progress>
+            </Row>
         ),
     },
     {

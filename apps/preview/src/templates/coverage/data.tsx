@@ -146,7 +146,8 @@ export const dataSections: CoverageSection[] = [
         name: "resizable",
         components: ["resizable"],
         render: () => (
-            <div className="flex items-start gap-6">
+            // The groups size themselves to 100% of their parent, so the row carries the height.
+            <div className="flex h-48 gap-6">
                 <ResizablePanelGroup orientation="horizontal" className="h-48 max-w-md rounded-lg border">
                     <ResizablePanel defaultSize="50%">
                         <div className="flex h-full items-center justify-center p-6 text-sm">One</div>

@@ -72,68 +72,96 @@ export const basicSections: CoverageSection[] = [
         ),
     },
     {
-        name: "kbd-spinner-separator",
-        components: ["kbd", "spinner", "separator", "skeleton", "label", "aspect-ratio"],
+        name: "kbd",
+        components: ["kbd"],
         render: () => (
-            <>
-                <Row label="Kbd">
-                    <Kbd>⌘</Kbd>
-                    <Kbd>Enter</Kbd>
-                    <KbdGroup>
-                        <Kbd>Ctrl</Kbd>
-                        <span>+</span>
-                        <Kbd>B</Kbd>
-                    </KbdGroup>
-                    <Button variant="outline">Search<Kbd>⌘K</Kbd></Button>
-                </Row>
-                <Row label="Spinner">
-                    <Spinner />
-                    <Spinner className="size-6" />
-                    <Badge><Spinner data-icon="inline-start" />Pending</Badge>
-                </Row>
-                <Row label="Separator · horizontal · vertical" className="flex flex-col gap-3">
-                    <div className="w-80">
-                        <div className="text-sm">Section above</div>
-                        <Separator className="my-2" />
-                        <div className="flex h-5 items-center gap-3 text-sm">
-                            <span>Blog</span>
-                            <Separator orientation="vertical" />
-                            <span>Docs</span>
-                            <Separator orientation="vertical" />
-                            <span>Source</span>
-                        </div>
+            <Row label="Kbd">
+                <Kbd>⌘</Kbd>
+                <Kbd>Enter</Kbd>
+                <KbdGroup>
+                    <Kbd>Ctrl</Kbd>
+                    <span>+</span>
+                    <Kbd>B</Kbd>
+                </KbdGroup>
+                <Button variant="outline">Search<Kbd>⌘K</Kbd></Button>
+            </Row>
+        ),
+    },
+    {
+        name: "spinner",
+        components: ["spinner"],
+        render: () => (
+            <Row label="Spinner">
+                <Spinner />
+                <Spinner className="size-6" />
+                <Badge><Spinner data-icon="inline-start" />Pending</Badge>
+            </Row>
+        ),
+    },
+    {
+        name: "separator",
+        components: ["separator"],
+        render: () => (
+            <Row label="Separator · horizontal · vertical" className="flex flex-col gap-3">
+                <div className="w-80">
+                    <div className="text-sm">Section above</div>
+                    <Separator className="my-2" />
+                    <div className="flex h-5 items-center gap-3 text-sm">
+                        <span>Blog</span>
+                        <Separator orientation="vertical" />
+                        <span>Docs</span>
+                        <Separator orientation="vertical" />
+                        <span>Source</span>
                     </div>
-                </Row>
-                <Row label="Skeleton">
-                    <Skeleton className="size-10 rounded-full" />
-                    <div className="flex w-60 flex-col gap-2">
-                        <Skeleton className="h-4 w-60" />
-                        <Skeleton className="h-4 w-40" />
-                    </div>
-                </Row>
-                <Row label="Label · with control · disabled">
-                    <Label htmlFor="coverage-label-input">Email</Label>
-                    <Label>
-                        <Checkbox defaultChecked />
-                        Accept terms
-                    </Label>
-                    <div className="group flex items-center gap-2" data-disabled="true">
-                        <Checkbox id="coverage-label-disabled" disabled />
-                        <Label htmlFor="coverage-label-disabled">Disabled</Label>
-                    </div>
-                    <Input id="coverage-label-input" className="w-48" placeholder="name@example.com" />
-                </Row>
-                <Row label="Aspect ratio 16 / 9">
-                    <div className="w-72">
-                        <AspectRatio ratio={16 / 9} className="rounded-lg bg-muted" />
-                    </div>
-                </Row>
-            </>
+                </div>
+            </Row>
+        ),
+    },
+    {
+        name: "skeleton",
+        components: ["skeleton"],
+        render: () => (
+            <Row label="Skeleton">
+                <Skeleton className="size-10 rounded-full" />
+                <div className="flex w-60 flex-col gap-2">
+                    <Skeleton className="h-4 w-60" />
+                    <Skeleton className="h-4 w-40" />
+                </div>
+            </Row>
+        ),
+    },
+    {
+        name: "label",
+        components: ["label"],
+        render: () => (
+            <Row label="Label · with control · disabled">
+                <Label htmlFor="coverage-label-input">Email</Label>
+                <Label>
+                    <Checkbox defaultChecked />
+                    Accept terms
+                </Label>
+                <div className="group flex items-center gap-2" data-disabled="true">
+                    <Checkbox id="coverage-label-disabled" disabled />
+                    <Label htmlFor="coverage-label-disabled">Disabled</Label>
+                </div>
+                <Input id="coverage-label-input" className="w-48" placeholder="name@example.com" />
+            </Row>
+        ),
+    },
+    {
+        name: "aspect-ratio",
+        components: ["aspect-ratio"],
+        render: () => (
+            <Row label="Aspect ratio 16 / 9">
+                <div className="w-72">
+                    <AspectRatio ratio={16 / 9} className="rounded-lg bg-muted" />
+                </div>
+            </Row>
         ),
     },
     {
         name: "toggle",
-        components: ["toggle", "toggle-group"],
+        components: ["toggle"],
         render: () => (
             <>
                 {(["default", "outline"] as const).map((variant) => (
@@ -146,6 +174,14 @@ export const basicSections: CoverageSection[] = [
                         <Toggle variant={variant} aria-label="icon"><Bell /></Toggle>
                     </Row>
                 ))}
+            </>
+        ),
+    },
+    {
+        name: "toggle-group",
+        components: ["toggle-group"],
+        render: () => (
+            <>
                 <Row label="Toggle group · default · outline · sm · lg · spacing 0 · vertical">
                     <ToggleGroup defaultValue={["bold"]} multiple>
                         <ToggleGroupItem value="bold" aria-label="Bold">B</ToggleGroupItem>

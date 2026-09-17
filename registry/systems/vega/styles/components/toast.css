@@ -16,17 +16,7 @@
    ============================================================ */
 
 /* mira: rounded-md(8px). 툴팁과 같은 단(--surface-radius-sm)이다 — 화면 구석에 잠깐
-   뜨는 작은 면이라 모달·팝오버보다 한 단 작게 간다.
-
-   ⚠ 이 줄은 Base UI `Toast` 에만 먹고 **Sonner `Toaster` 에는 안 먹는다.**
-      `sonner.tsx` 가 같은 `cn-toast` 클래스를 붙이지만, sonner 는 레이어 없는
-      스타일시트를 싣고 레이어 없는 규칙은 명시도와 무관하게 레이어 규칙을
-      이긴다. 이 파일은 앱에서 `layer(base)` 로 읽히므로 진다.
-      sonner 쪽 모서리는 `sonner.tsx` 의 인라인 `--border-radius` 가 정하며
-      그 값은 아직 `var(--surface-radius)`(10px)다. 여기가 8 로 내려가면서 두 자리가
-      갈렸다 — sonner.tsx 의 그 줄을 `--surface-radius-sm` 로 맞출 것(TSX 는 이 이관의
-      범위 밖이라 손대지 않았다).
-      sonner 가 어디까지 닿고 무엇이 안 닿는지는 `sonner.css` 머리말에 있다. */
+   뜨는 작은 면이라 모달·팝오버보다 한 단 작게 간다. */
 .cn-toast {
     border-radius: calc(var(--radius) * 1.8);   /* vega: rounded-2xl */
 }

@@ -35,7 +35,7 @@
         "reason": "mira's generated questionnaire.tsx carries `sm:min-h-7` on QuestionnaireActions while the shadcn base component (which registry/ui follows) carries `sm:min-h-9`. The preset bakes the value into the component as a utility, so no layer-3 rule can reach it and one shared set of TSX cannot hold both. The row and everything it stretches are 8px taller here."
     },
     {
-        "key": "^(alert/(alert-action#0|button#0)|item/badge#0|input-group/kbd#0|kbd-spinner-separator/kbd#4|native-select/(native-select#1|native-select-option#\\d+|native-select-wrapper#1))$",
+        "key": "^(alert/(alert-action#0|button#0)|item/badge#0|input-group/kbd#0|kbd/kbd#4|native-select/(native-select#1|native-select-option#\\d+|native-select-wrapper#1))$",
         "props": [
             "line-height",
             "height",
@@ -44,7 +44,7 @@
         "reason": "mira writes these types as `text-[0.625rem]`, which sets a font size and lets the line height inherit as a unitless ratio, so the same badge, kbd, xs button or <option> is 15px tall on the page (body 1.5) and 16.25px inside a `text-xs/relaxed` container. foundation fixes every line height in px per axis (tokens.css, `--ui-line-height-*`), so one value cannot follow its container. Keeping the ratio would make an axis value depend on where the component is used; the deliberate choice is the px axis."
     },
     {
-        "key": "-trigger#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "key": "-trigger#\\d+$|^checkbox/checkbox#6$",
         "props": [
             "background-color",
             "border-top-color",

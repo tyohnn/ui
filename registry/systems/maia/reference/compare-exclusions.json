@@ -27,7 +27,7 @@
         "reason": "The shortcuts contain \u2318, which is in neither Figtree build: the reference app falls back through next/font's Figtree Fallback and the preview through Figtree Variable plus the Pretendard Hangul fallback, so the glyph advance differs by 0.5\u20131px. Font stack, not a value."
     },
     {
-        "key": "^checkbox-radio-switch/checkbox#6$",
+        "key": "^checkbox/checkbox#6$",
         "props": [
             "border-top-color",
             "border-right-color",

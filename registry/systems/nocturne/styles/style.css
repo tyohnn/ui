@@ -24,11 +24,9 @@
                        popover · hover-card · tooltip
      단독            + 나머지 전부
 
-   ⚠ 토큰이 거의 없는 파일 다섯(carousel · message-scroller · scroll-area ·
-      toast · sonner)은 미완이 아니다. 쥘 것이 없거나(값이 컴포넌트 유틸리티에
+   ⚠ 토큰이 거의 없는 파일 넷(carousel · message-scroller · scroll-area ·
+      toast)은 미완이 아니다. 쥘 것이 없거나(값이 컴포넌트 유틸리티에
       박혀 base 레이어가 못 이긴다) 축에 걸치지 않는 값 하나뿐이다.
-      sonner 는 사정이 하나 더 있다 — 바깥 라이브러리가 레이어 없는 스타일시트를
-      실어서, 그가 선언한 속성은 레이어 규칙으로 이길 수 없다.
       각 파일 머리말에 사유가 있으니 "아직 안 한 것"으로 읽지 말 것.
 
    ⚠ 유틸리티로 남은 값에도 전부 사유가 붙어 있다. 대개 둘 중 하나다 —
@@ -89,7 +87,6 @@
 @import "./components/sidebar.css";
 @import "./components/skeleton.css";
 @import "./components/slider.css";
-@import "./components/sonner.css";
 @import "./components/switch.css";
 @import "./components/table.css";
 @import "./components/tabs.css";

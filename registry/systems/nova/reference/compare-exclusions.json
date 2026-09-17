@@ -1,6 +1,6 @@
 [
     {
-        "key": "^(checkbox-radio-switch|kbd-spinner-separator)/(checkbox|radio-group-item)#",
+        "key": "^(checkbox|radio-group|label)/(checkbox|radio-group-item)#",
         "props": [
             "opacity"
         ],
@@ -59,7 +59,7 @@
         "reason": "dark state colours on open triggers, the focused outline Cancel and the invalid checked checkbox: Tailwind sorts nova's dark: colours after state utilities that have no dark counterpart, so upstream those states lose their colour in dark"
     },
     {
-        "key": "^checkbox-radio-switch/checkbox#6$",
+        "key": "^checkbox/checkbox#6$",
         "props": [
             "border-top-color",
             "border-right-color",

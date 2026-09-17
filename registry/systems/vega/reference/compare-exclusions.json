@@ -27,7 +27,7 @@
         "reason": "The shortcuts contain ⌘, which is in neither Inter build: the reference app falls back through next/font's Inter Fallback and the preview through Inter Variable plus the Pretendard Hangul fallback, so the glyph advance differs by 0.5px. Font stack, not a value."
     },
     {
-        "key": "-trigger#\\d+$|/alert-dialog-cancel#\\d+$|^checkbox-radio-switch/checkbox#\\d+$|^sidebar/sidebar-input#\\d+$",
+        "key": "-trigger#\\d+$|/alert-dialog-cancel#\\d+$|^checkbox/checkbox#\\d+$|^sidebar/sidebar-input#\\d+$",
         "props": [
             "background-color",
             "border-top-color",

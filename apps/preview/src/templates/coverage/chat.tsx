@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 
-import { toast as sonnerToast } from "sonner";
 
 import { Download, Info, Loader, TriangleAlert, X } from "@tyohnn/icons";
 
@@ -43,7 +42,6 @@ import {
     QuestionnaireSubmit,
     QuestionnaireTitle,
 } from "@tyohnn/components/questionnaire";
-import { Toaster as SonnerToaster } from "@tyohnn/components/sonner";
 import { Toaster, toast } from "@tyohnn/components/toast";
 
 import { type CoverageSection, Row } from "./frame";
@@ -55,7 +53,11 @@ const CONVERSATION = [
     { id: "m2", role: "assistant", text: "Version 2.4 adds offline sync, a new command palette and faster search." },
     { id: "m3", role: "user", text: "Anything that breaks existing setups?" },
     { id: "m4", role: "assistant", text: "Only the legacy export endpoint is removed; the new one takes the same parameters." },
-    { id: "m5", role: "user", text: "Great, thanks." },
+    { id: "m5", role: "user", text: "Does offline sync need a new plan?" },
+    { id: "m6", role: "assistant", text: "No. It is on every plan; turn it on under Settings → Sync." },
+    { id: "m7", role: "user", text: "And the command palette shortcut?" },
+    { id: "m8", role: "assistant", text: "⌘K on macOS and Ctrl+K elsewhere. It opens from any page." },
+    { id: "m9", role: "user", text: "Great, thanks." },
 ] as const;
 
 const PLAN_ITEMS = [
@@ -64,20 +66,23 @@ const PLAN_ITEMS = [
 
 const NOTE_ITEMS = [{ name: "notes" }] as const;
 
+/** A chat window: messages read as sitting inside a conversation, not loose on the page. */
+const CHAT_WINDOW = "flex flex-col gap-3 rounded-xl border bg-card p-4";
+
 export const chatSections: CoverageSection[] = [
     {
         name: "bubble",
         components: ["bubble"],
         render: () => (
-            <div className="grid w-[1000px] grid-cols-2 gap-8">
-                <div className="flex flex-col gap-3">
+            <div className="grid w-[1000px] grid-cols-2 items-start gap-8">
+                <div className={CHAT_WINDOW}>
                     {BUBBLE_VARIANTS.map((variant, index) => (
                         <Bubble key={variant} variant={variant} align={index % 2 ? "end" : "start"}>
                             <BubbleContent>Bubble variant {variant}</BubbleContent>
                         </Bubble>
                     ))}
                 </div>
-                <div className="flex flex-col gap-8">
+                <div className={`${CHAT_WINDOW} gap-8`}>
                     <BubbleGroup>
                         <Bubble align="end">
                             <BubbleContent>First message in a group</BubbleContent>
@@ -102,30 +107,34 @@ export const chatSections: CoverageSection[] = [
         name: "message",
         components: ["message"],
         render: () => (
-            <div className="grid w-[1000px] grid-cols-2 gap-8">
-                <MessageGroup>
+            <div className="grid w-[1000px] grid-cols-2 items-start gap-8">
+                <div className={CHAT_WINDOW}>
+                    <MessageGroup>
+                        <Message>
+                            <MessageAvatar><Avatar size="sm"><AvatarFallback>AI</AvatarFallback></Avatar></MessageAvatar>
+                            <MessageContent>
+                                <MessageHeader>Assistant · 9:41</MessageHeader>
+                                <Bubble variant="ghost"><BubbleContent>Here is the summary you asked for.</BubbleContent></Bubble>
+                                <MessageFooter>Edited</MessageFooter>
+                            </MessageContent>
+                        </Message>
+                        <Message align="end">
+                            <MessageAvatar><Avatar size="sm"><AvatarFallback>ME</AvatarFallback></Avatar></MessageAvatar>
+                            <MessageContent>
+                                <Bubble><BubbleContent>Thanks, looks good.</BubbleContent></Bubble>
+                                <MessageFooter>Read</MessageFooter>
+                            </MessageContent>
+                        </Message>
+                    </MessageGroup>
+                </div>
+                <div className={CHAT_WINDOW}>
                     <Message>
-                        <MessageAvatar><Avatar size="sm"><AvatarFallback>AI</AvatarFallback></Avatar></MessageAvatar>
                         <MessageContent>
-                            <MessageHeader>Assistant · 9:41</MessageHeader>
-                            <Bubble variant="ghost"><BubbleContent>Here is the summary you asked for.</BubbleContent></Bubble>
-                            <MessageFooter>Edited</MessageFooter>
+                            <MessageHeader>Without avatar</MessageHeader>
+                            <p className="text-sm">Plain message content without a bubble.</p>
                         </MessageContent>
                     </Message>
-                    <Message align="end">
-                        <MessageAvatar><Avatar size="sm"><AvatarFallback>ME</AvatarFallback></Avatar></MessageAvatar>
-                        <MessageContent>
-                            <Bubble><BubbleContent>Thanks, looks good.</BubbleContent></Bubble>
-                            <MessageFooter>Read</MessageFooter>
-                        </MessageContent>
-                    </Message>
-                </MessageGroup>
-                <Message>
-                    <MessageContent>
-                        <MessageHeader>Without avatar</MessageHeader>
-                        <p className="text-sm">Plain message content without a bubble.</p>
-                    </MessageContent>
-                </Message>
+                </div>
             </div>
         ),
     },
@@ -133,11 +142,12 @@ export const chatSections: CoverageSection[] = [
         name: "message-scroller",
         components: ["message-scroller"],
         render: () => (
-            <div className="h-80 w-[520px] rounded-lg border">
+            <div className="h-80 w-[520px] rounded-xl border bg-card">
                 <MessageScrollerProvider>
                     <MessageScroller className="h-full">
                         <MessageScrollerViewport>
-                            <MessageScrollerContent>
+                            {/* Padded like a chat window, with more messages than the window holds so it scrolls. */}
+                            <MessageScrollerContent className="gap-4 p-4">
                                 {CONVERSATION.map((message) => (
                                     <MessageScrollerItem key={message.id}>
                                         <Message align={message.role === "user" ? "end" : "start"}>
@@ -200,13 +210,14 @@ export const chatSections: CoverageSection[] = [
                             </Attachment>
                         ))}
                     </AttachmentGroup>
-                    <Attachment>
-                        <AttachmentTrigger>
-                            <AttachmentMedia><Download /></AttachmentMedia>
-                            <AttachmentContent>
-                                <AttachmentTitle>Open attachment</AttachmentTitle>
-                            </AttachmentContent>
-                        </AttachmentTrigger>
+                    {/* The trigger is an invisible button over the whole attachment, not a wrapper. */}
+                    <Attachment className="w-56">
+                        <AttachmentMedia><Download /></AttachmentMedia>
+                        <AttachmentContent>
+                            <AttachmentTitle>Open attachment</AttachmentTitle>
+                            <AttachmentDescription>Whole card is the button</AttachmentDescription>
+                        </AttachmentContent>
+                        <AttachmentTrigger aria-label="Open attachment" />
                     </Attachment>
                 </Row>
             </>
@@ -269,18 +280,6 @@ export const chatSections: CoverageSection[] = [
             </Toaster>
         ),
     },
-    {
-        name: "sonner",
-        components: ["sonner"],
-        portals: ["[data-sonner-toaster]"],
-        render: (open) => (
-            <>
-                <SonnerToaster />
-                <SonnerOpener open={open} />
-                <span className="text-sm">Sonner toasts open in the corner.</span>
-            </>
-        ),
-    },
 ];
 
 /** Adds the toasts once, with fixed ids and no timeout, so a remount (StrictMode) adds nothing new. */
@@ -290,23 +289,15 @@ function ToastOpener({ open }: { open: boolean })
     {
         if (!open) return;
 
-        toast.add({ id: "coverage-toast-plain", title: "Event created", description: "Sunday, December 3 at 9:00 AM", timeout: 0 });
-        toast.add({ id: "coverage-toast-success", type: "success", title: "Saved", description: "Your changes are live.", timeout: 0 });
-        toast.add({ id: "coverage-toast-action", type: "error", title: "Upload failed", description: "Try again.", timeout: 0, actionProps: { children: "Retry" } });
-    }, [open]);
+        // Child effects run before the provider's: add on the next tick, once the Toaster listens to the manager.
+        const timer = setTimeout(() =>
+        {
+            toast.add({ id: "coverage-toast-plain", title: "Event created", description: "Sunday, December 3 at 9:00 AM", timeout: 0 });
+            toast.add({ id: "coverage-toast-success", type: "success", title: "Saved", description: "Your changes are live.", timeout: 0 });
+            toast.add({ id: "coverage-toast-action", type: "error", title: "Upload failed", description: "Try again.", timeout: 0, actionProps: { children: "Retry" } });
+        });
 
-    return null;
-}
-
-function SonnerOpener({ open }: { open: boolean })
-{
-    useEffect(() =>
-    {
-        if (!open) return;
-
-        sonnerToast("Event has been created", { id: "coverage-sonner-plain", description: "Sunday, December 3 at 9:00 AM", duration: Infinity });
-        sonnerToast.success("Profile saved", { id: "coverage-sonner-success", duration: Infinity });
-        sonnerToast.error("Upload failed", { id: "coverage-sonner-error", duration: Infinity, action: { label: "Retry", onClick: () => undefined } });
+        return () => clearTimeout(timer);
     }, [open]);
 
     return null;

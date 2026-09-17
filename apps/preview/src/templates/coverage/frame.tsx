@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
 /**
  * One coverage section: the registry/ui components it renders, the selectors of the popups it opens
@@ -17,6 +17,29 @@ export type CoverageSection = {
  * mid-pulse or a spinner mid-turn. Neither property is compared.
  */
 export const NO_MOTION = "*,*::before,*::after{animation:none!important;transition:none!important}";
+
+/**
+ * Motion is on, as in an app. Tooling that measures or screenshots opens a page with `&motion=off`, and then
+ * the NO_MOTION style goes into <head> after mount (an effect, so server-rendered copies such as the shadcn
+ * reference apps hydrate without a mismatch).
+ */
+export const NoMotion = () =>
+{
+    useEffect(() =>
+    {
+        if (new URLSearchParams(location.search).get("motion") !== "off") return;
+
+        const style = document.createElement("style");
+
+        style.dataset.noMotion = "";
+        style.textContent = NO_MOTION;
+        document.head.append(style);
+
+        return () => style.remove();
+    }, []);
+
+    return null;
+};
 
 /** A labelled row of states. Layout only; the label is plain text. */
 export const Row = ({ label, children, className }: { label: string; children: ReactNode; className?: string }) => (

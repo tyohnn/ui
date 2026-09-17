@@ -121,7 +121,7 @@ answer key in every case.
 
 | Where | Cause | What changed |
 |---|---|---|
-| `kbd-spinner-separator/kbd#4` `letter-spacing` | upstream `Kbd` declares no tracking, so a keycap **inherits** it from wherever it sits; sera pinned `normal` in `kbd.css` | `styles/tokens.css`: `--kbd-letter-spacing: initial` (and `--kbd-font-weight: var(--ui-font-weight-regular)`). `kbd.css` now reads the whole v4 `--kbd-*` axis instead of the xs control axis |
+| `kbd/kbd#4` (section kbd-spinner-separator until 2026-09-17) `letter-spacing` | upstream `Kbd` declares no tracking, so a keycap **inherits** it from wherever it sits; sera pinned `normal` in `kbd.css` | `styles/tokens.css`: `--kbd-letter-spacing: initial` (and `--kbd-font-weight: var(--ui-font-weight-regular)`). `kbd.css` now reads the whole v4 `--kbd-*` axis instead of the xs control axis |
 | `field/field-label#5` · `#7` `letter-spacing` | the two elements are **`FieldTitle`**, not a peer label. sera's `.cn-field-title` read `--ui-letter-spacing` (normal) while reading `--ui-label-text-transform` for its case — half of the quiet label band | `field.css`: `.cn-field-title` reads `--ui-label-letter-spacing`, the v4 slot foundation's own rule reads |
 | `input-group/button#3` | the element is `<InputGroupButton size="icon-sm" variant="outline">`, not the `sm` one. Upstream `inputGroupButtonVariants` gives it `size-8 p-0 text-sm` — a fixed 32px square that does **not** follow the group's height, plus the variants' base `text-sm` | `input-group.css`: `.cn-input-group-button-size-icon-sm` is `32px` square and reads the field type step. (`registry/ui`'s `InputGroupButton` matches upstream; nothing in the TSX changed) |
 | `input-group/input-group-control#5` padding | `InputGroupTextarea` is `py-2.5` (10px) upstream, while `.cn-textarea`'s `--control-padding-y-multiline` (12px) reached it inside the group | `input-group.css`: `.cn-input-group .cn-input-group-textarea { padding-block: 10px }` — written as a descendant so it beats `textarea.css`, which the barrel reads later |
@@ -149,7 +149,7 @@ scopes), so `scan-tokens` no longer warns about it; sera's two values are the sy
 
 `style-sera.css` styles `.cn-calendar-dropdown-root` and `.cn-calendar-caption-label`, which shadcn's
 `calendar.tsx` never applies, so those rules do nothing upstream; the reference app is the answer key and
-sera follows it. Conversely `input-otp.tsx` and `sonner.tsx` keep `cn-*` names for which a preset app has
+sera follows it. Conversely `input-otp.tsx` keeps `cn-*` names for which a preset app has
 no rules at all (see the `input-otp` exclusion).
 
 ## Foundation slot candidates

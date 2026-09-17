@@ -42,7 +42,7 @@
         "reason": "rhea gives the switch thumb `shadow-sm`, which the preset's own switch.tsx carries as a utility next to `ring-0`; Tailwind composes both into one box-shadow. registry/ui's Switch keeps shadcn's `ring-0` but has no shadow utility (TSX holds no visual values), and `ring-0` alone composes box-shadow in the utilities layer, which beats any layer-3 rule in layer(base). The cause is the shared TSX, not a rhea value, and this run does not change registry/ui."
     },
     {
-        "key": "-trigger#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "key": "-trigger#\\d+$|^checkbox/checkbox#6$",
         "props": [
             "background-color",
             "border-top-color",

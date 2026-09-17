@@ -35,7 +35,7 @@
         "reason": "lyra's generated questionnaire.tsx carries `sm:min-h-8` on QuestionnaireActions while the shadcn base component (which registry/ui follows) carries `sm:min-h-9`. The preset bakes the value into the component as a utility, so no layer-3 rule can reach it and one shared set of TSX cannot hold both. The row and everything it stretches are 4px taller here. Same shape as foundation's, with lyra's number."
     },
     {
-        "key": "-trigger#\\d+$|-cancel#\\d+$|^checkbox-radio-switch/checkbox#6$",
+        "key": "-trigger#\\d+$|-cancel#\\d+$|^checkbox/checkbox#6$",
         "props": [
             "background-color",
             "border-top-color",

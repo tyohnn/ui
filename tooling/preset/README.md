@@ -184,7 +184,7 @@ comparison could not decide as an exclusion with its reason, not as "not covered
 Read the reference app's `components/ui/*.tsx`, not only `style-<style>.css`: the style file is a **separate
 distribution** and the two disagree in both directions. shadcn's `calendar.tsx` never applies
 `.cn-calendar-dropdown-root` or `.cn-calendar-caption-label`, so those rules do nothing upstream; conversely
-`input-otp.tsx` and `sonner.tsx` keep `cn-*` names for which a preset app has no rules at all. The rendered app
+`input-otp.tsx` keeps `cn-*` names for which a preset app has no rules at all. The rendered app
 is the answer key; when the style file says more than the app renders, say so in `reference/README.md`.
 
 Also check the two systems the comparison never touches:

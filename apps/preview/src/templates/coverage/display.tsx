@@ -367,10 +367,10 @@ export const displaySections: CoverageSection[] = [
         ),
     },
     {
-        name: "accordion-collapsible",
-        components: ["accordion", "collapsible"],
+        name: "accordion",
+        components: ["accordion"],
         render: () => (
-            <div className="grid w-[1000px] grid-cols-2 items-start gap-8">
+            <div className="w-[484px]">
                 <Accordion defaultValue={["shipping"]}>
                     <AccordionItem value="shipping">
                         <AccordionTrigger>What are your shipping options?</AccordionTrigger>
@@ -385,25 +385,31 @@ export const displaySections: CoverageSection[] = [
                         <AccordionContent>Hidden.</AccordionContent>
                     </AccordionItem>
                 </Accordion>
-                <div className="flex flex-col gap-4">
-                    <Collapsible defaultOpen className="flex flex-col gap-2">
-                        <div className="flex items-center justify-between gap-4">
-                            <h4 className="text-sm font-semibold">Order #4189</h4>
-                            <CollapsibleTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Toggle" />}>
-                                <ChevronDown />
-                            </CollapsibleTrigger>
-                        </div>
-                        <div className="rounded-md border px-4 py-2 text-sm">Status: Shipped</div>
-                        <CollapsibleContent className="flex flex-col gap-2">
-                            <div className="rounded-md border px-4 py-2 text-sm">Shipping address: 100 Main St</div>
-                            <div className="rounded-md border px-4 py-2 text-sm">Items: 2x Studio Headphones</div>
-                        </CollapsibleContent>
-                    </Collapsible>
-                    <Collapsible>
-                        <CollapsibleTrigger render={<Button variant="outline" />}>Closed collapsible</CollapsibleTrigger>
-                        <CollapsibleContent>Hidden content</CollapsibleContent>
-                    </Collapsible>
-                </div>
+            </div>
+        ),
+    },
+    {
+        name: "collapsible",
+        components: ["collapsible"],
+        render: () => (
+            <div className="flex w-[484px] flex-col gap-4">
+                <Collapsible defaultOpen className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between gap-4">
+                        <h4 className="text-sm font-semibold">Order #4189</h4>
+                        <CollapsibleTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Toggle" />}>
+                            <ChevronDown />
+                        </CollapsibleTrigger>
+                    </div>
+                    <div className="rounded-md border px-4 py-2 text-sm">Status: Shipped</div>
+                    <CollapsibleContent className="flex flex-col gap-2">
+                        <div className="rounded-md border px-4 py-2 text-sm">Shipping address: 100 Main St</div>
+                        <div className="rounded-md border px-4 py-2 text-sm">Items: 2x Studio Headphones</div>
+                    </CollapsibleContent>
+                </Collapsible>
+                <Collapsible>
+                    <CollapsibleTrigger render={<Button variant="outline" />}>Closed collapsible</CollapsibleTrigger>
+                    <CollapsibleContent>Hidden content</CollapsibleContent>
+                </Collapsible>
             </div>
         ),
     },
@@ -446,36 +452,40 @@ export const displaySections: CoverageSection[] = [
         ),
     },
     {
-        name: "breadcrumb-pagination",
-        components: ["breadcrumb", "pagination"],
+        name: "breadcrumb",
+        components: ["breadcrumb"],
         render: () => (
-            <>
-                <Row label="Breadcrumb">
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem><BreadcrumbLink href="#coverage">Home</BreadcrumbLink></BreadcrumbItem>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem><BreadcrumbLink href="#coverage">Components</BreadcrumbLink></BreadcrumbItem>
-                            <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                            <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                </Row>
-                <Row label="Pagination">
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem><PaginationPrevious href="#coverage" /></PaginationItem>
-                            <PaginationItem><PaginationLink href="#coverage">1</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationLink href="#coverage" isActive>2</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationLink href="#coverage">3</PaginationLink></PaginationItem>
-                            <PaginationItem><PaginationEllipsis /></PaginationItem>
-                            <PaginationItem><PaginationNext href="#coverage" /></PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-                </Row>
-            </>
+            <Row label="Breadcrumb">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem><BreadcrumbLink href="#coverage">Home</BreadcrumbLink></BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem><BreadcrumbLink href="#coverage">Components</BreadcrumbLink></BreadcrumbItem>
+                        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                        <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </Row>
+        ),
+    },
+    {
+        name: "pagination",
+        components: ["pagination"],
+        render: () => (
+            <Row label="Pagination">
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem><PaginationPrevious href="#coverage" /></PaginationItem>
+                        <PaginationItem><PaginationLink href="#coverage">1</PaginationLink></PaginationItem>
+                        <PaginationItem><PaginationLink href="#coverage" isActive>2</PaginationLink></PaginationItem>
+                        <PaginationItem><PaginationLink href="#coverage">3</PaginationLink></PaginationItem>
+                        <PaginationItem><PaginationEllipsis /></PaginationItem>
+                        <PaginationItem><PaginationNext href="#coverage" /></PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </Row>
         ),
     },
 ];

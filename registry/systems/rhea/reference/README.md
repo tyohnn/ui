@@ -92,7 +92,7 @@ foundation's, kept for the same reasons; the sixth is rhea's own.
 
 `style-rhea.css` styles `.cn-calendar-dropdown-root` and `.cn-calendar-caption-label`, which shadcn's
 `calendar.tsx` never applies, so those rules do nothing upstream; the reference app is the answer key and
-rhea follows it. Conversely `input-otp.tsx` and `sonner.tsx` keep `cn-*` names for which a preset app has
+rhea follows it. Conversely `input-otp.tsx` keeps `cn-*` names for which a preset app has
 no rules at all (see the `input-otp` exclusion).
 
 ## Not measured

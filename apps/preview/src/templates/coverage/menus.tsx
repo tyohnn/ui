@@ -414,7 +414,8 @@ function ComboboxChipsDemo({ open }: { open: boolean })
     return (
         <div className="flex h-80 w-96 items-start">
             <Combobox multiple items={FRAMEWORKS} defaultValue={["Next.js", "Astro"]} defaultOpen={open}>
-                <ComboboxChips ref={anchor}>
+                {/* A fixed width: the popup takes the anchor's width, which would otherwise follow the chip count. */}
+                <ComboboxChips ref={anchor} className="w-full">
                     <ComboboxValue>
                         {(values: string[]) => (
                             <>
