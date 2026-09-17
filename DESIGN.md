@@ -455,8 +455,13 @@ and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) a
 
 | Name | Meaning | lucide | tabler | hugeicons | phosphor | remixicon | radix |
 |---|---|---|---|---|---|---|---|
+| `Activity` | activity feed / recent events | ActivityIcon | IconActivity | Activity01Icon | ActivityIcon | RiPulseLine | ActivityLogIcon* |
 | `ArrowDown` | scroll to the latest message | ArrowDownIcon | IconArrowDown | ArrowDown02Icon | ArrowDownIcon | RiArrowDownLine | ArrowDownIcon* |
 | `Bell` | notifications | BellIcon | IconBell | NotificationIcon | BellIcon | RiNotificationLine | BellIcon* |
+| `BrandMark` | the product's mark in an app header | ApertureIcon | IconAperture | ApertureIcon | ApertureIcon | RiCameraLensLine | ComponentInstanceIcon* |
+| `Briefcase` | business unit / segment | BriefcaseIcon | IconBriefcase | Briefcase01Icon | BriefcaseIcon | RiBriefcaseLine | BackpackIcon* |
+| `Building` | company / organisation | Building2Icon | IconBuilding | Building03Icon | BuildingsIcon | RiBuilding2Line | HomeIcon* |
+| `Calendar` | date / scheduled event | CalendarIcon | IconCalendar | Calendar03Icon | CalendarBlankIcon | RiCalendarLine | CalendarIcon* |
 | `CalendarChevronDown` | calendar caption dropdown | ChevronDownIcon | IconChevronDown | ArrowDownIcon | CaretDownIcon | RiArrowDownSLine | ChevronDownIcon* |
 | `CalendarChevronLeft` | calendar previous month | ChevronLeftIcon | IconChevronLeft | ArrowLeftIcon | CaretLeftIcon | RiArrowLeftSLine | ChevronLeftIcon* |
 | `CalendarChevronRight` | calendar next month | ChevronRightIcon | IconChevronRight | ArrowRightIcon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
@@ -467,10 +472,16 @@ and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) a
 | `ChevronRight` | next / submenu / breadcrumb separator | ChevronRightIcon | IconChevronRight | ArrowRight01Icon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
 | `ChevronUp` | disclosure close / scroll up | ChevronUpIcon | IconChevronUp | ArrowUp01Icon | CaretUpIcon | RiArrowUpSLine | ChevronUpIcon* |
 | `CircleCheck` | success status | CircleCheckIcon | IconCircleCheck | CheckmarkCircle02Icon | CheckCircleIcon | RiCheckboxCircleLine | CheckCircledIcon* |
+| `CircleHelp` | help / support docs | CircleHelpIcon | IconHelpCircle | HelpCircleIcon | QuestionIcon | RiQuestionLine | QuestionMarkCircledIcon* |
+| `Contact` | contacts / address book | ContactIcon | IconAddressBook | ContactBookIcon | AddressBookIcon | RiContactsBook2Line | IdCardIcon* |
+| `CreditCard` | billing / payment method | CreditCardIcon | IconCreditCard | CreditCardIcon | CreditCardIcon | RiBankCardLine | CardStackIcon* |
 | `Download` | download / export | DownloadIcon | IconDownload | Download01Icon | DownloadIcon | RiDownloadLine | DownloadIcon* |
+| `Headset` | support team / calls | HeadsetIcon | IconHeadset | HeadsetIcon | HeadsetIcon | RiCustomerService2Line | ChatBubbleIcon* |
 | `Info` | info status | InfoIcon | IconInfoCircle | InformationCircleIcon | InfoIcon | RiInformationLine | InfoCircledIcon* |
+| `Kanban` | board view | SquareKanbanIcon | IconLayoutKanban | KanbanIcon | KanbanIcon | RiKanbanView | ColumnsIcon* |
 | `LayoutGrid` | overview / grid view | LayoutGridIcon | IconLayoutGrid | GridIcon | GridFourIcon | RiGridLine | DashboardIcon* |
 | `Loader` | loading (spins) | Loader2Icon | IconLoader | Loading03Icon | SpinnerIcon | RiLoaderLine | ReloadIcon* |
+| `Mail` | email | MailIcon | IconMail | Mail01Icon | EnvelopeSimpleIcon | RiMailLine | EnvelopeClosedIcon* |
 | `Minus` | separator between OTP groups | MinusIcon | IconMinus | MinusSignIcon | MinusIcon | RiSubtractLine | MinusIcon* |
 | `MoreHorizontal` | more items / overflow | MoreHorizontalIcon | IconDots | MoreHorizontalCircle01Icon | DotsThreeIcon | RiMoreLine | DotsHorizontalIcon* |
 | `OctagonX` | error status | OctagonXIcon | IconAlertOctagon | MultiplicationSignCircleIcon | XCircleIcon | RiCloseCircleLine | CrossCircledIcon* |
@@ -478,13 +489,19 @@ and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) a
 | `Plus` | add / create | PlusIcon | IconPlus | PlusSignIcon | PlusIcon | RiAddLine | PlusIcon* |
 | `Search` | search field | SearchIcon | IconSearch | SearchIcon | MagnifyingGlassIcon | RiSearchLine | MagnifyingGlassIcon* |
 | `SelectIndicator` | select trigger (opens a list) | ChevronDownIcon | IconSelector | UnfoldMoreIcon | CaretDownIcon | RiArrowDownSLine | CaretSortIcon* |
+| `TrendingDown` | declining metric | TrendingDownIcon | IconTrendingDown | TrendingDownIcon | TrendDownIcon | RiArrowRightDownLine | ArrowBottomRightIcon* |
+| `TrendingUp` | growing metric / forecast | TrendingUpIcon | IconTrendingUp | TrendingUpIcon | TrendUpIcon | RiArrowRightUpLine | ArrowTopRightIcon* |
 | `TriangleAlert` | warning status | TriangleAlertIcon | IconAlertTriangle | Alert02Icon | WarningIcon | RiErrorWarningLine | ExclamationTriangleIcon* |
+| `UserPlus` | invite a person | UserPlusIcon | IconUserPlus | UserAdd01Icon | UserPlusIcon | RiUserAddLine | PlusCircledIcon* |
 | `Users` | people / team | UsersIcon | IconUsers | UserGroupIcon | UsersIcon | RiGroupLine | PersonIcon* |
 | `X` | close / clear | XIcon | IconX | Cancel01Icon | XIcon | RiCloseLine | Cross2Icon* |
 
 \* shadcn maps no radix icons; the radix column is tyohnn's closest choice (shadcn's v3 new-york style used
-several of them: `Cross2Icon`, `DotsHorizontalIcon`, `CaretSortIcon`, `ViewVerticalIcon`). `Bell`, `ChartLine`, `Download`, `LayoutGrid`, `Plus` and `Users` are
-used by the preview template only.
+several of them: `Cross2Icon`, `DotsHorizontalIcon`, `CaretSortIcon`, `ViewVerticalIcon`). `Activity`, `Bell`, `BrandMark`, `Briefcase`,
+`Building`, `Calendar`, `ChartLine`, `CircleHelp`, `Contact`, `CreditCard`, `Download`, `Headset`, `Kanban`, `LayoutGrid`, `Mail`,
+`Plus`, `TrendingDown`, `TrendingUp`, `UserPlus` and `Users` are used by the preview templates only (the last fourteen added
+with the `crm-dashboard` template; their tabler · hugeicons · phosphor · remixicon glyphs are the closest names in each
+package, since shadcn has no IconPlaceholder for them).
 
 **Adding an icon**
 

@@ -4,10 +4,16 @@
 
 import type { Icon as TablerIcon } from "@tabler/icons-react";
 import {
+    IconActivity,
+    IconAddressBook,
     IconAlertOctagon,
     IconAlertTriangle,
+    IconAperture,
     IconArrowDown,
     IconBell,
+    IconBriefcase,
+    IconBuilding,
+    IconCalendar,
     IconChartLine,
     IconCheck,
     IconChevronDown,
@@ -15,16 +21,24 @@ import {
     IconChevronRight,
     IconChevronUp,
     IconCircleCheck,
+    IconCreditCard,
     IconDots,
     IconDownload,
+    IconHeadset,
+    IconHelpCircle,
     IconInfoCircle,
     IconLayoutGrid,
+    IconLayoutKanban,
     IconLayoutSidebar,
     IconLoader,
+    IconMail,
     IconMinus,
     IconPlus,
     IconSearch,
     IconSelector,
+    IconTrendingDown,
+    IconTrendingUp,
+    IconUserPlus,
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
@@ -38,8 +52,13 @@ const icon = (Glyph: TablerIcon) =>
     return Icon;
 };
 
+export const Activity = icon(IconActivity);
 export const ArrowDown = icon(IconArrowDown);
 export const Bell = icon(IconBell);
+export const BrandMark = icon(IconAperture);
+export const Briefcase = icon(IconBriefcase);
+export const Building = icon(IconBuilding);
+export const Calendar = icon(IconCalendar);
 export const CalendarChevronDown = icon(IconChevronDown);
 export const CalendarChevronLeft = icon(IconChevronLeft);
 export const CalendarChevronRight = icon(IconChevronRight);
@@ -50,10 +69,16 @@ export const ChevronLeft = icon(IconChevronLeft);
 export const ChevronRight = icon(IconChevronRight);
 export const ChevronUp = icon(IconChevronUp);
 export const CircleCheck = icon(IconCircleCheck);
+export const CircleHelp = icon(IconHelpCircle);
+export const Contact = icon(IconAddressBook);
+export const CreditCard = icon(IconCreditCard);
 export const Download = icon(IconDownload);
+export const Headset = icon(IconHeadset);
 export const Info = icon(IconInfoCircle);
+export const Kanban = icon(IconLayoutKanban);
 export const LayoutGrid = icon(IconLayoutGrid);
 export const Loader = icon(IconLoader);
+export const Mail = icon(IconMail);
 export const Minus = icon(IconMinus);
 export const MoreHorizontal = icon(IconDots);
 export const OctagonX = icon(IconAlertOctagon);
@@ -61,6 +86,9 @@ export const PanelLeft = icon(IconLayoutSidebar);
 export const Plus = icon(IconPlus);
 export const Search = icon(IconSearch);
 export const SelectIndicator = icon(IconSelector);
+export const TrendingDown = icon(IconTrendingDown);
+export const TrendingUp = icon(IconTrendingUp);
 export const TriangleAlert = icon(IconAlertTriangle);
+export const UserPlus = icon(IconUserPlus);
 export const Users = icon(IconUsers);
 export const X = icon(IconX);
