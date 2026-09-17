@@ -2,6 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "graphite",
     "description": "Dark · dense · soft clay controls · vivid blue/yellow accents: near-black planes one step apart, hairline dividers, compact rows and tinted tags.",
+    "tagline": "Pretendard · dense · clay controls",
+    "added": "2026-09-15T16:45:17+09:00",
     "forkedFrom": {
         "source": "foundation",
         "commit": "1e327ac",

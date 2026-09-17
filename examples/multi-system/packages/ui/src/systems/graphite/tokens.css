@@ -174,6 +174,7 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 10px;
     --surface-radius-sm: 8px;    /* tooltip 의 rounded-md */
+    --toast-radius: var(--surface-radius-sm);    /* toast: the tooltip's step (a small surface in a corner) */
     /* 모달 면의 그림자(foundation 슬롯). 이 시스템은 다른 띄운 면과 같은 그림자를 얹는다. */
     --dialog-shadow: var(--shadow-float);
     /* 메뉴 하위 목록의 그림자(foundation 슬롯). */
