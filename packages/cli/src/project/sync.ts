@@ -18,7 +18,7 @@ import { exists, read, readIfExists, rel, relSpecifier, writeFile } from "../lib
 import type { Changes } from "../lib/log.js";
 import type { Registry } from "../source/registry.js";
 import { type AppFiles, inspectApp } from "./app.js";
-import { packageDir, type PackageJson, type PackageManager } from "./detect.js";
+import { expectedPackageDir, packageDir, type PackageJson, type PackageManager } from "./detect.js";
 import { cssFontImports, familyStacks, fontPackages, nextFontCode, nextFontStacks, sameFonts, stacksCss } from "./fonts.js";
 import { syncDependencies, updatePackageJson } from "./package-json.js";
 import { isCode, type Placement, placementOf } from "./placement.js";
@@ -366,7 +366,7 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
 
         // layout
         const layout = app.next.layout ?? join(app.next.appDir, "layout.tsx");
-        const font = nextFontCode(appRecord.fonts, registry, dirname(layout), app.dir, (name) => packageDir(app.dir, name));
+        const font = nextFontCode(appRecord.fonts, registry, dirname(layout), (name) => packageDir(app.dir, name, root), (name) => expectedPackageDir(app.dir, name, root, record.packageManager));
         const htmlClasses = [...(appRecord.mode === "dark" ? ['"dark"'] : []), '"font-sans"', ...font.variables];
         const body = layoutBlock([
             `// Fonts of ${system}: ${[appRecord.fonts.sans, appRecord.fonts.heading, appRecord.fonts.mono, appRecord.fonts.hangulFallback].join(" · ")} (sans · heading · mono · hangul), self-hosted by next/font.`,
@@ -392,7 +392,7 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
 
         edit(layout, (content) => applyLayout(content, blockWithMode, cssSpecifier ?? relSpecifier(dirname(layout), app.css), rel(root, layout)), newLayout);
 
-        if (font.unresolved.length) changes.warn(`${font.unresolved.join(", ")} not installed yet: run the command again after installing so next/font/local finds the files`);
+        if (font.unresolved.length) changes.warn(`${font.unresolved.join(", ")} not installed in the project yet: ${rel(root, layout)} points next/font/local at ${font.unresolved.map((name) => rel(root, expectedPackageDir(app.dir, name, root, record.packageManager))).join(", ")} without having seen the files there (run the command again after installing to verify)`);
 
         // next.config
         if (placement.monorepo)

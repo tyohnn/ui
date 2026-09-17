@@ -225,7 +225,7 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
                 ...fontPackages(app.fonts, registry, app.framework),
                 ...(placement.monorepo ? {} : registry.iconLibrary(app.icons).packages),
             });
-            const notInstalled = needed.filter((name) => !packageDir(appDir, name));
+            const notInstalled = needed.filter((name) => !packageDir(appDir, name, root));
 
             if (notInstalled.length) add("FAIL", where, `not installed: ${notInstalled.join(", ")} (run \`${record.packageManager} install\`)`);
         }
@@ -244,7 +244,7 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
     if (registry && installed && placement.monorepo)
     {
         const needed = Object.keys(Object.assign({}, ...libraries.map((library) => registry.iconLibrary(library).packages)));
-        const notInstalled = needed.filter((name) => !packageDir(join(root, record.ui.path), name));
+        const notInstalled = needed.filter((name) => !packageDir(join(root, record.ui.path), name, root));
 
         if (notInstalled.length) add("FAIL", "project", `not installed for ${record.ui.path}: ${notInstalled.join(", ")}`);
     }

@@ -1,7 +1,7 @@
 // What kind of project the CLI is running in, and which package manager it uses.
 
 import { existsSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 
 import { exists, read, readJson, rel } from "../lib/fs.js";
 
@@ -153,10 +153,17 @@ export const findUp = (start: string, file: string): string | null =>
     }
 };
 
-/** An installed package's folder as seen from `from` (node_modules lookup without following symlinks) */
-export const packageDir = (from: string, name: string): string | null =>
+/**
+ * An installed package's folder as seen from `from` (node_modules lookup without following symlinks). The lookup stops
+ * at `root`: a copy in a folder above the project (another checkout, the user's home) is not the project's, and paths
+ * written from it would break wherever the project is installed on its own.
+ */
+export const packageDir = (from: string, name: string, root: string): string | null =>
 {
-    let current = from;
+    const top = resolve(root);
+    let current = resolve(from);
+
+    if (relative(top, current).startsWith("..")) return null;
 
     while (true)
     {
@@ -166,7 +173,14 @@ export const packageDir = (from: string, name: string): string | null =>
 
         const parent = dirname(current);
 
-        if (parent === current) return null;
+        if (current === top || parent === current) return null;
         current = parent;
     }
 };
+
+/**
+ * Where `pm install` puts a dependency of the workspace package at `dir` before it is installed: pnpm links it into the
+ * package's own node_modules, npm, yarn and bun hoist it to the project root's.
+ */
+export const expectedPackageDir = (dir: string, name: string, root: string, pm: PackageManager): string =>
+    join(pm === "pnpm" ? dir : root, "node_modules", name);

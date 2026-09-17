@@ -109,18 +109,19 @@ export interface NextFontCode
     variables: string[];
     /** CSS variables the declarations define */
     cssVariables: string[];
-    /** Packages whose files could not be found (not installed yet) */
+    /** Packages whose files could not be found (not installed yet): their paths assume `expectedDir` */
     unresolved: string[];
 }
 
 /**
- * next/font code for a root layout. `packageDir(name)` finds an installed package from the app (without following
- * symlinks, so pnpm's node_modules/<name> link is used rather than its store path).
+ * next/font code for a root layout. `packageDir(name)` finds an installed package from the app within the project
+ * (without following symlinks, so pnpm's node_modules/<name> link is used rather than its store path);
+ * `expectedDir(name)` is where the package manager will put one that is not installed yet.
  *
  * `adjustFontFallback: false`: next/font would otherwise append a metric-adjusted Arial between the font and the
  * Hangul fallback. Google variable fonts load their default axis only, like the fontsource entry the preview uses.
  */
-export const nextFontCode = (fonts: FontsChoice, registry: Registry, layoutDir: string, appDir: string, packageDir: (name: string) => string | null): NextFontCode =>
+export const nextFontCode = (fonts: FontsChoice, registry: Registry, layoutDir: string, packageDir: (name: string) => string | null, expectedDir: (name: string) => string): NextFontCode =>
 {
     const google: string[] = [];
     const decls: string[] = [];
@@ -150,7 +151,7 @@ export const nextFontCode = (fonts: FontsChoice, registry: Registry, layoutDir: 
 
         if (!dir) unresolved.push(pkg);
 
-        const base = dir ?? join(appDir, "node_modules", pkg);
+        const base = dir ?? expectedDir(pkg);
         const files = font.local!.files.map((file) =>
         {
             const inside = file.path.startsWith(`${pkg}/`) ? file.path.slice(pkg.length + 1) : file.path;
