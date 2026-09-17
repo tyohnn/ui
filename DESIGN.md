@@ -467,53 +467,183 @@ and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) a
 
 | Name | Meaning | lucide | tabler | hugeicons | phosphor | remixicon | radix |
 |---|---|---|---|---|---|---|---|
+| `Account` | account / verified profile (user menu) | BadgeCheckIcon | IconRosetteDiscountCheck | CheckmarkBadgeIcon | CheckCircleIcon | RiCheckboxCircleLine | CheckCircledIcon* |
 | `Activity` | activity feed / recent events | ActivityIcon | IconActivity | Activity01Icon | ActivityIcon | RiPulseLine | ActivityLogIcon* |
+| `Archive` | archive an item | ArchiveIcon | IconArchive† | Archive02Icon† | ArchiveBoxIcon† | RiInboxArchiveLine† | ArchiveIcon* |
+| `ArchiveX` | junk / archived mail | ArchiveXIcon | IconArchiveOff | ArchiveIcon | ArchiveIcon | RiArchiveLine | ArchiveIcon* |
 | `ArrowDown` | scroll to the latest message | ArrowDownIcon | IconArrowDown | ArrowDown02Icon | ArrowDownIcon | RiArrowDownLine | ArrowDownIcon* |
+| `ArrowLeft` | previous page / back | ArrowLeftIcon | IconArrowLeft† | ArrowLeft02Icon† | ArrowLeftIcon† | RiArrowLeftLine† | ArrowLeftIcon* |
+| `ArrowRight` | next page / continue | ArrowRightIcon | IconArrowRight† | ArrowRight02Icon† | ArrowRightIcon† | RiArrowRightLine† | ArrowRightIcon* |
+| `ArrowUp` | import / send upwards (submit a prompt) | ArrowUpIcon | IconArrowUp | ArrowUpIcon | ArrowUpIcon | RiArrowUpLine | ArrowUpIcon* |
+| `ArrowUpDown` | sortable column | ArrowUpDownIcon | IconArrowsSort† | ArrowUpDownIcon† | ArrowsDownUpIcon† | RiArrowUpDownLine† | CaretSortIcon* |
+| `AtSign` | mention | AtSignIcon | IconAt† | AtIcon† | AtIcon† | RiAtLine† | EnvelopeClosedIcon* |
 | `Bell` | notifications | BellIcon | IconBell | NotificationIcon | BellIcon | RiNotificationLine | BellIcon* |
+| `Blocks` | templates / building blocks | BlocksIcon | IconCube | CubeIcon | CubeIcon | RiBox3Line | CubeIcon* |
+| `Bold` | bold text | BoldIcon | IconBold† | TextBoldIcon† | TextBIcon† | RiBold† | FontBoldIcon* |
+| `BookOpen` | documentation / guides | BookOpenIcon | IconBook | BookOpen02Icon | BookOpenIcon | RiBookOpenLine | ReaderIcon* |
+| `Bookmark` | bookmark / saved | BookmarkIcon | IconBookmark† | Bookmark01Icon† | BookmarkSimpleIcon† | RiBookmarkLine† | BookmarkIcon* |
+| `Bot` | models / assistant | BotIcon | IconRobot | RoboticIcon | RobotIcon | RiRobotLine | FaceIcon* |
+| `Braces` | API / JSON / method | BracesIcon | IconBraces† | BracesIcon† | BracketsCurlyIcon† | RiBracesLine† | CodeIcon* |
 | `BrandMark` | the product's mark in an app header | ApertureIcon | IconAperture | ApertureIcon | ApertureIcon | RiCameraLensLine | ComponentInstanceIcon* |
 | `Briefcase` | business unit / segment | BriefcaseIcon | IconBriefcase | Briefcase01Icon | BriefcaseIcon | RiBriefcaseLine | BackpackIcon* |
+| `Bug` | bug / defect | BugIcon | IconBug† | Bug01Icon† | BugIcon† | RiBugLine† | ExclamationTriangleIcon* |
 | `Building` | company / organisation | Building2Icon | IconBuilding | Building03Icon | BuildingsIcon | RiBuilding2Line | HomeIcon* |
-| `Calendar` | date / scheduled event | CalendarIcon | IconCalendar | Calendar03Icon | CalendarBlankIcon | RiCalendarLine | CalendarIcon* |
+| `Calendar` | date / scheduled event | CalendarIcon | IconCalendar | CalendarIcon | CalendarIcon | RiCalendarLine | CalendarIcon* |
 | `CalendarChevronDown` | calendar caption dropdown | ChevronDownIcon | IconChevronDown | ArrowDownIcon | CaretDownIcon | RiArrowDownSLine | ChevronDownIcon* |
 | `CalendarChevronLeft` | calendar previous month | ChevronLeftIcon | IconChevronLeft | ArrowLeftIcon | CaretLeftIcon | RiArrowLeftSLine | ChevronLeftIcon* |
 | `CalendarChevronRight` | calendar next month | ChevronRightIcon | IconChevronRight | ArrowRightIcon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
-| `ChartLine` | reports / analytics | ChartLineIcon | IconChartLine | Chart03Icon | ChartLineIcon | RiLineChartLine | BarChartIcon* |
+| `ChartBar` | bar chart / volume | ChartColumnIcon | IconChartBar† | ChartHistogramIcon† | ChartBarIcon† | RiBarChartLine† | BarChartIcon* |
+| `ChartLine` | reports / analytics | ChartLineIcon | IconChartLine | ChartIcon | ChartLineIcon | RiLineChartLine | BarChartIcon* |
 | `Check` | checked item or box | CheckIcon | IconCheck | Tick02Icon | CheckIcon | RiCheckLine | CheckIcon* |
 | `ChevronDown` | disclosure open / scroll down | ChevronDownIcon | IconChevronDown | ArrowDown01Icon | CaretDownIcon | RiArrowDownSLine | ChevronDownIcon* |
 | `ChevronLeft` | previous | ChevronLeftIcon | IconChevronLeft | ArrowLeft01Icon | CaretLeftIcon | RiArrowLeftSLine | ChevronLeftIcon* |
 | `ChevronRight` | next / submenu / breadcrumb separator | ChevronRightIcon | IconChevronRight | ArrowRight01Icon | CaretRightIcon | RiArrowRightSLine | ChevronRightIcon* |
 | `ChevronUp` | disclosure close / scroll up | ChevronUpIcon | IconChevronUp | ArrowUp01Icon | CaretUpIcon | RiArrowUpSLine | ChevronUpIcon* |
+| `ChevronsUpDown` | switcher trigger (team · user · version) | ChevronsUpDownIcon | IconSelector | UnfoldMoreIcon | CaretUpDownIcon | RiArrowUpDownLine | CaretSortIcon* |
+| `Circle` | open / to do status | CircleIcon | IconCircle† | CircleIcon† | CircleIcon† | RiCircleLine† | CircleIcon* |
 | `CircleCheck` | success status | CircleCheckIcon | IconCircleCheck | CheckmarkCircle02Icon | CheckCircleIcon | RiCheckboxCircleLine | CheckCircledIcon* |
+| `CircleDashed` | backlog / draft status | CircleDashedIcon | IconCircleDashed† | DashedLineCircleIcon† | CircleDashedIcon† | RiLoader5Line† | CircleBackslashIcon* |
 | `CircleHelp` | help / support docs | CircleHelpIcon | IconHelpCircle | HelpCircleIcon | QuestionIcon | RiQuestionLine | QuestionMarkCircledIcon* |
+| `Clock` | time / duration / pending | ClockIcon | IconClock† | Clock01Icon† | ClockIcon† | RiTimeLine† | ClockIcon* |
+| `Code` | code block / source | CodeIcon | IconCode† | SourceCodeIcon† | CodeIcon† | RiCodeLine† | CodeIcon* |
+| `Columns` | column visibility / layout | Columns3Icon | IconLayoutColumns† | LayoutThreeColumnIcon† | ColumnsIcon† | RiLayoutColumnLine† | ColumnsIcon* |
 | `Contact` | contacts / address book | ContactIcon | IconAddressBook | ContactBookIcon | AddressBookIcon | RiContactsBook2Line | IdCardIcon* |
+| `Copy` | copy / duplicate | CopyIcon | IconCopy | Copy01Icon | CopyIcon | RiFileCopyLine | CopyIcon* |
+| `Cpu` | compute / model size | CpuIcon | IconCpu† | CpuIcon† | CpuIcon† | RiCpuLine† | MixIcon* |
 | `CreditCard` | billing / payment method | CreditCardIcon | IconCreditCard | CreditCardIcon | CreditCardIcon | RiBankCardLine | CardStackIcon* |
+| `Database` | database / storage | DatabaseIcon | IconDatabase† | Database01Icon† | DatabaseIcon† | RiDatabase2Line† | StackIcon* |
+| `DeletedPages` | show deleted pages / trash view | TrashIcon | IconTrash | DeleteIcon | TrashIcon | RiDeleteBinLine | TrashIcon* |
+| `DollarSign` | revenue / price | DollarSignIcon | IconCurrencyDollar† | DollarCircleIcon† | CurrencyDollarIcon† | RiMoneyDollarCircleLine† | TokensIcon* |
 | `Download` | download / export | DownloadIcon | IconDownload | Download01Icon | DownloadIcon | RiDownloadLine | DownloadIcon* |
+| `Export` | export (page actions menu) | ArrowDownIcon | IconArrowDown | ArrowDownIcon | ArrowDownIcon | RiArrowDownLine | ArrowDownIcon* |
+| `ExternalLink` | open elsewhere / external link | ArrowUpRightIcon | IconArrowUpRight | ArrowUpRightIcon | ArrowUpRightIcon | RiArrowRightUpLine | ExternalLinkIcon* |
+| `Eye` | view / visible | EyeIcon | IconEye† | ViewIcon† | EyeIcon† | RiEyeLine† | EyeOpenIcon* |
+| `File` | file / draft | FileIcon | IconFile | FileIcon | FileIcon | RiFileLine | FileIcon* |
+| `FileText` | document / wiki page | FileTextIcon | IconFileText | File01Icon | FileTextIcon | RiFileTextLine | FileTextIcon* |
+| `Filter` | filter a list | ListFilterIcon | IconFilter† | FilterIcon† | FunnelIcon† | RiFilter3Line† | MixerHorizontalIcon* |
+| `Flag` | priority / flagged | FlagIcon | IconFlag† | Flag01Icon† | FlagIcon† | RiFlagLine† | DrawingPinFilledIcon* |
+| `Folder` | folder / project | FolderIcon | IconFolder | FolderIcon | FolderIcon | RiFolderLine | ArchiveIcon* |
+| `Forward` | share onwards / forward | ArrowRightIcon | IconArrowForward | ArrowRightIcon | ShareFatIcon | RiShareForwardLine | ArrowRightIcon* |
+| `Frame` | design project / frame | FrameIcon | IconFrame | CropIcon | CropIcon | RiCropLine | FrameIcon* |
+| `GitBranch` | branch | GitBranchIcon | IconGitBranch† | GitBranchIcon† | GitBranchIcon† | RiGitBranchLine† | Share2Icon* |
+| `GitCommit` | commit | GitCommitHorizontalIcon | IconGitCommit† | GitCommitIcon† | GitCommitIcon† | RiGitCommitLine† | CommitIcon* |
+| `GitMerge` | merge | GitMergeIcon | IconGitMerge† | GitMergeIcon† | GitMergeIcon† | RiGitMergeLine† | Share1Icon* |
+| `GitPullRequest` | pull request | GitPullRequestIcon | IconGitPullRequest† | GitPullRequestIcon† | GitPullRequestIcon† | RiGitPullRequestLine† | Share2Icon* |
+| `Globe` | language & region / public | GlobeIcon | IconWorld | Globe02Icon | GlobeIcon | RiGlobalLine | GlobeIcon* |
+| `Hash` | channel / tag / number | HashIcon | IconHash† | HashtagIcon† | HashIcon† | RiHashtag† | FrameIcon* |
+| `Heading` | heading text | HeadingIcon | IconHeading† | Heading01Icon† | TextHIcon† | RiHeading† | HeadingIcon* |
 | `Headset` | support team / calls | HeadsetIcon | IconHeadset | HeadsetIcon | HeadsetIcon | RiCustomerService2Line | ChatBubbleIcon* |
+| `History` | history / versions | HistoryIcon | IconHistory† | WorkHistoryIcon† | ClockCounterClockwiseIcon† | RiHistoryLine† | CountdownTimerIcon* |
+| `Home` | home | HomeIcon | IconHome | HomeIcon | HouseIcon | RiHomeLine | HomeIcon* |
+| `Image` | image / media | ImageIcon | IconPhoto† | Image01Icon† | ImageIcon† | RiImageLine† | ImageIcon* |
+| `Inbox` | inbox | InboxIcon | IconInbox | InboxIcon | TrayIcon | RiInboxLine | EnvelopeOpenIcon* |
 | `Info` | info status | InfoIcon | IconInfoCircle | InformationCircleIcon | InfoIcon | RiInformationLine | InfoCircledIcon* |
+| `Italic` | italic text | ItalicIcon | IconItalic† | TextItalicIcon† | TextItalicIcon† | RiItalic† | FontItalicIcon* |
 | `Kanban` | board view | SquareKanbanIcon | IconLayoutKanban | KanbanIcon | KanbanIcon | RiKanbanView | ColumnsIcon* |
+| `Key` | API key / secret | KeyRoundIcon | IconKey† | Key01Icon† | KeyIcon† | RiKey2Line† | LockOpen1Icon* |
+| `Keyboard` | keyboard / accessibility | KeyboardIcon | IconKeyboard | KeyboardIcon | KeyboardIcon | RiKeyboardLine | KeyboardIcon* |
+| `Layers` | layers / environments | LayersIcon | IconStack2† | Layers01Icon† | StackIcon† | RiStackLine† | LayersIcon* |
+| `LayoutDashboard` | dashboard | LayoutDashboardIcon | IconLayoutDashboard† | DashboardSquare01Icon† | SquaresFourIcon† | RiDashboardLine† | DashboardIcon* |
 | `LayoutGrid` | overview / grid view | LayoutGridIcon | IconLayoutGrid | GridIcon | GridFourIcon | RiGridLine | DashboardIcon* |
+| `LifeBuoy` | support | LifeBuoyIcon | IconLifebuoy | ChartRingIcon | LifebuoyIcon | RiLifebuoyLine | QuestionMarkCircledIcon* |
+| `Link` | link / copy link / connected accounts | LinkIcon | IconLink | LinkIcon | LinkIcon | RiLinksLine | Link2Icon* |
+| `List` | bulleted list / list view | ListIcon | IconList† | LeftToRightListBulletIcon† | ListBulletsIcon† | RiListUnordered† | ListBulletIcon* |
+| `ListOrdered` | numbered list | ListOrderedIcon | IconListNumbers† | LeftToRightListNumberIcon† | ListNumbersIcon† | RiListOrdered† | ListBulletIcon* |
 | `Loader` | loading (spins) | Loader2Icon | IconLoader | Loading03Icon | SpinnerIcon | RiLoaderLine | ReloadIcon* |
+| `Lock` | privacy / locked | LockIcon | IconLock | ShieldIcon | LockIcon | RiLockLine | LockClosedIcon* |
+| `LogOut` | log out | LogOutIcon | IconLogout | LogoutIcon | SignOutIcon | RiLogoutBoxLine | ExitIcon* |
+| `LogoCommand` | a team or workspace logo (command glyph) | TerminalIcon | IconCommand | CommandIcon | CommandIcon | RiCommandLine | CodeIcon* |
+| `LogoGallery` | a product or team logo (stacked rows glyph) | GalleryVerticalEndIcon | IconLayoutRows | LayoutBottomIcon | RowsIcon | RiGalleryLine | RowsIcon* |
+| `LogoWaveform` | a team logo (waveform glyph) | AudioLinesIcon | IconWaveSine | AudioWave01Icon | WaveformIcon | RiPulseLine | SpeakerLoudIcon* |
 | `Mail` | email | MailIcon | IconMail | Mail01Icon | EnvelopeSimpleIcon | RiMailLine | EnvelopeClosedIcon* |
+| `Map` | travel / map | MapIcon | IconMap | MapsIcon | MapTrifoldIcon | RiMapLine | SewingPinIcon* |
+| `MapPin` | location | MapPinIcon | IconMapPin† | Location01Icon† | MapPinIcon† | RiMapPinLine† | SewingPinIcon* |
+| `Megaphone` | announcement / release | MegaphoneIcon | IconSpeakerphone† | Megaphone01Icon† | MegaphoneIcon† | RiMegaphoneLine† | SpeakerLoudIcon* |
+| `Menu` | navigation menu | MenuIcon | IconMenu | Menu09Icon | ListIcon | RiMenuLine | HamburgerMenuIcon* |
+| `MessageCircle` | messages & media / chat | MessageCircleIcon | IconMessageQuestion | MessageIcon | ChatCircleIcon | RiChat1Line | ChatBubbleIcon* |
+| `MessageCircleQuestion` | help chat | MessageCircleQuestionIcon | IconMessageQuestion | MessageQuestionIcon | ChatCircleIcon | RiQuestionLine | QuestionMarkCircledIcon* |
+| `MessageSquare` | comment / comment thread | MessageSquareIcon | IconMessage† | Comment01Icon† | ChatTeardropIcon† | RiMessage2Line† | ChatBubbleIcon* |
+| `Mic` | voice input | MicIcon | IconMicrophone† | Mic01Icon† | MicrophoneIcon† | RiMicLine† | SpeakerModerateIcon* |
 | `Minus` | separator between OTP groups | MinusIcon | IconMinus | MinusSignIcon | MinusIcon | RiSubtractLine | MinusIcon* |
+| `Monitor` | desktop device | MonitorIcon | IconDeviceDesktop† | ComputerIcon† | MonitorIcon† | RiComputerLine† | DesktopIcon* |
+| `Moon` | dark appearance | MoonIcon | IconMoon† | Moon02Icon† | MoonIcon† | RiMoonLine† | MoonIcon* |
+| `MoreActions` | more actions on a sidebar item | MoreHorizontalIcon | IconDots | MoreHorizontalCircle01Icon | DotsThreeOutlineIcon | RiMoreLine | DotsHorizontalIcon* |
 | `MoreHorizontal` | more items / overflow | MoreHorizontalIcon | IconDots | MoreHorizontalCircle01Icon | DotsThreeIcon | RiMoreLine | DotsHorizontalIcon* |
+| `MoreVertical` | row actions (vertical dots) | EllipsisVerticalIcon | IconDotsVertical† | MoreVerticalCircle01Icon† | DotsThreeVerticalIcon† | RiMore2Line† | DotsVerticalIcon* |
+| `MoveTo` | move to / redo | CornerUpRightIcon | IconCornerUpRight | RedoIcon | ArrowBendUpRightIcon | RiCornerUpRightLine | ArrowTopRightIcon* |
 | `OctagonX` | error status | OctagonXIcon | IconAlertOctagon | MultiplicationSignCircleIcon | XCircleIcon | RiCloseCircleLine | CrossCircledIcon* |
+| `Package` | product / order package | PackageIcon | IconPackage† | PackageIcon† | PackageIcon† | RiBox3Line† | CubeIcon* |
+| `Paintbrush` | appearance / theme | PaintbrushIcon | IconPalette | PaintBoardIcon | PaletteIcon | RiPaletteLine | BlendingModeIcon* |
 | `PanelLeft` | toggle the sidebar | PanelLeftIcon | IconLayoutSidebar | SidebarLeftIcon | SidebarIcon | RiSideBarLine | ViewVerticalIcon* |
+| `Paperclip` | attachment | PaperclipIcon | IconPaperclip† | Attachment01Icon† | PaperclipIcon† | RiAttachment2† | Link2Icon* |
+| `Pencil` | edit | PencilIcon | IconPencil† | PencilEdit01Icon† | PencilSimpleIcon† | RiPencilLine† | Pencil1Icon* |
+| `Phone` | phone / call | PhoneIcon | IconPhone† | Call02Icon† | PhoneIcon† | RiPhoneLine† | MobileIcon* |
+| `PieChart` | sales & marketing / share of a whole | PieChartIcon | IconChartPie | PieChartIcon | ChartPieIcon | RiPieChartLine | PieChartIcon* |
+| `Pin` | pin to top | PinIcon | IconPin† | PinIcon† | PushPinIcon† | RiPushpinLine† | DrawingPinIcon* |
 | `Plus` | add / create | PlusIcon | IconPlus | PlusSignIcon | PlusIcon | RiAddLine | PlusIcon* |
+| `Quote` | quote / callout | QuoteIcon | IconQuote† | QuoteDownIcon† | QuotesIcon† | RiDoubleQuotesL† | QuoteIcon* |
+| `Receipt` | invoice / receipt | ReceiptIcon | IconReceipt† | Invoice01Icon† | ReceiptIcon† | RiBillLine† | FileTextIcon* |
+| `RefreshCw` | regenerate / refresh | RefreshCwIcon | IconRefresh† | RefreshIcon† | ArrowsClockwiseIcon† | RiRefreshLine† | ReloadIcon* |
+| `Reply` | reply | ReplyIcon | IconArrowBackUp† | MailReply01Icon† | ArrowBendUpLeftIcon† | RiReplyLine† | ResetIcon* |
+| `ReplyAll` | reply to all | ReplyAllIcon | IconArrowBackUpDouble† | MailReplyAll01Icon† | ArrowBendDoubleUpLeftIcon† | RiReplyAllLine† | DoubleArrowLeftIcon* |
+| `Rocket` | launch / release | RocketIcon | IconRocket† | Rocket01Icon† | RocketIcon† | RiRocketLine† | RocketIcon* |
 | `Search` | search field | SearchIcon | IconSearch | SearchIcon | MagnifyingGlassIcon | RiSearchLine | MagnifyingGlassIcon* |
 | `SelectIndicator` | select trigger (opens a list) | ChevronDownIcon | IconSelector | UnfoldMoreIcon | CaretDownIcon | RiArrowDownSLine | CaretSortIcon* |
+| `Send` | send / sent mail / feedback | SendIcon | IconSend | SentIcon | PaperPlaneTiltIcon | RiSendPlaneLine | PaperPlaneIcon* |
+| `Settings` | settings (navigation section) | Settings2Icon | IconSettings | Settings05Icon | GearIcon | RiSettingsLine | GearIcon* |
+| `SettingsAdvanced` | advanced settings | SettingsIcon | IconSettings | SettingsIcon | GearIcon | RiSettingsLine | MixerVerticalIcon* |
+| `Share` | share | ShareIcon | IconShare2 | Share03Icon | ShareIcon | RiShareLine | Share1Icon* |
+| `ShieldCheck` | security / verified | ShieldCheckIcon | IconShieldCheck† | SecurityCheckIcon† | ShieldCheckIcon† | RiShieldCheckLine† | LockClosedIcon* |
+| `ShoppingCart` | cart / checkout | ShoppingCartIcon | IconShoppingCart† | ShoppingCart01Icon† | ShoppingCartIcon† | RiShoppingCartLine† | ArchiveIcon* |
+| `SiteHeaderSidebarToggle` | toggle the sidebar from a site header (sidebar-16) | PanelLeftIcon | IconLayoutSidebar | SidebarLeftIcon | SidebarIcon | RiLayoutLeftLine | ViewVerticalIcon* |
+| `SlidersHorizontal` | parameters / adjust | SlidersHorizontalIcon | IconAdjustmentsHorizontal† | SlidersHorizontalIcon† | SlidersHorizontalIcon† | RiEqualizerLine† | MixerHorizontalIcon* |
+| `Smartphone` | mobile device | SmartphoneIcon | IconDeviceMobile† | SmartPhone01Icon† | DeviceMobileIcon† | RiSmartphoneLine† | MobileIcon* |
+| `Smile` | emoji / reaction | SmileIcon | IconMoodSmile† | SmileIcon† | SmileyIcon† | RiEmotionLine† | FaceIcon* |
+| `Sparkles` | AI / upgrade | SparklesIcon | IconSparkles | SparklesIcon | SparkleIcon | RiSparklingLine | StarIcon* |
+| `Square` | stop (generation) | SquareIcon | IconSquare† | StopIcon† | SquareIcon† | RiStopLine† | StopIcon* |
+| `SquareCheck` | task done / checklist | SquareCheckIcon | IconSquareCheck† | CheckmarkSquare02Icon† | CheckSquareIcon† | RiCheckboxLine† | CheckboxIcon* |
+| `Star` | favourite / starred | StarIcon | IconStar | StarIcon | StarIcon | RiStarLine | StarIcon* |
+| `StarOff` | remove from favourites | StarOffIcon | IconStarOff | StarOffIcon | StarIcon | RiStarOffLine | StarFilledIcon* |
+| `Sun` | light appearance | SunIcon | IconSun† | Sun03Icon† | SunIcon† | RiSunLine† | SunIcon* |
+| `Table` | table view | TableIcon | IconTable† | Table01Icon† | TableIcon† | RiTable2† | TableIcon* |
+| `Tag` | label / tag | TagIcon | IconTag† | Tag01Icon† | TagIcon† | RiPriceTag3Line† | BookmarkIcon* |
+| `Terminal` | playground / console | TerminalSquareIcon | IconTerminal2 | ComputerTerminalIcon | TerminalIcon | RiTerminalBoxLine | CodeIcon* |
+| `ThumbsDown` | bad response | ThumbsDownIcon | IconThumbDown† | ThumbsDownIcon† | ThumbsDownIcon† | RiThumbDownLine† | CrossCircledIcon* |
+| `ThumbsUp` | good response | ThumbsUpIcon | IconThumbUp† | ThumbsUpIcon† | ThumbsUpIcon† | RiThumbUpLine† | CheckCircledIcon* |
+| `Trash` | delete / move to trash | Trash2Icon | IconTrash | Delete02Icon | TrashIcon | RiDeleteBinLine | TrashIcon* |
 | `TrendingDown` | declining metric | TrendingDownIcon | IconTrendingDown | TrendingDownIcon | TrendDownIcon | RiArrowRightDownLine | ArrowBottomRightIcon* |
 | `TrendingUp` | growing metric / forecast | TrendingUpIcon | IconTrendingUp | TrendingUpIcon | TrendUpIcon | RiArrowRightUpLine | ArrowTopRightIcon* |
 | `TriangleAlert` | warning status | TriangleAlertIcon | IconAlertTriangle | Alert02Icon | WarningIcon | RiErrorWarningLine | ExclamationTriangleIcon* |
+| `Truck` | shipping / delivery | TruckIcon | IconTruck† | DeliveryTruck01Icon† | TruckIcon† | RiTruckLine† | RocketIcon* |
+| `Undo` | undo | CornerUpLeftIcon | IconCornerUpLeft | UndoIcon | ArrowBendUpLeftIcon | RiCornerUpLeftLine | ResetIcon* |
+| `Upload` | upload / import a file | UploadIcon | IconUpload† | Upload01Icon† | UploadIcon† | RiUploadLine† | UploadIcon* |
 | `UserPlus` | invite a person | UserPlusIcon | IconUserPlus | UserAdd01Icon | UserPlusIcon | RiUserAddLine | PlusCircledIcon* |
 | `Users` | people / team | UsersIcon | IconUsers | UserGroupIcon | UsersIcon | RiGroupLine | PersonIcon* |
+| `Video` | audio & video / meeting | VideoIcon | IconVideoPlus | RecordIcon | VideoIcon | RiVideoLine | VideoIcon* |
+| `Webhook` | webhook / integration | WebhookIcon | IconWebhook† | WebhookIcon† | WebhooksLogoIcon† | RiWebhookLine† | Link2Icon* |
 | `X` | close / clear | XIcon | IconX | Cancel01Icon | XIcon | RiCloseLine | Cross2Icon* |
+| `Zap` | fast / usage / automation | ZapIcon | IconBolt† | FlashIcon† | LightningIcon† | RiFlashlightLine† | LightningBoltIcon* |
 
 \* shadcn maps no radix icons; the radix column is tyohnn's closest choice (shadcn's v3 new-york style used
 several of them: `Cross2Icon`, `DotsHorizontalIcon`, `CaretSortIcon`, `ViewVerticalIcon`). `Activity`, `Bell`, `BrandMark`, `Briefcase`,
-`Building`, `Calendar`, `ChartLine`, `CircleHelp`, `Contact`, `CreditCard`, `Download`, `Headset`, `Kanban`, `LayoutGrid`, `Mail`,
-`Plus`, `TrendingDown`, `TrendingUp`, `UserPlus` and `Users` are used by the preview templates only (the last fourteen added
-with the `crm-dashboard` template; their tabler · hugeicons · phosphor · remixicon glyphs are the closest names in each
-package, since shadcn has no IconPlaceholder for them).
+`Building`, `Contact`, `CreditCard`, `Download`, `Headset`, `Kanban`, `LayoutGrid`, `Mail`,
+`Plus`, `TrendingDown`, `TrendingUp`, `UserPlus` and `Users` were added with the `crm-dashboard` template; their tabler · hugeicons ·
+phosphor · remixicon glyphs are the closest names in each package, since shadcn has no IconPlaceholder for them.
+
+**Sidebar blocks (2026-09-17).** The names from `Account` to `Video` marked "sidebar blocks" in `names.ts` are every
+`IconPlaceholder` of shadcn's `apps/v4/registry/bases/base/blocks/sidebar-01` … `sidebar-16` (4.21.0): all five library names
+are upstream's. Where a block draws a glyph an existing name already draws in every library, the existing name is used
+(`Bell`, `Check`, `ChevronDown`, `ChevronRight`, `CreditCard`, `Minus`, `Plus`, `Search`); where one library differs, the
+block's use got its own name (`ChevronsUpDown` next to `SelectIndicator`, `MoreActions` next to `MoreHorizontal` — phosphor
+`DotsThreeOutlineIcon`, `SiteHeaderSidebarToggle` next to `PanelLeft` — remix `RiLayoutLeftLine`, `Export` next to `ArrowDown`,
+`Settings` / `SettingsAdvanced` and `Trash` / `DeletedPages` for lucide's two glyphs). Team logos are named for their glyph
+(`LogoCommand`, `LogoGallery`, `LogoWaveform`). `Calendar` and `ChartLine`, whose non-lucide glyphs had been guesses, now take
+the blocks' upstream mapping (hugeicons `CalendarIcon` · phosphor `CalendarIcon`; hugeicons `ChartIcon`).
+
+† The names marked "block templates" in `names.ts` (`Archive` … `Zap`) are for the product screens the block templates
+draw (code, API, orders, charts, AI, mail, editor, git, devices …). shadcn has no IconPlaceholder for them, so every
+non-lucide glyph is the closest name in that package (marked †), like the crm names above. The block templates may use
+only names that exist here; a missing one is reported, not added in a template change.
 
 **Adding an icon**
 
