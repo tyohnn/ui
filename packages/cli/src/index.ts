@@ -2,6 +2,8 @@
 
 import { parseArgs } from "node:util";
 
+import { init } from "./commands/init.js";
+import type { GlobalOptions } from "./commands/context.js";
 import { CliError, log } from "./lib/log.js";
 
 declare const __TYOHNN_VERSION__: string;
@@ -89,10 +91,11 @@ const main = async (): Promise<number> =>
         return command || values.help ? 0 : 1;
     }
 
+    const options: GlobalOptions = { ...values, install: !values["no-install"] };
 
     switch (command)
     {
-        case "__never__": return 0;
+        case "init": await init(options); return 0;
         default: throw new CliError(`unknown command "${command}"`, "Run `tyohnn --help`.");
     }
 };
