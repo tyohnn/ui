@@ -176,6 +176,7 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 14px;       /* nocturne: popovers · menus · select and combobox content */
     --surface-radius-sm: 14px;    /* nocturne: tooltips take the popup step too (also accordion frame, icon tiles) */
+    --toast-radius: var(--surface-radius-sm);    /* toast: the tooltip's step (a small surface in a corner) */
     /* 모달 면(dialog · alert-dialog · command-dialog)의 그림자 — mira 는 링만 두고 그림자가 없다.
        80% 막 위라 보이지 않는 값이지만, 시스템이 얹고 싶으면 이 슬롯만 채우면 된다. */
     --dialog-shadow: var(--shadow-float);

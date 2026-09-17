@@ -1,6 +1,6 @@
 # tyohnn
 
-Scaffold [tyohnn](https://github.com/john-yeon/tyohnn) design systems into your project: shadcn components on Base
+Scaffold [tyohnn](https://github.com/tyohnn/ui) design systems into your project: shadcn components on Base
 UI primitives, styled by a three-layer CSS architecture (colours · tokens · `cn-*` rules). The CLI copies one
 set of component TSX and one or more complete design-system folders, then wires them into your app. There is no
 runtime package: after `init` the code is yours.
@@ -65,7 +65,7 @@ The `@` alias is read from `tsconfig.json` (`"@/*": ["./src/*"]`); when there is
 
 The npm package holds only the CLI. The components and systems come from the tyohnn repository at run time:
 
-- **Default**: `https://codeload.github.com/john-yeon/tyohnn/tar.gz/main`. `--ref <branch|tag|commit>` pins another
+- **Default**: `https://codeload.github.com/tyohnn/ui/tar.gz/main`. `--ref <branch|tag|commit>` pins another
   version. The tarball is extracted (only `registry/` and the preview templates) into the user cache under its commit
   id, which `tyohnn.json` records.
 - **Cache**: `~/Library/Caches/tyohnn` (macOS), `$XDG_CACHE_HOME/tyohnn` or `~/.cache/tyohnn` (Linux),

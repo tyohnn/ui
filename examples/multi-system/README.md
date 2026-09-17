@@ -43,7 +43,7 @@ node ../../packages/cli/dist/index.js add mira --app apps/admin --example compon
 ```
 
 (`--source` reads this checkout's committed registry through the same extraction as a GitHub download; without it
-the CLI downloads `john-yeon/tyohnn@main`.)
+the CLI downloads `tyohnn/ui@main`.)
 
 ## Run and check
 

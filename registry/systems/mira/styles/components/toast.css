@@ -18,5 +18,5 @@
 /* mira: rounded-md(8px). 툴팁과 같은 단(--surface-radius-sm)이다 — 화면 구석에 잠깐
    뜨는 작은 면이라 모달·팝오버보다 한 단 작게 간다. */
 .cn-toast {
-    border-radius: var(--surface-radius-sm);
+    border-radius: var(--toast-radius);
 }

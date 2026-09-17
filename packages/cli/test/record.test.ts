@@ -10,7 +10,7 @@ const fonts = { sans: "inter", heading: "inherit", mono: "system", hangulFallbac
 
 const sample = (): TyohnnRecord => ({
     version: RECORD_VERSION,
-    source: { kind: "github", repo: "john-yeon/tyohnn", ref: "main", commit: "a".repeat(40) },
+    source: { kind: "github", repo: "tyohnn/ui", ref: "main", commit: "a".repeat(40) },
     project: "monorepo",
     packageManager: "npm",
     ui: { path: "packages/ui", importBase: "@acme/ui", systems: ["mira", "graphite", "mira"], icons: ["lucide", "hugeicons"] },

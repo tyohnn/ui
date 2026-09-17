@@ -1,6 +1,6 @@
 // Where the registry comes from.
 //
-//   default            GitHub tarball https://codeload.github.com/<repo>/tar.gz/<ref> (repo john-yeon/tyohnn, ref main),
+//   default            GitHub tarball https://codeload.github.com/<repo>/tar.gz/<ref> (repo tyohnn/ui, ref main),
 //                      extracted into the user cache per commit. A branch or tag is resolved again on every run
 //                      (falling back to the cached commit when offline); a full commit id is served from the cache.
 //   --source <dir>     a tyohnn checkout, read in place
@@ -16,7 +16,7 @@ import { refCacheFile, sourceCacheDir } from "./cache.js";
 import { Registry } from "./registry.js";
 import { commonRoot, readTar } from "./tar.js";
 
-export const DEFAULT_REPO = "john-yeon/tyohnn";
+export const DEFAULT_REPO = "tyohnn/ui";
 export const DEFAULT_REF = "main";
 
 export interface SourceOptions

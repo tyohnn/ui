@@ -64,4 +64,4 @@ export const COVERAGE = COVERAGE_GROUPS.map((group) => ({ id: group.id, label: g
 
 export const COVERAGE_POPUPS = new Set(COVERAGE_POPUP_SECTIONS);
 
-export const REPOSITORY = "https://github.com/john-yeon/tyohnn";
+export const REPOSITORY = "https://github.com/tyohnn/ui";

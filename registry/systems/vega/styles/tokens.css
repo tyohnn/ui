@@ -175,6 +175,7 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 10px;
     --surface-radius-sm: 8px;    /* tooltip 의 rounded-md */
+    --toast-radius: var(--radius-2xl);    /* vega: the toast is rounded-2xl, a step of its own */
     /* 모달 면의 그림자(foundation 슬롯). vega (and mira): 링만 있고 그림자가 없다. */
     --dialog-shadow: 0 0 #0000;
     /* 메뉴 하위 목록의 그림자(foundation 슬롯). vega: shadow-lg */
