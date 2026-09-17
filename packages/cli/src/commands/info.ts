@@ -34,7 +34,10 @@ export const list = async (options: GlobalOptions): Promise<void> =>
 
     log.info(color.bold("\nFonts"));
 
-    for (const [id, font] of registry.fonts()) log.info(`  ${id.padEnd(17)}  ${font.family} · ${font.category} · ${font.provider === "google" ? "Google Fonts, self-hosted" : `npm ${font.npm?.package}`}${font.hangul ? " · Hangul" : ""}`);
+    const fonts = [...registry.fonts()];
+    const fontWidth = Math.max(...fonts.map(([id]) => id.length));
+
+    for (const [id, font] of fonts) log.info(`  ${id.padEnd(fontWidth)}  ${font.family} · ${font.category} · ${font.provider === "google" ? "Google Fonts, self-hosted" : `npm ${font.npm?.package}`}${font.hangul ? " · Hangul" : ""}`);
 
     log.info(color.dim("\ninit --system <name> [--icons <library>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>]"));
 };
