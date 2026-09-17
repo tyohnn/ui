@@ -4,6 +4,7 @@ import { dataSections } from "./data";
 import { displaySections } from "./display";
 import { formSections } from "./forms";
 import { type CoverageSection, NO_MOTION } from "./frame";
+import { COVERAGE_GROUPS, COVERAGE_POPUP_SECTIONS } from "./groups";
 import { menuSections } from "./menus";
 import { overlaySections } from "./overlays";
 
@@ -29,8 +30,25 @@ export const COVERAGE_SECTIONS: CoverageSection[] = [
     ...chatSections,
 ];
 
+/** groups.ts is the data-only copy of COVERAGE_SECTIONS the site reads; a drift fails the coverage render. */
+const driftError = () =>
+{
+    const listed = COVERAGE_GROUPS.flatMap((group) => group.sections).join(" ");
+    const rendered = COVERAGE_SECTIONS.map((entry) => entry.name).join(" ");
+    const popups = COVERAGE_SECTIONS.filter((entry) => (entry.portals ?? []).length > 0).map((entry) => entry.name).join(" ");
+
+    if (listed !== rendered) return `coverage/groups.ts lists "${listed}" but the page renders "${rendered}"`;
+    if (COVERAGE_POPUP_SECTIONS.join(" ") !== popups) return `COVERAGE_POPUP_SECTIONS should be "${popups}"`;
+
+    return null;
+};
+
 export const Coverage = ({ section }: { section?: string | null }) =>
 {
+    const drift = driftError();
+
+    if (drift) throw new Error(drift);
+
     const selected = section ? COVERAGE_SECTIONS.filter((entry) => entry.name === section) : COVERAGE_SECTIONS;
 
     return (
