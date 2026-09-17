@@ -141,6 +141,8 @@
     --control-indicator-radius: 4px;
     --control-indicator-icon-size: 10px;
     --control-indicator-dot-size: 8px;
+    /* 키캡의 모서리(foundation 슬롯). 이 시스템은 지시자와 같은 단이다. */
+    --kbd-radius: var(--control-indicator-radius);
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
@@ -151,6 +153,9 @@
     --switch-track-width-sm: 24px;
     --switch-track-height-sm: 14px;
     --switch-thumb-inset: 1px;
+    /* 손잡이 크기(foundation 슬롯). 이 시스템은 궤도에서 안쪽 여백을 뺀 값이다. */
+    --switch-thumb-size-md: calc(var(--switch-track-height-md) - var(--switch-thumb-inset) * 2);
+    --switch-thumb-size-sm: calc(var(--switch-track-height-sm) - var(--switch-thumb-inset) * 2);
 
     /* 포커스 링 — mira: focus-visible:ring-2 ring-ring/30. 테두리 바깥에 간격 없이 box-shadow 한 겹으로 그린다.
        링의 색은 1층의 --ring-focus(30%) · --ring-focus-strong(50%) · --ring-invalid 가 갖는다.
@@ -169,6 +174,12 @@
     /* mira: card · popover · dropdown · select · sheet 가 rounded-lg(10px), dialog 계열은 rounded-xl(14px). */
     --surface-radius: 10px;
     --surface-radius-sm: 8px;    /* tooltip 의 rounded-md */
+    /* 모달 면의 그림자(foundation 슬롯). 이 시스템은 다른 띄운 면과 같은 그림자를 얹는다. */
+    --dialog-shadow: var(--shadow-float);
+    /* 메뉴 하위 목록의 그림자(foundation 슬롯). */
+    --menu-sub-shadow: var(--shadow-float);
+    /* Sheet 의 그림자(foundation 슬롯). 이 시스템은 다른 띄운 면과 같은 단이다. */
+    --sheet-shadow: var(--shadow-float);
     --surface-radius-lg: 14px;   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
     --surface-padding-md: 16px;  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 10px;  /* popover p-2.5 */
@@ -193,11 +204,19 @@
     --menu-item-padding-x: 8px;       /* item px-2 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
     --menu-item-gap: 8px;             /* item gap-2 */
+    /* graphite: 항목 높이는 --menu-item-height 하나가 정한다(세로 여백 없음). */
+    --menu-item-padding-y: 0px;
+    --menu-item-padding-y-check: 0px;
+    /* Group label. graphite's rows have no vertical padding, but the label band keeps mira's py-1.5. */
+    --menu-label-padding-y: 6px;
+    --command-item-padding-x: 8px;
 
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
     --menu-item-padding-inset: 30px;
     /* 단축키는 자간을 넓혀 키캡이 서로 떨어져 읽히게 한다. mira: tracking-widest */
     --menu-shortcut-letter-spacing: 0.1em;
+    /* 단축키의 행간(foundation 슬롯). 이 시스템은 ui 축의 xs 와 같다. */
+    --menu-shortcut-line-height: var(--ui-line-height-xs);
     /* 목록이 길어질 때의 상한. mira command-list max-h-72 */
     --menu-list-max-height: 288px;
 
@@ -312,6 +331,8 @@
     --table-line-height: 19px;
     --table-head-font-size: 11px;
     --table-head-line-height: 15px;
+    /* The head sets no tracking of its own; `initial` = inherit the table's. */
+    --table-head-letter-spacing: initial;
     /* Right padding of a cell holding a checkbox. mira: pr-0. */
     --table-checkbox-inset-end: var(--table-cell-padding-x);
 
@@ -349,6 +370,9 @@
     --avatar-size-sm: 20px;
     /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
     --avatar-font-size-sm: 9px;
+    /* md/lg initials set no type of their own: `initial` = inherit. */
+    --avatar-font-size: initial;
+    --avatar-line-height: initial;
     --avatar-font-weight: 600;
     --avatar-line-height-sm: 1;
     --avatar-size-md: 32px;
@@ -390,4 +414,138 @@
     --typeset-space-h2: 2.2;
     --typeset-space-h3: 1.8;
     --typeset-tracking: -0.01em;
+}
+
+/* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
+:root {
+    --badge-height: var(--control-height-xs);
+    --badge-padding-x: var(--control-padding-x-xs);
+    --badge-padding-x-icon: var(--control-padding-x-icon-xs);
+    --badge-padding-y: 2px;
+    --badge-gap: var(--control-gap-xs);
+    --badge-icon-size: var(--control-icon-size-xs);
+    --badge-border-width: var(--control-border-width);
+    --badge-radius: 9999px;
+    --badge-font-size: var(--ui-text-xs);
+    --badge-line-height: var(--ui-line-height-xs);
+    --badge-letter-spacing: var(--ui-letter-spacing);
+    --badge-font-weight: var(--ui-font-weight);
+    --badge-text-transform: initial;
+    --kbd-height: var(--control-height-xs);
+    --kbd-min-width: var(--kbd-height);
+    --kbd-padding-x: 4px;
+    --kbd-gap: var(--control-gap-xs);
+    --kbd-font-size: var(--ui-text-xs);
+    --kbd-line-height: var(--ui-line-height-xs);
+    --kbd-letter-spacing: var(--ui-letter-spacing);
+    --kbd-font-weight: var(--ui-font-weight);
+    --kbd-icon-size: var(--control-icon-size-sm);
+    --control-radius-sm: var(--control-radius);
+    --control-text-transform: initial;
+    --control-padding-x-grouped: var(--control-padding-x-md);
+    --control-icon-button-icon-size-sm: var(--control-icon-size-sm);
+    --control-padding-x-field: var(--control-padding-x-md);
+    --control-padding-y-field: 0px;   /* graphite: fields carry no vertical padding; their height is a min-height */
+    --control-font-size-field: var(--control-font-size-md);
+    --control-line-height-field: var(--control-line-height-md);
+    --control-letter-spacing-field: var(--control-letter-spacing);
+    --toggle-gap: var(--control-gap-md);
+    --toggle-group-joined-radius: var(--control-radius);
+    --switch-thumb-width-md: var(--switch-thumb-size-md);
+    --switch-thumb-width-sm: var(--switch-thumb-size-sm);
+    --switch-radius: 9999px;
+    --label-font-weight: var(--ui-font-weight);
+    --ui-label-text-transform: initial;
+    --ui-label-letter-spacing: var(--ui-letter-spacing);
+    --title-text-transform: initial;
+    --title-letter-spacing: var(--ui-letter-spacing);
+    --table-head-text-transform: initial;
+    --menu-separator-margin-inline: calc(var(--menu-padding) * -1);
+    --menu-separator-margin-block: var(--menu-padding);
+    --menu-label-text-transform: initial;
+    --menu-label-letter-spacing: var(--ui-letter-spacing);
+    --menu-item-text-transform: initial;
+    --menu-item-letter-spacing: var(--ui-letter-spacing);
+    --menu-item-font-weight: initial;
+    --menu-narrow-min-width: var(--menu-min-width);
+    --command-item-radius: var(--menu-item-radius);
+    --command-item-gap: var(--menu-item-gap);
+    --select-item-gap: var(--menu-item-gap);
+    --menubar-padding: var(--menu-padding);
+    --menubar-gap: normal;
+    --menubar-item-padding-inset: var(--menu-item-padding-inset);
+    --card-radius: var(--surface-radius);
+    --bubble-radius: var(--surface-radius);
+    --bubble-padding-x: var(--surface-padding-sm);
+    --bubble-padding-y: 6px;
+    --bubble-line-height: var(--ui-line-height-md);
+    --chart-tooltip-radius: var(--surface-radius);
+    --empty-radius: var(--surface-radius-lg);
+    --sheet-padding: var(--surface-padding-lg);
+    --accordion-border-width: var(--surface-border-width);
+    --tabs-list-height: var(--control-height-lg);
+    --tabs-list-padding: 3px;
+    --tabs-trigger-gap: 6px;
+    --tabs-trigger-padding-x: 6px;
+    --tabs-trigger-padding-y: 2px;
+    --tabs-trigger-active-shadow: none;
+    --item-gap: var(--menu-item-gap);
+    --item-media-icon-size: var(--control-icon-size-lg);
+    --slider-track-thickness: 4px;
+    --sidebar-surface-padding: var(--menu-item-padding-x);
+    --sidebar-surface-gap: var(--menu-item-gap);
+    --sidebar-input-height: var(--control-height-lg);
+    --sidebar-item-padding-y: var(--sidebar-item-padding-x);
+    --sidebar-separator-margin-inline: var(--sidebar-item-padding-x);
+    --sidebar-badge-font-weight: var(--ui-font-weight);
+    --sidebar-part-radius: var(--sidebar-item-radius);
+}
+
+:root {
+    /* ========================================================
+       Axis contract v5 — one slot, one meaning
+       --------------------------------------------------------
+       Stage 2 of v4 found slots that several elements read while a system gave
+       those elements different values. Each split below adds the name the
+       second reader needed; its default is an alias of the slot it came from,
+       so foundation renders exactly as it did under v4.
+       ======================================================== */
+
+    /* The grouped control padding, split per reader. --control-padding-x-grouped stays the shared
+       step; the inline addons, the block (top · bottom) addons and the joined toggle-group item each
+       read their own name. rhea · nova · lyra · vega keep the block addons at the md step while the
+       inline ones and the toggle item go to px-2; sera zeroes the addons and keeps the toggle's md. */
+    --input-group-addon-padding-x: var(--control-padding-x-grouped);
+    --input-group-addon-padding-x-block: var(--input-group-addon-padding-x);
+    --toggle-group-item-padding-x: var(--control-padding-x-grouped);
+    /* The input-group button's corner. mira: the sm control corner; luma · nova step the sm button
+       down but keep the grouped button at the control radius. */
+    --input-group-button-radius: var(--control-radius-sm);
+    /* A joined toggle group: the group's own corner (--toggle-group-joined-radius), its sm step,
+       and the corners of the joined items. rhea squares the group and rounds only the items;
+       nova steps the sm group down while the items keep the control radius. */
+    --toggle-group-joined-radius-sm: var(--toggle-group-joined-radius);
+    --toggle-group-item-radius: var(--toggle-group-joined-radius);
+    /* The select trigger's side padding, start and end apart (default size). mira: the field
+       padding on both sides. rhea gives the trigger px-3 where the inputs are px-2.5; vega's
+       trigger is `pl-2.5 pr-2`. */
+    --select-trigger-padding-start: var(--control-padding-x-field);
+    --select-trigger-padding-end: var(--select-trigger-padding-start);
+    /* The native select's vertical padding. mira: the field's py-0.5. sera gives it py-2 while the
+       input stays py-1; graphite's input has none while the native select keeps 2px. */
+    --native-select-padding-y: var(--control-padding-y-field);
+    /* The toned badge (`[data-tone]`, the tag) height. mira: the badge height. luma · sera · lyra
+       keep the tag at the xs control step while the plain badge shrinks to h-5 (or auto). */
+    --tag-height: var(--badge-height);
+    /* The accordion's rules between items. mira: the group's own border width. sera · nova · lyra
+       draw no frame around the group but keep the rule between items. */
+    --accordion-item-border-width: var(--accordion-border-width);
+    /* Card parts. The header and footer corners, and an edge image's corners. mira: the card's
+       corner. maia rounds the header and footer one step below the card (14 in an 18 card); nova
+       gives the image the popover corner while the card and its parts take the dialog one. */
+    --card-part-radius: var(--card-radius);
+    --card-image-radius: var(--card-radius);
+    /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
+       rhea adds shadow-sm, sera · vega · luma their own card shadow. */
+    --card-shadow: var(--shadow-card);
 }

@@ -86,9 +86,7 @@ function BreadcrumbSeparator({
       {...props}
     >
       {children ?? (
-        <ChevronRight
-  className="cn-rtl-flip"
-/>
+        <ChevronRight className="cn-rtl-flip" />
       )}
     </li>
   )

@@ -35,6 +35,7 @@
 
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
+    text-transform: var(--control-text-transform);
 
     --tw-ring-color: var(--ring-focus-strong);
 
@@ -98,7 +99,7 @@
     min-height: var(--control-height-md);
     min-width: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
-    gap: var(--control-gap-md);
+    gap: var(--toggle-gap);
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
 

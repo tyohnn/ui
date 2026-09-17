@@ -82,9 +82,7 @@ function CommandInput({
           {...props}
         />
         <InputGroupAddon>
-          <Search
-  className="cn-command-input-icon"
-/>
+          <Search className="cn-command-input-icon" />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -162,8 +160,8 @@ function CommandItem({
     >
       {children}
       <Check
-  className="cn-command-item-indicator ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
-/>
+        className="cn-command-item-indicator ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
+      />
     </CommandPrimitive.Item>
   )
 }

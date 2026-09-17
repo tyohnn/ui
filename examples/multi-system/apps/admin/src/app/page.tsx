@@ -1,6 +1,8 @@
-import { ComponentSheet } from "./_examples/component-sheet";
-
-export default function Page()
-{
-    return <ComponentSheet />;
+export default function Home() {
+  return (
+    <main className="p-8">
+      <h1 className="text-2xl font-semibold">admin</h1>
+      <p className="app-note">A fixture for the tyohnn CLI.</p>
+    </main>
+  );
 }

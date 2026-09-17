@@ -27,7 +27,7 @@
       걸치지 않는다. 좌우 10px 만 surface 축의 sm(popover p-2.5)과 같은 단이다. */
 .cn-chart-tooltip {
     border: var(--surface-border-width) solid var(--ring-subtle);
-    border-radius: var(--surface-radius);
+    border-radius: var(--chart-tooltip-radius);
     background-color: var(--popover);
     color: var(--popover-foreground);
     box-shadow: var(--shadow-float);
