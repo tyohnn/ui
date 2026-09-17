@@ -6,7 +6,7 @@ import { aliasFor, effectivePaths } from "../codemods/tsconfig.js";
 import { exists, readJson, rel } from "../lib/fs.js";
 import { CliError, log } from "../lib/log.js";
 import { inspectApp } from "../project/app.js";
-import { detectProject, frameworkOf, isCoveredByWorkspaces, type PackageJson, workspaceDirs } from "../project/detect.js";
+import { detectProject, frameworkOf, isCoveredByWorkspaces, type PackageJson, workspaceDirs, workspaceGlobs } from "../project/detect.js";
 import { describeFonts, type FontOverrides, resolveFonts, validateFonts } from "../project/fonts.js";
 import { readRecord, RECORD_VERSION, type TyohnnRecord } from "../project/record.js";
 import { sync } from "../project/sync.js";
@@ -30,6 +30,26 @@ const chooseSystem = async (options: GlobalOptions, registry: Registry): Promise
     }));
 };
 
+/** The monorepo root whose workspaces include `dir`, if any */
+const enclosingMonorepo = (dir: string): string | null =>
+{
+    let current = dirname(dir);
+
+    while (current !== dirname(current))
+    {
+        if (exists(join(current, "package.json")))
+        {
+            const globs = workspaceGlobs(current);
+
+            if (globs.length && isCoveredByWorkspaces(globs, rel(current, dir))) return current;
+        }
+
+        current = dirname(current);
+    }
+
+    return null;
+};
+
 /** "@acme" from a root package named "acme" or "@acme/monorepo" */
 export const defaultScope = (rootName: string | undefined): string =>
 {
@@ -49,6 +69,12 @@ export const init = async (options: GlobalOptions): Promise<void> =>
     if (existing) return reinit(options, root, existing);
 
     const project = detectProject(root);
+    const parent = project?.kind !== "monorepo" ? enclosingMonorepo(root) : null;
+
+    if (parent)
+    {
+        throw new CliError(`${root} is an app of the monorepo at ${parent}`, `Run init at the monorepo root with --app ${rel(parent, root)}, so the TSX lands in one shared UI package.`);
+    }
 
     if (!project)
     {

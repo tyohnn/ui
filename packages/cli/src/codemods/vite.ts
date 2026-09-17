@@ -53,6 +53,8 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
 
     const splicer = new Splicer(code);
     const manual: string[] = [];
+    // Whether the config reads fileURLToPath in an alias the CLI writes
+    let aliasCode = blockAliases;
     const firstLines: string[] = [];
 
     // plugins
@@ -86,6 +88,7 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
         if (!resolveProperty)
         {
             firstLines.push("// tyohnn:begin resolve", reindent(resolveBlockBody(aliases)), "// tyohnn:end resolve");
+            aliasCode = true;
         }
         else if (resolveObject?.type === "ObjectExpression")
         {
@@ -96,10 +99,12 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
 
             if (missing.length === 0)
             {
-                // already aliased
+                // Already aliased; a tyohnn-tagged entry from an earlier run still needs its import.
+                aliasCode = existing.includes("tyohnn");
             }
             else if (!aliasProperty)
             {
+                aliasCode = true;
                 insertFirstInObject(splicer, resolveObject, [
                     "// tyohnn:begin alias",
                     "alias: [",
@@ -110,6 +115,7 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
             }
             else if (aliasValue?.type === "ArrayExpression")
             {
+                aliasCode = true;
                 const text = missing.map((alias) => `{ find: ${alias.exact ? regexFor(alias.find) : JSON.stringify(alias.find)}, replacement: ${replacementCode(alias)} } /* tyohnn */`).join(", ");
                 const last = aliasValue.elements.at(-1);
 
@@ -118,6 +124,7 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
             }
             else if (aliasValue?.type === "ObjectExpression" && missing.every((alias) => !alias.exact))
             {
+                aliasCode = true;
                 insertFirstInObject(splicer, aliasValue, missing.map((alias) => `${JSON.stringify(alias.find)}: ${replacementCode(alias)}, // tyohnn`).join("\n"));
             }
             else manual.push(`add resolve.alias ${missing.map((alias) => `${alias.find} → ${alias.target}`).join(", ")}`);
@@ -130,7 +137,7 @@ export const applyViteConfig = (source: string, aliases: ViteAlias[], file = "vi
     // imports
     const needImports = [
         ...(tailwindImport ? [] : [`import ${tailwindName} from "@tailwindcss/vite";`]),
-        ...(aliases.length && !hasFileUrl ? ['import { fileURLToPath } from "node:url";'] : []),
+        ...(aliasCode && !hasFileUrl ? ['import { fileURLToPath } from "node:url";'] : []),
     ];
     let result = splicer.toString();
 

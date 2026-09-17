@@ -43,6 +43,15 @@ describe("vite.config codemod", () =>
         expect(applyViteConfig(code, appAlias).code).toBe(code);
     });
 
+    it("adds no import when the alias is already the user's", () =>
+    {
+        const input = 'import { defineConfig } from "vite";\nimport path from "node:path";\n\nexport default defineConfig({\n    plugins: [],\n    resolve: { alias: { "@": path.resolve(__dirname, "./src") } },\n});\n';
+        const { code } = applyViteConfig(input, appAlias);
+
+        expect(code).not.toContain("fileURLToPath");
+        expect(code).toContain("plugins: [tailwindcss() /* tyohnn */]");
+    });
+
     it("handles a function config", () =>
     {
         const { code } = applyViteConfig("export default defineConfig(({ mode }) => ({\n  base: mode === 'x' ? '/' : '/app',\n}))\n", appAlias);
