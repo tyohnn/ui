@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* The app's own rules. */
+.app-note {
+  font-style: italic;
+}
