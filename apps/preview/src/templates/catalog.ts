@@ -54,7 +54,7 @@ export const TEMPLATE_CATALOG = [
     block("block-ai-playground", "AI playground", "07", true),
     block("block-project", "Project", "08"),
     block("block-inbox", "Inbox", "09", true),
-    block("block-editor", "Editor", "10"),
+    block("block-editor", "Editor", "10", true),
     block("block-code-review", "Code review", "11"),
     block("block-calendar", "Calendar", "12"),
     block("block-settings-dialog", "Settings dialog", "13"),
