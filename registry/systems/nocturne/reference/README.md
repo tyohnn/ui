@@ -27,6 +27,9 @@ last `:root` block of `styles/tokens.css`.
 | `--title-font-weight` | 2 | `var(--ui-font-weight)` | card · dialog · alert-dialog · sheet · drawer · empty titles | Bricolage titles at 700 while UI labels stay 500 |
 | `--sidebar-group-label-font-family` · `--table-head-font-family` · `--menu-label-font-family` | 2 | `initial` (inherit) | sidebar group label · table head · dropdown / context / menubar / command / combobox / select group labels | the mono label voice; no family slot exists on any label band |
 | `--sidebar-item-active-marker-width` · `-offset` · `-inset-y` | 2 | — (no marker) | `[data-slot=sidebar-menu-item]:has(> .cn-sidebar-menu-button[data-active])::before` | the straight bar outside the active item (a structural addition, shape 1 in DESIGN.md §5) |
+| `--sidebar-sub-item-active-marker-offset` | 2 | — (no marker) | `[data-slot=sidebar-menu-sub-item]:has(> .cn-sidebar-menu-sub-button[data-active])::before` | the active sub item's bar stands on the sub list's rail |
+| `--tabs-list-radius-vertical` | 2 | — | `.cn-tabs-list` in a vertical `Tabs` (a new selector) | a pill corner turns a vertical bar into a stadium |
+| `--toggle-group-vertical-radius` | 2 | — | `.cn-toggle-group[data-orientation=vertical]` and its joined end items (a new selector) | the same stadium problem on a vertical joined group |
 | `--typeset-heading-weight` · `--typeset-heading-tracking` | 2 | the vendor's `600` · `normal` | `typeset-preset.css` h1–h4 | Bricolage long-form headings at 700 / -0.04em |
 | `--sidebar-item-active-marker` | 1 | — | the bar above | lavender, darker in light |
 | `--progress-indicator-fill` · `--slider-range-fill` | 1 | `var(--primary)` | `.cn-progress-indicator` · `.cn-slider-range` | indicators take the signal while the primary pill stays pale |
@@ -36,7 +39,9 @@ last `:root` block of `styles/tokens.css`.
 
 Other rule edits that read existing slots: `.cn-select-label` now reads the menu-label band
 (`--menu-label-padding-y` · `-letter-spacing` · `-text-transform`) like the other popup group labels (foundation
-gives it literals), and `.cn-empty-title` reads `--title-letter-spacing` instead of mira's `-0.025em` literal.
+gives it literals), `.cn-empty-title` reads `--title-letter-spacing` instead of mira's `-0.025em` literal, and
+`.cn-kbd` inside a tooltip steps up to `bg-secondary` and keeps its own text colour (foundation fades it for the
+inverted tooltip, which made it invisible on nocturne's raised one).
 
 The three `!important`s are the DESIGN.md §1 kind: upstream sets the value with a utility, and layer 3 in
 `layer(base)` cannot beat a utility otherwise.

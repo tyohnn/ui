@@ -654,6 +654,10 @@
     --control-radius-field: 10px;
     /* The default tabs bar's corner. Foundation reads --surface-radius (the popup corner). */
     --tabs-list-radius: 9999px;
+    /* The vertical tabs bar's corner: a card-like box holding pill triggers. */
+    --tabs-list-radius-vertical: 18px;
+    /* A vertical toggle group's corner and its end items' corners (the pill turns a column into a stadium). */
+    --toggle-group-vertical-radius: 14px;
     /* Surface titles' weight (card · dialog · sheet · drawer · alert-dialog · empty).
        Foundation reads --ui-font-weight, which also sets every UI label. */
     --title-font-weight: 700;
@@ -667,6 +671,8 @@
     --sidebar-item-active-marker-width: 2px;
     --sidebar-item-active-marker-offset: 6px;
     --sidebar-item-active-marker-inset-y: 8px;
+    /* A sub item's bar stands on the sub list's rail: the list's start padding plus the rail's width. */
+    --sidebar-sub-item-active-marker-offset: calc(var(--sidebar-sub-item-indent) - var(--sidebar-item-padding-x) + var(--surface-border-width));
     /* Long-form headings (h1–h4): Bricolage at 700, tracked tighter than the titles' -0.03em.
        Foundation leaves the vendor's 600 and normal tracking. */
     --typeset-heading-weight: 700;

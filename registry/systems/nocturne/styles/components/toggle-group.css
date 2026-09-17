@@ -26,6 +26,13 @@
     &[data-size="sm"] {
         border-radius: var(--toggle-group-joined-radius-sm);
     }
+
+    /* nocturne: a vertical group is taller than it is wide, so the pill corner turns it into a stadium;
+       the group and its end items take their own corner (--toggle-group-vertical-radius). A different
+       selector, not a value. */
+    &[data-orientation="vertical"] {
+        border-radius: var(--toggle-group-vertical-radius);
+    }
 }
 
 .cn-toggle-group-item {
@@ -51,12 +58,12 @@
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="vertical"] > &:first-child {
-        border-start-start-radius: var(--toggle-group-item-radius);
-        border-start-end-radius: var(--toggle-group-item-radius);
+        border-start-start-radius: var(--toggle-group-vertical-radius);
+        border-start-end-radius: var(--toggle-group-vertical-radius);
     }
 
     .cn-toggle-group[data-spacing="0"][data-orientation="vertical"] > &:last-child {
-        border-end-start-radius: var(--toggle-group-item-radius);
-        border-end-end-radius: var(--toggle-group-item-radius);
+        border-end-start-radius: var(--toggle-group-vertical-radius);
+        border-end-end-radius: var(--toggle-group-vertical-radius);
     }
 }

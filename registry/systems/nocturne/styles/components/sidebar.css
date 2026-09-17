@@ -476,3 +476,15 @@
     background-color: var(--sidebar-item-active-marker);
     pointer-events: none;
 }
+
+/* The active sub item marks the sub list's rail the same way: the bar stands on the rail, left of the
+   item, straight, with the same width, inset and colour. */
+[data-slot="sidebar-menu-sub-item"]:has(> .cn-sidebar-menu-sub-button[data-active])::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: calc(var(--sidebar-sub-item-active-marker-offset) * -1);
+    inset-block: var(--sidebar-item-active-marker-inset-y);
+    width: var(--sidebar-item-active-marker-width);
+    background-color: var(--sidebar-item-active-marker);
+    pointer-events: none;
+}

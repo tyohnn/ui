@@ -49,6 +49,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 | Step | Where |
 |---|---|
 | pill (9999px) | buttons of every variant and size, badges and tags, toggles, toggle-group / segmented items, the default tabs bar and its triggers, switches, sidebar count badges |
+| pill, turned on its side | a vertical tabs bar (18px) and a vertical joined toggle group (14px) are columns, where a pill corner would draw a stadium |
 | 10px | input, textarea, select trigger, native select, combobox input, input group, OTP cells, field choice cards |
 | 8px | menu rows, command rows, sidebar items and parts |
 | 14px | popover, hover card, dropdown / context menu, select and combobox content, tooltip, chart tooltip, accordion frame |

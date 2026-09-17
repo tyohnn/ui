@@ -27,7 +27,9 @@
     background-color: var(--muted);
     color: var(--muted-foreground);
     border-radius: var(--kbd-radius);
-    @apply w-fit font-sans in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10;
+    /* nocturne: tooltips are raised surfaces, not inverted chips (tooltip.css), so a keycap inside one
+       keeps its own text colour and steps one plane up from the tooltip's fill instead of fading into it. */
+    @apply w-fit font-sans in-data-[slot=tooltip-content]:bg-secondary;
 
     & svg:not([class*="size-"]) {
         width: var(--kbd-icon-size);

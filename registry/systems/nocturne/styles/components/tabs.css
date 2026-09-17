@@ -33,6 +33,12 @@
         height: var(--tabs-list-height);
     }
 
+    /* nocturne: a vertical bar is taller than it is wide, so the pill corner turns it into a stadium;
+       it takes its own corner (--tabs-list-radius-vertical). A different selector, not a value. */
+    &:where(.group\/tabs[data-orientation="vertical"] *) {
+        border-radius: var(--tabs-list-radius-vertical);
+    }
+
     &[data-variant="line"] {
         border-radius: 0;
         border-bottom: var(--tabs-line-divider-width) solid var(--border);
