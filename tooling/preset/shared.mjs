@@ -38,7 +38,9 @@ export const workdir = () =>
 
 export const referenceAppDir = (preset) => join(workdir(), preset);
 
-/** Sparse checkout of apps/v4/registry at the pinned tag (styles, themes, base colours, preset config). */
+const SPARSE_PATHS = ["/apps/v4/registry/*.ts", "/apps/v4/registry/styles/", "/apps/v4/registry/bases/base/blocks/"];
+
+/** Sparse checkout of apps/v4/registry at the pinned tag (styles, themes, base colours, preset config, the base blocks' sources). */
 export const shadcnCheckout = ({ fetch = false } = {}) =>
 {
     const dir = join(workdir(), `ui-${SHADCN_VERSION}`);
@@ -48,7 +50,12 @@ export const shadcnCheckout = ({ fetch = false } = {}) =>
         if (!fetch) throw new Error(`No shadcn checkout at ${dir}. Run tooling/preset/make-reference.mjs first (same --workdir).`);
 
         execFileSync("git", ["clone", "-q", "--depth", "1", "--branch", SHADCN_TAG, "--filter=blob:none", "--sparse", SHADCN_REPO, dir], { stdio: "inherit" });
-        execFileSync("git", ["-C", dir, "sparse-checkout", "set", "--no-cone", "/apps/v4/registry/*.ts", "/apps/v4/registry/styles/"], { stdio: "inherit" });
+        execFileSync("git", ["-C", dir, "sparse-checkout", "set", "--no-cone", ...SPARSE_PATHS], { stdio: "inherit" });
+    }
+    else if (fetch && !existsSync(join(dir, "apps/v4/registry/bases/base/blocks/_registry.ts")))
+    {
+        // A checkout made before the block sources were part of the sparse set.
+        execFileSync("git", ["-C", dir, "sparse-checkout", "set", "--no-cone", ...SPARSE_PATHS], { stdio: "inherit" });
     }
 
     return dir;
