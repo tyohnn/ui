@@ -312,6 +312,12 @@ removing one always bumps it.
   order, sheet plus the open select · dropdown · dialog); `--diff <before> <after>` compares two dumps by key. Use
   them around a `registry/ui` change: dump every system in both modes before, rebuild, dump again, diff.
 - `node tooling/scaffold-prototype doctor --target <monorepo> [--built]` — a scaffolded monorepo (section 11).
+- `node tooling/snapshot/export-dc.mjs --system <name> --template <template> --out <dir> [--verify <dir>] [--sizes <file>]` —
+  exports a preview template rendered with one system as a static Claude Design canvas artboard (`<Name>.dc.html`):
+  the template root's markup, the system's `compiled.css` without rules for classes the markup never uses, Google
+  Fonts `<link>`s for google-provider fonts and inline woff2 subsets for Pretendard, in the system's default mode.
+  `--verify` screenshots the preview and the artboard and compares a few computed values. It starts its own preview
+  on port 5199 and stops it.
 
 - `node tooling/snapshot/compare-shadcn.mjs --system <name> [--mode light|dark] [--reference <url>] [--preview <origin>]` —
   compares the preview against the shadcn reference app of a preset (`tooling/preset/make-reference.mjs`).
