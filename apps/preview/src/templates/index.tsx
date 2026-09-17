@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 
 import { BlockAiPlayground } from "./blocks/block-ai-playground";
+import { BlockProject } from "./blocks/block-project";
 import { BlockPlaceholder } from "./blocks/placeholder";
 import { TEMPLATE_CATALOG, type TemplateId } from "./catalog";
 import { ComponentSheet } from "./component-sheet";
@@ -17,6 +18,7 @@ const CoverageTemplate = () => <Coverage section={new URLSearchParams(location.s
  */
 const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     "block-ai-playground": BlockAiPlayground,
+    "block-project": BlockProject,
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
     "crm-dashboard": CrmDashboard,
