@@ -329,6 +329,14 @@ removing one always bumps it.
   Elements pair by `data-slot` and order; the sheet plus the open select, dropdown menu and dialog are measured;
   exclusions with reasons live in `registry/systems/<name>/reference/compare-exclusions.json`.
 
+- `node tooling/snapshot/compare-blocks.mjs --system <name> --block sidebar-NN --template <id> [--mode light|dark]` — a block
+  template's chrome (every top-level `[data-slot="sidebar"]` subtree and the page header) against the shadcn block in the
+  preset's reference app (`make-reference.mjs --blocks`), paired like compare-shadcn; text and text-bearing widths are not
+  compared; exclusions in `apps/preview/src/templates/blocks/<id>/compare-exclusions.json` (`tooling/preset/blocks.md`).
+- `node tooling/snapshot/check-templates.mjs [--templates all|ids] [--systems all|names] [--modes light,dark]` — every
+  template of `apps/preview/src/templates/catalog.ts` at its viewport: console and page errors, an empty `data-template`
+  root, horizontal overflow, platform-font fallback; screenshots in `tooling/snapshot/out/templates/`.
+
 ⚠ Put `.dark` on `<html>`: layer-2 compositions such as `--shadow-control` resolve on `:root`.
 
 ## 8. Typography

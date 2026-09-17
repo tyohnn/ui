@@ -18,6 +18,11 @@ The pinned shadcn version is `SHADCN_VERSION` in `shared.mjs` (4.21.0). Bump it 
 | `slot-migration.md` | stage 2 of the v4 slot cleanup: per system, which layer-3 rule's value moves into which slot |
 | `../snapshot/compare-shadcn.mjs --system <preset>` | computed-style comparison of the tyohnn preview against the reference app (default template `coverage`) |
 | `../snapshot/check-coverage.mjs --system <name>` | render check only: does a system draw the coverage template without console errors, page errors or empty sections |
+| `make-reference.mjs <preset> --blocks sidebar-01,… \| all` | installs shadcn's sidebar blocks into the reference app, one route (`/blocks/sidebar-NN`) and component folder each |
+| `port-block.mjs sidebar-NN` | the mechanical port of one block's sources (imports, IconPlaceholder → `@tyohnn/icons`) for a block template |
+| `blocks.md` | how the sixteen block templates are ported, filled, compared and render-checked |
+| `../snapshot/compare-blocks.mjs --system <name> --block sidebar-NN --template <id>` | a block template's sidebar and header against the shadcn block |
+| `../snapshot/check-templates.mjs` | render check of every catalog template × system × mode |
 
 Downloads and generated apps live in a work directory outside the repository: `--workdir <dir>`, else
 `TYOHNN_PRESET_WORKDIR`, else `<os tmpdir>/tyohnn-preset`. Use the same one for every step.
