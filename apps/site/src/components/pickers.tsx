@@ -1,17 +1,31 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
+import { Fragment } from "react";
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
 
-import { TEMPLATES, type TemplateId } from "@/lib/site";
+import { TEMPLATE_GROUPS, TEMPLATES, type TemplateId } from "@/lib/site";
 
+const TEMPLATE_ITEMS = TEMPLATES.map((template) => ({ value: template.id, label: template.label }));
+const GROUPS = TEMPLATE_GROUPS.map((group) => ({ ...group, templates: TEMPLATES.filter((template) => template.group === group.id) })).filter((group) => group.templates.length > 0);
+
+/** The template picker of every page: the catalog's templates under their group (Showcase · Blocks). */
 export const TemplateSelect = ({ value, onChange, id }: { value: TemplateId; onChange: (value: TemplateId) => void; id?: string }) => (
-    <Select items={TEMPLATES.map((template) => ({ value: template.id, label: template.label }))} value={value} onValueChange={(next) => next && onChange(next as TemplateId)}>
-        <SelectTrigger id={id} size="sm" aria-label="Template" className="min-w-40">
+    <Select items={TEMPLATE_ITEMS} value={value} onValueChange={(next) => next && onChange(next as TemplateId)}>
+        <SelectTrigger id={id} size="sm" aria-label="Template" className="min-w-52" data-template-select="">
             <SelectValue />
         </SelectTrigger>
         <SelectContent>
-            {TEMPLATES.map((template) => <SelectItem key={template.id} value={template.id}>{template.label}</SelectItem>)}
+            {GROUPS.map((group, index) => (
+                <Fragment key={group.id}>
+                    {index > 0 && <SelectSeparator />}
+                    <SelectGroup>
+                        <SelectLabel>{group.label}</SelectLabel>
+                        {group.templates.map((template) => <SelectItem key={template.id} value={template.id}>{template.label}</SelectItem>)}
+                    </SelectGroup>
+                </Fragment>
+            ))}
         </SelectContent>
     </Select>
 );

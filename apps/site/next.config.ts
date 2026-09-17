@@ -11,6 +11,9 @@ const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
  */
 const nextConfig: NextConfig = {
     output: "export",
+    // SITE_DIST_DIR=out-check builds (and exports) into another folder, so a check build never replaces an
+    // out/ that `npm run serve` is serving (`serve -- --dir out-check`). With output export, distDir is the export folder.
+    ...(process.env.SITE_DIST_DIR ? { distDir: process.env.SITE_DIST_DIR } : {}),
     // registry/ui lives outside the app: compile it and resolve its imports from the repository root.
     transpilePackages: ["@tyohnn/ui"],
     turbopack: { root: repoRoot },

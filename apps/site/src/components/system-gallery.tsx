@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Badge } from "@tyohnn/components/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@tyohnn/components/card";
 
-import { previewUrl, type Mode, type SystemInfo, type TemplateId } from "@/lib/site";
+import { DEFAULT_TEMPLATE, previewUrl, templateOf, type Mode, type SystemInfo, type TemplateId } from "@/lib/site";
 
 import { Segmented, TemplateSelect } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
@@ -22,7 +22,8 @@ const MODES = [
 /** Every system rendering the same template at the same size; each card links to its system page. */
 export const SystemGallery = ({ systems }: { systems: SystemInfo[] }) =>
 {
-    const [template, setTemplate] = useState<TemplateId>("crm-dashboard");
+    const [template, setTemplate] = useState<TemplateId>(DEFAULT_TEMPLATE);
+    const { viewport } = templateOf(template);
     const [mode, setMode] = useState<ModeChoice>("default");
 
     return (
@@ -47,7 +48,7 @@ export const SystemGallery = ({ systems }: { systems: SystemInfo[] }) =>
                         <li key={system.name} data-system={system.name} className="min-w-0">
                             <Link href={`/systems/${system.name}`} className="group block h-full rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring">
                                 <Card className="h-full overflow-hidden pt-0 transition-shadow group-hover:shadow-md">
-                                    <ScaledFrame src={previewUrl(system.name, template, shown)} title={`${system.name} · ${template} · ${shown}`} width={1200} height={760} className="border-b" />
+                                    <ScaledFrame src={previewUrl(system.name, template, shown)} title={`${system.name} · ${template} · ${shown}`} width={viewport.width} height={viewport.height} className="border-b" />
                                     <CardHeader>
                                         <CardTitle>{system.name}</CardTitle>
                                         <CardDescription>{system.mood}</CardDescription>

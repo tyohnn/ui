@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 import { buttonVariants } from "@tyohnn/components/button";
-import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
-import { previewUrl, TEMPLATES, type Mode, type TemplateId } from "@/lib/site";
+import { DEFAULT_TEMPLATE, previewUrl, templateOf, type Mode, type TemplateId } from "@/lib/site";
 
-import { Segmented } from "./pickers";
+import { Segmented, TemplateSelect } from "./pickers";
+import { ScaledFrame } from "./scaled-frame";
 
 const MODES = [
     { value: "light", label: "Light" },
@@ -17,18 +17,15 @@ const MODES = [
 /** One system, one template at a time, in a large interactive iframe. */
 export const SystemViewer = ({ system, defaultMode }: { system: string; defaultMode: Mode }) =>
 {
-    const [template, setTemplate] = useState<TemplateId>("crm-dashboard");
+    const [template, setTemplate] = useState<TemplateId>(DEFAULT_TEMPLATE);
     const [mode, setMode] = useState<Mode>(defaultMode);
     const src = previewUrl(system, template, mode);
+    const entry = templateOf(template);
 
     return (
         <section aria-label="Live preview" className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <Tabs value={template} onValueChange={(value) => setTemplate(value as TemplateId)} className="max-w-full overflow-x-auto">
-                    <TabsList>
-                        {TEMPLATES.map((item) => <TabsTrigger key={item.id} value={item.id}>{item.label}</TabsTrigger>)}
-                    </TabsList>
-                </Tabs>
+                <TemplateSelect value={template} onChange={setTemplate} />
                 <div className="flex items-center gap-2">
                     <Segmented label="Mode" value={mode} options={MODES} onChange={setMode} />
                     <a href={src} target="_blank" rel="noreferrer" className={buttonVariants({ variant: "outline", size: "sm" })}>
@@ -36,16 +33,30 @@ export const SystemViewer = ({ system, defaultMode }: { system: string; defaultM
                     </a>
                 </div>
             </div>
-            {/* Narrow screens scroll the frame sideways; the template keeps a desktop-ish width. */}
-            <div className="overflow-x-auto rounded-lg border bg-muted">
-                <iframe
+            {entry.group === "blocks" ? (
+                // A block is a page that fills its viewport: render it at that viewport, scaled to the column.
+                <ScaledFrame
                     key={src}
                     src={src}
                     title={`${system} · ${template} · ${mode}`}
-                    data-viewer=""
-                    className="block h-[78vh] min-h-[520px] w-full min-w-[960px] border-0"
+                    width={entry.viewport.width}
+                    height={entry.viewport.height}
+                    interactive
+                    className="rounded-lg border"
                 />
-            </div>
+            ) : (
+                // A showcase template is a long page: a tall scrolling frame, at least as wide as its viewport (narrow screens scroll sideways).
+                <div className="overflow-x-auto rounded-lg border bg-muted">
+                    <iframe
+                        key={src}
+                        src={src}
+                        title={`${system} · ${template} · ${mode}`}
+                        data-viewer=""
+                        className="block h-[78vh] min-h-[520px] w-full border-0"
+                        style={{ minWidth: Math.min(entry.viewport.width, 960) }}
+                    />
+                </div>
+            )}
         </section>
     );
 };

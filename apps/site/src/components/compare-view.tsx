@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 
-import { isTemplate, previewUrl, type Mode, type SystemInfo, type TemplateId } from "@/lib/site";
+import { DEFAULT_TEMPLATE, isTemplate, previewUrl, templateOf, type Mode, type SystemInfo, type TemplateId } from "@/lib/site";
 
 import { Segmented, TemplateSelect } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
@@ -34,7 +34,10 @@ export const CompareView = ({ systems }: { systems: SystemInfo[] }) =>
     };
 
     const chosen = { a: pick("a", names.includes("mira") ? "mira" : names[0]), b: pick("b", names.includes("vega") ? "vega" : names[1]), c: pick("c", NONE) };
-    const template: TemplateId = isTemplate(params.get("template")) ? (params.get("template") as TemplateId) : "crm-dashboard";
+    const template: TemplateId = isTemplate(params.get("template")) ? (params.get("template") as TemplateId) : DEFAULT_TEMPLATE;
+    const entry = templateOf(template);
+    // A block is a page of exactly its viewport; a showcase template is a long page, shown 1500px tall so more of it is in view.
+    const frame = entry.group === "blocks" ? entry.viewport : { width: entry.viewport.width, height: 1500 };
     const modeParam = params.get("mode");
     const mode = modeParam === "light" || modeParam === "dark" ? modeParam : "default";
 
@@ -93,8 +96,8 @@ export const CompareView = ({ systems }: { systems: SystemInfo[] }) =>
                             <ScaledFrame
                                 src={previewUrl(system.name, template, shown)}
                                 title={`${system.name} · ${template} · ${shown}`}
-                                width={1200}
-                                height={1500}
+                                width={frame.width}
+                                height={frame.height}
                                 interactive
                                 className="rounded-lg border"
                             />
