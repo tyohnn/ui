@@ -102,8 +102,22 @@ A **real product screen**, dense and plausible, English, fictional company and p
   utilities in body code. Anything visual the primitives do not draw goes in the template's `<style>`, scoped under
   `[data-template="<id>"]`, reading **tokens only** (`--border`, `--muted`, `--muted-foreground`, `--ui-text-*`,
   `--radius-*`, `--font-mono` …). Long-form text can use the system's typeset axis (`typeset typeset-tool`).
+  The type scale is `--ui-text-xs` · `sm` · `md` · `lg` (each with `--ui-line-height-*`). **`--ui-text-xl` does not
+  exist**: a larger heading uses `lg` (or the typeset axis); an `xl` step is only a candidate token to propose, never
+  something a template reads.
+- **Parts rendered in a portal** (a Dialog, Sheet, Popover or menu content) mount under `<body>`, outside
+  `[data-template]`, so rules scoped to the root never reach them. Put `data-template-part="<id>"` on the portalled
+  part's own element (the dialog body, the popover content) and scope those rules under
+  `[data-template-part="<id>"]`, keeping `[data-template="<id>"]` for everything in the page. See
+  `block-settings-dialog/notifications.tsx` (`SETTINGS_STYLE`).
 - Real content: realistic numbers, names, states (selected, disabled, badges, empty rows), not lorem ipsum or grey
   boxes. Fill the viewport; let inner panes scroll (`min-h-0 overflow-y-auto`) rather than the page.
+- **Why the body scrolls in its own region.** Upstream's page header is `sticky top-0 … bg-background` inside
+  `SidebarInset` with **no z-index**. When the page itself scrolls, any body element that makes a stacking context or
+  is positioned (a card with a shadow and `relative`, a sticky table head, a chart tooltip, a Select trigger) paints
+  over the header as it slides under it. Upstream's placeholder boxes never do; a product screen does. The header
+  markup is compared and stays as upstream, so the body is a viewport-high column (`h-svh`/`min-h-0 flex-1` under the
+  header) whose panes scroll themselves, and the header never has anything scroll beneath it.
 - **Every system must fit.** Controls are 28–44px tall and text 12–18px depending on the system; rows that hold
   many controls must wrap (`flex-wrap`) or give way. Check sera (large, uppercase) and lyra (monospace) early.
 - Fixed data in `data.ts`; no `Date.now`, no `Math.random`.
@@ -149,8 +163,21 @@ Also `npx turbo typecheck`, `node tooling/scan-tokens`, `node tooling/validate-s
 
 ## Exclusion policy
 
-compare-blocks already ignores text content and the width of every element that holds text. Anything else that
-differs is either a bug in the port (fix it), a system value (fix the system, see below), or an exclusion.
+compare-blocks already skips, by rule and without an exclusion (counted in its summary line and `result.json`):
+
+- text content, and the `width` of every element that holds text (labels are fictional);
+- **page height**: `height` / `rect-height` of a root (`sidebarN/root`, the in-flow sidebar wrapper) when, on each
+  side, it equals that page's document height (`scrollHeight`, never below the 900px viewport). Upstream's
+  placeholder body makes the page 1014–1616px tall, a product screen that scrolls in its own region leaves it at 900px;
+  the value follows the body, not the sidebar. A root that is not page-high on either side, and everything inside it
+  (the fixed `h-svh` container), is still compared;
+- **auto margins**: a margin whose computed value is `auto` on both sides (`ml-auto`, `sm:ml-auto`, read with the typed
+  OM `computedStyleMap()`, because `getComputedStyle` returns the used px). Its px is the room the neighbours' text
+  leaves (the header's right-aligned trigger, a mail row's date, the site header's search form). `auto` on one side
+  only is reported, shown as `… (auto)`.
+
+Do not add exclusions for these. Anything else that differs is either a bug in the port (fix it), a system value
+(fix the system, see below), or an exclusion.
 
 `blocks/<id>/compare-exclusions.json`:
 
