@@ -1,15 +1,1 @@
-[
-    {
-        "key": "^sidebar0/sidebar-group-label#\\d+>svg#0$",
-        "props": [
-            "width",
-            "height",
-            "rect-width",
-            "rect-height"
-        ],
-        "systems": [
-            "sera"
-        ],
-        "reason": "Section chevron inside SidebarGroupLabel: upstream's sera style draws the group label's svg at 14px, tyohnn's sera rule leaves it at 16px. A registry (sera sidebar icon size) difference outside this template, which may not touch registry/**; reported for the shared sidebar icon size rule instead of fixed here."
-    }
-]
+[]

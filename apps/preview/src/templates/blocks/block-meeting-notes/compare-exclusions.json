@@ -3,26 +3,5 @@
         "key": "^sidebar0/dropdown-menu-trigger#0>svg#0$",
         "props": ["width", "height", "rect-width", "rect-height"],
         "reason": "pending foundation fix: nested svg size in sidebar menu button. The team logo glyph sits in the switcher's div.size-5; upstream SidebarMenuButton sizes every descendant svg ([&_svg]:size-4), tyohnn's .cn-sidebar-menu-button sizes direct-child svgs only, so the nested logo keeps the icon's 24px box. Not the template's."
-    },
-    {
-        "key": "^sidebar1/sidebar-menu-button#\\d+>svg#0$",
-        "props": ["width", "height", "rect-width", "rect-height"],
-        "reason": "pending foundation fix: nested svg size in sidebar menu button. The calendar item's Check (size-3) sits in a div inside SidebarMenuButton; upstream's [&_svg]:size-4 on the button overrides it to 16px, tyohnn's .cn-sidebar-menu-button sizes direct-child svgs only, so the nested glyph keeps its own 12px. Not the template's."
-    },
-    {
-        "key": "^sidebar1/calendar#0>th#\\d+$",
-        "props": ["line-height", "height", "rect-height"],
-        "reason": "Registry calendar rule: foundation's .cn-calendar-weekday sets line-height: 1.5, upstream's weekday class sets no line-height and inherits (1.333 here, inside the sidebar), so each weekday cell is 2px taller. Every system, not the template's; reported."
-    },
-    {
-        "key": "^sidebar1/(sidebar-group#0|sidebar-group-content#0|calendar#0|calendar#0>(div#[01]|table#0|thead#0|tr#0))$",
-        "props": ["height", "rect-height"],
-        "reason": "The date picker's containers grow by the weekday row's 2px (the calendar weekday line-height difference above); not the template's."
-    },
-    {
-        "key": "^sidebar1/sidebar-group-label#\\d+>svg#0$",
-        "props": ["width", "height", "rect-width", "rect-height"],
-        "systems": ["sera"],
-        "reason": "sera system value, outside this template's reach: registry/systems/sera sidebar.css sizes .cn-sidebar-group-label > svg with --sidebar-item-icon-size (16px) while upstream sera's group label draws the collapsible chevron at 14px. To be fixed in the sera system (the template is not allowed to touch registry/); reported."
     }
 ]
