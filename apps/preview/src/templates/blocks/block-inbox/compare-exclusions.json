@@ -1,0 +1,12 @@
+[
+    {
+        "key": "^sidebar0/root$",
+        "props": ["height", "rect-height"],
+        "reason": "The outer sidebar's in-flow wrapper stretches to the page height, which is the body's: upstream's placeholder column of 24 bars makes the page 1609px tall, the reader fills the 900px viewport and scrolls inside. Not the sidebar's value."
+    },
+    {
+        "key": "^sidebar0/sidebar-group-content#1>span#\\d+$",
+        "props": ["margin-left"],
+        "reason": "The mail row's date is pushed right with ml-auto, so its auto margin is the row width minus the sender's name and the date: it follows the fictional names, like the text widths compare-blocks already skips."
+    }
+]
