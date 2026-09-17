@@ -1,0 +1,32 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "nocturne",
+    "description": "Exhibition dark: near-black planes, pale pill buttons, Bricolage Grotesque titles, mono uppercase labels and one lavender signal for focus and selection.",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "af17294",
+        "note": "Forked from foundation rather than luma: foundation's layer-3 rules are the unmodified slot contract (luma still carries 46 forked rule files and draws borderless fields), and nocturne's hairline borders, 10px fields and flat cards are closer to foundation's shapes with values changed."
+    },
+    "fonts": {
+        "sans": "geist",
+        "heading": "bricolage-grotesque",
+        "mono": "geist-mono",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "dark",
+    "tags": [
+        "dark",
+        "light",
+        "exhibition",
+        "pill",
+        "rounded",
+        "mono-labels"
+    ],
+    "source": {
+        "kind": "site-design",
+        "note": "The tyohnn website's exhibition tone, 2026-09-17"
+    }
+}
