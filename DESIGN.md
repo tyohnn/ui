@@ -320,6 +320,10 @@ removing one always bumps it.
   `--verify` screenshots the preview and the artboard and compares a few computed values. It starts its own preview
   on port 5199 and stops it.
 
+- `npm run build -w @tyohnn/site` — `apps/site/scripts/build-previews.mjs` builds the preview once per system
+  (`--base=/preview/<name>/ --own-css`) into `apps/site/public/preview/<name>/`, then Next exports the site to
+  `apps/site/out`. The site reads systems and fonts from the registry at build time and styles itself with mira.
+
 - `node tooling/snapshot/compare-shadcn.mjs --system <name> [--mode light|dark] [--reference <url>] [--preview <origin>]` —
   compares the preview against the shadcn reference app of a preset (`tooling/preset/make-reference.mjs`).
   Elements pair by `data-slot` and order; the sheet plus the open select, dropdown menu and dialog are measured;
