@@ -1,8 +1,9 @@
 import type { ComponentType } from "react";
 
 import { BlockAiPlayground } from "./blocks/block-ai-playground";
-import { BlockPlaceholder } from "./blocks/placeholder";
+import { BlockOrders } from "./blocks/block-orders";
 import { BlockRoadmap } from "./blocks/block-roadmap";
+import { BlockPlaceholder } from "./blocks/placeholder";
 import { TEMPLATE_CATALOG, type TemplateId } from "./catalog";
 import { ComponentSheet } from "./component-sheet";
 import { Coverage } from "./coverage";
@@ -18,6 +19,7 @@ const CoverageTemplate = () => <Coverage section={new URLSearchParams(location.s
  */
 const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     "block-ai-playground": BlockAiPlayground,
+    "block-orders": BlockOrders,
     "block-roadmap": BlockRoadmap,
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
