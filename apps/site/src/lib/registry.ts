@@ -127,3 +127,6 @@ export const getFontIds = () => [...fontCatalog().keys()].sort();
 export const getIconLibraries = () =>
     Object.entries(readJson<Manifest>(join(registryRoot, "ui/manifest.json")).iconLibraries)
         .map(([id, library]) => ({ id, label: ICON_LABELS[id] ?? id, packages: Object.keys(library.packages) }));
+
+/** The font catalog, for the docs */
+export const getFonts = () => [...fontCatalog().values()].sort((a, b) => a.id.localeCompare(b.id));
