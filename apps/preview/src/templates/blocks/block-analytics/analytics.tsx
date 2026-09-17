@@ -16,8 +16,9 @@ import { COMPARISONS, FUNNEL, KPIS, PERIODS, SOURCES, TOP_PAGES, VISITS } from "
 /**
  * The body of the analytics app: period controls, four KPI cards, a visits area chart beside a traffic-source bar
  * chart, then the top pages table beside the conversion funnel. Fixed data, no time and no randomness; charts have
- * animation off so every render is the final frame. Layout utilities only; series colours are the chart tokens and
- * the small text bands read tokens in ANALYTICS_STYLE.
+ * animation off so every render is the final frame. Layout utilities only; series colours are the chart tokens (named
+ * directly, not through ChartStyle's runtime --color-<key>, so scan-tokens resolves them) and the small text bands read
+ * tokens in ANALYTICS_STYLE.
  */
 
 const VISITS_CONFIG = {
@@ -106,8 +107,8 @@ const VisitsChart = () => (
                     <YAxis tickLine={false} axisLine={false} width={36} tickFormatter={formatThousands} />
                     <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
                     <ChartLegend content={<ChartLegendContent />} />
-                    <Area dataKey="pageViews" type="monotone" fill="var(--color-pageViews)" fillOpacity={0.15} stroke="var(--color-pageViews)" strokeWidth={2} isAnimationActive={false} />
-                    <Area dataKey="visitors" type="monotone" fill="var(--color-visitors)" fillOpacity={0.3} stroke="var(--color-visitors)" strokeWidth={2} isAnimationActive={false} />
+                    <Area dataKey="pageViews" type="monotone" fill="var(--chart-2)" fillOpacity={0.15} stroke="var(--chart-2)" strokeWidth={2} isAnimationActive={false} />
+                    <Area dataKey="visitors" type="monotone" fill="var(--chart-1)" fillOpacity={0.3} stroke="var(--chart-1)" strokeWidth={2} isAnimationActive={false} />
                 </AreaChart>
             </ChartContainer>
         </CardContent>

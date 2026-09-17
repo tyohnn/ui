@@ -54,11 +54,11 @@ export const VISITS = [
 ];
 
 export const SOURCES = [
-    { source: "Search", visitors: 18420, fill: "var(--color-search)" },
-    { source: "Direct", visitors: 11205, fill: "var(--color-direct)" },
-    { source: "Social", visitors: 7930, fill: "var(--color-social)" },
-    { source: "Referral", visitors: 5874, fill: "var(--color-referral)" },
-    { source: "Email", visitors: 4784, fill: "var(--color-email)" },
+    { source: "Search", visitors: 18420, fill: "var(--chart-1)" },
+    { source: "Direct", visitors: 11205, fill: "var(--chart-2)" },
+    { source: "Social", visitors: 7930, fill: "var(--chart-3)" },
+    { source: "Referral", visitors: 5874, fill: "var(--chart-4)" },
+    { source: "Email", visitors: 4784, fill: "var(--chart-5)" },
 ];
 
 export const TOP_PAGES = [
