@@ -47,7 +47,7 @@ export const TEMPLATE_CATALOG = [
     { id: "icons", label: "Icons", group: "showcase", viewport: FRAME, built: true },
     block("block-docs", "Docs", "01", true),
     block("block-api-reference", "API reference", "02", true),
-    block("block-help-center", "Help center", "03"),
+    block("block-help-center", "Help center", "03", true),
     block("block-roadmap", "Roadmap", "04"),
     block("block-orders", "Orders", "05"),
     block("block-analytics", "Analytics", "06"),
