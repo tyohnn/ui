@@ -1,0 +1,22 @@
+[
+    {
+        "key": "^extra0/sidebar-wrapper#0>(div#([2-9]|[1-9]\\d+)|span#\\d+)$",
+        "props": "*",
+        "reason": "The dialog's scrolling body (main > div.overflow-y-auto) is the template's content, not chrome: upstream fills it with ten placeholder boxes (div#2 to div#11), the template with the notification settings form. The dialog root (--roots '[data-slot=dialog-content]') measures its whole subtree, so the body's plain elements pair against the placeholders by order. The scroll container itself (div#1), the header's div#0, the dialog surface, sidebar and header stay compared."
+    },
+    {
+        "key": "^extra0/(field|switch|radio-group|select|table|checkbox|button|separator)[a-z-]*#\\d+(>.*)?$",
+        "props": "*",
+        "reason": "Components of the notification settings form inside the dialog's scrolling body (fields, switches, radio group, selects, channel table, checkboxes, save and cancel buttons). Upstream's body has only placeholder boxes, so these have no counterpart; they are the template's content, render-checked by check-templates."
+    },
+    {
+        "key": "^extra0/dialog-description#0$",
+        "props": [
+            "margin-top"
+        ],
+        "systems": [
+            "sera"
+        ],
+        "reason": "Upstream's DialogDescription is `sr-only` (visually hidden, 1px box). shadcn's sera puts `mt-0.5` in the same utilities layer as `sr-only`, and it comes later, so 2px wins; tyohnn's sera sets margin-block-start: 2px in the component layer (registry/systems/sera _surface-family.css), which the `sr-only` utility's margin: -1px overrides. A cascade-layer difference of the registry for any system whose description has a margin, invisible here; not the template's. Reported."
+    }
+]

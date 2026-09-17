@@ -4,10 +4,13 @@ import { BlockAiPlayground } from "./blocks/block-ai-playground";
 import { BlockAnalytics } from "./blocks/block-analytics";
 import { BlockApiReference } from "./blocks/block-api-reference";
 import { BlockChangelog } from "./blocks/block-changelog";
+import { BlockCodeReview } from "./blocks/block-code-review";
 import { BlockDocs } from "./blocks/block-docs";
 import { BlockHelpCenter } from "./blocks/block-help-center";
 import { BlockOrders } from "./blocks/block-orders";
+import { BlockProject } from "./blocks/block-project";
 import { BlockRoadmap } from "./blocks/block-roadmap";
+import { BlockSettingsDialog } from "./blocks/block-settings-dialog";
 import { BlockTeam } from "./blocks/block-team";
 import { BlockPlaceholder } from "./blocks/placeholder";
 import { TEMPLATE_CATALOG, type TemplateId } from "./catalog";
@@ -28,10 +31,13 @@ const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     "block-analytics": BlockAnalytics,
     "block-api-reference": BlockApiReference,
     "block-changelog": BlockChangelog,
+    "block-code-review": BlockCodeReview,
     "block-docs": BlockDocs,
     "block-help-center": BlockHelpCenter,
     "block-orders": BlockOrders,
+    "block-project": BlockProject,
     "block-roadmap": BlockRoadmap,
+    "block-settings-dialog": BlockSettingsDialog,
     "block-team": BlockTeam,
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
