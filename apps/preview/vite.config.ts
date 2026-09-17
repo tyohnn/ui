@@ -5,6 +5,9 @@ import { fontIds, readFontCatalog, readSystemMeta } from "@tyohnn/build-system/r
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 
+// @ts-expect-error -- plain .mjs script without declarations
+import { writePretendardSubset } from "./scripts/pretendard-subset.mjs";
+
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 
 /**
@@ -58,10 +61,17 @@ const systemPlugin = (): Plugin => ({
             const catalog = readFontCatalog();
 
             // Self-hosted only: fontsource packages for google-provider fonts, the npm package for local ones.
+            // A local font with npm.dynamicSubsetCss (Pretendard) loads a stylesheet trimmed from it instead:
+            // the catalog weights as woff2 unicode-range chunks, plus the static woff2 for the glyphs no chunk
+            // carries (scripts/pretendard-subset.mjs).
             return fontIds(meta.fonts)
                 .map((fontId) =>
                 {
                     const font = catalog.get(fontId);
+                    // registry.d.mts does not declare dynamicSubsetCss yet.
+                    const subset = font?.provider === "local" && (font.npm as { dynamicSubsetCss?: string } | undefined)?.dynamicSubsetCss;
+
+                    if (subset) return `import ${JSON.stringify((writePretendardSubset({ id: fontId }) as { out: string }).out)};`;
 
                     const entry = font?.provider === "google" ? font.fontsource?.css : font?.npm?.css;
 
@@ -87,7 +97,12 @@ const systemPlugin = (): Plugin => ({
 export default defineConfig({
     plugins: [react(), systemPlugin()],
     publicDir: ownCss ? false : `${repoRoot}dist`,
-    build: { outDir: `dist/${process.env.ICONS ? `${system}-${iconLibrary}` : system}`, emptyOutDir: true },
+    build: {
+        outDir: `dist/${process.env.ICONS ? `${system}-${iconLibrary}` : system}`,
+        emptyOutDir: true,
+        // Font files stay files (a few Pretendard chunks are under the 4 kB inline limit): the site shares them across systems.
+        assetsInlineLimit: (file) => (/\.(?:woff2?|ttf|otf)$/.test(file) ? false : undefined),
+    },
     resolve: {
         // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/ui/…
         // (@tyohnn/ui and the tooling packages are untouched by this pattern).
