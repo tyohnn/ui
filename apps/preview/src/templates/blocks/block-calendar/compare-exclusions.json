@@ -1,13 +1,5 @@
 [
     {
-        "key": "^sidebar0/root$",
-        "props": [
-            "height",
-            "rect-height"
-        ],
-        "reason": "The sidebar's in-flow wrapper stretches to the page height, which is the body's: upstream's grid of 20 placeholder squares makes the page 1014px tall, the week view fills the 900px viewport and scrolls inside. Not the sidebar's value."
-    },
-    {
         "key": "^sidebar0/sidebar-menu-button#\\d+>svg#0$",
         "props": [
             "width",

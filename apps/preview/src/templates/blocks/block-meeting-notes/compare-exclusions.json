@@ -1,10 +1,5 @@
 [
     {
-        "key": "^sidebar0/root$",
-        "props": ["height", "rect-height"],
-        "reason": "The left sidebar's in-flow wrapper stretches to the page height, which is the body's: upstream's placeholder column (a 100vh bar under a 6rem bar) makes the page 1100px tall, the notes fill the 900px viewport and scroll inside. Not the sidebar's value."
-    },
-    {
         "key": "^sidebar0/dropdown-menu-trigger#0>svg#0$",
         "props": ["width", "height", "rect-width", "rect-height"],
         "reason": "pending foundation fix: nested svg size in sidebar menu button. The team logo glyph sits in the switcher's div.size-5; upstream SidebarMenuButton sizes every descendant svg ([&_svg]:size-4), tyohnn's .cn-sidebar-menu-button sizes direct-child svgs only, so the nested logo keeps the icon's 24px box. Not the template's."

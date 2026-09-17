@@ -22,6 +22,17 @@
 // compared. A template keeps upstream's nav structure (item count, nesting, open/closed) and changes labels only,
 // so the keys pair one to one; anything else is an exclusion with a reason.
 //
+// Two more values follow the content rather than the chrome, and are skipped by rule (counted in the summary):
+//
+//   - page height: a root (`sidebarN/root`, the in-flow `[data-slot=sidebar]` wrapper) stretches to the page, whose
+//     height is the body's (upstream's placeholder body vs the product screen). A root's `height` and `rect-height`
+//     are skipped when, on each side, the value equals that page's document height (`scrollHeight` of the root
+//     element, never below the viewport). A root that is not page-high on either side is still compared, and so is
+//     every element inside it (the fixed `h-svh` container).
+//   - auto margins: a margin whose computed value is `auto` (`ml-auto`, `sm:ml-auto`, read from the typed OM
+//     `computedStyleMap()`, since getComputedStyle resolves it to the used px) is the space the neighbours' text
+//     leaves. Skipped when it is `auto` on both sides; `auto` on one side only is a mismatch.
+//
 // Exclusions: apps/preview/src/templates/blocks/<template>/compare-exclusions.json (or --exclusions <file>):
 //   [{ "key": "<regex on the reported key>", "props": ["prop", …] | "*", "reason": "…", "systems"?: ["sera"], "modes"?: ["dark"] }]
 // Reported keys are `<root>/<key>`, root = `sidebar0` · `sidebar1` · `header0` · `extra0` ….
@@ -102,6 +113,24 @@ const markRootsInPage = (extra) =>
     return names;
 };
 
+/** Runs in the page after collection: `key → [margin props whose computed value is auto]` for the measured elements. */
+const autoMarginsInPage = () =>
+{
+    const found = {};
+
+    for (const element of document.querySelectorAll("[data-compare-key]"))
+    {
+        if (!element.computedStyleMap || element.tagName.toLowerCase() === "svg") continue;
+
+        const map = element.computedStyleMap();
+        const auto = ["margin-top", "margin-right", "margin-bottom", "margin-left"].filter((prop) => String(map.get(prop)) === "auto");
+
+        if (auto.length) found[element.getAttribute("data-compare-key")] = auto;
+    }
+
+    return found;
+};
+
 const measure = async (browser, url, side) =>
 {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, colorScheme: mode });
@@ -132,10 +161,13 @@ const measure = async (browser, url, side) =>
         rows.push(...result.rows);
     }
 
+    const autoMargins = await page.evaluate(autoMarginsInPage);
+    const pageHeight = await page.evaluate(() => Math.max(document.documentElement.scrollHeight, window.innerHeight));
+
     await page.screenshot({ path: join(shots, `${side}.png`) });
     await page.close();
 
-    return { roots, rows, errors };
+    return { roots, rows, errors, autoMargins, pageHeight };
 };
 
 const browser = await chromium.launch();
@@ -149,6 +181,8 @@ await browser.close();
 const mismatches = [];
 const excluded = [];
 const textWidth = [];
+const pageHeights = [];
+const autoMargins = [];
 const classify = (row) =>
 {
     const rule = exclusions.find((candidate) => candidate.pattern.test(row.key) && (candidate.props === "*" || candidate.props.includes(row.prop)));
@@ -194,7 +228,29 @@ for (const [key, left] of a)
             continue;
         }
 
-        classify({ key, component: left.component, prop, shadcn: left.values[prop] ?? "(none)", tyohnn: right.values[prop] ?? "(none)", text: left.text });
+        // A sidebar root is as tall as the page, and the page is as tall as the body.
+        const pageHigh = (value, side) => Math.abs(parseFloat(value) - side.pageHeight) <= 1;
+
+        if (/^[a-z]+\d+\/root$/.test(key) && (prop === "height" || prop === "rect-height")
+            && pageHigh(left.values[prop], reference) && pageHigh(right.values[prop], tyohnn))
+        {
+            pageHeights.push(`${key} ${prop}`);
+            continue;
+        }
+
+        const autoLeft = reference.autoMargins[key]?.includes(prop) ?? false;
+        const autoRight = tyohnn.autoMargins[key]?.includes(prop) ?? false;
+
+        // An auto margin is the room the neighbours' (fictional) text leaves.
+        if (autoLeft && autoRight)
+        {
+            autoMargins.push(`${key} ${prop}`);
+            continue;
+        }
+
+        const shown = (value, auto) => `${value ?? "(none)"}${auto ? " (auto)" : ""}`;
+
+        classify({ key, component: left.component, prop, shadcn: shown(left.values[prop], autoLeft), tyohnn: shown(right.values[prop], autoRight), text: left.text });
     }
 }
 
@@ -205,6 +261,8 @@ const result = {
     elements: { shadcn: reference.rows.length, tyohnn: tyohnn.rows.length },
     pairs, unpaired, mismatches, excluded,
     textWidthsSkipped: textWidth.length,
+    pageHeightsSkipped: pageHeights,
+    autoMarginsSkipped: autoMargins,
     pageErrors: { shadcn: reference.errors, tyohnn: tyohnn.errors },
 };
 
@@ -212,7 +270,7 @@ writeFileSync(join(shots, "result.json"), `${JSON.stringify(result, null, 2)}\n`
 
 const clip = (value) => String(value).replace(/\|/g, "\\|").slice(0, 70);
 
-console.log(`${system} ${template} vs shadcn ${block} (${mode}): roots ${reference.roots.join(",")} · elements shadcn=${reference.rows.length} tyohnn=${tyohnn.rows.length} · pairs ${pairs} · unpaired ${unpaired.shadcn.length}/${unpaired.tyohnn.length} · mismatches ${mismatches.length} · excluded ${excluded.length} · text widths skipped ${textWidth.length}`);
+console.log(`${system} ${template} vs shadcn ${block} (${mode}): roots ${reference.roots.join(",")} · elements shadcn=${reference.rows.length} tyohnn=${tyohnn.rows.length} · pairs ${pairs} · unpaired ${unpaired.shadcn.length}/${unpaired.tyohnn.length} · mismatches ${mismatches.length} · excluded ${excluded.length} · text widths skipped ${textWidth.length} · page heights skipped ${pageHeights.length} · auto margins skipped ${autoMargins.length}`);
 
 if (reference.errors.length || tyohnn.errors.length) console.log(`page errors: shadcn ${JSON.stringify(reference.errors)} · tyohnn ${JSON.stringify(tyohnn.errors)}`);
 

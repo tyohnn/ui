@@ -1,13 +1,5 @@
 [
     {
-        "key": "^sidebar0/root$",
-        "props": [
-            "height",
-            "rect-height"
-        ],
-        "reason": "The sidebar root (upstream's in-flow [data-slot=sidebar] wrapper) is as tall as the page. Upstream's placeholder body is min-h-[100vh] under a 64px header (1616px); the reference body scrolls in its own viewport-high pane (900px). A content-dependent height, not the chrome's; the fixed sidebar container inside is compared and matches."
-    },
-    {
         "key": "^sidebar0/sidebar-group-label#\\d+>svg#0$",
         "props": [
             "width",

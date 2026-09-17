@@ -1,7 +1,0 @@
-[
-    {
-        "key": "^header0/root>form#0$",
-        "props": ["margin-left"],
-        "reason": "Site header search form's upstream `sm:ml-auto`: the auto margin is the header width left over after the breadcrumb, so it follows the breadcrumb labels' text width (the template's labels are its own). Content-dependent, not a style difference; the form's own box, input and icon are compared."
-    }
-]
