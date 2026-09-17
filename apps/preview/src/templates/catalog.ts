@@ -48,9 +48,9 @@ export const TEMPLATE_CATALOG = [
     block("block-docs", "Docs", "01", true),
     block("block-api-reference", "API reference", "02", true),
     block("block-help-center", "Help center", "03", true),
-    block("block-roadmap", "Roadmap", "04"),
-    block("block-orders", "Orders", "05"),
-    block("block-analytics", "Analytics", "06"),
+    block("block-roadmap", "Roadmap", "04", true),
+    block("block-orders", "Orders", "05", true),
+    block("block-analytics", "Analytics", "06", true),
     block("block-ai-playground", "AI playground", "07", true),
     block("block-project", "Project", "08"),
     block("block-inbox", "Inbox", "09"),
@@ -60,7 +60,7 @@ export const TEMPLATE_CATALOG = [
     block("block-settings-dialog", "Settings dialog", "13"),
     block("block-changelog", "Changelog", "14", true),
     block("block-meeting-notes", "Meeting notes", "15"),
-    block("block-team", "Team", "16"),
+    block("block-team", "Team", "16", true),
 ] as const satisfies readonly TemplateEntry[];
 
 export type TemplateId = (typeof TEMPLATE_CATALOG)[number]["id"];
