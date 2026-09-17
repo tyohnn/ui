@@ -62,7 +62,7 @@ A design system is a complete folder, frozen once created. Nothing is composed a
 
 ```
 registry/systems/<name>/
-  system.json                 name · description · forkedFrom { source, commit } · fonts · icons · defaultMode · tags · source
+  system.json                 name · description · tagline · added · forkedFrom { source, commit } · fonts · icons · defaultMode · tags · source
                               (schema: registry/schema/system.schema.json)
   styles/globals.css          layer 1, complete (:root and .dark)
   styles/tokens.css           layer 2, complete
@@ -116,7 +116,7 @@ This copies the source's `styles/`, writes `DESIGN.md` from `registry/foundation
    Do not append override blocks; the file should read as this system's own values.
 2. Prefer tuning a slot (below) over editing a layer-3 rule. Edit a rule only for a structural change no
    slot expresses, and consider adding a slot to foundation instead.
-3. Fill `system.json` (description, tags, `source` with the origin of the material) and `DESIGN.md`.
+3. Fill `system.json` (description, `tagline` — three short facts joined by " · " that the site's cards show —, tags, `source` with the origin of the material) and `DESIGN.md`. `added` is stamped when the folder is created; the site lists systems newest first.
    Keep source material in `reference/`. Do not ship another company's name, logo or unique assets.
    A system ported from a shadcn preset records `source { kind: "shadcn-preset", preset, shadcnVersion, commit }`.
 4. `node tooling/build-system <name>`, `node tooling/scan-tokens <name>`, `node tooling/validate-system <name>`,

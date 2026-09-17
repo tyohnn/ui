@@ -2,6 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "maia",
     "description": "Round and roomy: neutral greys on 36px controls with 14px text, 26px-rounded buttons and inputs, 18px cards and a three-pixel focus ring.",
+    "tagline": "Figtree · 36px controls · round",
+    "added": "2026-09-16T14:35:58+09:00",
     "forkedFrom": {
         "source": "foundation",
         "commit": "22b2874",

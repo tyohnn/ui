@@ -2,6 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "vega",
     "description": "Calm · classic · comfortable: neutral greys, 36px controls with 14px text, a faint shadow-xs under outlined controls and 14px-rounded cards drawn with a hairline ring.",
+    "tagline": "Inter · 36px controls · shadow-xs",
+    "added": "2026-09-15T18:00:50+09:00",
     "forkedFrom": {
         "source": "foundation",
         "commit": "82c5ab1",

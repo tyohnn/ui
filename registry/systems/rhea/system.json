@@ -2,6 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "rhea",
     "description": "Soft and roomy: 16px corners, a filled field with no border, and a light shadow under every card.",
+    "tagline": "Inter · filled fields · 16px corners",
+    "added": "2026-09-16T11:20:18+09:00",
     "forkedFrom": {
         "source": "foundation",
         "commit": "4b51482"

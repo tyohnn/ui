@@ -2,6 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "luma",
     "description": "Soft and generous: neutral greys drawn with no borders at all — a tinted fill, a hairline ring and a real shadow — on 36px controls with 14px text and 26px-rounded cards and buttons.",
+    "tagline": "Inter · borderless · 26px corners",
+    "added": "2026-09-16T11:26:32+09:00",
     "forkedFrom": {
         "source": "foundation",
         "commit": "4b51482",

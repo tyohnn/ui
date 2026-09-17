@@ -12,7 +12,9 @@
         "icons",
         "tags",
         "source",
-        "defaultMode"
+        "defaultMode",
+        "tagline",
+        "added"
     ],
     "additionalProperties": false,
     "properties": {
@@ -27,6 +29,17 @@
         "description": {
             "type": "string",
             "minLength": 1
+        },
+        "tagline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "Three short facts joined by ' · ' (a font, a density or shape, a signature): the one line a gallery card shows"
+        },
+        "added": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the system joined the registry (ISO 8601); the site lists systems newest first"
         },
         "forkedFrom": {
             "type": "object",

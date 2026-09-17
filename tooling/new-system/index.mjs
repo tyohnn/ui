@@ -49,6 +49,8 @@ writeFileSync(join(target, "system.json"), `${JSON.stringify({
     $schema: "../../schema/system.schema.json",
     name,
     description: "",
+    tagline: "",
+    added: new Date().toISOString(),
     forkedFrom: { source: from, commit: currentCommit() },
     fonts: readSystemMeta(from).fonts,
     icons: readSystemMeta(from).icons,
