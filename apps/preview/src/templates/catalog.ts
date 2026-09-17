@@ -45,7 +45,7 @@ export const TEMPLATE_CATALOG = [
     { id: "component-sheet", label: "Component sheet", group: "showcase", viewport: FRAME, built: true },
     { id: "coverage", label: "Coverage", group: "showcase", viewport: FRAME, built: true },
     { id: "icons", label: "Icons", group: "showcase", viewport: FRAME, built: true },
-    block("block-docs", "Docs", "01"),
+    block("block-docs", "Docs", "01", true),
     block("block-api-reference", "API reference", "02"),
     block("block-help-center", "Help center", "03"),
     block("block-roadmap", "Roadmap", "04"),
