@@ -169,11 +169,11 @@ differs is either a bug in the port (fix it), a system value (fix the system, se
 
 ## Pitfalls found in the exemplar (sidebar-07)
 
-- **Nested svg size.** Upstream `SidebarMenuButton` sizes every descendant svg (`[&_svg]:size-4`); tyohnn's
-  `.cn-sidebar-menu-button` sizes direct children only (`& > svg`). A logo glyph inside the team switcher's
-  `div.size-8` stays 24px here and 16px upstream. Excluded in block-ai-playground with that reason and reported for
-  foundation; blocks with the same shape (10 and 15's team switcher, `div.size-5`) will hit it too. Where upstream
-  already gives the glyph `className="size-4"` (version switcher, 03–06 and 08/16 headers) it matches.
+- **Nested svg size.** Upstream `SidebarMenuButton` sizes every descendant svg (`[&_svg]:size-4`). tyohnn's
+  `.cn-sidebar-menu-button` sized direct children only (`& > svg`), so a logo glyph inside the team switcher's
+  `div.size-8` stayed 24px; the rule now sizes every descendant svg (colour still direct children only) in foundation
+  and all nine systems, and blocks 10 and 15 (`div.size-5`) need no exclusion for it. A nested svg that carries its
+  own size utility still keeps it (the rule sits in the base layer), where upstream's `[&_svg]:size-4` would win.
 - **sera's local `--radius: 0`.** style-sera zeroes `--radius` on the sidebar header and content, so `rounded-*`
   utilities inside them are square. Fixed in `registry/systems/sera` (sidebar.css) after this comparison; other
   systems with a local `--radius` (maia) already had it.
@@ -199,10 +199,10 @@ differs is either a bug in the port (fix it), a system value (fix the system, se
 | 06 → `block-analytics` | dropdown sub-menus · opt-in card in the footer | — | app-sidebar · nav-main · sidebar-opt-in-form | the opt-in form has an Input and Button inside the sidebar card (compared) |
 | 08 → `block-project` | `variant="inset"` · nav-secondary at the bottom | nav-projects-08-16 · nav-secondary-08-16 | app-sidebar · nav-main · nav-user | inset: the body sits in a rounded, shadowed SidebarInset; the header is inside it |
 | 09 → `block-inbox` | two nested sidebars: icon rail + mail list, `--sidebar-width: 350px` | — | app-sidebar · nav-user | the outer sidebar contains both (one compared root); the mail list has upstream's mail count — keep it; the click shuffle's `Math.random` may stay |
-| 10 → `block-editor` | Notion-like; NavActions popover in the header | nav-main-10-15 · nav-secondary-10-15 · nav-workspaces | app-sidebar · nav-actions · nav-favorites · team-switcher | the header holds NavActions (compared, popover closed); team logo in `div.size-5` hits the nested-svg exclusion; emoji in data are text |
+| 10 → `block-editor` | Notion-like; NavActions popover in the header | nav-main-10-15 · nav-secondary-10-15 · nav-workspaces | app-sidebar · nav-actions · nav-favorites · team-switcher | the header holds NavActions (compared, popover closed); team logo in `div.size-5` is sized by the menu button's descendant-svg rule; emoji in data are text |
 | 11 → `block-code-review` | recursive file tree, change badges | — | app-sidebar | the tree's recursion and open folders (`defaultOpen` by folder name) must match upstream's data shape exactly; renaming a folder changes which one opens |
 | 12 → `block-calendar` | date picker · calendar lists · user | date-picker | app-sidebar · calendars · nav-user | the reference renders the real date at build time and the frozen clock on hydration; if the calendar keys differ, compare again before excluding |
 | 13 → `block-settings-dialog` | sidebar inside a Dialog, `open` by default | — | settings-dialog | the page body behind the dialog is ours; the sidebar and the dialog's `<header>` are compared; pass `--roots '[data-slot=dialog-content]'` to measure the dialog surface too |
 | 14 → `block-changelog` | `side="right"` table of contents | — | app-sidebar | the header's trigger is `ml-auto rotate-180` on the right; keep it |
-| 15 → `block-meeting-notes` | left and right sidebars (right: calendars + date picker) | date-picker · nav-main-10-15 · nav-secondary-10-15 · nav-workspaces | calendars · nav-favorites · nav-user · sidebar-left · sidebar-right · team-switcher | two roots `sidebar0` / `sidebar1`; nested-svg exclusion for the team logo; calendars use `rounded-xs` here (`rounded-sm` in 12) |
+| 15 → `block-meeting-notes` | left and right sidebars (right: calendars + date picker) | date-picker · nav-main-10-15 · nav-secondary-10-15 · nav-workspaces | calendars · nav-favorites · nav-user · sidebar-left · sidebar-right · team-switcher | two roots `sidebar0` / `sidebar1`; the team logo is sized by the menu button's descendant-svg rule; calendars use `rounded-xs` here (`rounded-sm` in 12) |
 | 16 → `block-team` | sticky site header above the sidebar (`--header-height`) | nav-projects-08-16 · nav-secondary-08-16 | app-sidebar · nav-main · nav-user · search-form (16 variant) · site-header | the site header is the compared header; its toggle uses `SiteHeaderSidebarToggle` (remix glyph differs from `PanelLeft`) |
