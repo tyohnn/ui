@@ -16,18 +16,5 @@
             "rect-height"
         ],
         "reason": "pending foundation fix: nested svg size in sidebar menu button. The calendar item's Check (size-3) sits in a div inside SidebarMenuButton; upstream's [&_svg]:size-4 on the button overrides it to 16px, tyohnn's .cn-sidebar-menu-button sizes direct-child svgs only, so the nested glyph keeps its own 12px. Not the template's."
-    },
-    {
-        "key": "^sidebar0/sidebar-group-label#\\d+>svg#0$",
-        "props": [
-            "width",
-            "height",
-            "rect-width",
-            "rect-height"
-        ],
-        "systems": [
-            "sera"
-        ],
-        "reason": "sera system value, outside this template's reach: registry/systems/sera sidebar.css sizes .cn-sidebar-group-label > svg with --sidebar-item-icon-size (16px) while upstream sera's group label draws the collapsible chevron at 14px. To be fixed in the sera system (the template is not allowed to touch registry/); reported."
     }
 ]

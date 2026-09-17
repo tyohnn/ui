@@ -147,9 +147,11 @@
     text-transform: var(--sidebar-group-label-text-transform);
     @apply transition-[margin,opacity] duration-200 ease-linear;
 
+    /* sera: [&>svg]:size-3.5 — 라벨의 펼침 chevron 은 항목 아이콘(16)보다 한 단 작은 14 다.
+       sidebar-item 축에 없는 값이고 이 자리 하나뿐이라 리터럴로 적는다. */
     & > svg {
-        width: var(--sidebar-item-icon-size);
-        height: var(--sidebar-item-icon-size);
+        width: 14px;
+        height: 14px;
     }
 
     .group[data-collapsible="icon"] & {
