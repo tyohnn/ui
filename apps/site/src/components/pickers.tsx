@@ -1,50 +1,89 @@
 "use client";
 
-import { Fragment } from "react";
+import type { Mode, SystemSummary, TemplateEntry } from "@/lib/site";
+import { CATEGORIES, screenSource } from "@/lib/site";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@tyohnn/components/select";
-import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
+import { Combobox } from "./combobox";
 
-import { TEMPLATE_GROUPS, TEMPLATES, type TemplateId } from "@/lib/site";
+const systemOptions = (systems: SystemSummary[]) =>
+    systems.map((system) => ({ value: system.name, search: `${system.name} ${system.tagline}`, system }));
 
-const TEMPLATE_ITEMS = TEMPLATES.map((template) => ({ value: template.id, label: template.label }));
-const GROUPS = TEMPLATE_GROUPS.map((group) => ({ ...group, templates: TEMPLATES.filter((template) => template.group === group.id) })).filter((group) => group.templates.length > 0);
-
-/** The template picker of every page: the catalog's templates under their group (Showcase · Blocks). */
-export const TemplateSelect = ({ value, onChange, id }: { value: TemplateId; onChange: (value: TemplateId) => void; id?: string }) => (
-    <Select items={TEMPLATE_ITEMS} value={value} onValueChange={(next) => next && onChange(next as TemplateId)}>
-        <SelectTrigger id={id} size="sm" aria-label="Template" className="min-w-52" data-template-select="">
-            <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-            {GROUPS.map((group, index) => (
-                <Fragment key={group.id}>
-                    {index > 0 && <SelectSeparator />}
-                    <SelectGroup>
-                        <SelectLabel>{group.label}</SelectLabel>
-                        {group.templates.map((template) => <SelectItem key={template.id} value={template.id}>{template.label}</SelectItem>)}
-                    </SelectGroup>
-                </Fragment>
-            ))}
-        </SelectContent>
-    </Select>
+const SystemOption = ({ system, selected }: { system: SystemSummary; selected: boolean }) => (
+    <>
+        <b style={{ fontFamily: system.nameFont }}>{system.name}</b>
+        <span className="tag">{system.defaultMode}</span>
+        <small>{system.tagline}</small>
+        <span className="check">{selected ? "✓" : ""}</span>
+    </>
 );
 
-/** A single-choice segmented control over string options. */
-export const Segmented = <T extends string>({ value, options, onChange, label }: {
-    value: T;
-    options: readonly { value: T; label: string }[];
-    onChange: (value: T) => void;
-    label: string;
-}) => (
-    <ToggleGroup
-        variant="outline"
-        size="sm"
-        spacing={0}
-        aria-label={label}
-        value={[value]}
-        onValueChange={(next: string[]) => next[0] && onChange(next[0] as T)}
-    >
-        {options.map((option) => <ToggleGroupItem key={option.value} value={option.value}>{option.label}</ToggleGroupItem>)}
-    </ToggleGroup>
+const nameFontOf = (systems: SystemSummary[], name: string) => systems.find((system) => system.name === name)?.nameFont;
+
+/** The Components page's system picker */
+export const SystemCombobox = ({ systems, value, onChange }: { systems: SystemSummary[]; value: string; onChange: (name: string) => void }) => (
+    <Combobox
+        options={systemOptions(systems)}
+        value={value}
+        onChange={onChange}
+        label="System"
+        placeholder="Search systems…"
+        triggerClassName="combo-trigger"
+        trigger={<><span className="lbl">System</span><b style={{ fontFamily: nameFontOf(systems, value) }}>{value}</b><span className="chev" aria-hidden>⌄</span></>}
+        renderOption={(option, selected) => <SystemOption system={option.system} selected={selected} />}
+    />
+);
+
+/** Compare's A / B pickers */
+export const SystemPicker = ({ systems, value, onChange, side }: { systems: SystemSummary[]; value: string; onChange: (name: string) => void; side: "A" | "B" }) => (
+    <Combobox
+        options={systemOptions(systems)}
+        value={value}
+        onChange={onChange}
+        label={`System ${side}`}
+        placeholder="Search systems…"
+        triggerClassName="picker"
+        align="left"
+        trigger={<><span className="lbl">{side}</span><b style={{ fontFamily: nameFontOf(systems, value) }}>{value}</b><span className="chev" aria-hidden>⌄</span></>}
+        renderOption={(option, selected) => <SystemOption system={option.system} selected={selected} />}
+    />
+);
+
+/** Compare's screen picker, grouped by category */
+export const ScreenPicker = ({ value, onChange }: { value: string; onChange: (id: string) => void }) =>
+{
+    const options = CATEGORIES.flatMap((category) => category.screens.map((screen: TemplateEntry) => ({
+        value: screen.id,
+        search: `${screen.label} ${screen.block ?? ""} ${category.label}`,
+        group: category.label,
+        screen,
+    })));
+    const current = options.find((option) => option.value === value)?.screen;
+
+    return (
+        <Combobox
+            options={options}
+            value={value}
+            onChange={onChange}
+            label="Screen"
+            placeholder="Search screens…"
+            triggerClassName="picker tpl"
+            optionClassName="template"
+            trigger={<><span className="lbl">Screen</span><b>{current?.label}</b><small>{current ? screenSource(current) : ""}</small><span className="chev" aria-hidden>⌄</span></>}
+            renderOption={(option, selected) => (
+                <>
+                    <b>{option.screen.label}</b>
+                    <span className="tag">{screenSource(option.screen)}</span>
+                    <span className="check">{selected ? "✓" : ""}</span>
+                </>
+            )}
+        />
+    );
+};
+
+/** Light / Dark for the frames */
+export const ModeSeg = ({ mode, onChange, label = "Preview mode" }: { mode: Mode; onChange: (mode: Mode) => void; label?: string }) => (
+    <span className="seg" role="group" aria-label={label}>
+        <button type="button" aria-pressed={mode === "light"} onClick={() => onChange("light")}>Light</button>
+        <button type="button" aria-pressed={mode === "dark"} onClick={() => onChange("dark")}>Dark</button>
+    </span>
 );

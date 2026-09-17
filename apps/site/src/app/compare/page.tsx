@@ -1,28 +1,39 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { CompareView } from "@/components/compare-view";
+import { type CompareFacts, CompareView } from "@/components/compare-view";
 import { getSystems } from "@/lib/registry";
+import { summarize } from "@/lib/site";
 
 export const metadata: Metadata = {
     title: "Compare",
-    description: "Two or three tyohnn design systems side by side on the same template.",
+    description: "Two tyohnn design systems on the same screen, split by a divider you drag.",
 };
 
 export default function ComparePage()
 {
+    const systems = getSystems();
+    const facts: CompareFacts[] = systems.map((system) => ({
+        name: system.name,
+        description: system.description,
+        sans: system.fonts.sans.family,
+        heading: system.fonts.heading?.family ?? system.fonts.sans.family,
+        icons: system.icons.id,
+        defaultMode: system.defaultMode,
+    }));
+
     return (
-        <div className="flex flex-col gap-6 pt-8">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-2xl font-semibold tracking-tight">Compare</h1>
-                <p className="max-w-2xl text-sm text-muted-foreground">
-                    Similar systems, different decisions. Put two or three side by side on the same template and look at control
-                    heights, corners, borders against shadows, and label case — the parts a colour theme does not touch.
-                </p>
+        <>
+            <div className="page-head">
+                <div>
+                    <div className="eyebrow">Side by side</div>
+                    <h1>Compare</h1>
+                    <p>Two systems, one screen. Drag the divider to see where spacing, corners, depth and type part ways.</p>
+                </div>
             </div>
-            <Suspense fallback={<p className="text-sm text-muted-foreground">Loading…</p>}>
-                <CompareView systems={getSystems()} />
+            <Suspense>
+                <CompareView systems={systems.map(summarize)} facts={facts} />
             </Suspense>
-        </div>
+        </>
     );
 }

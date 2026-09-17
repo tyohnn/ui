@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 
-import { Button } from "@tyohnn/components/button";
-import { cn } from "@tyohnn/lib/utils";
-
-/** One shell command with a copy button. */
-export const CopyCommand = ({ command, label, className }: { command: string; label?: string; className?: string }) =>
+const useCopy = (command: string) =>
 {
     const [copied, setCopied] = useState(false);
 
@@ -15,36 +11,50 @@ export const CopyCommand = ({ command, label, className }: { command: string; la
         try
         {
             await navigator.clipboard.writeText(command);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
         }
         catch
         {
-            // Clipboard API unavailable (insecure context): select the text for a manual copy instead.
-            const range = document.createRange();
-            const code = document.querySelector(`[data-command="${CSS.escape(command)}"]`);
+            // Clipboard API unavailable (insecure context): select the command for a manual copy instead.
+            const node = document.querySelector(`[data-command="${CSS.escape(command)}"]`);
 
-            if (code)
-            {
-                range.selectNodeContents(code);
-                getSelection()?.removeAllRanges();
-                getSelection()?.addRange(range);
-            }
+            if (!node) return;
+
+            const range = document.createRange();
+
+            range.selectNodeContents(node);
+            getSelection()?.removeAllRanges();
+            getSelection()?.addRange(range);
         }
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
     };
 
+    return { copied, copy };
+};
+
+/** One shell command in a pill with a copy button. */
+export const CopyCommand = ({ command, className }: { command: string; className?: string }) =>
+{
+    const { copied, copy } = useCopy(command);
+
     return (
-        <div className={cn("flex min-w-0 flex-col gap-1", className)}>
-            {label && <span className="text-xs text-muted-foreground">{label}</span>}
-            <div className="flex min-w-0 items-center gap-2 rounded-md border bg-muted/40 py-1 pr-1 pl-3">
-                <code data-command={command} className="site-code min-w-0 flex-1 overflow-x-auto whitespace-nowrap">
-                    <span className="text-muted-foreground select-none">$ </span>
-                    {command}
-                </code>
-                <Button variant="ghost" size="xs" onClick={copy} aria-label={`Copy: ${command}`} data-copied={copied || undefined}>
-                    {copied ? "Copied" : "Copy"}
-                </Button>
-            </div>
+        <span className={className ? `cmd ${className}` : "cmd"}>
+            <span><span className="dollar">$</span> <span data-command={command}>{command}</span></span>
+            <button type="button" className="copy" onClick={copy} aria-label={`Copy: ${command}`}>{copied ? "Copied" : "Copy"}</button>
+        </span>
+    );
+};
+
+/** A labelled command row (docs). */
+export const CommandCard = ({ label, command }: { label?: string; command: string }) =>
+{
+    const { copied, copy } = useCopy(command);
+
+    return (
+        <div className="cmd-card">
+            {label && <span className="what">{label}</span>}
+            <span className="line"><i>$</i><span data-command={command}>{command}</span></span>
+            <button type="button" className="copy" onClick={copy} aria-label={`Copy: ${command}`}>{copied ? "Copied" : "Copy"}</button>
         </div>
     );
 };

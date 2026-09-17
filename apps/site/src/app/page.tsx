@@ -1,51 +1,42 @@
-import Link from "next/link";
-
 import { CopyCommand } from "@/components/copy-command";
-import { SystemGallery } from "@/components/system-gallery";
+import { Gallery } from "@/components/gallery";
+import { Hero } from "@/components/hero";
 import { getSystems } from "@/lib/registry";
-import { SITE_SYSTEM } from "@/lib/site";
+import { summarize } from "@/lib/site";
 
 const LAYERS = [
-    { name: "Layer 1 · colours", body: "Semantic colours for light and dark, the radius base and static shadows." },
-    { name: "Layer 2 · tokens", body: "Density, shape and depth: control heights, paddings, corners, rings and composed shadows." },
-    { name: "Layer 3 · rules", body: "cn-* rules per component that assemble those values. The TSX carries no visual values." },
+    { num: "1", title: "Colour", body: "The palette for light and dark, as semantic tokens.", file: "styles/globals.css" },
+    { num: "2", title: "Tokens", body: "Density, shape and shadow slots: control heights, radii, surface depth.", file: "styles/tokens.css" },
+    { num: "3", title: "Component rules", body: <>One file per component, styling the <span className="mono">cn-*</span> hooks. The TSX never changes.</>, file: "styles/components/*.css" },
 ];
 
 export default function Home()
 {
-    const systems = getSystems();
+    const systems = getSystems().map(summarize);
 
     return (
-        <div className="flex flex-col gap-10 pt-10">
-            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-end">
-                <div className="flex flex-col gap-3">
-                    <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">shadcn + Base UI + three CSS layers</h1>
-                    <p className="max-w-2xl text-sm text-muted-foreground">
-                        tyohnn is one set of shadcn components on Base UI primitives, drawn by {systems.length} complete design systems.
-                        Switching a system changes more than colour: density, shape and depth move with it. Every card below is the same
-                        TSX with a different system folder.
-                    </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <CopyCommand command={`npx tyohnn init --system ${SITE_SYSTEM}`} label="Copy one system into a Next.js, Vite or monorepo project" />
-                    <p className="text-xs text-muted-foreground">
-                        <Link href="/docs" className="underline underline-offset-4 hover:text-foreground">CLI docs</Link>
-                        {" · "}
-                        <Link href="/compare" className="underline underline-offset-4 hover:text-foreground">Compare systems side by side</Link>
-                    </p>
-                </div>
-            </section>
+        <>
+            <Hero systems={systems} />
+            <Gallery systems={systems} />
 
-            <dl className="grid gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-3">
+            <div className="layers">
                 {LAYERS.map((layer) => (
-                    <div key={layer.name} className="flex flex-col gap-1 bg-background p-4">
-                        <dt className="text-xs font-medium">{layer.name}</dt>
-                        <dd className="text-xs text-muted-foreground">{layer.body}</dd>
+                    <div key={layer.num} className="layer">
+                        <div className="num" aria-hidden>{layer.num}</div>
+                        <h3>{layer.title}</h3>
+                        <p>{layer.body}</p>
+                        <code>{layer.file}</code>
                     </div>
                 ))}
-            </dl>
+            </div>
 
-            <SystemGallery systems={systems} />
-        </div>
+            <div className="install">
+                <div>
+                    <h2>Copy a whole system.</h2>
+                    <p>Components, three layers, fonts, icons and DESIGN.md — into Next.js, Vite or a Turborepo monorepo.</p>
+                </div>
+                <CopyCommand command={`npx tyohnn init --system ${systems[0].name}`} />
+            </div>
+        </>
     );
 }
