@@ -34,7 +34,7 @@ export const Coverage = ({ section }: { section?: string | null }) =>
     const selected = section ? COVERAGE_SECTIONS.filter((entry) => entry.name === section) : COVERAGE_SECTIONS;
 
     return (
-        <main data-specimen="coverage" className="mx-auto flex w-[1100px] flex-col gap-12 px-6 py-10">
+        <main data-template="coverage" data-specimen="coverage" className="mx-auto flex w-[1100px] flex-col gap-12 px-6 py-10">
             <style>{NO_MOTION}</style>
             {selected.length === 0 && <p>Unknown section “{section}”. Known: {COVERAGE_SECTIONS.map((entry) => entry.name).join(", ")}</p>}
             {selected.map((entry) => (

@@ -9,7 +9,7 @@ const library = icons as unknown as Partial<Record<string, IconComponent>>;
  * and by `[data-missing]`. Sizes and colours are layout utilities only.
  */
 export const IconSheet = () => (
-    <main className="mx-auto flex min-h-dvh max-w-6xl flex-col justify-center gap-6 px-6 py-12">
+    <main data-template="icons" className="mx-auto flex min-h-dvh max-w-6xl flex-col justify-center gap-6 px-6 py-12">
         <div data-specimen="icons" className="grid grid-cols-4 gap-3 sm:grid-cols-6">
             {ICON_NAMES.map((name) =>
             {
