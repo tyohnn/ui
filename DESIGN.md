@@ -422,7 +422,8 @@ Sizes live in `styles/tokens.css`, not in the font choice. When a system changes
   registered family) and `local.files` (woff2 paths inside the package, per weight).
 - `license` is one line: name and URL. Licence texts stay in the packages.
 - Seeded with the preset fonts and Pretendard: `geist`, `inter`, `figtree`, `jetbrains-mono`, `noto-sans`,
-  `playfair-display`, `pretendard`. Add a font by adding a file; a system may only name catalog ids.
+  `playfair-display`, `pretendard`; `bricolage-grotesque` and `geist-mono` were added for nocturne (2026-09-17). Add a
+  font by adding a file; a system may only name catalog ids.
 
 Fonts are always self-hosted. Nothing in the repository or the preview loads `fonts.googleapis.com` or
 `fonts.gstatic.com`. The preview (`apps/preview`) imports the CSS entries of the fonts its started system

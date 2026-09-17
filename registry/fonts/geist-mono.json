@@ -1,0 +1,34 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "geist-mono",
+    "family": "Geist Mono",
+    "category": "mono",
+    "provider": "google",
+    "next": {
+        "import": "Geist_Mono",
+        "variable": "--font-mono-geist-mono"
+    },
+    "fontsource": {
+        "package": "@fontsource-variable/geist-mono",
+        "variable": true,
+        "css": "@fontsource-variable/geist-mono",
+        "family": "Geist Mono Variable"
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700
+    ],
+    "axes": [
+        "wght"
+    ],
+    "subsets": [
+        "latin"
+    ],
+    "hangul": false,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}
