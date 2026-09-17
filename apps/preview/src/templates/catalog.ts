@@ -59,7 +59,7 @@ export const TEMPLATE_CATALOG = [
     block("block-calendar", "Calendar", "12", true),
     block("block-settings-dialog", "Settings dialog", "13"),
     block("block-changelog", "Changelog", "14"),
-    block("block-meeting-notes", "Meeting notes", "15"),
+    block("block-meeting-notes", "Meeting notes", "15", true),
     block("block-team", "Team", "16"),
 ] as const satisfies readonly TemplateEntry[];
 

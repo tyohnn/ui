@@ -4,6 +4,7 @@ import { BlockAiPlayground } from "./blocks/block-ai-playground";
 import { BlockCalendar } from "./blocks/block-calendar";
 import { BlockEditor } from "./blocks/block-editor";
 import { BlockInbox } from "./blocks/block-inbox";
+import { BlockMeetingNotes } from "./blocks/block-meeting-notes";
 import { BlockPlaceholder } from "./blocks/placeholder";
 import { TEMPLATE_CATALOG, type TemplateId } from "./catalog";
 import { ComponentSheet } from "./component-sheet";
@@ -23,6 +24,7 @@ const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     "block-calendar": BlockCalendar,
     "block-editor": BlockEditor,
     "block-inbox": BlockInbox,
+    "block-meeting-notes": BlockMeetingNotes,
     "component-sheet": ComponentSheet,
     coverage: CoverageTemplate,
     "crm-dashboard": CrmDashboard,
