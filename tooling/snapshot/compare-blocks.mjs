@@ -222,7 +222,7 @@ if (mismatches.length)
 
     for (const row of mismatches)
     {
-        const id = `${row.component} ${row.prop}`;
+        const id = `${row.component}\u0000${row.prop}`;
 
         groups.set(id, [...(groups.get(id) ?? []), row]);
     }
