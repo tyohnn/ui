@@ -107,8 +107,7 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
     {
         const onScroll = () =>
         {
-            // Cards sit in two columns, so document order is not top-to-bottom: take the card whose top most
-            // recently crossed a line just below the top of the viewport.
+            // The card whose top most recently crossed a line just below the top of the viewport.
             const line = 160;
             let active: string | undefined;
             let best = -Infinity;
@@ -132,6 +131,34 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
 
         return () => window.removeEventListener("scroll", onScroll);
     }, [groups]);
+
+    // Frames above the target finish measuring after the jump and shrink, which would carry the target away:
+    // land on it, then re-align a few times while they settle (unless the reader scrolls meanwhile).
+    const jumpTo = (event: React.MouseEvent, section: string) =>
+    {
+        event.preventDefault();
+
+        const target = document.getElementById(`section-${section}`);
+
+        if (!target) return;
+
+        history.replaceState(null, "", `#section-${section}`);
+
+        const align = () => window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - 24, behavior: "instant" });
+        let moved = false;
+        const stop = () => { moved = true; };
+
+        window.addEventListener("wheel", stop, { once: true, passive: true });
+        window.addEventListener("touchmove", stop, { once: true, passive: true });
+        align();
+        [300, 900, 1800, 3000].forEach((delay) => setTimeout(() => { if (!moved) align(); }, delay));
+        setTimeout(() =>
+        {
+            window.removeEventListener("wheel", stop);
+            window.removeEventListener("touchmove", stop);
+        }, 3100);
+        setCurrent(section);
+    };
 
     const pickSystem = (next: string) =>
     {
@@ -167,7 +194,7 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
                         <div key={group.id} className="igroup">
                             <h4>{group.label}<span>{group.sections.length}</span></h4>
                             {group.sections.map((section) => (
-                                <a key={section} href={`#section-${section}`} aria-current={current === section ? "true" : undefined}>{section}</a>
+                                <a key={section} href={`#section-${section}`} aria-current={current === section ? "true" : undefined} onClick={(event) => jumpTo(event, section)}>{section}</a>
                             ))}
                         </div>
                     ))}

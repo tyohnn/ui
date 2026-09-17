@@ -225,13 +225,14 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .gsec-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
 .gsec-head h3 { font-size: 40px; font-weight: 700; letter-spacing: -0.04em; }
 .gsec-head span { font-family: var(--mono); font-size: 12px; color: var(--fg-3); }
-.masonry { columns: 2; column-gap: 20px; }
-.ccard { break-inside: avoid; margin-bottom: 20px; background: var(--ink-1); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 24px; }
+/* One card per row: most sections then render at their real size (the frame never scales past 1:1). */
+.masonry { display: flex; flex-direction: column; gap: 20px; }
+.ccard { background: var(--ink-1); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 24px; }
 .ccard-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
 .ccard-top b { font-family: var(--mono); font-size: 13px; font-weight: 500; }
 .ccard-top .tag { margin-left: auto; }
 .ccard-top .pop { color: var(--glow); border-color: rgba(185, 194, 255, 0.35); }
-.ccard .scaled { max-height: 460px; }
+.ccard .scaled { max-height: 720px; }
 .empty-note { color: var(--fg-3); font-size: 14px; padding: 24px 0; }
 
 /* SYSTEM COMBOBOX (components/system-combobox.tsx) */
