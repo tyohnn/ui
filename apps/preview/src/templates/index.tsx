@@ -3,10 +3,14 @@ import type { ComponentType } from "react";
 import { BlockAiPlayground } from "./blocks/block-ai-playground";
 import { BlockAnalytics } from "./blocks/block-analytics";
 import { BlockApiReference } from "./blocks/block-api-reference";
+import { BlockCalendar } from "./blocks/block-calendar";
 import { BlockChangelog } from "./blocks/block-changelog";
 import { BlockCodeReview } from "./blocks/block-code-review";
 import { BlockDocs } from "./blocks/block-docs";
+import { BlockEditor } from "./blocks/block-editor";
 import { BlockHelpCenter } from "./blocks/block-help-center";
+import { BlockInbox } from "./blocks/block-inbox";
+import { BlockMeetingNotes } from "./blocks/block-meeting-notes";
 import { BlockOrders } from "./blocks/block-orders";
 import { BlockProject } from "./blocks/block-project";
 import { BlockRoadmap } from "./blocks/block-roadmap";
@@ -30,10 +34,14 @@ const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     "block-ai-playground": BlockAiPlayground,
     "block-analytics": BlockAnalytics,
     "block-api-reference": BlockApiReference,
+    "block-calendar": BlockCalendar,
     "block-changelog": BlockChangelog,
     "block-code-review": BlockCodeReview,
     "block-docs": BlockDocs,
+    "block-editor": BlockEditor,
     "block-help-center": BlockHelpCenter,
+    "block-inbox": BlockInbox,
+    "block-meeting-notes": BlockMeetingNotes,
     "block-orders": BlockOrders,
     "block-project": BlockProject,
     "block-roadmap": BlockRoadmap,
