@@ -47,6 +47,11 @@
                 "package": { "type": "string", "minLength": 1 },
                 "css": { "type": "string", "minLength": 1 },
                 "family": { "type": "string", "minLength": 1 },
+                "dynamicSubsetCss": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Static faces split into unicode-range chunks under the same family (npm.family). Installs keep only the entry's weights and the woff2 source of each face."
+                },
                 "variableCss": { "type": "string" },
                 "variableFamily": { "type": "string" }
             }

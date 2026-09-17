@@ -12,6 +12,7 @@
         "package": "pretendard",
         "css": "pretendard/dist/web/static/pretendard.css",
         "family": "Pretendard",
+        "dynamicSubsetCss": "pretendard/dist/web/static/pretendard-dynamic-subset.css",
         "variableCss": "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css",
         "variableFamily": "Pretendard Variable"
     },
