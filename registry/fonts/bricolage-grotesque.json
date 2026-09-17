@@ -1,0 +1,36 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "bricolage-grotesque",
+    "family": "Bricolage Grotesque",
+    "category": "sans",
+    "provider": "google",
+    "next": {
+        "import": "Bricolage_Grotesque",
+        "variable": "--font-sans-bricolage-grotesque"
+    },
+    "fontsource": {
+        "package": "@fontsource-variable/bricolage-grotesque",
+        "variable": true,
+        "css": "@fontsource-variable/bricolage-grotesque",
+        "family": "Bricolage Grotesque Variable"
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700,
+        800
+    ],
+    "axes": [
+        "wght",
+        "opsz"
+    ],
+    "subsets": [
+        "latin"
+    ],
+    "hangul": false,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}
