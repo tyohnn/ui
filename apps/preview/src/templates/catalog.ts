@@ -57,7 +57,7 @@ export const TEMPLATE_CATALOG = [
     block("block-editor", "Editor", "10"),
     block("block-code-review", "Code review", "11", true),
     block("block-calendar", "Calendar", "12"),
-    block("block-settings-dialog", "Settings dialog", "13"),
+    block("block-settings-dialog", "Settings dialog", "13", true),
     block("block-changelog", "Changelog", "14"),
     block("block-meeting-notes", "Meeting notes", "15"),
     block("block-team", "Team", "16"),
