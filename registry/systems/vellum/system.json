@@ -1,0 +1,35 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "vellum",
+    "theme": "vellum",
+    "description": "Warm and documentary: a paper-toned ground under white cards, a serif that carries every heading, hairline rules instead of shadows, and tables dense enough to read a hundred rows at once. Ink is the action; one deep teal is the signal.",
+    "tagline": "Source Serif 4 · paper ground · dense tables",
+    "added": "2026-09-18T14:40:00+09:00",
+    "forkedFrom": {
+        "source": "mira",
+        "commit": "da1a2ff",
+        "note": "Forked for its compact controls and hairline rings, then given a warm ground, a serif heading axis, softer corners and a denser table rhythm."
+    },
+    "fonts": {
+        "sans": "inter",
+        "heading": "source-serif-4",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "light",
+        "dark",
+        "warm",
+        "serif",
+        "dense",
+        "document"
+    ],
+    "source": {
+        "kind": "reference-screenshot",
+        "note": "Screens of a legal AI workspace shared by the owner, 2026-09-18. Design values only — the warm paper ground, the serif-over-sans pairing, the hairline rules, the table rhythm and the ink/teal split. No product's marks, wording or screen layouts are reproduced."
+    }
+}
