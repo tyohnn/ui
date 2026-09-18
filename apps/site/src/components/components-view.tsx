@@ -5,6 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { COVERAGE, COVERAGE_POPUPS, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
 
 import { ModeSeg, SystemCombobox } from "./pickers";
+import { ThemeEditor } from "./theme-editor";
+import { ThemeProvider } from "./theme-provider";
+import type { ThemeInfo } from "@/lib/themes";
 import { ScaledFrame } from "./scaled-frame";
 
 /** The coverage page's own width (apps/preview coverage/index.tsx lays sections out at 1100px). */
@@ -15,7 +18,7 @@ const COVERAGE_HEIGHT = 900;
  * Every coverage section of one system, grouped, each in its own live frame (popups rendered open). The
  * system and mode pickers restyle every frame; the index filters and follows the scroll position.
  */
-export const ComponentsView = ({ systems, components }: { systems: SystemSummary[]; components: number }) =>
+export const ComponentsView = ({ systems, components, themes, owns }: { systems: SystemSummary[]; components: number; themes: ThemeInfo[]; owns: Record<string, string> }) =>
 {
     const [name, setName] = useState(systems[0].name);
     const system = systems.find((entry) => entry.name === name) ?? systems[0];
@@ -118,7 +121,7 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
     };
 
     return (
-        <>
+        <ThemeProvider themes={themes} own={owns[name] ?? name}>
             <div className="comp-head">
                 <div>
                     <div className="eyebrow">{components} components · {sections} sections</div>
@@ -129,6 +132,7 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
                     </p>
                 </div>
                 <div className="head-tools">
+                    <ThemeEditor systemName={name} />
                     <ModeSeg mode={mode} onChange={setMode} />
                     <SystemCombobox systems={systems} value={name} onChange={pickSystem} />
                 </div>
@@ -180,6 +184,6 @@ export const ComponentsView = ({ systems, components }: { systems: SystemSummary
                     ))}
                 </div>
             </div>
-        </>
+        </ThemeProvider>
     );
 };

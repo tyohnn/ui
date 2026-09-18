@@ -7,6 +7,12 @@
         <script>
             // One design system per page. ?system=<name> (default: the system the server was started for) · ?mode=dark|light (default dark).
             // `dark` must sit on <html>: layer-2 clay compositions resolve on :root.
+            //
+            // ?theme=<id> wears another palette: the system's own colours are in compiled.css, and the theme's
+            // stylesheet is loaded straight after, so the same 72 names are redeclared and nothing else moves.
+            // apps/site/scripts/build-previews.mjs writes one file per theme next to the system builds
+            // (/preview/_themes/<id>.css), which is where this resolves from `base`. The bare dev server has no
+            // themes folder, so ?theme= there is simply ignored by the browser.
             (() => {
                 const params = new URLSearchParams(location.search);
                 const system = (params.get("system") || "__TYOHNN_SYSTEM__").replace(/[^a-z0-9-]/gi, "");
@@ -20,6 +26,16 @@
                 link.href = `__TYOHNN_BASE__systems/${system}/compiled.css`;
                 link.id = "system-css";
                 document.head.appendChild(link);
+
+                const theme = (params.get("theme") || "").replace(/[^a-z0-9-]/gi, "");
+
+                if (theme) {
+                    const colours = document.createElement("link");
+                    colours.rel = "stylesheet";
+                    colours.href = `__TYOHNN_BASE__../_themes/${theme}.css`;
+                    colours.id = "theme-css";
+                    document.head.appendChild(colours);
+                }
             })();
         </script>
     </head>
