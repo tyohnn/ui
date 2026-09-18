@@ -140,19 +140,38 @@ export const themeToCss = (resolved) =>
     ].join("\n");
 };
 
+// base64url by hand: the editor runs in a browser, where `Buffer` may be a polyfill without that encoding.
+const toBase64 = (text) =>
+{
+    const bytes = new TextEncoder().encode(text);
+
+    if (typeof btoa === "function") return btoa(String.fromCharCode(...bytes));
+
+    return Buffer.from(bytes).toString("base64");
+};
+
+const fromBase64 = (text) =>
+{
+    const padded = text + "=".repeat((4 - (text.length % 4)) % 4);
+
+    if (typeof atob === "function") return new TextDecoder().decode(Uint8Array.from(atob(padded), (character) => character.charCodeAt(0)));
+
+    return Buffer.from(padded, "base64").toString("utf8");
+};
+
 /** A theme packed for a share link: `tyohnn-theme:<base64url>`. */
 export const encodeTheme = (theme) =>
 {
     const payload = { n: theme.name, t: theme.title, e: theme.extends, l: theme.light, d: theme.dark, m: theme.material };
 
-    return `tyohnn-theme:${Buffer.from(JSON.stringify(payload), "utf8").toString("base64url")}`;
+    return `tyohnn-theme:${toBase64(JSON.stringify(payload)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
 };
 
 /** The theme inside a `tyohnn-theme:` string. */
 export const decodeTheme = (encoded) =>
 {
-    const body = encoded.startsWith("tyohnn-theme:") ? encoded.slice("tyohnn-theme:".length) : encoded;
-    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
+    const body = (encoded.startsWith("tyohnn-theme:") ? encoded.slice("tyohnn-theme:".length) : encoded).replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(fromBase64(body));
 
     return {
         name: payload.n,

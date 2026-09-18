@@ -6,6 +6,7 @@ import { hash, readIfExists, rel } from "../lib/fs.js";
 import { color, log } from "../lib/log.js";
 import { isCode, placementOf } from "../project/placement.js";
 import { requireRecord, usedIcons, usedSystems } from "../project/record.js";
+import { listThemes } from "../project/theme.js";
 import { openSource } from "../source/index.js";
 import { describeSource, type GlobalOptions, openProjectSource, recordRoot, workingDir } from "./context.js";
 
@@ -28,6 +29,15 @@ export const list = async (options: GlobalOptions): Promise<void> =>
         log.info(`  ${name.padEnd(width)}  ${firstSentence(meta.description)} ${color.dim(`(${meta.fonts.sans} · ${meta.icons.library} · ${meta.mode})`)}`);
     }
 
+    log.info(color.bold("\nThemes") + color.dim("  — colours only; any theme goes on any system"));
+
+    const themes = listThemes(registry);
+
+    for (const [group, names] of Object.entries(themes))
+    {
+        if (names.length) log.info(`  ${group.padEnd(8)}  ${names.join(" · ")}`);
+    }
+
     log.info(color.bold("\nIcon libraries"));
 
     for (const [name, library] of Object.entries(registry.manifest.iconLibraries)) log.info(`  ${name.padEnd(10)}  ${Object.keys(library.packages).join(" + ")}`);
@@ -39,7 +49,7 @@ export const list = async (options: GlobalOptions): Promise<void> =>
 
     for (const [id, font] of fonts) log.info(`  ${id.padEnd(fontWidth)}  ${font.family} · ${font.category} · ${font.provider === "google" ? "Google Fonts, self-hosted" : `npm ${font.npm?.package}`}${font.hangul ? " · Hangul" : ""}`);
 
-    log.info(color.dim("\ninit --system <name> [--icons <library>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>]"));
+    log.info(color.dim("\ninit --system <name> [--theme <name>] [--icons <library>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>]"));
 };
 
 type State = "unchanged" | "upstream" | "local" | "conflict" | "removed upstream" | "added upstream";

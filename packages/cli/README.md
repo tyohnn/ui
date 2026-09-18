@@ -21,12 +21,36 @@ monorepos (with or without Turborepo).
 | `use <system> [--app <path>]` | Switches an app to another system: entry CSS, fonts and mode. The TSX stays; the old system folder is removed when no app uses it. |
 | `icons <library> [--app <path>]` | Switches an app's icon library (mapping file and packages). |
 | `fonts [--sans <id>] [--heading <id\|inherit>] [--mono <id\|system>] [--reset] [--app <path>]` | Switches an app's fonts; `--reset` returns to the system's. |
+| `theme <name \| ./file.json \| tyohnn-theme:<code>> [--reset] [--app <path>]` | Switches an app's colours, keeping its system. `--reset` returns to the system's own theme. |
 | `list` | Systems, icon libraries and fonts, one line each. |
 | `doctor [--built]` | Checks the setup against `tyohnn.json` (see below). Exit code 1 on a failure. |
 | `diff [--files]` | Compares the project's copies with the source: changed upstream, changed locally, both, added, removed. |
 
+## Colours
+
+A **theme** is 72 colour values, light and dark. A **system** is the feel — density, shape, material,
+motion. They are separate axes, so any theme goes on any system:
+
+```sh
+tyohnn init --system mira --theme nocturne   # mira's density, nocturne's colours
+tyohnn theme stone                           # a neutral ramp (shadcn's baseColor)
+tyohnn theme blue                            # an accent: primary, secondary, charts and the sidebar
+                                             # accent move; the rest of the palette stays
+tyohnn theme ./brand.json                    # your own, a file in the project
+tyohnn theme tyohnn-theme:<code>             # a link from the theme editor
+tyohnn theme --reset                         # back to the system's own colours
+```
+
+An accent is not a whole palette, so it is composed over what the app wears now (`mira + blue`), the way
+shadcn's `create` pairs a baseColor with a theme. `tyohnn list` prints the themes, bases and accents.
+
+While an app wears its system's own theme it uses the system folder's `theme.css` and nothing is
+generated. As soon as it wears another, the CLI writes `tyohnn-theme.css` next to the entry CSS and
+imports that instead — the same place in the cascade, so nothing else moves. `doctor` checks that the file
+is still what the theme renders.
+
 Common options: `--yes` (no prompts, take defaults) · `--force` (overwrite files that exist or were edited) ·
-`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--icons <library>`, `--font <id>`,
+`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--font <id>`,
 `--font-heading <id|inherit>`, `--font-mono <id|system>`, and in a monorepo `--app <path>`, `--ui <folder>`
 (default `packages/ui`) and `--scope <@scope>` (the package becomes `<scope>/ui`). `--example component-sheet`
 copies the preview's component sheet into the app (a page at `/tyohnn/component-sheet` in Next.js).

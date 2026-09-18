@@ -29,13 +29,58 @@ The three layers:
 
 | Layer | Foundation file | Holds | Example |
 |---|---|---|---|
-| 1 — colours | `styles/globals.css` | semantic colours in `:root` and `.dark`, Tailwind `@theme` mapping, radius foundation, static shadows | `--primary`, `--border-subtle`, `--checked`, `--clay-contact` |
+| 1 — palette | `styles/theme.css` (generated) | the 72 colours a theme fills, in `:root` and `.dark` | `--primary`, `--tag-blue-bg`, `--checked` |
+| 1 — formulas | `styles/globals.css` | what is derived from the palette, this system's own colours and material, Tailwind `@theme` mapping, radius foundation, static shadows | `--primary-soft: color-mix(in oklab, var(--primary) 5%, transparent)`, `--clay-contact` |
 | 2 — tokens | `styles/tokens.css` | density, shape, type, motion and composed shadows in `:root` | `--control-height-md`, `--table-row-height`, `--shadow-control` |
 | 3 — rules | `styles/style.css` → `styles/components/*.css` | `cn-*` rules that assemble layer 1/2 values | `.cn-badge[data-tone] { border-radius: var(--tag-radius) }` |
 
 Layer 3 is imported into `layer(base)` (Tailwind's cascade layer) so utilities passed through
 `className` still win. Shared rules (`_control-family`, `_menu-family`, `_surface-family`, `_shared`)
 load first.
+
+The input order is the cascade contract, and it is written in three places that must agree
+(`tooling/build-system/index.mjs` `renderEntry`, `packages/cli/src/project/sync.ts` `SYSTEM_CSS_FILES`,
+and an app's entry CSS):
+
+    tailwindcss → globals.css → theme.css → tokens.css → typeset → style.css layer(base)
+
+`theme.css` comes after `globals.css` so a theme can be swapped without touching the system, and
+`globals.css` must not declare a palette colour — it would be overwritten silently.
+
+### Colour is a separate axis
+
+A **theme** is 72 colour values (`packages/theme` `PALETTE`), light and dark. A **system** is the feel:
+density, shape, material, motion, and the formulas that derive hover · soft · ring colours from the
+palette. Any theme goes on any system.
+
+- A palette colour is never a literal in `globals.css`; `styles/theme.css` is generated from
+  `registry/themes/<id>.json` (the `theme` in `system.json`) by `tooling/theme/write-css.mjs`, and
+  `validate-system` fails when the file on disk is not what the theme renders.
+- A colour derived from the palette is written as a **formula**, not as the value it happens to have
+  today: `color-mix(in oklab, var(--primary) 5%, transparent)`, which is what Tailwind compiles
+  `bg-primary/5` to. `tooling/theme/classify.mjs` proves a formula paints the same pixel as the literal
+  it replaces.
+- A colour the palette cannot explain (graphite's clay blue, nocturne's `--glow`) stays a literal in
+  `globals.css`. Material is the system's character, not the theme's.
+
+### A slot's default belongs to the rule that reads it
+
+A slot exists because one system wants a different look there. The other systems declare **nothing**: the
+rule carries the default.
+
+```css
+.cn-sidebar-menu-button { border-color: var(--sidebar-item-border, var(--border)); }
+```
+
+`scan-tokens` requires only the palette of every system (rule 2), and rule 1 fails a read of an
+undeclared name that has no fallback. Three kinds of default cannot move into the rule and stay declared
+in layer 1:
+
+- a CSS-wide keyword (`initial`): `var(--x)` on a property set to `initial` is guaranteed-invalid, so the
+  property inherits, while `var(--x, initial)` sets the initial value — a different colour;
+- a slot read through Tailwind's `text-(color:--x)` shorthand, which has nowhere to put a fallback;
+- a slot whose `:root` and `.dark` values differ — one fallback cannot be two values, and dropping only
+  one scope silently gives dark the light value.
 
 Layer 3 uses `!important` only where upstream itself beats the caller's utilities, usually where
 upstream writes `!` (the collapsed sidebar item's `size-8!`). One such place has no `!` upstream: the icon

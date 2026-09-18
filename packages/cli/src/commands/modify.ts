@@ -1,10 +1,11 @@
-// Commands that change an existing setup: add · use · icons · fonts. Each edits tyohnn.json and syncs.
+// Commands that change an existing setup: add · use · icons · fonts · theme. Each edits tyohnn.json and syncs.
 
 import { CliError, log } from "../lib/log.js";
 import { inspectApp } from "../project/app.js";
 import { describeFonts, resolveFonts, validateFonts } from "../project/fonts.js";
 import { requireRecord, type TyohnnRecord, usedIcons } from "../project/record.js";
 import { sync } from "../project/sync.js";
+import { describeTheme, normalizeTheme, resolveThemeInput } from "../project/theme.js";
 import type { Registry } from "../source/registry.js";
 import { appPathFrom, type GlobalOptions, interactive, newChanges, openProjectSource, parseMode, printSummary, recordRoot, resolveAppPath, select, workingDir } from "./context.js";
 import { initFontOverrides } from "./init.js";
@@ -106,6 +107,20 @@ export const icons = async (library: string | undefined, options: GlobalOptions)
 
     record.apps[appPath].icons = library;
     await run(root, record, registry, options, previous === library ? `${library} re-applied` : `Icons of ${appPath === "." ? "the app" : appPath}: ${previous} → ${library}`);
+};
+
+/** tyohnn theme <id | ./file.json | tyohnn-theme:<code>> [--app <path>] [--reset] */
+export const theme = async (argument: string | undefined, options: GlobalOptions): Promise<void> =>
+{
+    if (!argument && !options.reset) throw new CliError("no theme given", "Usage: tyohnn theme <name | ./theme.json | tyohnn-theme:<code>> [--reset]. Run `tyohnn list` for the themes.");
+
+    const { root, record, registry } = await load(options);
+    const appPath = resolveAppPath(options, root, record);
+    const app = record.apps[appPath];
+
+    app.theme = options.reset || !argument ? undefined : normalizeTheme(resolveThemeInput(argument, root, registry, app), registry, app.system);
+
+    await run(root, record, registry, options, `Colours of ${appPath === "." ? "the app" : appPath}: ${describeTheme(app.theme, registry, app.system)}`);
 };
 
 /** tyohnn fonts [--sans <id>] [--heading <id|inherit>] [--mono <id|system>] [--reset] [--app <path>] */
