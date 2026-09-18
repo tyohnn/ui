@@ -30,6 +30,7 @@ export interface GlobalOptions
     mono?: string;
     mode?: string;
     system?: string;
+    theme?: string;
     ui?: string;
     scope?: string;
     example?: string;

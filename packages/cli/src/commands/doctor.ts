@@ -3,7 +3,8 @@
 //
 // Per app
 //   FAIL  entry CSS missing · no system or two systems imported · the wired system differs from tyohnn.json
-//   FAIL  import order tailwindcss → globals → tokens → typeset → typeset-preset → style.css layer(base)
+//   FAIL  import order tailwindcss → globals → theme → tokens → typeset → typeset-preset → style.css layer(base)
+//   FAIL  the app's own colours: theme file missing · generated tyohnn-theme.css missing or stale
 //   FAIL  monorepo: no @source for the UI package · next.config does not transpile it
 //   FAIL  Next: <html> does not read the layout block · font stacks read variables the layout does not declare ·
 //         next/font/local files missing · `dark` on <html> differs from the recorded mode
@@ -28,6 +29,7 @@ import { CliError, color, log } from "../lib/log.js";
 import { packageDir } from "../project/detect.js";
 import { cssFontImports, fontPackages } from "../project/fonts.js";
 import { placementOf } from "../project/placement.js";
+import { describeTheme, themeCss } from "../project/theme.js";
 import { readRecord, usedIcons } from "../project/record.js";
 import { SYSTEM_CSS_FILES } from "../project/sync.js";
 import { openCachedCommit } from "../source/index.js";
@@ -91,12 +93,16 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
 
         for (const file of SYSTEM_CSS_FILES)
         {
-            const index = imports.findIndex((entry) => systemOf(entry.specifier) === app.system && entry.specifier.endsWith(`/${file}`));
+            // An app wearing another theme imports its own generated colours in that slot instead.
+            const ownColours = file === "theme.css" && app.theme;
+            const index = ownColours
+                ? imports.findIndex((entry) => entry.specifier.endsWith("tyohnn-theme.css"))
+                : imports.findIndex((entry) => systemOf(entry.specifier) === app.system && entry.specifier.endsWith(`/${file}`));
             const layer = file === "style.css" ? "base" : null;
 
             if (index === -1)
             {
-                add("FAIL", where, `missing @import of ${app.system}/${file}`);
+                add("FAIL", where, ownColours ? "the app's theme is set but its colours are not imported" : `missing @import of ${app.system}/${file}`);
                 ordered = false;
                 continue;
             }
@@ -116,7 +122,26 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
             previous = Math.max(previous, index);
         }
 
-        if (ordered && systems.length === 1) add("ok", where, "import order tailwindcss → globals → tokens → typeset → style.css layer(base)");
+        if (ordered && systems.length === 1) add("ok", where, "import order tailwindcss → globals → theme → tokens → typeset → style.css layer(base)");
+
+        // Colours
+        if (app.theme)
+        {
+            const named = describeTheme(app.theme, registry!, app.system);
+            const themeSource = "file" in app.theme ? join(root, app.theme.file) : null;
+            const generated = join(dirname(cssFile), "tyohnn-theme.css");
+
+            if (themeSource && !existsSync(themeSource)) add("FAIL", where, `theme file ${(app.theme as { file: string }).file} is missing (tyohnn.json points at it)`);
+            else if (!existsSync(generated)) add("FAIL", where, `${rel(root, generated)} is missing (run \`tyohnn theme\` again${appPath === "." ? "" : ` with --app ${appPath}`})`);
+            else if (registry)
+            {
+                const expected = themeCss(app.theme, root, registry);
+
+                if (readIfExists(generated) !== expected) add("FAIL", where, `${rel(root, generated)} is not what the theme renders (run \`tyohnn theme\` again)`);
+                else add("ok", where, `colours: ${describeTheme(app.theme, registry, app.system)}`);
+            }
+            else add("ok", where, `colours: ${"file" in app.theme ? app.theme.file : "id" in app.theme ? app.theme.id : `${app.theme.base} + ${app.theme.accent}`}`);
+        }
 
         if (placement.monorepo)
         {
