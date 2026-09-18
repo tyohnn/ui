@@ -10,6 +10,7 @@ import { detectProject, frameworkOf, isCoveredByWorkspaces, type PackageJson, wo
 import { describeFonts, type FontOverrides, resolveFonts, validateFonts } from "../project/fonts.js";
 import { readRecord, RECORD_VERSION, type TyohnnRecord } from "../project/record.js";
 import { sync } from "../project/sync.js";
+import { describeTheme, normalizeTheme, resolveThemeInput } from "../project/theme.js";
 import { openSource } from "../source/index.js";
 import type { Registry } from "../source/registry.js";
 import { appPathFrom, describeSource, type GlobalOptions, interactive, newChanges, parseMode, printSummary, recordRoot, select, text, workingDir } from "./context.js";
@@ -164,7 +165,9 @@ export const init = async (options: GlobalOptions): Promise<void> =>
     const changes = newChanges();
     const [appPath, app] = Object.entries(record.apps)[0];
 
-    log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · ${mode} mode`);
+    if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
+
+    log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · colours ${describeTheme(app.theme, registry, app.system)} · ${mode} mode`);
     await sync({ root, registry, record, changes, options: { force: Boolean(options.force), install: options.install !== false } });
     printSummary(`Set up ${systemName} in ${project.kind === "monorepo" ? `${record.ui.path} and ${appPath}` : `this ${app.framework === "next" ? "Next.js" : "Vite"} app`}`, changes, root);
     log.info(`\nNext: run the app, then \`tyohnn doctor\`.${project.kind === "monorepo" ? " Add another app with `tyohnn add <system> --app <path>`." : ""}`);
@@ -190,6 +193,7 @@ const reinit = async (options: GlobalOptions, root: string, record: TyohnnRecord
     if (options.icons) app.icons = options.icons;
     if (options.font || options["font-heading"] || options["font-mono"]) app.fonts = resolveFonts(system.fonts, initFontOverrides(options));
     if (options.mode) app.mode = parseMode(options.mode)!;
+    if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
     if (options.example) app.example = options.example;
 
     const changes = newChanges();

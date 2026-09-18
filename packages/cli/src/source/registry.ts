@@ -17,6 +17,8 @@ export interface SystemMeta
 {
     name: string;
     description: string;
+    /** registry/themes/<id>.json — the colour set the system ships with */
+    theme?: string;
     fonts: FontsChoice;
     icons: { library: string };
     defaultMode?: "light" | "dark";

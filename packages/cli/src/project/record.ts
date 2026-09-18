@@ -6,6 +6,7 @@ import { jsonText, readJson, sortKeys, writeFile } from "../lib/fs.js";
 import { CliError } from "../lib/log.js";
 import type { SourceInfo } from "../source/index.js";
 import type { FontsChoice } from "../source/registry.js";
+import type { ThemeChoice } from "./theme.js";
 import type { Framework, PackageManager, ProjectKind } from "./detect.js";
 
 export const RECORD_FILE = "tyohnn.json";
@@ -17,6 +18,8 @@ export interface AppRecord
     system: string;
     icons: string;
     fonts: FontsChoice;
+    /** The colour set; absent means the system's own theme */
+    theme?: ThemeChoice;
     mode: "light" | "dark";
     /** Entry CSS, relative to the project root */
     css: string;
@@ -89,6 +92,7 @@ export const serializeRecord = (record: TyohnnRecord): string =>
             system: app.system,
             icons: app.icons,
             fonts: { sans: app.fonts.sans, heading: app.fonts.heading, mono: app.fonts.mono, hangulFallback: app.fonts.hangulFallback },
+            ...(app.theme ? { theme: "id" in app.theme ? { id: app.theme.id } : "base" in app.theme ? { base: app.theme.base, accent: app.theme.accent } : { file: app.theme.file } } : {}),
             mode: app.mode,
             css: app.css,
             ...(app.example ? { example: app.example } : {}),

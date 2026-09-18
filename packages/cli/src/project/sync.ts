@@ -24,6 +24,7 @@ import { syncDependencies, updatePackageJson } from "./package-json.js";
 import { isCode, type Placement, placementOf } from "./placement.js";
 import { install, workspaceRange } from "./pm.js";
 import { type AppRecord, type TyohnnRecord, usedIcons, usedSystems, writeRecord } from "./record.js";
+import { isOwnTheme, themeCss } from "./theme.js";
 import { OwnedFiles } from "./writer.js";
 
 export interface SyncOptions
@@ -60,6 +61,9 @@ const pascal = (name: string) => name.split("-").map((part) => part[0].toUpperCa
 /** Folder of an app's copy of an example (Next: a private folder next to its route page) */
 const exampleDir = (app: AppFiles, example: string) =>
     app.next ? join(app.next.appDir, "tyohnn", example, "_example") : join(app.dir, "src/tyohnn", example);
+
+/** An app that wears a theme other than its system's own gets this generated file next to its entry CSS. */
+const appThemeCss = (app: AppFiles): string => join(dirname(app.css), "tyohnn-theme.css");
 
 const planOwnedFiles = (ctx: SyncContext, placement: Placement, apps: AppFiles[]): OwnedFiles =>
 {
@@ -120,6 +124,16 @@ const planOwnedFiles = (ctx: SyncContext, placement: Placement, apps: AppFiles[]
             const from = `${registry.systemDir(system)}/${file}`;
 
             copy(from, placement.target(from)!);
+        }
+    }
+
+    for (const app of apps)
+    {
+        const appRecord = record.apps[app.path];
+
+        if (!isOwnTheme(appRecord.theme, registry, appRecord.system))
+        {
+            owned.plan(appThemeCss(app), "generated:theme.css", themeCss(appRecord.theme!, ctx.root, registry));
         }
     }
 
@@ -284,7 +298,13 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
         "   globals → layer 1 theme colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */",
         '@import "tailwindcss";',
         ...(app.framework === "vite" ? cssFontImports(appRecord.fonts, registry) : []),
-        ...SYSTEM_CSS_FILES.map((file) => `@import "${systemSpecifier}/${file}"${file === "style.css" ? " layer(base)" : ""};`),
+        ...SYSTEM_CSS_FILES.map((file) =>
+        {
+            // The app's own colours replace the system's, in the same place in the cascade.
+            if (file === "theme.css" && !isOwnTheme(appRecord.theme, registry, system)) return `@import "${relSpecifier(cssDir, appThemeCss(app))}";`;
+
+            return `@import "${systemSpecifier}/${file}"${file === "style.css" ? " layer(base)" : ""};`;
+        }),
     ].join("\n");
 
     const system_ = registry.system(system);
