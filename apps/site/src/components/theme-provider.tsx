@@ -101,13 +101,14 @@ const writeHash = (state: ThemeState | null) =>
 };
 
 /**
- * Holds the colours the page is showing and puts them into every preview iframe on it.
+ * Holds the colours the page is showing and puts them into every preview iframe on it. Every frame gets the
+ * same palette, which is what makes a side-by-side comparison about the feel rather than the colour.
  *
  * The frames are same-origin, so a stylesheet can be written straight into their documents — the same
  * `:root` / `.dark` blocks the CLI would generate, in the same place in the cascade, which is why a
  * change lands instantly and looks exactly like a build would.
  */
-export const ThemeProvider = ({ themes, own, children }: { themes: ThemeInfo[]; own: string; children: ReactNode }) =>
+export const ThemeProvider = ({ themes, own, always = false, children }: { themes: ThemeInfo[]; own: string; always?: boolean; children: ReactNode }) =>
 {
     const [state, setState] = useState<ThemeState>({ base: own, accent: null, edits: empty() });
     const [ready, setReady] = useState(false);
@@ -120,7 +121,9 @@ export const ThemeProvider = ({ themes, own, children }: { themes: ThemeInfo[]; 
 
     const isOwn = state.base === own && !state.accent && Object.keys(state.edits.light).length === 0 && Object.keys(state.edits.dark).length === 0;
     const display = useMemo(() => compose(themes, state), [themes, state]);
-    const colours = isOwn ? null : display;
+    // `always` is for a page comparing two systems: both sides wear the same colours from the start, so what
+    // is left between them is the feel. Elsewhere the frames are left exactly as built until something changes.
+    const colours = isOwn && !always ? null : display;
     const css = useMemo(() => colours ? themeToCss({ name: "editor", title: "editor", ...colours }) : null, [colours]);
 
     useEffect(() =>

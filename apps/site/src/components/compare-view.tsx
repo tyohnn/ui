@@ -6,6 +6,9 @@ import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState }
 import { DEFAULT_SCREEN, isScreen, type Mode, previewUrl, screenOf, type SystemInfo, type SystemSummary } from "@/lib/site";
 
 import { ModeSeg, ScreenPicker, SystemPicker } from "./pickers";
+import { ThemeEditor } from "./theme-editor";
+import { ThemeProvider } from "./theme-provider";
+import type { ThemeInfo } from "@/lib/themes";
 import { ScaledFrame } from "./scaled-frame";
 
 /** The facts the table under the split compares */
@@ -15,7 +18,7 @@ export type CompareFacts = Pick<SystemInfo, "name" | "description"> & { sans: st
  * Two systems on one screen, one over the other: drag the divider (or use ← → on it) to move the boundary.
  * The pickers, screen and mode live in the URL (?a=&b=&screen=&mode=), so a comparison can be shared.
  */
-export const CompareView = ({ systems, facts }: { systems: SystemSummary[]; facts: CompareFacts[] }) =>
+export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemSummary[]; facts: CompareFacts[]; themes: ThemeInfo[]; owns: Record<string, string> }) =>
 {
     const router = useRouter();
     const pathname = usePathname();
@@ -65,13 +68,14 @@ export const CompareView = ({ systems, facts }: { systems: SystemSummary[]; fact
     const fontOf = (name: string) => systems.find((system) => system.name === name)?.nameFont;
 
     return (
-        <>
+        <ThemeProvider themes={themes} own={owns[a] ?? a} always>
             <div className="controls">
                 <SystemPicker systems={systems} value={a} onChange={(value) => update({ a: value })} side="A" />
                 <span className="vs">vs</span>
                 <SystemPicker systems={systems} value={b} onChange={(value) => update({ b: value })} side="B" />
                 <button type="button" className="swap" onClick={() => update({ a: b, b: a })}>⇄ Swap</button>
                 <div className="right">
+                    <ThemeEditor systemName={`${a} and ${b}`} />
                     <ScreenPicker value={screen} onChange={(value) => update({ screen: value })} />
                     <ModeSeg mode={mode} onChange={(value) => update({ mode: value })} />
                 </div>
@@ -129,7 +133,8 @@ export const CompareView = ({ systems, facts }: { systems: SystemSummary[]; fact
                         <div key={`${label}-b`} className={tone}>{right}</div>,
                     ];
                 })}
+
             </div>
-        </>
+        </ThemeProvider>
     );
 };
