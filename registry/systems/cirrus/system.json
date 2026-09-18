@@ -1,0 +1,34 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "cirrus",
+    "description": "Daylight and glass: a cool near-white page, white cards on wide soft shadows, pill buttons, and every floating layer — menus, popovers, dialogs, sheets — frosted. Ink-navy is the action; one sky blue is the signal, with mint beside it in charts.",
+    "tagline": "Pretendard · frosted layers · pill buttons",
+    "added": "2026-09-18T06:25:59.435Z",
+    "forkedFrom": {
+        "source": "luma",
+        "commit": "2126466"
+    },
+    "fonts": {
+        "sans": "pretendard",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "light",
+        "dark",
+        "cool",
+        "glass",
+        "airy",
+        "marketing"
+    ],
+    "source": {
+        "kind": "reference-screenshot",
+        "note": "Screens of a Korean startup-legal marketing site shared by the owner, 2026-09-18. Design values only — the pale sky gradients, the frosted chips floating over photographs, the wide soft shadows under white cards, the near-black pill CTA and the blue/mint pairing in the diagnostic charts. No product's marks, wording or screen layouts are reproduced."
+    },
+    "theme": "cirrus"
+}
