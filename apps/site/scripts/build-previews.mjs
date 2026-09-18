@@ -6,11 +6,16 @@
 // apps/preview built for that system with `--base=/preview/<name>/ --own-css`, so the fonts, icon library and
 // stylesheet are that system's and nothing else ships. The output is not committed (.gitignore).
 //
+// Colours are shared too: every theme in registry/themes is rendered once into
+// apps/site/public/preview/_themes/<id>.css, which a preview loads after its own stylesheet when the URL
+// carries `?theme=<id>`. That is how one build shows any palette.
+//
 // Font files are shared: every build emits the same content-hashed files (Pretendard's woff2 chunks for all
 // nine systems, Inter's for four), so each one is moved to apps/site/public/preview/_fonts/<file> once and the
 // system's CSS/JS point at /preview/_fonts/<file> instead of /preview/<system>/assets/<file>.
 //
-// Usage: node scripts/build-previews.mjs [name…]   (default: every system)
+// Usage: node scripts/build-previews.mjs [name…] [--themes]   (default: every system; --themes: only the
+// theme stylesheets, which are quick and independent of the builds)
 
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
@@ -18,12 +23,15 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { buildSystem } from "@tyohnn/build-system";
-import { listSystems } from "@tyohnn/build-system/registry";
+import { listSystems, registryRoot } from "@tyohnn/build-system/registry";
+import { resolveTheme, themeToCss } from "@tyohnn/theme";
 
 const siteRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const previewRoot = join(siteRoot, "../preview");
 const outRoot = join(siteRoot, "public/preview");
 const fontsRoot = join(outRoot, "_fonts");
+const themesOut = join(outRoot, "_themes");
+const themesRoot = join(registryRoot, "themes");
 const FONT_FILE = /\.(?:woff2?|ttf|otf)$/;
 const TEXT_FILE = /\.(?:css|js|html)$/;
 
@@ -37,10 +45,11 @@ if (unknown.length > 0)
     process.exit(2);
 }
 
-const systems = requested.length > 0 ? requested : known;
+const themesOnly = process.argv.includes("--themes");
+const systems = themesOnly ? [] : requested.length > 0 ? requested : known;
 const started = Date.now();
 
-if (requested.length === 0) rmSync(outRoot, { recursive: true, force: true });
+if (!themesOnly && requested.length === 0) rmSync(outRoot, { recursive: true, force: true });
 
 /** Moves one build's font files into _fonts/ (one copy per content-hashed name) and rewrites its references. */
 const shareFonts = (name) =>
@@ -105,6 +114,31 @@ const run = (name) =>
         child.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`${name}: preview build failed\n${stderr}`))));
     });
 
+/** Every complete theme as its own stylesheet, so a preview can wear one without being rebuilt. */
+const buildThemes = () =>
+{
+    const load = (id) =>
+    {
+        for (const dir of [".", "bases", "accents"])
+        {
+            const path = join(themesRoot, dir, `${id}.json`);
+
+            if (existsSync(path)) return JSON.parse(readFileSync(path, "utf8"));
+        }
+
+        return undefined;
+    };
+    const ids = [".", "bases"].flatMap((dir) => existsSync(join(themesRoot, dir))
+        ? readdirSync(join(themesRoot, dir)).filter((file) => file.endsWith(".json")).map((file) => file.slice(0, -".json".length))
+        : []);
+
+    mkdirSync(themesOut, { recursive: true });
+
+    for (const id of ids) writeFileSync(join(themesOut, `${id}.css`), themeToCss(resolveTheme(load(id), load)));
+
+    return ids.length;
+};
+
 for (const name of systems) buildSystem(name);
 
 // Vite builds share nothing but the read-only dependency tree; three at a time keeps memory reasonable.
@@ -128,4 +162,5 @@ for (const name of systems)
     console.log(`preview/${name}  ${fonts} font files → _fonts/ (${moved} new, ${fonts - moved} shared)`);
 }
 
+console.log(`${buildThemes()} themes → ${themesOut}`);
 console.log(`${systems.length} previews in ${((Date.now() - started) / 1000).toFixed(1)}s → ${outRoot}`);

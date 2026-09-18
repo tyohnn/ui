@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { SystemView } from "@/components/system-view";
+import { ThemeProvider } from "@/components/theme-provider";
 import { getSystem, getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
+import { readThemes, systemThemes } from "@/lib/themes";
 
 export const dynamicParams = false;
 
@@ -40,8 +42,11 @@ export default async function SystemPage({ params }: Props)
         ["Default", system.defaultMode === "dark" ? "Dark" : "Light"],
     ];
 
+    const themes = readThemes();
+    const own = systemThemes()[system.name] ?? system.name;
+
     return (
-        <>
+        <ThemeProvider themes={themes} own={own}>
             <nav className="crumbs" aria-label="Breadcrumb">
                 <Link href="/#systems">Systems</Link>
                 <span aria-hidden>/</span>
@@ -61,6 +66,6 @@ export default async function SystemPage({ params }: Props)
                     </div>
                 )}
             />
-        </>
+        </ThemeProvider>
     );
 }

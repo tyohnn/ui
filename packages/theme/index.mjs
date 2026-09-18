@@ -244,6 +244,16 @@ export const parseColour = (value) =>
     return null;
 };
 
+/** A colour as `#rrggbb`, for the browser inputs that only speak hex; null when it cannot be read. */
+export const toHex = (value) =>
+{
+    const rgb = parseColour(value);
+
+    if (!rgb) return null;
+
+    return `#${rgb.map((channel) => Math.round(channel * 255).toString(16).padStart(2, "0")).join("")}`;
+};
+
 const luminance = ([r, g, b]) =>
 {
     const channel = (value) => value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;

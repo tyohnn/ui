@@ -8,6 +8,7 @@ import { CATEGORIES, type Mode, previewUrl, REPOSITORY, screenSource, type Syste
 import { CopyCommand } from "./copy-command";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
+import { ThemeEditor } from "./theme-editor";
 
 /**
  * A system page below the breadcrumb: the intro (server-rendered, passed in), the install panel, the sticky
@@ -87,7 +88,7 @@ export const SystemView = ({
                         {category.label}<small>{category.screens.length}</small>
                     </a>
                 ))}
-                <span className="end">{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
+                <span className="end"><ThemeEditor systemName={system.name} />{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
             </nav>
 
             {CATEGORIES.map((category) => (
