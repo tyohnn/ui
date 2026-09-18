@@ -128,15 +128,21 @@ const buildThemes = () =>
 
         return undefined;
     };
-    const ids = [".", "bases"].flatMap((dir) => existsSync(join(themesRoot, dir))
+    const idsIn = (dir) => existsSync(join(themesRoot, dir))
         ? readdirSync(join(themesRoot, dir)).filter((file) => file.endsWith(".json")).map((file) => file.slice(0, -".json".length))
-        : []);
+        : [];
+    const whole = [".", "bases"].flatMap(idsIn);
+    const accents = idsIn("accents");
 
-    mkdirSync(themesOut, { recursive: true });
+    mkdirSync(join(themesOut, "accents"), { recursive: true });
 
-    for (const id of ids) writeFileSync(join(themesOut, `${id}.css`), themeToCss(resolveTheme(load(id), load)));
+    for (const id of whole) writeFileSync(join(themesOut, `${id}.css`), themeToCss(resolveTheme(load(id), load)));
 
-    return ids.length;
+    // An accent is a partial layer: loaded after a whole palette it redeclares only what it moves, which is
+    // how `?theme=stone+blue` composes without a file per pair.
+    for (const id of accents) writeFileSync(join(themesOut, "accents", `${id}.css`), themeToCss(resolveTheme(load(id), load), { partial: true }));
+
+    return whole.length + accents.length;
 };
 
 for (const name of systems) buildSystem(name);

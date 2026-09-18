@@ -70,7 +70,7 @@
     translate: 0;
 
     &[data-checked] {
-        background-color: var(--switch-thumb-on, var(--card));
+        background-color: var(--switch-thumb-on, var(--background));
         translate: calc(100% - 2px);   /* vega: translate-x-[calc(100%-2px)] */
     }
 

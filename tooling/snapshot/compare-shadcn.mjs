@@ -30,7 +30,7 @@
 // Matching mismatches are reported as excluded, with their reason, and do not count.
 //
 // Usage:
-//   node tooling/snapshot/compare-shadcn.mjs --system vega [--template coverage|component-sheet] [--mode light|dark]
+//   node tooling/snapshot/compare-shadcn.mjs --system vega [--theme <id|base+accent>] [--template coverage|component-sheet] [--mode light|dark]
 //        [--reference http://localhost:3100] [--preview http://localhost:5173] [--sections a,b] [--states open|closed]
 //        [--shots dir] [--out file.json] [--exclusions file] [--max-shots 40]
 //
@@ -65,6 +65,10 @@ const template = arg("template", "coverage") === "component-sheet" ? "component-
 const mode = arg("mode", "light") === "dark" ? "dark" : "light";
 const referenceOrigin = arg("reference", "http://localhost:3100");
 const previewOrigin = arg("preview", "http://localhost:5173");
+// The colours the tyohnn side wears: a theme id, or `<base>+<accent>`. The reference app has to have been
+// built for the same two axes (make-reference.mjs --variant <baseColor>-<accent>).
+const theme = arg("theme", "");
+const themeParam = theme ? `theme=${encodeURIComponent(theme)}&` : "";
 const only = (arg("sections", "") || "").split(",").map((name) => name.trim()).filter(Boolean);
 const shots = arg("shots", join(repoRoot, "tooling/snapshot/out", `shadcn-${system}-${template}-${mode}`));
 const out = arg("out", join(shots, "result.json"));
@@ -150,7 +154,7 @@ let sectionsCompared = [];
 if (template === "component-sheet")
 {
     const referenceUrl = referenceOrigin;
-    const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}&motion=off`;
+    const previewUrl = `${previewOrigin}/?system=${encodeURIComponent(system)}&mode=${mode}&${themeParam}motion=off`;
     const reference = await measureSheet(browser, { url: referenceUrl, mode, states: states ? STATES : [], shots, side: "shadcn" });
     const tyohnn = await measureSheet(browser, { url: previewUrl, mode, states: states ? STATES : [], shots, side: "tyohnn", swap: strings });
 
@@ -194,7 +198,7 @@ else
     const url = (origin, extra) => (section) =>
         `${origin}/?${extra}motion=off&template=coverage${section ? `&section=${encodeURIComponent(section)}` : ""}`;
     const reference = await coveragePage(browser, { url: url(referenceOrigin, ""), mode, side: "shadcn" });
-    const tyohnn = await coveragePage(browser, { url: url(previewOrigin, `system=${encodeURIComponent(system)}&mode=${mode}&`), mode, swap: strings, side: "tyohnn" });
+    const tyohnn = await coveragePage(browser, { url: url(previewOrigin, `system=${encodeURIComponent(system)}&mode=${mode}&${themeParam}`), mode, swap: strings, side: "tyohnn" });
     const declared = await reference.sections();
     const mine = await tyohnn.sections();
     const names = (list) => list.map((section) => section.name).join(",");
@@ -311,6 +315,7 @@ const result = {
     mode,
     reference: referenceOrigin,
     preview: previewOrigin,
+    theme: theme || null,
     elements,
     pairs,
     sections: sectionsCompared,

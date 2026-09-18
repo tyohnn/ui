@@ -36,7 +36,30 @@ export const workdir = () =>
     return dir;
 };
 
-export const referenceAppDir = (preset) => join(workdir(), preset);
+export const referenceAppDir = (preset, variant) => join(workdir(), variant ? `${preset}--${variant}` : preset);
+
+/** shadcn's own `-p` URL for a preset's config, with the colour axes swapped (CLI 4.21.0 `pe()`). */
+export const presetUrl = (config, overrides = {}) =>
+{
+    const merged = { ...config, ...overrides };
+    const params = new URLSearchParams({
+        base: merged.base ?? "base",
+        style: merged.style,
+        baseColor: merged.baseColor,
+        theme: merged.theme,
+        iconLibrary: merged.iconLibrary,
+        font: merged.font,
+        rtl: String(merged.rtl ?? false),
+        menuAccent: merged.menuAccent,
+        menuColor: merged.menuColor,
+        radius: merged.radius,
+    });
+
+    if (merged.chartColor && merged.chartColor !== "neutral") params.set("chartColor", merged.chartColor);
+    if (merged.fontHeading && merged.fontHeading !== "inherit") params.set("fontHeading", merged.fontHeading);
+
+    return `https://ui.shadcn.com/init?${params.toString()}`;
+};
 
 const SPARSE_PATHS = ["/apps/v4/registry/*.ts", "/apps/v4/registry/styles/", "/apps/v4/registry/bases/base/blocks/"];
 
