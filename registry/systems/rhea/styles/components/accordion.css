@@ -29,7 +29,7 @@
 
     /* 열린 항목은 바탕이 한 단 옅게 깔린다. mira: data-open:bg-muted/50 */
     &[data-open] {
-        background-color: var(--muted-soft);
+        background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     }
 }
 

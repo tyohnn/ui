@@ -7,7 +7,10 @@
 //                 with `hangul: true`                                                             → FAIL
 //   3. stacks     layer-1 --font-sans / --font-heading / --font-mono in :root equal the stacks built
 //                 from the fonts and the catalog (system font → Hangul fallback → platform)       → FAIL
-//   4. icons      (once) every name in registry/ui/icons/names.ts is exported by all six
+//   4. theme      system.json `theme` names a theme in registry/themes, it resolves to the whole
+//                 palette, and styles/theme.css is exactly what it renders (a generated file)     → FAIL
+//                 low-contrast pairs in the resolved theme                                        → warning
+//   5. icons      (once) every name in registry/ui/icons/names.ts is exported by all six
 //                 icons/libraries/<library>.tsx files and nothing else is; the libraries match the
 //                 schema enum and manifest.json iconLibraries; registry/ui components, hooks and lib
 //                 import no icon package directly (only @tyohnn/icons)                            → FAIL
@@ -20,6 +23,9 @@ import { join, relative } from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 
 import { fontIds, fontStacks, listSystems, readFontCatalog, readSystemMeta, readTokens, repoRoot, schemaRoot, styleFiles, systemRoot, uiRoot } from "@tyohnn/build-system/registry";
+import { checkContrast, checkTheme, resolveTheme, themeToCss } from "@tyohnn/theme";
+
+import { loadTheme, themeIdOf } from "../theme/themes.mjs";
 
 const readJson = (file) => JSON.parse(readFileSync(file, "utf8"));
 const ajv = new Ajv2020({ allErrors: true, strict: false });
@@ -43,6 +49,9 @@ for (const [id, font] of catalog)
     if (!validateFont(font)) errorsOf(validateFont).forEach((error) => catalogFailures.push(`registry/fonts/${id}.json: ${error}`));
     if (font.id !== id) catalogFailures.push(`registry/fonts/${id}.json: id "${font.id}" differs from the file name`);
 }
+
+/** Not failures: values upstream ships that read below AA, reported once at the end. */
+const warnings = [];
 
 const check = (name) =>
 {
@@ -87,10 +96,36 @@ const check = (name) =>
         else if (found[0].value !== expected) failures.push(`styles/globals.css:${found[0].line} ${token}\n      is:       ${found[0].value}\n      expected: ${expected}`);
     }
 
+    // 4. theme
+    const themeId = themeIdOf(meta);
+    const theme = loadTheme(themeId);
+
+    if (!theme) failures.push(`theme "${themeId}" is not in registry/themes`);
+    else
+    {
+        const resolved = resolveTheme(theme, loadTheme);
+        const problems = checkTheme(resolved);
+
+        if (problems.length > 0) failures.push(...problems.map((line) => `registry/themes/${themeId}.json: ${line}`));
+        else
+        {
+            const path = styleFiles(systemRoot(name)).theme;
+            const expected = themeToCss(resolved);
+
+            if (!existsSync(path)) failures.push(`styles/theme.css is missing — run node tooling/theme/write-css.mjs ${name}`);
+            else if (readFileSync(path, "utf8") !== expected) failures.push(`styles/theme.css is not what theme "${themeId}" renders — run node tooling/theme/write-css.mjs ${name}`);
+
+            for (const row of checkContrast(resolved))
+            {
+                warnings.push(`${name}: --${row.foreground} on --${row.background} is ${row.ratio}:1 in ${row.mode} (AA wants 4.5)`);
+            }
+        }
+    }
+
     return failures;
 };
 
-// 4. icons (shared by every system)
+// 5. icons (shared by every system)
 const ICON_PACKAGES = /from\s+["'](lucide-react|@tabler\/icons-react|@hugeicons\/[^"']+|@phosphor-icons\/[^"']+|@remixicon\/[^"']+|@radix-ui\/react-icons)["']/g;
 
 const checkIcons = () =>
@@ -162,8 +197,11 @@ for (const name of names)
 
     console.log(`\n${name}: fonts ${JSON.stringify(meta.fonts)} · icons ${meta.icons?.library}`);
     failures.forEach((failure) => console.log(`  ✗ ${failure}`));
-    console.log(failures.length === 0 ? "  ✓ schema · font ids · layer-1 font stacks" : `  ✗ ${failures.length} failures`);
+    console.log(failures.length === 0 ? `  ✓ schema · font ids · layer-1 font stacks · theme "${themeIdOf(meta)}"` : `  ✗ ${failures.length} failures`);
     failed ||= failures.length > 0;
 }
+
+if (warnings.length > 0) console.log(`\ncontrast below AA (${warnings.length}):`);
+warnings.forEach((warning) => console.log(`  ⚠ ${warning}`));
 
 process.exit(failed ? 1 : 0);

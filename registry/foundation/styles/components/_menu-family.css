@@ -50,7 +50,7 @@
     /* 안쪽 링은 v4 의 --menu-ring 이다. 기본값이 --ring-subtle 이라 화면은 같고,
        카드의 링과 메뉴의 링을 갈라 쓰는 시스템만 값이 달라진다. */
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--shadow-float);
 }
 
@@ -270,7 +270,7 @@
 .cn-menubar-separator,
 .cn-command-separator,
 .cn-combobox-separator {
-    background-color: var(--border-subtle);
+    background-color: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
     height: var(--surface-border-width);
     margin-inline: var(--menu-separator-margin-inline);
     margin-block: var(--menu-separator-margin-block);

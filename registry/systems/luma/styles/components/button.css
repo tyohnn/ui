@@ -65,25 +65,25 @@
 .cn-button-variant-default {
     background-color: var(--primary);
     background-image: var(--surface-primary);
-    border-color: var(--primary-border);
+    border-color: var(--primary-border, transparent);
     box-shadow: var(--shadow-control-primary);
     color: var(--primary-foreground);
 
     &:hover {
-        background-color: var(--primary-hover);
+        background-color: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
     }
 }
 
 .cn-button-variant-secondary {
     background-color: var(--secondary);
     background-image: var(--surface-control);
-    border-color: var(--button-secondary-border);
+    border-color: var(--button-secondary-border, transparent);
     box-shadow: var(--shadow-control);
     color: var(--secondary-foreground);
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
-        background-color: var(--secondary-hover);
+        background-color: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
     }
 }
 
@@ -96,13 +96,13 @@
 .cn-button-variant-outline {
     background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
-    border-color: var(--button-outline-border);
+    border-color: var(--button-outline-border, var(--border));
     box-shadow: var(--shadow-control);
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
         /* axis contract v4 — 종전 --input-fill-hover. foundation 값은 그 별칭이다. */
-        background-color: var(--button-outline-hover-fill);
+        background-color: var(--button-outline-hover-fill, var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent)));
         color: var(--foreground);
     }
 

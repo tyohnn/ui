@@ -19,7 +19,7 @@
 .cn-context-menu-sub-content {
     min-width: 128px;
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--menu-sub-shadow);
 }
 

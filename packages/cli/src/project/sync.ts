@@ -43,7 +43,7 @@ export interface SyncContext
 
 const TAILWIND_RANGE = "^4";
 
-export const SYSTEM_CSS_FILES = ["globals.css", "tokens.css", "typeset.css", "typeset-preset.css", "style.css"] as const;
+export const SYSTEM_CSS_FILES = ["globals.css", "theme.css", "tokens.css", "typeset.css", "typeset-preset.css", "style.css"] as const;
 
 /** The monorepo default icon library: the one most apps use (alphabetical on a tie) */
 export const defaultIconLibrary = (record: TyohnnRecord): string =>
@@ -254,9 +254,9 @@ const syncPackages = (ctx: SyncContext, placement: Placement, apps: AppFiles[]):
     return changed;
 };
 
-/** Custom property names a system declares in layer 1 and 2 */
+/** Custom property names a system declares in layer 1 (globals and the generated theme) and layer 2 */
 const systemTokenNames = (registry: Registry, system: string): Set<string> =>
-    new Set(["globals.css", "tokens.css"].flatMap((file) => [...registry.read(`${registry.systemDir(system)}/styles/${file}`).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)].map((match) => match[1])));
+    new Set(["globals.css", "theme.css", "tokens.css"].flatMap((file) => [...registry.read(`${registry.systemDir(system)}/styles/${file}`).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)].map((match) => match[1])));
 
 const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
 {
@@ -281,7 +281,7 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
     const systemSpecifier = placement.monorepo ? `${record.ui.importBase}/systems/${system}` : relSpecifier(cssDir, placement.systemDir(system));
     const systemBlock = [
         `/* Design system ${system} (tyohnn). One system per app; this order is the cascade contract: tailwindcss → layer 1`,
-        "   colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */",
+        "   globals → layer 1 theme colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */",
         '@import "tailwindcss";',
         ...(app.framework === "vite" ? cssFontImports(appRecord.fonts, registry) : []),
         ...SYSTEM_CSS_FILES.map((file) => `@import "${systemSpecifier}/${file}"${file === "style.css" ? " layer(base)" : ""};`),

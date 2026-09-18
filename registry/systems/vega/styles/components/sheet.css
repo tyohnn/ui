@@ -29,11 +29,10 @@
     box-shadow: var(--sheet-shadow);
     gap: var(--surface-padding-md);   /* vega: gap-4 */
 
-    /* ⚠ 200ms 는 리터럴이다. mira 의 duration-200 이고 --control-duration(150)과 다른
-       값인데 모션 축에 다른 단이 없다. 이징은 mira 의 ease-in-out 대신 계열의
-       --control-ease 를 읽는다(1층 머리말 — 기본 이징은 UI 에 약하다). */
+    /* 큰 패널이 밀려 들어오는 속도는 모션 축의 느린 단이다(mira 의 duration-200).
+       이징은 mira 의 ease-in-out 대신 계열의 --control-ease 를 읽는다(1층 머리말 — 기본 이징은 UI 에 약하다). */
     transition-property: opacity, translate, transform;
-    transition-duration: 200ms;
+    transition-duration: var(--motion-slow);
     transition-timing-function: var(--control-ease);
 
     /* 안쪽을 향한 한 변에만 선을 긋는다. */

@@ -1,6 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "sera",
+    "theme": "sera",
     "description": "Editorial taupe: square corners, uppercase labels and a Playfair Display serif for every title.",
     "tagline": "Playfair Display · square · uppercase labels",
     "added": "2026-09-16T16:29:11+09:00",

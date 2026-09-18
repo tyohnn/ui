@@ -6,6 +6,7 @@
     "description": "Per design system (and foundation): undefined tokens, missing foundation tokens, missing component stylesheets, system-only and dead tokens.",
     "main": "index.mjs",
     "dependencies": {
-        "@tyohnn/build-system": "*"
+        "@tyohnn/build-system": "*",
+        "@tyohnn/theme": "*"
     }
 }

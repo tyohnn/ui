@@ -105,9 +105,14 @@
     --control-font-weight-regular: 400;
     --control-letter-spacing: -0.01em;
 
-    /* 모션 — mira 의 오버레이는 duration-100, 컨트롤은 transition-all 기본(150ms)이다. */
-    --control-duration: 150ms;
-    --control-ease: var(--ease-out);
+    /* 모션 축 — 세 단과 한 곡선. 시스템의 빠릿함이 여기서 갈린다. 11종 모두 같은 값으로 시작한다. */
+    --motion-fast: 100ms;    /* 작은 표면이 나타났다 사라지는 속도(툴팁 · 팝오버) */
+    --motion-base: 150ms;    /* 컨트롤의 색·테두리·그림자 전환 */
+    --motion-slow: 200ms;    /* 큰 패널이 밀려 들어오는 속도(sheet · drawer) */
+    --motion-ease: var(--ease-out);
+    /* 컨트롤이 읽는 이름은 그대로 둔다 — 3층 209곳이 이 둘만 읽는다. */
+    --control-duration: var(--motion-base);
+    --control-ease: var(--motion-ease);
     /* 눌림 — mira 는 scale 이 아니라 active:translate-y-px 로 1px 내려앉는다. */
     --control-press-offset: 1px;
 
@@ -126,14 +131,14 @@
 
     /* Control shadows and surfaces. Systems build them from the layer-1 --clay-* materials
        (see systems/graphite/styles/tokens.css). mira controls are flat: no shadow, no gradient. */
-    --shadow-control: inset 0 1px 0 var(--clay-highlight), inset 0 -1px 0 var(--clay-shade), 0 1px 1px var(--clay-contact), 0 2px 6px -1px var(--clay-ambient);
-    --shadow-control-primary: inset 0 1px 0 var(--clay-primary-highlight), inset 0 -1px 0 var(--clay-primary-shade), 0 1px 1px var(--clay-contact), 0 2px 8px -1px var(--clay-primary-ambient);
-    --shadow-raised: inset 0 1px 0 var(--clay-highlight), inset 0 -1px 0 var(--clay-shade-soft), 0 1px 1px var(--clay-contact-soft), 0 1px 3px var(--clay-ambient-soft);
-    --shadow-control-pressed: inset 0 1px 1px var(--clay-shade), inset 0 -1px 0 var(--clay-highlight);
-    --shadow-recessed: inset 0 1px 1px var(--clay-contact);
+    --shadow-control: inset 0 1px 0 var(--clay-highlight, transparent), inset 0 -1px 0 var(--clay-shade, transparent), 0 1px 1px var(--clay-contact, transparent), 0 2px 6px -1px var(--clay-ambient, transparent);
+    --shadow-control-primary: inset 0 1px 0 var(--clay-primary-highlight, transparent), inset 0 -1px 0 var(--clay-primary-shade, transparent), 0 1px 1px var(--clay-contact, transparent), 0 2px 8px -1px var(--clay-primary-ambient, transparent);
+    --shadow-raised: inset 0 1px 0 var(--clay-highlight, transparent), inset 0 -1px 0 var(--clay-shade-soft, transparent), 0 1px 1px var(--clay-contact-soft, transparent), 0 1px 3px var(--clay-ambient-soft, transparent);
+    --shadow-control-pressed: inset 0 1px 1px var(--clay-shade, transparent), inset 0 -1px 0 var(--clay-highlight, transparent);
+    --shadow-recessed: inset 0 1px 1px var(--clay-contact, transparent);
     --checkbox-indeterminate-shadow: none;
-    --surface-control: linear-gradient(to bottom, var(--clay-surface-top), var(--clay-surface-bottom));
-    --surface-primary: linear-gradient(to bottom, var(--clay-primary-top), var(--clay-primary-bottom));
+    --surface-control: linear-gradient(to bottom, var(--clay-surface-top, transparent), var(--clay-surface-bottom, transparent));
+    --surface-primary: linear-gradient(to bottom, var(--clay-primary-top, transparent), var(--clay-primary-bottom, transparent));
     --tag-shadow: none;
 
     /* 지시자 — 체크박스·라디오. mira: size-4 · rounded-[4px] · 체크 [&>svg]:size-3.5 · 라디오 점 size-2 */

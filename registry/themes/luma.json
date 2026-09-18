@@ -1,0 +1,14 @@
+{
+    "$schema": "../schema/theme.schema.json",
+    "name": "luma",
+    "title": "Luma",
+    "source": {
+        "kind": "shadcn",
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what luma moves"
+    },
+    "extends": {
+        "base": "neutral"
+    },
+    "light": {},
+    "dark": {}
+}

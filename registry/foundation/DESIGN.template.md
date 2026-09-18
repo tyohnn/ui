@@ -18,7 +18,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 |---|---|---|
 | `--background` / `--foreground` | | |
 | `--primary` | | |
-| `--selection` | | |
+| `--checked` | | |
 | `--control-height-md` | | |
 
 ## Combination rules

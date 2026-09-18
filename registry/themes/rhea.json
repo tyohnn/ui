@@ -1,0 +1,14 @@
+{
+    "$schema": "../schema/theme.schema.json",
+    "name": "rhea",
+    "title": "Rhea",
+    "source": {
+        "kind": "shadcn",
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what rhea moves"
+    },
+    "extends": {
+        "base": "neutral"
+    },
+    "light": {},
+    "dark": {}
+}

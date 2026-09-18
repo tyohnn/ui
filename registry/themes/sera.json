@@ -1,0 +1,14 @@
+{
+    "$schema": "../schema/theme.schema.json",
+    "name": "sera",
+    "title": "Sera",
+    "source": {
+        "kind": "shadcn",
+        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves"
+    },
+    "extends": {
+        "base": "taupe"
+    },
+    "light": {},
+    "dark": {}
+}

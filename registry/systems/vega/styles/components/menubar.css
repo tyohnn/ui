@@ -68,7 +68,7 @@
 
 .cn-menubar-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--menu-sub-shadow);   /* vega: shadow-lg */
 }
 

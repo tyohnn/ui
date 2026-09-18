@@ -1,0 +1,30 @@
+{
+    "$schema": "../schema/theme.schema.json",
+    "name": "vega",
+    "title": "Vega",
+    "source": {
+        "kind": "shadcn",
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what vega moves"
+    },
+    "extends": {
+        "base": "neutral"
+    },
+    "light": {
+        "tag-blue-bg": "transparent",
+        "tag-purple-bg": "transparent",
+        "tag-green-bg": "transparent",
+        "tag-orange-bg": "transparent",
+        "tag-red-bg": "transparent",
+        "tag-yellow-bg": "transparent",
+        "tag-gray-bg": "transparent"
+    },
+    "dark": {
+        "tag-blue-bg": "transparent",
+        "tag-purple-bg": "transparent",
+        "tag-green-bg": "transparent",
+        "tag-orange-bg": "transparent",
+        "tag-red-bg": "transparent",
+        "tag-yellow-bg": "transparent",
+        "tag-gray-bg": "transparent"
+    }
+}

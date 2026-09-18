@@ -1,6 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "nocturne",
+    "theme": "nocturne",
     "description": "Exhibition dark: near-black planes, pale pill buttons, Bricolage Grotesque titles, mono uppercase labels and one lavender signal for focus and selection.",
     "tagline": "Geist · pill controls · one lavender signal",
     "added": "2026-09-17T20:22:15+09:00",

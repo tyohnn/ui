@@ -57,7 +57,7 @@
 
     &[data-active="true"] {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* 검증 실패는 활성보다 뒤에 두어 테두리가 붉게 남는다. 링은 활성 칸에만 붉게 그린다. */

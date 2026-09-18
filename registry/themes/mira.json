@@ -1,0 +1,14 @@
+{
+    "$schema": "../schema/theme.schema.json",
+    "name": "mira",
+    "title": "Mira",
+    "source": {
+        "kind": "shadcn",
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what mira moves"
+    },
+    "extends": {
+        "base": "neutral"
+    },
+    "light": {},
+    "dark": {}
+}

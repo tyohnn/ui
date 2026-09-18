@@ -173,7 +173,7 @@ function QuestionnaireInput({
         data-slot="questionnaire-input"
         className={cn(
           "cn-questionnaire-input min-h-11 w-full min-w-0 transition-[color,box-shadow,background-color] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0",
-          "selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground",
+          "placeholder:text-muted-foreground",
           className
         )}
         {...props}

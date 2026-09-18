@@ -1,6 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "lyra",
+    "theme": "lyra",
     "description": "Terminal-plain: JetBrains Mono everywhere, square corners on every surface, and 1px rings doing the work shadows do elsewhere.",
     "tagline": "JetBrains Mono · square · rings",
     "added": "2026-09-16T14:06:01+09:00",

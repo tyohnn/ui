@@ -14,6 +14,7 @@ apps/*/dist
 test-results/
 playwright-report/
 tooling/snapshot/out/
+tooling/theme/out/
 
 # misc
 .DS_Store

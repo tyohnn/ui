@@ -20,7 +20,7 @@ three CSS layers). Every file under `styles/` is this system's own; nothing is c
 - **Dense.** Label buttons 28px, icon buttons 29px, table rows 41px with a 37px head, sidebar items
   29px (active 31px), tags 20px. Body table text 13/19, table head 11/15, sidebar items 13/19.
 - **Two accents with separate jobs.** Blue `--primary #3d4ef5` is for the primary action only.
-  Yellow `--selection #facc15` is for selection (checked and indeterminate checkboxes). Do not swap
+  Yellow `--checked #facc15` is for selection (checked and indeterminate checkboxes). Do not swap
   them and do not add a third accent for state.
 
 ## Key values
@@ -29,7 +29,7 @@ three CSS layers). Every file under `styles/` is this system's own; nothing is c
 |---|---|---|
 | `--foreground` / `--muted-foreground` / `--foreground-subtle` | `#f2f2f2` / `#8c8c8c` / `#5e5e5e` | text, secondary text, section labels |
 | `--primary` · `--primary-border` | `#3d4ef5` · `#5460e0` | primary button fill and its one-step-lighter edge |
-| `--selection` · `--selection-foreground` | `#facc15` · `#0a0a0a` | checkbox fill and check mark |
+| `--checked` · `--checked-foreground` | `#facc15` · `#0a0a0a` | checkbox fill and check mark |
 | `--link` | `#8fb2ff` | links (same hue as the blue tag text) |
 | `--muted` | `#1e1e1e` | selected table row |
 | `--control-font-weight-regular` · `--ui-font-weight-regular` | 400 | only the primary button and labels stay at 500 |

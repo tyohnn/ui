@@ -40,7 +40,7 @@
        무효가 되고, 라벨은 지금처럼 바깥 값을 그대로 물려받는다(DESIGN.md 5절). */
     text-transform: var(--control-text-transform);
 
-    --tw-ring-color: var(--ring-focus-strong);
+    --tw-ring-color: var(--ring-focus-strong, color-mix(in oklab, var(--ring) 50%, transparent));
 
     &:focus-visible {
         border-color: var(--ring);

@@ -61,14 +61,14 @@
 .cn-switch {
     &:focus-visible {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus), var(--control-shadow);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent)), var(--control-shadow);
     }
 }
 
 /* 라디오만 한 단 굵고 진하다. mira: focus-visible:ring-3 focus-visible:ring-ring/50 */
 .cn-radio-group-item:focus-visible {
     border-color: var(--ring);
-    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-focus-strong), var(--control-shadow);
+    box-shadow: 0 0 0 var(--focus-ring-width-strong) var(--ring-focus-strong, color-mix(in oklab, var(--ring) 50%, transparent)), var(--control-shadow);
 }
 
 /* ⚠ Toggle 은 이 목록에 없다. 컴포넌트 cva 에 focus-visible:ring-[3px] 가 박혀 있어
@@ -77,7 +77,7 @@
 /* 파괴 버튼은 링과 테두리를 붉은 계열로 바꾼다.
    mira: focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40 */
 .cn-button-variant-destructive:focus-visible {
-    border-color: var(--destructive-focus-border);
+    border-color: var(--destructive-focus-border, color-mix(in oklab, var(--destructive) 40%, transparent));
     box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid), var(--control-shadow);
 }
 
@@ -106,9 +106,9 @@
 /* 이미 켜져 있는 체크박스·라디오는 테두리를 그대로 둔다.
    채워진 상자의 테두리까지 붉히면 무엇이 잘못됐는지가 아니라
    무엇이 켜져 있는지가 안 보인다. mira: aria-invalid:aria-checked:border-primary
-   체크박스의 켜진 색은 --selection 슬롯이 갖는다(foundation 에서는 --primary 와 같다). */
+   체크박스의 켜진 색은 --checked 슬롯이 갖는다(foundation 에서는 --primary 와 같다). */
 .cn-checkbox[aria-invalid="true"][data-checked] {
-    border-color: var(--checkbox-invalid-checked-border);
+    border-color: var(--checkbox-invalid-checked-border, var(--checked));
 }
 
 .cn-radio-group-item[aria-invalid="true"][data-checked] {
@@ -130,12 +130,12 @@
 
 .cn-input:disabled,
 .cn-textarea:disabled {
-    background-color: var(--input-fill-disabled);
+    background-color: var(--input-fill-disabled, var(--input-fill));
 }
 
 .cn-native-select:disabled,
 .cn-select-trigger[data-disabled] {
-    background-color: var(--select-fill-disabled);
+    background-color: var(--select-fill-disabled, var(--input-fill-disabled, var(--input-fill)));
 }
 
 /* --------------------------------------------------------

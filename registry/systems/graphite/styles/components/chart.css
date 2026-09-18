@@ -26,7 +26,7 @@
    ⚠ 세로 6px 과 간격 6px 은 리터럴이다. surface 축의 여백은 10·16·24 이고 gap 은 4·16 이라
       걸치지 않는다. 좌우 10px 만 surface 축의 sm(popover p-2.5)과 같은 단이다. */
 .cn-chart-tooltip {
-    border: var(--surface-border-width) solid var(--ring-subtle);
+    border: var(--surface-border-width) solid var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
     border-radius: var(--chart-tooltip-radius);
     background-color: var(--popover);
     color: var(--popover-foreground);

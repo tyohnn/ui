@@ -21,7 +21,7 @@ every file under `styles/` belongs to this system. Tune values in place.
   even: 12px at 19.5px leading across controls and UI text, 10px at 15px for badges, keycaps and shortcuts,
   14px at 20px for titles.
 - **Accents**: there is no accent colour. `--primary` is neutral-900 (neutral-200 in dark) and carries every
-  emphasis — filled buttons, checked boxes, the selected row (`--selection` is `--primary`). Links use
+  emphasis — filled buttons, checked boxes, the selected row (`--checked` is `--primary`). Links use
   `--link`; status colour appears only through `--destructive` and the six status tokens. Charts are the
   neutral ramp (`chartColor: neutral`), five steps of grey, not five hues.
 
@@ -31,7 +31,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 |---|---|---|
 | `--background` / `--foreground` | `oklch(1 0 0)` / `oklch(0.145 0 0)` (dark: `0.145` / `0.985`) | page ground and body text |
 | `--primary` | `oklch(0.205 0 0)` (dark: `oklch(0.922 0 0)`) | every emphasis; there is no second accent |
-| `--selection` | `var(--primary)` | checked, selected, active — the same weight as a filled button |
+| `--checked` | `var(--primary)` | checked, selected, active — the same weight as a filled button |
 | `--control-height-md` | `28px` | the default control step; inputs, selects, toggles and buttons all sit on it |
 | `--radius` / `--control-radius` / `--surface-radius` | `0.625rem` (10px) / `8px` / `10px` | controls are one step tighter than surfaces |
 | `--control-font-size-md` / `--control-line-height-md` | `12px` / `19.5px` | mira's `text-xs/relaxed`; the fractional leading is the preset's and must not be rounded |
@@ -40,7 +40,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 
 ## Combination rules
 
-- **One emphasis per view.** Because `--primary` and `--selection` are the same neutral, a filled button next
+- **One emphasis per view.** Because `--primary` and `--checked` are the same neutral, a filled button next
   to a selected row reads as two equal claims. Give a screen one filled button and let everything else be
   outline or ghost.
 - **Depth by ring, not by shadow.** When a new surface needs separating, add `--ring-subtle` or step the
@@ -61,7 +61,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 - Do not add a drop shadow to a dialog, an alert dialog, the command palette or a card. Fill
   `--dialog-shadow` in a fork instead.
 - Do not introduce an accent hue. A system that needs one is a different system; fork mira and set
-  `--primary`, `--selection`, `--ring` and the chart ramp together.
+  `--primary`, `--checked`, `--ring` and the chart ramp together.
 - Do not edit layer-3 rules to change a value. Every difference this system needed from upstream is a slot;
   `registry/foundation/reference/README.md` lists them.
 

@@ -46,7 +46,7 @@
     /* 링과 그림자는 Tailwind 의 합성 변수에 나눠 담는다(upstream: ring-1 → --tw-ring-shadow).
        그래서 호출부의 `shadow-none` · `shadow-md` 는 --tw-shadow 만 바꾸고 링은 남는다.
        리터럴 box-shadow 한 줄이면 유틸리티가 통째로 덮어 링까지 지운다. */
-    --tw-ring-shadow: 0 0 0 var(--surface-border-width) var(--card-ring);
+    --tw-ring-shadow: 0 0 0 var(--surface-border-width) var(--card-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)));
     --tw-shadow: var(--card-shadow);   /* vega: ring-1 + shadow-xs (--shadow-card) */
     box-shadow: var(--tw-inset-shadow, 0 0 #0000), var(--tw-inset-ring-shadow, 0 0 #0000), var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow), var(--tw-shadow);
 

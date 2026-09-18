@@ -1,0 +1,676 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://tyohnn.dev/schema/theme.schema.json",
+    "title": "tyohnn theme",
+    "description": "registry/themes/<id>.json — one set of colour values, wearable by any system",
+    "type": "object",
+    "required": [
+        "name",
+        "title",
+        "light",
+        "dark"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Equals the file name without .json"
+        },
+        "title": {
+            "type": "string",
+            "minLength": 1
+        },
+        "source": {
+            "type": "object",
+            "required": [
+                "kind"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "kind": {
+                    "enum": [
+                        "shadcn",
+                        "system",
+                        "custom"
+                    ]
+                },
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "extends": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Layers applied before this theme's own values, in this order",
+            "properties": {
+                "base": {
+                    "type": "string",
+                    "description": "registry/themes/bases/<id>.json — the neutral ramp"
+                },
+                "accent": {
+                    "type": "string",
+                    "description": "registry/themes/accents/<id>.json — primary, secondary and the sidebar accent"
+                },
+                "chart": {
+                    "type": "string",
+                    "description": "registry/themes/accents/<id>.json — the chart ramp only"
+                }
+            }
+        },
+        "light": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "A colour per palette name (72 in a complete theme): base 18 · chart 5 · sidebar 8 · status 6 · tag 21 · avatar 9 · state 5",
+            "properties": {
+                "background": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "card": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "card-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "popover": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "popover-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "primary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "primary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "secondary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "secondary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "muted": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "muted-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "accent": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "accent-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "destructive": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "input": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "ring": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-1": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-2": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-3": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-4": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-5": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-primary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-primary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-accent": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-accent-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-ring": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "info": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "info-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "success": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "success-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "warning": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "warning-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-slate": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-teal": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-plum": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-olive": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-rust": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-navy": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-moss": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-mauve": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "checked": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "checked-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "selection": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "selection-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "link": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "dark": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "A colour per palette name (72 in a complete theme): base 18 · chart 5 · sidebar 8 · status 6 · tag 21 · avatar 9 · state 5",
+            "properties": {
+                "background": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "card": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "card-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "popover": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "popover-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "primary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "primary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "secondary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "secondary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "muted": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "muted-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "accent": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "accent-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "destructive": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "input": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "ring": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-1": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-2": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-3": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-4": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "chart-5": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-primary": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-primary-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-accent": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-accent-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "sidebar-ring": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "info": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "info-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "success": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "success-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "warning": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "warning-soft": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-blue-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-purple-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-green-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-orange-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-red-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-yellow-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-bg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-border": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "tag-gray-fg": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-slate": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-teal": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-plum": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-olive": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-rust": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-navy": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-moss": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "avatar-tone-mauve": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "checked": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "checked-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "selection": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "selection-foreground": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "link": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "material": {
+            "type": "object",
+            "description": "Optional material tints (clay · glow). A system that draws flat surfaces ignores them.",
+            "additionalProperties": {
+                "type": "object",
+                "required": [
+                    "light",
+                    "dark"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                    "light": {
+                        "type": "string"
+                    },
+                    "dark": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -58,7 +58,7 @@
 
     &[data-open],
     &[data-popup-open] {
-        background-color: var(--muted-soft);
+        background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     }
 
     &:hover,
@@ -70,7 +70,7 @@
     }
 
     &:focus-visible {
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 }
 
@@ -102,7 +102,7 @@
     }
 
     &[data-active] {
-        background-color: var(--muted-soft);
+        background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     }
 
     &:hover,
@@ -113,7 +113,7 @@
     }
 
     &:focus-visible {
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 }
 
@@ -147,7 +147,7 @@
         color: var(--popover-foreground);
         border-radius: var(--surface-radius-sm);   /* vega: rounded-md shadow */
         box-shadow:
-            0 0 0 var(--surface-border-width) var(--ring-subtle),
+            0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
             var(--shadow-chip);
     }
 }
@@ -161,7 +161,7 @@
     color: var(--popover-foreground);
     border-radius: var(--surface-radius);   /* vega: rounded-lg shadow */
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--shadow-chip);
 }
 

@@ -6,6 +6,7 @@
     "type": "object",
     "required": [
         "name",
+        "theme",
         "description",
         "forkedFrom",
         "fonts",
@@ -25,6 +26,11 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9-]*$",
             "description": "Named for the design and mood, not the use case; equals the folder name"
+        },
+        "theme": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "registry/themes/<id>.json — the colour set this system ships with; any other theme can replace it"
         },
         "description": {
             "type": "string",

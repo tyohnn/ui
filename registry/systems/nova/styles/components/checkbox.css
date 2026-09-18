@@ -2,7 +2,7 @@
    3층 — Checkbox 규칙
    ------------------------------------------------------------
    2026-09-13 mira 규칙으로 옮김.
-   Token slots: --checkbox-border, --shadow-recessed, --selection{,-foreground}. Foundation values give
+   Token slots: --checkbox-border, --shadow-recessed, --checked{,-foreground}. Foundation values give
    the mira checkbox (--input border · --input-fill · primary when checked). Indeterminate stays unfilled
    as in mira.
 
@@ -27,22 +27,22 @@
 
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
-    border: var(--control-border-width) solid var(--checkbox-border);
+    border: var(--control-border-width) solid var(--checkbox-border, var(--input));
     border-radius: var(--control-indicator-radius);
     background-color: var(--checkbox-fill);
     box-shadow: var(--shadow-recessed);
 
     &[data-checked] {
-        background-color: var(--selection);
-        border-color: var(--selection);
-        color: var(--selection-foreground);
+        background-color: var(--checked);
+        border-color: var(--checked);
+        color: var(--checked-foreground);
         box-shadow: none;
     }
 
     /* Indeterminate — foundation slots repeat the unchecked look (mira); a system may fill it like checked. */
     &[data-indeterminate] {
-        background-color: var(--checkbox-indeterminate-fill);
-        border-color: var(--checkbox-indeterminate-border);
+        background-color: var(--checkbox-indeterminate-fill, var(--checkbox-fill));
+        border-color: var(--checkbox-indeterminate-border, var(--checkbox-border, var(--input)));
         color: var(--checkbox-indeterminate-foreground);
         box-shadow: var(--checkbox-indeterminate-shadow);
     }
@@ -67,14 +67,14 @@
        mira: group-has-[:focus-visible]/field-label:ring-0 …:not-data-checked:border-input …:data-checked:border-primary */
     .group\/field-label:has(:focus-visible) & {
         box-shadow: none;
-        border-color: var(--checkbox-border);
+        border-color: var(--checkbox-border, var(--input));
 
         &[data-checked] {
-            border-color: var(--selection);
+            border-color: var(--checked);
         }
 
         &[data-indeterminate] {
-            border-color: var(--checkbox-indeterminate-border);
+            border-color: var(--checkbox-indeterminate-border, var(--checkbox-border, var(--input)));
         }
     }
 }

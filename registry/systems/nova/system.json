@@ -1,6 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "nova",
+    "theme": "nova",
     "description": "Geist on a neutral ramp: soft 10px corners, roomy 32px controls at 14px, and depth drawn with a hairline ring and a muted footer band.",
     "tagline": "Geist · 32px controls · 10px corners",
     "added": "2026-09-16T12:02:45+09:00",

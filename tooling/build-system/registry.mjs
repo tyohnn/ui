@@ -40,6 +40,7 @@ export const systemRoot = (name) =>
 /** The fixed stylesheet order of every system */
 export const styleFiles = (root) => ({
     colors: join(root, "styles/globals.css"),
+    theme: join(root, "styles/theme.css"),
     tokens: join(root, "styles/tokens.css"),
     typeset: [join(root, "styles/typeset.css"), join(root, "styles/typeset-preset.css")],
     barrel: join(root, "styles/style.css"),

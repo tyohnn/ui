@@ -52,7 +52,7 @@
        maia: only the Dropdown Menu and the Menubar read --menu-ring (the rule near the end of this
        file); the Context Menu, the Command panel and the Combobox keep --ring-subtle in dark. */
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--shadow-float);
 }
 
@@ -278,7 +278,7 @@
 .cn-menubar-separator,
 .cn-command-separator,
 .cn-combobox-separator {
-    background-color: var(--border-subtle);
+    background-color: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
     height: var(--surface-border-width);
     margin-inline: var(--menu-separator-margin-inline);
     margin-block: var(--menu-separator-margin-block);
@@ -352,6 +352,6 @@
 .cn-menubar-content,
 .cn-menubar-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--shadow-float);
 }

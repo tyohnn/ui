@@ -134,7 +134,7 @@
     /* mira: focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 */
     &:focus-within {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus), var(--shadow-control);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent)), var(--shadow-control);
     }
 
     /* 검증 실패는 포커스와 무관하게 늘 그리고, 포커스보다 뒤에 두어 이긴다.
@@ -162,7 +162,7 @@
     border-radius: 6px;
     padding-inline: 6px;
     /* v4: 칩의 바탕은 --combobox-chip-fill 이다(기본값이 1층의 --chip). */
-    background-color: var(--combobox-chip-fill);
+    background-color: var(--combobox-chip-fill, var(--chip, color-mix(in oklab, var(--muted-foreground) 10%, transparent)));
     color: var(--foreground);
     font-size: var(--ui-text-sm);
     letter-spacing: var(--ui-letter-spacing);

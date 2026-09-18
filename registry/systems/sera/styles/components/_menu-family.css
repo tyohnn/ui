@@ -48,7 +48,7 @@
     border-radius: var(--surface-radius);
     min-width: var(--menu-min-width);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--shadow-float);
 }
 
@@ -295,7 +295,7 @@
 .cn-menubar-separator,
 .cn-command-separator,
 .cn-combobox-separator {
-    background-color: var(--border-subtle);
+    background-color: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
     height: var(--surface-border-width);
     margin-inline: var(--menu-separator-margin-inline);
     margin-block: var(--menu-separator-margin-block);

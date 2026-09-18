@@ -1,6 +1,7 @@
 {
     "$schema": "../../schema/system.schema.json",
     "name": "mira",
+    "theme": "mira",
     "description": "Quiet · compact · precise: neutral greys, 28px controls with 12px text, flat unshadowed surfaces and hairline rings instead of drop shadows.",
     "tagline": "Inter · 28px controls · hairline rings",
     "added": "2026-09-16T10:47:08+09:00",
