@@ -2,7 +2,7 @@
 
 :root {
     /* base */
-    --background: oklch(0.977 0.004 85);
+    --background: oklch(0.995 0.002 85);
     --foreground: oklch(0.215 0.004 70);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.215 0.004 70);
@@ -29,14 +29,14 @@
     --chart-5: oklch(0.845 0.008 85);
 
     /* sidebar */
-    --sidebar: oklch(0.215 0.004 70);
-    --sidebar-foreground: oklch(0.93 0.004 85);
-    --sidebar-primary: oklch(0.985 0.003 85);
-    --sidebar-primary-foreground: oklch(0.215 0.004 70);
-    --sidebar-accent: oklch(0.285 0.005 70);
-    --sidebar-accent-foreground: oklch(0.97 0.003 85);
-    --sidebar-border: oklch(0.32 0.005 70);
-    --sidebar-ring: oklch(0.55 0.05 192);
+    --sidebar: oklch(0.982 0.005 80);
+    --sidebar-foreground: oklch(0.3 0.008 70);
+    --sidebar-primary: oklch(0.215 0.004 70);
+    --sidebar-primary-foreground: oklch(0.985 0.003 85);
+    --sidebar-accent: oklch(0.948 0.009 78);
+    --sidebar-accent-foreground: oklch(0.215 0.004 70);
+    --sidebar-border: oklch(0.928 0.008 78);
+    --sidebar-ring: oklch(0.4 0.05 192);
 
     /* status */
     --info: oklch(0.48 0.105 250);

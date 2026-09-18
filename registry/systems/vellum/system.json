@@ -2,8 +2,8 @@
     "$schema": "../../schema/system.schema.json",
     "name": "vellum",
     "theme": "vellum",
-    "description": "Warm and documentary: a paper-toned ground under white cards, a serif that carries every heading, hairline rules instead of shadows, and tables dense enough to read a hundred rows at once. Ink is the action; one deep teal is the signal.",
-    "tagline": "Source Serif 4 · paper ground · dense tables",
+    "description": "Warm and documentary: a parchment shell around a white document surface, a serif that carries every heading, hairline rules instead of shadows, and tables dense enough to read a hundred rows at once. Ink is the action; one deep teal is the signal.",
+    "tagline": "Source Serif 4 · parchment shell · dense tables",
     "added": "2026-09-18T14:40:00+09:00",
     "forkedFrom": {
         "source": "mira",

@@ -13,10 +13,10 @@ client connection and a wide review table).
 
 **What was taken**: design values only.
 
-- the warm paper ground under white cards, and the hairline that separates them
+- the warm parchment shell (the rail and the inset's gutter) around a white document surface, and the
+  hairline that separates what sits on it
 - the serif-over-sans pairing for headings, and how large the headings run against 13px body text
 - ink as the primary action, with one deep teal for focus, links and the first chart series
-- an ink sidebar rail against a paper page
 - small rounded-rectangle labels rather than pills
 - the table rhythm: a short head, tight cells, many rows visible at once
 
