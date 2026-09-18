@@ -3,12 +3,12 @@
 **Design systems you can swap, not just themes you can recolour.**
 
 shadcn components on [Base UI](https://base-ui.com) primitives, with every visual decision — colour,
-density, shape, material, motion — pulled out of the TSX and into three layers of plain CSS. Eleven complete
+density, shape, material, motion — pulled out of the TSX and into three layers of plain CSS. Twelve complete
 systems ship with the registry. A CLI copies one into your project, source and all.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Components](https://img.shields.io/badge/components-61-black.svg)](registry/ui/components)
-[![Systems](https://img.shields.io/badge/systems-11-black.svg)](registry/systems)
+[![Systems](https://img.shields.io/badge/systems-12-black.svg)](registry/systems)
 
 > **Status: pre-release.** The registry, the CLI and the site are working; the CLI is not on npm yet, so
 > run it from a clone (see [Quick start](#quick-start)). Expect the occasional breaking change until 1.0.
@@ -121,8 +121,9 @@ theme goes on any system. Seven of the eight ported shadcn presets have no colou
 | `graphite` | Pretendard · dense · clay controls | dark |
 | `nocturne` | Geist · pill controls · one lavender signal | dark |
 | `vellum` | Source Serif 4 · paper ground · dense tables | light |
+| `cirrus` | Pretendard · frosted layers · pill buttons | light |
 
-The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne` and `vellum` are our own. Each is a
+The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne`, `vellum` and `cirrus` are our own. Each is a
 **complete, frozen folder** — all three layers, its own `DESIGN.md`, nothing composed at build time — so
 what you copy is what you saw.
 
@@ -147,6 +148,7 @@ they are, not as strings.
 tyohnn init --system vega          # scaffold; in a monorepo, creates packages/ui and wires one app
 tyohnn add mira --app apps/admin   # a second system in the same monorepo
 tyohnn use nocturne                # switch an app to another system
+tyohnn theme stone                 # switch an app's colours, keeping its system (--reset: the system's)
 tyohnn fonts --sans geist          # switch fonts (--reset returns to the system's)
 tyohnn icons lucide                # switch icon library (six supported, semantic names)
 tyohnn list                        # systems, fonts, icon libraries
@@ -161,10 +163,10 @@ Full reference: [packages/cli/README.md](packages/cli/README.md).
 
 ## Roadmap
 
-- [x] Three-layer architecture, 61 components, 11 systems (the eight ported presets verified against shadcn)
+- [x] Three-layer architecture, 61 components, 12 systems (the eight ported presets verified against shadcn)
 - [x] CLI: scaffold, switch systems, fonts, icons, doctor, diff
 - [x] Colour as a separate axis — themes, 7 bases × 17 accents, free-form palettes
-- [ ] `tyohnn theme` — wear any theme on any system, from the CLI
+- [x] `tyohnn theme` — wear any theme on any system, from the CLI
 - [ ] **Web editor** — tune a system in the live preview and take the CSS away with you
 - [ ] **Save and share** your own system (including over MCP), and export it into a project
 - [ ] **image-to-system** — a screenshot or a reference, turned into a system to start from
