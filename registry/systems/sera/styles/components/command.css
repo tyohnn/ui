@@ -37,7 +37,7 @@
 .cn-command-input-wrapper > .cn-command-input-group {
     height: 40px;
     padding-inline: 12px;
-    background-color: var(--command-input-fill);
+    background-color: var(--command-input-fill, var(--input-fill));
 }
 
 .cn-command-input {

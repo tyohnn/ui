@@ -77,25 +77,25 @@
     padding-block: 16px;
     border: var(--control-border-width) solid var(--input);
     border-radius: var(--surface-radius-lg);
-    background-color: var(--questionnaire-choice-fill);
+    background-color: var(--questionnaire-choice-fill, transparent);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
 
     &:hover {
-        background-color: var(--input-fill-hover);
+        background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
     }
 
     &:is([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         border-color: var(--ring);
         /* mira: data-checked:bg-primary/10 — 필드 라벨의 /5 보다 한 단 진하다 */
-        background-color: var(--primary-soft-strong);
+        background-color: var(--primary-soft-strong, color-mix(in oklab, var(--primary) 10%, transparent));
     }
 
     /* mira: has-[>input:focus-visible]:border-ring …:ring-2 …:ring-ring/30 */
     &:has(> input:focus-visible) {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* mira: data-invalid:border-destructive — data-* 변형이 has-* 뒤에 오므로 포커스 중에도 붉다.
@@ -148,7 +148,7 @@
 .cn-questionnaire-shortcut {
     width: 20px;
     height: 20px;
-    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border, var(--input));
     border-radius: var(--control-radius-xs);
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: var(--background);   /* sera: bg-background (mira: /80) */
@@ -170,18 +170,25 @@
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-field);
     padding-block: var(--control-padding-y-field);
-    border: var(--control-border-width) solid var(--input-border);
-    border-block-end-color: var(--input-border-bottom);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
+    border-block-end-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     font-size: var(--control-font-size-field);
     line-height: var(--control-line-height-field);
     letter-spacing: var(--control-letter-spacing-field);
 
+    /* mira: selection:bg-primary selection:text-primary-foreground — 컴포넌트가 들고 있던 선택 색을
+       --selection 슬롯으로 내렸다. 값은 그대로다. */
+    &::selection {
+        background-color: var(--selection);
+        color: var(--selection-foreground);
+    }
+
     /* mira: focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 */
     &:focus-visible {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* Input 과 같다 — 늘 그리고, 포커스보다 뒤에 두어 이긴다. */

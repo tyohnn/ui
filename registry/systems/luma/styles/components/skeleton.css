@@ -12,7 +12,7 @@
       위 대비 1.08 · 회색 판 위 1.02 로 화면에서 사라져 있었다. --muted 는 hover 를
       겸하는 축이라 값을 올릴 수도 없어서 --skeleton 으로 축을 갈랐다(사유는 1층). */
 .cn-skeleton {
-    background-color: var(--skeleton);
+    background-color: var(--skeleton, var(--muted));
     /* luma: rounded-2xl — read from --radius so the sidebar's larger local --radius reaches it. */
     border-radius: calc(var(--radius) * 1.8);
 }

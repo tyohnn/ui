@@ -1,0 +1,17 @@
+{
+    "name": "@tyohnn/theme",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "The theme colour set: the finite palette every theme fills, composition over bases and accents, CSS rendering, sharing links and contrast.",
+    "main": "index.mjs",
+    "exports": {
+        ".": {
+            "types": "./index.d.mts",
+            "default": "./index.mjs"
+        }
+    },
+    "scripts": {
+        "test": "node --test test/*.test.mjs"
+    }
+}

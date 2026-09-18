@@ -47,7 +47,7 @@
 .cn-alert-dialog-overlay,
 .cn-sheet-overlay,
 .cn-drawer-overlay {
-    background-color: var(--overlay-backdrop);
+    background-color: var(--overlay-backdrop, oklch(0 0 0 / 80%));
 }
 
 /* lyra: only the sheet's scrim carries text-xs/relaxed. */
@@ -102,7 +102,7 @@
 .cn-dialog-content,
 .cn-alert-dialog-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--dialog-shadow);
 }
 
@@ -111,7 +111,7 @@
 .cn-popover-content,
 .cn-hover-card-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--shadow-float);
 }
 

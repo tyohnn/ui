@@ -31,13 +31,13 @@
     height: var(--switch-track-height-md);
     padding: 0;   /* rhea: the 2px border is the inset */
 
-    border: 2px solid var(--switch-track-border-off);   /* rhea: border-2 — the width is a literal: v4 has no switch border-width slot */
+    border: 2px solid var(--switch-track-border-off, transparent);   /* rhea: border-2 — the width is a literal: v4 has no switch border-width slot */
     border-radius: var(--switch-radius);
     background-color: var(--switch-track-off);
 
     &[data-checked] {
         background-color: var(--primary);
-        border-color: var(--switch-track-border-on);
+        border-color: var(--switch-track-border-on, transparent);
     }
 
     &[data-size="sm"] {
@@ -63,7 +63,7 @@
     translate: 0;
 
     &[data-checked] {
-        background-color: var(--switch-thumb-on);
+        background-color: var(--switch-thumb-on, var(--card));
         translate: calc(var(--switch-track-width-md) - var(--switch-track-height-md));
     }
 

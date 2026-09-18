@@ -39,7 +39,7 @@
 .cn-command-input-wrapper > .cn-command-input-group {
     height: var(--control-height-md);   /* lyra: h-8! */
     /* lyra: border-none bg-input/30 — the palette's box is a fill, not a bordered field. */
-    background-color: var(--command-input-fill);
+    background-color: var(--command-input-fill, var(--input-fill));
     border: 0 solid transparent;
 }
 

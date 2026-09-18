@@ -38,7 +38,7 @@
     height: var(--control-height-sm) !important;
     border-radius: var(--surface-radius) !important;
     border-color: color-mix(in oklab, var(--input) 30%, transparent);
-    background-color: var(--command-input-fill);
+    background-color: var(--command-input-fill, var(--input-fill));
     box-shadow: none !important;
 
     & > [data-slot="input-group-addon"] {

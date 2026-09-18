@@ -32,7 +32,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 | `--muted-foreground` · `--foreground-subtle` | `#a3a5ab` · `#6b6e75` (light `#5d6068` · `#8c8f96`) | secondary text · disabled and placeholders only |
 | `--primary` / `--primary-foreground` | `#ecece8` / `#0b0c0e` · `#111214` / `#f6f6f3` | the pale (light: ink) pill |
 | `--ring` | `#b9c2ff` · `#5a63d6` | the lavender signal; every indicator slot aliases it |
-| `--selection` | `var(--primary)` | checked checkbox / radio / switch take the pill pair, not lavender |
+| `--checked` | `var(--primary)` | checked checkbox / radio / switch take the pill pair, not lavender |
 | `--chart-1…5` | lavender · sky · mint · sand · coral | cool to warm, restrained |
 | `--control-height-md` · `--control-font-size-md` | 36px · 14px | the control |
 | `--control-radius` · `--control-radius-field` | 9999px · 10px | pills · fields |

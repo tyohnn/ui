@@ -30,7 +30,7 @@
       서는 일이 없어 함께 움직일 이유가 없다 — 축에 걸치지 않는 값은 토큰으로
       만들지 않는다는 규칙을 따른다. */
 .cn-slider-track {
-    background-color: var(--slider-track-fill);
+    background-color: var(--slider-track-fill, var(--muted));
     border-radius: var(--control-radius);
 
     &[data-orientation="horizontal"] {
@@ -68,7 +68,7 @@
         0 4px 6px -1px rgb(0 0 0 / 0.1),
         0 2px 4px -2px rgb(0 0 0 / 0.1);
     border-radius: var(--control-radius);
-    background-color: var(--slider-thumb-fill);
+    background-color: var(--slider-thumb-fill, #fff);
 
     transition-property: color, box-shadow;
     transition-duration: var(--control-duration);
@@ -88,6 +88,6 @@
     &:hover,
     &:focus-visible,
     &:active {
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 }

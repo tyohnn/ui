@@ -25,7 +25,7 @@ coverage template in both modes against `ab3c807` (the commit before v4).
 
 The sites count includes `.cn-checkbox[aria-invalid="true"][data-checked]` `border-color`, which reads
 `--checkbox-invalid-checked-border` since that slot was added after these tables were generated. All seven
-unconverted systems write `var(--selection)` there — foundation's default — so it adopts unchanged and has
+unconverted systems write `var(--checked)` there — foundation's default — so it adopts unchanged and has
 no row.
 
 The systems are independent of one another: each touches only `registry/systems/<system>/`, so they can be

@@ -37,7 +37,7 @@
     font-weight: var(--control-font-weight);
     letter-spacing: var(--control-letter-spacing);
 
-    --tw-ring-color: var(--ring-focus-strong);
+    --tw-ring-color: var(--ring-focus-strong, color-mix(in oklab, var(--ring) 50%, transparent));
 
     &:focus-visible {
         border-color: var(--ring);

@@ -32,7 +32,7 @@
     background-color: var(--popover);   /* rhea: bg-popover */   /* mira: bg-background */
     color: var(--popover-foreground);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--shadow-float);   /* rhea: ring-1 + shadow-lg */
     padding-inline: 10px;   /* rhea: px-2.5 */
     padding-block: 6px;

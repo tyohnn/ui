@@ -94,7 +94,7 @@
     &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         background-color: var(--primary-soft);
         /* sera: has-data-checked:border-primary/30 (dark /20) */
-        border-color: var(--field-label-checked-border);
+        border-color: var(--field-label-checked-border, var(--border));
     }
 
     /* ⚠ 안쪽 여백 8px 은 리터럴이다. 카드 안의 여백이라 control 축(높이가 정본)에도
@@ -108,12 +108,12 @@
         border-radius: var(--control-radius);
 
         &:not(:has(:disabled, [data-disabled])):hover {
-            background-color: var(--input-fill-hover);
+            background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
         }
 
         &:has(:focus-visible) {
             border-color: var(--ring);
-            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
         }
     }
 }

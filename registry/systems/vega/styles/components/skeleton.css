@@ -11,6 +11,6 @@
    색은 --skeleton 축이 갖는다(--muted 는 hover 를 겸하는 축이라 값을 올릴 수 없다).
    vega 는 bg-muted 라 그 축의 값이 --muted 와 같다 — 사유는 1층. */
 .cn-skeleton {
-    background-color: var(--skeleton);
+    background-color: var(--skeleton, var(--muted));
     border-radius: var(--radius-md);   /* vega: rounded-md */
 }

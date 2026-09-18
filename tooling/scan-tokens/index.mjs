@@ -6,7 +6,11 @@
 //                      styles, registry/ui or apps/preview that no top-level :root/.dark of the
 //                      system's globals.css / tokens.css defines and nothing declares locally
 //                      (a ChartConfig key's runtime --color-<key> counts as declared)             → FAIL
-//   2. foundation set  a token name foundation defines (per scope) that the system lacks        → FAIL
+//   2. palette         a theme colour (packages/theme PALETTE) the system's layer 1 lacks, in either
+//                      scope — every theme fills the whole set, so a gap is a broken theme.css   → FAIL
+//                      Other foundation tokens are NOT required: a slot a system does not tune is
+//                      simply not declared, and layer 2 · 3 read it with the default as a fallback
+//                      (`var(--sidebar-item-border, var(--border))`). Rule 1 enforces that fallback.
 //   3. components      a registry/ui component without styles/components/<name>.css in the system,
 //                      or a stylesheet style.css does not import (skipped when foundation has none) → FAIL
 //   4. system-only     a token only this system defines                                          → warning
@@ -18,6 +22,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, extname, join, relative } from "node:path";
 
 import { foundationRoot, listSystems, readImports, readTokens, repoRoot, stripComments, styleFiles, systemRoot, uiRoot } from "@tyohnn/build-system/registry";
+import { PALETTE } from "@tyohnn/theme";
 
 const EXTERNAL_PREFIXES = ["--tw-", "--radix-", "--scroll-fade-", "--drawer-", "--toast-"];
 const EXTERNAL_NAMES = new Set([
@@ -65,7 +70,7 @@ const tokenScopes = (root) =>
     const files = styleFiles(root);
     const map = new Map();
 
-    for (const [layer, file] of [["1", files.colors], ["2", files.tokens]])
+    for (const [layer, file] of [["1", files.colors], ["1", files.theme], ["2", files.tokens]])
     {
         for (const row of readTokens(file))
         {
@@ -214,17 +219,15 @@ const scan = (name) =>
         else failures.push(`undefined: ${token}  (${rows.map((row) => row.where).join(", ")})`);
     }
 
-    // 2. foundation token set
-    for (const [token, entry] of foundationTokens)
+    // 2. the theme palette, in both scopes
+    for (const colour of PALETTE)
     {
+        const token = `--${colour}`;
         const own = tokens.get(token);
 
-        for (const scope of entry.scopes)
+        for (const scope of [":root", ".dark"])
         {
-            if (!own || !own.scopes.has(scope))
-            {
-                failures.push(`missing foundation token: ${token} in ${scope} (layer ${entry.layer})`);
-            }
+            if (!own || !own.scopes.has(scope)) failures.push(`missing theme colour: ${token} in ${scope} — run node tooling/theme/write-css.mjs ${name}`);
         }
     }
 
@@ -246,7 +249,14 @@ const scan = (name) =>
     {
         for (const [token, entry] of tokens)
         {
-            if (!foundationTokens.has(token)) warnings.push(`system-only token: ${token}  (${relative(repoRoot, entry.file)}:${entry.line})`);
+            // A name only this system declares is worth a look — unless every reader already falls
+            // back, which is how a system tunes one slot without the other ten declaring anything.
+            const readers = usages.get(token) ?? [];
+
+            if (!foundationTokens.has(token) && !(readers.length > 0 && readers.every((row) => row.hasFallback)))
+            {
+                warnings.push(`system-only token: ${token}  (${relative(repoRoot, entry.file)}:${entry.line})`);
+            }
         }
     }
 
@@ -272,7 +282,7 @@ for (const name of names)
     result.warnings.forEach((warning) => console.log(`  ⚠ ${warning}`));
     result.failures.forEach((failure) => console.log(`  ✗ ${failure}`));
     console.log(result.failures.length === 0
-        ? "  ✓ undefined 0 · foundation tokens complete · component stylesheets complete"
+        ? "  ✓ undefined 0 · theme palette complete · component stylesheets complete"
         : `  ✗ ${result.failures.length} failures`);
     failed ||= result.failures.length > 0;
 }

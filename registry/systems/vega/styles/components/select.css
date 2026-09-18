@@ -22,10 +22,10 @@
 /* 표면 슬롯 — 바탕 --surface-control · 그림자 --shadow-control · 누르면 눌린 그림자(foundation 은 모두 none).
    ⚠ 바탕이 background-image 라 hover 의 background-color(--select-hover)는 그 아래에 깔린다. */
 .cn-select-trigger {
-    border: var(--control-border-width) solid var(--input-border);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
     /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
        foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
-    border-bottom-color: var(--input-border-bottom);
+    border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-image: var(--surface-control);
@@ -104,7 +104,7 @@
        갈라 쓸 수 있다. 기본값이 --menu-min-width 라 지금은 같은 값이다. */
     min-width: var(--menu-narrow-min-width);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--shadow-float);
 
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;
@@ -186,7 +186,7 @@
 
 /* mira: bg-border/50 -mx-1 my-1 h-px */
 .cn-select-separator {
-    background-color: var(--border-subtle);
+    background-color: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
     height: var(--surface-border-width);
     /* v4: 구분선의 여백은 면의 안쪽 여백에서 파생되지 않고 제 슬롯을 갖는다(_menu-family.css 와 같다). */
     margin-inline: var(--menu-separator-margin-inline);

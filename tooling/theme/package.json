@@ -1,0 +1,14 @@
+{
+    "name": "@tyohnn/theme-tooling",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Colour themes: classify layer-1 colours, import the shadcn palettes, extract a system into a theme.",
+    "dependencies": {
+        "@tyohnn/build-system": "*",
+        "@tyohnn/theme": "*"
+    },
+    "scripts": {
+        "test": "node --test test/*.test.mjs"
+    }
+}

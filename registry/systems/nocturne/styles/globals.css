@@ -1,6 +1,11 @@
 /* ============================================================
-   nocturne — layer 1: colours
+   nocturne — layer 1: the colour formulas
    ------------------------------------------------------------
+   Layer 1 is two files. The palette itself (72 colours, the ramp below included) lives in the
+   generated styles/theme.css, from registry/themes/nocturne.json; this file holds what is derived
+   from it, nocturne's own colours and material, and everything that is not a colour. The ramp is
+   documented here because the formulas below are read against it.
+
    The tyohnn website's exhibition tone (2026-09-17). Dark is the primary design:
    near-black planes one step apart, hairline borders, a pale ink pill as the main
    action and ONE lavender signal (#b9c2ff) for focus and selection indicators.
@@ -24,7 +29,8 @@
       the nocturne-only names marked "nocturne slot" (reference/README.md lists them as
       foundation slot candidates).
 
-   ⚠ Keep :root and .dark in this one file, so a token can never be tuned in one mode only.
+   ⚠ Keep :root and .dark together in one file — here and in theme.css — so a token can never be
+      tuned in one mode only.
    ============================================================ */
 
 @import "tw-animate-css";
@@ -43,27 +49,27 @@
     --color-sidebar-accent: var(--sidebar-accent);
     --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
     --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-active-foreground: var(--sidebar-active-foreground);
-    --color-sidebar-active: var(--sidebar-active);
+    --color-sidebar-active-foreground: var(--sidebar-active-foreground, var(--sidebar-accent-foreground));
+    --color-sidebar-active: var(--sidebar-active, var(--sidebar-accent));
     --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar-icon: var(--sidebar-icon);
+    --color-sidebar-icon: var(--sidebar-icon, var(--muted-foreground));
     --color-sidebar: var(--sidebar);
     --color-chart-5: var(--chart-5);
     --color-chart-4: var(--chart-4);
     --color-chart-3: var(--chart-3);
     --color-chart-2: var(--chart-2);
     --color-chart-1: var(--chart-1);
-    --color-overlay-backdrop: var(--overlay-backdrop);
-    --color-ring-subtle: var(--ring-subtle);
+    --color-overlay-backdrop: var(--overlay-backdrop, oklch(0 0 0 / 80%));
+    --color-ring-subtle: var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
     --color-ring-invalid: var(--ring-invalid);
-    --color-ring-focus-strong: var(--ring-focus-strong);
-    --color-ring-focus: var(--ring-focus);
+    --color-ring-focus-strong: var(--ring-focus-strong, color-mix(in oklab, var(--ring) 50%, transparent));
+    --color-ring-focus: var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     --color-ring: var(--ring);
     --color-link: var(--link);
-    --color-input-fill-hover: var(--input-fill-hover);
+    --color-input-fill-hover: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
     --color-input-fill: var(--input-fill);
     --color-input: var(--input);
-    --color-border-subtle: var(--border-subtle);
+    --color-border-subtle: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
     --color-border-strong: var(--border-strong);
     --color-border: var(--border);
     --color-destructive-soft-hover: var(--destructive-soft-hover);
@@ -78,14 +84,14 @@
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
-    --color-muted-soft: var(--muted-soft);
+    --color-muted-soft: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     --color-muted: var(--muted);
-    --color-chip: var(--chip);
-    --color-secondary-hover: var(--secondary-hover);
+    --color-chip: var(--chip, color-mix(in oklab, var(--muted-foreground) 10%, transparent));
+    --color-secondary-hover: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
     --color-secondary-foreground: var(--secondary-foreground);
     --color-secondary: var(--secondary);
-    --color-primary-hover: var(--primary-hover);
-    --color-primary-soft-strong: var(--primary-soft-strong);
+    --color-primary-hover: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
+    --color-primary-soft-strong: var(--primary-soft-strong, color-mix(in oklab, var(--primary) 10%, transparent));
     --color-primary-soft: var(--primary-soft);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
@@ -93,10 +99,10 @@
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
-    --color-foreground-subtle: var(--foreground-subtle);
+    --color-foreground-subtle: var(--foreground-subtle, var(--ring));
     --color-foreground: var(--foreground);
     --color-canvas: var(--canvas);
-    --color-skeleton: var(--skeleton);
+    --color-skeleton: var(--skeleton, var(--muted));
     --color-background: var(--background);
     /* The shadcn radius scale from --radius (14px below): 10 · 12 · 14 · 18 · 22 · 26 · 30.
        Utilities only; layer 3 reads the layer-2 radius ladder (pill · 10 · 14 · 16 · 18). */
@@ -136,197 +142,70 @@
     --color-scheme: light;
 
     /* ---- Light: a cool off-white ground, white cards, ink text ---- */
-    --background: #f6f6f3;
-    --foreground: #111214;
-    --card: #ffffff;
-    --card-foreground: #111214;
-    --popover: #ffffff;
-    --popover-foreground: #111214;
-    --canvas: #f6f6f3;
+    --canvas: var(--background);
 
     /* The main action is an ink pill with off-white text. */
-    --primary: #111214;
-    --primary-foreground: #f6f6f3;
     --primary-hover: #2a2b2f;
-    --primary-soft: rgb(17 18 20 / 4%);
-    --primary-soft-strong: rgb(17 18 20 / 8%);
+    --primary-soft: color-mix(in oklab, var(--primary) 4%, transparent);
+    --primary-soft-strong: var(--border);
 
-    --secondary: #ebebe7;
-    --secondary-foreground: #111214;
     --secondary-hover: #e2e2dd;
 
-    --muted: #efefeb;
-    --muted-foreground: #5d6068;             /* 5.8:1 on the ground */
-    --muted-soft: rgb(17 18 20 / 2.5%);
-    --chip: rgb(17 18 20 / 6%);
-    --ghost-hover: #ebebe7;
-    --skeleton: #ebebe7;
+    --muted-soft: color-mix(in oklab, var(--border) 30%, transparent);
+    --chip: color-mix(in oklab, var(--foreground) 6%, transparent);
+    --ghost-hover: var(--sidebar-accent);
+    --skeleton: var(--sidebar-accent);
     /* Disabled and placeholder text only — below AA on purpose. */
     --foreground-subtle: #8c8f96;
 
-    /* Menu row focus and other accent fills: neutral, never lavender. */
-    --accent: #efefeb;
-    --accent-foreground: #111214;
-
-    --destructive: oklch(0.577 0.245 27.325);     /* red-600 */
-    --destructive-soft: oklch(0.577 0.245 27.325 / 8%);
-    --destructive-soft-hover: oklch(0.577 0.245 27.325 / 14%);
-
-    --info: oklch(0.5 0.134 242.749);             /* sky-700 */
-    --info-soft: oklch(0.951 0.026 236.824);      /* sky-100 */
-    --success: oklch(0.527 0.154 150.069);        /* green-700 */
-    --success-soft: oklch(0.962 0.044 156.743);   /* green-100 */
-    --warning: oklch(0.555 0.163 48.998);         /* amber-700 */
-    --warning-soft: oklch(0.962 0.059 95.617);    /* amber-100 */
+    --destructive-soft: color-mix(in oklab, var(--destructive) 8%, transparent);
+    --destructive-soft-hover: color-mix(in oklab, var(--destructive) 14%, transparent);
 
     /* Hairlines 8%, the strong edge (inputs · outline controls · popups) 18%. */
-    --border: rgb(17 18 20 / 8%);
-    --border-subtle: rgb(17 18 20 / 5%);
-    --border-strong: rgb(17 18 20 / 18%);
-    --input: rgb(17 18 20 / 18%);
-    --input-fill: #ffffff;
-    --input-fill-hover: #fbfbf9;
-    --select-hover: #fbfbf9;
+    --border-subtle: color-mix(in oklab, var(--foreground) 5%, transparent);
+    --border-strong: var(--input);
+    --input-fill: var(--card);
+    --input-fill-hover: color-mix(in oklab, var(--background) 46%, var(--card));
+    --select-hover: color-mix(in oklab, var(--background) 46%, var(--card));
     /* The lavender signal, darkened for the light ground (4.6:1). */
-    --ring: #5a63d6;
-    --ring-focus: rgb(90 99 214 / 30%);
-    --ring-focus-strong: rgb(90 99 214 / 45%);
-    --ring-invalid: oklch(0.577 0.245 27.325 / 20%);
-    --border-invalid: oklch(0.577 0.245 27.325);
-    --destructive-focus-border: oklch(0.577 0.245 27.325 / 40%);
-    /* Links are ink with an underline; lavender stays a signal. */
-    --link: #111214;
+    --ring-focus-strong: color-mix(in oklab, var(--ring) 45%, transparent);
+    --ring-invalid: color-mix(in oklab, var(--destructive) 20%, transparent);
+    --border-invalid: var(--destructive);
 
     /* The popup and dialog edge (the strong border) and the modal backdrop. */
-    --ring-subtle: rgb(17 18 20 / 18%);
+    --ring-subtle: var(--input);
     --overlay-backdrop: rgb(17 18 20 / 40%);
 
-    /* Charts: lavender first, then a restrained cool-to-warm set, darkened for the light ground. */
-    --chart-1: #5a63d6;   /* lavender */
-    --chart-2: #2f86b8;   /* sky */
-    --chart-3: #2e9a73;   /* mint */
-    --chart-4: #b8862a;   /* sand */
-    --chart-5: #c7604a;   /* coral */
+    --sidebar-active-foreground: var(--sidebar-foreground);
 
-    --sidebar: #f6f6f3;
-    --sidebar-foreground: #111214;
-    --sidebar-icon: #5d6068;
-    --sidebar-primary: #111214;
-    --sidebar-primary-foreground: #f6f6f3;
-    --sidebar-accent: #ebebe7;
-    --sidebar-accent-foreground: #111214;
-    --sidebar-active: #ebebe7;
-    --sidebar-active-foreground: #111214;
-    --sidebar-border: rgb(17 18 20 / 8%);
-    --sidebar-ring: #5a63d6;
+    --switch-track-off: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --switch-thumb-off: var(--card);
+    --switch-thumb-on: var(--background);
+    --drawer-border: color-mix(in oklab, var(--foreground) 8%, transparent);
+    --sidebar-input-fill: var(--card);
 
-    --switch-track-off: rgb(17 18 20 / 14%);
-    --switch-thumb-off: #ffffff;
-    --switch-thumb-on: #f6f6f3;
-    --drawer-border: rgb(17 18 20 / 8%);
-    --sidebar-input-fill: #ffffff;
-
-    /* ---- Token slots (axis contract v1) ---- */
-
-    --primary-border: transparent;
-    /* Checked controls take the ink pill pair; lavender is not a fill. */
-    --selection: var(--primary);
-    --selection-foreground: var(--primary-foreground);
-    --checkbox-border: var(--input);
+    /* Text selection (::selection). mira: the primary pair — the value the questionnaire input carried
+       as `selection:bg-primary selection:text-primary-foreground` before the slot existed. */
     --sidebar-badge-foreground: var(--muted-foreground);
-    --sidebar-item-border: var(--border);
-    --sidebar-item-active-border: var(--border);
-    --sidebar-item-hover-background: var(--sidebar-accent);
     /* The label voice colour (sidebar group labels · table heads): 4.7:1 on the ground, 5.1:1 on white. */
     --sidebar-group-label-foreground: #6b6e75;
-    --sidebar-badge-background: transparent;
-    --sidebar-badge-active-background: transparent;
-    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
-    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
-    --table-row-divider: var(--border);
     --table-head-foreground: #6b6e75;
-    --button-secondary-border: transparent;
     /* The outline pill draws the strong edge on no fill of its own. */
     --button-outline-border: var(--border-strong);
     --button-outline-fill: transparent;
-    --button-ghost-foreground: initial;
-    --slider-thumb-fill: #ffffff;
+    --slider-thumb-fill: var(--card);
     --checkbox-fill: var(--input-fill);
-    --checkbox-indeterminate-fill: var(--checkbox-fill);
-    --checkbox-indeterminate-border: var(--checkbox-border);
-    --checkbox-indeterminate-foreground: initial;
-
-    /* Clay materials: nocturne is flat. */
-    --clay-highlight: transparent;
-    --clay-shade: transparent;
-    --clay-shade-soft: transparent;
-    --clay-contact: transparent;
-    --clay-contact-soft: transparent;
-    --clay-ambient: transparent;
-    --clay-ambient-soft: transparent;
-    --clay-surface-top: transparent;
-    --clay-surface-bottom: transparent;
-    --clay-primary-highlight: transparent;
-    --clay-primary-shade: transparent;
-    --clay-primary-ambient: transparent;
-    --clay-primary-top: transparent;
-    --clay-primary-bottom: transparent;
-
-    /* Tag tones: quiet outline tags on the neutral ramp. */
-    --tag-blue-bg: var(--input-fill);
-    --tag-blue-border: var(--border);
-    --tag-blue-fg: var(--foreground);
-    --tag-purple-bg: var(--input-fill);
-    --tag-purple-border: var(--border);
-    --tag-purple-fg: var(--foreground);
-    --tag-green-bg: var(--input-fill);
-    --tag-green-border: var(--border);
-    --tag-green-fg: var(--foreground);
-    --tag-orange-bg: var(--input-fill);
-    --tag-orange-border: var(--border);
-    --tag-orange-fg: var(--foreground);
-    --tag-red-bg: var(--input-fill);
-    --tag-red-border: var(--border);
-    --tag-red-fg: var(--foreground);
-    --tag-yellow-bg: var(--input-fill);
-    --tag-yellow-border: var(--border);
-    --tag-yellow-fg: var(--foreground);
-    --tag-gray-bg: var(--input-fill);
-    --tag-gray-border: var(--border);
-    --tag-gray-fg: var(--foreground);
-
-    --avatar-tone-foreground: var(--muted-foreground);
-    --avatar-tone-slate: var(--muted);
-    --avatar-tone-teal: var(--muted);
-    --avatar-tone-plum: var(--muted);
-    --avatar-tone-olive: var(--muted);
-    --avatar-tone-rust: var(--muted);
-    --avatar-tone-navy: var(--muted);
-    --avatar-tone-moss: var(--muted);
-    --avatar-tone-mauve: var(--muted);
 
     /* ---- Axis contract v4 — layer-1 slots ---- */
-    --input-border: var(--input);
-    --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--muted);
-    --select-fill-disabled: var(--input-fill-disabled);
-    --command-input-fill: var(--input-fill);
     --button-outline-hover-fill: var(--muted);
     /* Resting cards: a hairline. Popups: the strong edge. */
     --card-ring: var(--border);
     --menu-ring: var(--border-strong);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--secondary);
-    --switch-track-border-off: transparent;
-    --switch-track-border-on: transparent;
     /* A checked selection card is marked by the lavender edge, its fill stays neutral. */
     --field-label-checked-border: var(--ring);
-    --questionnaire-choice-fill: transparent;
-    --questionnaire-shortcut-border: var(--input);
-    --radio-indicator-dot-size: var(--control-indicator-dot-size);
-    --checkbox-invalid-checked-border: var(--selection);
 
-    /* ---- nocturne slots (foundation slot candidates, reference/README.md) ---- */
     /* The deep popup shadow's colour; --shadow-float composes it. */
     --shadow-float-color: rgb(17 18 20 / 14%);
     /* Indicators that foundation paints with --primary: the progress bar and the slider range. */
@@ -343,194 +222,86 @@
 
     /* shadcn's --radius, for utilities only: 14px, the popup step of nocturne's ladder. */
     --radius: 0.875rem;
+
+    /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
+       ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
+          so they are declared here instead of defaulting inside the rule. */
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+
+    /* Ghost text and the indeterminate check mark. mira: both inherit ("initial" is the guaranteed-invalid
+       value, which makes `color` fall back to inheritance).
+       ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
+          initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
+    --button-ghost-foreground: initial;
+    --checkbox-indeterminate-foreground: initial;
+    --ring-focus: color-mix(in oklab, var(--ring) 30%, transparent);
 }
 
 .dark {
     --color-scheme: dark;
 
     /* ---- Dark (primary): near-black planes one step apart ---- */
-    --background: #0b0c0e;
-    --foreground: #ecece8;
-    --card: #121316;
-    --card-foreground: #ecece8;
-    --popover: #1a1c20;
-    --popover-foreground: #ecece8;
-    --canvas: #0b0c0e;
+    --canvas: var(--background);
 
     /* The main action is a pale pill on the dark ground (16.5:1). */
-    --primary: #ecece8;
-    --primary-foreground: #0b0c0e;
     --primary-hover: #d6d6d1;
-    --primary-soft: rgb(236 236 232 / 5%);
-    --primary-soft-strong: rgb(236 236 232 / 9%);
+    --primary-soft: color-mix(in oklab, var(--primary) 5%, transparent);
+    --primary-soft-strong: var(--border);
 
-    --secondary: #24262b;
-    --secondary-foreground: #ecece8;
     --secondary-hover: #2c2e34;
 
-    --muted: #1a1c20;
-    --muted-foreground: #a3a5ab;             /* 7.9:1 on the ground */
-    --muted-soft: rgb(236 236 232 / 3%);
-    --chip: rgb(236 236 232 / 8%);
-    --ghost-hover: #1a1c20;
-    --skeleton: #1a1c20;
+    --muted-soft: color-mix(in oklab, var(--foreground) 3%, transparent);
+    --chip: color-mix(in oklab, var(--foreground) 8%, transparent);
+    --ghost-hover: var(--sidebar-accent);
+    --skeleton: var(--sidebar-accent);
     /* Disabled and placeholder text only — below AA on purpose. */
     --foreground-subtle: #6b6e75;
 
-    /* Menu row focus on the raised #1a1c20 surface: one step up, still neutral. */
-    --accent: #24262b;
-    --accent-foreground: #ecece8;
-
-    --destructive: oklch(0.704 0.191 22.216);     /* red-400 — reads on #0b0c0e */
-    --destructive-soft: oklch(0.704 0.191 22.216 / 14%);
-    --destructive-soft-hover: oklch(0.704 0.191 22.216 / 22%);
-
-    --info: oklch(0.746 0.16 232.661);            /* sky-400 */
-    --info-soft: oklch(0.293 0.066 243.157);      /* sky-950 */
-    --success: oklch(0.792 0.209 151.711);        /* green-400 */
-    --success-soft: oklch(0.266 0.065 152.934);   /* green-950 */
-    --warning: oklch(0.828 0.189 84.429);         /* amber-400 */
-    --warning-soft: oklch(0.279 0.077 45.635);    /* amber-950 */
+    --destructive-soft: color-mix(in oklab, var(--destructive) 14%, transparent);
+    --destructive-soft-hover: color-mix(in oklab, var(--destructive) 22%, transparent);
 
     /* Hairlines 9%, the strong edge (inputs · outline controls · popups) 20%. */
-    --border: rgb(236 236 232 / 9%);
-    --border-subtle: rgb(236 236 232 / 5%);
-    --border-strong: rgb(236 236 232 / 20%);
-    --input: rgb(236 236 232 / 20%);
-    --input-fill: rgb(236 236 232 / 3%);
-    --input-fill-hover: rgb(236 236 232 / 5%);
-    --select-hover: rgb(236 236 232 / 5%);
+    --border-subtle: color-mix(in oklab, var(--foreground) 5%, transparent);
+    --border-strong: var(--input);
+    --input-fill: color-mix(in oklab, var(--input) 16%, transparent);
+    --input-fill-hover: color-mix(in oklab, var(--input) 25%, transparent);
+    --select-hover: color-mix(in oklab, var(--foreground) 5%, transparent);
     /* The one lavender signal. */
-    --ring: #b9c2ff;
-    --ring-focus: rgb(185 194 255 / 35%);
-    --ring-focus-strong: rgb(185 194 255 / 50%);
-    --ring-invalid: oklch(0.704 0.191 22.216 / 40%);
-    --border-invalid: oklch(0.704 0.191 22.216 / 60%);
-    --destructive-focus-border: oklch(0.704 0.191 22.216 / 40%);
-    --link: #ecece8;
+    --ring-focus: color-mix(in oklab, var(--ring) 35%, transparent);
+    --ring-invalid: color-mix(in oklab, var(--destructive) 40%, transparent);
+    --border-invalid: color-mix(in oklab, var(--destructive) 60%, transparent);
 
-    --ring-subtle: rgb(236 236 232 / 20%);
+    --ring-subtle: var(--input);
     --overlay-backdrop: rgb(5 5 6 / 72%);
 
-    /* Charts: lavender first, then a restrained cool-to-warm set that reads on #0b0c0e. */
-    --chart-1: #b9c2ff;   /* lavender */
-    --chart-2: #8ecbf0;   /* sky */
-    --chart-3: #8fd6b8;   /* mint */
-    --chart-4: #e6c27a;   /* sand */
-    --chart-5: #ee9a84;   /* coral */
+    --sidebar-active-foreground: var(--sidebar-foreground);
 
-    --sidebar: #0b0c0e;
-    --sidebar-foreground: #ecece8;
-    --sidebar-icon: #a3a5ab;
-    --sidebar-primary: #ecece8;
-    --sidebar-primary-foreground: #0b0c0e;
-    --sidebar-accent: #1a1c20;
-    --sidebar-accent-foreground: #ecece8;
-    --sidebar-active: #1a1c20;
-    --sidebar-active-foreground: #ecece8;
-    --sidebar-border: rgb(236 236 232 / 9%);
-    --sidebar-ring: #b9c2ff;
+    --switch-track-off: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --switch-thumb-off: var(--foreground);
+    --switch-thumb-on: var(--background);
+    --drawer-border: color-mix(in oklab, var(--foreground) 20%, transparent);
+    --sidebar-input-fill: color-mix(in oklab, var(--sidebar-foreground) 3%, transparent);
 
-    --switch-track-off: rgb(236 236 232 / 14%);
-    --switch-thumb-off: #ecece8;
-    --switch-thumb-on: #0b0c0e;
-    --drawer-border: rgb(236 236 232 / 20%);
-    --sidebar-input-fill: rgb(236 236 232 / 3%);
-
-    /* ---- Token slots (axis contract v1) ---- */
-
-    --primary-border: transparent;
-    --selection: var(--primary);
-    --selection-foreground: var(--primary-foreground);
-    --checkbox-border: var(--input);
+    /* Text selection (::selection). mira: the primary pair — the value the questionnaire input carried
+       as `selection:bg-primary selection:text-primary-foreground` before the slot existed. */
     --sidebar-badge-foreground: var(--muted-foreground);
-    --sidebar-item-border: var(--border);
-    --sidebar-item-active-border: var(--border);
-    --sidebar-item-hover-background: var(--sidebar-accent);
     /* The label voice colour: between muted and subtle, 5.6:1 on the ground and 4.9:1 on #1a1c20.
        The spec's subtle #6b6e75 is 3.8:1, below AA for 11px text, so labels take this step. */
     --sidebar-group-label-foreground: #868990;
-    --sidebar-badge-background: transparent;
-    --sidebar-badge-active-background: transparent;
-    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
-    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
-    --table-row-divider: var(--border);
     --table-head-foreground: #868990;
-    --button-secondary-border: transparent;
     --button-outline-border: var(--border-strong);
     --button-outline-fill: transparent;
-    --button-ghost-foreground: initial;
-    --slider-thumb-fill: #ecece8;
+    --slider-thumb-fill: var(--foreground);
     --checkbox-fill: var(--input-fill);
-    --checkbox-indeterminate-fill: var(--checkbox-fill);
-    --checkbox-indeterminate-border: var(--checkbox-border);
-    --checkbox-indeterminate-foreground: initial;
-
-    --clay-highlight: transparent;
-    --clay-shade: transparent;
-    --clay-shade-soft: transparent;
-    --clay-contact: transparent;
-    --clay-contact-soft: transparent;
-    --clay-ambient: transparent;
-    --clay-ambient-soft: transparent;
-    --clay-surface-top: transparent;
-    --clay-surface-bottom: transparent;
-    --clay-primary-highlight: transparent;
-    --clay-primary-shade: transparent;
-    --clay-primary-ambient: transparent;
-    --clay-primary-top: transparent;
-    --clay-primary-bottom: transparent;
-
-    --tag-blue-bg: var(--input-fill);
-    --tag-blue-border: var(--border);
-    --tag-blue-fg: var(--foreground);
-    --tag-purple-bg: var(--input-fill);
-    --tag-purple-border: var(--border);
-    --tag-purple-fg: var(--foreground);
-    --tag-green-bg: var(--input-fill);
-    --tag-green-border: var(--border);
-    --tag-green-fg: var(--foreground);
-    --tag-orange-bg: var(--input-fill);
-    --tag-orange-border: var(--border);
-    --tag-orange-fg: var(--foreground);
-    --tag-red-bg: var(--input-fill);
-    --tag-red-border: var(--border);
-    --tag-red-fg: var(--foreground);
-    --tag-yellow-bg: var(--input-fill);
-    --tag-yellow-border: var(--border);
-    --tag-yellow-fg: var(--foreground);
-    --tag-gray-bg: var(--input-fill);
-    --tag-gray-border: var(--border);
-    --tag-gray-fg: var(--foreground);
-
-    --avatar-tone-foreground: var(--muted-foreground);
-    --avatar-tone-slate: var(--muted);
-    --avatar-tone-teal: var(--muted);
-    --avatar-tone-plum: var(--muted);
-    --avatar-tone-olive: var(--muted);
-    --avatar-tone-rust: var(--muted);
-    --avatar-tone-navy: var(--muted);
-    --avatar-tone-moss: var(--muted);
-    --avatar-tone-mauve: var(--muted);
 
     /* ---- Axis contract v4 — layer-1 slots ---- */
-    --input-border: var(--input);
-    --input-border-bottom: var(--input-border);
     --input-fill-disabled: var(--muted);
-    --select-fill-disabled: var(--input-fill-disabled);
-    --command-input-fill: var(--input-fill);
     --button-outline-hover-fill: var(--muted);
     --card-ring: var(--border);
     --menu-ring: var(--border-strong);
-    --combobox-chip-fill: var(--chip);
     --slider-track-fill: var(--secondary);
-    --switch-track-border-off: transparent;
-    --switch-track-border-on: transparent;
     --field-label-checked-border: var(--ring);
-    --questionnaire-choice-fill: transparent;
-    --questionnaire-shortcut-border: var(--input);
-    --radio-indicator-dot-size: var(--control-indicator-dot-size);
-    --checkbox-invalid-checked-border: var(--selection);
 
     /* ---- nocturne slots ---- */
     --shadow-float-color: rgb(0 0 0 / 60%);
@@ -541,6 +312,20 @@
     --tooltip-fill: var(--popover);
     --tooltip-foreground: var(--popover-foreground);
     --tooltip-ring: var(--border-strong);
+
+    /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
+       ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
+          so they are declared here instead of defaulting inside the rule. */
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+
+    /* Ghost text and the indeterminate check mark. mira: both inherit ("initial" is the guaranteed-invalid
+       value, which makes `color` fall back to inheritance).
+       ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
+          initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
+    --button-ghost-foreground: initial;
+    --checkbox-indeterminate-foreground: initial;
+    --ring-focus-strong: color-mix(in oklab, var(--ring) 50%, transparent);
 }
 
 /* Accessibility: reduced motion keeps feedback, drops movement. */

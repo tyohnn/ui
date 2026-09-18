@@ -25,14 +25,14 @@
     display: flex;
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
-    border-color: var(--checkbox-border);
+    border-color: var(--checkbox-border, var(--input));
     border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     /* Checkbox 와 같은 축을 읽는다 — mira 는 밝은 쪽에 바탕이 없고 어두운 쪽만 dark:bg-input/30 이다. */
     background-color: var(--checkbox-fill);
 
     &[data-checked] {
         background-color: var(--primary);
-        border-color: var(--checkbox-border);   /* rhea drops data-checked:border-primary */
+        border-color: var(--checkbox-border, var(--input));   /* rhea drops data-checked:border-primary */
         color: var(--primary-foreground);
     }
 
@@ -46,10 +46,10 @@
     /* 라벨을 눌러 포커스가 들어온 경우 — checkbox.css 와 같다. */
     .group\/field-label:has(:focus-visible) & {
         box-shadow: none;
-        border-color: var(--checkbox-border);
+        border-color: var(--checkbox-border, var(--input));
 
         &[data-checked] {
-            border-color: var(--checkbox-border);
+            border-color: var(--checkbox-border, var(--input));
         }
     }
 }
@@ -68,8 +68,8 @@
     inset-inline-start: 50%;
     translate: -50% -50%;
 
-    width: var(--radio-indicator-dot-size);
-    height: var(--radio-indicator-dot-size);
+    width: var(--radio-indicator-dot-size, var(--control-indicator-dot-size));
+    height: var(--radio-indicator-dot-size, var(--control-indicator-dot-size));
     border-radius: 9999px;
     background-color: var(--primary-foreground);
 }

@@ -111,16 +111,16 @@
            테두리 색을 바꾸지 않으므로 foundation 기본값이 --border 라 지금과 같다. 포커스 링의
            border-color 가 뒤에 와서 이긴다 — 순서를 바꾸지 말 것. */
         &:has([data-state="checked"], [data-checked]:not([data-checked="false"])) {
-            border-color: var(--field-label-checked-border);
+            border-color: var(--field-label-checked-border, var(--border));
         }
 
         &:not(:has(:disabled, [data-disabled])):hover {
-            background-color: var(--input-fill-hover);
+            background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
         }
 
         &:has(:focus-visible) {
             border-color: var(--ring);
-            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
         }
     }
 }
@@ -129,7 +129,7 @@
 .cn-field-label-aria {
     &:has([data-selected="true"]) {
         background-color: var(--primary-soft);
-        border-color: var(--field-label-checked-border);   /* lyra: primary/30 */
+        border-color: var(--field-label-checked-border, var(--border));   /* lyra: primary/30 */
     }
 }
 

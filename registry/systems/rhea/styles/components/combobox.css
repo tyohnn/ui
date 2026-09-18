@@ -120,7 +120,7 @@
     padding-inline: var(--control-padding-x-field);
     padding-block: var(--control-padding-y-field);   /* rhea: py-1 */
 
-    border: var(--control-border-width) solid var(--input-border);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-clip: padding-box;
@@ -138,7 +138,7 @@
     /* mira: focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 */
     &:focus-within {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* 검증 실패는 포커스와 무관하게 늘 그리고, 포커스보다 뒤에 두어 이긴다.
@@ -164,7 +164,7 @@
     gap: 4px;
     border-radius: var(--control-radius);   /* rhea: rounded-2xl */
     padding-inline: 6px;
-    background-color: var(--combobox-chip-fill);
+    background-color: var(--combobox-chip-fill, var(--chip, color-mix(in oklab, var(--muted-foreground) 10%, transparent)));
     color: var(--foreground);
     font-size: var(--ui-text-xs);   /* rhea: the chip keeps text-xs */
     letter-spacing: var(--ui-letter-spacing);

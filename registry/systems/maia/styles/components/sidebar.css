@@ -146,7 +146,7 @@
     height: var(--sidebar-group-label-height);
     border-radius: var(--sidebar-part-radius);
     padding-inline: var(--sidebar-group-label-padding-x);
-    color: var(--sidebar-group-label-foreground);
+    color: var(--sidebar-group-label-foreground, color-mix(in oklab, var(--sidebar-foreground) 70%, transparent));
     font-size: var(--sidebar-group-label-font-size);
     font-weight: var(--sidebar-group-label-font-weight);
     letter-spacing: var(--sidebar-group-label-letter-spacing);
@@ -204,7 +204,7 @@
     gap: var(--sidebar-item-gap);
     color: var(--sidebar-foreground);
     /* The border is always drawn (width 0 in foundation) so an active border never shifts the label. */
-    border: var(--sidebar-item-border-width) solid var(--sidebar-item-border);
+    border: var(--sidebar-item-border-width) solid var(--sidebar-item-border, var(--border));
     font-weight: var(--sidebar-item-font-weight-idle);
     @apply text-left transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8;
 
@@ -228,7 +228,7 @@
     }
 
     & > svg {
-        color: var(--sidebar-icon);
+        color: var(--sidebar-icon, var(--muted-foreground));
     }
 
     /* hover · 눌림 · 열림 — mira: hover:bg-sidebar-accent … data-open:hover:bg-sidebar-accent.
@@ -237,7 +237,7 @@
     &:hover,
     &:active,
     &[data-open]:hover {
-        background-color: var(--sidebar-item-hover-background);
+        background-color: var(--sidebar-item-hover-background, var(--sidebar-accent));
         color: var(--sidebar-accent-foreground);
 
         & > svg {
@@ -250,14 +250,14 @@
        --sidebar-accent 와 같은 값을 갖고, 2층의 굵기 축은 활성 항목의 값(500)을 갖는다. */
     &[data-active] {
         height: var(--sidebar-item-height-active);
-        background-color: var(--sidebar-active);
-        border-color: var(--sidebar-item-active-border);
+        background-color: var(--sidebar-active, var(--sidebar-accent));
+        border-color: var(--sidebar-item-active-border, var(--border));
         box-shadow: var(--shadow-raised);
-        color: var(--sidebar-active-foreground);
+        color: var(--sidebar-active-foreground, var(--sidebar-accent-foreground));
         font-weight: var(--sidebar-item-font-weight);
 
         & > svg {
-            color: var(--sidebar-active-foreground);
+            color: var(--sidebar-active-foreground, var(--sidebar-accent-foreground));
         }
     }
 
@@ -286,7 +286,7 @@
 
 .cn-sidebar-menu-button-variant-default {
     &:hover {
-        background-color: var(--sidebar-item-hover-background);
+        background-color: var(--sidebar-item-hover-background, var(--sidebar-accent));
         color: var(--sidebar-accent-foreground);
     }
 }
@@ -378,9 +378,9 @@
     top: calc((var(--sidebar-item-height) - var(--sidebar-badge-height)) / 2);
     border-radius: var(--sidebar-badge-radius);
     padding-inline: var(--sidebar-badge-padding-x);
-    background-color: var(--sidebar-badge-background);
+    background-color: var(--sidebar-badge-background, transparent);
     box-shadow: var(--shadow-raised);
-    color: var(--sidebar-badge-foreground);
+    color: var(--sidebar-badge-foreground, var(--sidebar-foreground));
     font-size: var(--sidebar-badge-font-size);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--sidebar-badge-line-height);
@@ -389,7 +389,7 @@
 
     .peer\/menu-button[data-active] ~ & {
         top: calc((var(--sidebar-item-height-active) - var(--sidebar-badge-height)) / 2);
-        background-color: var(--sidebar-badge-active-background);
+        background-color: var(--sidebar-badge-active-background, transparent);
     }
 
     .peer\/menu-button[data-size="sm"] ~ & {
@@ -469,8 +469,8 @@
     }
 
     &[data-active] {
-        background-color: var(--sidebar-active);
-        color: var(--sidebar-active-foreground);
+        background-color: var(--sidebar-active, var(--sidebar-accent));
+        color: var(--sidebar-active-foreground, var(--sidebar-accent-foreground));
     }
 
     &:focus-visible {

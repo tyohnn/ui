@@ -24,10 +24,10 @@
 .cn-select-trigger {
     /* mira: py-1.5 — 높이(h-7)는 크기 클래스가 잡고, 이 여백이 글자 자리를 정한다. */
     padding-block: 8px;   /* luma: py-2 */
-    border: var(--control-border-width) solid var(--input-border);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
     /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
        foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
-    border-bottom-color: var(--input-border-bottom);
+    border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius-sm);   /* luma: rounded-3xl */
     background-color: var(--input-fill);
     background-image: var(--surface-control);
@@ -107,7 +107,7 @@
        갈라 쓸 수 있다. 기본값이 --menu-min-width 라 지금은 같은 128px 이다. */
     min-width: var(--menu-narrow-min-width);
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--shadow-float);
 
     @apply data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100;

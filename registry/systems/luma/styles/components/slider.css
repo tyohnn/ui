@@ -31,7 +31,7 @@
       일이 없어 함께 움직일 이유가 없다.
    ⚠ 바탕도 v4 의 --slider-track-fill 이 갖는다(foundation 값은 --muted 의 별칭). */
 .cn-slider-track {
-    background-color: var(--slider-track-fill);
+    background-color: var(--slider-track-fill, var(--muted));
     border-radius: 9999px;   /* luma: rounded-full */
 
     &[data-orientation="horizontal"] {
@@ -65,7 +65,7 @@
     height: 16px;
     border: 0 solid transparent;
     border-radius: 9999px;   /* luma: rounded-full */
-    background-color: var(--slider-thumb-fill);
+    background-color: var(--slider-thumb-fill, #fff);
     /* luma: ring-1 ring-black/10 under shadow-md. */
     box-shadow:
         0 0 0 1px rgb(0 0 0 / 0.1),
@@ -96,6 +96,6 @@
     &:hover,
     &:focus-visible,
     &:active {
-        box-shadow: 0 0 0 4px var(--ring-focus);   /* luma: hover·focus-visible:ring-4 */
+        box-shadow: 0 0 0 4px var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));   /* luma: hover·focus-visible:ring-4 */
     }
 }

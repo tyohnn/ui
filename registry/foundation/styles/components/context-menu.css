@@ -18,7 +18,7 @@
    링은 계열 면과 같은 v4 슬롯(--menu-ring)을 읽는다 — 기본값은 --ring-subtle 이다. */
 .cn-context-menu-sub-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--menu-ring),
+        0 0 0 var(--surface-border-width) var(--menu-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))),
         var(--menu-sub-shadow);
 }
 

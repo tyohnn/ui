@@ -41,8 +41,8 @@
     gap: 8px;
     /* sera: border-transparent border-b-input bg-transparent — the label shares the
        input family's single edge. */
-    border: var(--control-border-width) solid var(--input-border);
-    border-block-end-color: var(--input-border-bottom);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
+    border-block-end-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius);
     padding-inline: 10px;
     background-color: transparent;

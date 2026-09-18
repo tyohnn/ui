@@ -1,5 +1,6 @@
 {
     "name": "foundation",
+    "theme": "foundation",
     "description": "The tyohnn foundation: shadcn + Base UI + the three CSS layers with mira values. Maintainer and skill master copy; new systems fork it.",
     "axisContractVersion": 5,
     "fonts": {
@@ -14,6 +15,7 @@
     "defaultMode": "light",
     "styles": {
         "colors": "styles/globals.css",
+        "theme": "styles/theme.css",
         "tokens": "styles/tokens.css",
         "typeset": [
             "styles/typeset.css",
@@ -23,6 +25,7 @@
     },
     "files": [
         "styles/globals.css",
+        "styles/theme.css",
         "styles/tokens.css",
         "styles/typeset.css",
         "styles/typeset-preset.css",
