@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { PALETTE_GROUPS, contrast, resolveValue } from "@tyohnn/theme";
+import { PALETTE_GROUPS, contrast, resolveValue, toHex } from "@tyohnn/theme";
 
 import { useTheme, type Mode } from "./theme-provider";
 
@@ -47,27 +47,41 @@ const Copy = ({ label, text }: { label: string; text: string }) =>
     );
 };
 
-/** One colour: the value as it resolves (an alias shows what it stands for) and a way to change it. */
+/**
+ * One colour: the value as it resolves (an alias shows what it stands for), a picker on the chip and the
+ * text as written. The picker speaks hex only, so it replaces the value with one; the text field is how a
+ * precise `oklch(…)`, a `color-mix(…)` or an alias is written.
+ */
 const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
 {
     const theme = useTheme()!;
-    const values = (theme.colours ?? { light: {}, dark: {} })[mode];
+    const values = theme.display[mode];
     const written = values[name] ?? "";
     const value = resolveValue(values, written);
     const edited = theme.state.edits[mode][name] !== undefined;
 
     return (
-        <label className={edited ? "th-swatch edited" : "th-swatch"}>
-            <span className="th-chip" style={{ background: value }} aria-hidden />
-            <span className="th-name">{name}</span>
-            <input
-                type="text"
-                value={theme.state.edits[mode][name] ?? written}
-                spellCheck={false}
-                onChange={(event) => theme.setColour(mode, name, event.target.value)}
-                aria-label={`--${name} (${mode})`}
-            />
-        </label>
+        <div className={edited ? "th-swatch edited" : "th-swatch"}>
+            <label className="th-chip" style={{ background: value }}>
+                <span className="sr-only">{`Pick --${name} (${mode})`}</span>
+                <input type="color" value={toHex(value) ?? "#000000"} onChange={(event) => theme.setColour(mode, name, event.target.value)} />
+            </label>
+            <label className="th-field">
+                <span className="th-name">{name}</span>
+                <input
+                    type="text"
+                    value={theme.state.edits[mode][name] ?? written}
+                    spellCheck={false}
+                    onChange={(event) => theme.setColour(mode, name, event.target.value)}
+                    aria-label={`--${name} (${mode})`}
+                />
+            </label>
+            {edited && (
+                <button type="button" className="th-undo" onClick={() => theme.clearColour(mode, name)} title={`Back to ${written === value ? "the theme's value" : value}`}>
+                    <span className="sr-only">{`Undo --${name}`}</span>↺
+                </button>
+            )}
+        </div>
     );
 };
 
@@ -87,7 +101,23 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
     const bases = theme.themes.filter((entry) => entry.kind === "base");
     const named = theme.themes.filter((entry) => entry.kind === "theme");
     const accents = theme.themes.filter((entry) => entry.kind === "accent");
-    const values = (theme.colours ?? { light: {}, dark: {} })[mode];
+    const values = theme.display[mode];
+    const edits = Object.keys(theme.state.edits.light).length + Object.keys(theme.state.edits.dark).length;
+
+    const pick = (entry: typeof theme.themes[number]) => (
+        <button
+            key={entry.id}
+            type="button"
+            className={theme.state.base === entry.id ? "th-pick on" : "th-pick"}
+            onClick={() => theme.setBase(entry.id)}
+            title={entry.title}
+        >
+            <span className="th-dots" aria-hidden>
+                {entry.swatch[mode].map((colour, index) => <i key={index} style={{ background: colour }} />)}
+            </span>
+            {entry.id}
+        </button>
+    );
 
     return (
         <div className="th-root">
@@ -112,23 +142,13 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                     </header>
 
                     <section>
-                        <h4>Start from</h4>
-                        <div className="th-row">
-                            {[...named, ...bases].map((entry) => (
-                                <button
-                                    key={entry.id}
-                                    type="button"
-                                    className={theme.state.base === entry.id ? "th-pick on" : "th-pick"}
-                                    onClick={() => theme.setBase(entry.id)}
-                                    title={entry.kind === "base" ? `${entry.title} — a neutral ramp` : entry.title}
-                                >
-                                    <span className="th-dots" aria-hidden>
-                                        {entry.swatch[mode].map((colour, index) => <i key={index} style={{ background: colour }} />)}
-                                    </span>
-                                    {entry.id}
-                                </button>
-                            ))}
-                        </div>
+                        <h4>Themes <small>a whole palette, one per system</small></h4>
+                        <div className="th-row">{named.map(pick)}</div>
+                    </section>
+
+                    <section>
+                        <h4>Bases <small>shadcn&rsquo;s neutral ramps</small></h4>
+                        <div className="th-row">{bases.map(pick)}</div>
                     </section>
 
                     <section>
@@ -152,6 +172,11 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                     <section>
                         <h4>
                             Every colour
+                            {edits > 0 && (
+                                <button type="button" className="th-clear" onClick={theme.clearEdits}>
+                                    {edits} changed by hand — clear
+                                </button>
+                            )}
                             <span className="th-modes">
                                 {(["light", "dark"] as Mode[]).map((option) => (
                                     <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{option}</button>
@@ -188,7 +213,7 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                         <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>Download theme.json</button>
                         <Copy label="Copy install command" text={`npx tyohnn init --system ${systemName} --theme ${theme.link}`} />
                         <Copy label="Copy share link" text={typeof window === "undefined" ? "" : window.location.href} />
-                        <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn}>Reset</button>
+                        <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title="Back to the system's own colours">Reset all</button>
                     </footer>
                 </div>
             )}

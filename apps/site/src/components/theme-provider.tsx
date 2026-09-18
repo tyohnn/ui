@@ -22,7 +22,9 @@ interface ThemeValue
     /** The system's own theme id, so "reset" means something */
     own: string;
     state: ThemeState;
-    /** null while the state is the system's own theme: the frames are left exactly as built */
+    /** The palette the panel shows: always the whole 72, even before anything is changed */
+    display: { light: Record<string, string>; dark: Record<string, string> };
+    /** null while the state is the system's own theme: the frames are then left exactly as built */
     colours: { light: Record<string, string>; dark: Record<string, string> } | null;
     css: string | null;
     warnings: ReturnType<typeof checkContrast>;
@@ -31,6 +33,10 @@ interface ThemeValue
     setBase: (id: string) => void;
     setAccent: (id: string | null) => void;
     setColour: (mode: Mode, name: string, value: string) => void;
+    /** Put one colour back to what the base and accent say */
+    clearColour: (mode: Mode, name: string) => void;
+    /** Keep the base and accent, drop every hand edit */
+    clearEdits: () => void;
     reset: () => void;
     isOwn: boolean;
 }
@@ -113,7 +119,8 @@ export const ThemeProvider = ({ themes, own, children }: { themes: ThemeInfo[]; 
     }, [own]);
 
     const isOwn = state.base === own && !state.accent && Object.keys(state.edits.light).length === 0 && Object.keys(state.edits.dark).length === 0;
-    const colours = useMemo(() => isOwn ? null : compose(themes, state), [themes, state, isOwn]);
+    const display = useMemo(() => compose(themes, state), [themes, state]);
+    const colours = isOwn ? null : display;
     const css = useMemo(() => colours ? themeToCss({ name: "editor", title: "editor", ...colours }) : null, [colours]);
 
     useEffect(() =>
@@ -173,16 +180,16 @@ export const ThemeProvider = ({ themes, own, children }: { themes: ThemeInfo[]; 
 
     const value = useMemo<ThemeValue>(() =>
     {
-        const merged = colours ?? compose(themes, { base: own, accent: null, edits: empty() });
         const theme = themeOf(state);
 
         return {
             themes,
             own,
             state,
+            display,
             colours,
             css,
-            warnings: checkContrast({ name: "editor", title: "editor", ...merged }),
+            warnings: checkContrast({ name: "editor", title: "editor", ...display }),
             theme,
             link: encodeTheme(theme),
             isOwn,
@@ -196,9 +203,16 @@ export const ThemeProvider = ({ themes, own, children }: { themes: ThemeInfo[]; 
 
                 return { ...current, edits };
             }),
+            clearColour: (mode, name) => setState((current) =>
+            {
+                const { [name]: gone, ...rest } = current.edits[mode];
+
+                return { ...current, edits: { ...current.edits, [mode]: rest } };
+            }),
+            clearEdits: () => setState((current) => ({ ...current, edits: empty() })),
             reset: () => setState({ base: own, accent: null, edits: empty() }),
         };
-    }, [themes, own, state, colours, css, isOwn]);
+    }, [themes, own, state, display, colours, css, isOwn]);
 
     return <Context.Provider value={value}>{children}</Context.Provider>;
 };

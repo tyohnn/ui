@@ -54,5 +54,6 @@ export function encodeTheme(theme: Theme): string;
 export function decodeTheme(encoded: string): Theme;
 export function parseColour(value: string): [number, number, number] | null;
 export function resolveValue(values: Colours, value: string): string;
+export function toHex(value: string): string | null;
 export function contrast(a: string, b: string): number | null;
 export function checkContrast(resolved: ResolvedTheme, minimum?: number): ContrastFailure[];
