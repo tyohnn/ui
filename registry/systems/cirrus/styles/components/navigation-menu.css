@@ -205,6 +205,7 @@
     .cn-navigation-menu-viewport,
     .cn-navigation-menu-popup {
         background-color: var(--glass-fill, var(--popover));
+        background-image: var(--glass-sheen, none);
         backdrop-filter: var(--glass-filter, none);
     }
 }

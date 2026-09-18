@@ -116,3 +116,12 @@
         padding-top: var(--card-spacing);
     }
 }
+
+/* cirrus: 카드도 하늘 바닥의 빛을 조금 받는다 — 다만 떠 있는 층보다 한 단 진한 유리다
+   (--glass-card-*: 88% 채움 · 12px 흐림). 값과 계약은 tokens.css 의 glass 축. */
+@supports (backdrop-filter: blur(1px)) {
+    .cn-card {
+        background-color: var(--glass-card-fill, var(--card));
+        backdrop-filter: var(--glass-card-filter, none);
+    }
+}

@@ -22,6 +22,10 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   fill and blur move together; 72% is the opacity floor; a nested layer turns glass **off** (a
   `backdrop-filter` makes a stacking context, and a submenu inside one gets trapped); and only one
   blur per stack. Sub-menus, the chart tooltip and the toast are the documented opaque exceptions.
+- **Ground**: the page carries two very faint lights — blue at the top left, mint at the top right —
+  painted as a fixed `background-image` on `body` (never on `--background`, which is also a control
+  fill). Glass only exists if there is something behind it: on a flat single colour a 76% frosted panel
+  is indistinguishable from a white one, so the ground is part of the material, not decoration.
 - **Planes and depth**: white cards on a cool near-white page, lifted by a wide, low-opacity shadow
   tinted blue-black (`rgb(16 32 64)`) so it reads as light rather than as grey dirt. Rings stay
   luma's hairline `foreground/5`.
@@ -38,6 +42,7 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 | Slot | Value (light) | Meaning |
 |---|---|---|
 | `--glass-fill` · `--glass-filter` | `popover 76%` · `blur(24px) saturate(1.6)` | the material, and it only applies to floating layers |
+| `--glass-sheen` | `linear-gradient(180deg, card 42%, transparent 42%)` | the light on the top of the pane — what says "glass" when the ground is quiet |
 | `--overlay-backdrop` · `--overlay-backdrop-blur` | `oklch(0.55 0.03 250 / 26%)` · `20px` | a pale blue scrim; the blur is the effect, the colour steps aside |
 | `--background` / `--foreground` | `oklch(0.985 0.004 240)` / `oklch(0.22 0.02 255)` | cool daylight page, blue-ink text |
 | `--primary` | `oklch(0.26 0.03 255)` | ink-navy: the pill CTA |
@@ -51,8 +56,13 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 
 - **Glass floats, opaque sits.** The test is not "is it pretty here" but "does it float?" If the layer
   is portalled and has a backdrop behind it, it is glass; if it is in the document flow, it is opaque.
-- **One blur per stack.** The modal backdrop already blurs; the dialog on top of it blurs its own
-  ground. Do not add a third blur inside the dialog — pay for the repaint once.
+- **One blur per ground.** The modal backdrop blurs the page; the dialog blurs what is behind the
+  dialog; a sticky footer inside it blurs the body scrolling under itself. Three blurs, three different
+  grounds — that is allowed. What is not allowed is two blurs over the *same* ground (the dead
+  `before:backdrop-blur-2xl` this system deleted).
+- **Nothing repaints the surface colour.** A band that has to match a floating pane (a sticky footer, a
+  toolbar) must read `var(--glass-fill, var(--popover))`, never `--popover` alone: on a glass pane a
+  hardcoded opaque fill shows up as a white strip. The blocks' settings dialog was fixed this way.
 - **One blue per view.** Focus, a link and the first chart series are already three appearances. A
   fourth (a tinted surface, a blue-filled button) makes the signal stop signalling.
 - **Mint is the second series, not a second accent.** It belongs in charts and progress; it is not a

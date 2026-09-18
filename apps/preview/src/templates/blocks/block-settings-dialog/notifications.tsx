@@ -148,7 +148,20 @@ export const NotificationSettings = () => (
 export const SETTINGS_STYLE = `
 [data-template-part="block-settings-dialog"] .sd-icon { width: 14px; height: 14px; flex-shrink: 0; }
 [data-template-part="block-settings-dialog"] .sd-meta { font-size: var(--ui-text-sm); line-height: var(--ui-line-height-sm); color: var(--muted-foreground); }
-[data-template-part="block-settings-dialog"] .sd-hint { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
+/* ⚠ 힌트는 스위치와 **닿기 전에** 줄인다. 폭을 막아 두지 않으면 글꼴이 조금만 넓어져도
+   (다른 시스템의 sans, 한글 폴백) 마지막 낱말이 스위치 밑으로 들어간 것처럼 보인다 —
+   ellipsis 는 자리가 없을 때만 걸리므로, 자리를 절반 조금 넘게 못 박아 항상 여백이 남게 한다. */
+[data-template-part="block-settings-dialog"] .sd-hint { flex: 0 1 auto; min-width: 0; max-width: 56%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
 [data-template-part="block-settings-dialog"] .sd-table { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); }
-[data-template-part="block-settings-dialog"] .sd-footer { border-top: 1px solid var(--border); background-color: var(--popover); }
+/* ⚠ 붙박이 푸터는 면의 색을 **다시 적지 않는다**. --popover 를 리터럴처럼 박아 두면 면이 불투명한
+   시스템에서는 맞아떨어지지만, 떠 있는 면이 유리인 시스템(cirrus)에서는 유리 패널 위에 불투명한
+   흰 띠가 얹힌다(2026-09-18 실측: 다이얼로그 oklab(1 0 0 / 0.76) vs 푸터 oklch(1 0 0)).
+   그래서 면과 같은 채움을 폴백으로 읽고, 유리일 때만 자기 흐림을 갖는다 —
+   패널의 흐림은 "패널 뒤"를, 푸터의 흐림은 "푸터 뒤로 흐르는 본문"을 가린다(서로 다른 바닥이다).
+   --glass-fill 이 없는 시스템에서는 var() 가 --popover 로 떨어지고 필터도 none 이라 화면이 같다. */
+[data-template-part="block-settings-dialog"] .sd-footer { border-top: 1px solid var(--border); background-color: var(--glass-fill, var(--popover)); }
+
+@supports (backdrop-filter: blur(1px)) {
+    [data-template-part="block-settings-dialog"] .sd-footer { backdrop-filter: var(--glass-filter, none); }
+}
 `;
