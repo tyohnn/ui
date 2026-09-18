@@ -1,0 +1,35 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "source-serif-4",
+    "family": "Source Serif 4",
+    "category": "serif",
+    "provider": "google",
+    "next": {
+        "import": "Source_Serif_4",
+        "variable": "--font-serif-source-serif-4"
+    },
+    "fontsource": {
+        "package": "@fontsource-variable/source-serif-4",
+        "variable": true,
+        "css": "@fontsource-variable/source-serif-4",
+        "family": "Source Serif 4 Variable"
+    },
+    "weights": [
+        400,
+        500,
+        600,
+        700
+    ],
+    "axes": [
+        "opsz",
+        "wght"
+    ],
+    "subsets": [
+        "latin"
+    ],
+    "hangul": false,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}

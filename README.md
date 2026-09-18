@@ -3,12 +3,12 @@
 **Design systems you can swap, not just themes you can recolour.**
 
 shadcn components on [Base UI](https://base-ui.com) primitives, with every visual decision — colour,
-density, shape, material, motion — pulled out of the TSX and into three layers of plain CSS. Ten complete
+density, shape, material, motion — pulled out of the TSX and into three layers of plain CSS. Eleven complete
 systems ship with the registry. A CLI copies one into your project, source and all.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Components](https://img.shields.io/badge/components-61-black.svg)](registry/ui/components)
-[![Systems](https://img.shields.io/badge/systems-10-black.svg)](registry/systems)
+[![Systems](https://img.shields.io/badge/systems-11-black.svg)](registry/systems)
 
 > **Status: pre-release.** The registry, the CLI and the site are working; the CLI is not on npm yet, so
 > run it from a clone (see [Quick start](#quick-start)). Expect the occasional breaking change until 1.0.
@@ -120,8 +120,9 @@ theme goes on any system. Seven of the eight ported shadcn presets have no colou
 | `sera` | Playfair Display · square · uppercase labels | light |
 | `graphite` | Pretendard · dense · clay controls | dark |
 | `nocturne` | Geist · pill controls · one lavender signal | dark |
+| `vellum` | Source Serif 4 · paper ground · dense tables | light |
 
-The first eight are ports of shadcn's `create` presets; `graphite` and `nocturne` are our own. Each is a
+The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne` and `vellum` are our own. Each is a
 **complete, frozen folder** — all three layers, its own `DESIGN.md`, nothing composed at build time — so
 what you copy is what you saw.
 
@@ -160,7 +161,7 @@ Full reference: [packages/cli/README.md](packages/cli/README.md).
 
 ## Roadmap
 
-- [x] Three-layer architecture, 61 components, 10 systems verified against shadcn
+- [x] Three-layer architecture, 61 components, 11 systems (the eight ported presets verified against shadcn)
 - [x] CLI: scaffold, switch systems, fonts, icons, doctor, diff
 - [x] Colour as a separate axis — themes, 7 bases × 17 accents, free-form palettes
 - [ ] `tyohnn theme` — wear any theme on any system, from the CLI

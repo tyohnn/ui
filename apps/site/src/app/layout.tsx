@@ -10,6 +10,7 @@ import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/noto-sans";
 import "@fontsource-variable/playfair-display";
+import "@fontsource-variable/source-serif-4";
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./site.css";
 

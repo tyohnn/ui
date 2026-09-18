@@ -13,4 +13,5 @@ export const SITE_FONTS: readonly string[] = [
     "noto-sans",
     "playfair-display",
     "pretendard",
+    "source-serif-4",
 ];
