@@ -1,6 +1,10 @@
 // make-reference — build the shadcn reference app (the answer key) for one create preset.
 //
-// Usage: node tooling/preset/make-reference.mjs <preset> [--workdir <dir>] [--skip-add] [--blocks sidebar-01,… | all]
+// Usage: node tooling/preset/make-reference.mjs <preset> [--variant <base>-<accent>] [--workdir <dir>] [--skip-add]
+//        [--blocks sidebar-01,… | all]
+//
+// `--variant stone-blue` builds the same preset with another baseColor and theme — the answer key for wearing
+// a tyohnn theme on that system. It goes to <workdir>/<preset>--<variant>, so the plain reference app stays.
 //
 //   1. Sparse-checks out shadcn-ui/ui at the pinned tag (apps/v4/registry: styles, themes, preset config).
 //   2. `npx shadcn@<version> init -t next -b base -p <preset> -n <preset>`: a Next app on Base UI with the
@@ -27,10 +31,19 @@ import { dirname, join } from "node:path";
 
 import { repoRoot } from "@tyohnn/build-system/registry";
 
-import { argValue, PRESETS, presetConfig, referenceAppDir, REFERENCE_PORT, SHADCN_VERSION, shadcnCheckout, shadcnCommit, workdir } from "./shared.mjs";
+import { argValue, PRESETS, presetConfig, presetUrl, referenceAppDir, REFERENCE_PORT, SHADCN_VERSION, shadcnCheckout, shadcnCommit, workdir } from "./shared.mjs";
 
 const args = process.argv.slice(2);
-const preset = args.find((arg, index) => !arg.startsWith("--") && !["--workdir", "--blocks"].includes(args[index - 1]));
+const preset = args.find((arg, index) => !arg.startsWith("--") && !["--workdir", "--blocks", "--variant"].includes(args[index - 1]));
+// `<baseColor>-<accent>`: the two colour axes shadcn create asks about, which a tyohnn theme also carries.
+const variant = argValue("variant", "");
+const [variantBase, variantAccent] = variant.split("-");
+
+if (variant && (!variantBase || !variantAccent))
+{
+    console.error(`--variant takes <baseColor>-<accent>, e.g. stone-blue`);
+    process.exit(2);
+}
 const blocksArg = argValue("blocks", "");
 const BLOCK_NAMES = Array.from({ length: 16 }, (_, index) => `sidebar-${String(index + 1).padStart(2, "0")}`);
 const blocks = blocksArg === "all" ? BLOCK_NAMES : blocksArg.split(",").map((name) => name.trim()).filter(Boolean);
@@ -58,14 +71,17 @@ const run = (command, commandArgs, cwd) =>
 
 shadcnCheckout({ fetch: true });
 
-const config = presetConfig(preset);
-const app = referenceAppDir(preset);
+const config = { ...presetConfig(preset), ...(variant ? { baseColor: variantBase, theme: variantAccent, chartColor: variantAccent } : {}) };
+const app = referenceAppDir(preset, variant);
+const name = variant ? `${preset}--${variant}` : preset;
 const shadcn = `shadcn@${SHADCN_VERSION}`;
+// A variant is not a named preset, so it goes in as the URL shadcn's own create builds for those choices.
+const source = variant ? presetUrl(presetConfig(preset), { baseColor: variantBase, theme: variantAccent, chartColor: variantAccent }) : preset;
 
 // 2. init
 if (!existsSync(join(app, "components.json")))
 {
-    run("npx", ["-y", shadcn, "init", "-t", "next", "-b", "base", "-p", preset, "-n", preset, "--no-monorepo", "-y"], workdir());
+    run("npx", ["-y", shadcn, "init", "-t", "next", "-b", "base", "-p", source, "-n", name, "--no-monorepo", "-y"], workdir());
 }
 
 // 3. every registry/ui component
@@ -204,7 +220,7 @@ const record = {
     shadcnVersion: SHADCN_VERSION,
     commit: shadcnCommit(),
     config,
-    command: `npx ${shadcn} init -t next -b base -p ${preset} -n ${preset} --no-monorepo -y && npx ${shadcn} add <${components.length} registry/ui components> --overwrite -y`,
+    command: `npx ${shadcn} init -t next -b base -p ${source} -n ${name} --no-monorepo -y && npx ${shadcn} add <${components.length} registry/ui components> --overwrite -y`,
     styleSource: `https://github.com/shadcn-ui/ui/blob/${shadcnCommit()}/apps/v4/registry/styles/style-${config.style}.css`,
     componentsMissing: missing,
     specimen: { from: TEMPLATES.map((template) => `apps/preview/src/templates/${template}`), imports: "@tyohnn/components/* → @/components/ui/*", icons: `@tyohnn/icons → components/tyohnn-icons (${iconLibrary})`, text: "tooling/preset/specimen-text.json" },

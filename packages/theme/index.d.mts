@@ -49,7 +49,7 @@ export const CONTRAST_PAIRS: [string, string][];
 export function groupOf(name: string): PaletteGroup | null;
 export function resolveTheme(theme: Theme, load: (id: string) => Theme | undefined): ResolvedTheme;
 export function checkTheme(resolved: ResolvedTheme): string[];
-export function themeToCss(resolved: ResolvedTheme): string;
+export function themeToCss(resolved: ResolvedTheme, options?: { partial?: boolean }): string;
 export function encodeTheme(theme: Theme): string;
 export function decodeTheme(encoded: string): Theme;
 export function parseColour(value: string): [number, number, number] | null;

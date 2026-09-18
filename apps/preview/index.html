@@ -27,13 +27,17 @@
                 link.id = "system-css";
                 document.head.appendChild(link);
 
-                const theme = (params.get("theme") || "").replace(/[^a-z0-9-]/gi, "");
+                // ?theme=<id> or ?theme=<base>+<accent>: the accent is a partial layer, so it is simply the
+                // second stylesheet — the same composition the theme files describe with `extends`.
+                const [base, accent] = (params.get("theme") || "").split("+").map((part) => (part || "").replace(/[^a-z0-9-]/gi, ""));
 
-                if (theme) {
+                for (const [index, href] of [base && `_themes/${base}.css`, accent && `_themes/accents/${accent}.css`].entries()) {
+                    if (!href) continue;
+
                     const colours = document.createElement("link");
                     colours.rel = "stylesheet";
-                    colours.href = `__TYOHNN_BASE__../_themes/${theme}.css`;
-                    colours.id = "theme-css";
+                    colours.href = `__TYOHNN_BASE__../${href}`;
+                    colours.id = index === 0 ? "theme-css" : "theme-accent-css";
                     document.head.appendChild(colours);
                 }
             })();

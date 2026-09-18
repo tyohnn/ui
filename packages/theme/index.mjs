@@ -108,9 +108,13 @@ const declarations = (values, indent = "    ") =>
 
     for (const [group, names] of Object.entries(PALETTE_GROUPS))
     {
+        const present = names.filter((name) => values[name] !== undefined);
+
+        if (present.length === 0) continue;
         if (lines.length > 0) lines.push("");
+
         lines.push(`${indent}/* ${group} */`);
-        for (const name of names) lines.push(`${indent}--${name}: ${values[name]};`);
+        for (const name of present) lines.push(`${indent}--${name}: ${values[name]};`);
     }
 
     return lines.join("\n");
@@ -119,10 +123,13 @@ const declarations = (values, indent = "    ") =>
 /**
  * The generated layer-1 colour file. It is imported after globals.css, so a system's own identity
  * colours — declared after it in the cascade — still win.
+ *
+ * `partial` writes only the colours a layer carries, without insisting on the whole palette: that is how an
+ * accent is shipped as its own stylesheet, to be loaded after a base and redeclare the few names it moves.
  */
-export const themeToCss = (resolved) =>
+export const themeToCss = (resolved, { partial = false } = {}) =>
 {
-    const problems = checkTheme(resolved);
+    const problems = partial ? [] : checkTheme(resolved);
 
     if (problems.length > 0) throw new Error(problems.join("\n"));
 
