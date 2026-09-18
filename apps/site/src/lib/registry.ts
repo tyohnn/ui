@@ -100,7 +100,17 @@ export const getSystems = (): SystemInfo[] =>
             const heading = system.fonts.heading === "inherit" ? null : font(system.fonts.heading);
             const sans = font(system.fonts.sans);
             const nameFont = heading ?? sans;
-            const css = readFileSync(join(systemsRoot, system.name, "styles/globals.css"), "utf8");
+            // ⚠ 1층은 두 파일이다. 팔레트 리터럴은 theme.css 에 있고 globals.css 에는 파생식만 남는다
+            //    (2026-09-18 테마 분리). globals.css 만 읽던 탓에 시스템 카드의 스와치가 전 시스템에서
+            //    비어 있었다. 테마에서 먼저 찾고, 없으면 globals 로 떨어진다.
+            const themeCss = readFileSync(join(systemsRoot, system.name, "styles/theme.css"), "utf8");
+            const globalsCss = readFileSync(join(systemsRoot, system.name, "styles/globals.css"), "utf8");
+            const swatch = (name: string) =>
+            {
+                const value = token(themeCss, defaultMode, name);
+
+                return value === "transparent" ? token(globalsCss, defaultMode, name) : value;
+            };
 
             // A system name is set in its own font, which the site must self-host (src/lib/site-fonts.ts).
             if (!SITE_FONTS.includes(nameFont.id)) throw new Error(`${system.name}: the site does not load font "${nameFont.id}"; add it to src/lib/site-fonts.ts and src/app/layout.tsx`);
@@ -123,7 +133,7 @@ export const getSystems = (): SystemInfo[] =>
                     packages: Object.keys(manifest.iconLibraries[library]?.packages ?? {}),
                 },
                 defaultMode,
-                palette: ["background", "muted", "border", "primary", "foreground"].map((name) => token(css, defaultMode, name)),
+                palette: ["background", "muted", "border", "primary", "foreground"].map(swatch),
             };
         });
 

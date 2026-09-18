@@ -177,8 +177,9 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .panel-row { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--fg-2); }
 .swatches { display: flex; gap: 6px; }
 .swatches i { width: 28px; height: 28px; border-radius: 0; border: 1px solid var(--line-strong); }
-.neighbors { display: flex; justify-content: space-between; font-size: 13px; color: var(--fg-3); border-top: 1px solid var(--line); padding-top: 14px; }
-.neighbors a:hover { color: var(--fg); }
+.crumb-nav { margin-left: auto; display: flex; gap: 18px; }
+.crumb-nav a { color: var(--fg-3); }
+.crumb-nav a:hover { color: var(--fg); }
 
 .catbar { position: sticky; top: 16px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: rgba(18, 19, 22, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 999px; margin-bottom: 56px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
 .cat { font-size: 14px; color: var(--fg-2); padding: 8px 16px; border-radius: 999px; display: inline-flex; gap: 8px; align-items: baseline; }
