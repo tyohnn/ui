@@ -1,6 +1,6 @@
 // The shipped themes are data, and this is what keeps them honest: every theme resolves to a complete
-// palette, and every theme that belongs to a system paints exactly what that system's layer 1 paints
-// today. The second test is the migration's safety net — it fails the moment a theme would move a pixel.
+// palette, and every theme that belongs to a system is exactly the colours that system's generated
+// styles/theme.css declares — so a theme cannot drift from the file the build reads.
 
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -59,12 +59,12 @@ test("a base is a whole palette and an accent only moves what it names", () =>
     }
 });
 
-test("each system's theme paints what its layer 1 paints", () =>
+test("each system's theme is what its generated colour file declares", () =>
 {
     for (const name of ["foundation", ...listSystems()])
     {
         const resolved = resolveTheme(load(name), load);
-        const rows = readTokens(styleFiles(name === "foundation" ? foundationRoot : systemRoot(name)).colors);
+        const rows = readTokens(styleFiles(name === "foundation" ? foundationRoot : systemRoot(name)).theme);
 
         for (const [mode, selector] of [["light", ":root"], ["dark", ".dark"]])
         {
