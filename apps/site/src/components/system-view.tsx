@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
 
-import { CATEGORIES, type Mode, previewUrl, REPOSITORY, screenSource, type SystemSummary } from "@/lib/site";
+import { CATEGORIES, type Mode, previewUrl, screenSource, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { ModeSeg } from "./pickers";
@@ -17,12 +17,11 @@ import { ThemeEditor } from "./theme-editor";
  */
 export const SystemView = ({
     system,
-    previous,
     next,
     intro,
 }: {
     system: SystemSummary;
-    previous: string;
+    /** The neighbour after this one: the Compare link's other side. 이웃 이동 링크는 빵부스러기 줄이 갖는다. */
     next: string;
     intro: ReactNode;
 }) =>
@@ -68,11 +67,6 @@ export const SystemView = ({
                         <span className="swatches" aria-label={`${system.defaultMode} palette`}>
                             {system.palette.map((colour, index) => <i key={index} style={{ background: colour }} title={colour} />)}
                         </span>
-                    </div>
-                    <div className="neighbors">
-                        <Link href={`/systems/${previous}`}>← {previous}</Link>
-                        <a href={`${REPOSITORY}/blob/main/registry/systems/${system.name}/DESIGN.md`}>DESIGN.md</a>
-                        <Link href={`/systems/${next}`}>{next} →</Link>
                     </div>
                 </div>
             </div>

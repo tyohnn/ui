@@ -51,10 +51,16 @@ export default async function SystemPage({ params }: Props)
                 <Link href="/#systems">Systems</Link>
                 <span aria-hidden>/</span>
                 <span>{system.name}</span>
+                {/* 이웃 시스템은 맨 위, 빵부스러기 줄의 오른쪽 끝이다. 설치 패널 바닥에 있을 때는
+                    화면을 다 내려야 보였는데, 시스템 사이를 옮겨 다니는 것은 화면을 보기 **전에**
+                    하는 일이다. */}
+                <span className="crumb-nav">
+                    <Link href={`/systems/${previous}`}>← {previous}</Link>
+                    <Link href={`/systems/${next}`}>{next} →</Link>
+                </span>
             </nav>
             <SystemView
                 system={summarize(system)}
-                previous={previous}
                 next={next}
                 intro={(
                     <div>
