@@ -92,7 +92,8 @@ export const getSystems = (): SystemInfo[] =>
     cache = readdirSync(systemsRoot, { withFileTypes: true })
         .filter((entry) => entry.isDirectory() && existsSync(join(systemsRoot, entry.name, "system.json")))
         .map((entry) => readJson<SystemJson>(join(systemsRoot, entry.name, "system.json")))
-        .sort((a, b) => b.added.localeCompare(a.added) || a.name.localeCompare(b.name))
+        // By instant, not by string: `added` is ISO 8601, and a UTC "Z" stamp sorts wrongly against a +09:00 one.
+        .sort((a, b) => Date.parse(b.added) - Date.parse(a.added) || a.name.localeCompare(b.name))
         .map((system) =>
         {
             const library = system.icons?.library ?? "lucide";
