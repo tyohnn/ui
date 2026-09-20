@@ -65,20 +65,31 @@
          data-invalid:border-destructive gap-2.5 rounded-xl border px-3 py-2.5 text-xs/relaxed
    모서리는 컨트롤(8)이 아니라 rounded-xl(14)이라 면 축의 --surface-radius-lg 를 읽는다.
    바탕은 없다 — nova 의 dark:bg-input/20 을 mira 가 뺐다.
-   ⚠ 좌우 12px · 상하 10px · 간격 10px 은 리터럴이다. control 축은 높이가 정본이라
-      세로 패딩 단계를 갖지 않고, 이 카드는 설명이 두 줄이 될 수 있어 높이를 고정할 수 없다.
+   ⚠ 좌우 · 상하 · 간격 · 모서리는 2층의 --questionnaire-choice-* 축이 갖는다. control 축을
+      쓰지 않는 것은 그쪽은 높이가 정본이라 세로 패딩 단계가 없고, 이 카드는 설명이 두 줄이 될 수
+      있어 높이를 고정할 수 없기 때문이다(2026-09-20, 리터럴에서 축으로).
    ⚠ 켜짐은 shadcn 의 data-checked 변형과 같은 두 형태를 본다([data-state=checked] ·
       [data-checked]). 손으로 옮기면서 하나를 빠뜨리면 구현에 따라 색이 안 켜진다. */
 .cn-questionnaire-choice {
-    gap: 10px;
-    padding-inline: 12px;
-    padding-block: 10px;
+    gap: var(--questionnaire-choice-gap);
+    padding-inline: var(--questionnaire-choice-padding-x);
+    padding-block: var(--questionnaire-choice-padding-y);
     border: var(--control-border-width) solid var(--input);
-    border-radius: var(--surface-radius-lg);
+    border-radius: var(--questionnaire-choice-radius);
     background-color: var(--questionnaire-choice-fill, transparent);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
+
+    /* 누를 자리의 바닥 44px 은 업스트림(min-h-11)의 것이라 리터럴이다. 데스크톱 높이만 시스템이
+       정한다 — graphite 는 34px 로, 컨트롤(28)과 표 줄(41) 사이에 앉힌다.
+       ⚠ 이 높이는 3층이 갖는다. 컴포넌트에 유틸리티로 적으면 유틸리티 레이어가 3층을 이겨
+          어떤 시스템도 되돌릴 수 없다 — 바닥 버튼 넷이 같은 이유로 height 를 쓴다. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
+    }
 
     &:hover {
         background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));

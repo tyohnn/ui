@@ -85,6 +85,17 @@
         background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     }
 
+    /* The 44px touch floor is upstream's (min-h-11), so it stays a literal here; only the desktop
+       height is the system's to choose.
+       ⚠ Layer 3 owns this height. Written as a utility on the component it would sit in the
+          utilities layer and beat every system's rule — the same reason the four footer buttons
+          are given `height` rather than `min-height`. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
+    }
+
     &:is([data-state="checked"], [data-checked]:not([data-checked="false"])) {
         /* nova: data-checked:border-primary/40 data-checked:bg-muted */
         border-color: color-mix(in oklab, var(--primary) 40%, transparent);

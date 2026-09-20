@@ -487,6 +487,16 @@
     --bubble-line-height: var(--ui-line-height-md);
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
+
+    /* 설문 선택 카드 — 여백 · 간격 · 모서리 · 데스크톱 바닥.
+       ⚠ 이 넷은 mira 의 12/10/10 · rounded-xl 을 3층 리터럴로 물려받은 것이라 graphite 의 촘촘한
+          결과 어긋나 있었다(2026-09-20 실측 44px). 위아래 6px 에 --ui-line-height-md(20)와 테두리
+          둘을 더해 34px 다 — 컨트롤(28)과 표 줄(41) 사이에 앉는다. */
+    --questionnaire-choice-padding-x: 10px;
+    --questionnaire-choice-padding-y: 6px;
+    --questionnaire-choice-gap: 8px;
+    --questionnaire-choice-radius: var(--surface-radius);
+    --questionnaire-choice-min-height: 34px;
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
     --tabs-list-height: var(--control-height-lg);

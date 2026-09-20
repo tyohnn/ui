@@ -70,17 +70,28 @@
    ⚠ 켜짐은 shadcn 의 data-checked 변형과 같은 두 형태를 본다([data-state=checked] ·
       [data-checked]). 손으로 옮기면서 하나를 빠뜨리면 구현에 따라 색이 안 켜진다. */
 .cn-questionnaire-choice {
-    gap: 10px;
-    padding-inline: 12px;
-    padding-block: 10px;
+    gap: var(--questionnaire-choice-gap);
+    padding-inline: var(--questionnaire-choice-padding-x);
+    padding-block: var(--questionnaire-choice-padding-y);
     border: var(--control-border-width) solid var(--input);
-    border-radius: var(--surface-radius-lg);
+    border-radius: var(--questionnaire-choice-radius);
     /* 평소 바탕은 v4 슬롯 --questionnaire-choice-fill 이 갖는다(1층, foundation: transparent
        = mira 처럼 바탕 없음). hover · 켜짐은 아래에서 덮는다. */
     background-color: var(--questionnaire-choice-fill, transparent);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
+
+    /* The 44px touch floor is upstream's (min-h-11), so it stays a literal here; only the desktop
+       height is the system's to choose.
+       ⚠ Layer 3 owns this height. Written as a utility on the component it would sit in the
+          utilities layer and beat every system's rule — the same reason the four footer buttons
+          are given `height` rather than `min-height`. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
+    }
 
     &:hover {
         background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));

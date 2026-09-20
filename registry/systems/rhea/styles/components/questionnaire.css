@@ -80,6 +80,17 @@
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
 
+    /* The 44px touch floor is upstream's (min-h-11), so it stays a literal here; only the desktop
+       height is the system's to choose.
+       ⚠ Layer 3 owns this height. Written as a utility on the component it would sit in the
+          utilities layer and beat every system's rule — the same reason the four footer buttons
+          are given `height` rather than `min-height`. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
+    }
+
     &:hover {
         background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
     }
