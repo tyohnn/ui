@@ -139,6 +139,19 @@
     --checkbox-indeterminate-shadow: none;
     --surface-control: linear-gradient(to bottom, var(--clay-surface-top, transparent), var(--clay-surface-bottom, transparent));
     --surface-primary: linear-gradient(to bottom, var(--clay-primary-top, transparent), var(--clay-primary-bottom, transparent));
+
+    /* 손 올린 컨트롤의 면.
+       ⚠ background-image 는 언제나 background-color 위에 칠해진다. graphite 는 컨트롤을
+          그라디언트로 채우는 유일한 시스템이라(clay), 단추의 :hover 색이 통째로 덮여
+          보이지 않았다(2026-09-20 실측: default · secondary · outline 셋 다).
+       ⚠ --surface-control 은 위아래가 같은 색이다(#191919 → #191919). 기울기가 없는 단색
+          덮개이므로 none 으로 두어도 잃는 것이 없고, 각 variant 가 제 손 올림 색을 되찾는다.
+       ⚠ --surface-primary 는 진짜 기울기가 있으므로(#4a5af7 → #3443ea) 모양을 지키고 한 단만
+          어둡게 한다. 1층 재료를 그대로 읽으므로 색을 갈면 따라온다. */
+    --surface-control-hover: none;
+    --surface-primary-hover: linear-gradient(to bottom,
+        color-mix(in oklab, var(--clay-primary-top, transparent) 90%, #000),
+        color-mix(in oklab, var(--clay-primary-bottom, transparent) 90%, #000));
     --tag-shadow: none;
 
     /* 지시자 — 체크박스·라디오. mira: size-4 · rounded-[4px] · 체크 [&>svg]:size-3.5 · 라디오 점 size-2 */

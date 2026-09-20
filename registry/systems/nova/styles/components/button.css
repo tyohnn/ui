@@ -71,6 +71,7 @@
 
     &:hover {
         background-color: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
+        background-image: var(--surface-primary-hover, var(--surface-primary));
     }
 }
 
@@ -84,6 +85,7 @@
 
     &:hover {
         background-color: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
+        background-image: var(--surface-control-hover, var(--surface-control));
     }
 }
 
@@ -103,6 +105,7 @@
     &:hover {
         /* axis contract v4 — 종전 --input-fill-hover. foundation 값은 그 별칭이다. */
         background-color: var(--button-outline-hover-fill, var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent)));
+        background-image: var(--surface-control-hover, var(--surface-control));
         color: var(--foreground);
     }
 

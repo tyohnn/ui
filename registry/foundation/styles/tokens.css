@@ -135,6 +135,12 @@
     --checkbox-indeterminate-shadow: var(--shadow-recessed);
     --surface-control: none;
     --surface-primary: none;
+
+    /* The hovered control's surface. background-image always paints over background-color, so a
+       system that fills a control with a gradient silently swallows every :hover colour these
+       rules set. Default to the resting surface: a system without clay is unchanged. */
+    --surface-control-hover: var(--surface-control);
+    --surface-primary-hover: var(--surface-primary);
     --tag-shadow: none;
 
     /* 지시자 — 체크박스·라디오. mira: size-4 · rounded-[4px] · 체크 [&>svg]:size-3.5 · 라디오 점 size-2 */
