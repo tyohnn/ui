@@ -228,6 +228,9 @@
     --sidebar-item-border: transparent;
     --sidebar-item-active-border: var(--border-strong);
     --sidebar-item-hover-background: transparent;
+    /* 선택된 줄의 hover 는 제 바탕을 한 단만 밝힌다. 선택이 풀린 것처럼 보이면 안 되고,
+       살아 있다는 것만 알리면 되는 자리다. */
+    --sidebar-active-hover-background: color-mix(in oklab, var(--sidebar-accent) 92%, var(--foreground));
     --sidebar-group-label-foreground: var(--foreground-subtle, var(--ring));
     --sidebar-badge-background: var(--sidebar-accent);
     --sidebar-badge-active-background: var(--sidebar);
@@ -316,6 +319,9 @@
     --sidebar-item-border: transparent;
     --sidebar-item-active-border: var(--border-strong);
     --sidebar-item-hover-background: transparent;
+    /* 선택된 줄의 hover 는 제 바탕을 한 단만 밝힌다. 선택이 풀린 것처럼 보이면 안 되고,
+       살아 있다는 것만 알리면 되는 자리다. */
+    --sidebar-active-hover-background: color-mix(in oklab, var(--sidebar-accent) 92%, var(--foreground));
     --sidebar-group-label-foreground: var(--foreground-subtle, var(--ring));
     --sidebar-badge-background: var(--sidebar-accent);
     --sidebar-badge-active-background: var(--sidebar);
