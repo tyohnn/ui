@@ -561,6 +561,10 @@
     --questionnaire-choice-gap: 10px;
     --questionnaire-choice-radius: var(--surface-radius-lg);
     --questionnaire-choice-min-height: 44px;   /* the component's min-h-11 */
+    /* The questionnaire's vertical rhythm: between a question and the actions, and between a
+       question's head and its choices. mira's literals, so foundation is unchanged. */
+    --questionnaire-gap: 16px;
+    --questionnaire-item-gap: 12px;
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
 

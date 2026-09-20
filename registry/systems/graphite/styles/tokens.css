@@ -497,6 +497,11 @@
     --questionnaire-choice-gap: 8px;
     --questionnaire-choice-radius: var(--surface-radius);
     --questionnaire-choice-min-height: 34px;
+    /* 설문의 세로 리듬 — 질문과 단추 사이, 머리와 선택지 사이.
+       ⚠ mira 의 16 · 12 를 3층 리터럴로 물려받아 12px 여백의 카드 안에서 헐거웠다. 와이어
+          프레임의 9px 한 리듬으로 맞춘다(2026-09-20). */
+    --questionnaire-gap: 9px;
+    --questionnaire-item-gap: 9px;
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
     --tabs-list-height: var(--control-height-lg);

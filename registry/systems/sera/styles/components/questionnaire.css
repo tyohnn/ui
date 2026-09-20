@@ -19,7 +19,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 24px;
+    gap: var(--questionnaire-gap, 24px);
 }
 
 .cn-questionnaire-progress {
@@ -33,7 +33,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--questionnaire-item-gap, 20px);
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3

@@ -10,8 +10,10 @@
       (--control-indicator-*)을 그대로 읽는다. 값이 이미 16·4·14·8 로
       일치했다 — 축을 새로 만든 것이 아니라 이름을 붙인 것이다.
 
-   ⚠ 세로 리듬(16 · 12 · 6 · 2px)은 리터럴이다. 2층에 폼 세로 리듬 축이
-      없다 — Field 와 같은 사정이다.
+   ⚠ 세로 리듬 가운데 바깥 둘(질문↔단추, 머리↔선택지)은 2층의 --questionnaire-gap ·
+      --questionnaire-item-gap 이 갖는다(2026-09-20, 리터럴에서 축으로). 안쪽 둘
+      (선택지 사이 6, 제목↔설명 2)은 여전히 리터럴이다 — 카드 안의 촘촘한 단이라
+      시스템이 갈아 끼울 일이 없었다.
 
    ⚠ 고른 답의 바탕은 --primary-soft(mira data-checked:bg-primary/10)다. 테두리는
       mira 의 border-primary/40 에 맞는 토큰이 없어 --ring 으로 둔다. 손이 올라간
@@ -19,7 +21,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 16px;
+    gap: var(--questionnaire-gap, 16px);
 }
 
 .cn-questionnaire-progress {
@@ -32,7 +34,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--questionnaire-item-gap, 12px);
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
