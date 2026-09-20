@@ -502,6 +502,10 @@
           프레임의 9px 한 리듬으로 맞춘다(2026-09-20). */
     --questionnaire-gap: 9px;
     --questionnaire-item-gap: 9px;
+    /* 고른 답의 테두리. ⚠ 3층이 마땅한 토큰이 없어 --ring 으로 두고 있었는데, graphite 의
+       --ring 은 채도 0 의 회색이라 고른 답이 파랗게 서지 않았다(2026-09-20 실측 lab(48.5 0 0)).
+       주 단추의 가장자리와 같은 --primary-border(#5460e0)로 맞춘다 — 와이어프레임의 값이다. */
+    --questionnaire-choice-checked-border: var(--primary-border);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
     --tabs-list-height: var(--control-height-lg);

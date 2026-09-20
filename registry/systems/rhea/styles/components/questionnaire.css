@@ -96,7 +96,7 @@
     }
 
     &:is([data-state="checked"], [data-checked]:not([data-checked="false"])) {
-        border-color: var(--ring);
+        border-color: var(--questionnaire-choice-checked-border, var(--ring));
         /* mira: data-checked:bg-primary/10 — 필드 라벨의 /5 보다 한 단 진하다 */
         background-color: var(--primary-soft-strong, color-mix(in oklab, var(--primary) 10%, transparent));
     }

@@ -565,6 +565,9 @@
        question's head and its choices. mira's literals, so foundation is unchanged. */
     --questionnaire-gap: 16px;
     --questionnaire-item-gap: 12px;
+    /* The checked choice's edge. mira draws it with border-primary/40; no token matched, so layer 3
+       substituted --ring. That is right only where --ring carries the accent's hue. */
+    --questionnaire-choice-checked-border: var(--ring);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
 
