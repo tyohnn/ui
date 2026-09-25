@@ -131,6 +131,7 @@
 @supports (backdrop-filter: blur(1px)) {
     .cn-card {
         background-color: var(--glass-card-fill, var(--card));
+        background-image: var(--glass-sheen, none);
         backdrop-filter: var(--glass-card-filter, none);
     }
 }

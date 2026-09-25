@@ -206,15 +206,16 @@
           불투명으로 둔다.
        ④ 흐림은 한 겹만. 막과 면이 겹치는 자리에서 둘 다 키우지 말 것.
        -------------------------------------------------------- */
-    --glass-fill: color-mix(in oklab, var(--popover) 82%, transparent);
-    --glass-filter: blur(28px) saturate(1.5);
-    /* 유리 윗면에 닿는 빛 한 줄 — 흰 7% 라 어두운 유리에서만 보이고 밝은 쪽에서는 저절로 사라진다. */
-    --glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 40%);
-    --glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.07);
-    /* 윈도우(카드)의 유리 — 본문이 얹히므로 78% 채움(계약 ② 위). 흐림은 떠 있는 층과 같다:
-       HUD 의 카드는 흐름 안에 눌러앉지 않고 뜬다. */
-    --glass-card-fill: color-mix(in oklab, var(--card) 78%, transparent);
-    --glass-card-filter: blur(28px) saturate(1.5);
+    --glass-fill: color-mix(in oklab, var(--popover) 78%, transparent);
+    --glass-filter: blur(40px) saturate(1.8);
+    /* 유리 윗면에 닿는 빛 — 위 45% 에만 옅은 광택, 가장자리에는 위쪽 한 줄과 사방의 아주 옅은 테. 흰빛이라 어두운 유리에서만
+       보이고 밝은 쪽에서는 저절로 사라진다. 흐림만으로는 어두운 바탕 위에서 유리인지 알 수 없어서 빛으로 두께를 준다. */
+    --glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.075), rgb(255 255 255 / 0.015) 45%, transparent 70%);
+    --glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.12), inset 0 0 0 1px rgb(255 255 255 / 0.03);
+    /* 윈도우(카드)의 유리 — 본문이 얹히므로 74% 채움(계약 ② 하한 72% 위). 흐림은 떠 있는 층과 같다:
+       HUD 의 카드는 흐름 안에 눌러앉지 않고 뜬다. 채도 1.8 이 뒤의 빛을 유리 안으로 끌어온다. */
+    --glass-card-fill: color-mix(in oklab, var(--card) 74%, transparent);
+    --glass-card-filter: blur(40px) saturate(1.8);
 
     /* --------------------------------------------------------
        menu — 목록 안의 항목
