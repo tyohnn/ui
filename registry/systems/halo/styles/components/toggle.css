@@ -55,10 +55,12 @@
         color: var(--foreground);
     }
 
+    /* halo: 눌린 칸은 글자색 14% 를 섞은 판 — --muted 는 연기 유리(74%) 위에서 한 단도 차이 나지 않아 골라진 것이 안 보였다. */
     &[aria-pressed="true"],
     &[data-pressed],
     &[data-state="on"] {
-        background-color: var(--muted);
+        background-color: color-mix(in oklab, var(--foreground) 14%, transparent);
+        color: var(--foreground);
     }
 }
 
