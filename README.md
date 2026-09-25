@@ -122,8 +122,9 @@ theme goes on any system. Seven of the eight ported shadcn presets have no colou
 | `nocturne` | Geist · pill controls · one lavender signal | dark |
 | `vellum` | Source Serif 4 · paper ground · dense tables | light |
 | `cirrus` | Pretendard · frosted layers · pill buttons | light |
+| `halo` | Pretendard · smoked glass · media cards | dark |
 
-The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne`, `vellum` and `cirrus` are our own. Each is a
+The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne`, `vellum`, `cirrus` and `halo` are our own. Each is a
 **complete, frozen folder** — all three layers, its own `DESIGN.md`, nothing composed at build time — so
 what you copy is what you saw.
 
@@ -163,7 +164,7 @@ Full reference: [packages/cli/README.md](packages/cli/README.md).
 
 ## Roadmap
 
-- [x] Three-layer architecture, 61 components, 12 systems (the eight ported presets verified against shadcn)
+- [x] Three-layer architecture, 61 components, 13 systems (the eight ported presets verified against shadcn)
 - [x] CLI: scaffold, switch systems, fonts, icons, doctor, diff
 - [x] Colour as a separate axis — themes, 7 bases × 17 accents, free-form palettes
 - [x] `tyohnn theme` — wear any theme on any system, from the CLI
