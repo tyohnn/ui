@@ -140,3 +140,22 @@
 .cn-bubble-group {
     @apply gap-2;
 }
+
+/* halo: 말풍선도 떠 있는 유리다 — HUD 의 말은 물결이나 바탕화면 위에 뜬다. secondary(halo 의 말) · muted(사람의 말)
+   말풍선이 뒤를 비친다(값·계약은 tokens.css 의 glass 축). default(신호색) · outline 은 그대로 불투명하다. */
+@supports (backdrop-filter: blur(1px)) {
+    .cn-bubble-variant-secondary > [data-slot="bubble-content"],
+    .cn-bubble-variant-muted > [data-slot="bubble-content"] {
+        background-image: var(--glass-sheen, none);
+        backdrop-filter: var(--glass-filter, none);
+        box-shadow: 0 0 0 var(--surface-border-width) var(--ring-subtle), var(--glass-edge, 0 0 #0000);
+    }
+
+    .cn-bubble-variant-secondary > [data-slot="bubble-content"] {
+        background-color: color-mix(in oklab, var(--secondary) 76%, transparent);
+    }
+
+    .cn-bubble-variant-muted > [data-slot="bubble-content"] {
+        background-color: color-mix(in oklab, var(--muted) 72%, transparent);
+    }
+}
