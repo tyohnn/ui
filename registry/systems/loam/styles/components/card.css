@@ -23,6 +23,8 @@
     --card-spacing: var(--surface-padding-md);
 
     background-color: var(--card);
+    /* loam: light falls across the card from the top left (slot --card-sheen, layer 1). */
+    background-image: var(--card-sheen, none);
     color: var(--card-foreground);
     /* 모서리는 카드 자신의 축이다 — v4 슬롯 --card-radius(foundation 은 --surface-radius 의 별칭).
        머리·바닥은 v5 의 --card-part-radius, 가장자리 이미지는 --card-image-radius(둘 다 그 별칭)다. */
@@ -115,4 +117,12 @@
     &:is(.border-t) {
         padding-top: var(--card-spacing);
     }
+}
+
+/* loam: an emphasised card (the one hero on a page, a call to act) takes the hero corner and lets the
+   signal glow down from its top edge (slots --card-emphasis-radius · --card-emphasis-sheen). It is a
+   data attribute rather than a variant so the TSX stays the upstream component. */
+.cn-card[data-emphasis] {
+    border-radius: var(--card-emphasis-radius, var(--card-radius));
+    background-image: var(--card-emphasis-sheen, var(--card-sheen, none));
 }

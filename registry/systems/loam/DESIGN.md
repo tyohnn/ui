@@ -18,6 +18,12 @@ every file under `styles/` belongs to this system. Tune values in place.
   selected sidebar row `#262626` (8% white over the sidebar). Hairlines are 8% white, the strong edge 14%.
   Resting cards are flat; popups, dialogs and sheets cast one soft shadow, `0 14px 32px rgb(0 0 0 / 32%)`
   (`rgb(39 37 35 / 12%)` in light).
+- **Light from the top left:** panes and cards are lit, not flat. A pane (the floating sidebar, the main area
+  beside it) carries `--pane-sheen` — a 4% white ellipse above its top-left corner and a 1.5% one past its
+  bottom right — and every card a 3.5% white wash at 135° that fades by 45%. In light the same shapes are a
+  faint ink shade.
+- **Panels on a ground:** with a floating sidebar the workspace is two panels on the `#111` ground, each with
+  an edge — the sidebar at 10% white on 12px corners, the main pane at 6% on 18px corners with an 8px gap.
 - **Density:** 36px controls with 14px Geist text; pills at 24 · 30 · 36 · 40; compact 30px sidebar rows on
   12px corners; 26px group labels.
 - **Accents:** sage `#73b490` (light `#3a7854`) is the signal: focus rings, progress, the slider range, the
@@ -36,6 +42,9 @@ every file under `styles/` belongs to this system. Tune values in place.
 | `--primary` / `--primary-foreground` | `#ffffff` / `#111111` · `#2a2a2a` / `#ffffff` | the white (light: ink) pill |
 | `--ring` | `#73b490` · `#3a7854` | the sage signal |
 | `--bubble-fill` | `var(--secondary)` | the person's chat bubble is a quiet plane, not the pill |
+| `--pane-sheen` · `--card-sheen` | white 4% ellipse · white 3.5% at 135° (ink in light) | light from the top left on panes and cards |
+| `--card-emphasis-sheen` · `--card-emphasis-radius` | sage 16% glowing down from the top · 24px | a card marked `data-emphasis` |
+| `--sidebar-pane-ring` · `--sidebar-pane-gap` · `--sidebar-floating-shadow` | 6% white · 8px · none | the main pane beside a floating sidebar, and the sidebar without a shadow |
 | `--sidebar-foreground` · `--sidebar-active-foreground` | `#bdbdbd` · `#ffffff` | idle rows at 72% white, the active row white on its veil |
 | `--control-height-md` · `--control-font-size-md` | 36px · 14px | the control |
 | `--control-radius` · `--control-radius-field` | 9999px · 12px | pills · fields |
@@ -58,6 +67,10 @@ every file under `styles/` belongs to this system. Tune values in place.
 
 ## Combination rules
 
+- **Emphasis is a glow, not a colour.** The one card a view leads with (a hero, a call to act) takes
+  `data-emphasis`: a 24px corner and a sage glow from its top edge. One per view, like the white pill.
+- **Use the floating sidebar.** `<Sidebar variant="floating">` turns the main area into a bordered pane beside
+  it; that pair is loam's workspace. The plain sidebar still works and draws no panes.
 - **One white pill per view.** The primary pill is the one action the view is for; the rest are secondary
   (`#2a2a2a`), outline (the 14% edge, no fill) or ghost pills.
 - **Veils, not colours, make depth.** A section inside a pane is the card plane with a hairline; a list of
