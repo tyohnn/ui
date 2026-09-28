@@ -39,7 +39,7 @@ and the mono uppercase label band — so every layer-3 rule it inherits still re
 | `--card-emphasis-sheen` · `--card-emphasis-radius` | 1 · 2 | `--card-sheen` · `--card-radius` | `.cn-card[data-emphasis]` (a new selector) | the one hero card: a signal glow from the top edge and the hero corner |
 | `--pane-sheen` | 1 | `none` | the floating sidebar's inner panel · the pane beside it | panels are lit from the top left |
 | `--sidebar-floating-shadow` | 2 | `var(--shadow-chip)` | `.group[data-variant=floating] .cn-sidebar-inner` | the source's panels have an edge and no shadow |
-| `--sidebar-pane-ring` · `--sidebar-pane-gap` | 1 · 2 | `var(--border)` · — | `.peer[data-variant=floating] ~ .cn-sidebar-inset` at md and up (a new selector) | beside a floating sidebar the main area is a bordered pane too; upstream styles the inset only for `variant="inset"` |
+| `--sidebar-pane-ring` · `--sidebar-pane-gap` · `--pane-sheen-blend` | 1 · 2 · 1 | `var(--border)` · — · `normal` | `.peer[data-variant=floating] ~ .cn-sidebar-inset` at md and up (a new selector) | beside a floating sidebar the main area is a bordered pane too; upstream styles the inset only for `variant="inset"`. The edge and the light are an `::after` overlay so an app's opaque main cannot hide them |
 
 loam also keeps nocturne's names (`--control-radius-field`, `--tabs-list-radius*`, `--title-font-weight`, the
 label family slots, the active-marker slots with a 0px width, `--typeset-heading-*`, `--shadow-float-color`,

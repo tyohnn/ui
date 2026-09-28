@@ -91,9 +91,23 @@
         margin: var(--sidebar-pane-gap);
         margin-inline-start: 0;
         border-radius: var(--surface-radius-lg);
-        box-shadow: inset 0 0 0 var(--surface-border-width) var(--sidebar-pane-ring, var(--border));
-        background-image: var(--pane-sheen, none);
         overflow: hidden;
+        isolation: isolate;
+
+        /* ⚠ The edge and the light are an overlay, not the pane's own background. Apps fill the pane with an
+           opaque main and header (bg-canvas · bg-background), which would hide an inset shadow and a
+           background image; the source lays its washes over the page the same way (blended, above). */
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 var(--surface-border-width) var(--sidebar-pane-ring, var(--border));
+            background-image: var(--pane-sheen, none);
+            mix-blend-mode: var(--pane-sheen-blend, normal);
+        }
     }
 }
 

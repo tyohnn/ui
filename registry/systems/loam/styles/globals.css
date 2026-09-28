@@ -237,6 +237,8 @@
         var(--card-sheen);
     /* The hairline around a pane beside a floating sidebar. */
     --sidebar-pane-ring: var(--border);
+    /* The pane's overlay darkens in light, as the source multiplies its washes. */
+    --pane-sheen-blend: multiply;
 
     /* shadcn's --radius, for utilities only: 12px, the row and card step of loam's ladder. */
     --radius: 0.75rem;
@@ -345,6 +347,8 @@
         var(--card-sheen);
     /* The pane's edge is quieter than the sidebar's (6% against 10%). */
     --sidebar-pane-ring: rgb(255 255 255 / 6%);
+    /* The pane's overlay lightens, as the source blends its washes plus-lighter. */
+    --pane-sheen-blend: plus-lighter;
 
     /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
        ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
