@@ -22,6 +22,10 @@ every file under `styles/` belongs to this system. Tune values in place.
   beside it) carries `--pane-sheen` — a 4% white ellipse above its top-left corner and a 1.5% one past its
   bottom right — and every card a 3.5% white wash at 135° that fades by 45%. In light the same shapes are a
   faint ink shade.
+- **Small floating layers are glass:** menus, selects, comboboxes, the command palette, popovers, hover cards
+  and the navigation menu fill at 72% of `--popover` over a 32px blur, so the thumbnail or card behind them
+  bleeds through softened, and catch the top-left light a little stronger than a card (6% white). Dialogs,
+  sheets and drawers are reading surfaces and stay opaque, and so does a submenu inside a glass menu.
 - **Panels on a ground:** with a floating sidebar the workspace is two panels on the `#111` ground, each with
   an edge — the sidebar at 10% white on 12px corners, the main pane at 6% on 18px corners with an 8px gap.
 - **Density:** 36px controls with 14px Geist text; pills at 24 · 30 · 36 · 40; compact 30px sidebar rows on
@@ -43,6 +47,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 | `--ring` | `#73b490` · `#3a7854` | the sage signal |
 | `--bubble-fill` | `var(--secondary)` | the person's chat bubble is a quiet plane, not the pill |
 | `--pane-sheen` · `--card-sheen` | white 4% ellipse · white 3.5% at 135° (ink in light) | light from the top left on panes and cards |
+| `--glass-fill` · `--glass-filter` · `--glass-sheen` | `--popover` at 72% · `blur(32px) saturate(1.6)` · white 6% at 135° (white 45% in light) | menus, selects, popovers, hover cards and the navigation menu |
 | `--card-emphasis-sheen` · `--card-emphasis-radius` | sage 16% glowing down from the top · 24px | a card marked `data-emphasis` |
 | `--sidebar-pane-ring` · `--sidebar-pane-gap` · `--sidebar-floating-shadow` | 6% white · 8px · none | the main pane beside a floating sidebar, and the sidebar without a shadow |
 | `--sidebar-foreground` · `--sidebar-active-foreground` | `#bdbdbd` · `#ffffff` | idle rows at 72% white, the active row white on its veil |
@@ -93,6 +98,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 - Set labels in mono or uppercase. That is nocturne's voice, not loam's.
 - Round a field like a pill, or a button like a field: pills act, 12px boxes take input.
 - Use `--foreground-subtle` for readable text; it is below AA on purpose.
+- Put glass under text people read at length, or stack glass on glass. Dialogs and submenus are opaque.
 
 ## Files
 

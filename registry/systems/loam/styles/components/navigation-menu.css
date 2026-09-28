@@ -198,3 +198,13 @@
 
     @apply transition-[top,left,right,bottom] duration-300 data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0;
 }
+
+/* loam: 내비게이션 메뉴의 뷰포트·팝업도 떠 있는 층이다(값·계약은 tokens.css 의 glass 축). */
+@supports (backdrop-filter: blur(1px)) {
+    .cn-navigation-menu-viewport,
+    .cn-navigation-menu-popup {
+        background-color: var(--glass-fill, var(--popover));
+        background-image: var(--glass-sheen, none);
+        backdrop-filter: var(--glass-filter, none);
+    }
+}
