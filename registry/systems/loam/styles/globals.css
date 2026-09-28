@@ -1,0 +1,365 @@
+/* ============================================================
+   loam — layer 1: the colour formulas
+   ------------------------------------------------------------
+   Layer 1 is two files. The palette itself (72 colours, the ramp below included) lives in the
+   generated styles/theme.css, from registry/themes/loam.json; this file holds what is derived
+   from it, loam's own colours and material, and everything that is not a colour. The ramp is
+   documented here because the formulas below are read against it.
+
+   A garden at night (2026-09-28, forked from nocturne). Dark is the primary design: a #111
+   ground, the sidebar and panes one shade up, and every quieter surface a thin veil of white
+   laid over what is under it (2–8% fills, 8–14% hairlines). The main action is a white pill;
+   ONE sage green (#73b490) marks progress, focus and the selected row. Light is a designed
+   counterpart from the same source: a #f6f6f6 page, white panes, warm ink #272523, an ink pill
+   and the sage darkened to #3a7854 for contrast.
+
+   The dark ramp
+     #111111  ground (background · canvas)
+     #171717  sidebar
+     #1c1c1c  card (sections inside a pane)
+     #222222  raised (popover · menus · muted fill)
+     #262626  sidebar hover and the selected sidebar row
+     #2a2a2a  secondary / hover-strong (menu row focus on a raised surface · secondary button)
+     rgba(255,255,255,0.08) hairline border · 0.14 strong border (inputs · outline controls · popups)
+     #d9dcd8 foreground · #919191 muted · #6e6e6e subtle (disabled, placeholders) · #ffffff titles
+
+   ⚠ Sage is a signal. It is read by --ring (focus), --sidebar-ring, --tabs-line-indicator,
+      --progress-indicator-fill, --slider-range-fill, --field-label-checked-border and --chart-1.
+      Every hover and highlighted row stays on the white veils; buttons, badges and checked
+      controls stay on the neutral pair.
+
+   ⚠ Token names and structure are foundation's (axis contract v5) through nocturne; only values
+      changed. The nocturne-only names keep their meaning (reference/README.md).
+
+   ⚠ Keep :root and .dark together in one file — here and in theme.css — so a token can never be
+      tuned in one mode only.
+   ============================================================ */
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    /* Tailwind font-sans · font-heading · font-mono read the layer-1 stacks in :root below. */
+    --font-heading: var(--font-heading);
+    --font-sans: var(--font-sans);
+    --font-mono: var(--font-mono);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-active-foreground: var(--sidebar-active-foreground, var(--sidebar-accent-foreground));
+    --color-sidebar-active: var(--sidebar-active, var(--sidebar-accent));
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-icon: var(--sidebar-icon, var(--muted-foreground));
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-overlay-backdrop: var(--overlay-backdrop, oklch(0 0 0 / 80%));
+    --color-ring-subtle: var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
+    --color-ring-invalid: var(--ring-invalid);
+    --color-ring-focus-strong: var(--ring-focus-strong, color-mix(in oklab, var(--ring) 50%, transparent));
+    --color-ring-focus: var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
+    --color-ring: var(--ring);
+    --color-link: var(--link);
+    --color-input-fill-hover: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
+    --color-input-fill: var(--input-fill);
+    --color-input: var(--input);
+    --color-border-subtle: var(--border-subtle, color-mix(in oklab, var(--border) 50%, transparent));
+    --color-border-strong: var(--border-strong);
+    --color-border: var(--border);
+    --color-destructive-soft-hover: var(--destructive-soft-hover);
+    --color-destructive-soft: var(--destructive-soft);
+    --color-destructive: var(--destructive);
+    --color-warning-soft: var(--warning-soft);
+    --color-warning: var(--warning);
+    --color-success-soft: var(--success-soft);
+    --color-success: var(--success);
+    --color-info-soft: var(--info-soft);
+    --color-info: var(--info);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted-soft: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
+    --color-muted: var(--muted);
+    --color-chip: var(--chip, color-mix(in oklab, var(--muted-foreground) 10%, transparent));
+    --color-secondary-hover: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-hover: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
+    --color-primary-soft-strong: var(--primary-soft-strong, color-mix(in oklab, var(--primary) 10%, transparent));
+    --color-primary-soft: var(--primary-soft);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground-subtle: var(--foreground-subtle, var(--ring));
+    --color-foreground: var(--foreground);
+    --color-canvas: var(--canvas);
+    --color-skeleton: var(--skeleton, var(--muted));
+    --color-background: var(--background);
+    /* The shadcn radius scale from --radius (12px below): 8 · 10 · 12 · 16 · 20 · 24 · 28.
+       Utilities only; layer 3 reads the layer-2 radius ladder (pill · 10 · 12 · 16 · 18 · 24). */
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+    --radius-4xl: calc(var(--radius) + 16px);
+}
+
+/* Shadows and easing — ⚠ must be `static` so layer 3 can read them as variables.
+
+     card    none: resting cards are drawn with a hairline, never a drop shadow
+     float   one soft shadow under every popup, menu, dialog and sheet:
+             0 14px 32px in the mode's shadow colour (--shadow-float-color, nocturne slot).
+             The colour is a layer-1 name because the depth differs by mode and a static
+             theme value has no .dark scope; the value resolves on <html>, where .dark sits.
+     chip    the floating sidebar's small shadow */
+@theme static {
+    --shadow-card: 0 0 #0000;
+    --shadow-float: 0 14px 32px var(--shadow-float-color);
+    --shadow-chip: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root {
+    /* Typography — built from system.json fonts (sans geist · heading inherit ·
+       mono geist-mono · hangulFallback pretendard) and the registry/fonts catalog; tooling/validate-system
+       checks these three lines. Fonts are loaded by the app, never by these files. */
+    --font-sans: "Geist", "Geist Variable", "Pretendard", ui-sans-serif, system-ui, sans-serif;
+    --font-heading: var(--font-sans);
+    --font-mono: "Geist Mono", "Geist Mono Variable", "Pretendard", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --color-scheme: light;
+
+    /* ---- Light: a #f6f6f6 page, white panes, warm ink text ---- */
+    --canvas: var(--background);
+
+    /* The main action is an ink pill with white text. */
+    --primary-hover: #404040;
+    --primary-soft: color-mix(in oklab, var(--primary) 4%, transparent);
+    --primary-soft-strong: var(--border);
+
+    --secondary-hover: #e8e8e7;
+
+    --muted-soft: color-mix(in oklab, var(--border) 30%, transparent);
+    --chip: color-mix(in oklab, var(--foreground) 6%, transparent);
+    --ghost-hover: var(--sidebar-accent);
+    --skeleton: var(--sidebar-accent);
+    /* Disabled and placeholder text only — below AA on purpose. */
+    --foreground-subtle: #9a9894;
+
+    --destructive-soft: color-mix(in oklab, var(--destructive) 8%, transparent);
+    --destructive-soft-hover: color-mix(in oklab, var(--destructive) 14%, transparent);
+
+    /* Hairlines 10%, the strong edge (inputs · outline controls · popups) 18%. */
+    --border-subtle: color-mix(in oklab, var(--foreground) 5%, transparent);
+    --border-strong: var(--input);
+    --input-fill: #f7f7f7;
+    --input-fill-hover: #efefef;
+    --select-hover: #efefef;
+    /* The sage signal, darkened for the light ground (5.0:1 on white). */
+    --ring-focus-strong: color-mix(in oklab, var(--ring) 45%, transparent);
+    --ring-invalid: color-mix(in oklab, var(--destructive) 20%, transparent);
+    --border-invalid: var(--destructive);
+
+    /* The popup and dialog edge (the strong border) and the modal backdrop. */
+    --ring-subtle: var(--input);
+    --overlay-backdrop: rgb(39 37 35 / 32%);
+
+    --sidebar-active-foreground: var(--sidebar-foreground);
+
+    --switch-track-off: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --switch-thumb-off: var(--card);
+    --switch-thumb-on: var(--background);
+    --drawer-border: color-mix(in oklab, var(--foreground) 8%, transparent);
+    --sidebar-input-fill: var(--card);
+
+    /* Text selection (::selection). mira: the primary pair — the value the questionnaire input carried
+       as `selection:bg-primary selection:text-primary-foreground` before the slot existed. */
+    --sidebar-badge-foreground: var(--muted-foreground);
+    /* The quiet label colour (sidebar group labels · table heads): 4.5:1 on the page, 4.6:1 on white. */
+    --sidebar-group-label-foreground: #77746f;
+    --table-head-foreground: #77746f;
+    /* The outline pill draws the strong edge on no fill of its own. */
+    --button-outline-border: var(--border-strong);
+    --button-outline-fill: transparent;
+    --slider-thumb-fill: var(--card);
+    --checkbox-fill: var(--input-fill);
+
+    /* ---- Axis contract v4 — layer-1 slots ---- */
+    --input-fill-disabled: var(--muted);
+    --button-outline-hover-fill: var(--muted);
+    /* Resting cards: a hairline. Popups: the strong edge. */
+    --card-ring: var(--border);
+    --menu-ring: var(--border-strong);
+    --slider-track-fill: var(--secondary);
+    /* A checked selection card is marked by the sage edge, its fill stays neutral. */
+    --field-label-checked-border: var(--ring);
+
+    /* The deep popup shadow's colour; --shadow-float composes it. */
+    --shadow-float-color: rgb(39 37 35 / 12%);
+    /* Indicators that foundation paints with --primary: the progress bar and the slider range. */
+    --progress-indicator-fill: var(--ring);
+    --slider-range-fill: var(--ring);
+    /* The straight bar outside an active sidebar item's left edge. */
+    --sidebar-item-active-marker: var(--ring);
+    /* The line tabs' underline (upstream draws it with bg-foreground). */
+    --tabs-line-indicator: var(--ring);
+    /* Tooltips are small raised surfaces with the strong edge, not inverted chips. */
+    --tooltip-fill: var(--popover);
+    --tooltip-foreground: var(--popover-foreground);
+    --tooltip-ring: var(--border-strong);
+    /* The person's bubble is a quiet plane, not the primary pill (loam slot). */
+    --bubble-fill: var(--secondary);
+    --bubble-foreground: var(--secondary-foreground);
+
+    /* shadcn's --radius, for utilities only: 12px, the row and card step of loam's ladder. */
+    --radius: 0.75rem;
+
+    /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
+       ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
+          so they are declared here instead of defaulting inside the rule. */
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+
+    /* Ghost text and the indeterminate check mark. mira: both inherit ("initial" is the guaranteed-invalid
+       value, which makes `color` fall back to inheritance).
+       ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
+          initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
+    --button-ghost-foreground: initial;
+    --checkbox-indeterminate-foreground: initial;
+    --ring-focus: color-mix(in oklab, var(--ring) 30%, transparent);
+}
+
+.dark {
+    --color-scheme: dark;
+
+    /* ---- Dark (primary): a #111 ground, panes one shade up, veils of white ---- */
+    --canvas: var(--background);
+
+    /* The main action is a white pill on the dark ground (18.9:1). */
+    --primary-hover: #e6e6e6;
+    --primary-soft: color-mix(in oklab, var(--primary) 5%, transparent);
+    --primary-soft-strong: var(--border);
+
+    --secondary-hover: #303030;
+
+    --muted-soft: rgb(255 255 255 / 3%);
+    --chip: rgb(255 255 255 / 8%);
+    --ghost-hover: var(--sidebar-accent);
+    --skeleton: var(--sidebar-accent);
+    /* Disabled and placeholder text only — below AA on purpose. */
+    --foreground-subtle: #6e6e6e;
+
+    --destructive-soft: color-mix(in oklab, var(--destructive) 14%, transparent);
+    --destructive-soft-hover: color-mix(in oklab, var(--destructive) 22%, transparent);
+
+    /* Veils: hairlines 8%, the strong edge (inputs · outline controls · popups) 14%. Fields are a 6% veil. */
+    --border-subtle: rgb(255 255 255 / 5%);
+    --border-strong: var(--input);
+    --input-fill: rgb(255 255 255 / 6%);
+    --input-fill-hover: rgb(255 255 255 / 9%);
+    --select-hover: rgb(255 255 255 / 9%);
+    /* The one sage signal. */
+    --ring-focus: color-mix(in oklab, var(--ring) 35%, transparent);
+    --ring-invalid: color-mix(in oklab, var(--destructive) 40%, transparent);
+    --border-invalid: color-mix(in oklab, var(--destructive) 60%, transparent);
+
+    --ring-subtle: var(--input);
+    --overlay-backdrop: rgb(0 0 0 / 64%);
+
+    /* The active row turns white on its 8% veil; idle rows sit at 72% white. */
+    --sidebar-active-foreground: var(--sidebar-accent-foreground);
+
+    --switch-track-off: color-mix(in oklab, var(--foreground) 14%, transparent);
+    --switch-thumb-off: var(--foreground);
+    --switch-thumb-on: var(--background);
+    --drawer-border: rgb(255 255 255 / 12%);
+    --sidebar-input-fill: rgb(255 255 255 / 7%);
+
+    /* Text selection (::selection). mira: the primary pair — the value the questionnaire input carried
+       as `selection:bg-primary selection:text-primary-foreground` before the slot existed. */
+    --sidebar-badge-foreground: var(--muted-foreground);
+    /* The quiet label colour: 5.2:1 on the sidebar. The source's group labels sit at 38% white,
+       3.3:1 and below AA at 13px, so labels take this step. */
+    --sidebar-group-label-foreground: #8a8a8a;
+    --table-head-foreground: #8a8a8a;
+    --button-outline-border: var(--border-strong);
+    --button-outline-fill: transparent;
+    --slider-thumb-fill: var(--foreground);
+    --checkbox-fill: var(--input-fill);
+
+    /* ---- Axis contract v4 — layer-1 slots ---- */
+    --input-fill-disabled: var(--muted);
+    --button-outline-hover-fill: var(--muted);
+    --card-ring: var(--border);
+    --menu-ring: var(--border-strong);
+    --slider-track-fill: var(--secondary);
+    --field-label-checked-border: var(--ring);
+
+    /* ---- nocturne slots ---- */
+    --shadow-float-color: rgb(0 0 0 / 32%);
+    --progress-indicator-fill: var(--ring);
+    --slider-range-fill: var(--ring);
+    --sidebar-item-active-marker: var(--ring);
+    --tabs-line-indicator: var(--ring);
+    --tooltip-fill: var(--popover);
+    --tooltip-foreground: var(--popover-foreground);
+    --tooltip-ring: var(--border-strong);
+    /* The person's bubble is a quiet plane, not the white pill (loam slot). */
+    --bubble-fill: var(--secondary);
+    --bubble-foreground: var(--secondary-foreground);
+
+    /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
+       ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
+          so they are declared here instead of defaulting inside the rule. */
+    --sidebar-badge-hover-foreground: var(--sidebar-accent-foreground);
+    --sidebar-badge-active-foreground: var(--sidebar-accent-foreground);
+
+    /* Ghost text and the indeterminate check mark. mira: both inherit ("initial" is the guaranteed-invalid
+       value, which makes `color` fall back to inheritance).
+       ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
+          initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
+    --button-ghost-foreground: initial;
+    --checkbox-indeterminate-foreground: initial;
+    --ring-focus-strong: color-mix(in oklab, var(--ring) 50%, transparent);
+}
+
+/* Accessibility: reduced motion keeps feedback, drops movement. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@layer base {
+  :root {
+    color-scheme: var(--color-scheme);
+    }
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+  html {
+    @apply font-sans;
+    }
+}

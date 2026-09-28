@@ -1,0 +1,177 @@
+/* Generated from the theme "loam" — do not edit. Change the theme, not this file. */
+
+:root {
+    /* base */
+    --background: #f6f6f6;
+    --foreground: #272523;
+    --card: #ffffff;
+    --card-foreground: #272523;
+    --popover: #ffffff;
+    --popover-foreground: #272523;
+    --primary: #2a2a2a;
+    --primary-foreground: #ffffff;
+    --secondary: #f0f0f0;
+    --secondary-foreground: #272523;
+    --muted: #f2f2f1;
+    --muted-foreground: #686764;
+    --accent: #eff2ee;
+    --accent-foreground: #272523;
+    --destructive: #c0272e;
+    --border: rgb(39 37 35 / 10%);
+    --input: rgb(39 37 35 / 18%);
+    --ring: #3a7854;
+
+    /* chart */
+    --chart-1: #3a7854;
+    --chart-2: #4f7799;
+    --chart-3: #a8801c;
+    --chart-4: #76679a;
+    --chart-5: #c0272e;
+
+    /* sidebar */
+    --sidebar: #fafafa;
+    --sidebar-foreground: #272523;
+    --sidebar-primary: #2a2a2a;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #efefee;
+    --sidebar-accent-foreground: #272523;
+    --sidebar-border: rgb(39 37 35 / 8%);
+    --sidebar-ring: #3a7854;
+
+    /* status */
+    --info: #3f6789;
+    --info-soft: color-mix(in oklab, #6e96b8 14%, transparent);
+    --success: #39624d;
+    --success-soft: color-mix(in oklab, #66b08b 14%, transparent);
+    --warning: #8a6512;
+    --warning-soft: color-mix(in oklab, #d4a83a 16%, transparent);
+
+    /* tag */
+    --tag-blue-bg: color-mix(in oklab, #3f6789 12%, transparent);
+    --tag-blue-border: color-mix(in oklab, #3f6789 26%, transparent);
+    --tag-blue-fg: #3f6789;
+    --tag-purple-bg: color-mix(in oklab, #665889 12%, transparent);
+    --tag-purple-border: color-mix(in oklab, #665889 26%, transparent);
+    --tag-purple-fg: #665889;
+    --tag-green-bg: color-mix(in oklab, #39624d 12%, transparent);
+    --tag-green-border: color-mix(in oklab, #39624d 26%, transparent);
+    --tag-green-fg: #39624d;
+    --tag-orange-bg: color-mix(in oklab, #8a6512 12%, transparent);
+    --tag-orange-border: color-mix(in oklab, #8a6512 26%, transparent);
+    --tag-orange-fg: #8a6512;
+    --tag-red-bg: color-mix(in oklab, #a3262c 12%, transparent);
+    --tag-red-border: color-mix(in oklab, #a3262c 26%, transparent);
+    --tag-red-fg: #a3262c;
+    --tag-yellow-bg: color-mix(in oklab, #8a6512 12%, transparent);
+    --tag-yellow-border: color-mix(in oklab, #8a6512 26%, transparent);
+    --tag-yellow-fg: #8a6512;
+    --tag-gray-bg: color-mix(in oklab, #686764 12%, transparent);
+    --tag-gray-border: color-mix(in oklab, #686764 26%, transparent);
+    --tag-gray-fg: #686764;
+
+    /* avatar */
+    --avatar-tone-foreground: var(--muted-foreground);
+    --avatar-tone-slate: var(--muted);
+    --avatar-tone-teal: var(--muted);
+    --avatar-tone-plum: var(--muted);
+    --avatar-tone-olive: var(--muted);
+    --avatar-tone-rust: var(--muted);
+    --avatar-tone-navy: var(--muted);
+    --avatar-tone-moss: var(--muted);
+    --avatar-tone-mauve: var(--muted);
+
+    /* state */
+    --checked: var(--primary);
+    --checked-foreground: var(--primary-foreground);
+    --selection: var(--primary);
+    --selection-foreground: var(--primary-foreground);
+    --link: #39624d;
+}
+
+.dark {
+    /* base */
+    --background: #111111;
+    --foreground: #d9dcd8;
+    --card: #1c1c1c;
+    --card-foreground: #d9dcd8;
+    --popover: #222222;
+    --popover-foreground: #d9dcd8;
+    --primary: #ffffff;
+    --primary-foreground: #111111;
+    --secondary: #2a2a2a;
+    --secondary-foreground: #ededed;
+    --muted: #222222;
+    --muted-foreground: #919191;
+    --accent: #2a2a2a;
+    --accent-foreground: #ededed;
+    --destructive: #e5737a;
+    --border: rgb(255 255 255 / 8%);
+    --input: rgb(255 255 255 / 14%);
+    --ring: #73b490;
+
+    /* chart */
+    --chart-1: #73b490;
+    --chart-2: #6e96b8;
+    --chart-3: #d4a83a;
+    --chart-4: #9b8bb8;
+    --chart-5: #e5737a;
+
+    /* sidebar */
+    --sidebar: #171717;
+    --sidebar-foreground: #bdbdbd;
+    --sidebar-primary: #ffffff;
+    --sidebar-primary-foreground: #111111;
+    --sidebar-accent: #262626;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgb(255 255 255 / 10%);
+    --sidebar-ring: #73b490;
+
+    /* status */
+    --info: #8fb3d1;
+    --info-soft: color-mix(in oklab, #6e96b8 18%, transparent);
+    --success: #8fc9a8;
+    --success-soft: color-mix(in oklab, #73b490 18%, transparent);
+    --warning: #e0bd62;
+    --warning-soft: color-mix(in oklab, #d4a83a 18%, transparent);
+
+    /* tag */
+    --tag-blue-bg: color-mix(in oklab, #6e96b8 16%, transparent);
+    --tag-blue-border: color-mix(in oklab, #6e96b8 30%, transparent);
+    --tag-blue-fg: color-mix(in oklab, #6e96b8 70%, white);
+    --tag-purple-bg: color-mix(in oklab, #9b8bb8 16%, transparent);
+    --tag-purple-border: color-mix(in oklab, #9b8bb8 30%, transparent);
+    --tag-purple-fg: color-mix(in oklab, #9b8bb8 70%, white);
+    --tag-green-bg: color-mix(in oklab, #73b490 16%, transparent);
+    --tag-green-border: color-mix(in oklab, #73b490 30%, transparent);
+    --tag-green-fg: color-mix(in oklab, #73b490 70%, white);
+    --tag-orange-bg: color-mix(in oklab, #d4a83a 16%, transparent);
+    --tag-orange-border: color-mix(in oklab, #d4a83a 30%, transparent);
+    --tag-orange-fg: color-mix(in oklab, #d4a83a 70%, white);
+    --tag-red-bg: color-mix(in oklab, #e5737a 16%, transparent);
+    --tag-red-border: color-mix(in oklab, #e5737a 30%, transparent);
+    --tag-red-fg: color-mix(in oklab, #e5737a 70%, white);
+    --tag-yellow-bg: color-mix(in oklab, #d4a83a 16%, transparent);
+    --tag-yellow-border: color-mix(in oklab, #d4a83a 30%, transparent);
+    --tag-yellow-fg: color-mix(in oklab, #d4a83a 70%, white);
+    --tag-gray-bg: color-mix(in oklab, #a0a0a0 16%, transparent);
+    --tag-gray-border: color-mix(in oklab, #a0a0a0 30%, transparent);
+    --tag-gray-fg: color-mix(in oklab, #a0a0a0 70%, white);
+
+    /* avatar */
+    --avatar-tone-foreground: var(--muted-foreground);
+    --avatar-tone-slate: var(--muted);
+    --avatar-tone-teal: var(--muted);
+    --avatar-tone-plum: var(--muted);
+    --avatar-tone-olive: var(--muted);
+    --avatar-tone-rust: var(--muted);
+    --avatar-tone-navy: var(--muted);
+    --avatar-tone-moss: var(--muted);
+    --avatar-tone-mauve: var(--muted);
+
+    /* state */
+    --checked: var(--primary);
+    --checked-foreground: var(--primary-foreground);
+    --selection: var(--primary);
+    --selection-foreground: var(--primary-foreground);
+    --link: #9dd4b5;
+}

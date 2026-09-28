@@ -1,0 +1,35 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "loam",
+    "theme": "loam",
+    "description": "Garden-at-night dark: a near-black ground with panes one shade up, every quieter surface a thin veil of white over it, pill buttons with a white primary, 30px sidebar rows on 12px corners, and one sage green that marks progress, focus and indicators. Geist for everything, titles included.",
+    "tagline": "Geist · white veils · one sage signal",
+    "added": "2026-09-28T08:01:21.329Z",
+    "forkedFrom": {
+        "source": "nocturne",
+        "commit": "36772b5",
+        "note": "Forked from nocturne: the same dark ladder of planes, pill controls, 10px fields and a single signal colour that marks and never fills buttons. loam replaces the lavender with sage, drops Bricolage titles and the mono uppercase label voice for Geist in sentence case, softens the corners (12px rows, 18px panes) and tightens the sidebar to 30px rows."
+    },
+    "fonts": {
+        "sans": "geist",
+        "heading": "inherit",
+        "mono": "geist-mono",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "dark",
+    "tags": [
+        "dark",
+        "light",
+        "garden",
+        "pill",
+        "veils",
+        "workspace"
+    ],
+    "source": {
+        "kind": "reference-screenshot",
+        "note": "A creator-workspace dashboard the owner was logged into, captured in the browser on 2026-09-28 (home, library, chat, a custom-AI pane and its knowledge tab), with computed styles read from the page. Design values only — the #111 ground and one-step-up panes, white-alpha fills and hairlines, the white pill CTA, the sage accent family, 30px/12px sidebar rows and the 12·16·18·24 corner ladder. No product's marks, names, wording, icons or screen layouts are reproduced."
+    }
+}
