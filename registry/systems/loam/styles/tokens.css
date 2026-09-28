@@ -684,4 +684,14 @@
        Foundation leaves the vendor's 600 and normal tracking. */
     --typeset-heading-weight: 600;
     --typeset-heading-tracking: -0.03em;
+
+    /* ========================================================
+       loam-only names
+       ======================================================== */
+    /* A card marked data-emphasis takes the hero corner. */
+    --card-emphasis-radius: 24px;
+    /* A floating sidebar casts no shadow; its 10% edge is enough. Foundation: --shadow-chip. */
+    --sidebar-floating-shadow: none;
+    /* The gap around the main pane beside a floating sidebar (the sidebar's own padding is 8px). */
+    --sidebar-pane-gap: 8px;
 }

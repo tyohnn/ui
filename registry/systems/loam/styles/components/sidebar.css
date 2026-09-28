@@ -60,9 +60,12 @@
 
     .group[data-variant="floating"] & {
         border-radius: var(--surface-radius);
+        /* loam: the shadow is a slot (--sidebar-floating-shadow, foundation --shadow-chip) and the
+           panel carries the pane sheen, so the floating sidebar reads as a lit panel with an edge. */
         box-shadow:
             0 0 0 var(--surface-border-width) var(--sidebar-border),
-            var(--shadow-chip);
+            var(--sidebar-floating-shadow, var(--shadow-chip));
+        background-image: var(--pane-sheen, none);
     }
 }
 
@@ -76,6 +79,22 @@
 .cn-sidebar-inset {
     background-color: var(--background);
     @apply md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-[var(--surface-radius-lg)] md:peer-data-[variant=inset]:shadow-chip md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2;
+}
+
+/* loam: beside a floating sidebar the main area is a pane too — the workspace is panels on a dark ground,
+   each with an edge and the same light from the top left. The sidebar's own 8px padding is the gap on
+   its side; the pane keeps that gap on the other three (--sidebar-pane-gap), takes the pane corner and
+   draws its edge as an inner ring so the layout does not move (slots --sidebar-pane-ring · --pane-sheen).
+   Below md the sidebar is a sheet and the pane fills the screen as before. */
+@media (width >= 48rem) {
+    .peer[data-variant="floating"] ~ .cn-sidebar-inset {
+        margin: var(--sidebar-pane-gap);
+        margin-inline-start: 0;
+        border-radius: var(--surface-radius-lg);
+        box-shadow: inset 0 0 0 var(--surface-border-width) var(--sidebar-pane-ring, var(--border));
+        background-image: var(--pane-sheen, none);
+        overflow: hidden;
+    }
 }
 
 /* 검색칸. Input 컴포넌트 위에 얹는 예외다 — mira 는 h-8 에 bg-muted/20(1층이 --muted-soft 로

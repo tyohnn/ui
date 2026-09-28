@@ -224,6 +224,19 @@
     /* The person's bubble is a quiet plane, not the primary pill (loam slot). */
     --bubble-fill: var(--secondary);
     --bubble-foreground: var(--secondary-foreground);
+    /* Light falls from the top left (loam slots). In light the veil is a faint ink shade, as the
+       source multiplies it: a wide ellipse above the top-left corner and a fainter one past the
+       bottom right, on panes (the floating sidebar and the main pane) and on cards. */
+    --pane-sheen:
+        radial-gradient(ellipse 120% 90% at 15% -10%, rgb(39 37 35 / 4%) 0%, transparent 75%),
+        radial-gradient(ellipse 110% 80% at 105% 110%, rgb(39 37 35 / 3%) 0%, transparent 80%);
+    --card-sheen: linear-gradient(135deg, rgb(39 37 35 / 3%) 0%, transparent 45%);
+    /* A card marked data-emphasis: the signal glows down from its top edge. */
+    --card-emphasis-sheen:
+        radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--ring) 14%, transparent) 0%, transparent 55%),
+        var(--card-sheen);
+    /* The hairline around a pane beside a floating sidebar. */
+    --sidebar-pane-ring: var(--border);
 
     /* shadcn's --radius, for utilities only: 12px, the row and card step of loam's ladder. */
     --radius: 0.75rem;
@@ -321,6 +334,17 @@
     /* The person's bubble is a quiet plane, not the white pill (loam slot). */
     --bubble-fill: var(--secondary);
     --bubble-foreground: var(--secondary-foreground);
+    /* Light falls from the top left: a 4% white ellipse above the top-left corner and a 1.5% one
+       past the bottom right, on panes and on cards. */
+    --pane-sheen:
+        radial-gradient(ellipse 120% 90% at 15% -10%, rgb(255 255 255 / 4%) 0%, transparent 75%),
+        radial-gradient(ellipse 110% 80% at 105% 110%, rgb(255 255 255 / 1.5%) 0%, transparent 80%);
+    --card-sheen: linear-gradient(135deg, rgb(255 255 255 / 3.5%) 0%, transparent 45%);
+    --card-emphasis-sheen:
+        radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--ring) 16%, transparent) 0%, transparent 55%),
+        var(--card-sheen);
+    /* The pane's edge is quieter than the sidebar's (6% against 10%). */
+    --sidebar-pane-ring: rgb(255 255 255 / 6%);
 
     /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
        ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,
