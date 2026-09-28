@@ -212,3 +212,18 @@
         height: var(--control-icon-size-md);
     }
 }
+
+/* loam: 고른 값을 담는 목록도 떠 있는 층이라 유리다. 스크롤 버튼은 목록 위에 덧대는 같은 면이므로
+   채움을 비운다 — 불투명으로 두면 유리 위에 불투명 띠가 뜬다(값·계약은 tokens.css 의 glass 축). */
+@supports (backdrop-filter: blur(1px)) {
+    .cn-select-content {
+        background-color: var(--glass-fill, var(--popover));
+        background-image: var(--glass-sheen, none);
+        backdrop-filter: var(--glass-filter, none);
+    }
+
+    .cn-select-scroll-up-button,
+    .cn-select-scroll-down-button {
+        background-color: transparent;
+    }
+}

@@ -74,6 +74,17 @@
     color: var(--popover-foreground);
 }
 
+/* loam: 팝오버와 호버 카드는 유리다. 다이얼로그 · 시트 · 드로어는 읽는 면이라 불투명으로 남긴다
+   (값·계약은 tokens.css 의 glass 축). backdrop-filter 를 못 쓰면 위 규칙의 불투명 채움이 그대로 선다. */
+@supports (backdrop-filter: blur(1px)) {
+    .cn-popover-content,
+    .cn-hover-card-content {
+        background-color: var(--glass-fill, var(--popover));
+        background-image: var(--glass-sheen, none);
+        backdrop-filter: var(--glass-filter, none);
+    }
+}
+
 /* 본문 글자. mira: text-xs/relaxed — Popover 만 text-xs(12/16)다. */
 .cn-dialog-content,
 .cn-alert-dialog-content,
