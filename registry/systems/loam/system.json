@@ -17,7 +17,7 @@
         "hangulFallback": "pretendard"
     },
     "icons": {
-        "library": "lucide"
+        "library": "hugeicons"
     },
     "defaultMode": "dark",
     "tags": [
