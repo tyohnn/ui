@@ -1,6 +1,6 @@
 # cirrus
 
-Daylight. A cool near-white page, white cards floating on wide soft shadows, pill buttons, and one
+Daylight. A cool near-white page, white cards set flat on it behind a hairline edge, pill buttons, and one
 sky blue doing all the signalling. What makes it cirrus rather than a tinted luma is the material:
 **every layer that floats is glass** — menus, select lists, popovers, hover cards, dialogs, sheets,
 drawers and the modal backdrop are frosted, 76% fill over a 24px blur. Anything that sits down in the
@@ -26,10 +26,11 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   painted as a fixed `background-image` on `body` (never on `--background`, which is also a control
   fill). Glass only exists if there is something behind it: on a flat single colour a 76% frosted panel
   is indistinguishable from a white one, so the ground is part of the material, not decoration.
-- **Planes and depth**: white cards on a cool near-white page, lifted by a wide, low-opacity shadow
-  tinted blue-black (`rgb(16 32 64)`) so it reads as light rather than as grey dirt. Rings stay
-  luma's hairline `foreground/5`.
-- **Shape**: the button family is a pill (`9999px`); the input family is a 12px rectangle. Cards 20px,
+- **Planes and depth**: white cards sit on a cool near-white page — opaque, no blur, a 1px grounded
+  shadow (`0 1px 2px rgb(16 32 64 / 0.04)`) and their own ring, `--card-ring` (`foreground/9`, dark
+  `/12`). Depth belongs to what floats: the wide blue-black `--shadow-card` is kept for a raised card
+  but no longer drawn by default. Floating layers keep luma's hairline `--ring-subtle` (`foreground/5`).
+- **Shape**: the button family is a pill (`9999px`); the input family is a 12px rectangle. Cards 14px,
   floating surfaces 18px, dialogs 24px. Pressing is still luma's 1px drop, not a scale.
 - **Density**: luma's comfortable ramp — 36px default controls, 14px text, generous padding. Nothing
   here is compact; if the screen needs a hundred rows, it wants `vellum`, not this.
@@ -47,9 +48,10 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 | `--background` / `--foreground` | `oklch(0.985 0.004 240)` / `oklch(0.22 0.02 255)` | cool daylight page, blue-ink text |
 | `--primary` | `oklch(0.26 0.03 255)` | ink-navy: the pill CTA |
 | `--ring` · `--link` · `--checked` · `--chart-1` | `oklch(0.62 0.16 250)` | the one sky blue |
-| `--shadow-card` | `0 8px 24px -8px rgb(16 32 64 / 0.12), …` | wide and soft, tinted blue-black |
+| `--card-shadow` · `--card-ring` | `0 1px 2px rgb(16 32 64 / 0.04)` · `foreground 9%` | a card sits on the page; its edge is a line, not a lift |
+| `--shadow-card` | `0 8px 24px -8px rgb(16 32 64 / 0.12), …` | wide and soft, tinted blue-black — kept for a raised card, not drawn by default |
 | `--control-radius` · `--control-radius-sm` | `9999px` · `12px` | buttons are pills, inputs are rectangles |
-| `--card-radius` · `--surface-radius` · `--surface-radius-lg` | `20px` · `18px` · `24px` | card · floating surface · dialog |
+| `--card-radius` · `--surface-radius` · `--surface-radius-lg` | `14px` · `18px` · `24px` | card · floating surface · dialog |
 | `--control-height-md` · `--control-font-size-md` | `36px` · `14px` | luma's comfortable default |
 
 ## Combination rules
