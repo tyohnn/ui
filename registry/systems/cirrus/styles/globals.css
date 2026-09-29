@@ -201,6 +201,9 @@
     /* 떠 있는 면(카드·팝오버·드롭다운)의 테두리와 모달 뒤에 까는 막.
        mira: ring-1 ring-foreground/10 · bg-black/80 supports-backdrop-filter:backdrop-blur-xs */
     --ring-subtle: color-mix(in oklab, var(--foreground) 5%, transparent);    /* surfaces ring-foreground/5 in light */
+    /* cirrus: 카드의 테두리만 한 단 진하게. 유리를 벗은 카드는 선으로 바닥과 갈린다.
+       --ring-subtle 은 메뉴 · 팝오버 · 셀렉트 · 차트 툴팁도 읽으므로 올리지 않는다. */
+    --card-ring: color-mix(in oklab, var(--foreground) 9%, transparent);
     --overlay-backdrop: oklch(0.55 0.03 250 / 26%);    /* cirrus: 옅은 푸른 막 — 흐림이 주인공이라 색은 비킨다 */
 
     /* 스위치. mira: data-unchecked:bg-input dark:data-unchecked:bg-input/80 ·
@@ -339,6 +342,7 @@
     --button-ghost-foreground: initial;
     --checkbox-indeterminate-foreground: initial;
     --ring-subtle: color-mix(in oklab, var(--foreground) 10%, transparent);
+    --card-ring: color-mix(in oklab, var(--foreground) 12%, transparent);
     --switch-thumb-on: var(--primary-foreground);
 
     /* --------------------------------------------------------
