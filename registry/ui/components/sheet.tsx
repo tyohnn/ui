@@ -6,6 +6,7 @@ import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
 import { X } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -71,7 +72,7 @@ function SheetContent({
             }
           >
             <X />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{strings.close}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

@@ -9,7 +9,8 @@
             "@tyohnn/components/*": ["../../registry/ui/components/*"],
             "@tyohnn/lib/*": ["../../registry/ui/lib/*"],
             "@tyohnn/hooks/*": ["../../registry/ui/hooks/*"],
-            "@tyohnn/icons": ["../../registry/ui/icons/index.ts"]
+            "@tyohnn/icons": ["../../registry/ui/icons/index.ts"],
+            "@tyohnn/strings": ["../../registry/ui/strings/index.ts"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]

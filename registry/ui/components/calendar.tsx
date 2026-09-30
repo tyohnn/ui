@@ -11,6 +11,7 @@ import {
 
 import { Button, buttonVariants } from "@tyohnn/components/button"
 import { CalendarChevronDown, CalendarChevronLeft, CalendarChevronRight } from "@tyohnn/icons"
+import { dateLocale } from "@tyohnn/strings"
 
 function Calendar({
   className,
@@ -18,7 +19,7 @@ function Calendar({
   showOutsideDays = true,
   captionLayout = "label",
   buttonVariant = "ghost",
-  locale,
+  locale = dateLocale,
   formatters,
   components,
   ...props

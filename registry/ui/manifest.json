@@ -4,7 +4,8 @@
         "@tyohnn/components/*": "components/*",
         "@tyohnn/lib/*": "lib/*",
         "@tyohnn/hooks/*": "hooks/*",
-        "@tyohnn/icons": "icons/index.ts"
+        "@tyohnn/icons": "icons/index.ts",
+        "@tyohnn/strings": "strings/index.ts"
     },
     "dependencies": {
         "@base-ui/react": "1.8.0",
@@ -28,6 +29,10 @@
         "@types/react-dom": "^19",
         "tailwindcss": "^4",
         "typescript": "^5"
+    },
+    "locales": {
+        "en": "strings/locales/en.ts",
+        "ko": "strings/locales/ko.ts"
     },
     "iconLibraries": {
         "lucide": {
@@ -133,6 +138,8 @@
         "hooks/use-mobile.ts",
         "icons/index.ts",
         "icons/names.ts",
-        "lib/utils.ts"
+        "lib/utils.ts",
+        "strings/index.ts",
+        "strings/names.ts"
     ]
 }

@@ -44,6 +44,26 @@ describe("registry", () =>
         expect(resolveDefaultMode({ tags: ["light"] })).toBe("light");
     });
 
+    it("ships every locale with the same keys and a real locale tag", async () =>
+    {
+        const registry = new Registry(repoRoot);
+        const locales = Object.keys(registry.manifest.locales ?? {});
+        const shape = (value: unknown): unknown => typeof value === "object" && value ? Object.fromEntries(Object.entries(value).map(([key, inner]) => [key, shape(inner)])) : typeof value;
+
+        expect(locales).toEqual(expect.arrayContaining(["en", "ko"]));
+        expect(() => registry.locale("xx")).toThrow(/unknown locale/);
+
+        const loaded = await Promise.all(locales.map((name) => import(registry.path(`registry/ui/${registry.locale(name)}`))));
+
+        for (const [index, module] of loaded.entries())
+        {
+            expect(shape(module.strings)).toEqual(shape(loaded[0].strings));
+            expect(Intl.getCanonicalLocales(module.locale)[0]).toBe(module.locale);
+            expect(module.locale.startsWith(locales[index])).toBe(true);
+            expect(module.dateLocale.code.split("-")[0]).toBe(locales[index]);
+        }
+    });
+
     it("builds the same layer-1 font stacks every system declares", () =>
     {
         const registry = new Registry(repoRoot);

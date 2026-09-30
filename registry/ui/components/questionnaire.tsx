@@ -6,6 +6,7 @@ import { cn } from "cn"
 
 import { buttonVariants, type Button } from "@tyohnn/components/button"
 import { Check } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function Questionnaire({
   className,
@@ -231,7 +232,7 @@ function QuestionnairePrevious({
       )}
       {...props}
     >
-      {children ?? "Previous"}
+      {children ?? strings.questionnaire.previous}
     </QuestionnairePrimitive.Previous>
   )
 }
@@ -256,7 +257,7 @@ function QuestionnaireSkip({
       )}
       {...props}
     >
-      {children ?? "Skip"}
+      {children ?? strings.questionnaire.skip}
     </QuestionnairePrimitive.Skip>
   )
 }
@@ -281,7 +282,7 @@ function QuestionnaireNext({
       )}
       {...props}
     >
-      {children ?? "Next"}
+      {children ?? strings.questionnaire.next}
     </QuestionnairePrimitive.Next>
   )
 }
@@ -306,7 +307,7 @@ function QuestionnaireSubmit({
       )}
       {...props}
     >
-      {children ?? "Submit"}
+      {children ?? strings.questionnaire.submit}
     </QuestionnairePrimitive.Submit>
   )
 }

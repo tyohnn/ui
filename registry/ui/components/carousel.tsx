@@ -8,6 +8,7 @@ import useEmblaCarousel, {
 
 import { Button } from "@tyohnn/components/button"
 import { ChevronLeft, ChevronRight } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -122,7 +123,7 @@ function Carousel({
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
         role="region"
-        aria-roledescription="carousel"
+        aria-roledescription={strings.carousel.role}
         data-slot="carousel"
         {...props}
       >
@@ -159,7 +160,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       role="group"
-      aria-roledescription="slide"
+      aria-roledescription={strings.carousel.slideRole}
       data-slot="carousel-item"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
@@ -196,7 +197,7 @@ function CarouselPrevious({
       {...props}
     >
       <ChevronLeft className="cn-rtl-flip" />
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{strings.carousel.previous}</span>
     </Button>
   )
 }
@@ -226,7 +227,7 @@ function CarouselNext({
       {...props}
     >
       <ChevronRight className="cn-rtl-flip" />
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{strings.carousel.next}</span>
     </Button>
   )
 }

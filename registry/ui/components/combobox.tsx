@@ -12,6 +12,7 @@ import {
   InputGroupInput,
 } from "@tyohnn/components/input-group"
 import { Check, ChevronDown, X } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 const Combobox = ComboboxPrimitive.Root
 
@@ -249,6 +250,7 @@ function ComboboxChip({
           render={<Button variant="ghost" size="icon-xs" />}
           className="cn-combobox-chip-remove"
           data-slot="combobox-chip-remove"
+          aria-label={strings.combobox.removeChip}
         >
           <X className="cn-combobox-chip-indicator-icon pointer-events-none" />
         </ComboboxPrimitive.ChipRemove>
