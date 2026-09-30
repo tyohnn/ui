@@ -5,7 +5,8 @@ import { join } from "node:path";
 import { hash, readIfExists, rel } from "../lib/fs.js";
 import { color, log } from "../lib/log.js";
 import { isCode, placementOf } from "../project/placement.js";
-import { requireRecord, usedIcons, usedSystems } from "../project/record.js";
+import { localeOf, requireRecord, usedIcons, usedSystems } from "../project/record.js";
+import { isSharedFile } from "../project/sync.js";
 import { listThemes } from "../project/theme.js";
 import { openSource } from "../source/index.js";
 import { describeSource, type GlobalOptions, openProjectSource, recordRoot, workingDir } from "./context.js";
@@ -42,6 +43,8 @@ export const list = async (options: GlobalOptions): Promise<void> =>
 
     for (const [name, library] of Object.entries(registry.manifest.iconLibraries)) log.info(`  ${name.padEnd(10)}  ${Object.keys(library.packages).join(" + ")}`);
 
+    if (registry.manifest.locales) log.info(`${color.bold("\nLocales")}  ${Object.keys(registry.manifest.locales).join(" · ")}`);
+
     log.info(color.bold("\nFonts"));
 
     const fonts = [...registry.fonts()];
@@ -49,7 +52,7 @@ export const list = async (options: GlobalOptions): Promise<void> =>
 
     for (const [id, font] of fonts) log.info(`  ${id.padEnd(fontWidth)}  ${font.family} · ${font.category} · ${font.provider === "google" ? "Google Fonts, self-hosted" : `npm ${font.npm?.package}`}${font.hangul ? " · Hangul" : ""}`);
 
-    log.info(color.dim("\ninit --system <name> [--theme <name>] [--icons <library>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>]"));
+    log.info(color.dim("\ninit --system <name> [--theme <name>] [--icons <library>] [--locale <locale>] [--font <id>] [--font-heading <id|inherit>] [--font-mono <id|system>]"));
 };
 
 type State = "unchanged" | "upstream" | "local" | "conflict" | "removed upstream" | "added upstream";
@@ -83,8 +86,9 @@ export const diff = async (options: GlobalOptions): Promise<number> =>
     }
 
     const wanted = [
-        ...registry.manifest.files.filter((file) => /^(components|hooks|lib)\//.test(file) || file === "icons/names.ts").map((file) => `registry/ui/${file}`),
+        ...registry.manifest.files.filter(isSharedFile).map((file) => `registry/ui/${file}`),
         ...usedIcons(record).map((library) => `registry/ui/${registry.iconLibrary(library).file}`),
+        ...(registry.hasStrings ? [`registry/ui/${registry.locale(localeOf(record))}`] : []),
         ...usedSystems(record).flatMap((system) => registry.systemFiles(system).map((file) => `${registry.systemDir(system)}/${file}`)),
     ];
 

@@ -22,6 +22,7 @@ export interface GlobalOptions
     install?: boolean;
     app?: string;
     icons?: string;
+    locale?: string;
     font?: string;
     "font-heading"?: string;
     "font-mono"?: string;

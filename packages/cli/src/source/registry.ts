@@ -46,6 +46,8 @@ export interface Manifest
     dependencies: Record<string, string>;
     devDependencies: Record<string, string>;
     iconLibraries: Record<string, { file: string; packages: Record<string, string> }>;
+    /** Locale → file under registry/ui; absent in sources older than the strings axis */
+    locales?: Record<string, string>;
 }
 
 /** Maintainer-only systems the CLI never lists or installs */
@@ -150,6 +152,26 @@ export class Registry
         if (!info) throw new CliError(`unknown icon library "${name}"`, `Known libraries: ${Object.keys(this.manifest.iconLibraries).join(", ")}.`);
 
         return info;
+    }
+
+    /** Whether this source ships @tyohnn/strings (older sources hard-code English in the components) */
+    get hasStrings(): boolean
+    {
+        return Boolean(this.manifest.locales);
+    }
+
+    /** registry/ui-relative file of a locale */
+    locale(name: string): string
+    {
+        const locales = this.manifest.locales;
+
+        if (!locales) throw new CliError(`this tyohnn source has no locales (its components are in English only)`, "Read a newer source (--ref main).");
+
+        const file = locales[name];
+
+        if (!file) throw new CliError(`unknown locale "${name}"`, `Known locales: ${Object.keys(locales).join(", ")}.`);
+
+        return file;
     }
 
     /** The range tyohnn itself declares for a package (preview, then registry/ui), or null */
