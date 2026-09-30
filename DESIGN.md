@@ -17,11 +17,14 @@ so new upstream components port over with little work.
 - TSX holds **no visual values**: no colours, sizes, radii or shadows chosen by the component.
   Layout utilities that upstream bakes in stay, and each exception is explained where it lives.
 - Everything visible is decided by CSS in three layers.
-- Placeholder aliases `@tyohnn/components/*`, `@tyohnn/lib/*`, `@tyohnn/hooks/*` and `@tyohnn/icons` are used for
-  internal imports. They are path aliases (tsconfig `paths`, Vite `resolve.alias`), not packages; no workspace is
-  named `@tyohnn/components`, `@tyohnn/lib`, `@tyohnn/hooks` or `@tyohnn/icons`. The CLI replaces this alias with
+- Placeholder aliases `@tyohnn/components/*`, `@tyohnn/lib/*`, `@tyohnn/hooks/*`, `@tyohnn/icons` and
+  `@tyohnn/strings` are used for internal imports. They are path aliases (tsconfig `paths`, Vite `resolve.alias`),
+  not packages; no workspace is named `@tyohnn/components`, `@tyohnn/lib`, `@tyohnn/hooks`, `@tyohnn/icons` or
+  `@tyohnn/strings`. The CLI replaces this alias with
   the consumer's alias.
 - Icons come only from `@tyohnn/icons` by semantic name (section 10), never from an icon package.
+- Words a component says by itself (screen-reader names, landmark labels, text-prop defaults) come only from
+  `@tyohnn/strings` (section 12), never as literals in the TSX.
 - Variants that are not props are data attributes forwarded by the component (`data-tone`,
   `data-shape`). They only mean something when a layer-3 rule reads them.
 
@@ -772,3 +775,35 @@ tyohnn.json                              source commit · per-app system, icons,
   when CLI-owned files were edited. `--built` checks the isolation above in `.next/static` CSS.
 - Start one preview at a time when comparing (or pass `--force`): two Vite servers share the dependency cache and
   the second invalidates the first.
+
+## 12. Words
+
+Components never hard-code the words they say by themselves: the name of an icon-only button, a `sr-only` label, a
+landmark's `aria-label`, an `aria-roledescription`, or the default of a text prop. They read them from
+`@tyohnn/strings`:
+
+```tsx
+import { strings } from "@tyohnn/strings"
+
+<span className="sr-only">{strings.close}</span>
+```
+
+```
+registry/ui/strings/
+  names.ts               the Strings interface: every key, with where it is used
+  locales/<locale>.ts    one per language: `strings` (satisfies Strings), `locale` (BCP 47, for Intl) and
+                         `dateLocale` (react-day-picker's locale, which also carries the calendar's own labels)
+  index.ts               export * from "./locales/<locale>"   (the alias target; en in the repo)
+```
+
+A project has one language per UI package (`tyohnn.json` `ui.locale`, default `en`): `init --locale <locale>` sets it
+and `tyohnn locale <locale>` switches it. The CLI copies `names.ts` and the chosen locale file and writes `index.ts`;
+every app of a monorepo gets the same words. An app that switches language at run time needs its own i18n; props such
+as `text` or `title` still override a default on one screen.
+
+**Adding a word.** Add the key to `names.ts` and a value to every locale file; `tsc` fails until each one has it
+(`satisfies Strings`) and the CLI's tests compare the locales' shapes. `LOCALE=<locale>` starts the preview in that
+language. Words are written for the people who read them: the Korean file follows the Korean UX-writing rules
+(해요체 sentences, verbs on buttons, 「닫기」 for stepping back, names people already use).
+
+**Adding a language.** Add `locales/<locale>.ts` and its entry in `registry/ui/manifest.json` `locales`.
