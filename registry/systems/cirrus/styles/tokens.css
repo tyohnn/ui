@@ -229,7 +229,10 @@
     --surface-border-width: 1px;
 
     /* 모달 뒤에 까는 막. 색은 1층의 --overlay-backdrop 이 갖는다. mira: backdrop-blur-xs = 4px */
-    --overlay-backdrop-blur: 20px;    /* cirrus: 막도 유리다 — 색을 옅게 두고 흐림을 키웠다 */
+    /* cirrus: 막은 옅은 색에 옅은 흐림이다. 20px 이던 때는 뒤 화면이 지워져 시트를 여는 순간 어디서 왔는지를
+       잃었다(2026-09-30 resolv). 흐림의 주인은 떠 있는 면(--glass-filter)이고 막은 거드는 만큼만 흐린다.
+       아래 계약 ④(흐림은 한 겹만)와 같은 방향이다 */
+    --overlay-backdrop-blur: 4px;
 
     /* --------------------------------------------------------
        glass — cirrus 의 재질 축
