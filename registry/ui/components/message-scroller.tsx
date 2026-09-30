@@ -11,6 +11,7 @@ import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
 import { ArrowDown } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function MessageScrollerProvider(
   props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>
@@ -112,7 +113,9 @@ function MessageScrollerButton({
         <>
           <ArrowDown />
           <span className="sr-only">
-            {direction === "end" ? "Scroll to end" : "Scroll to start"}
+            {direction === "end"
+              ? strings.messageScroller.toEnd
+              : strings.messageScroller.toStart}
           </span>
         </>
       )}

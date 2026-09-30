@@ -20,9 +20,10 @@ monorepos (with or without Turborepo).
 | `add <system> --app <path>` | Monorepo: adds a system to the existing UI package and wires another app to it. Asks when its icon library differs from the other apps' (`--icons` answers up front). |
 | `use <system> [--app <path>]` | Switches an app to another system: entry CSS, fonts and mode. The TSX stays; the old system folder is removed when no app uses it. |
 | `icons <library> [--app <path>]` | Switches an app's icon library (mapping file and packages). |
+| `locale <locale>` | Switches the words the components say by themselves (screen-reader names, landmark labels, default button text) for the whole UI package: `en` · `ko`. |
 | `fonts [--sans <id>] [--heading <id\|inherit>] [--mono <id\|system>] [--reset] [--app <path>]` | Switches an app's fonts; `--reset` returns to the system's. |
 | `theme <name \| ./file.json \| tyohnn-theme:<code>> [--reset] [--app <path>]` | Switches an app's colours, keeping its system. `--reset` returns to the system's own theme. |
-| `list` | Systems, icon libraries and fonts, one line each. |
+| `list` | Systems, themes, icon libraries, locales and fonts. |
 | `doctor [--built]` | Checks the setup against `tyohnn.json` (see below). Exit code 1 on a failure. |
 | `diff [--files]` | Compares the project's copies with the source: changed upstream, changed locally, both, added, removed. |
 
@@ -50,7 +51,7 @@ imports that instead — the same place in the cascade, so nothing else moves. `
 is still what the theme renders.
 
 Common options: `--yes` (no prompts, take defaults) · `--force` (overwrite files that exist or were edited) ·
-`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--font <id>`,
+`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--locale <locale>`, `--font <id>`,
 `--font-heading <id|inherit>`, `--font-mono <id|system>`, and in a monorepo `--app <path>`, `--ui <folder>`
 (default `packages/ui`) and `--scope <@scope>` (the package becomes `<scope>/ui`). `--example component-sheet`
 copies the preview's component sheet into the app (a page at `/tyohnn/component-sheet` in Next.js).
@@ -66,6 +67,7 @@ twice changes nothing the second time.
 packages/ui/src/components · hooks · lib       the TSX, imports as @acme/ui/components/…
 packages/ui/src/icons/libraries/<library>.tsx  the icon libraries some app uses
 packages/ui/src/icons/index.ts                 the package's default library (what its own typecheck sees)
+packages/ui/src/strings/                       index.ts · names.ts · locales/<locale>.ts, imports as @acme/ui/strings
 packages/ui/src/systems/<system>/              globals.css · tokens.css · typeset*.css · style.css · components/ · DESIGN.md · system.json
 apps/<app>/src/app/globals.css                 imports exactly one system
 apps/<app>/tsconfig.json                       paths "@acme/ui/icons" → that app's library
@@ -79,6 +81,7 @@ tyohnn.json                                    at the monorepo root
 src/components/ui/*.tsx                imports as @/components/ui/…
 src/hooks · src/lib
 src/components/icons/                  index.ts · names.ts · libraries/<library>.tsx
+src/lib/strings/                       index.ts · names.ts · locales/<locale>.ts
 src/styles/tyohnn/<system>/            the system folder
 ```
 
@@ -139,6 +142,13 @@ library file; Next.js honours tsconfig paths for transpiled workspace packages i
 is written (a Turbopack alias whose target does not resolve is ignored silently). Vite apps in a monorepo get an
 exact-match `resolve.alias` as well. One library per monorepo is simpler; `add` asks before adding a second.
 
+## Words
+
+Components take the words they say by themselves (the name of an icon-only button, a landmark label, a default like
+"Previous") from one module (`@acme/ui/strings` or `@/lib/strings`). The language is recorded once for the UI package
+(`tyohnn.json` `ui.locale`, default `en`), so every app of a monorepo speaks the same one. Props such as `text` or
+`title` still override a default on one screen. Sources older than this axis have no locales; `locale` then says so.
+
 ## Several systems in one monorepo
 
 Each app imports exactly one system; never import two in one app (every system defines the same `cn-*` rules and
@@ -151,7 +161,8 @@ Per app: the entry CSS imports one system, the recorded one, in order, with `sty
 monorepo `@source`; Next.js `transpilePackages`, the layout block, `<html>` reading it, `dark` matching the recorded
 mode, font variables the stacks read, `next/font/local` files present; Vite `index.html` mode and the entry CSS import;
 icons resolving to the recorded library; font and icon packages installed. Project: components importing icon packages
-directly, CLI-owned files missing (fail) or edited (warning), icon libraries diverging across apps (warning).
+directly, `strings/index.ts` exporting another locale than recorded, CLI-owned files missing (fail) or edited
+(warning), icon libraries diverging across apps (warning).
 
 ## Known limitations
 

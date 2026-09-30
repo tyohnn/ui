@@ -5,7 +5,7 @@ import { parseArgs } from "node:util";
 import { doctor } from "./commands/doctor.js";
 import { diff, list } from "./commands/info.js";
 import { init } from "./commands/init.js";
-import { add, fonts, icons, theme, use } from "./commands/modify.js";
+import { add, fonts, icons, locale, theme, use } from "./commands/modify.js";
 import type { GlobalOptions } from "./commands/context.js";
 import { CliError, log } from "./lib/log.js";
 
@@ -20,6 +20,7 @@ Usage
   tyohnn add <system> --app <path>                 another system for another app of the monorepo
   tyohnn use <system> [--app <path>]               switch an app's system (TSX stays)
   tyohnn icons <library> [--app <path>]            switch an app's icon library
+  tyohnn locale <locale>                           switch the language the components speak (en · ko)
   tyohnn fonts [--sans --heading --mono] [--app]   switch an app's fonts (--reset: the system's)
   tyohnn theme <name|./file.json> [--app]          switch an app's colours (--reset: the system's)
   tyohnn list                                      systems, icon libraries and fonts
@@ -29,6 +30,7 @@ Usage
 Options
   --system <name>           design system (init)
   --icons <library>         lucide · tabler · hugeicons · phosphor · remixicon · radix
+  --locale <locale>         the components' own words: screen-reader names and default labels (init; default en)
   --font <id>               sans font (init, add, use); --font-heading <id|inherit> · --font-mono <id|system>
   --theme <name|file|link>  colour set (init): a registry theme, a JSON file, or a tyohnn-theme: link
   --mode <light|dark>       default colour mode (the system's by default)
@@ -54,6 +56,7 @@ const main = async (): Promise<number> =>
         options: {
             system: { type: "string" },
             icons: { type: "string" },
+            locale: { type: "string" },
             font: { type: "string" },
             theme: { type: "string" },
             "font-heading": { type: "string" },
@@ -105,6 +108,7 @@ const main = async (): Promise<number> =>
         case "add": await add(argument, options); return 0;
         case "use": await use(argument, options); return 0;
         case "icons": await icons(argument, options); return 0;
+        case "locale": await locale(argument, options); return 0;
         case "fonts": await fonts(options); return 0;
         case "theme": await theme(argument, options); return 0;
         case "list": await list(options); return 0;

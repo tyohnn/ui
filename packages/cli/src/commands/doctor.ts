@@ -12,7 +12,8 @@
 //   FAIL  icons: the app resolves a different library than recorded, or the library file is missing
 //   WARN  the entry CSS redeclares the system's tokens outside the tyohnn blocks
 // Project
-//   FAIL  a copied component imports an icon package directly · a CLI-owned file is missing · a package is not installed
+//   FAIL  a copied component imports an icon package directly · a CLI-owned file is missing · a package is not installed ·
+//         strings/index.ts exports a different locale than recorded
 //   WARN  icon libraries diverge across apps · CLI-owned files changed since they were written (user edits)
 // --built (Next): the app's built CSS carries no token value that only another system of the UI package declares
 
@@ -30,7 +31,7 @@ import { packageDir } from "../project/detect.js";
 import { cssFontImports, fontPackages } from "../project/fonts.js";
 import { placementOf } from "../project/placement.js";
 import { describeTheme, themeCss } from "../project/theme.js";
-import { readRecord, usedIcons } from "../project/record.js";
+import { localeOf, readRecord, usedIcons } from "../project/record.js";
 import { SYSTEM_CSS_FILES } from "../project/sync.js";
 import { openCachedCommit } from "../source/index.js";
 import { type GlobalOptions, recordRoot, workingDir } from "./context.js";
@@ -272,6 +273,15 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
         const notInstalled = needed.filter((name) => !packageDir(join(root, record.ui.path), name, root));
 
         if (notInstalled.length) add("FAIL", "project", `not installed for ${record.ui.path}: ${notInstalled.join(", ")}`);
+    }
+
+    if (record.ui.locale)
+    {
+        const index = join(placement.stringsDir, "index.ts");
+        const locale = readIfExists(index)?.match(/locales\/([A-Za-z-]+)"/)?.[1];
+
+        if (locale !== localeOf(record)) add("FAIL", "project", `${rel(root, index)} exports ${locale ?? "nothing"}, tyohnn.json says ${localeOf(record)}`);
+        else add("ok", "project", `strings → ${locale}`);
     }
 
     const direct = walk(placement.base)

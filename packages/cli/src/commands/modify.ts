@@ -1,9 +1,9 @@
-// Commands that change an existing setup: add · use · icons · fonts · theme. Each edits tyohnn.json and syncs.
+// Commands that change an existing setup: add · use · icons · locale · fonts · theme. Each edits tyohnn.json and syncs.
 
 import { CliError, log } from "../lib/log.js";
 import { inspectApp } from "../project/app.js";
 import { describeFonts, resolveFonts, validateFonts } from "../project/fonts.js";
-import { requireRecord, type TyohnnRecord, usedIcons } from "../project/record.js";
+import { localeOf, requireRecord, type TyohnnRecord, usedIcons } from "../project/record.js";
 import { sync } from "../project/sync.js";
 import { describeTheme, normalizeTheme, resolveThemeInput } from "../project/theme.js";
 import type { Registry } from "../source/registry.js";
@@ -107,6 +107,21 @@ export const icons = async (library: string | undefined, options: GlobalOptions)
 
     record.apps[appPath].icons = library;
     await run(root, record, registry, options, previous === library ? `${library} re-applied` : `Icons of ${appPath === "." ? "the app" : appPath}: ${previous} → ${library}`);
+};
+
+/** tyohnn locale <locale> — the words of the shared components; one per UI package, so every app gets them */
+export const locale = async (name: string | undefined, options: GlobalOptions): Promise<void> =>
+{
+    if (!name) throw new CliError("which locale?", "Usage: tyohnn locale <locale>. Run `tyohnn list` for the locales.");
+
+    const { root, record, registry } = await load(options);
+
+    registry.locale(name);
+
+    const previous = localeOf(record);
+
+    record.ui.locale = name;
+    await run(root, record, registry, options, previous === name ? `${name} re-applied` : `Words of ${record.ui.path}: ${previous} → ${name}`);
 };
 
 /** tyohnn theme <id | ./file.json | tyohnn-theme:<code>> [--app <path>] [--reset] */

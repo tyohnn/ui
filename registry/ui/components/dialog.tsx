@@ -6,6 +6,7 @@ import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
 import { X } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -68,7 +69,7 @@ function DialogContent({
             }
           >
             <X />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{strings.close}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -106,7 +107,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close render={<Button variant="outline" />}>
-          Close
+          {strings.close}
         </DialogPrimitive.Close>
       )}
     </div>

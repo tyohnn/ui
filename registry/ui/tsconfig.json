@@ -9,9 +9,10 @@
             "@tyohnn/components/*": ["./components/*"],
             "@tyohnn/lib/*": ["./lib/*"],
             "@tyohnn/hooks/*": ["./hooks/*"],
-            "@tyohnn/icons": ["./icons/index.ts"]
+            "@tyohnn/icons": ["./icons/index.ts"],
+            "@tyohnn/strings": ["./strings/index.ts"]
         }
     },
-    "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts", "icons/**/*.ts", "icons/**/*.tsx"],
+    "include": ["components/**/*.tsx", "hooks/**/*.ts", "lib/**/*.ts", "icons/**/*.ts", "icons/**/*.tsx", "strings/**/*.ts"],
     "exclude": ["node_modules"]
 }

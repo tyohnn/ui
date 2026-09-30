@@ -16,6 +16,7 @@ import {
   InputGroupAddon,
 } from "@tyohnn/components/input-group"
 import { Check, Search } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function Command({
   className,
@@ -34,8 +35,8 @@ function Command({
 }
 
 function CommandDialog({
-  title = "Command Palette",
-  description = "Search for a command to run...",
+  title = strings.command.title,
+  description,
   children,
   className,
   showCloseButton = false,
@@ -51,7 +52,7 @@ function CommandDialog({
     <Dialog {...props}>
       <DialogHeader className="sr-only">
         <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
+        {description && <DialogDescription>{description}</DialogDescription>}
       </DialogHeader>
       <DialogContent
         className={cn(

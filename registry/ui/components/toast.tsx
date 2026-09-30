@@ -6,6 +6,7 @@ import { cn } from "cn"
 
 import { Button } from "@tyohnn/components/button"
 import { CircleCheck, Info, Loader, OctagonX, TriangleAlert, X } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 const toast = ToastPrimitive.createToastManager()
 
@@ -117,7 +118,7 @@ function ToastClose({
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
-      aria-label="Close toast"
+      aria-label={strings.toast.close}
       render={render}
       className={cn(
         "relative shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:text-foreground",

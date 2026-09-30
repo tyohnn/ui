@@ -153,6 +153,7 @@ tyohnn use nocturne                # switch an app to another system
 tyohnn theme stone                 # switch an app's colours, keeping its system (--reset: the system's)
 tyohnn fonts --sans geist          # switch fonts (--reset returns to the system's)
 tyohnn icons lucide                # switch icon library (six supported, semantic names)
+tyohnn locale ko                   # the language the components speak: screen-reader names, default labels (en · ko)
 tyohnn list                        # systems, fonts, icon libraries
 tyohnn doctor                      # check the project against tyohnn.json
 tyohnn diff                        # what changed upstream, locally, or both
@@ -181,7 +182,7 @@ Full reference: [packages/cli/README.md](packages/cli/README.md).
 ## Repository
 
 ```
-registry/ui                the one set of component TSX (components · hooks · lib · icons for six libraries)
+registry/ui                the one set of component TSX (components · hooks · lib · icons for six libraries · strings per language)
 registry/systems/<name>    complete design systems (system.json · styles · DESIGN.md · reference)
 registry/themes            colour sets: bases, accents, and one per system
 registry/foundation        maintainer master copy of the layers that systems fork

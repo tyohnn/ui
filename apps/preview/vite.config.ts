@@ -23,6 +23,7 @@ const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 const system = (process.env.SYSTEM || "foundation").replace(/[^a-z0-9-]/gi, "");
 const meta = readSystemMeta(system);
 const iconLibrary = process.env.ICONS || meta.icons?.library || "lucide";
+const locale = process.env.LOCALE || "en";
 
 const FONTS_ID = "virtual:tyohnn-fonts";
 const SYSTEM_ID = "virtual:tyohnn-system";
@@ -107,9 +108,11 @@ export default defineConfig({
         // Placeholder alias, not a package: @tyohnn/{components,lib,hooks}/* → registry/ui/…
         // (@tyohnn/ui and the tooling packages are untouched by this pattern).
         // @tyohnn/icons → the started system's icon library (ICONS=<library> overrides it for a trial build).
+        // @tyohnn/strings → English, or LOCALE=<locale> (registry/ui/strings/locales) to read the components in another language.
         alias: [
             { find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` },
             { find: /^@tyohnn\/icons$/, replacement: `${repoRoot}registry/ui/icons/libraries/${iconLibrary}.tsx` },
+            { find: /^@tyohnn\/strings$/, replacement: `${repoRoot}registry/ui/strings/locales/${locale}.ts` },
         ],
     },
     server: {

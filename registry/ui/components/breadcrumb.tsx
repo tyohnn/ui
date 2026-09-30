@@ -4,11 +4,12 @@ import { useRender } from "@base-ui/react/use-render"
 import { cn } from "cn"
 
 import { ChevronRight, MoreHorizontal } from "@tyohnn/icons"
+import { strings } from "@tyohnn/strings"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      aria-label="breadcrumb"
+      aria-label={strings.breadcrumb.label}
       data-slot="breadcrumb"
       className={cn("cn-breadcrumb", className)}
       {...props}
@@ -108,7 +109,6 @@ function BreadcrumbEllipsis({
       {...props}
     >
       <MoreHorizontal />
-      <span className="sr-only">More</span>
     </span>
   )
 }
