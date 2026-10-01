@@ -158,7 +158,7 @@ export const WEEK_STYLE = `
 [data-template="block-calendar"] .cal-column[data-today] { background-color: color-mix(in oklab, var(--primary) 4%, transparent); }
 [data-template="block-calendar"] .cal-event {
     --tone: var(--primary); --tone-soft: color-mix(in oklab, var(--primary) 12%, var(--background));
-    border-left: 3px solid var(--tone); border-radius: var(--radius-md); background-color: var(--tone-soft); color: var(--foreground);
+    border-radius: min(var(--control-radius), 8px); background-color: var(--tone-soft); color: var(--foreground);
     font-size: var(--ui-text-xs); line-height: var(--ui-line-height-xs);
 }
 [data-template="block-calendar"] .cal-event[data-tone="success"] { --tone: var(--success); --tone-soft: var(--success-soft); }
