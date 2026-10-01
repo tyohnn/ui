@@ -23,7 +23,11 @@
     /* v4: 아래 변만 따로 읽는다 — 인풋을 밑줄 하나로 그리는 시스템(sera)이 여기만 내린다.
        foundation 기본값은 --input-border 의 별칭이라 네 변이 같다. */
     border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
-    border-radius: var(--control-radius);
+    /* cirrus: the group is an input, so it reads the input family's radius. luma's group is
+       rounded-4xl (26) next to inputs at rounded-3xl (22) — both exceed half the 36px height,
+       so both render as pills and the binding never showed. cirrus split the two steps
+       (pill 9999 for pressable controls, 12 for inputs) and the group must follow the inputs. */
+    border-radius: var(--control-radius-sm);
     background-color: var(--input-fill);
 
     /* luma: has-[textarea]:rounded-2xl · has-data-[align=block-*]:rounded-3xl */
