@@ -1,0 +1,35 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "clover",
+    "theme": "clover",
+    "description": "Bright and orderly back-office: white paper, cool grey ink and one vivid green that is the action, the focus and the checked state at once. 36px controls with 14px text, outlined controls that sit as white chips on a hairline, a primary button that runs from green into teal, small tinted labels with bold ink of their own hue, rounded-square avatars and 48px table rows ruled by the faintest line.",
+    "tagline": "Inter · white chips · green into teal",
+    "added": "2026-10-01T14:36:43.530Z",
+    "forkedFrom": {
+        "source": "foundation",
+        "commit": "d538d3b",
+        "note": "Forked from foundation for its unmodified layer-3 rules. Everything clover changes is a value, except two rules that had a literal where clover needed a slot (the avatar corner and the tag weight; see reference/README.md)."
+    },
+    "fonts": {
+        "sans": "inter",
+        "heading": "inherit",
+        "mono": "system",
+        "hangulFallback": "pretendard"
+    },
+    "icons": {
+        "library": "hugeicons"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "light",
+        "dark",
+        "green",
+        "back-office",
+        "tables",
+        "tags"
+    ],
+    "source": {
+        "kind": "reference-screenshot",
+        "note": "Seven screens of an HR and back-office workspace shared by the owner on 2026-10-01 (a profile sheet, a document list, a permission popover, a calibration table, a report builder, a year-end settlement table and an expense table). Colours were sampled from the images; sizes were chosen in their register. Design values only — no product's marks, names, wording, icons or screen layouts are reproduced."
+    }
+}
