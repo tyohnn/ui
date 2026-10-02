@@ -15,8 +15,13 @@ export type DataTableColumn<Row> = {
     /** The column's name. `hidden` keeps it for assistive technology only (a column of row actions). */
     header: string;
     hidden?: boolean;
-    /** `number` right-aligns with tabular figures · `code` sets an identifier in the mono stack · `nowrap` keeps a short value on one line */
-    kind?: "text" | "nowrap" | "code" | "number";
+    /**
+     * `number` right-aligns with tabular figures · `code` sets an identifier in the mono stack · `nowrap` keeps a short
+     * value on one line · `wrap` lets a sentence run over several lines
+     */
+    kind?: "text" | "nowrap" | "wrap" | "code" | "number";
+    /** `end` puts the header and the cells at the end of the column: a status badge, a row's action */
+    align?: "end";
     /** The least width in px; the table still lays out automatically, so a system with larger type widens the column */
     width?: number;
     /** Draws the header as a sort button and reports the press */
@@ -39,12 +44,13 @@ export type DataTableSelection<Row> = {
 const CELL: Record<NonNullable<DataTableColumn<unknown>["kind"]>, string> = {
     text: "",
     nowrap: "whitespace-nowrap",
+    wrap: "whitespace-normal",
     code: CODE,
     number: "text-right tabular-nums whitespace-nowrap",
 };
 
 /**
- * A table drawn from columns and rows: typed cells (text, one-line, identifier, number), sortable headers and a
+ * A table drawn from columns and rows: typed cells (text, one-line, wrapping, identifier, number), sortable headers and a
  * checkbox column when `selection` is given. It is the bare table — put it in a card (DataTableCard), a tab panel
  * (TabCard) or straight on the page. The rows come from the caller; the table fetches nothing.
  */
@@ -95,7 +101,7 @@ export const DataTable = <Row,>({
                         </TableHead>
                     )}
                     {columns.map((column) => (
-                        <TableHead key={column.id} className={cn(column.kind === "number" && CELL.number, wrapHeaders && "whitespace-normal") || undefined}>
+                        <TableHead key={column.id} className={cn(column.kind === "number" && CELL.number, column.align === "end" && "text-right", wrapHeaders && "whitespace-normal") || undefined}>
                             {column.hidden ? <span className="sr-only">{column.header}</span> : column.onSort ? (
                                 <Button variant="ghost" size="xs" className="-ml-2" onClick={column.onSort}>
                                     {column.header}
@@ -124,7 +130,7 @@ export const DataTable = <Row,>({
                                 </TableCell>
                             )}
                             {columns.map((column) => (
-                                <TableCell key={column.id} className={CELL[column.kind ?? "text"] || undefined}>{column.cell(row)}</TableCell>
+                                <TableCell key={column.id} className={cn(CELL[column.kind ?? "text"], column.align === "end" && "text-right") || undefined}>{column.cell(row)}</TableCell>
                             ))}
                         </TableRow>
                     );
