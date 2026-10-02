@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-10/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, sidebar, inset, header with trigger, separator, breadcrumb and
 // NavActions — is upstream's markup and classes with the document's title; the body is the document (./document).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import { NavActions } from "./nav-actions"
@@ -19,13 +19,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Document, DOCUMENT_STYLE } from "./document"
+import { Document } from "./document"
 
 export function BlockEditor() {
   return (
     <div data-template="block-editor">
       <NoMotion />
-      <style>{DOCUMENT_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
