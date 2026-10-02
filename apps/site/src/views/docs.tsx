@@ -139,7 +139,7 @@ export function DocsView({ locale }: { locale: Locale })
                                 <div key={group.id} className="row cols-3" role="row">
                                     <div role="cell">{group.tokens.map((token) => <code key={token.name} style={{ display: "block", width: "fit-content", marginBottom: 4 }}>{token.name}</code>)}</div>
                                     <div role="cell">{group.tokens.map((token) => `${token.rem}rem`).join(" · ")}</div>
-                                    <div role="cell">{text.title}: {text.hint}.</div>
+                                    <div role="cell"><b>{text.title}.</b> {text.hint}</div>
                                 </div>
                             );
                         })}

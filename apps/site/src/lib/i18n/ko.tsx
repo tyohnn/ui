@@ -90,8 +90,7 @@ export const ko: Messages = {
         categoriesLabel: "화면 분류",
         screens: (count) => `화면 ${count}개`,
         fullScreen: "전체 화면 ↗",
-        frames: "프레임 ↗",
-        framesTitle: "프레임 컨트롤과 함께 열어요. 윤곽선과 토큰별 슬라이더가 보여요",
+        sidePanel: "레이아웃과 색상",
         compare: "비교",
     },
 
@@ -134,11 +133,9 @@ export const ko: Messages = {
     },
 
     frames: {
-        trigger: "레이아웃",
         edited: "수정됨",
         title: "레이아웃",
-        close: "닫기",
-        intro: "페이지의 블록이 놓이는 자리예요. 컴포넌트는 같고 여백만 달라져요. 바꾸면 바로 프레임에 반영돼요.",
+        intro: "간격과 폭을 조절해요. 슬라이더를 움직이면 이 페이지의 모든 화면이 바로 바뀌어요.",
         copyCss: "CSS 복사",
         resetAll: "모두 되돌리기",
         resetTitle: "기본값으로 되돌려요",
@@ -349,8 +346,8 @@ export const ko: Messages = {
         ],
         framesTry: (systemLink) => (
             <>
-                값을 직접 바꿔 보려면 아무 {systemLink}에서 <b>레이아웃</b> 패널을 열어요. 슬라이더 하나가 페이지의 모든 화면을 한 번에
-                움직여요. 화면 옆의 <b>프레임 ↗</b> 링크는 그 화면만 따로 열고, 프레임 윤곽선과 같은 슬라이더를 보여 줘요.
+                값을 직접 바꿔 보려면 아무 {systemLink}에서 화면 옆의 <b>레이아웃</b> 탭을 써요. 슬라이더 하나가 페이지의 모든 화면을
+                한 번에 움직여요.
             </>
         ),
         framesTryLink: "시스템 페이지",
@@ -448,12 +445,13 @@ export const ko: Messages = {
             bubble: "말풍선", message: "메시지", "message-scroller": "메시지 스크롤러", attachment: "첨부 파일", questionnaire: "설문", toast: "토스트",
         },
         frameGroups: {
-            gutter: { title: "가장자리 여백", hint: "페이지와 화면 가장자리 사이" },
-            gap: { title: "간격", hint: "페이지의 블록 사이" },
-            measure: { title: "읽기 폭", hint: "읽는 열이 가장 넓어지는 폭" },
-            aside: { title: "보조 패널", hint: "분할 화면에서 좁은 쪽 패널" },
-            document: { title: "문서 여백", hint: "문서의 위쪽과 아래쪽" },
+            gutter: { title: "페이지 여백", hint: "페이지 내용과 가장자리 사이의 공간이에요." },
+            gap: { title: "블록 사이 간격", hint: "제목과 표처럼 페이지 위 항목들 사이의 간격이에요." },
+            measure: { title: "읽기 폭", hint: "글 열이 얼마나 넓어질 수 있는지 정해요. 긴 줄도 읽기 편하게 해 줘요." },
+            aside: { title: "보조 패널 폭", hint: "페이지가 둘로 나뉠 때 옆의 좁은 패널 폭이에요. 목차 같은 패널이 여기에 해당해요." },
+            document: { title: "문서 여백", hint: "문서 내용의 위와 아래 공간이에요." },
         },
+        frameSteps: { xs: "아주 작게", sm: "작게", md: "보통", lg: "크게", xl: "아주 크게", start: "위", end: "아래" },
     },
 
     systems: {

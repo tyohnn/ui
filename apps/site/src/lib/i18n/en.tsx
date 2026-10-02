@@ -106,8 +106,7 @@ export const en = {
         categoriesLabel: "Screen categories",
         screens: (count: number) => `${count} screens`,
         fullScreen: "Full screen ↗",
-        frames: "Frames ↗",
-        framesTitle: "Open with the frame controls: outlines and a slider per token",
+        sidePanel: "Layout and colours",
         compare: "Compare",
     },
 
@@ -150,11 +149,9 @@ export const en = {
     },
 
     frames: {
-        trigger: "Layout",
         edited: "edited",
         title: "Layout",
-        close: "Close",
-        intro: "Where the blocks of a page stand. The same components, more or less room. Changes land in the frames as you make them.",
+        intro: "Adjust spacing and widths. Every screen on this page updates as you drag.",
         copyCss: "Copy CSS",
         resetAll: "Reset all",
         resetTitle: "Back to the defaults",
@@ -367,8 +364,8 @@ export const en = {
         ] as [string, string, string][],
         framesTry: (systemLink: ReactNode): ReactNode => (
             <>
-                To try the values, open the <b>Layout</b> panel on any {systemLink}: a slider moves every
-                screen on the page at once. <b>Frames ↗</b> beside a screen opens it alone with the frames outlined and the same sliders.
+                To try the values, use the <b>Layout</b> tab beside the screens on any {systemLink}: a slider moves every
+                screen on the page at once.
             </>
         ),
         framesTryLink: "system's page",
@@ -423,6 +420,8 @@ export const en = {
         /** Coverage sections are component ids; a locale may show a name beside the id */
         sections: {} as Record<string, string>,
         frameGroups: {} as Record<string, { title: string; hint: string }>,
+        /** English has none: the registry's own step names ("Small", "Medium"…) are the words */
+        frameSteps: {} as Record<string, string>,
     },
     systems: {} as Record<string, SystemText>,
 };

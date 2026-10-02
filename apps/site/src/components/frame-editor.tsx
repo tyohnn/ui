@@ -113,69 +113,56 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
 /**
  * The layout panel: every frame token by axis with a slider. The tokens and their defaults are read out of the
  * frames' own classes (registry/blocks/lib/frame.ts), so what the reader moves here is what a system or a product
- * would declare.
+ * would declare. It is the first tab of the side panel (system-view.tsx), which stands beside the screens all the
+ * time, so a slider and what it moves are in view together. Its children are the panel's own: the intro, a section
+ * a group, and the footer that stays at the bottom.
  */
-export const FrameEditor = ({ frames }: { frames: FrameTokens }) =>
+export const FramePanel = ({ frames }: { frames: FrameTokens }) =>
 {
     const { t, labels } = useLocale();
-    const [open, setOpen] = useState(false);
 
     return (
-        <div className="th-root">
-            <button type="button" className="th-trigger fr-trigger" onClick={() => setOpen(!open)} aria-expanded={open}>
-                {t.frames.trigger}
-                {frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
-            </button>
+        <>
+            <p className="side-intro">{t.frames.intro}</p>
 
-            {open && (
-                <div className="th-panel fr-panel">
-                    <header>
-                        <div>
-                            <b>{t.frames.title}</b>
-                            <small>{t.frames.intro}</small>
+            {FRAME_TOKEN_GROUPS.map((group) =>
+            {
+                const text = labels.frameGroup(group.id, group);
+
+                return (
+                    <section key={group.id}>
+                        <h4>{text.title} <code>{group.prefix}*</code></h4>
+                        <p className="fr-hint">{text.hint}</p>
+                        <div className="fr-grid">
+                            {group.tokens.map((token) =>
+                            {
+                                const value = frames.values[token.name] ?? token.rem;
+                                const edited = frames.values[token.name] !== undefined;
+
+                                return (
+                                    <label key={token.name} className={edited ? "fr-token edited" : "fr-token"} title={token.name}>
+                                        <span className="fr-label">{labels.frameStep(token.key, token.label)} <code>{token.key}</code></span>
+                                        <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
+                                        <input
+                                            type="range"
+                                            min={0}
+                                            max={group.max}
+                                            step={group.step}
+                                            value={value}
+                                            onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
+                                        />
+                                    </label>
+                                );
+                            })}
                         </div>
-                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label={t.frames.close}>×</button>
-                    </header>
+                    </section>
+                );
+            })}
 
-                    {FRAME_TOKEN_GROUPS.map((group) =>
-                    {
-                        const text = labels.frameGroup(group.id, group);
-
-                        return (
-                            <section key={group.id}>
-                                <h4>{text.title} <small>{text.hint}</small></h4>
-                                <div className="fr-grid">
-                                    {group.tokens.map((token) =>
-                                    {
-                                        const value = frames.values[token.name] ?? token.rem;
-                                        const edited = frames.values[token.name] !== undefined;
-
-                                        return (
-                                            <label key={token.name} className={edited ? "fr-token edited" : "fr-token"}>
-                                                <span className="th-name">{token.name}</span>
-                                                <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
-                                                <input
-                                                    type="range"
-                                                    min={0}
-                                                    max={group.max}
-                                                    step={group.step}
-                                                    value={value}
-                                                    onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
-                                                />
-                                            </label>
-                                        );
-                                    })}
-                                </div>
-                            </section>
-                        );
-                    })}
-
-                    <footer>
-                        <Copy label={t.frames.copyCss} text={frames.css ?? ""} disabled={frames.changed === 0} />
-                        <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title={t.frames.resetTitle}>{t.frames.resetAll}</button>
-                    </footer>
-                </div>
-            )}
-        </div>
+            <footer>
+                <Copy label={t.frames.copyCss} text={frames.css ?? ""} disabled={frames.changed === 0} />
+                <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title={t.frames.resetTitle}>{t.frames.resetAll}</button>
+            </footer>
+        </>
     );
 };

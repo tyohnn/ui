@@ -34,6 +34,9 @@ iframe { display: block; border: 0; }
 }
 
 .page { max-width: 1440px; margin-inline: auto; }
+/* A system page gives the screens the whole window: they are drawn at desktop width and scaled to the room. */
+body:has(.sys-body) .page { max-width: none; }
+body:has(.sys-body) .wrap { padding-inline: 32px; }
 .wrap { padding-inline: 64px; }
 .mono { font-family: var(--mono); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -185,28 +188,36 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .crumb-nav a { color: var(--fg-3); }
 .crumb-nav a:hover { color: var(--fg); }
 
-.catbar { position: sticky; top: 16px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: rgba(18, 19, 22, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 999px; margin-bottom: 56px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
-.cat { font-size: 14px; color: var(--fg-2); padding: 8px 16px; border-radius: 999px; display: inline-flex; gap: 8px; align-items: baseline; }
+.catbar { position: sticky; top: 16px; z-index: 20; overflow-x: auto; scrollbar-width: none; display: flex; align-items: center; gap: 6px; padding: 10px 12px; background: rgba(18, 19, 22, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 999px; margin-bottom: 56px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
+.cat { font-size: 14px; color: var(--fg-2); padding: 8px 16px; border-radius: 999px; display: inline-flex; gap: 8px; align-items: baseline; flex: none; white-space: nowrap; }
 .cat:hover { color: var(--fg); }
 .cat small { font-family: var(--mono); font-size: 11px; color: var(--fg-3); }
 .cat[aria-current="true"] { background: var(--fg); color: var(--ink-0); font-weight: 500; }
 .cat[aria-current="true"] small { color: rgba(11, 12, 14, 0.55); }
-.catbar .end { margin-left: auto; display: flex; gap: 10px; align-items: center; padding-right: 4px; font-size: 13px; color: var(--fg-3); }
+.catbar .end { margin-left: auto; display: flex; flex: none; gap: 10px; align-items: center; padding-left: 12px; padding-right: 4px; font-size: 13px; color: var(--fg-3); white-space: nowrap; }
 
+.catbar::-webkit-scrollbar { display: none; }
+/* On a narrow page the bar gives up its extras before it has to scroll: the total first, then each category's count. */
+@media (max-width: 1280px) {
+    .catbar .count { display: none; }
+    .cat { padding-inline: 12px; }
+}
+@media (max-width: 1100px) {
+    .cat small { display: none; }
+}
 .cat-head { display: flex; align-items: baseline; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
 .cat-head h2 { font-size: 56px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; }
 .cat-head .count { font-family: var(--mono); color: var(--fg-3); font-size: 13px; }
 .cat-block { padding-bottom: 96px; scroll-margin-top: 96px; }
-.shot-row { display: grid; grid-template-columns: 228px 1fr; gap: 36px; padding-bottom: 56px; }
-.meta { position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 6px; }
+/* A preview has an edge and rounded corners, and no room inside them: the screen runs to the border. */
+.frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.shot-row { display: flex; flex-direction: column; gap: 14px; padding-bottom: 56px; }
+.meta { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
 .meta h3 { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
-.meta .src { font-family: var(--mono); font-size: 12px; color: var(--fg-3); }
-.meta .links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.meta .links { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; align-self: center; }
 .meta .links a { font-size: 12.5px; color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
 .meta .links a:hover { color: var(--fg); border-color: var(--line-strong); }
 .meta.active::before { content: ""; position: absolute; left: -24px; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: var(--glow); }
-.frame { background: var(--ink-1); border: 1px solid var(--line); border-radius: 16px; padding: 8px; }
-.frame .scaled { border-radius: 9px; }
 
 /* COMPONENTS PAGE */
 .comp-head { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end; padding-block: 56px 32px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
@@ -348,8 +359,6 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .rail { max-height: 320px; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .sys-name { font-size: 120px; }
-    .shot-row { grid-template-columns: 1fr; gap: 14px; }
-    .meta { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 12px; }
     .meta.active::before { display: none; }
     .catbar { overflow-x: auto; border-radius: 16px; }
     .controls { flex-wrap: wrap; }
@@ -444,12 +453,36 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .th-panel { position: fixed; inset: auto 16px 16px; width: auto; max-height: 76vh; }
 }
 
-/* The layout panel (frame-editor.tsx): the frame tokens by axis, a slider each. It shares the colour panel's shell. */
-.fr-trigger { padding-left: 12px; }
-.fr-panel { width: min(520px, calc(100vw - 32px)); }
-.fr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px 16px; }
+/*
+ * The side panel: the layout and colour panels (frame-editor.tsx, theme-editor.tsx) are the two tabs of a panel that is
+ * always at the left of the screens, full height and sticky, so a slider and the frames it moves are in view together.
+ * It is the popover's shell (.th-panel) put in a column.
+ */
+.sys-body { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: start; }
+.sys-main { min-width: 0; }
+.th-panel.side-panel { position: sticky; top: 16px; right: auto; z-index: 30; width: auto; max-height: calc(100vh - 32px); border-radius: 18px; }
+.side-tabs { position: sticky; top: -20px; z-index: 2; display: flex; gap: 4px; margin: -20px -20px 0; padding: 14px 20px 12px; background: rgb(18, 19, 22); border-bottom: 1px solid var(--line); }
+.side-tabs button { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-3); border-radius: 999px; padding: 5px 14px; }
+.side-tabs button:hover { color: var(--fg-2); }
+.side-tabs button[aria-selected="true"] { color: var(--ink-0); background: var(--fg); font-weight: 500; }
+.side-tabs button[aria-selected="true"] .th-badge { color: var(--ink-0); border-color: rgba(0, 0, 0, 0.3); }
+.side-intro { margin: 0; font-size: 12px; line-height: 1.5; color: var(--fg-3); }
+/* The actions stay at the bottom of the panel while the rest scrolls; the negative margins reach the panel's padding. */
+.side-panel footer { position: sticky; bottom: -20px; z-index: 1; margin: 0 -20px -20px; padding: 16px 20px 20px; background: rgb(18, 19, 22); }
+/* Without the room for a column the panel goes above the screens, as tall as its content up to a limit. */
+@media (max-width: 900px) {
+    .sys-body { display: block; }
+    .th-panel.side-panel { position: relative; top: auto; max-height: 460px; margin-bottom: 24px; }
+}
+
+/* The layout panel: the frame tokens by axis, a slider each. */
+.fr-panel h4 { justify-content: space-between; font-family: var(--sans); font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--fg); margin-bottom: 4px; }
+.fr-panel h4 code, .fr-label code { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--fg-3); }
+.fr-hint { font-size: 12px; line-height: 1.5; color: var(--fg-3); margin-bottom: 12px; }
+.fr-grid { display: grid; gap: 10px 16px; }
 .fr-token { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: baseline; }
-.fr-token .th-name { width: auto; }
+.fr-label { font-size: 12px; color: var(--fg-2); }
+.fr-label code { margin-left: 4px; }
 .fr-value { font-family: var(--mono); font-size: 11px; color: var(--fg-3); font-variant-numeric: tabular-nums; }
 .fr-token.edited .fr-value { color: var(--glow); }
 .fr-token input { grid-column: 1 / -1; width: 100%; accent-color: var(--glow); }

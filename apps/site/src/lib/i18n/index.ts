@@ -41,5 +41,6 @@ export const labelsOf = (locale: Locale) =>
         section: (id: string) => labels.sections[id] ?? id,
         coverageGroup: (id: string, fallback: string) => labels.coverageGroups[id] ?? fallback,
         frameGroup: (id: string, fallback: { title: string; hint: string }) => labels.frameGroups[id] ?? fallback,
+        frameStep: (key: string, fallback: string) => labels.frameSteps[key] ?? fallback,
     };
 };
