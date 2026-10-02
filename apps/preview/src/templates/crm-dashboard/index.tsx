@@ -6,6 +6,7 @@ import {
     BrandMark,
     Briefcase,
     Building,
+    Calendar,
     ChartLine,
     ChevronDown,
     CircleHelp,
@@ -24,11 +25,20 @@ import {
     Users,
 } from "@tyohnn/icons";
 
+import { ActivityBars } from "@tyohnn/blocks/activity-bars";
+import { CompactSelect } from "@tyohnn/blocks/compact-select";
+import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
+import { FilterBar } from "@tyohnn/blocks/filter-bar";
+import { InlineFacts } from "@tyohnn/blocks/inline-facts";
+import { PageBar } from "@tyohnn/blocks/page-bar";
+import { Person } from "@tyohnn/blocks/person";
+import { SegmentMeter } from "@tyohnn/blocks/segment-meter";
+import { SummaryBar } from "@tyohnn/blocks/summary-bar";
+import { ToneDot } from "@tyohnn/blocks/tone-dot";
+import { TwoLineLabel } from "@tyohnn/blocks/two-line-label";
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
-import { Checkbox } from "@tyohnn/components/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 import {
     Sidebar,
     SidebarContent,
@@ -44,21 +54,20 @@ import {
     SidebarProvider,
     SidebarSeparator,
 } from "@tyohnn/components/sidebar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
 import { NoMotion } from "../coverage/frame";
 
-import { avatarTone, COLUMN_WIDTHS, COLUMNS, CURRENT_USER, initials, ROWS, TAG_TONE } from "./data";
-import { CRM_STYLE, LastInteraction, PipelineDot, Sparkline, StatusDot, WinMeter } from "./parts";
+import { activityLevels, avatarTone, COLUMN_WIDTHS, type CompanyRow, CURRENT_USER, initials, ROWS, TAG_TONE } from "./data";
 
 /**
- * The Sales CRM "Companies" screen assembled from registry/ui components, so every design system can
- * render it: `?template=crm-dashboard`. The window is 1435px wide and as tall as its content (control
- * sizes differ per system). Fixed data, no time and no randomness, so two renders are identical.
+ * The Sales CRM "Companies" screen, so every design system can render it: `?template=crm-dashboard`. The window
+ * is 1435px wide and as tall as its content (control sizes differ per system). Fixed data, no time and no
+ * randomness, so two renders are identical.
  *
- * The window root carries `data-template="crm-dashboard"`; tooling/snapshot/export-dc.mjs exports it.
- * Template code uses layout utilities only; colours and type come from CRM_STYLE, which reads tokens.
+ * The window root carries `data-template="crm-dashboard"`; tooling/snapshot/export-dc.mjs exports it. The body is
+ * composed from blocks (registry/blocks): the page bar, the filter bar, the table with its meter, trend and
+ * interaction cells, and the summary bar. The sidebar, the columns and the filters are the CRM's own and stay here.
  */
 
 type NavItem = { label: string; icon?: ComponentType; dot?: "warning" | "destructive" | "info"; count?: number; active?: boolean };
@@ -106,7 +115,7 @@ const Menu = ({ items }: { items: NavItem[] }) => (
         {items.map(({ label, icon: Icon, dot, count, active }) => (
             <SidebarMenuItem key={label}>
                 <SidebarMenuButton isActive={active}>
-                    {Icon ? <Icon /> : dot && <PipelineDot tone={dot} />}
+                    {Icon ? <Icon /> : dot && <ToneDot tone={dot} className="mx-1" />}
                     <span>{label}</span>
                 </SidebarMenuButton>
                 {count !== undefined && <SidebarMenuBadge>{count}</SidebarMenuBadge>}
@@ -115,24 +124,11 @@ const Menu = ({ items }: { items: NavItem[] }) => (
     </SidebarMenu>
 );
 
-const Heading = ({ title, subtitle }: { title: string; subtitle: string }) => (
-    <div className="crm-heading">
-        <span className="crm-heading-title">{title}</span>
-        <span className="crm-heading-subtitle">{subtitle}</span>
-    </div>
-);
-
-const Person = ({ name }: { name: string }) => (
-    <Avatar size="sm">
-        <AvatarFallback data-tone={avatarTone(name)}>{initials(name)}</AvatarFallback>
-    </Avatar>
-);
-
 const CrmSidebar = () => (
-    <Sidebar collapsible="none" className="crm-sidebar h-auto">
+    <Sidebar collapsible="none" className="h-auto border-e border-sidebar-border">
         <SidebarHeader className="flex-row items-center gap-2.5">
-            <span className="crm-brand-mark"><BrandMark /></span>
-            <Heading title="Sales CRM" subtitle="Company pipeline" />
+            <span className="grid size-8 shrink-0 place-items-center rounded-[var(--radius-md)] border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground [&_svg]:size-[18px]"><BrandMark /></span>
+            <TwoLineLabel title="Sales CRM" subtitle="Company pipeline" />
         </SidebarHeader>
         <SidebarSeparator className="mx-0" />
         <SidebarContent className="overflow-visible">
@@ -160,7 +156,7 @@ const CrmSidebar = () => (
         </SidebarContent>
         <SidebarSeparator className="mx-0" />
         <SidebarFooter className="flex-row items-center justify-between">
-            <Heading title="14 Days" subtitle="Left on trials" />
+            <TwoLineLabel title="14 Days" subtitle="Left on trials" />
             <Button variant="secondary" size="sm" data-shape="pill">
                 <CreditCard data-icon="inline-start" />
                 Add Billings
@@ -170,124 +166,110 @@ const CrmSidebar = () => (
 );
 
 const PageHeader = () => (
-    <header className="crm-page-header flex items-center justify-between gap-4 px-4 py-2.5">
-        <div className="flex items-center gap-2.5">
-            <h1 className="crm-page-title">Companies</h1>
+    <PageBar
+        title="Companies"
+        status={(
             <Badge variant="outline">
-                <StatusDot />
+                <ToneDot tone="success" size="sm" />
                 Active
             </Badge>
-        </div>
-        <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" data-shape="round" aria-label="Search"><Search /></Button>
-            <Button variant="outline" size="icon" data-shape="round" aria-label="Notifications"><Bell /></Button>
-            <Button variant="outline" data-shape="pill" className="gap-2">
-                <Person name={CURRENT_USER} />
-                {CURRENT_USER}
-                <ChevronDown data-icon="inline-end" />
-            </Button>
-        </div>
-    </header>
+        )}
+        actions={(
+            <>
+                <Button variant="outline" size="icon" data-shape="round" aria-label="Search"><Search /></Button>
+                <Button variant="outline" size="icon" data-shape="round" aria-label="Notifications"><Bell /></Button>
+                <Button variant="outline" data-shape="pill" className="gap-2">
+                    <Avatar size="sm">
+                        <AvatarFallback data-tone={avatarTone(CURRENT_USER)}>{initials(CURRENT_USER)}</AvatarFallback>
+                    </Avatar>
+                    {CURRENT_USER}
+                    <ChevronDown data-icon="inline-end" />
+                </Button>
+            </>
+        )}
+    />
 );
 
 const Toolbar = () => (
-    <div className="flex items-center justify-between gap-4 px-4 py-4">
-        <div className="flex items-center gap-2">
-            {FILTERS.map((filter) => (
-                <Select key={filter.label} items={filter.options} defaultValue={filter.value}>
-                    <SelectTrigger size="sm" className="gap-2">
-                        <span className="crm-filter-label">{filter.label}</span>
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {filter.options.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-                    </SelectContent>
-                </Select>
-            ))}
-        </div>
-        <div className="flex items-center gap-1.5">
-            <Button variant="outline">
-                <Download data-icon="inline-start" />
-                Export
-            </Button>
-            <Button>
-                <Plus data-icon="inline-start" />
-                New Company
-            </Button>
-        </div>
-    </div>
+    <FilterBar
+        filters={FILTERS.map((filter) => (
+            <CompactSelect key={filter.label} label={filter.label} showLabel options={filter.options} defaultValue={filter.value} className="gap-2" />
+        ))}
+        actions={(
+            <>
+                <Button variant="outline">
+                    <Download data-icon="inline-start" />
+                    Export
+                </Button>
+                <Button>
+                    <Plus data-icon="inline-start" />
+                    New Company
+                </Button>
+            </>
+        )}
+    />
 );
 
+// The reference table's column widths follow the checkbox column's (COLUMN_WIDTHS[0]); the actions column takes what is left.
+const [SELECT_WIDTH, ...WIDTHS] = COLUMN_WIDTHS;
+
+const COLUMNS: DataTableColumn<CompanyRow>[] = [
+    { id: "company", header: "Companies", width: WIDTHS[0], cell: (row) => <span style={{ fontWeight: "var(--ui-font-weight)" }}>{row.company}</span> },
+    {
+        id: "segment",
+        header: "Segment & Stage",
+        width: WIDTHS[1],
+        cell: (row) => (
+            <span className="flex items-center gap-1">
+                {row.tags.map((tag) => <Badge key={tag} variant="outline" data-tone={TAG_TONE[tag]}>{tag}</Badge>)}
+            </span>
+        ),
+    },
+    { id: "owner", header: "Account Owner", width: WIDTHS[2], cell: (row) => <Person name={row.owner} initials={initials(row.owner)} tone={avatarTone(row.owner)} /> },
+    { id: "deals", header: "Open Deals", width: WIDTHS[3], cell: (row) => <span className="tabular-nums">{row.deals}</span> },
+    {
+        id: "value",
+        header: "Pipeline Value",
+        width: WIDTHS[4],
+        cell: (row) => (
+            <span className="flex items-center gap-1.5 tabular-nums">
+                <span className="text-muted-foreground">$</span>
+                <span>{row.value}</span>
+            </span>
+        ),
+    },
+    { id: "win", header: "Win Probability", width: WIDTHS[5], cell: (row) => <SegmentMeter value={row.win} /> },
+    { id: "trend", header: "Activity Trend", width: WIDTHS[6], cell: (row) => <ActivityBars levels={activityLevels(ROWS.indexOf(row) + 3)} /> },
+    { id: "interaction", header: "Last Interaction", width: WIDTHS[7], cell: (row) => <InlineFacts icon={<Calendar />} facts={[row.date, row.touch]} /> },
+    { id: "actions", header: "Actions", cell: (row) => <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.company}`}><MoreHorizontal /></Button> },
+];
+
 const CompaniesTable = () => (
-    <Table>
-        <colgroup>
-            {COLUMN_WIDTHS.map((width, index) => <col key={index} style={{ width }} />)}
-            <col />
-        </colgroup>
-        <TableHeader>
-            <TableRow>
-                <TableHead><Checkbox indeterminate aria-label="Select all" /></TableHead>
-                {/* Head labels may wrap: a system with larger type then narrows a column to its body content instead of pushing the table past the window. */}
-                {COLUMNS.map((column) => <TableHead key={column} className="whitespace-normal">{column}</TableHead>)}
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            {ROWS.map((row, index) => (
-                <TableRow key={row.company} data-state={row.selected ? "selected" : undefined}>
-                    <TableCell><Checkbox defaultChecked={row.selected} aria-label={`Select ${row.company}`} /></TableCell>
-                    <TableCell><span className="crm-company">{row.company}</span></TableCell>
-                    <TableCell>
-                        <span className="flex items-center gap-1">
-                            {row.tags.map((tag) => <Badge key={tag} variant="outline" data-tone={TAG_TONE[tag]}>{tag}</Badge>)}
-                        </span>
-                    </TableCell>
-                    <TableCell>
-                        <span className="flex items-center gap-2">
-                            <Person name={row.owner} />
-                            <span>{row.owner}</span>
-                        </span>
-                    </TableCell>
-                    <TableCell><span className="crm-number">{row.deals}</span></TableCell>
-                    <TableCell>
-                        <span className="crm-number flex items-center gap-1.5">
-                            <span className="crm-currency">$</span>
-                            <span>{row.value}</span>
-                        </span>
-                    </TableCell>
-                    <TableCell><WinMeter value={row.win} /></TableCell>
-                    <TableCell><Sparkline seed={index + 3} /></TableCell>
-                    <TableCell><LastInteraction date={row.date} label={row.touch} /></TableCell>
-                    <TableCell>
-                        <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.company}`}><MoreHorizontal /></Button>
-                    </TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    </Table>
+    <DataTable
+        columns={COLUMNS}
+        rows={ROWS}
+        rowId={(row) => row.company}
+        // Head labels may wrap: a system with larger type then narrows a column to its body content instead of pushing the table past the window.
+        wrapHeaders
+        selection={{
+            defaultSelected: ROWS.filter((row) => row.selected).map((row) => row.company),
+            selectAllLabel: "Select all",
+            selectRowLabel: (row) => `Select ${row.company}`,
+            width: SELECT_WIDTH,
+        }}
+    />
 );
 
 const SUMMARY = ["Sum of pipeline", "Avg win probability", "Add Calculation"];
 
 const TableSummary = () => (
-    <div className="crm-summary grid grid-cols-4">
-        <div className="crm-summary-cell flex items-center gap-2 px-3 py-2">
-            <span className="crm-summary-count crm-number">20</span>
-            <span>Companies in view</span>
-        </div>
-        {SUMMARY.map((label) => (
-            <div key={label} className="crm-summary-cell flex items-center gap-2.5 px-3 py-2">
-                <Plus />
-                <span>{label}</span>
-            </div>
-        ))}
-    </div>
+    <SummaryBar cells={[{ value: "20", label: "Companies in view" }, ...SUMMARY.map((label) => ({ icon: <Plus />, label }))]} />
 );
 
 export const CrmDashboard = () => (
     <div className="p-8">
         <NoMotion />
-        <div data-template="crm-dashboard" className="flex w-[1435px] overflow-hidden">
-            <style>{CRM_STYLE}</style>
+        <div data-template="crm-dashboard" className="flex w-[1435px] overflow-hidden rounded-[var(--radius-xl)] border border-border bg-background font-sans text-foreground antialiased">
             <SidebarProvider className="min-h-0" style={{ "--sidebar-width": "246px" } as CSSProperties}>
                 <CrmSidebar />
                 <SidebarInset className="min-w-0">
