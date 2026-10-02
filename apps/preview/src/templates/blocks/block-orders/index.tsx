@@ -1,7 +1,8 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-05/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider, sidebar, inset, bordered header with trigger, separator and breadcrumb — is
 // upstream's markup and classes with the store's breadcrumb labels; the body is the orders page (./orders).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks
+// (registry/blocks), which read system tokens through utilities, so the template has no stylesheet of its own.
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +21,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Orders, ORDERS_STYLE } from "./orders"
+import { Orders } from "./orders"
 
 export function BlockOrders() {
   return (
     <div data-template="block-orders">
       <NoMotion />
-      <style>{ORDERS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
