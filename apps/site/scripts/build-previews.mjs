@@ -77,8 +77,10 @@ const shareFonts = (name) =>
     }
 
     const names = new Set(fonts);
-    // A font url as Vite writes it for `--base=/preview/<name>/`, or in any other form (caught below).
-    const fontUrl = /[^"'()\s,]*?([\w.-]+\.(?:woff2?|ttf|otf))/g;
+    // A font url as Vite writes it for `--base=/preview/<name>/`, or in any other form (caught below). The
+    // lookbehind starts a match at the head of a url only: without it every character of a 1.7MB bundle
+    // begins its own scan to the end of the token around it, which is 12s for each system.
+    const fontUrl = /(?<![^"'()\s,])[^"'()\s,]*?([\w.-]+\.(?:woff2?|ttf|otf))/g;
     const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
         entry.isDirectory() ? walk(join(dir, entry.name)) : TEXT_FILE.test(entry.name) ? [join(dir, entry.name)] : []);
 
