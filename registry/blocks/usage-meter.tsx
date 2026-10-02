@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 
 import { Progress, ProgressLabel, ProgressValue } from "@tyohnn/components/progress";

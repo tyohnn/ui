@@ -39,7 +39,7 @@ export const ActivityFeed = ({
 }) => (
     <ItemGroup {...pendingFrame(loading)} className={cn("gap-0", className)}>
         {loading && Array.from({ length: loadingRows }, (_, index) => (
-            <Item key={index} size="xs" className="px-0">
+            <Item key={index} role="listitem" size="xs" className="px-0">
                 <ItemMedia>
                     <Avatar size="sm">
                         <AvatarFallback />
@@ -55,7 +55,7 @@ export const ActivityFeed = ({
             </Item>
         ))}
         {!loading && entries.map((entry) => (
-            <Item key={entry.id} size="xs" className="px-0">
+            <Item key={entry.id} role="listitem" size="xs" className="px-0">
                 <ItemMedia>
                     <Avatar size="sm">
                         {entry.image !== undefined && <AvatarImage src={entry.image} alt="" />}

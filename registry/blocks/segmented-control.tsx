@@ -4,8 +4,8 @@ import { type ReactNode, useState } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
 
-export type SegmentedOption = {
-    value: string;
+export type SegmentedOption<Value extends string = string> = {
+    value: Value;
     label: string;
     /** An icon before the label, with `data-icon="inline-start"` */
     icon?: ReactNode;
@@ -16,7 +16,7 @@ export type SegmentedOption = {
  * (board · list), a scope (all · mine). `label` names the group for assistive technology. The first option is on
  * until `value` or `defaultValue` says otherwise; for more than a handful of options use CompactSelect.
  */
-export const SegmentedControl = ({
+export const SegmentedControl = <Value extends string = string>({
     label,
     options,
     value,
@@ -25,10 +25,10 @@ export const SegmentedControl = ({
     className,
 }: {
     label: string;
-    options: readonly SegmentedOption[];
-    value?: string;
-    defaultValue?: string;
-    onValueChange?: (value: string) => void;
+    options: readonly SegmentedOption<Value>[];
+    value?: Value;
+    defaultValue?: Value;
+    onValueChange?: (value: Value) => void;
     className?: string;
 }) =>
 {
@@ -45,8 +45,8 @@ export const SegmentedControl = ({
             {
                 if (next[0] === undefined) return;
 
-                setOwn(String(next[0]));
-                onValueChange?.(String(next[0]));
+                setOwn(next[0] as Value);
+                onValueChange?.(next[0] as Value);
             }}
             aria-label={label}
             className={className}

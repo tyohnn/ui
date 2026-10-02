@@ -37,7 +37,7 @@ export const ActionItemList = ({
 }) => (
     <ItemGroup {...pendingFrame(loading)} className={cn("gap-2", className)}>
         {loading && Array.from({ length: count }, (_, index) => (
-            <Item key={index} size="sm" variant="outline">
+            <Item key={index} role="listitem" size="sm" variant="outline">
                 {items[index] !== undefined && <ItemMedia variant="icon">{items[index].icon}</ItemMedia>}
                 <ItemContent className="min-w-0">
                     <ItemTitle className="w-full min-w-0"><span className="block truncate"><PendingText length={20} /></span></ItemTitle>
@@ -48,7 +48,7 @@ export const ActionItemList = ({
             </Item>
         ))}
         {!loading && items.map((item) => (
-            <Item key={item.id} size="sm" variant="outline">
+            <Item key={item.id} role="listitem" size="sm" variant="outline">
                 <ItemMedia variant="icon">{item.icon}</ItemMedia>
                 <ItemContent className="min-w-0">
                     <ItemTitle className="w-full min-w-0"><span className="block truncate">{item.title}</span></ItemTitle>
