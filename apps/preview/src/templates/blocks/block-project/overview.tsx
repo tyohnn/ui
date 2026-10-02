@@ -43,7 +43,7 @@ const ProjectHead = () => (
         description="Rebuild of the Atlas field app for iOS and Android · owned by Priya Raman · started Dec 2, 2025"
         actions={(
             <>
-                <AvatarStack people={MEMBERS.map((member) => ({ initials: member.initials[0], name: member.name }))} max={MEMBERS.length} total={MEMBER_COUNT} />
+                <AvatarStack loading={LOADING} people={MEMBERS.map((member) => ({ initials: member.initials[0], name: member.name }))} max={MEMBERS.length} total={MEMBER_COUNT} />
                 <Button variant="outline" size="sm">
                     <Share data-icon="inline-start" />
                     Share
@@ -70,6 +70,8 @@ const TaskCard = () => (
         )}
     >
         <TaskList
+            loading={LOADING}
+            loadingRows={TASKS.length}
             tasks={TASKS.map((task) => ({
                 id: task.id,
                 title: task.title,
