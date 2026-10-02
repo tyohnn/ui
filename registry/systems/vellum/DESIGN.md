@@ -19,11 +19,10 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   document surface (`--background`, `--card`), and everything inside it is separated by a 1px hairline
   (`--border`) plus the one subtle inner ring cards and menus share. `--shadow-card` is empty; depth
   comes from the parchment/white step at the shell boundary, not from lift.
-- **Two weights of line**: the hairline (`--border`) separates, and it may stay faint because the
-  content on either side says where each part is. The edge of a field (`--input-border`) locates: it is
-  the only thing that says where a field starts, so it is ink at half strength and clears 3:1 against
-  every surface a field sits on (WCAG 1.4.11), in both modes. A form reads like a printed form — ruled
-  boxes on a page of faint rules.
+- **One weight of line**: the hairline draws everything — separators, table rules, card rings, and the
+  edge of every control. A field (Input, Select, Checkbox, Radio) wears the same edge as the outline
+  Button beside it, so a toolbar of fields and buttons reads as one family. See "Known deviation" below
+  for what that costs.
 - **Density**: 32px controls with 13px text — a step taller than mira, because the controls sit in a
   document and want to be comfortable. The table goes the other way: a 36px head, 7px cell padding, and
   rows that size to their content.
@@ -48,7 +47,6 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 | `--chart-1` … `--chart-5` | `oklch(0.4 0.05 192)` → `oklch(0.74 0.05 192)`, 0.085 L apart | one teal ramp, strongest first (dark: `0.72` → `0.44`, brightest first); the faintest step is still 2.2:1 on the page |
 | `--sidebar` | `oklch(0.982 0.005 80)` | the parchment shell: the rail, and the gutter around an inset |
 | `--checked` | `oklch(0.215 0.004 70)` | a checked box is ink, not teal |
-| `--input-border` · `--checkbox-border` · `--switch-track-off` | `color-mix(in oklab, var(--foreground) 50%, var(--background))` | the edge of a field, half-strength ink: 3.8:1 on the page in light, 4.0:1 in dark (the hairline is 1.3 and 1.5) |
 | `--control-height-md` | `32px` | comfortable controls (mira: 28) |
 | `--table-head-height-default` | `36px` | tight rows (mira: 40) |
 | `--tag-radius` · `--badge-radius` | `6px` | a label is a small rounded rectangle, never a pill |
@@ -63,11 +61,10 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   column of forty avatars reads as texture, not confetti.
 - **One teal per view.** If focus, a link and a chart series are all on screen, that is already three
   places the teal appears; do not add a fourth by tinting a surface with it.
-- **The field edge is for what a person fills in.** Input, Textarea, Select, Native Select, Input Group,
-  Input OTP, the Combobox chip box, Checkbox, Radio and the off Switch read it. A button does not: the
-  outline Button and the outline Toggle keep the hairline, because their label is what identifies them
-  and a page of dark-edged buttons would compete with the fields. An invalid field keeps the same weight
-  in red (`--border-invalid` is the full `--destructive` in both modes).
+- **Fields and outline buttons share one edge.** `--input` equals `--border` in light and sits one step
+  above it in dark; `--input-border` and `--checkbox-border` are not set, so every field falls back to
+  `--input`. Do not darken one without the other: a dark-edged select next to a hairline button is the
+  mismatch this rule exists to prevent.
 - **The chart ramp says order, never kind.** Use `--chart-1..5` where swapping the items would change
   the meaning — funnel stages, tiers, age bands, this period against the last — or as one colour
   (`--chart-1`) for a single series. Nominal bars (channels, teams, accounts) all take `--chart-1`; the
@@ -86,15 +83,26 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   every focus ring on the page.
 - Do not turn labels back into pills (`9999px`). The 6px rectangle is a system-wide voice — badges,
   tags and the select chips all share it.
-- Do not draw a field with the hairline, and do not rule the page with the field edge. Setting
-  `--input-border` back to `--border` makes a form on white paper invisible (1.3:1); using the field edge
-  for separators, table rules or card rings turns the document into a grid of boxes.
 - Do not add hues to tell chart series apart, and do not borrow the tag tones or the status colours for
   them. A tag tone is a soft plate, not a mark, and a status colour already means something. If a chart
   needs more than two series in one plot, it is several charts.
 - Do not tint the document surface to match the shell. The parchment belongs to the rail and the
   gutter; the moment the reading surface goes warm, the page loses the plane that says "this is the
   document". In dark mode the same split holds, one step deeper: the rail sits below the page, not above.
+
+## Known deviation
+
+The edge of a field measures 1.3:1 against the page in light and 1.6:1 in dark (the fill, 1.05:1). WCAG
+1.4.11 asks 3:1 of a component's boundary when the boundary is the only thing that identifies it, which
+is the case for an empty input and an unchecked box. vellum does not meet it, on purpose: on white, 3:1
+means a mid-grey edge (`#949494` or darker), and a field drawn that way no longer belongs with the
+hairline buttons and rules around it. This is the common trade — shadcn's presets make the same one.
+
+A product that has to pass 1.4.11 sets the edge in its own CSS, after the system's:
+`--input-border: color-mix(in oklab, var(--foreground) 50%, var(--background))` (3.8:1 light, 4.0:1
+dark) and `--checkbox-border: var(--input-border)`. Radio, Input OTP, the Combobox chip box and the
+sidebar search field read `--input` directly and need a rule of their own; `reference/README.md` has the
+list.
 
 ## Files
 

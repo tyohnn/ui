@@ -33,10 +33,8 @@
     width: var(--control-height-md);
     height: var(--control-height-md);
 
-    /* vellum: the field edge slot Input reads (foundation reads --input here and has no slot;
-       reference/README.md → Foundation slot candidates). */
-    border-block: var(--control-border-width) solid var(--input-border, var(--input));
-    border-inline-end: var(--control-border-width) solid var(--input-border, var(--input));
+    border-block: var(--control-border-width) solid var(--input);
+    border-inline-end: var(--control-border-width) solid var(--input);
     background-color: var(--input-fill);
     font-size: var(--control-font-size-md);
     line-height: var(--control-line-height-md);
@@ -47,7 +45,7 @@
     transition-timing-function: var(--control-ease);
 
     &:first-child {
-        border-inline-start: var(--control-border-width) solid var(--input-border, var(--input));
+        border-inline-start: var(--control-border-width) solid var(--input);
         border-start-start-radius: var(--control-radius);
         border-end-start-radius: var(--control-radius);
     }

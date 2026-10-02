@@ -85,9 +85,7 @@
     height: var(--sidebar-input-height);
     /* mira: bg-muted/20 dark:bg-muted/30 border-input */
     background-color: var(--sidebar-input-fill);
-    /* vellum: the field edge slot Input reads (foundation reads --input here and has no slot;
-       reference/README.md → Foundation slot candidates). */
-    border-color: var(--input-border, var(--input));
+    border-color: var(--input);
     @apply w-full;
 }
 
