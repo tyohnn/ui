@@ -74,6 +74,8 @@ const AutomationFragment = () => (
         </CardHeader>
         <CardContent>
             <RuleSteps
+                loading={LOADING}
+                count={3}
                 steps={[
                     { id: "when", keyword: <Badge variant="secondary">When</Badge>, parts: ["Status changes to", <Badge variant="outline"><Check data-icon="inline-start" />Done</Badge>] },
                     { id: "if", keyword: <Badge variant="secondary">If</Badge>, parts: ["Label is", <Badge variant="outline">customer-facing</Badge>] },

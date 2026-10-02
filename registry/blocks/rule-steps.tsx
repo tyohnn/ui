@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from "react";
 
 import { Badge } from "@tyohnn/components/badge";
 import { BODY } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type RuleStep = {
@@ -32,7 +32,7 @@ export const RuleSteps = ({
 }) => (
     <div {...pendingFrame(loading)} className={cn("flex flex-col gap-2", className)}>
         {loading && Array.from({ length: count }, (_, index) => (
-            <div key={index} className="flex flex-wrap items-center gap-2 rounded-[var(--radius-lg)] border border-border bg-muted px-3 py-2">
+            <div key={index} className={cn("flex flex-wrap items-center gap-2 rounded-[var(--radius-lg)] border border-border bg-muted px-3 py-2", BARS_ON_MUTED)}>
                 <Badge variant="outline"><PendingText length={4} /></Badge>
                 <span className={BODY}><PendingText length={28} /></span>
             </div>
