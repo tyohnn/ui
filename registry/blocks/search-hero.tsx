@@ -9,6 +9,7 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGr
 import { Kbd } from "@tyohnn/components/kbd";
 import { LEAD, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 /**
  * The band at the top of a help center or a directory, centred on one large search field: a status badge, the
@@ -19,10 +20,10 @@ export const SearchHero = ({
     status,
     title,
     description,
-    searchLabel,
+    searchLabel = strings.blocks.search.label,
     placeholder,
     shortcut,
-    submitLabel,
+    submitLabel = strings.blocks.search.submit,
     suggestionsLabel,
     suggestions,
     value,
@@ -35,11 +36,11 @@ export const SearchHero = ({
     title: ReactNode;
     description?: ReactNode;
     /** Names the field for assistive technology */
-    searchLabel: string;
+    searchLabel?: string;
     placeholder?: string;
     /** The keys that focus the field ("⌘ K") */
     shortcut?: string;
-    submitLabel: string;
+    submitLabel?: string;
     /** What the suggestions are ("Popular:") */
     suggestionsLabel?: string;
     suggestions?: readonly string[];

@@ -9,6 +9,7 @@ import { ButtonGroup } from "@tyohnn/components/button-group";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { TITLE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 /**
  * The bar over a calendar view: a button back to today, previous and next, the range on show as the title with a
@@ -16,15 +17,15 @@ import { cn } from "@tyohnn/lib/utils";
  * action. Every word is the caller's: the button labels, the range and the names of the views.
  */
 export const CalendarToolbar = ({
-    todayLabel,
-    previousLabel,
-    nextLabel,
+    todayLabel = strings.blocks.calendar.today,
+    previousLabel = strings.blocks.calendar.previous,
+    nextLabel = strings.blocks.calendar.next,
     range,
     badge,
     tools,
     views,
     defaultView,
-    viewsLabel,
+    viewsLabel = strings.blocks.calendar.views,
     action,
     onToday,
     onPrevious,
@@ -32,10 +33,11 @@ export const CalendarToolbar = ({
     onViewChange,
     className,
 }: {
-    todayLabel: string;
+    /** The button back to today; the locale's own word when left out */
+    todayLabel?: string;
     /** Names for the two arrow buttons ("Previous week", "Next week") */
-    previousLabel: string;
-    nextLabel: string;
+    previousLabel?: string;
+    nextLabel?: string;
     /** The dates on show, already formatted ("Jan 11 – 17, 2026") */
     range: ReactNode;
     /** A badge after the range: the week number */
@@ -65,7 +67,7 @@ export const CalendarToolbar = ({
         <div className="ml-auto flex flex-wrap items-center gap-2">
             {tools}
             {views !== undefined && (
-                <SegmentedControl label={viewsLabel ?? ""} options={views} defaultValue={defaultView} onValueChange={onViewChange} />
+                <SegmentedControl label={viewsLabel} options={views} defaultValue={defaultView} onValueChange={onViewChange} />
             )}
             {action}
         </div>

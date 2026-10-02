@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import { MoreHorizontal } from "@tyohnn/icons";
 
 import { Button } from "@tyohnn/components/button";
+import { strings } from "@tyohnn/strings";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,9 +19,9 @@ export type RowMenuItem = { label: string; variant?: "default" | "destructive"; 
 
 /**
  * The actions of one row behind a "more" button. `groups` are separated by a divider; put what cannot be undone
- * in the last group as `destructive`. `label` names the button for the row it belongs to ("Actions for #1042").
+ * in the last group as `destructive`. `label` names the button for the row it belongs to ("Actions for #1042"); the locale's own words when left out.
  */
-export const RowMenu = ({ label, groups }: { label: string; groups: readonly (readonly RowMenuItem[])[] }) => (
+export const RowMenu = ({ label = strings.blocks.rowMenu.label, groups }: { label?: string; groups: readonly (readonly RowMenuItem[])[] }) => (
     <DropdownMenu>
         <DropdownMenuTrigger render={<Button variant="ghost" size="icon-xs" aria-label={label} />}>
             <MoreHorizontal />

@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupTextarea } from "@tyohnn/components/input-group";
 import { Kbd } from "@tyohnn/components/kbd";
 import { AttachmentList, type AttachmentFile } from "@tyohnn/blocks/attachment-list";
+import { strings } from "@tyohnn/strings";
 
 export type PromptInputTool = { label: string; icon: ReactNode; onClick?: () => void };
 
@@ -14,7 +15,7 @@ export type PromptInputTool = { label: string; icon: ReactNode; onClick?: () => 
  * the send button. `label` names the text field for assistive technology.
  */
 export const PromptInput = ({
-    label,
+    label = strings.blocks.prompt.label,
     value,
     defaultValue,
     onValueChange,
@@ -26,7 +27,7 @@ export const PromptInput = ({
     send,
     className,
 }: {
-    label: string;
+    label?: string;
     value?: string;
     defaultValue?: string;
     onValueChange?: (value: string) => void;
@@ -37,7 +38,7 @@ export const PromptInput = ({
     status?: ReactNode;
     /** The keys that send, in a Kbd */
     shortcut?: ReactNode;
-    send: { label: string; icon: ReactNode; onClick?: () => void };
+    send: { label?: string; icon: ReactNode; onClick?: () => void };
     className?: string;
 }) => (
     <InputGroup className={className}>
@@ -59,7 +60,7 @@ export const PromptInput = ({
             {status !== undefined && <InputGroupText className="ml-1">{status}</InputGroupText>}
             <span className="ml-auto flex items-center gap-2">
                 {shortcut !== undefined && <InputGroupText><Kbd>{shortcut}</Kbd></InputGroupText>}
-                <InputGroupButton size="icon-xs" variant="default" aria-label={send.label} onClick={send.onClick}>{send.icon}</InputGroupButton>
+                <InputGroupButton size="icon-xs" variant="default" aria-label={send.label ?? strings.blocks.prompt.send} onClick={send.onClick}>{send.icon}</InputGroupButton>
             </span>
         </InputGroupAddon>
     </InputGroup>
