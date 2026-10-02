@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { Field, FieldLabel } from "@tyohnn/components/field";
 import { Switch } from "@tyohnn/components/switch";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -13,6 +14,8 @@ import { cn } from "@tyohnn/lib/utils";
  *
  * The hint is cut with an ellipsis before it reaches the switch: its width is capped at a little over half the
  * row, so a wider typeface or a fallback font never pushes its last word under the switch.
+ *
+ * `loading` keeps the words and draws the switch disabled and off: whether it is on is what it waits for.
  */
 export const SwitchRow = ({
     id,
@@ -22,6 +25,7 @@ export const SwitchRow = ({
     defaultChecked,
     onCheckedChange,
     disabled,
+    loading,
 }: {
     id: string;
     label: ReactNode;
@@ -30,10 +34,12 @@ export const SwitchRow = ({
     defaultChecked?: boolean;
     onCheckedChange?: (checked: boolean) => void;
     disabled?: boolean;
+    loading?: boolean;
 }) => (
-    <Field orientation="horizontal">
+    <Field {...pendingFrame(loading)} orientation="horizontal">
         <FieldLabel htmlFor={id}>{label}</FieldLabel>
         {hint !== undefined && <span className={cn(NOTE, "max-w-[56%] min-w-0 flex-[0_1_auto] truncate text-right")}>{hint}</span>}
-        <Switch id={id} checked={checked} defaultChecked={defaultChecked} onCheckedChange={onCheckedChange} disabled={disabled} />
+        {/* The key: a switch that waited off takes its value when it arrives. */}
+        <Switch key={loading ? "pending" : "value"} id={id} checked={loading ? false : checked} defaultChecked={defaultChecked} onCheckedChange={onCheckedChange} disabled={loading || disabled} />
     </Field>
 );
