@@ -1,7 +1,8 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-09/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider with its 350px sidebar width, sidebar, inset, sticky header with
 // trigger, separator and breadcrumb — is upstream's markup and classes; the body is the mail reader (./reader).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks
+// (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +21,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Reader, READER_STYLE } from "./reader"
+import { Reader } from "./reader"
 
 export function BlockInbox() {
   return (
     <div data-template="block-inbox">
       <NoMotion />
-      <style>{READER_STYLE}</style>
       <SidebarProvider
         style={
           {
