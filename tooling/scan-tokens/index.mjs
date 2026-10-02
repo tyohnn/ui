@@ -3,7 +3,7 @@
 // Checks foundation and every registry/systems/* folder on its own files (systems are snapshots;
 // nothing is composed):
 //   1. undefined       a var() (or Tailwind shorthand such as text-(color:--x)) read by the system's
-//                      styles, registry/ui or apps/preview that no top-level :root/.dark of the
+//                      styles, registry/ui, registry/blocks or apps/preview that no top-level :root/.dark of the
 //                      system's globals.css / tokens.css defines and nothing declares locally
 //                      (a ChartConfig key's runtime --color-<key> counts as declared)             → FAIL
 //   2. palette         a theme colour (packages/theme PALETTE) the system's layer 1 lacks, in either
@@ -187,7 +187,7 @@ const chartColorNames = (paths) =>
 
 const foundationTokens = tokenScopes(foundationRoot);
 const uiComponents = readdirSync(join(uiRoot, "components")).filter((file) => file.endsWith(".tsx")).map((file) => basename(file, ".tsx"));
-const sharedReaders = [...collect(uiRoot), ...collect(join(repoRoot, "apps/preview/src"))];
+const sharedReaders = [...collect(uiRoot), ...collect(join(repoRoot, "registry/blocks")), ...collect(join(repoRoot, "apps/preview/src"))];
 const CHART_COLORS = chartColorNames(sharedReaders);
 const isExternal = (name) => EXTERNAL_NAMES.has(name) || CHART_COLORS.has(name) || EXTERNAL_PREFIXES.some((prefix) => name.startsWith(prefix));
 

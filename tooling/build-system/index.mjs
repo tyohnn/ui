@@ -4,7 +4,7 @@
 //   dist/systems/<name>/compiled.css  Tailwind CLI output
 //
 // Fixed order: tailwindcss → globals (layer 1) → tokens (layer 2) → typeset → style.css in layer(base).
-// Tailwind scans registry/ui and apps/preview only.
+// Tailwind scans registry/ui, registry/blocks and apps/preview only.
 //
 // Usage: node tooling/build-system <name>… | --all   (`foundation` is a valid name; --all includes it)
 
@@ -20,6 +20,7 @@ const require = createRequire(import.meta.url);
 
 export const SOURCES = [
     join(repoRoot, "registry/ui"),
+    join(repoRoot, "registry/blocks"),
     join(repoRoot, "apps/preview/src"),
     join(repoRoot, "apps/preview/index.html"),
 ];
