@@ -15,7 +15,7 @@ export const SummaryBar = ({ cells, className }: { cells: readonly SummaryCell[]
         style={{ gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}
     >
         {cells.map((cell) => (
-            <div key={cell.label} className={cn("flex items-center border-s border-border px-3 py-2 first:border-s-0 [&_svg]:size-[12px]", cell.value === undefined ? "gap-2.5" : "gap-2")}>
+            <div key={cell.label} className={cn("flex items-center border-s border-border px-3 py-2 first:border-s-0 [&_svg]:size-[var(--control-icon-size-sm)]", cell.value === undefined ? "gap-2.5" : "gap-2")}>
                 {cell.value === undefined ? cell.icon : <span className={cn(FIGURE, "text-foreground")}>{cell.value}</span>}
                 <span>{cell.label}</span>
             </div>

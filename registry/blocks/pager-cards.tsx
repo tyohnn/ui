@@ -17,7 +17,7 @@ export type PagerPage = {
 export const PagerCards = ({ previous, next, className }: { previous?: PagerPage; next?: PagerPage; className?: string }) => (
     <div className={cn("grid gap-3 sm:grid-cols-2", className)}>
         {previous !== undefined && (
-            <Card size="sm" className="[&_svg]:size-[14px]">
+            <Card size="sm" className="[&_svg]:size-[var(--control-icon-size-md)]">
                 <CardHeader>
                     <CardDescription className="flex items-center gap-1.5"><ArrowLeft />{previous.label ?? strings.blocks.pager.previous}</CardDescription>
                     <CardTitle>{previous.title}</CardTitle>
@@ -26,7 +26,7 @@ export const PagerCards = ({ previous, next, className }: { previous?: PagerPage
             </Card>
         )}
         {next !== undefined && (
-            <Card size="sm" className="text-end [&_svg]:size-[14px]">
+            <Card size="sm" className="text-end [&_svg]:size-[var(--control-icon-size-md)]">
                 <CardHeader>
                     <CardDescription className="flex items-center justify-end gap-1.5">{next.label ?? strings.blocks.pager.next}<ArrowRight /></CardDescription>
                     <CardTitle>{next.title}</CardTitle>

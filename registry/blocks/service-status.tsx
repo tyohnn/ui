@@ -19,7 +19,7 @@ export const ServiceStatus = ({ services, className }: { services: readonly Serv
         {services.map((service) => (
             <div key={service.name} className="flex items-center justify-between gap-2">
                 <span className={ROW_LABEL}>{service.name}</span>
-                <span className={cn("flex items-center gap-1.5 text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[14px] [&_svg]:shrink-0", STATE[service.state])}>
+                <span className={cn("flex items-center gap-1.5 text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0", STATE[service.state])}>
                     {service.state === "ok" ? <CircleCheck /> : <TriangleAlert />}
                     {service.label}
                 </span>

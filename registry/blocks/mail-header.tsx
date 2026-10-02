@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
-import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { HEADING_LG, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -32,7 +32,7 @@ export const MailHeader = ({
 }) => (
     <div className={cn("flex flex-col gap-4", className)}>
         <div className="flex flex-wrap items-start justify-between gap-3">
-            <h1 className="min-w-0 font-heading text-[length:calc(var(--ui-text-lg)*1.3)] leading-[1.3] font-semibold text-foreground">{subject}</h1>
+            <h1 className={cn("min-w-0 text-foreground", HEADING_LG)}>{subject}</h1>
             {aside !== undefined && <div className="flex items-center gap-1.5">{aside}</div>}
         </div>
         <div className="flex items-start gap-3">

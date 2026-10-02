@@ -8,5 +8,5 @@ import { cn } from "@tyohnn/lib/utils";
  * with. For a one-line figure that lines up with others (a count, an expiry) use IconMeta.
  */
 export const IconNote = ({ icon, children, className }: { icon: ReactNode; children: ReactNode; className?: string }) => (
-    <span className={cn(NOTE, "flex items-center gap-1 [&_svg]:size-[14px] [&_svg]:shrink-0", className)}>{icon}{children}</span>
+    <span className={cn(NOTE, "flex items-center gap-1 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0", className)}>{icon}{children}</span>
 );

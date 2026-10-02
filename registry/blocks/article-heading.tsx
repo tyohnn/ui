@@ -12,6 +12,6 @@ export const ArticleHeading = ({ eyebrow, title, lead, meta }: { eyebrow?: React
         {eyebrow !== undefined && <p className={cn("m-0", NOTE)}>{eyebrow}</p>}
         <h1 className={eyebrow === undefined ? undefined : "mt-1"}>{title}</h1>
         {lead !== undefined && <p className="text-muted-foreground">{lead}</p>}
-        {meta !== undefined && <div className={cn("not-typeset mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 [&_svg]:size-[14px]", NOTE)}>{meta}</div>}
+        {meta !== undefined && <div className={cn("not-typeset mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 [&_svg]:size-[var(--control-icon-size-md)]", NOTE)}>{meta}</div>}
     </>
 );

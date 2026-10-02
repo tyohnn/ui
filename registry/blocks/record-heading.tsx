@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { HEADING_LG } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -24,7 +25,7 @@ export const RecordHeading = ({
 }) => (
     <div className={cn("flex flex-wrap items-start justify-between gap-x-6 gap-y-3", className)}>
         <div className="flex min-w-0 flex-col gap-2">
-            <h1 className="m-0 text-[length:calc(var(--ui-text-lg)*1.25)] leading-[1.3] font-semibold">
+            <h1 className={cn("m-0", HEADING_LG)}>
                 {title} {number !== undefined && <span className="font-normal text-muted-foreground">{number}</span>}
             </h1>
             {status !== undefined && <div className="flex flex-wrap items-center gap-2">{status}</div>}
