@@ -4,6 +4,7 @@ import { TrendingDown, TrendingUp } from "@tyohnn/icons";
 
 import { Badge } from "@tyohnn/components/badge";
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { FIGURE, META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 
@@ -20,10 +21,35 @@ export type Metric = {
 /**
  * A row of small metric cards: label, figure, the change as a trend badge and one line of context.
  * `changeVariant` picks the badge the change is written in: outlined, or filled where the cards are the page's subject.
+ * `loading` draws `count` cards with bars for the label, the figure and the note.
  */
-export const MetricCards = ({ metrics, changeVariant = "outline", className }: { metrics: readonly Metric[]; changeVariant?: "outline" | "secondary"; className?: string }) => (
-    <div className={cn("grid grid-cols-2 gap-4 xl:grid-cols-4", className)}>
-        {metrics.map((metric) =>
+export const MetricCards = ({
+    metrics = [],
+    changeVariant = "outline",
+    loading,
+    count = 4,
+    className,
+}: {
+    metrics?: readonly Metric[];
+    changeVariant?: "outline" | "secondary";
+    loading?: boolean;
+    /** How many cards to draw while loading */
+    count?: number;
+    className?: string;
+}) => (
+    <div {...pendingFrame(loading)} className={cn("grid grid-cols-2 gap-4 xl:grid-cols-4", className)}>
+        {loading && Array.from({ length: count }, (_, index) => (
+            <Card key={index} size="sm">
+                <CardHeader>
+                    <CardDescription><PendingText length={12} /></CardDescription>
+                    <CardTitle className={FIGURE}><PendingText length={7} /></CardTitle>
+                </CardHeader>
+                <CardFooter>
+                    <span className={META}><PendingText length={22} /></span>
+                </CardFooter>
+            </Card>
+        ))}
+        {!loading && metrics.map((metric) =>
         {
             const TrendIcon = metric.trend === "down" ? TrendingDown : TrendingUp;
 
