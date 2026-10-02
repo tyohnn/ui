@@ -378,6 +378,16 @@ const tokenDeclarations = (file: string): Map<string, string> =>
     return rows;
 };
 
+// The CSS minifier writes a plain fallback for every `color-mix(in <space>, <first colour> …)` it finds (inside @supports
+// for the mix itself), and that fallback is the first colour. It belongs to the system that declared the mix, but it can
+// equal another system's declaration (graphite's dark --canvas mix → `--canvas: var(--background)`, which mira declares).
+const colorMixFallback = (text: string): string | undefined =>
+{
+    const found = /^(--[A-Za-z0-9_-]+)\s*:\s*color-mix\(\s*in\s+[a-z0-9 ]+,\s*(var\([^()]*\)|#[0-9a-f]{3,8}|[a-z]+\([^()]*\)|[a-z]+)(?:\s+[\d.]+%)?\s*,/i.exec(text);
+
+    return found ? normalise(`${found[1]}:${found[2]}`) : undefined;
+};
+
 const builtCheck = (root: string, record: NonNullable<ReturnType<typeof readRecord>>, appPath: string, add: (level: Level, where: string, message: string) => void) =>
 {
     const app = record.apps[appPath];
@@ -394,6 +404,14 @@ const builtCheck = (root: string, record: NonNullable<ReturnType<typeof readReco
     const output = normalise(cssFiles.map(read).join("\n"));
     const declarations = (system: string) => new Map(["globals.css", "tokens.css"].flatMap((file) => [...tokenDeclarations(join(placement.systemDir(system), file))]));
     const own = declarations(app.system);
+
+    for (const text of [...own.values()])
+    {
+        const fallback = colorMixFallback(text);
+
+        if (fallback) own.set(fallback, text);
+    }
+
     const others = record.ui.systems.filter((name) => name !== app.system);
     const foreign = new Map(others.flatMap((name) => [...declarations(name)]));
     const leaked = [...foreign].filter(([key]) => !own.has(key) && output.includes(key));
