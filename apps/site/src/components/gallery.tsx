@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { CATEGORIES, DEFAULT_SCREEN, previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
+import { useLocale } from "./locale-provider";
 import { ScaledFrame } from "./scaled-frame";
 
 type Sort = "newest" | "az";
@@ -18,6 +19,7 @@ const STAGGER_MS = 35;
  */
 export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 {
+    const { t, labels, href } = useLocale();
     const [screen, setScreen] = useState<string>(DEFAULT_SCREEN);
     const [sort, setSort] = useState<Sort>("newest");
     const [flipping, setFlipping] = useState(false);
@@ -45,18 +47,19 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
     return (
         <>
             <div className="section-head" id="systems">
-                <h2>Pick a screen.<br />Every system follows.</h2>
+                <h2>{t.gallery.titleFirst}<br />{t.gallery.titleSecond}</h2>
                 <div className="gallery-side">
                     <p>
-                        {spell(CATEGORIES.reduce((count, category) => count + category.screens.length, 0))} product screens — a CRM and
-                        {" "}{spell(CATEGORIES.reduce((count, category) => count + category.screens.filter((item) => item.block).length, 0)).toLowerCase()} built
-                        on shadcn&apos;s sidebar blocks. One click switches every card together.
+                        {t.gallery.body(
+                            CATEGORIES.reduce((count, category) => count + category.screens.length, 0),
+                            CATEGORIES.reduce((count, category) => count + category.screens.filter((item) => item.block).length, 0),
+                        )}
                     </p>
                     <div className="sortbar">
-                        <span className="eyebrow">{systems.length} systems</span>
-                        <span className="seg" role="group" aria-label="Order">
-                            <button type="button" aria-pressed={sort === "newest"} onClick={() => setSort("newest")}>Newest</button>
-                            <button type="button" aria-pressed={sort === "az"} onClick={() => setSort("az")}>A–Z</button>
+                        <span className="eyebrow">{t.gallery.count(systems.length)}</span>
+                        <span className="seg" role="group" aria-label={t.gallery.orderLabel}>
+                            <button type="button" aria-pressed={sort === "newest"} onClick={() => setSort("newest")}>{t.gallery.newest}</button>
+                            <button type="button" aria-pressed={sort === "az"} onClick={() => setSort("az")}>{t.gallery.alphabetical}</button>
                         </span>
                     </div>
                 </div>
@@ -64,16 +67,16 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 
             <div className="chipbar">
                 {CATEGORIES.map((category) => (
-                    <div key={category.id} className="chiprow" role="group" aria-label={category.label}>
-                        <span className="group">{category.label}</span>
+                    <div key={category.id} className="chiprow" role="group" aria-label={labels.category(category.id, category.label)}>
+                        <span className="group">{labels.category(category.id, category.label)}</span>
                         {category.screens.map((item) => (
                             <button key={item.id} type="button" className="chip" aria-pressed={item.id === screen} onClick={() => choose(item.id)}>
-                                {item.label}
+                                {labels.screen(item.id, item.label)}
                             </button>
                         ))}
                     </div>
                 ))}
-                <div className="chip-foot">Components, icons and every state are on <Link href="/components">Components →</Link></div>
+                <div className="chip-foot">{t.gallery.chipFoot((label) => <Link href={href("/components")}>{label}</Link>)}</div>
             </div>
 
             <div className="grid">
@@ -84,14 +87,14 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                     return (
                         <Link
                             key={system.name}
-                            href={`/systems/${system.name}`}
+                            href={href(`/systems/${system.name}`)}
                             className={["card", featured ? "featured" : "", flipping ? "flip" : ""].filter(Boolean).join(" ")}
                             style={{ transitionDelay: `${position * STAGGER_MS}ms` }}
                         >
                             <div className="card-shot">
                                 <ScaledFrame
                                     src={previewUrl(system.name, screen, system.defaultMode)}
-                                    title={`${system.name}: ${entry.label}`}
+                                    title={`${system.name}: ${labels.screen(entry.id, entry.label)}`}
                                     width={entry.viewport.width}
                                     height={entry.viewport.height}
                                 />
@@ -99,25 +102,20 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                             <div className="card-body">
                                 <div className="card-title">
                                     <h3 style={{ fontFamily: system.nameFont }}>{system.name}</h3>
-                                    <span className="tag">{system.defaultMode}</span>
-                                    {system.name === newest && <span className="tag new">New</span>}
-                                    <span className="open">Open →</span>
+                                    <span className="tag">{t.modeTag[system.defaultMode]}</span>
+                                    {system.name === newest && <span className="tag new">{t.gallery.isNew}</span>}
+                                    <span className="open">{t.gallery.open}</span>
                                 </div>
                                 <div className="card-spec">{system.tagline}</div>
                             </div>
                         </Link>
                     );
                 })}
-                <Link href="/compare" className="all-tile">
-                    <b>Compare two →</b>
-                    <span>Any two of {systems.length} systems, side by side</span>
+                <Link href={href("/compare")} className="all-tile">
+                    <b>{t.gallery.compareTitle}</b>
+                    <span>{t.gallery.compareBody(systems.length)}</span>
                 </Link>
             </div>
         </>
     );
 };
-
-const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"];
-
-/** 17 → "Seventeen" (numbers past twenty stay digits) */
-const spell = (value: number) => WORDS[value] ?? String(value);

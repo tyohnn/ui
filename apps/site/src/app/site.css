@@ -13,8 +13,9 @@
     --fg-2: #a3a5ab;
     --fg-3: #6b6e75;
     --glow: #b9c2ff;
-    --display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist Variable", "Helvetica Neue", Arial, sans-serif;
+    /* Pretendard sits after each Latin face: Latin text is unchanged, and Hangul (which these faces lack) is drawn in it. */
+    --display: "Bricolage Grotesque Variable", "Pretendard Variable", "Helvetica Neue", Arial, sans-serif;
+    --body: "Geist Variable", "Pretendard Variable", "Helvetica Neue", Arial, sans-serif;
     --mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
     color-scheme: dark;
 }
@@ -46,6 +47,8 @@ iframe { display: block; border: 0; }
 .nav-links { display: flex; gap: 28px; color: var(--fg-2); font-size: 14px; }
 .nav-links a:hover, .nav-links .on { color: var(--fg); }
 .nav-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+.lang-switch { font-size: 13px; line-height: 1.5; color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.lang-switch:hover { color: var(--fg); border-color: var(--line-strong); }
 
 .cmd { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 13px; color: var(--fg); background: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 8px 8px 8px 16px; white-space: nowrap; }
 .cmd .dollar { color: var(--fg-3); }
@@ -86,7 +89,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .dots { display: flex; gap: 6px; }
 .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-3); }
 .stage-bar .path { font-family: var(--mono); color: var(--fg-2); }
-.stage-bar .pause { margin-left: auto; font-family: var(--mono); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.stage-bar .pause { margin-left: auto; white-space: nowrap; font-family: var(--mono); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
 .stage-bar .pause:hover { color: var(--fg); }
 .stage-shot { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 1435 / 760; }
 .stage-shot .layer-frame { position: absolute; inset: 0; transition: opacity 0.6s ease; }
@@ -231,6 +234,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .masonry { display: flex; flex-direction: column; gap: 20px; }
 .ccard { background: var(--ink-1); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; scroll-margin-top: 24px; }
 .ccard-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.ccard-top .sid { font-family: var(--mono); font-size: 11px; color: var(--fg-3); margin-right: auto; margin-left: 8px; }
 .ccard-top b { font-family: var(--mono); font-size: 13px; font-weight: 500; }
 .ccard-top .tag { margin-left: auto; }
 .ccard-top .pop { color: var(--glow); border-color: rgba(185, 194, 255, 0.35); }
@@ -358,7 +362,10 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .wrap { padding-inline: 16px; }
     .nav { gap: 16px; }
     .nav-links { gap: 14px; overflow-x: auto; }
-    .nav-right { display: none; }
+    .nav-right .cmd { display: none; }
+    .nav-links { min-width: 0; flex: 1 1 auto; }
+    .nav-right { margin-left: 0; }
+    .lang-switch { font-size: 12px; padding: 4px 10px; }
     .hero h1, .page-head h1, .doc h1 { font-size: 60px; }
     .comp-head h1 { font-size: 52px; }
     .section-head h2, .install h2, .cat-head h2 { font-size: 40px; }
@@ -456,3 +463,30 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .th-undo:hover { color: var(--glow); }
 .th-clear { font-family: var(--sans); font-size: 11px; text-transform: none; letter-spacing: 0; color: var(--glow); border: 1px solid rgba(185, 194, 255, 0.35); border-radius: 999px; padding: 2px 10px; }
 .th-clear:hover { background: rgba(185, 194, 255, 0.12); }
+
+/* KOREAN (html lang="ko"). Hangul fills its em box where Latin does not, so the headline sizes come down a step and
+   the negative tracking that tightens Latin display type eases; lines break between words, not inside them. */
+html:lang(ko) body { word-break: keep-all; overflow-wrap: break-word; line-height: 1.6; }
+html:lang(ko) h1, html:lang(ko) h2, html:lang(ko) h3, html:lang(ko) h4 { line-height: 1.2; word-break: keep-all; }
+html:lang(ko) .eyebrow, html:lang(ko) .chiprow .group, html:lang(ko) .igroup h4, html:lang(ko) .th-panel h4, html:lang(ko) .diff .k,
+html:lang(ko) .dtable .row:first-child > div, html:lang(ko) .combo-group, html:lang(ko) .combo-trigger .lbl, html:lang(ko) .picker .lbl { letter-spacing: 0.02em; }
+html:lang(ko) .hero h1 { font-size: 104px; line-height: 1.05; letter-spacing: -0.04em; }
+html:lang(ko) .section-head h2 { font-size: 48px; line-height: 1.2; letter-spacing: -0.03em; }
+html:lang(ko) .layer h3, html:lang(ko) .meta h3 { font-size: 22px; letter-spacing: -0.02em; line-height: 1.3; }
+html:lang(ko) .install h2 { font-size: 40px; line-height: 1.2; letter-spacing: -0.03em; }
+html:lang(ko) .all-tile b { font-size: 22px; letter-spacing: -0.02em; }
+html:lang(ko) .cat-head h2 { font-size: 44px; line-height: 1.15; letter-spacing: -0.03em; }
+html:lang(ko) .comp-head h1 { font-size: 56px; line-height: 1.1; letter-spacing: -0.03em; }
+html:lang(ko) .gsec-head h3, html:lang(ko) .dsec h2 { font-size: 32px; line-height: 1.25; letter-spacing: -0.02em; }
+html:lang(ko) .page-head h1, html:lang(ko) .doc h1 { font-size: 64px; line-height: 1.1; letter-spacing: -0.03em; }
+html:lang(ko) .rail-item .spec, html:lang(ko) .card-spec { word-break: keep-all; }
+@media (max-width: 1180px) {
+    html:lang(ko) .hero h1 { font-size: 80px; }
+}
+@media (max-width: 720px) {
+    html:lang(ko) .hero h1 { font-size: 48px; }
+    html:lang(ko) .page-head h1, html:lang(ko) .doc h1 { font-size: 44px; }
+    html:lang(ko) .comp-head h1 { font-size: 40px; }
+    html:lang(ko) .section-head h2, html:lang(ko) .install h2, html:lang(ko) .cat-head h2 { font-size: 32px; }
+}
+html:lang(ko) .ccard-top b { font-family: var(--body); font-size: 14px; }

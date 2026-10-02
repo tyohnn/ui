@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { FRAME_TOKEN_GROUPS } from "../../../../registry/blocks/lib/frame";
 
+import { useLocale } from "./locale-provider";
+
 /**
  * The frame tokens the page is trying — how far a page stands from its edge, the room between its blocks, a reading
  * column's width, an aside's — and the same values in every preview iframe on it. Like the colours, the frames are
@@ -86,6 +88,7 @@ export type FrameTokens = ReturnType<typeof useFrameTokens>;
 
 const Copy = ({ label, text, disabled }: { label: string; text: string; disabled?: boolean }) =>
 {
+    const { t } = useLocale();
     const [done, setDone] = useState(false);
 
     return (
@@ -102,7 +105,7 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
                 });
             }}
         >
-            {done ? "Copied" : label}
+            {done ? t.copy.copied : label}
         </button>
     );
 };
@@ -114,56 +117,62 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
  */
 export const FrameEditor = ({ frames }: { frames: FrameTokens }) =>
 {
+    const { t, labels } = useLocale();
     const [open, setOpen] = useState(false);
 
     return (
         <div className="th-root">
             <button type="button" className="th-trigger fr-trigger" onClick={() => setOpen(!open)} aria-expanded={open}>
-                Layout
-                {frames.changed > 0 && <span className="th-badge">edited</span>}
+                {t.frames.trigger}
+                {frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
             </button>
 
             {open && (
                 <div className="th-panel fr-panel">
                     <header>
                         <div>
-                            <b>Layout</b>
-                            <small>Where the blocks of a page stand. The same components, more or less room. Changes land in the frames as you make them.</small>
+                            <b>{t.frames.title}</b>
+                            <small>{t.frames.intro}</small>
                         </div>
-                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label="Close">×</button>
+                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label={t.frames.close}>×</button>
                     </header>
 
-                    {FRAME_TOKEN_GROUPS.map((group) => (
-                        <section key={group.id}>
-                            <h4>{group.title} <small>{group.hint}</small></h4>
-                            <div className="fr-grid">
-                                {group.tokens.map((token) =>
-                                {
-                                    const value = frames.values[token.name] ?? token.rem;
-                                    const edited = frames.values[token.name] !== undefined;
+                    {FRAME_TOKEN_GROUPS.map((group) =>
+                    {
+                        const text = labels.frameGroup(group.id, group);
 
-                                    return (
-                                        <label key={token.name} className={edited ? "fr-token edited" : "fr-token"}>
-                                            <span className="th-name">{token.name}</span>
-                                            <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
-                                            <input
-                                                type="range"
-                                                min={0}
-                                                max={group.max}
-                                                step={group.step}
-                                                value={value}
-                                                onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
-                                            />
-                                        </label>
-                                    );
-                                })}
-                            </div>
-                        </section>
-                    ))}
+                        return (
+                            <section key={group.id}>
+                                <h4>{text.title} <small>{text.hint}</small></h4>
+                                <div className="fr-grid">
+                                    {group.tokens.map((token) =>
+                                    {
+                                        const value = frames.values[token.name] ?? token.rem;
+                                        const edited = frames.values[token.name] !== undefined;
+
+                                        return (
+                                            <label key={token.name} className={edited ? "fr-token edited" : "fr-token"}>
+                                                <span className="th-name">{token.name}</span>
+                                                <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
+                                                <input
+                                                    type="range"
+                                                    min={0}
+                                                    max={group.max}
+                                                    step={group.step}
+                                                    value={value}
+                                                    onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
+                                                />
+                                            </label>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        );
+                    })}
 
                     <footer>
-                        <Copy label="Copy CSS" text={frames.css ?? ""} disabled={frames.changed === 0} />
-                        <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title="Back to the defaults">Reset all</button>
+                        <Copy label={t.frames.copyCss} text={frames.css ?? ""} disabled={frames.changed === 0} />
+                        <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title={t.frames.resetTitle}>{t.frames.resetAll}</button>
                     </footer>
                 </div>
             )}

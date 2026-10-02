@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { COVERAGE, COVERAGE_POPUPS, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
 
+import { useLocale } from "./locale-provider";
 import { ModeSeg, SystemCombobox } from "./pickers";
 import { ThemeEditor } from "./theme-editor";
 import { ThemeProvider } from "./theme-provider";
@@ -20,6 +21,7 @@ const COVERAGE_HEIGHT = 900;
  */
 export const ComponentsView = ({ systems, components, themes, owns }: { systems: SystemSummary[]; components: number; themes: ThemeInfo[]; owns: Record<string, string> }) =>
 {
+    const { t, labels } = useLocale();
     const [name, setName] = useState(systems[0].name);
     const system = systems.find((entry) => entry.name === name) ?? systems[0];
     const [mode, setMode] = useState<Mode>(system.defaultMode);
@@ -34,9 +36,9 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
         const needle = query.trim().toLowerCase();
 
         return COVERAGE
-            .map((group) => ({ ...group, sections: needle ? group.sections.filter((section) => section.includes(needle)) : group.sections }))
+            .map((group) => ({ ...group, sections: needle ? group.sections.filter((section) => section.includes(needle) || labels.section(section).toLowerCase().includes(needle)) : group.sections }))
             .filter((group) => group.sections.length > 0);
-    }, [query]);
+    }, [query, labels]);
 
     // `/` focuses the filter, as the kbd hint says.
     useEffect(() =>
@@ -124,12 +126,9 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
         <ThemeProvider themes={themes} own={owns[name] ?? name}>
             <div className="comp-head">
                 <div>
-                    <div className="eyebrow">{components} components · {sections} sections</div>
-                    <h1>Components</h1>
-                    <p>
-                        Every registry component in one system: variants, sizes and states — disabled, invalid, checked, selected, open.
-                        Switch the system and the whole sheet restyles.
-                    </p>
+                    <div className="eyebrow">{t.components.eyebrow(components, sections)}</div>
+                    <h1>{t.components.title}</h1>
+                    <p>{t.components.body}</p>
                 </div>
                 <div className="head-tools">
                     <ThemeEditor systemName={name} />
@@ -139,34 +138,35 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
             </div>
 
             <div className="all">
-                <nav className="index" aria-label="Components">
+                <nav className="index" aria-label={t.components.navLabel}>
                     <label className="search">
-                        <span className="sr-only">Filter components</span>
-                        <input ref={search} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filter components" />
+                        <span className="sr-only">{t.components.filter}</span>
+                        <input ref={search} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.components.filter} />
                         <kbd>/</kbd>
                     </label>
                     {groups.map((group) => (
                         <div key={group.id} className="igroup">
-                            <h4>{group.label}<span>{group.sections.length}</span></h4>
+                            <h4>{labels.coverageGroup(group.id, group.label)}<span>{group.sections.length}</span></h4>
                             {group.sections.map((section) => (
-                                <a key={section} href={`#section-${section}`} aria-current={current === section ? "true" : undefined} onClick={(event) => jumpTo(event, section)}>{section}</a>
+                                <a key={section} href={`#section-${section}`} aria-current={current === section ? "true" : undefined} onClick={(event) => jumpTo(event, section)}>{labels.section(section)}</a>
                             ))}
                         </div>
                     ))}
                 </nav>
 
                 <div>
-                    {groups.length === 0 && <p className="empty-note">No component matches “{query}”.</p>}
+                    {groups.length === 0 && <p className="empty-note">{t.components.empty(query)}</p>}
                     {groups.map((group) => (
                         <section key={group.id} className="gsec">
-                            <div className="gsec-head"><h3>{group.label}</h3><span>{group.sections.length} sections</span></div>
+                            <div className="gsec-head"><h3>{labels.coverageGroup(group.id, group.label)}</h3><span>{t.components.sections(group.sections.length)}</span></div>
                             <div className="masonry">
                                 {group.sections.map((section) => (
                                     <div key={section} id={`section-${section}`} className="ccard" data-section-card={section}>
                                         <div className="ccard-top">
-                                            <b>{section}</b>
+                                            <b>{labels.section(section)}</b>
+                                            {labels.section(section) !== section && <small className="sid">{section}</small>}
                                             {COVERAGE_POPUPS.has(section)
-                                                ? <span className="tag pop">open popup</span>
+                                                ? <span className="tag pop">{t.components.openPopup}</span>
                                                 : <span className="tag">{group.id}</span>}
                                         </div>
                                         <ScaledFrame

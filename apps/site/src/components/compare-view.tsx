@@ -5,6 +5,7 @@ import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState }
 
 import { DEFAULT_SCREEN, isScreen, type Mode, previewUrl, screenOf, type SystemInfo, type SystemSummary } from "@/lib/site";
 
+import { useLocale } from "./locale-provider";
 import { ModeSeg, ScreenPicker, SystemPicker } from "./pickers";
 import { ThemeEditor } from "./theme-editor";
 import { ThemeProvider } from "./theme-provider";
@@ -12,7 +13,7 @@ import type { ThemeInfo } from "@/lib/themes";
 import { ScaledFrame } from "./scaled-frame";
 
 /** The facts the table under the split compares */
-export type CompareFacts = Pick<SystemInfo, "name" | "description"> & { sans: string; heading: string; icons: string; defaultMode: Mode };
+export type CompareFacts = Pick<SystemInfo, "name"> & { character: string; sans: string; heading: string; icons: string; defaultMode: Mode };
 
 /**
  * Two systems on one screen, one over the other: drag the divider (or use ← → on it) to move the boundary.
@@ -20,6 +21,7 @@ export type CompareFacts = Pick<SystemInfo, "name" | "description"> & { sans: st
  */
 export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemSummary[]; facts: CompareFacts[]; themes: ThemeInfo[]; owns: Record<string, string> }) =>
 {
+    const { t, labels } = useLocale();
     const router = useRouter();
     const pathname = usePathname();
     const params = useSearchParams();
@@ -59,11 +61,11 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
 
     const factOf = (name: string) => facts.find((fact) => fact.name === name)!;
     const rows: [string, (fact: CompareFacts) => string][] = [
-        ["Sans", (fact) => fact.sans],
-        ["Heading", (fact) => fact.heading],
-        ["Icons", (fact) => fact.icons],
-        ["Default mode", (fact) => (fact.defaultMode === "dark" ? "Dark" : "Light")],
-        ["Character", (fact) => fact.description.split(":")[0].trim()],
+        [t.compare.rows.sans, (fact) => fact.sans],
+        [t.compare.rows.heading, (fact) => fact.heading],
+        [t.compare.rows.icons, (fact) => fact.icons],
+        [t.compare.rows.mode, (fact) => t.mode[fact.defaultMode]],
+        [t.compare.rows.character, (fact) => fact.character],
     ];
     const fontOf = (name: string) => systems.find((system) => system.name === name)?.nameFont;
 
@@ -73,9 +75,9 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
                 <SystemPicker systems={systems} value={a} onChange={(value) => update({ a: value })} side="A" />
                 <span className="vs">vs</span>
                 <SystemPicker systems={systems} value={b} onChange={(value) => update({ b: value })} side="B" />
-                <button type="button" className="swap" onClick={() => update({ a: b, b: a })}>⇄ Swap</button>
+                <button type="button" className="swap" onClick={() => update({ a: b, b: a })}>{t.compare.swap}</button>
                 <div className="right">
-                    <ThemeEditor systemName={`${a} and ${b}`} />
+                    <ThemeEditor systemName={t.compare.pair(a, b)} />
                     <ScreenPicker value={screen} onChange={(value) => update({ screen: value })} />
                     <ModeSeg mode={mode} onChange={(value) => update({ mode: value })} />
                 </div>
@@ -90,10 +92,10 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
                     onPointerMove={(event) => event.buttons === 1 && moveTo(event.clientX)}
                 >
                     <div className="side">
-                        <ScaledFrame src={previewUrl(a, entry.id, mode)} title={`${a}: ${entry.label}`} width={entry.viewport.width} height={entry.viewport.height} eager style={{ height: "100%" }} />
+                        <ScaledFrame src={previewUrl(a, entry.id, mode)} title={`${a}: ${labels.screen(entry.id, entry.label)}`} width={entry.viewport.width} height={entry.viewport.height} eager style={{ height: "100%" }} />
                     </div>
                     <div className="side" style={{ clipPath: `inset(0 0 0 ${split}%)` }}>
-                        <ScaledFrame src={previewUrl(b, entry.id, mode)} title={`${b}: ${entry.label}`} width={entry.viewport.width} height={entry.viewport.height} eager style={{ height: "100%" }} />
+                        <ScaledFrame src={previewUrl(b, entry.id, mode)} title={`${b}: ${labels.screen(entry.id, entry.label)}`} width={entry.viewport.width} height={entry.viewport.height} eager style={{ height: "100%" }} />
                     </div>
                     <span className="side-tag a" style={{ fontFamily: fontOf(a) }}>{a}</span>
                     <span className="side-tag b" style={{ fontFamily: fontOf(b) }}>{b}</span>
@@ -102,7 +104,7 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
                         style={{ left: `${split}%` }}
                         role="slider"
                         tabIndex={0}
-                        aria-label={`Divider between ${a} and ${b}`}
+                        aria-label={t.compare.divider(a, b)}
                         aria-valuemin={0}
                         aria-valuemax={100}
                         aria-valuenow={Math.round(split)}
