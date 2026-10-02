@@ -309,6 +309,16 @@ const scenarios = {
             await stopPreview();
             await stopApp();
         }
+
+        // Blocks: installed after the fact, typechecked with the app's alias, removed again without a trace.
+        const beforeBlocks = treeHash(app);
+
+        if (tyohnn(s, "blocks", ["blocks", "--yes"], app).status !== 0) return;
+        record(s, "blocks land in src/components/blocks", existsSync(join(app, "src/components/blocks/data-table-card.tsx")) && existsSync(join(app, "src/components/blocks/lib/text.ts")));
+        step(s, "tsc --noEmit with blocks", "npx", ["tsc", "--noEmit"], app);
+        tyohnn(s, "doctor with blocks", ["doctor"], app);
+        tyohnn(s, "blocks remove", ["blocks", "remove", "--yes"], app);
+        record(s, "blocks remove restores the tree", treeHash(app) === beforeBlocks);
     },
 
     async vite()
@@ -404,6 +414,12 @@ const scenarios = {
 
             record(s, "icons lucide switches admin's icons", afterIcons > 0 && adminLucide === 0, `lucide svgs in admin: ${adminLucide} → ${afterIcons}`);
             tyohnn(s, "doctor after icons", ["doctor"], root);
+
+            // Blocks in the UI package: every app gets them through the package's exports.
+            if (tyohnn(s, "blocks", ["blocks", "--yes"], root).status !== 0) return;
+            record(s, "blocks land in packages/ui/src/blocks", existsSync(join(root, "packages/ui/src/blocks/data-table-card.tsx")) && existsSync(join(root, "packages/ui/src/blocks/lib/text.ts")));
+            step(s, "turbo typecheck with blocks", "npx", ["turbo", "run", "typecheck"], root);
+            tyohnn(s, "doctor with blocks", ["doctor"], root);
         }
         finally
         {
