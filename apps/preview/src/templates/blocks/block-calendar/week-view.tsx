@@ -26,7 +26,6 @@ const VIEWS = [
 export const WeekView = () => (
     <div className="flex min-h-0 flex-[1_1_0px] flex-col [contain:inline-size]">
         <CalendarToolbar
-            todayLabel="Today"
             previousLabel="Previous week"
             nextLabel="Next week"
             range="Jan 11 – 17, 2026"
@@ -39,7 +38,6 @@ export const WeekView = () => (
             )}
             views={VIEWS}
             defaultView="week"
-            viewsLabel="View"
             action={(
                 <Button size="sm">
                     <Plus data-icon="inline-start" />
@@ -52,7 +50,6 @@ export const WeekView = () => (
             hours={HOURS}
             events={EVENTS}
             allDay={ALL_DAY}
-            allDayLabel="All day"
             zoneLabel="GMT+1"
             now={{ at: NOW, label: "Now, 11:45" }}
             formatTime={formatTime}
