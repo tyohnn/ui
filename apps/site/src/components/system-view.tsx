@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
 
-import { CATEGORIES, type Mode, previewUrl, screenSource, type SystemSummary } from "@/lib/site";
+import { CATEGORIES, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { FramePanel, useFrameTokens } from "./frame-editor";
@@ -17,7 +17,7 @@ import { useTheme } from "./theme-provider";
  * A system page below the breadcrumb: the intro (server-rendered, passed in), the install panel, the sticky
  * category bar and every screen stacked by category. The bar's buttons scroll to their category and follow the
  * scroll position; both mode switches drive every frame. Beside the screens stands a side panel that is always there,
- * with Layout and Colours as its tabs, so what a slider moves can be watched while it moves. Each screen is a row: its
+ * with Colours and Layout as its tabs, so what a slider moves can be watched while it moves. Each screen is a row: its
  * title and links on one line, the preview under it.
  */
 export const SystemView = ({
@@ -34,7 +34,7 @@ export const SystemView = ({
     const { t, labels, href } = useLocale();
     const [mode, setMode] = useState<Mode>(system.defaultMode);
     const [current, setCurrent] = useState<string>(CATEGORIES[0].id);
-    const [tab, setTab] = useState<"layout" | "colours">("layout");
+    const [tab, setTab] = useState<"layout" | "colours">("colours");
     const theme = useTheme();
     const frames = useFrameTokens();
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
@@ -83,14 +83,14 @@ export const SystemView = ({
             <div className="sys-body">
                 <aside className="th-panel side-panel" aria-label={t.systemView.sidePanel}>
                     <div className="side-tabs" role="tablist">
-                        <button type="button" role="tab" aria-selected={tab === "layout"} onClick={() => setTab("layout")}>
-                            {t.frames.title}{frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
-                        </button>
                         <button type="button" role="tab" aria-selected={tab === "colours"} onClick={() => setTab("colours")}>
                             {t.theme.title}{theme && !theme.isOwn && <span className="th-badge">{t.theme.edited}</span>}
                         </button>
+                        <button type="button" role="tab" aria-selected={tab === "layout"} onClick={() => setTab("layout")}>
+                            {t.frames.title}{frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
+                        </button>
                     </div>
-                    {tab === "layout" ? <FramePanel frames={frames} /> : <ThemePanel systemName={system.name} />}
+                    {tab === "colours" ? <ThemePanel systemName={system.name} /> : <FramePanel frames={frames} />}
                 </aside>
 
                 <div className="sys-main">
@@ -118,7 +118,6 @@ export const SystemView = ({
                                 <div key={screen.id} className="shot-row">
                                     <div className="meta">
                                         <h3>{labels.screen(screen.id, screen.label)}</h3>
-                                        <div className="src">{screenSource(screen)} · {screen.viewport.width}×{screen.viewport.height}</div>
                                         <div className="links">
                                             <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">{t.systemView.fullScreen}</a>
                                             <Link href={href(`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`)}>{t.systemView.compare}</Link>
