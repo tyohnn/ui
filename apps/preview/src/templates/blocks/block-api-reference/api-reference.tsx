@@ -7,6 +7,9 @@ import { EndpointHeader } from "@tyohnn/blocks/endpoint-header";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
+import { ASIDE_WIDTH } from "@tyohnn/blocks/lib/frame";
+import { Page, PageContent } from "@tyohnn/blocks/page";
+import { PageSplit } from "@tyohnn/blocks/page-split";
 import { PendingText } from "@tyohnn/blocks/pending";
 import { ParameterTable } from "@tyohnn/blocks/parameter-table";
 import { Prose } from "@tyohnn/blocks/prose";
@@ -15,6 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from "@tyohnn/components/alert";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
+import { cn } from "@tyohnn/lib/utils";
 
 import { LOADING } from "../../loading";
 import {
@@ -48,7 +52,7 @@ const Parameters = ({ title, description, parameters }: { title: string; descrip
 const CopyButton = () => <Button variant="ghost" size="xs"><Copy data-icon="inline-start" className="size-[14px]" />Copy</Button>;
 
 const Endpoint = () => (
-    <div className="flex min-w-0 flex-col gap-8">
+    <div className="flex min-w-0 flex-1 flex-col gap-8">
         <EndpointHeader
             loading={LOADING}
             method={ENDPOINT.method}
@@ -110,7 +114,7 @@ const Endpoint = () => (
 
 // The examples column stays in view beside the parameters while the page scrolls.
 const Examples = () => (
-    <div className="sticky top-8 flex min-w-0 flex-col gap-4 self-start">
+    <div className={cn("sticky top-8 flex min-w-0 flex-col gap-4 self-start", ASIDE_WIDTH.xl)}>
         <InfoCard
             loading={LOADING}
             title="Request"
@@ -137,10 +141,12 @@ const Examples = () => (
 // scrolls in its own pane: upstream's sticky header has no z-index, so positioned table parts would paint over it on a
 // page scroll.
 export const ApiReference = () => (
-    <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
-        <div className="grid gap-8 px-8 pt-8 pb-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,30rem)]">
-            <Endpoint />
-            <Examples />
-        </div>
-    </div>
+    <Page gutter="none" gap="none">
+        <PageContent gutter="lg" gap="none" document>
+            <PageSplit gap="lg">
+                <Endpoint />
+                <Examples />
+            </PageSplit>
+        </PageContent>
+    </Page>
 );

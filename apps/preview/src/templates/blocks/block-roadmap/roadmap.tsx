@@ -20,6 +20,7 @@ import { AvatarStack } from "@tyohnn/blocks/avatar-stack";
 import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { KanbanBoard } from "@tyohnn/blocks/kanban-board";
 import { KanbanCard } from "@tyohnn/blocks/kanban-card";
+import { Page } from "@tyohnn/blocks/page";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { TableSearch } from "@tyohnn/blocks/table-search";
@@ -112,7 +113,7 @@ const PENDING_CARD = (
 
 // [contain:inline-size]: the board's width never widens SidebarInset (upstream markup, no min-w-0); it scrolls in place.
 export const Roadmap = () => (
-    <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 p-4 pt-0 [contain:inline-size]">
+    <Page scroll="regions" flush>
         <Toolbar />
         <KanbanBoard
             loading={LOADING}
@@ -139,5 +140,5 @@ export const Roadmap = () => (
                 };
             })}
         />
-    </div>
+    </Page>
 );

@@ -1,6 +1,7 @@
 import { Plus, Search, Settings } from "@tyohnn/icons";
 
 import { CalendarToolbar } from "@tyohnn/blocks/calendar-toolbar";
+import { Page } from "@tyohnn/blocks/page";
 import { WeekView as WeekGrid } from "@tyohnn/blocks/week-view";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
@@ -25,7 +26,7 @@ const VIEWS = [
 // the hour grid keeps a minimum height and scrolls inside when a system's controls are taller.
 // [contain:inline-size]: the content never widens SidebarInset (upstream markup, no min-w-0).
 export const WeekView = () => (
-    <div className="flex min-h-0 flex-[1_1_0px] flex-col [contain:inline-size]">
+    <Page scroll="regions" gutter="none" gap="none">
         <CalendarToolbar
             previousLabel="Previous week"
             nextLabel="Next week"
@@ -56,5 +57,5 @@ export const WeekView = () => (
             now={{ at: NOW, label: "Now, 11:45" }}
             formatTime={formatTime}
         />
-    </div>
+    </Page>
 );

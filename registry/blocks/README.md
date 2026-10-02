@@ -106,6 +106,33 @@ Blocks import each other and their helpers as `@tyohnn/blocks/*`, and components
 
 ## Blocks
 
+Frames
+
+A frame holds blocks and decides only where they stand: how far from the edge, how far from each other, what
+scrolls, what sits beside what. It has no content of its own. The steps it picks from are tokens with their
+defaults written in the read (`lib/frame.ts`), so changing one value moves every screen that stands at that step.
+`frames.md` has the measurements behind them.
+
+To try the values, open any template in the preview with `&frames=1`: a panel lists the tokens, outlines the
+frames on the screen, marks the tokens that screen reads, and moves them live; "Copy CSS" gives the declarations.
+
+| Block | File | What it is |
+|---|---|---|
+| `Page` | `page.tsx` | The content under the bar: the gutter and gap, and whether the page scrolls or is pinned so a region scrolls |
+| `PagePane` | `page.tsx` | A region of a pinned page that scrolls by itself |
+| `PageContent` | `page.tsx` | A column of blocks inside something that scrolls: gutter, gap, an optional reading measure, a document's own padding |
+| `PageSplit` | `page-split.tsx` | Two panes side by side while the page is at least 56rem wide; below that the aside stacks, becomes a sheet, or hides (`narrow`) |
+| `PageMain` · `PageAside` | `page-split.tsx` | The pane that takes the room, and the narrower one at an aside width |
+| `PageAsideTrigger` | `page-split.tsx` | The button that opens an aside that became a sheet; drawn only while the page is narrow |
+
+| Token (default in `lib/frame.ts`) | Default | Read by |
+|---|---|---|
+| `--page-gutter-sm` · `-md` · `-lg` · `-xl` | 1 · 1.5 · 2 · 2.5rem | `gutter` on Page · PagePane · PageContent |
+| `--page-gap-xs` · `-sm` · `-md` · `-lg` · `-xl` | 0.75 · 1 · 1.5 · 2 · 2.5rem | `gap` on every frame |
+| `--page-measure-sm` · `-md` · `-lg` | 48 · 52 · 64rem | `measure` on PageContent, `MEASURE` on a block that is the column |
+| `--page-aside-xs` · `-sm` · `-md` · `-lg` · `-xl` | 14 · 18 · 20 · 26 · 30rem | `width` on PageAside, `ASIDE_WIDTH` on a block that is the pane |
+| `--page-document-padding-start` · `-end` | 2 · 4rem | `document` on PageContent |
+
 Pages and sections
 
 | Block | File | What it is |
@@ -251,7 +278,7 @@ Planning
 | `KanbanBoard` | `kanban-board.tsx` | Columns side by side, each with its name, count, add button and its cards scrolling inside |
 | `KanbanCard` | `kanban-card.tsx` | One board item: key, title, menu, badges, progress, people and facts |
 
-Shared: `pending.tsx` (the bar a waiting value is, and the frame's attributes) · `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
+Shared: `lib/frame.ts` (the steps a frame picks from and their tokens) · `pending.tsx` (the bar a waiting value is, and the frame's attributes) · `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
 caption, inline code, the display size) · `lib/bands.ts` (a card's toolbar and footer bands) · `lib/chart.ts` (the
 chart colours in series order).
 

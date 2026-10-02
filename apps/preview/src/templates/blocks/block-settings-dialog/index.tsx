@@ -38,7 +38,7 @@ const Page = () => (
             <Separator orientation="vertical" className="data-vertical:h-5 data-vertical:self-auto" />
             <span className="text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground">Northvale workspace</span>
             <div className="ml-auto flex items-center gap-2">
-                <InputGroup className="w-64">
+                <InputGroup className="hidden w-64 sm:flex">
                     <InputGroupAddon><Search /></InputGroupAddon>
                     <InputGroupInput aria-label="Search" placeholder="Search messages" />
                 </InputGroup>
@@ -50,7 +50,7 @@ const Page = () => (
         </div>
         <Separator />
         <div className="flex min-h-0 flex-1">
-            <nav className="flex w-60 shrink-0 flex-col gap-1 border-r border-border p-3" aria-label="Channels">
+            <nav className="hidden w-60 shrink-0 flex-col gap-1 border-r border-border p-3 sm:flex" aria-label="Channels">
                 {CHANNELS.map((channel) => (
                     <Button key={channel.name} variant={"active" in channel ? "secondary" : "ghost"} size="sm" className="justify-start">
                         <Hash data-icon="inline-start" />

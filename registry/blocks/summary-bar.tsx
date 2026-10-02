@@ -8,8 +8,9 @@ export type SummaryCell = { label: string } & ({ value: ReactNode; icon?: undefi
 
 /**
  * The band under a table that sums it up, in equal cells with a hairline between them: a figure with what it
- * counts ("20 companies in view"), or an icon with a calculation to add. `loading` draws a bar for each figure;
- * the labels and the icons stay.
+ * counts ("20 companies in view"), or an icon with a calculation to add. A label wraps inside its cell, and breaks
+ * a word rather than leave it, when the band is narrow. `loading` draws a bar for each figure; the labels and the
+ * icons stay.
  */
 export const SummaryBar = ({ cells, loading, className }: { cells: readonly SummaryCell[]; loading?: boolean; className?: string }) => (
     <div
@@ -20,7 +21,7 @@ export const SummaryBar = ({ cells, loading, className }: { cells: readonly Summ
         {cells.map((cell) => (
             <div key={cell.label} className={cn("flex items-center border-s border-border px-3 py-2 first:border-s-0 [&_svg]:size-[var(--control-icon-size-sm)]", cell.value === undefined ? "gap-2.5" : "gap-2")}>
                 {cell.value === undefined ? cell.icon : <span className={cn(FIGURE, "text-foreground")}>{loading ? <PendingText length={2} /> : cell.value}</span>}
-                <span>{cell.label}</span>
+                <span className="min-w-0 [overflow-wrap:anywhere]">{cell.label}</span>
             </div>
         ))}
     </div>

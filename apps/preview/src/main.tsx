@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import "virtual:tyohnn-fonts";
 import { iconLibrary, system } from "virtual:tyohnn-system";
 
+import { FrameControls } from "./frame-controls";
 import { templates } from "./templates";
 
 document.documentElement.dataset.iconLibrary = iconLibrary;
@@ -72,5 +73,6 @@ createRoot(document.getElementById("root")!).render(
     <StrictMode>
         {requested !== system && <Mismatch />}
         {Template ? <Template /> : <p>Unknown template “{name}”. Known: {Object.keys(templates).join(", ")}</p>}
+        {params.has("frames") && <FrameControls />}
     </StrictMode>,
 );

@@ -19,6 +19,8 @@ import { ContactOptions } from "@tyohnn/blocks/contact-options";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { PendingText } from "@tyohnn/blocks/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
+import { Page, PageContent } from "@tyohnn/blocks/page";
+import { PageAside, PageSplit } from "@tyohnn/blocks/page-split";
 import { SearchHero } from "@tyohnn/blocks/search-hero";
 import { SectionCard } from "@tyohnn/blocks/section-card";
 import { SectionHeading } from "@tyohnn/blocks/section-heading";
@@ -89,7 +91,7 @@ const Topics = () => (
 const RecentArticles = () => (
     <SectionCard
         loading={LOADING}
-        className="min-w-0"
+        className="min-w-0 flex-1"
         title="Recently updated"
         description="Articles changed in the last two weeks"
         action={<Button variant="outline" size="sm">View all</Button>}
@@ -152,18 +154,18 @@ const Status = () => (
 
 // [contain:inline-size]: the body never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
 export const HelpCenter = () => (
-    <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
+    <Page gutter="none" gap="none">
         <Hero />
-        <div className="flex flex-col gap-8 px-8 pt-8 pb-12">
+        <PageContent gutter="lg" gap="lg" document>
             <Topics />
-            <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,26rem)]">
+            <PageSplit gap="md">
                 <RecentArticles />
-                <div className="flex min-w-0 flex-col gap-6">
+                <PageAside width="lg" gap="md">
                     <Contact />
                     <Tickets />
                     <Status />
-                </div>
-            </div>
-        </div>
-    </div>
+                </PageAside>
+            </PageSplit>
+        </PageContent>
+    </Page>
 );

@@ -6,9 +6,11 @@ import { CommandCard } from "@/components/copy-command";
 import { DocsToc } from "@/components/docs-toc";
 import { getFonts, getIconLibraries, getSystems } from "@/lib/registry";
 
+import { FRAME_TOKEN_GROUPS, PAGE_SPLIT_MIN_REM } from "../../../../../registry/blocks/lib/frame";
+
 export const metadata: Metadata = {
     title: "Docs",
-    description: "The tyohnn CLI: init, add, use, icons, fonts, doctor and diff; where files go; fonts and icons; several systems in one monorepo.",
+    description: "The tyohnn CLI: init, add, use, icons, fonts, blocks, doctor and diff; where files go; fonts and icons; blocks and frames; several systems in one monorepo.",
 };
 
 const SECTIONS = [
@@ -18,6 +20,8 @@ const SECTIONS = [
     { id: "files", label: "Where files go" },
     { id: "fonts", label: "Fonts" },
     { id: "icons", label: "Icons" },
+    { id: "blocks", label: "Blocks" },
+    { id: "frames", label: "Frames" },
     { id: "monorepo", label: "Several systems" },
     { id: "source", label: "Versions and source" },
     { id: "ownership", label: "File ownership" },
@@ -29,9 +33,17 @@ const COMMANDS: [string, ReactNode][] = [
     ["use <system> [--app <path>]", <>Switches an app to another system: entry CSS, fonts and mode. The TSX stays.</>],
     ["icons <library> [--app <path>]", <>Switches an app&apos;s icon library (mapping file and packages).</>],
     ["fonts [--sans] [--heading] [--mono] [--reset]", <>Switches an app&apos;s fonts; <code>--reset</code> returns to the system&apos;s own.</>],
+    ["blocks [remove]", <>Installs (or updates) the blocks and frames next to the components; <code>remove</code> takes them out.</>],
     ["list", <>Systems, icon libraries and fonts, one line each.</>],
     ["doctor [--built]", <>Checks the setup against <code>tyohnn.json</code>; exit code 1 on a failure.</>],
     ["diff [--files]", <>Compares the project&apos;s copies with the source: changed upstream, locally, or both.</>],
+];
+
+/** What the narrower pane of a split does below the page width where two panes no longer fit */
+const NARROW: [string, string, string][] = [
+    ["stack", "It goes under the main pane and the page scrolls as one.", "Content read along with the main pane: a team page's seat and invitation cards."],
+    ["sheet", "It leaves the page and opens over it from a PageAsideTrigger; the main pane keeps its height.", "A tool that works on the main pane: a playground's run settings, a review's checks."],
+    ["hide", "It is not drawn.", "An aid the page works without: a table of contents."],
 ];
 
 const OPTIONS: [string, string][] = [
@@ -174,6 +186,71 @@ export default function DocsPage()
                     <ul className="libs">
                         {icons.map((library) => <li key={library.id}><b>{library.id}</b>{library.packages.join(" + ")}</li>)}
                     </ul>
+                </Section>
+
+                <Section id="blocks" title="Blocks">
+                    <p className="prose">
+                        A block is a piece of a screen composed from the components: a page heading, a row of metric cards, a table in a card with
+                        tabs and bulk actions, a kanban board. It reads the system&apos;s tokens and decides no colour, size or radius of its own, so it
+                        changes with the system and with nothing else. Its data and words come from the screen that uses it.
+                    </p>
+                    <CommandCard label="With a new project" command="npx tyohnn@latest init --system vega --blocks" />
+                    <CommandCard label="Into a project that has the components" command="npx tyohnn@latest blocks" />
+                    <p className="prose">
+                        They land next to the components (<code>blocks/</code>) as CLI-owned files: <code>doctor</code> checks them, <code>diff</code>{" "}
+                        shows what changed upstream, <code>tyohnn blocks</code> updates them and <code>tyohnn blocks remove</code> takes them out.
+                        Every screen in the gallery is built from them.
+                    </p>
+                </Section>
+
+                <Section id="frames" title="Frames">
+                    <p className="prose">
+                        A frame is a block with no content of its own. It holds other blocks and decides only where they stand: how far from the
+                        edge, how far from each other, what scrolls, and what sits beside what. <code>Page</code> is the content under the bar;{" "}
+                        <code>PageContent</code> is a column inside something that scrolls; <code>PageSplit</code> puts a main pane and an aside side by side.
+                    </p>
+                    <Tree
+                        lines={[
+                            '<Page scroll="regions">                    pinned: something inside scrolls',
+                            "    <PageHeading … />",
+                            "    <PageSplit narrow=\"stack\">",
+                            "        <DataTableCard … />                   the main pane takes the room",
+                            '        <PageAside width="md">…</PageAside>   20rem beside it',
+                            "    </PageSplit>",
+                            "</Page>",
+                        ]}
+                    />
+                    <p className="prose">
+                        <b>The screen picks a step; a token says how much it is.</b> <code>gutter=&quot;sm&quot;</code> is the screen&apos;s choice;{" "}
+                        <code>--page-gutter-sm</code> is 1rem unless a system or your own CSS says otherwise. Declare one on <code>:root</code>{" "}
+                        after the system&apos;s styles and every page at that step moves.
+                    </p>
+                    <div className="dtable" role="table">
+                        <div className="row cols-3" role="row"><div role="columnheader">Token</div><div role="columnheader">Default</div><div role="columnheader">What stands at it</div></div>
+                        {FRAME_TOKEN_GROUPS.map((group) => (
+                            <div key={group.id} className="row cols-3" role="row">
+                                <div role="cell">{group.tokens.map((token) => <code key={token.name} style={{ display: "block", width: "fit-content", marginBottom: 4 }}>{token.name}</code>)}</div>
+                                <div role="cell">{group.tokens.map((token) => `${token.rem}rem`).join(" · ")}</div>
+                                <div role="cell">{group.title}: {group.hint}.</div>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="prose">
+                        <b>Narrow pages.</b> A split stands side by side while its page is at least {PAGE_SPLIT_MIN_REM}rem wide — the page&apos;s own
+                        width, not the window&apos;s, so closing the sidebar gives the room back. Below that the aside does one of three things,
+                        chosen by the screen with <code>narrow</code> on <code>PageSplit</code>. There is no fourth: an aside that keeps its
+                        width squeezes the main pane to nothing.
+                    </p>
+                    <div className="dtable" role="table">
+                        <div className="row cols-3" role="row"><div role="columnheader">narrow</div><div role="columnheader">The aside</div><div role="columnheader">For</div></div>
+                        {NARROW.map(([name, what, when]) => (
+                            <div key={name} className="row cols-3" role="row"><div role="cell"><code>{name}</code></div><div role="cell">{what}</div><div role="cell">{when}</div></div>
+                        ))}
+                    </div>
+                    <p className="prose">
+                        To try the values, open the <b>Layout</b> panel on any <Link href="/#systems">system&apos;s page</Link>: a slider moves every
+                        screen on the page at once. <b>Frames ↗</b> beside a screen opens it alone with the frames outlined and the same sliders.
+                    </p>
                 </Section>
 
                 <Section id="monorepo" title="Several systems in one monorepo">

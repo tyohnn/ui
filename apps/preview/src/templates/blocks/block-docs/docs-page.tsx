@@ -6,8 +6,11 @@ import { CodeTabs } from "@tyohnn/blocks/code-tabs";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { IN_PROSE, INLINE_CODE, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
+import { ASIDE_NARROW_HIDDEN, ASIDE_WIDTH, MEASURE } from "@tyohnn/blocks/lib/frame";
 import { PendingText } from "@tyohnn/blocks/pending";
 import { OnThisPage } from "@tyohnn/blocks/on-this-page";
+import { Page, PageContent } from "@tyohnn/blocks/page";
+import { PageSplit } from "@tyohnn/blocks/page-split";
 import { PagerCards } from "@tyohnn/blocks/pager-cards";
 import { Prose } from "@tyohnn/blocks/prose";
 import { StepList } from "@tyohnn/blocks/step-list";
@@ -59,7 +62,7 @@ const OPTION_COLUMNS: DataTableColumn<Option>[] = [
 ];
 
 const Article = () => (
-    <Prose as="article" className="max-w-[52rem] min-w-0 flex-1">
+    <Prose as="article" className={cn(MEASURE.md, "min-w-0 flex-1")}>
         <ArticleHeading
             loading={LOADING}
             eyebrow="Getting started"
@@ -156,16 +159,18 @@ const Article = () => (
 
 // [contain:inline-size]: the body never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
 export const DocsPage = () => (
-    <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
-        <div className="flex gap-10 px-10 pt-8 pb-16">
+    <Page gutter="none" gap="none">
+        <PageContent gutter="xl" gap="none" document>
+        <PageSplit gap="xl" narrow="hide">
             <Article />
             <OnThisPage
                 loading={LOADING}
                 count={TOC.length}
                 items={TOC}
                 note="Found a problem? Open an issue from the docs repository or ask in the community forum."
-                className="hidden w-56 shrink-0 xl:flex"
+                className={cn(ASIDE_WIDTH.xs, ASIDE_NARROW_HIDDEN)}
             />
-        </div>
-    </div>
+        </PageSplit>
+        </PageContent>
+    </Page>
 );

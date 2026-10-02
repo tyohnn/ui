@@ -4,6 +4,7 @@ import { Checklist } from "@tyohnn/blocks/checklist";
 import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
+import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PendingText } from "@tyohnn/blocks/pending";
 import { PropertyList, PropertyText } from "@tyohnn/blocks/property-list";
 import { Prose } from "@tyohnn/blocks/prose";
@@ -100,8 +101,8 @@ const Properties = () => (
 
 // [contain:inline-size]: the page never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
 export const Document = () => (
-    <div className="min-h-0 flex-[1_1_0px] overflow-y-auto [contain:inline-size]">
-        <article className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-10">
+    <Page gutter="none" gap="none">
+        <PageContent as="article" measure="sm" gap="md" document>
             <DocumentTitle loading={LOADING} cover="📊" title="Checkout Redesign — Project Brief" />
             <Properties />
             <Prose preset="document">
@@ -185,6 +186,6 @@ export const Document = () => (
                     <li>Which guardrail breach pauses the experiment automatically?</li>
                 </ol>
             </Prose>
-        </article>
-    </div>
+        </PageContent>
+    </Page>
 );

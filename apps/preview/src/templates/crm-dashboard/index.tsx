@@ -30,6 +30,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { FilterBar } from "@tyohnn/blocks/filter-bar";
 import { InlineFacts } from "@tyohnn/blocks/inline-facts";
+import { Page, PagePane } from "@tyohnn/blocks/page";
 import { PageBar } from "@tyohnn/blocks/page-bar";
 import { Person } from "@tyohnn/blocks/person";
 import { SegmentMeter } from "@tyohnn/blocks/segment-meter";
@@ -53,6 +54,7 @@ import {
     SidebarMenuItem,
     SidebarProvider,
     SidebarSeparator,
+    SidebarTrigger,
 } from "@tyohnn/components/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
@@ -126,7 +128,8 @@ const Menu = ({ items }: { items: NavItem[] }) => (
 );
 
 const CrmSidebar = () => (
-    <Sidebar collapsible="none" className="h-full border-e border-sidebar-border">
+    // bg-sidebar on the container: its edge is drawn over the sidebar's own colour, as it was when the sidebar could not close.
+    <Sidebar collapsible="offcanvas" className="border-e border-sidebar-border bg-sidebar">
         <SidebarHeader className="flex-row items-center gap-2.5">
             <span className="grid size-8 shrink-0 place-items-center rounded-[var(--radius-md)] border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground [&_svg]:size-[18px]"><BrandMark /></span>
             <TwoLineLabel title="Sales CRM" subtitle="Company pipeline" />
@@ -168,6 +171,7 @@ const CrmSidebar = () => (
 
 const PageHeader = () => (
     <PageBar
+        leading={<SidebarTrigger className="-ml-1 md:hidden" />}
         loading={LOADING}
         title="Companies"
         status={(
@@ -282,6 +286,7 @@ export const CrmDashboard = () => (
             <CrmSidebar />
             <SidebarInset className="min-h-0 min-w-0">
                 <PageHeader />
+                <Page scroll="regions" gutter="none" gap="none">
                 <Tabs defaultValue="companies">
                     <TabsList variant="line" className="w-full justify-start gap-4 px-4">
                         <TabsTrigger value="companies" className="flex-none">Companies</TabsTrigger>
@@ -290,10 +295,11 @@ export const CrmDashboard = () => (
                     </TabsList>
                 </Tabs>
                 <Toolbar />
-                <div className="min-h-0 flex-1 overflow-y-auto">
+                <PagePane>
                     <CompaniesTable />
-                </div>
+                </PagePane>
                 <TableSummary />
+                </Page>
             </SidebarInset>
         </SidebarProvider>
     </div>

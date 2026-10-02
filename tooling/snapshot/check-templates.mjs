@@ -20,7 +20,10 @@
 //
 // Usage:
 //   node tooling/snapshot/check-templates.mjs [--templates all|id,id] [--systems all|name,name] [--modes light,dark]
-//        [--port 5240] [--shots dir] [--no-build] [--query loading]
+//        [--port 5240] [--shots dir] [--no-build] [--query loading] [--viewport 390x844]
+//
+// --viewport draws every template at that size instead of its catalog viewport: the check that a screen still fits
+// when it is narrow (a frame's split collapses, a tab strip scrolls) rather than widening the page.
 //
 // Screenshots (the viewport): tooling/snapshot/out/templates/<system>-<mode>/<id>.png (gitignored).
 // Exit 0 when nothing is reported.
@@ -57,6 +60,8 @@ const port = Number(arg("port", "5240"));
 const query = arg("query", "");
 const origin = `http://localhost:${port}`;
 const shotsRoot = arg("shots", join(repoRoot, "tooling/snapshot/out/templates"));
+const viewportArg = arg("viewport");
+const viewportOverride = viewportArg ? { width: Number(viewportArg.split("x")[0]), height: Number(viewportArg.split("x")[1] ?? 844) } : null;
 
 const unknown = [...templates.filter((entry) => typeof entry === "string"), ...systems.filter((name) => !knownSystems.includes(name))];
 
@@ -251,7 +256,7 @@ try
 
                 for (const entry of templates)
                 {
-                    const page = await browser.newPage({ viewport: entry.viewport, deviceScaleFactor: 1, colorScheme: mode });
+                    const page = await browser.newPage({ viewport: viewportOverride ?? entry.viewport, deviceScaleFactor: 1, colorScheme: mode });
                     const problems = [];
 
                     page.on("console", (message) => { if (message.type() === "error") problems.push(`console: ${message.text().replace(/\s+/g, " ").slice(0, 160)}`); });

@@ -22,6 +22,9 @@ export type Stat = {
  * when the value is part of a whole, and a line of detail. For figures that change against a period (with a trend
  * badge) use MetricCards. `loading` draws `count` cards with bars for the label, the value and the detail over
  * an empty progress track.
+ *
+ * The row holds as many cards as fit at their least width (`--stat-card-min-width`, 10rem when a system does not
+ * say) and the rest go to the next line: four across on a wide page, two on a phone, with no breakpoint.
  */
 export const StatCards = ({
     stats = [],
@@ -35,7 +38,7 @@ export const StatCards = ({
     count?: number;
     className?: string;
 }) => (
-    <div {...pendingFrame(loading)} className={cn("grid grid-cols-4 gap-4", className)}>
+    <div {...pendingFrame(loading)} className={cn("grid grid-cols-[repeat(auto-fit,minmax(var(--stat-card-min-width,10rem),1fr))] gap-4", className)}>
         {loading && Array.from({ length: count }, (_, index) => (
             <Card key={index} size="sm">
                 <CardHeader>

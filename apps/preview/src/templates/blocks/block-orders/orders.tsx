@@ -4,6 +4,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import type { DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DataTableCard } from "@tyohnn/blocks/data-table-card";
 import { MetricCards } from "@tyohnn/blocks/metric-cards";
+import { Page } from "@tyohnn/blocks/page";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
 import { Person } from "@tyohnn/blocks/person";
 import { RowMenu } from "@tyohnn/blocks/row-menu";
@@ -81,7 +82,7 @@ const Pages = () => (
 
 // [contain:inline-size]: the table's width never widens SidebarInset (upstream markup, no min-w-0).
 export const Orders = () => (
-    <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 p-4 [contain:inline-size]">
+    <Page scroll="regions">
         <PageHeading
             loading={LOADING}
             title="Orders"
@@ -126,5 +127,5 @@ export const Orders = () => (
             summary="Showing 1–12 of 2,184 orders"
             pagination={<Pages />}
         />
-    </div>
+    </Page>
 );

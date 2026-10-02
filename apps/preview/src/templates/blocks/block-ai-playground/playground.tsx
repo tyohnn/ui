@@ -26,6 +26,8 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { FieldPanel } from "@tyohnn/blocks/field-panel";
 import { HintField } from "@tyohnn/blocks/hint-field";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { Page } from "@tyohnn/blocks/page";
+import { PageAside, PageAsideTrigger, PageSplit } from "@tyohnn/blocks/page-split";
 import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { PromptInput } from "@tyohnn/blocks/prompt-input";
 import { SliderField } from "@tyohnn/blocks/slider-field";
@@ -72,6 +74,7 @@ const Toolbar = () => (
                     <Share data-icon="inline-start" />
                     Share
                 </Button>
+                <PageAsideTrigger label="Settings"><SlidersHorizontal /></PageAsideTrigger>
             </>
         )}
     >
@@ -172,7 +175,7 @@ const Composer = () => (
 // still scrolls on its own (the footer's usage bar stays put) if a system's controls ever outgrow it.
 const SettingsPanel = () => (
     <FieldPanel
-        className="w-80"
+        className="flex-1"
         title="Run settings"
         description="Applies to the next message"
         action={<Button variant="ghost" size="icon-sm" aria-label="Reset to defaults"><RefreshCw /></Button>}
@@ -209,12 +212,16 @@ const SettingsPanel = () => (
 // [contain:inline-size]: the row's content never widens SidebarInset (upstream markup, no min-w-0) past the viewport;
 // a system with larger controls wraps the toolbar instead.
 export const Playground = () => (
-    <div className="flex h-[calc(100svh-4rem)] min-h-0 gap-4 p-4 pt-0 [contain:inline-size]">
+    <Page scroll="regions" flush>
+        <PageSplit narrow="sheet">
         <Card className="min-w-0 flex-1 gap-0 py-0">
             <Toolbar />
             <Conversation />
             <Composer />
         </Card>
-        <SettingsPanel />
-    </div>
+        <PageAside width="md" gap="none" label="Settings">
+            <SettingsPanel />
+        </PageAside>
+        </PageSplit>
+    </Page>
 );
