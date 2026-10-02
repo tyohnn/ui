@@ -1,7 +1,7 @@
 /**
  * The calendar's fixed data: the week of 2026-01-14 (Sunday Jan 11 – Saturday Jan 17, the week the sidebar's date
  * picker starts on) for Iris Calloway at Brightline (fictional). Times are hours from midnight; the grid shows
- * 08:00–18:00. `tone` is the calendar's colour, drawn from status tokens in the template CSS.
+ * 08:00–18:00. `tone` is the calendar's colour, drawn from status tokens by the WeekView block.
  */
 
 export type Tone = "primary" | "success" | "info" | "warning";

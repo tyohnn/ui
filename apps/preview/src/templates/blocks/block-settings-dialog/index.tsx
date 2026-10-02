@@ -12,7 +12,6 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "
 import { Separator } from "@tyohnn/components/separator";
 
 import { NoMotion } from "../../coverage/frame";
-import { SETTINGS_STYLE } from "./notifications";
 import { SettingsDialog } from "./settings-dialog";
 
 const CHANNELS = [
@@ -33,9 +32,9 @@ const MESSAGES = [
 const Page = () => (
     <div className="flex h-svh flex-col">
         <div className="flex h-14 shrink-0 items-center gap-3 px-4">
-            <span className="sd-brand">Parley</span>
+            <span className="text-[length:var(--ui-text-lg)] leading-[var(--ui-line-height-lg)] font-semibold">Parley</span>
             <Separator orientation="vertical" className="data-vertical:h-5 data-vertical:self-auto" />
-            <span className="sd-page-meta">Northvale workspace</span>
+            <span className="text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground">Northvale workspace</span>
             <div className="ml-auto flex items-center gap-2">
                 <InputGroup className="w-64">
                     <InputGroupAddon><Search /></InputGroupAddon>
@@ -49,7 +48,7 @@ const Page = () => (
         </div>
         <Separator />
         <div className="flex min-h-0 flex-1">
-            <nav className="sd-channels flex w-60 shrink-0 flex-col gap-1 p-3" aria-label="Channels">
+            <nav className="flex w-60 shrink-0 flex-col gap-1 border-r border-border p-3" aria-label="Channels">
                 {CHANNELS.map((channel) => (
                     <Button key={channel.name} variant={"active" in channel ? "secondary" : "ghost"} size="sm" className="justify-start">
                         <Hash data-icon="inline-start" />
@@ -66,8 +65,8 @@ const Page = () => (
                                 <AvatarFallback>{message.initials}</AvatarFallback>
                             </Avatar>
                             <div className="flex min-w-0 flex-col gap-1">
-                                <span className="sd-page-meta"><strong>{message.name}</strong> · {message.time}</span>
-                                <p className="sd-text">{message.text}</p>
+                                <span className="text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground"><strong>{message.name}</strong> · {message.time}</span>
+                                <p className="m-0 text-[length:var(--ui-text-md)] leading-[var(--ui-line-height-md)]">{message.text}</p>
                             </div>
                         </div>
                     ))}
@@ -87,20 +86,10 @@ const Page = () => (
     </div>
 );
 
-const PAGE_STYLE = `
-[data-template="block-settings-dialog"] .sd-brand { font-weight: 600; font-size: var(--ui-text-lg); line-height: var(--ui-line-height-lg); }
-[data-template="block-settings-dialog"] .sd-page-meta { font-size: var(--ui-text-sm); line-height: var(--ui-line-height-sm); color: var(--muted-foreground); }
-[data-template="block-settings-dialog"] .sd-page-meta strong { color: var(--foreground); font-weight: 600; }
-[data-template="block-settings-dialog"] .sd-text { margin: 0; font-size: var(--ui-text-md); line-height: var(--ui-line-height-md); }
-[data-template="block-settings-dialog"] .sd-channels { border-right: 1px solid var(--border); }
-`;
-
 export function BlockSettingsDialog() {
     return (
         <div data-template="block-settings-dialog">
             <NoMotion />
-            <style>{PAGE_STYLE}</style>
-            <style>{SETTINGS_STYLE}</style>
             <Page />
         </div>
     );
