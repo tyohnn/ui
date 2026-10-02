@@ -1,7 +1,8 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-07/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, sidebar, inset, header with trigger, separator and breadcrumb — is
 // upstream's markup and classes with the playground's breadcrumb labels; the body is the playground (./playground).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks
+// (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +21,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Playground, PLAYGROUND_STYLE } from "./playground"
+import { Playground } from "./playground"
 
 export function BlockAiPlayground() {
   return (
     <div data-template="block-ai-playground">
       <NoMotion />
-      <style>{PLAYGROUND_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
