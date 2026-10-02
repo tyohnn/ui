@@ -8,6 +8,9 @@ const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
  * Static export (out/) for static hosting. The site draws its own chrome (src/app/site.css); every system
  * screen is an iframe of a per-system preview build from public/preview/<system>/ (scripts/build-previews.mjs),
  * so each one runs one system in its own document.
+ *
+ * Vercel's Next.js builder strips `.html` from every exported file, public/ included, so a preview is stored there
+ * as /preview/<system>/index and its index.html address is missing: vercel.json rewrites one to the other.
  */
 const nextConfig: NextConfig = {
     output: "export",
