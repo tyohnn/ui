@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-08/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, inset sidebar, SidebarInset, header with trigger, separator and breadcrumb —
 // is upstream's markup and classes with the project tool's breadcrumb labels; the body is the overview (./overview).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout.
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Overview, OVERVIEW_STYLE } from "./overview"
+import { Overview } from "./overview"
 
 export function BlockProject() {
   return (
     <div data-template="block-project">
       <NoMotion />
-      <style>{OVERVIEW_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

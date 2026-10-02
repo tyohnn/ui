@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-06/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider, sidebar, inset, bordered header with trigger, separator and breadcrumb — is
 // upstream's markup and classes with the analytics breadcrumb labels; the body is the traffic report (./analytics).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout.
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Analytics, ANALYTICS_STYLE } from "./analytics"
+import { Analytics } from "./analytics"
 
 export function BlockAnalytics() {
   return (
     <div data-template="block-analytics">
       <NoMotion />
-      <style>{ANALYTICS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

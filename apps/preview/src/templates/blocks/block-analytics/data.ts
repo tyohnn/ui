@@ -53,12 +53,18 @@ export const VISITS = [
     { date: "Jan 14", visitors: 1674, pageViews: 5644 },
 ];
 
+// The series of the visits chart; the first is drawn in front.
+export const VISITS_SERIES = [
+    { key: "visitors", label: "Visitors" },
+    { key: "pageViews", label: "Page views" },
+];
+
 export const SOURCES = [
-    { source: "Search", visitors: 18420, fill: "var(--chart-1)" },
-    { source: "Direct", visitors: 11205, fill: "var(--chart-2)" },
-    { source: "Social", visitors: 7930, fill: "var(--chart-3)" },
-    { source: "Referral", visitors: 5874, fill: "var(--chart-4)" },
-    { source: "Email", visitors: 4784, fill: "var(--chart-5)" },
+    { source: "Search", visitors: 18420 },
+    { source: "Direct", visitors: 11205 },
+    { source: "Social", visitors: 7930 },
+    { source: "Referral", visitors: 5874 },
+    { source: "Email", visitors: 4784 },
 ];
 
 export const TOP_PAGES = [

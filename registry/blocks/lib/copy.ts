@@ -21,3 +21,9 @@ export const CAPTION = "text-[length:var(--ui-text-xs)] leading-[var(--ui-line-h
 
 /** A line of text behind a small icon; goes with NOTE or BODY */
 export const ICON_LINE = "flex items-center gap-1.5 [&_svg]:size-[14px] [&_svg]:shrink-0";
+
+/**
+ * The size of a title or a figure that leads a detail page: a quarter over the largest UI text size. The systems
+ * have no token for this step yet, so it is derived from `--ui-text-lg` here, in one place.
+ */
+export const DISPLAY_SIZE = "text-[length:calc(var(--ui-text-lg)*1.25)]";
