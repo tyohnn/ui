@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+import { useLocale } from "./locale-provider";
+
 /** The docs' "On this page" list, following the scroll position. */
 export const DocsToc = ({ sections }: { sections: { id: string; label: string }[] }) =>
 {
+    const { t } = useLocale();
     const [current, setCurrent] = useState(sections[0]?.id);
 
     useEffect(() =>
@@ -34,8 +37,8 @@ export const DocsToc = ({ sections }: { sections: { id: string; label: string }[
     }, [sections]);
 
     return (
-        <nav className="toc" aria-label="On this page">
-            <div className="eyebrow">On this page</div>
+        <nav className="toc" aria-label={t.docs.tocLabel}>
+            <div className="eyebrow">{t.docs.tocLabel}</div>
             {sections.map((section) => (
                 <a key={section.id} href={`#${section.id}`} aria-current={current === section.id ? "true" : undefined}>{section.label}</a>
             ))}

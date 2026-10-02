@@ -240,6 +240,16 @@
         }
     }
 
+    /* 선택된 항목의 hover. mira 에 없는 규칙을 하나 더한다.
+       이 시스템의 hover 는 --sidebar-item-hover-background 가 transparent 라 **글자가 밝아지는
+       것 하나**뿐인데, 선택된 항목은 그 밝은 글자를 이미 늘 쓴다. 그래서 선택된 줄에 마우스를
+       올리면 바탕도 글자도 그림자도 한 픽셀 바뀌지 않고, 그 줄만 반응이 죽는다(2026-09-20 실측).
+       ⚠ 명시도가 (0,3,0) 이라 .cn-sidebar-menu-button-variant-default:hover(0,2,0)를 이긴다.
+          순서에 기대지 않으므로 이 블록이 파일 어디에 있어도 같다. */
+    &[data-active]:hover {
+        background-color: var(--sidebar-active-hover-background, var(--sidebar-active, var(--sidebar-accent)));
+    }
+
     &:focus-visible {
         box-shadow: 0 0 0 var(--focus-ring-width) var(--sidebar-ring);
     }

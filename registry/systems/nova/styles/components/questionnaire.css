@@ -19,7 +19,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 16px;
+    gap: var(--questionnaire-gap, 16px);
 }
 
 .cn-questionnaire-progress {
@@ -32,7 +32,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 16px;   /* nova: gap-4 */
+    gap: var(--questionnaire-item-gap, 16px);   /* nova: gap-4 */
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
@@ -83,6 +83,17 @@
     /* nova: hover:bg-muted/50 */
     &:hover {
         background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
+    }
+
+    /* The 44px touch floor is upstream's (min-h-11), so it stays a literal here; only the desktop
+       height is the system's to choose.
+       ⚠ Layer 3 owns this height. Written as a utility on the component it would sit in the
+          utilities layer and beat every system's rule — the same reason the four footer buttons
+          are given `height` rather than `min-height`. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
     }
 
     &:is([data-state="checked"], [data-checked]:not([data-checked="false"])) {
@@ -207,10 +218,14 @@
 /* ⚠ 이 규칙은 2026-09-05 토큰화 4차에서 실수로 빠졌다가 되살렸다. 컴포넌트가
    `grid-cols-[minmax(0,1fr)_auto_auto]` 만 갖고 열 간격은 여기서 주므로, 빠지면
    '건너뛰기'와 '다음' 버튼이 맞닿는다. 지우지 말 것.
-   mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
-   실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
+   mira: gap-1.5 sm:min-h-7. */
 .cn-questionnaire-actions {
     gap: 8px;   /* nova: gap-2 */
+
+    /* 누를 자리의 바닥 44px 은 업스트림(min-h-11)의 것이라 리터럴이다. sm 위의 높이는 아래
+       미디어 질의가 정한다 — 종전에는 컴포넌트의 sm:min-h-9(36px)가 이겨 이 줄이 죽어 있었다
+       (2026-09-20). 업스트림 참조는 sm:min-h-7 이었으므로 컴포넌트 쪽이 어긋나 있었다. */
+    min-height: 2.75rem;
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

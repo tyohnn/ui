@@ -135,6 +135,12 @@
     --checkbox-indeterminate-shadow: var(--shadow-recessed);
     --surface-control: none;
     --surface-primary: none;
+
+    /* The hovered control's surface. background-image always paints over background-color, so a
+       system that fills a control with a gradient silently swallows every :hover colour these
+       rules set. Default to the resting surface: a system without clay is unchanged. */
+    --surface-control-hover: var(--surface-control);
+    --surface-primary-hover: var(--surface-primary);
     --tag-shadow: none;
 
     /* 지시자 — 체크박스·라디오. mira: size-4 · rounded-[4px] · 체크 [&>svg]:size-3.5 · 라디오 점 size-2 */
@@ -550,6 +556,24 @@
     --bubble-line-height: var(--ui-line-height-md);
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
+
+    /* questionnaire choice (v4): the choice card's padding, gap, corner and desktop floor.
+       The component gives every interactive part of a questionnaire `min-h-11` and releases it at
+       `sm` so layer 3 owns the desktop height — the choice card was the one part missing that
+       release, so no system could make the card shorter than 44px (2026-09-20). These values are
+       mira's literals, so foundation is unchanged; a dense system now has somewhere to say so. */
+    --questionnaire-choice-padding-x: 12px;
+    --questionnaire-choice-padding-y: 10px;
+    --questionnaire-choice-gap: 10px;
+    --questionnaire-choice-radius: var(--surface-radius-lg);
+    --questionnaire-choice-min-height: 44px;   /* the component's min-h-11 */
+    /* The questionnaire's vertical rhythm: between a question and the actions, and between a
+       question's head and its choices. mira's literals, so foundation is unchanged. */
+    --questionnaire-gap: 16px;
+    --questionnaire-item-gap: 12px;
+    /* The checked choice's edge. mira draws it with border-primary/40; no token matched, so layer 3
+       substituted --ring. That is right only where --ring carries the accent's hue. */
+    --questionnaire-choice-checked-border: var(--ring);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
 

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { FRAME_TOKEN_GROUPS } from "../../../../registry/blocks/lib/frame";
 
+import { useLocale } from "./locale-provider";
+
 /**
  * The frame tokens the page is trying — how far a page stands from its edge, the room between its blocks, a reading
  * column's width, an aside's — and the same values in every preview iframe on it. Like the colours, the frames are
@@ -86,6 +88,7 @@ export type FrameTokens = ReturnType<typeof useFrameTokens>;
 
 const Copy = ({ label, text, disabled }: { label: string; text: string; disabled?: boolean }) =>
 {
+    const { t } = useLocale();
     const [done, setDone] = useState(false);
 
     return (
@@ -102,7 +105,7 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
                 });
             }}
         >
-            {done ? "Copied" : label}
+            {done ? t.copy.copied : label}
         </button>
     );
 };
@@ -114,42 +117,52 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
  * time, so a slider and what it moves are in view together. Its children are the panel's own: the intro, a section
  * a group, and the footer that stays at the bottom.
  */
-export const FramePanel = ({ frames }: { frames: FrameTokens }) => (
-    <>
-        <p className="side-intro">Adjust spacing and widths. Every screen on this page updates as you drag.</p>
+export const FramePanel = ({ frames }: { frames: FrameTokens }) =>
+{
+    const { t, labels } = useLocale();
 
-        {FRAME_TOKEN_GROUPS.map((group) => (
-            <section key={group.id}>
-                <h4>{group.title} <code>{group.prefix}*</code></h4>
-                <p className="fr-hint">{group.hint}</p>
-                <div className="fr-grid">
-                    {group.tokens.map((token) =>
-                    {
-                        const value = frames.values[token.name] ?? token.rem;
-                        const edited = frames.values[token.name] !== undefined;
+    return (
+        <>
+            <p className="side-intro">{t.frames.intro}</p>
 
-                        return (
-                            <label key={token.name} className={edited ? "fr-token edited" : "fr-token"} title={token.name}>
-                                <span className="fr-label">{token.label} <code>{token.key}</code></span>
-                                <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
-                                <input
-                                    type="range"
-                                    min={0}
-                                    max={group.max}
-                                    step={group.step}
-                                    value={value}
-                                    onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
-                                />
-                            </label>
-                        );
-                    })}
-                </div>
-            </section>
-        ))}
+            {FRAME_TOKEN_GROUPS.map((group) =>
+            {
+                const text = labels.frameGroup(group.id, group);
 
-        <footer>
-            <Copy label="Copy CSS" text={frames.css ?? ""} disabled={frames.changed === 0} />
-            <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title="Back to the defaults">Reset all</button>
-        </footer>
-    </>
-);
+                return (
+                    <section key={group.id}>
+                        <h4>{text.title} <code>{group.prefix}*</code></h4>
+                        <p className="fr-hint">{text.hint}</p>
+                        <div className="fr-grid">
+                            {group.tokens.map((token) =>
+                            {
+                                const value = frames.values[token.name] ?? token.rem;
+                                const edited = frames.values[token.name] !== undefined;
+
+                                return (
+                                    <label key={token.name} className={edited ? "fr-token edited" : "fr-token"} title={token.name}>
+                                        <span className="fr-label">{labels.frameStep(token.key, token.label)} <code>{token.key}</code></span>
+                                        <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
+                                        <input
+                                            type="range"
+                                            min={0}
+                                            max={group.max}
+                                            step={group.step}
+                                            value={value}
+                                            onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
+                                        />
+                                    </label>
+                                );
+                            })}
+                        </div>
+                    </section>
+                );
+            })}
+
+            <footer>
+                <Copy label={t.frames.copyCss} text={frames.css ?? ""} disabled={frames.changed === 0} />
+                <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title={t.frames.resetTitle}>{t.frames.resetAll}</button>
+            </footer>
+        </>
+    );
+};

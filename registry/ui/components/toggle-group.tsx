@@ -28,6 +28,7 @@ function ToggleGroup({
   orientation = "horizontal",
   style,
   children,
+  style,
   ...props
 }: ToggleGroupPrimitive.Props &
   VariantProps<typeof toggleVariants> & {

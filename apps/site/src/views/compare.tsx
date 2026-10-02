@@ -1,22 +1,18 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { type CompareFacts, CompareView } from "@/components/compare-view";
+import { getMessages, type Locale, localizeSystems } from "@/lib/i18n";
 import { getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
 import { readThemes, systemThemes } from "@/lib/themes";
 
-export const metadata: Metadata = {
-    title: "Compare",
-    description: "Two tyohnn design systems on the same screen, split by a divider you drag.",
-};
-
-export default function ComparePage()
+export function ComparePageView({ locale }: { locale: Locale })
 {
-    const systems = getSystems();
+    const t = getMessages(locale);
+    const systems = localizeSystems(locale, getSystems());
     const facts: CompareFacts[] = systems.map((system) => ({
         name: system.name,
-        description: system.description,
+        character: system.character,
         sans: system.fonts.sans.family,
         heading: system.fonts.heading?.family ?? system.fonts.sans.family,
         icons: system.icons.id,
@@ -27,9 +23,9 @@ export default function ComparePage()
         <>
             <div className="page-head">
                 <div>
-                    <div className="eyebrow">Side by side</div>
-                    <h1>Compare</h1>
-                    <p>Two systems, one screen, <b>the same palette on both sides</b> — so what you see is spacing, corners, depth and type. Change the colours and both follow.</p>
+                    <div className="eyebrow">{t.compare.eyebrow}</div>
+                    <h1>{t.compare.title}</h1>
+                    <p>{t.compare.body}</p>
                 </div>
             </div>
             <Suspense>

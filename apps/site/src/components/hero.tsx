@@ -5,6 +5,7 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
+import { useLocale } from "./locale-provider";
 import { ScaledFrame } from "./scaled-frame";
 
 const ROTATE_MS = 5000;
@@ -17,6 +18,7 @@ const SCREEN = "crm-dashboard";
  */
 export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
 {
+    const { t } = useLocale();
     const [index, setIndex] = useState(0);
     const [paused, setPaused] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -75,14 +77,11 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
     return (
         <div ref={section}>
             <div className="hero">
-                <h1>Same screen.<br /><span>Every system.</span></h1>
+                <h1>{t.hero.titleFirst}<br /><span>{t.hero.titleSecond}</span></h1>
                 <div className="hero-side">
-                    <p>
-                        One set of shadcn components on Base UI, restyled by three CSS layers. <b>Spacing, corners, depth and type</b> change
-                        with the system — not only colour. New systems land as complete snapshots, so the shelf keeps growing.
-                    </p>
+                    <p>{t.hero.body}</p>
                     <div className="hero-actions">
-                        <a className="btn-solid" href="#systems">Browse systems</a>
+                        <a className="btn-solid" href="#systems">{t.hero.browse}</a>
                         <CopyCommand command={`npx tyohnn@latest init --system ${current.name}`} />
                     </div>
                 </div>
@@ -94,7 +93,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                         <span className="dots" aria-hidden><i /><i /><i /></span>
                         <span className="path">{SCREEN} · {current.name} · {current.defaultMode}</span>
                         <button type="button" className="pause" onClick={() => { setPaused((value) => !value); setCycle((value) => value + 1); }}>
-                            {paused ? "▶ Play" : "❚❚ Pause"}
+                            {paused ? t.hero.play : t.hero.pause}
                         </button>
                     </div>
                     <div className="stage-shot">
@@ -102,7 +101,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                             <div key={system.name} className="layer-frame" style={{ opacity: system === current ? 1 : 0 }} aria-hidden={system !== current}>
                                 <ScaledFrame
                                     src={previewUrl(system.name, SCREEN, system.defaultMode)}
-                                    title={`${system.name} CRM dashboard`}
+                                    title={t.hero.frameTitle(system.name)}
                                     width={viewport.width}
                                     height={viewport.height}
                                     eager
@@ -115,8 +114,8 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
 
                 <div className="rail">
                     <div className="rail-head">
-                        <span className="eyebrow">Now showing</span>
-                        <span className="eyebrow">{systems.length} systems</span>
+                        <span className="eyebrow">{t.hero.nowShowing}</span>
+                        <span className="eyebrow">{t.hero.count(systems.length)}</span>
                     </div>
                     <div className="rail-list" ref={list}>
                         {systems.map((system, position) => (
@@ -128,7 +127,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                                 aria-pressed={position === index}
                                 onClick={() => jump(position)}
                             >
-                                <span className="name"><span style={{ fontFamily: system.nameFont }}>{system.name}</span><small>{system.defaultMode}</small></span>
+                                <span className="name"><span style={{ fontFamily: system.nameFont }}>{system.name}</span><small>{t.modeTag[system.defaultMode]}</small></span>
                                 <span className="spec">{system.tagline}</span>
                                 {position === index && (
                                     <span className="progress" style={{ "--rotate-ms": `${ROTATE_MS}ms` } as CSSProperties}>
@@ -138,7 +137,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                             </button>
                         ))}
                     </div>
-                    <a className="rail-foot" href="#systems">All systems →</a>
+                    <a className="rail-foot" href="#systems">{t.hero.all}</a>
                 </div>
             </div>
         </div>
