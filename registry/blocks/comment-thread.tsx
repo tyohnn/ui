@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Textarea } from "@tyohnn/components/textarea";
-import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PARAGRAPH, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 export type ThreadComment = { id: string; name: ReactNode; initials: string; when: ReactNode; /** After the time: the commenter's role */ badge?: ReactNode; body: ReactNode };
@@ -48,7 +48,7 @@ export const CommentThread = ({
                         <span className={cn(NOTE, "whitespace-nowrap")}>{comment.when}</span>
                         {comment.badge}
                     </div>
-                    <p className={BODY}>{comment.body}</p>
+                    <p className={PARAGRAPH}>{comment.body}</p>
                 </div>
             </div>
         ))}

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PARAGRAPH, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 const TONE = { success: "[&>svg]:text-success", destructive: "[&>svg]:text-destructive", muted: "[&>svg]:text-muted-foreground" } as const;
@@ -28,7 +28,7 @@ export const StatusLine = ({
 }) => (
     <div className={cn("flex items-center gap-2 [&>svg]:size-[14px] [&>svg]:shrink-0", tone !== undefined && TONE[tone], className)}>
         {leading}
-        <span className={cn(BODY, "min-w-0 flex-1 truncate")}>{label}</span>
+        <span className={cn(PARAGRAPH, "min-w-0 flex-1 truncate")}>{label}</span>
         {note !== undefined && <span className={cn(NOTE, "whitespace-nowrap")}>{note}</span>}
         {trailing}
     </div>

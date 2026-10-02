@@ -21,7 +21,7 @@ import { DetailSections } from "@tyohnn/blocks/detail-sections";
 import { DiffFile } from "@tyohnn/blocks/diff-file";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
-import { BODY, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";
@@ -203,7 +203,7 @@ const SidePanel = () => (
                 title: "Linked issue",
                 content: (
                     <>
-                        <span className={cn(BODY, ICON_LINE)}>
+                        <span className={cn(PARAGRAPH, ICON_LINE)}>
                             <Link />
                             LED-1297 Invoices stuck after 503s
                         </span>

@@ -98,7 +98,7 @@ export const Reader = () => (
                     lines={[<>To: {OPEN_MAIL.to}</>, <>Cc: {OPEN_MAIL.cc}</>]}
                     date={OPEN_MAIL.date}
                 />
-                <Prose className="max-w-[80ch] [&_p]:whitespace-pre-line">
+                <Prose size="md" className="max-w-[80ch] [&_p]:whitespace-pre-line">
                     {OPEN_MAIL.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
                 </Prose>
                 <Attachments />
