@@ -4,17 +4,8 @@ import { useState } from "react";
 
 import { PALETTE_GROUPS, contrast, resolveValue, toHex } from "@tyohnn/theme";
 
+import { useLocale } from "./locale-provider";
 import { useTheme, type Mode } from "./theme-provider";
-
-const GROUP_LABELS: Record<string, string> = {
-    base: "Base",
-    chart: "Charts",
-    sidebar: "Sidebar",
-    status: "Status",
-    tag: "Tag tones",
-    avatar: "Avatar tones",
-    state: "Checked · selection · link",
-};
 
 const download = (name: string, text: string) =>
 {
@@ -27,6 +18,7 @@ const download = (name: string, text: string) =>
 
 const Copy = ({ label, text }: { label: string; text: string }) =>
 {
+    const { t } = useLocale();
     const [done, setDone] = useState(false);
 
     return (
@@ -42,7 +34,7 @@ const Copy = ({ label, text }: { label: string; text: string }) =>
                 });
             }}
         >
-            {done ? "Copied" : label}
+            {done ? t.copy.copied : label}
         </button>
     );
 };
@@ -54,6 +46,7 @@ const Copy = ({ label, text }: { label: string; text: string }) =>
  */
 const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
 {
+    const { t } = useLocale();
     const theme = useTheme()!;
     const values = theme.display[mode];
     const written = values[name] ?? "";
@@ -63,7 +56,7 @@ const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
     return (
         <div className={edited ? "th-swatch edited" : "th-swatch"}>
             <label className="th-chip" style={{ background: value }}>
-                <span className="sr-only">{`Pick --${name} (${mode})`}</span>
+                <span className="sr-only">{t.theme.pick(name, t.modeTag[mode])}</span>
                 <input type="color" value={toHex(value) ?? "#000000"} onChange={(event) => theme.setColour(mode, name, event.target.value)} />
             </label>
             <label className="th-field">
@@ -73,12 +66,12 @@ const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
                     value={theme.state.edits[mode][name] ?? written}
                     spellCheck={false}
                     onChange={(event) => theme.setColour(mode, name, event.target.value)}
-                    aria-label={`--${name} (${mode})`}
+                    aria-label={t.theme.fieldLabel(name, t.modeTag[mode])}
                 />
             </label>
             {edited && (
-                <button type="button" className="th-undo" onClick={() => theme.clearColour(mode, name)} title={`Back to ${written === value ? "the theme's value" : value}`}>
-                    <span className="sr-only">{`Undo --${name}`}</span>↺
+                <button type="button" className="th-undo" onClick={() => theme.clearColour(mode, name)} title={t.theme.undoTitle(written === value ? null : value)}>
+                    <span className="sr-only">{t.theme.undo(name)}</span>↺
                 </button>
             )}
         </div>
@@ -91,6 +84,7 @@ const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
  */
 export const ThemeEditor = ({ systemName }: { systemName: string }) =>
 {
+    const { t } = useLocale();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<Mode>("light");
@@ -127,34 +121,34 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                         <i key={name} style={{ background: resolveValue(values, values[name] ?? "") }} />
                     ))}
                 </span>
-                Colours
-                {!theme.isOwn && <span className="th-badge">edited</span>}
+                {t.theme.trigger}
+                {!theme.isOwn && <span className="th-badge">{t.theme.edited}</span>}
             </button>
 
             {open && (
                 <div className="th-panel">
                     <header>
                         <div>
-                            <b>Colours</b>
-                            <small>{systemName}&rsquo;s feel, any palette. Changes land in the frames as you make them.</small>
+                            <b>{t.theme.title}</b>
+                            <small>{t.theme.intro(systemName)}</small>
                         </div>
-                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label="Close">×</button>
+                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label={t.theme.close}>×</button>
                     </header>
 
                     <section>
-                        <h4>Themes <small>a whole palette, one per system</small></h4>
+                        <h4>{t.theme.themes} <small>{t.theme.themesHint}</small></h4>
                         <div className="th-row">{named.map(pick)}</div>
                     </section>
 
                     <section>
-                        <h4>Bases <small>shadcn&rsquo;s neutral ramps</small></h4>
+                        <h4>{t.theme.bases} <small>{t.theme.basesHint}</small></h4>
                         <div className="th-row">{bases.map(pick)}</div>
                     </section>
 
                     <section>
-                        <h4>Accent <small>moves primary, secondary, the charts and the sidebar accent</small></h4>
+                        <h4>{t.theme.accent} <small>{t.theme.accentHint}</small></h4>
                         <div className="th-row">
-                            <button type="button" className={theme.state.accent === null ? "th-pick on" : "th-pick"} onClick={() => theme.setAccent(null)}>none</button>
+                            <button type="button" className={theme.state.accent === null ? "th-pick on" : "th-pick"} onClick={() => theme.setAccent(null)}>{t.theme.none}</button>
                             {accents.map((entry) => (
                                 <button
                                     key={entry.id}
@@ -171,22 +165,22 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
 
                     <section>
                         <h4>
-                            Every colour
+                            {t.theme.every}
                             {edits > 0 && (
                                 <button type="button" className="th-clear" onClick={theme.clearEdits}>
-                                    {edits} changed by hand — clear
+                                    {t.theme.clear(edits)}
                                 </button>
                             )}
                             <span className="th-modes">
                                 {(["light", "dark"] as Mode[]).map((option) => (
-                                    <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{option}</button>
+                                    <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{t.mode[option]}</button>
                                 ))}
                             </span>
                         </h4>
                         <div className="th-tabs">
                             {Object.keys(PALETTE_GROUPS).map((id) => (
                                 <button key={id} type="button" className={group === id ? "on" : ""} onClick={() => setGroup(id)}>
-                                    {GROUP_LABELS[id] ?? id}
+                                    {t.theme.groups[id] ?? id}
                                 </button>
                             ))}
                         </div>
@@ -197,11 +191,11 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
 
                     {theme.warnings.length > 0 && (
                         <section className="th-warn">
-                            <h4>Contrast below AA</h4>
+                            <h4>{t.theme.warnTitle}</h4>
                             <ul>
                                 {theme.warnings.slice(0, 6).map((row) => (
                                     <li key={`${row.mode}-${row.foreground}`}>
-                                        <code>--{row.foreground}</code> on <code>--{row.background}</code> is {row.ratio}:1 in {row.mode}
+                                        {t.theme.warn(<code>--{row.foreground}</code>, <code>--{row.background}</code>, row.ratio, t.modeTag[row.mode])}
                                     </li>
                                 ))}
                             </ul>
@@ -209,11 +203,11 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                     )}
 
                     <footer>
-                        <Copy label="Copy CSS" text={theme.css ?? ""} />
-                        <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>Download theme.json</button>
-                        <Copy label="Copy install command" text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
-                        <Copy label="Copy share link" text={typeof window === "undefined" ? "" : window.location.href} />
-                        <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title="Back to the system's own colours">Reset all</button>
+                        <Copy label={t.theme.copyCss} text={theme.css ?? ""} />
+                        <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>{t.theme.download}</button>
+                        <Copy label={t.theme.copyInstall} text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
+                        <Copy label={t.theme.copyShare} text={typeof window === "undefined" ? "" : window.location.href} />
+                        <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title={t.theme.resetTitle}>{t.theme.resetAll}</button>
                     </footer>
                 </div>
             )}

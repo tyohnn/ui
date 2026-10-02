@@ -7,6 +7,7 @@ import { CATEGORIES, type Mode, previewUrl, screenSource, type SystemSummary } f
 
 import { CopyCommand } from "./copy-command";
 import { FrameEditor, useFrameTokens } from "./frame-editor";
+import { useLocale } from "./locale-provider";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
 import { ThemeEditor } from "./theme-editor";
@@ -27,6 +28,7 @@ export const SystemView = ({
     intro: ReactNode;
 }) =>
 {
+    const { t, labels, href } = useLocale();
     const [mode, setMode] = useState<Mode>(system.defaultMode);
     const [current, setCurrent] = useState<string>(CATEGORIES[0].id);
     const frames = useFrameTokens();
@@ -61,19 +63,19 @@ export const SystemView = ({
             <div className="sys-head">
                 {intro}
                 <div className="panel">
-                    <div className="eyebrow">Install</div>
+                    <div className="eyebrow">{t.systemView.install}</div>
                     <CopyCommand command={`npx tyohnn@latest init --system ${system.name}`} />
-                    <div className="panel-row"><span>Preview mode</span><ModeSeg mode={mode} onChange={setMode} /></div>
+                    <div className="panel-row"><span>{t.systemView.previewMode}</span><ModeSeg mode={mode} onChange={setMode} /></div>
                     <div className="panel-row">
-                        <span>Palette</span>
-                        <span className="swatches" aria-label={`${system.defaultMode} palette`}>
+                        <span>{t.systemView.palette}</span>
+                        <span className="swatches" aria-label={t.systemView.paletteLabel(t.modeTag[system.defaultMode])}>
                             {system.palette.map((colour, index) => <i key={index} style={{ background: colour }} title={colour} />)}
                         </span>
                     </div>
                 </div>
             </div>
 
-            <nav className="catbar" aria-label="Screen categories">
+            <nav className="catbar" aria-label={t.systemView.categoriesLabel}>
                 {CATEGORIES.map((category) => (
                     <a
                         key={category.id}
@@ -81,30 +83,30 @@ export const SystemView = ({
                         className="cat"
                         aria-current={current === category.id ? "true" : undefined}
                     >
-                        {category.label}<small>{category.screens.length}</small>
+                        {labels.category(category.id, category.label)}<small>{category.screens.length}</small>
                     </a>
                 ))}
-                <span className="end"><FrameEditor frames={frames} /><ThemeEditor systemName={system.name} />{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
+                <span className="end"><FrameEditor frames={frames} /><ThemeEditor systemName={system.name} />{t.systemView.screens(screens)}<ModeSeg mode={mode} onChange={setMode} /></span>
             </nav>
 
             {CATEGORIES.map((category) => (
                 <section key={category.id} id={category.id} className="cat-block">
-                    <div className="cat-head"><h2>{category.label}</h2><span className="count">{category.screens.length} screens</span></div>
+                    <div className="cat-head"><h2>{labels.category(category.id, category.label)}</h2><span className="count">{t.systemView.screens(category.screens.length)}</span></div>
                     {category.screens.map((screen) => (
                         <div key={screen.id} className="shot-row">
                             <div className="meta">
-                                <h3>{screen.label}</h3>
+                                <h3>{labels.screen(screen.id, screen.label)}</h3>
                                 <div className="src">{screenSource(screen)} · {screen.viewport.width}×{screen.viewport.height}</div>
                                 <div className="links">
-                                    <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">Full screen ↗</a>
-                                    <a href={`${previewUrl(system.name, screen.id, mode)}&frames=${frames.param}`} target="_blank" rel="noreferrer" title="Open with the frame controls: outlines and a slider per token">Frames ↗</a>
-                                    <Link href={`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`}>Compare</Link>
+                                    <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">{t.systemView.fullScreen}</a>
+                                    <a href={`${previewUrl(system.name, screen.id, mode)}&frames=${frames.param}`} target="_blank" rel="noreferrer" title={t.systemView.framesTitle}>{t.systemView.frames}</a>
+                                    <Link href={href(`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`)}>{t.systemView.compare}</Link>
                                 </div>
                             </div>
                             <div className="frame">
                                 <ScaledFrame
                                     src={previewUrl(system.name, screen.id, mode)}
-                                    title={`${system.name}: ${screen.label}`}
+                                    title={`${system.name}: ${labels.screen(screen.id, screen.label)}`}
                                     width={screen.viewport.width}
                                     height={screen.viewport.height}
                                     interactive

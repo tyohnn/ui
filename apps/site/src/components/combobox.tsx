@@ -2,6 +2,8 @@
 
 import { type ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";
 
+import { useLocale } from "./locale-provider";
+
 export interface ComboOption
 {
     value: string;
@@ -39,6 +41,7 @@ export const Combobox = <T extends ComboOption>({
     align?: "left" | "right";
 }) =>
 {
+    const { t } = useLocale();
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState("");
     const [active, setActive] = useState(0);
@@ -157,7 +160,7 @@ export const Combobox = <T extends ComboOption>({
                         <kbd>{filtered.length}</kbd>
                     </div>
                     <div className="combo-list" role="listbox" id={listId} aria-label={label}>
-                        {filtered.length === 0 && <div className="combo-empty">No match</div>}
+                        {filtered.length === 0 && <div className="combo-empty">{t.combobox.noMatch}</div>}
                         {filtered.map((option, index) =>
                         {
                             const heading = option.group && option.group !== lastGroup ? option.group : null;

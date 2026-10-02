@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useLocale } from "./locale-provider";
+
 const useCopy = (command: string) =>
 {
     const [copied, setCopied] = useState(false);
@@ -36,11 +38,12 @@ const useCopy = (command: string) =>
 export const CopyCommand = ({ command, className }: { command: string; className?: string }) =>
 {
     const { copied, copy } = useCopy(command);
+    const { t } = useLocale();
 
     return (
         <span className={className ? `cmd ${className}` : "cmd"}>
             <span><span className="dollar">$</span> <span data-command={command}>{command}</span></span>
-            <button type="button" className="copy" onClick={copy} aria-label={`Copy: ${command}`}>{copied ? "Copied" : "Copy"}</button>
+            <button type="button" className="copy" onClick={copy} aria-label={t.copy.aria(command)}>{copied ? t.copy.copied : t.copy.copy}</button>
         </span>
     );
 };
@@ -49,12 +52,13 @@ export const CopyCommand = ({ command, className }: { command: string; className
 export const CommandCard = ({ label, command }: { label?: string; command: string }) =>
 {
     const { copied, copy } = useCopy(command);
+    const { t } = useLocale();
 
     return (
         <div className="cmd-card">
             {label && <span className="what">{label}</span>}
             <span className="line"><i>$</i><span data-command={command}>{command}</span></span>
-            <button type="button" className="copy" onClick={copy} aria-label={`Copy: ${command}`}>{copied ? "Copied" : "Copy"}</button>
+            <button type="button" className="copy" onClick={copy} aria-label={t.copy.aria(command)}>{copied ? t.copy.copied : t.copy.copy}</button>
         </div>
     );
 };

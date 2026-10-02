@@ -1,32 +1,30 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { SystemView } from "@/components/system-view";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getMessages, type Locale, localeHref, localizeSystems } from "@/lib/i18n";
 import { getSystem, getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
 import { readThemes, systemThemes } from "@/lib/themes";
 
-export const dynamicParams = false;
+export const systemParams = () => getSystems().map((system) => ({ name: system.name }));
 
-export const generateStaticParams = () => getSystems().map((system) => ({ name: system.name }));
-
-type Props = { params: Promise<{ name: string }> };
-
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> =>
+export const systemMetadata = (locale: Locale, name: string) =>
 {
-    const system = getSystem((await params).name);
+    const system = localizeSystems(locale, getSystems()).find((entry) => entry.name === name);
 
     return system ? { title: system.name, description: system.description } : {};
 };
 
-export default async function SystemPage({ params }: Props)
+export function SystemPageView({ locale, name }: { locale: Locale; name: string })
 {
-    const { name } = await params;
-    const system = getSystem(name);
+    const t = getMessages(locale);
+    const raw = getSystem(name);
 
-    if (!system) notFound();
+    if (!raw) notFound();
+
+    const system = localizeSystems(locale, [raw])[0];
 
     // Neighbours in name order, wrapping around.
     const names = getSystems().map((entry) => entry.name).sort();
@@ -35,11 +33,11 @@ export default async function SystemPage({ params }: Props)
     const next = names[(index + 1) % names.length];
 
     const specs: [string, string][] = [
-        ["Sans", system.fonts.sans.family],
-        ["Heading", system.fonts.heading?.family ?? system.fonts.sans.family],
-        ["Icons", system.icons.id],
-        ["Hangul", system.fonts.hangulFallback.family],
-        ["Default", system.defaultMode === "dark" ? "Dark" : "Light"],
+        [t.system.specs.sans, system.fonts.sans.family],
+        [t.system.specs.heading, system.fonts.heading?.family ?? system.fonts.sans.family],
+        [t.system.specs.icons, system.icons.id],
+        [t.system.specs.hangul, system.fonts.hangulFallback.family],
+        [t.system.specs.default, t.mode[system.defaultMode]],
     ];
 
     const themes = readThemes();
@@ -47,16 +45,16 @@ export default async function SystemPage({ params }: Props)
 
     return (
         <ThemeProvider themes={themes} own={own}>
-            <nav className="crumbs" aria-label="Breadcrumb">
-                <Link href="/#systems">Systems</Link>
+            <nav className="crumbs" aria-label={t.system.crumbsLabel}>
+                <Link href={localeHref(locale, "/#systems")}>{t.system.crumbsRoot}</Link>
                 <span aria-hidden>/</span>
                 <span>{system.name}</span>
                 {/* 이웃 시스템은 맨 위, 빵부스러기 줄의 오른쪽 끝이다. 설치 패널 바닥에 있을 때는
                     화면을 다 내려야 보였는데, 시스템 사이를 옮겨 다니는 것은 화면을 보기 **전에**
                     하는 일이다. */}
                 <span className="crumb-nav">
-                    <Link href={`/systems/${previous}`}>← {previous}</Link>
-                    <Link href={`/systems/${next}`}>{next} →</Link>
+                    <Link href={localeHref(locale, `/systems/${previous}`)}>← {previous}</Link>
+                    <Link href={localeHref(locale, `/systems/${next}`)}>{next} →</Link>
                 </span>
             </nav>
             <SystemView
