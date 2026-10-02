@@ -119,7 +119,7 @@ const SeatsCard = () => (
 const SecurityCard = () => (
     <InfoCard loading={LOADING} title="Sign-in security" description="Applies to every member of the workspace" contentClassName="flex flex-col gap-4">
         <UsageMeter loading={LOADING} value={83} label="15 of 18 use two-factor" />
-        <SwitchField id="tm-require-2fa" label="Require two-factor" description="Members without it are asked at next sign-in" />
+        <SwitchField loading={LOADING} id="tm-require-2fa" label="Require two-factor" description="Members without it are asked at next sign-in" />
     </InfoCard>
 );
 
