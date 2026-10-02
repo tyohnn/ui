@@ -35,6 +35,7 @@ export interface GlobalOptions
     ui?: string;
     scope?: string;
     example?: string;
+    blocks?: boolean;
     built?: boolean;
     files?: boolean;
     reset?: boolean;
