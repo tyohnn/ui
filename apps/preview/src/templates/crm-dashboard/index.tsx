@@ -61,9 +61,9 @@ import { NoMotion } from "../coverage/frame";
 import { activityLevels, avatarTone, COLUMN_WIDTHS, type CompanyRow, CURRENT_USER, initials, ROWS, TAG_TONE } from "./data";
 
 /**
- * The Sales CRM "Companies" screen, so every design system can render it: `?template=crm-dashboard`. The window
- * is 1435px wide and as tall as its content (control sizes differ per system). Fixed data, no time and no
- * randomness, so two renders are identical.
+ * The Sales CRM "Companies" screen, so every design system can render it: `?template=crm-dashboard`. It fills
+ * the viewport (the catalog shows it at 1435 × 760). Fixed data, no time and no randomness, so two renders are
+ * identical.
  *
  * The window root carries `data-template="crm-dashboard"`; tooling/snapshot/export-dc.mjs exports it. The body is
  * composed from blocks (registry/blocks): the page bar, the filter bar, the table with its meter, trend and
@@ -125,13 +125,13 @@ const Menu = ({ items }: { items: NavItem[] }) => (
 );
 
 const CrmSidebar = () => (
-    <Sidebar collapsible="none" className="h-auto border-e border-sidebar-border">
+    <Sidebar collapsible="none" className="h-full border-e border-sidebar-border">
         <SidebarHeader className="flex-row items-center gap-2.5">
             <span className="grid size-8 shrink-0 place-items-center rounded-[var(--radius-md)] border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground [&_svg]:size-[18px]"><BrandMark /></span>
             <TwoLineLabel title="Sales CRM" subtitle="Company pipeline" />
         </SidebarHeader>
         <SidebarSeparator className="mx-0" />
-        <SidebarContent className="overflow-visible">
+        <SidebarContent>
             <SidebarGroup>
                 <Menu items={NAV_MAIN} />
             </SidebarGroup>
@@ -263,29 +263,31 @@ const CompaniesTable = () => (
 const SUMMARY = ["Sum of pipeline", "Avg win probability", "Add Calculation"];
 
 const TableSummary = () => (
-    <SummaryBar cells={[{ value: "20", label: "Companies in view" }, ...SUMMARY.map((label) => ({ icon: <Plus />, label }))]} />
+    <SummaryBar className="border-t border-b-0" cells={[{ value: "20", label: "Companies in view" }, ...SUMMARY.map((label) => ({ icon: <Plus />, label }))]} />
 );
 
+// The screen fills its viewport like the block templates: the sidebar and the page are as tall as the window, and
+// the table scrolls between the filter bar and the summary bar.
 export const CrmDashboard = () => (
-    <div className="p-8">
+    <div data-template="crm-dashboard" className="flex h-svh w-full overflow-hidden bg-background font-sans text-foreground antialiased">
         <NoMotion />
-        <div data-template="crm-dashboard" className="flex w-[1435px] overflow-hidden rounded-[var(--radius-xl)] border border-border bg-background font-sans text-foreground antialiased">
-            <SidebarProvider className="min-h-0" style={{ "--sidebar-width": "246px" } as CSSProperties}>
-                <CrmSidebar />
-                <SidebarInset className="min-w-0">
-                    <PageHeader />
-                    <Tabs defaultValue="companies">
-                        <TabsList variant="line" className="w-full justify-start gap-4 px-4">
-                            <TabsTrigger value="companies" className="flex-none">Companies</TabsTrigger>
-                            <TabsTrigger value="deals" className="flex-none">Deals</TabsTrigger>
-                            <TabsTrigger value="forecast" className="flex-none">Forecast</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                    <Toolbar />
+        <SidebarProvider className="h-full min-h-0" style={{ "--sidebar-width": "246px" } as CSSProperties}>
+            <CrmSidebar />
+            <SidebarInset className="min-h-0 min-w-0">
+                <PageHeader />
+                <Tabs defaultValue="companies">
+                    <TabsList variant="line" className="w-full justify-start gap-4 px-4">
+                        <TabsTrigger value="companies" className="flex-none">Companies</TabsTrigger>
+                        <TabsTrigger value="deals" className="flex-none">Deals</TabsTrigger>
+                        <TabsTrigger value="forecast" className="flex-none">Forecast</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+                <Toolbar />
+                <div className="min-h-0 flex-1 overflow-y-auto">
                     <CompaniesTable />
-                    <TableSummary />
-                </SidebarInset>
-            </SidebarProvider>
-        </div>
+                </div>
+                <TableSummary />
+            </SidebarInset>
+        </SidebarProvider>
     </div>
 );
