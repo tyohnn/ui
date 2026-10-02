@@ -124,6 +124,28 @@ export const locale = async (name: string | undefined, options: GlobalOptions): 
     await run(root, record, registry, options, previous === name ? `${name} re-applied` : `Words of ${record.ui.path}: ${previous} → ${name}`);
 };
 
+/** tyohnn blocks [remove] — the blocks (registry/blocks) next to the components; one set per UI package */
+export const blocks = async (action: string | undefined, options: GlobalOptions): Promise<void> =>
+{
+    if (action !== undefined && action !== "remove") throw new CliError(`unknown action "${action}"`, "Usage: tyohnn blocks (install or update them) · tyohnn blocks remove.");
+
+    const { root, record, registry } = await load(options);
+    const had = Boolean(record.ui.blocks);
+
+    if (action === "remove")
+    {
+        delete record.ui.blocks;
+        await run(root, record, registry, options, had ? `Blocks removed from ${record.ui.path}` : "No blocks were installed");
+
+        return;
+    }
+
+    const count = registry.blockFiles().filter((file) => !file.startsWith("registry/blocks/lib/")).length;
+
+    record.ui.blocks = true;
+    await run(root, record, registry, options, had ? `${count} blocks re-applied` : `${count} blocks → ${record.ui.path}`);
+};
+
 /** tyohnn theme <id | ./file.json | tyohnn-theme:<code>> [--app <path>] [--reset] */
 export const theme = async (argument: string | undefined, options: GlobalOptions): Promise<void> =>
 {

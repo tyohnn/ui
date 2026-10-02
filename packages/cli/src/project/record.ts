@@ -48,6 +48,8 @@ export interface TyohnnRecord
         icons: string[];
         /** The words of the shared components (registry/ui/strings/locales); absent in older records means "en" */
         locale?: string;
+        /** Whether the blocks (registry/blocks) are installed next to the components */
+        blocks?: boolean;
     };
     apps: Record<string, AppRecord>;
     /** Packages the CLI added, per package.json (project-relative); only these are ever removed again */
@@ -89,6 +91,7 @@ export const serializeRecord = (record: TyohnnRecord): string =>
             systems: [...new Set(record.ui.systems)].sort(),
             icons: [...new Set(record.ui.icons)].sort(),
             ...(record.ui.locale ? { locale: record.ui.locale } : {}),
+            ...(record.ui.blocks ? { blocks: true } : {}),
         },
         apps: sortKeys(Object.fromEntries(Object.entries(record.apps).map(([path, app]) => [path, {
             framework: app.framework,

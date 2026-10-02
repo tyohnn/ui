@@ -204,6 +204,24 @@ export class Registry
         ].sort();
     }
 
+    /** Whether this source ships registry/blocks (older sources have the components only) */
+    get hasBlocks(): boolean
+    {
+        return this.has("registry/blocks");
+    }
+
+    /** Every block and what the blocks share (registry/blocks/**.ts(x)), as repository paths */
+    blockFiles(): string[]
+    {
+        if (!this.hasBlocks) throw new CliError("this tyohnn source has no blocks", "Read a newer source (--ref main).");
+
+        const walk = (dir: string, prefix: string): string[] =>
+            readdirSync(dir, { withFileTypes: true })
+                .flatMap((entry) => entry.isDirectory() ? walk(join(dir, entry.name), `${prefix}${entry.name}/`) : /\.tsx?$/.test(entry.name) ? [`${prefix}${entry.name}`] : []);
+
+        return walk(this.path("registry/blocks"), "registry/blocks/").sort();
+    }
+
     templateFiles(name: string): string[]
     {
         const base = `apps/preview/src/templates/${name}`;

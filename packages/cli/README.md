@@ -21,6 +21,7 @@ monorepos (with or without Turborepo).
 | `use <system> [--app <path>]` | Switches an app to another system: entry CSS, fonts and mode. The TSX stays; the old system folder is removed when no app uses it. |
 | `icons <library> [--app <path>]` | Switches an app's icon library (mapping file and packages). |
 | `locale <locale>` | Switches the words the components say by themselves (screen-reader names, landmark labels, default button text) for the whole UI package: `en` · `ko`. |
+| `blocks [remove]` | Installs (or updates) the blocks next to the components: screen pieces composed from them — page headings, table cards, lists, charts, forms. One set for the whole UI package; `remove` takes them out again. |
 | `fonts [--sans <id>] [--heading <id\|inherit>] [--mono <id\|system>] [--reset] [--app <path>]` | Switches an app's fonts; `--reset` returns to the system's. |
 | `theme <name \| ./file.json \| tyohnn-theme:<code>> [--reset] [--app <path>]` | Switches an app's colours, keeping its system. `--reset` returns to the system's own theme. |
 | `list` | Systems, themes, icon libraries, locales and fonts. |
@@ -51,7 +52,7 @@ imports that instead — the same place in the cascade, so nothing else moves. `
 is still what the theme renders.
 
 Common options: `--yes` (no prompts, take defaults) · `--force` (overwrite files that exist or were edited) ·
-`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--locale <locale>`, `--font <id>`,
+`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--locale <locale>`, `--blocks`, `--font <id>`,
 `--font-heading <id|inherit>`, `--font-mono <id|system>`, and in a monorepo `--app <path>`, `--ui <folder>`
 (default `packages/ui`) and `--scope <@scope>` (the package becomes `<scope>/ui`). `--example component-sheet`
 copies the preview's component sheet into the app (a page at `/tyohnn/component-sheet` in Next.js).
@@ -68,6 +69,7 @@ packages/ui/src/components · hooks · lib       the TSX, imports as @acme/ui/co
 packages/ui/src/icons/libraries/<library>.tsx  the icon libraries some app uses
 packages/ui/src/icons/index.ts                 the package's default library (what its own typecheck sees)
 packages/ui/src/strings/                       index.ts · names.ts · locales/<locale>.ts, imports as @acme/ui/strings
+packages/ui/src/blocks/                        the blocks (with `--blocks` or `tyohnn blocks`), imports as @acme/ui/blocks/…
 packages/ui/src/systems/<system>/              globals.css · tokens.css · typeset*.css · style.css · components/ · DESIGN.md · system.json
 apps/<app>/src/app/globals.css                 imports exactly one system
 apps/<app>/tsconfig.json                       paths "@acme/ui/icons" → that app's library
@@ -82,6 +84,7 @@ src/components/ui/*.tsx                imports as @/components/ui/…
 src/hooks · src/lib
 src/components/icons/                  index.ts · names.ts · libraries/<library>.tsx
 src/lib/strings/                       index.ts · names.ts · locales/<locale>.ts
+src/components/blocks/*.tsx · lib/     the blocks (with `--blocks` or `tyohnn blocks`), imports as @/components/blocks/…
 src/styles/tyohnn/<system>/            the system folder
 ```
 
@@ -148,6 +151,25 @@ Components take the words they say by themselves (the name of an icon-only butto
 "Previous") from one module (`@acme/ui/strings` or `@/lib/strings`). The language is recorded once for the UI package
 (`tyohnn.json` `ui.locale`, default `en`), so every app of a monorepo speaks the same one. Props such as `text` or
 `title` still override a default on one screen. Sources older than this axis have no locales; `locale` then says so.
+
+## Blocks
+
+`tyohnn init --blocks`, or `tyohnn blocks` later, copies every block of `registry/blocks` next to the components
+(`tyohnn.json` `ui.blocks`): a page heading, a table in a card with tabs and bulk actions, a kanban board, a week
+view, a code block. A block is composed from the components and reads the design system's tokens only, so it
+changes with the system like the components do. It fetches nothing and says nothing by itself: rows, labels,
+accessible names and callbacks are props.
+
+```tsx
+import { DataTableCard } from "@/components/blocks/data-table-card";   // monorepo: @acme/ui/blocks/data-table-card
+import { PageHeading } from "@/components/blocks/page-heading";
+```
+
+They come as one set, like the components. A block you do not import adds nothing to the JavaScript; its utility
+classes are in the built CSS all the same, because Tailwind scans the folder.
+They are CLI-owned files, so `doctor` checks them and `diff` shows what changed upstream; `tyohnn blocks` updates
+them and `tyohnn blocks remove` deletes them. The list is in the repository's `registry/blocks/README.md`.
+Sources older than the blocks have none; `blocks` then says so.
 
 ## Several systems in one monorepo
 

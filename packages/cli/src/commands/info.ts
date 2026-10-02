@@ -45,6 +45,8 @@ export const list = async (options: GlobalOptions): Promise<void> =>
 
     if (registry.manifest.locales) log.info(`${color.bold("\nLocales")}  ${Object.keys(registry.manifest.locales).join(" · ")}`);
 
+    if (registry.hasBlocks) log.info(`${color.bold("\nBlocks")}  ${registry.blockFiles().filter((file) => !file.startsWith("registry/blocks/lib/")).length} screen pieces composed from the components ${color.dim("(init --blocks · tyohnn blocks)")}`);
+
     log.info(color.bold("\nFonts"));
 
     const fonts = [...registry.fonts()];
@@ -89,6 +91,7 @@ export const diff = async (options: GlobalOptions): Promise<number> =>
         ...registry.manifest.files.filter(isSharedFile).map((file) => `registry/ui/${file}`),
         ...usedIcons(record).map((library) => `registry/ui/${registry.iconLibrary(library).file}`),
         ...(registry.hasStrings ? [`registry/ui/${registry.locale(localeOf(record))}`] : []),
+        ...(record.ui.blocks && registry.hasBlocks ? registry.blockFiles() : []),
         ...usedSystems(record).flatMap((system) => registry.systemFiles(system).map((file) => `${registry.systemDir(system)}/${file}`)),
     ];
 
