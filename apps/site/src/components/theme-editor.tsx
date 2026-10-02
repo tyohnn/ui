@@ -211,7 +211,7 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
                     <footer>
                         <Copy label="Copy CSS" text={theme.css ?? ""} />
                         <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>Download theme.json</button>
-                        <Copy label="Copy install command" text={`npx tyohnn init --system ${systemName} --theme ${theme.link}`} />
+                        <Copy label="Copy install command" text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
                         <Copy label="Copy share link" text={typeof window === "undefined" ? "" : window.location.href} />
                         <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title="Back to the system's own colours">Reset all</button>
                     </footer>

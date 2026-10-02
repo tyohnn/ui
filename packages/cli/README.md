@@ -6,7 +6,7 @@ set of component TSX and one or more complete design-system folders, then wires 
 runtime package: after `init` the code is yours.
 
 ```sh
-npx tyohnn init --system vega
+npx tyohnn@latest init --system vega
 ```
 
 Requires Node 20 or later. Supports Next.js (App Router) apps, Vite apps, and npm · pnpm · yarn · bun workspace
