@@ -8,7 +8,10 @@
 //   node tooling/snapshot/check-templates.mjs --templates block-orders --shots tooling/snapshot/out/before
 //   … change the template …
 //   node tooling/snapshot/check-templates.mjs --templates block-orders --shots tooling/snapshot/out/after
-//   node tooling/snapshot/diff-shots.mjs tooling/snapshot/out/before tooling/snapshot/out/after [--tolerance 0] [--out dir]
+//   node tooling/snapshot/diff-shots.mjs tooling/snapshot/out/before tooling/snapshot/out/after [--templates id,id]
+//        [--tolerance 0] [--out dir]
+//
+// --templates compares those templates only (the "before" folder usually holds every template, shot once).
 //
 // --out writes, for every pair that differs, a PNG with the differing pixels in red over the dimmed "after" shot.
 // Exit 0 when every pair is identical (within the tolerance), 1 when one differs or is missing on either side.
@@ -27,10 +30,11 @@ const arg = (name, fallback) =>
 };
 const tolerance = Number(arg("tolerance", "0"));
 const outDir = arg("out");
+const only = arg("templates")?.split(",").map((id) => `${id.trim()}.png`);
 
 if (!before || !after)
 {
-    console.error("usage: diff-shots.mjs <before dir> <after dir> [--tolerance 0] [--out dir]");
+    console.error("usage: diff-shots.mjs <before dir> <after dir> [--templates id,id] [--tolerance 0] [--out dir]");
     process.exit(2);
 }
 
@@ -42,7 +46,9 @@ const walk = (dir) => readdirSync(dir).flatMap((name) =>
 });
 
 const raw = (file) => sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-const files = [...new Set([...walk(before).map((file) => relative(before, file)), ...walk(after).map((file) => relative(after, file))])].sort();
+const files = [...new Set([...walk(before).map((file) => relative(before, file)), ...walk(after).map((file) => relative(after, file))])]
+    .filter((file) => !only || only.some((name) => file.endsWith(`/${name}`)))
+    .sort();
 let failed = 0;
 
 for (const file of files)
