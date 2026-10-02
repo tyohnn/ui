@@ -32,6 +32,11 @@ was chosen deliberately in that register and is documented in `DESIGN.md`:
 - the palette is authored in oklch (`registry/themes/vellum.json`), warm-tinted throughout
   (hue 70–85 for the neutrals, 192 for the teal), and passes AA on every pair `checkContrast` tests;
 - the density and shape steps are named in `DESIGN.md` → Key values, each with what it replaced in mira.
+- the chart colours are one ordinal ramp, checked as one (2026-10-02): a single hue, lightness in
+  order, steps at least 0.06 L apart, and the faintest step at least 2:1 on the page and on a card, in
+  both modes. The first set (three teals and two warm greys) was neither a ramp nor a categorical
+  palette: its neighbours measured ΔE 11 against a floor of 15, and in dark its lightness ran out of
+  order. `DESIGN.md` → Combination rules says what to draw when series have to be told apart.
 
 ## Foundation slot candidates
 
