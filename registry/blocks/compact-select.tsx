@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 
 export type CompactSelectOption = string | { value: string; label: string };
 
@@ -10,11 +10,14 @@ export type CompactSelectOption = string | { value: string; label: string };
  * A small select for a toolbar filter or a cell: a role, a status, a sort order. Options are plain strings or
  * value and label pairs; the first is selected until `value` or `defaultValue` says otherwise. `label` names the
  * control for assistive technology, or — with `showLabel` — is written in the trigger before the value ("Sort by …").
+ * `id` lets a field's label point at the trigger, and `heading` is a line over the options in the open list.
  */
 export const CompactSelect = ({
+    id,
     label,
     showLabel,
     icon,
+    heading,
     options,
     value,
     defaultValue,
@@ -22,9 +25,11 @@ export const CompactSelect = ({
     disabled,
     className,
 }: {
+    id?: string;
     label: string;
     showLabel?: boolean;
     icon?: ReactNode;
+    heading?: ReactNode;
     options: readonly CompactSelectOption[];
     value?: string;
     defaultValue?: string;
@@ -42,13 +47,14 @@ export const CompactSelect = ({
             onValueChange={onValueChange && ((next) => onValueChange(String(next)))}
             disabled={disabled}
         >
-            <SelectTrigger size="sm" aria-label={showLabel ? undefined : label} className={className}>
+            <SelectTrigger id={id} size="sm" aria-label={showLabel ? undefined : label} className={className}>
                 {icon}
                 {showLabel && <span className="text-muted-foreground">{label}</span>}
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
+                    {heading !== undefined && <SelectLabel>{heading}</SelectLabel>}
                     {items.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}
                 </SelectGroup>
             </SelectContent>
