@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Separator } from "@tyohnn/components/separator";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type PageAnchor = {
     /** The id of the heading the link jumps to */
@@ -23,15 +24,16 @@ const LINK = {
  * in, and a note under a divider. It sticks to the top of the scrolling pane while the page moves.
  */
 export const OnThisPage = ({
-    label,
-    title,
+    label = strings.blocks.onThisPage.title,
+    title = strings.blocks.onThisPage.title,
     items,
     note,
     className,
 }: {
-    /** The navigation's accessible name */
-    label: string;
-    title: ReactNode;
+    /** The title over the links; the locale's "On this page" when left out */
+    title?: ReactNode;
+    /** The navigation's accessible name; the locale's own words when left out */
+    label?: string;
     items: readonly PageAnchor[];
     note?: ReactNode;
     className?: string;

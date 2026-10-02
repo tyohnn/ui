@@ -10,7 +10,7 @@ import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
 import { ASIDE_WIDTH_STACKED } from "@tyohnn/blocks/lib/frame";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageSplit } from "@tyohnn/blocks/page-split";
-import { ParameterTable, type ParameterTableLabels } from "@tyohnn/blocks/parameter-table";
+import { ParameterTable } from "@tyohnn/blocks/parameter-table";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionHeading } from "@tyohnn/blocks/section-heading";
 import { Alert, AlertDescription, AlertTitle } from "@tyohnn/components/alert";
@@ -37,20 +37,10 @@ import {
  * blocks (registry/blocks); which parameters, status codes and examples exist is the API's own and stays here.
  */
 
-const PARAMETER_LABELS: ParameterTableLabels = {
-    name: "Name",
-    type: "Type",
-    required: "Required",
-    description: "Description",
-    requiredBadge: "Required",
-    optionalBadge: "Optional",
-};
-
 const Parameters = ({ title, description, parameters }: { title: string; description: string; parameters: Parameter[] }) => (
     <section className="flex flex-col gap-3">
         <SectionHeading title={title} description={description} />
         <ParameterTable
-            labels={PARAMETER_LABELS}
             parameters={parameters.map((parameter) => ({ ...parameter, note: parameter.values ? <>One of {parameter.values}</> : undefined }))}
         />
     </section>

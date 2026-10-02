@@ -2,6 +2,7 @@ import { MapPin } from "@tyohnn/icons";
 
 import { CAPTION } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type WeekTone = "primary" | "success" | "info" | "warning";
 
@@ -39,7 +40,7 @@ export const WeekView = ({
     hours,
     events,
     allDay,
-    allDayLabel,
+    allDayLabel = strings.blocks.calendar.allDay,
     zoneLabel,
     now,
     formatTime = clock,
@@ -55,7 +56,7 @@ export const WeekView = ({
     /** The gutter label over the hours: the time zone */
     zoneLabel?: string;
     /** The current time in today's column, with its name for assistive technology ("Now, 11:45") */
-    now?: { at: number; label: string };
+    now?: { at: number; label?: string };
     /** How an hour is written on the axis and in an event; 24-hour `HH:MM` when left out */
     formatTime?: (hours: number) => string;
     className?: string;
@@ -133,7 +134,7 @@ export const WeekView = ({
                             <div
                                 className="absolute right-0 left-0 z-[1] h-[2px] bg-destructive before:absolute before:top-[-3px] before:left-[-4px] before:size-[8px] before:rounded-full before:bg-destructive before:content-['']"
                                 style={{ top: percent(now.at) }}
-                                aria-label={now.label}
+                                aria-label={now.label ?? strings.blocks.calendar.now}
                             />
                         )}
                     </div>

@@ -100,7 +100,6 @@ const Thread = () => (
             badge: comment.initials === "KW" ? <Badge variant="outline">Author</Badge> : undefined,
             body: comment.body,
         }))}
-        replyLabel="Reply"
         replyPlaceholder="Reply to Rosa…"
         threadAction={(
             <Button variant="ghost" size="sm">
@@ -130,12 +129,10 @@ const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; 
         added={added}
         removed={removed}
         open={lines !== undefined}
-        toggleLabel={lines !== undefined ? "Collapse file" : "Expand file"}
         viewed={viewed}
-        viewedLabel="Viewed"
         menu={<Button variant="ghost" size="icon-xs" aria-label="File actions"><MoreHorizontal /></Button>}
     >
-        {lines !== undefined && <DiffView lines={lines} label="Diff" />}
+        {lines !== undefined && <DiffView lines={lines} />}
     </DiffFile>
 );
 

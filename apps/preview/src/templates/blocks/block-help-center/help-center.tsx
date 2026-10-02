@@ -60,7 +60,6 @@ const Hero = () => (
         searchLabel="Search the help center"
         placeholder="Search for articles, e.g. recurring invoices"
         shortcut="⌘ K"
-        submitLabel="Search"
         suggestionsLabel="Popular:"
         suggestions={POPULAR_SEARCHES}
     />

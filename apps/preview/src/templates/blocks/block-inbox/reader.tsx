@@ -109,7 +109,6 @@ export const Reader = () => (
             className="[&>*]:max-w-[61rem]"
             icon={<Reply />}
             heading="Reply to Priya Das, Tomas Lind"
-            label="Reply"
             defaultValue={"Hi Priya,\n\nGreat news — Friday at 11 works for us. I'll fold both changes into the handoff file and send the updated build notes on Thursday."}
             tools={[
                 { label: "Attach a file", icon: <Paperclip /> },
