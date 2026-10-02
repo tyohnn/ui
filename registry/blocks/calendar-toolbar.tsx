@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from "@tyohnn/icons";
 import { Button } from "@tyohnn/components/button";
 import { ButtonGroup } from "@tyohnn/components/button-group";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
+import { GUTTER_INLINE, type Gutter } from "@tyohnn/blocks/lib/frame";
 import { TITLE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
@@ -31,6 +32,7 @@ export const CalendarToolbar = ({
     onPrevious,
     onNext,
     onViewChange,
+    gutter = "sm",
     className,
 }: {
     /** The button back to today; the locale's own word when left out */
@@ -54,9 +56,11 @@ export const CalendarToolbar = ({
     onPrevious?: () => void;
     onNext?: () => void;
     onViewChange?: (view: string) => void;
+    /** How far its ends stand from the page's edge: the page's small gutter by default */
+    gutter?: Gutter;
     className?: string;
 }) => (
-    <div className={cn("flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border px-4 py-3", className)}>
+    <div className={cn("flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border py-3", GUTTER_INLINE[gutter], className)}>
         <Button variant="outline" size="sm" onClick={onToday}>{todayLabel}</Button>
         <ButtonGroup>
             <Button variant="outline" size="icon-sm" aria-label={previousLabel} onClick={onPrevious}><ChevronLeft /></Button>
