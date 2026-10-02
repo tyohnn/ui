@@ -26,7 +26,7 @@ import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";
 import { StatusLine } from "@tyohnn/blocks/status-line";
-import { ViewToggle } from "@tyohnn/blocks/view-toggle";
+import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { Avatar, AvatarFallback, AvatarGroup } from "@tyohnn/components/avatar";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
@@ -143,7 +143,7 @@ const FilesChanged = () => (
                 <GitCommit />
                 3 files changed · <DiffStat kind="add">+62</DiffStat> <DiffStat kind="del">−11</DiffStat> · 1 of 3 viewed
             </span>
-            <ViewToggle label="Diff view" options={[{ value: "unified", label: "Unified" }, { value: "split", label: "Split" }]} defaultValue="unified" />
+            <SegmentedControl label="Diff view" options={[{ value: "unified", label: "Unified" }, { value: "split", label: "Split" }]} defaultValue="unified" />
         </div>
         <ChangedFile id="cr-viewed-backoff" path="webhooks/retry/backoff.ts" added={17} removed={6} lines={withThread(BACKOFF_DIFF)} />
         <ChangedFile id="cr-viewed-policy" path="webhooks/retry/policy.ts" added={38} removed={0} viewed />

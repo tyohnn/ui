@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from "@tyohnn/icons";
 
 import { Button } from "@tyohnn/components/button";
 import { ButtonGroup } from "@tyohnn/components/button-group";
-import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
+import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { TITLE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 
@@ -65,16 +65,7 @@ export const CalendarToolbar = ({
         <div className="ml-auto flex flex-wrap items-center gap-2">
             {tools}
             {views !== undefined && (
-                <ToggleGroup
-                    variant="outline"
-                    size="sm"
-                    spacing={0}
-                    defaultValue={[defaultView ?? views[0]?.value ?? ""]}
-                    onValueChange={onViewChange && ((value) => value[0] !== undefined && onViewChange(String(value[0])))}
-                    aria-label={viewsLabel}
-                >
-                    {views.map((view) => <ToggleGroupItem key={view.value} value={view.value}>{view.label}</ToggleGroupItem>)}
-                </ToggleGroup>
+                <SegmentedControl label={viewsLabel ?? ""} options={views} defaultValue={defaultView} onValueChange={onViewChange} />
             )}
             {action}
         </div>

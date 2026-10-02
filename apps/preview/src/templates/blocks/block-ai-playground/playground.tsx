@@ -30,7 +30,7 @@ import { PromptInput } from "@tyohnn/blocks/prompt-input";
 import { SliderField } from "@tyohnn/blocks/slider-field";
 import { SwitchField } from "@tyohnn/blocks/switch-field";
 import { UsageMeter } from "@tyohnn/blocks/usage-meter";
-import { ViewToggle } from "@tyohnn/blocks/view-toggle";
+import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { Card } from "@tyohnn/components/card";
@@ -60,7 +60,7 @@ const Toolbar = () => (
     <CardToolbar
         actions={(
             <>
-                <ViewToggle label="Mode" options={[{ value: "chat", label: "Chat" }, { value: "compare", label: "Compare" }]} defaultValue="chat" />
+                <SegmentedControl label="Mode" options={[{ value: "chat", label: "Chat" }, { value: "compare", label: "Compare" }]} defaultValue="chat" />
                 <Button variant="ghost" size="icon-sm" aria-label="History"><History /></Button>
                 <Button variant="outline" size="sm">
                     <Code data-icon="inline-start" />
