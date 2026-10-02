@@ -26,7 +26,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { FieldPanel } from "@tyohnn/blocks/field-panel";
 import { HintField } from "@tyohnn/blocks/hint-field";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { PromptInput } from "@tyohnn/blocks/prompt-input";
 import { SliderField } from "@tyohnn/blocks/slider-field";
 import { SwitchField } from "@tyohnn/blocks/switch-field";

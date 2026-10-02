@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Progress, ProgressLabel, ProgressValue } from "@tyohnn/components/progress";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

@@ -8,7 +8,7 @@ import { Button } from "@tyohnn/components/button";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Label } from "@tyohnn/components/label";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
-import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 

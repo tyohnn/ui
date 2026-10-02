@@ -1,6 +1,6 @@
 // check-loading — does a template's waiting face keep the frame it has with the data?
 //
-// A block that is `loading` (registry/blocks/lib/pending.tsx) swaps its values for bars and marks its frame
+// A block that is `loading` (registry/blocks/pending.tsx) swaps its values for bars and marks its frame
 // `data-loading`. For each template × system this opens the template with `?loading` (apps/preview/src/templates/
 // loading.ts), takes the box of every `data-loading` frame, then opens it without and measures the same elements
 // (found again by their path from the template root). A frame whose box moved or changed size by more than

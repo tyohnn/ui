@@ -22,7 +22,7 @@ import { DiffFile } from "@tyohnn/blocks/diff-file";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
 import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";

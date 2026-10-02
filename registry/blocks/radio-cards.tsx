@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "@tyohnn/components/field";
 import { RadioGroup, RadioGroupItem } from "@tyohnn/components/radio-group";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type RadioCard = { value: string; label: ReactNode; description?: ReactNode };

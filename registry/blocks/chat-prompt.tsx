@@ -3,7 +3,7 @@ import { Fragment, type ReactNode } from "react";
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Bubble, BubbleContent } from "@tyohnn/components/bubble";
 import { Message, MessageAvatar, MessageContent, MessageFooter } from "@tyohnn/components/message";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 
 /**
  * What the person sent in a conversation with an assistant: their avatar and the message as a bubble on the end

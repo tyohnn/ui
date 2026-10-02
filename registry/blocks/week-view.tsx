@@ -1,7 +1,7 @@
 import { MapPin } from "@tyohnn/icons";
 
 import { CAPTION } from "@tyohnn/blocks/lib/copy";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 

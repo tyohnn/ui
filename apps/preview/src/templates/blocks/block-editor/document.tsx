@@ -4,7 +4,7 @@ import { Checklist } from "@tyohnn/blocks/checklist";
 import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { PropertyList, PropertyText } from "@tyohnn/blocks/property-list";
 import { Prose } from "@tyohnn/blocks/prose";
 import { TableFrame } from "@tyohnn/blocks/table-frame";

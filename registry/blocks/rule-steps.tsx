@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from "react";
 
 import { Badge } from "@tyohnn/components/badge";
 import { BODY } from "@tyohnn/blocks/lib/copy";
-import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type RuleStep = {

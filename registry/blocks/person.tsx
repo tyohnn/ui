@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@tyohnn/components/avatar";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

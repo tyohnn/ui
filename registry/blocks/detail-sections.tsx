@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from "react";
 
 import { Separator } from "@tyohnn/components/separator";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type DetailSection = { id: string; title: ReactNode; /** At the end of the title's line: a count ("4 of 6 passed") */ note?: ReactNode; content: ReactNode };

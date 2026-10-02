@@ -23,7 +23,7 @@ import { AttachmentList } from "@tyohnn/blocks/attachment-list";
 import { CollapsedThread } from "@tyohnn/blocks/collapsed-thread";
 import { IconToolbar } from "@tyohnn/blocks/icon-toolbar";
 import { ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { MailHeader } from "@tyohnn/blocks/mail-header";
 import { Prose } from "@tyohnn/blocks/prose";
 import { ReplyComposer } from "@tyohnn/blocks/reply-composer";

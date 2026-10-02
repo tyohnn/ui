@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Progress, ProgressLabel, ProgressValue } from "@tyohnn/components/progress";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 
 /**
  * How much of something is used: a progress bar with what it measures on one side and the percentage on the other.

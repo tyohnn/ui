@@ -4,7 +4,7 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Progress, ProgressValue } from "@tyohnn/components/progress";
 import { Badge } from "@tyohnn/components/badge";
 import { IconMeta } from "@tyohnn/blocks/icon-meta";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

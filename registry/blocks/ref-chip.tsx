@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { BARS_ON_MUTED, PendingText } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**

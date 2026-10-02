@@ -10,7 +10,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@tyohnn/components/input-group";
 import { Separator } from "@tyohnn/components/separator";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 
 import { NoMotion } from "../../coverage/frame";
 import { LOADING } from "../../loading";

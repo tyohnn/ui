@@ -7,7 +7,7 @@ import { EndpointHeader } from "@tyohnn/blocks/endpoint-header";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { ParameterTable } from "@tyohnn/blocks/parameter-table";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionHeading } from "@tyohnn/blocks/section-heading";

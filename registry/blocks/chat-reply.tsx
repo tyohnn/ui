@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Button } from "@tyohnn/components/button";
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageHeader } from "@tyohnn/components/message";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { Prose } from "@tyohnn/blocks/prose";
 import { cn } from "@tyohnn/lib/utils";
 

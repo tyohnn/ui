@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox } from "@tyohnn/components/checkbox";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
 import { cn } from "@tyohnn/lib/utils";
 

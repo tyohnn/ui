@@ -34,7 +34,7 @@ go, so the screen does not jump when the data arrives. There is no separate skel
 - **Which blocks.** Headings, cards, tables, lists, figures, people — anything that shows a title, a name, a
   number or rows the caller fetches. Not controls and inputs (a select, a search field, a composer), not layout
   bands, not text the caller writes in place (`Prose`).
-- **What changes.** Only the value slots: `PendingText` (`lib/pending.tsx`) in place of a title, a figure, a
+- **What changes.** Only the value slots: `PendingText` (`pending.tsx`) in place of a title, a figure, a
   name. What waits for nothing — actions, column headers, tabs, icons, the frame, its paddings and dividers —
   stays as it is. An avatar keeps its circle without initials; a badge, a progress bar or a chart is left out or
   drawn empty, whichever keeps the frame's height.
@@ -99,7 +99,8 @@ system and both modes. Two things to know when reading the result:
 ## Layout
 
     registry/blocks/<name>.tsx     one block (kebab-case file, PascalCase export)
-    registry/blocks/lib/           what blocks share (text recipes)
+    registry/blocks/lib/           what blocks share, as plain `.ts` modules (class recipes, colours): a monorepo exports
+                                   this folder as `./blocks/lib/*` → `*.ts`, so a module with JSX belongs one level up
 
 Blocks import each other and their helpers as `@tyohnn/blocks/*`, and components as `@tyohnn/components/*`.
 
@@ -250,7 +251,7 @@ Planning
 | `KanbanBoard` | `kanban-board.tsx` | Columns side by side, each with its name, count, add button and its cards scrolling inside |
 | `KanbanCard` | `kanban-card.tsx` | One board item: key, title, menu, badges, progress, people and facts |
 
-Shared: `lib/pending.tsx` (the bar a waiting value is, and the frame's attributes) · `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
+Shared: `pending.tsx` (the bar a waiting value is, and the frame's attributes) · `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
 caption, inline code, the display size) · `lib/bands.ts` (a card's toolbar and footer bands) · `lib/chart.ts` (the
 chart colours in series order).
 
