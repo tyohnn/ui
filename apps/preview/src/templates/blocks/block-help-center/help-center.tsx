@@ -70,6 +70,7 @@ const Hero = () => (
 const Topics = () => (
     <section className="flex flex-col gap-4">
         <SectionHeading
+            loading={LOADING}
             title="Popular topics"
             description="Guides grouped by what you are trying to do"
             action={<Button variant="ghost" size="sm">All 12 topics<ArrowRight data-icon="inline-end" /></Button>}
@@ -87,6 +88,7 @@ const Topics = () => (
 
 const RecentArticles = () => (
     <SectionCard
+        loading={LOADING}
         className="min-w-0"
         title="Recently updated"
         description="Articles changed in the last two weeks"
@@ -126,7 +128,7 @@ const Contact = () => (
 );
 
 const Tickets = () => (
-    <InfoCard title="Your open requests" action={<Badge variant="secondary">{LOADING ? <PendingText length={1} /> : 2}</Badge>}>
+    <InfoCard loading={LOADING} title="Your open requests" action={<Badge variant="secondary">{LOADING ? <PendingText length={1} /> : 2}</Badge>}>
         <TicketList
             loading={LOADING}
             count={TICKETS.length}
@@ -143,7 +145,7 @@ const Tickets = () => (
 );
 
 const Status = () => (
-    <InfoCard title="System status" action={<Badge variant="outline">{LOADING ? <PendingText length={13} /> : "Updated 09:40"}</Badge>}>
+    <InfoCard loading={LOADING} title="System status" action={<Badge variant="outline">{LOADING ? <PendingText length={13} /> : "Updated 09:40"}</Badge>}>
         <ServiceStatus loading={LOADING} count={SERVICES.length} services={SERVICES.map((service) => ({ name: service.name, state: service.state === "Operational" ? "ok" : "degraded", label: service.state }))} />
     </InfoCard>
 );
