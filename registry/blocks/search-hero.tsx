@@ -8,7 +8,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@tyohnn/components/input-group";
 import { Kbd } from "@tyohnn/components/kbd";
 import { HEADING_XL, LEAD, NOTE } from "@tyohnn/blocks/lib/copy";
-import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 

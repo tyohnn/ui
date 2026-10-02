@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { PARAGRAPH, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 const TONE = { success: "[&>svg]:text-success", destructive: "[&>svg]:text-destructive", muted: "[&>svg]:text-muted-foreground" } as const;

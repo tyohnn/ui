@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@tyohnn/components/item";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type FileTile = {

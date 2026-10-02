@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "@tyohnn/icons";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@tyohnn/components/card";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 

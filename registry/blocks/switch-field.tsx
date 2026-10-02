@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Field, FieldContent, FieldDescription, FieldLabel } from "@tyohnn/components/field";
 import { Switch } from "@tyohnn/components/switch";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 
 /**
  * One setting as a switch: its name and what turning it on does, with the switch at the end of the row. `icon`

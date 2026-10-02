@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 import { Field, FieldLabel } from "@tyohnn/components/field";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 
 export type SelectFieldOption = string | { value: string; label: string };

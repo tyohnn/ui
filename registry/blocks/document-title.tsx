@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 
 const HEADLINE = "font-heading text-[length:var(--heading-font-size-xl)] leading-[var(--heading-line-height-xl)] tracking-[var(--heading-letter-spacing)] font-bold text-foreground";
 

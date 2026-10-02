@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { Progress } from "@tyohnn/components/progress";
 import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type TimelineRow = {

@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { Card } from "@tyohnn/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 import { FOOTER_BAND, TOOLBAR_BAND } from "@tyohnn/blocks/lib/bands";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

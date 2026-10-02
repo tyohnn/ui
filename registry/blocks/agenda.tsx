@@ -5,7 +5,7 @@ import { type ReactNode, useState } from "react";
 import { Badge } from "@tyohnn/components/badge";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type AgendaItem = {

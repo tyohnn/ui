@@ -7,7 +7,7 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { BODY, BULLETS, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { Person } from "@tyohnn/blocks/person";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionTitle } from "@tyohnn/blocks/section-title";

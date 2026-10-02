@@ -4,7 +4,7 @@ import { TrendingDown, TrendingUp } from "@tyohnn/icons";
 
 import { Badge } from "@tyohnn/components/badge";
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { FIGURE, META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

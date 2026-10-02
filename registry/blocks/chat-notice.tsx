@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**

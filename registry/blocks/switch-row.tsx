@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { Field, FieldLabel } from "@tyohnn/components/field";
 import { Switch } from "@tyohnn/components/switch";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**

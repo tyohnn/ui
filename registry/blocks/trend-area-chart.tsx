@@ -4,7 +4,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@tyohnn/components/chart";
 import { seriesColor } from "@tyohnn/blocks/lib/chart";
-import { pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type TrendSeries = { key: string; label: string };

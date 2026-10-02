@@ -4,7 +4,7 @@ import { ChevronDown } from "@tyohnn/icons";
 
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type CollapsedMessage = { id: string; name: string; initials: string; teaser: ReactNode; date: ReactNode };

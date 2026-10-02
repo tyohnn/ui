@@ -6,7 +6,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { KanbanCard } from "@tyohnn/blocks/kanban-card";
 import { BODY } from "@tyohnn/blocks/lib/copy";
-import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 

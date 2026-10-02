@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Separator } from "@tyohnn/components/separator";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
