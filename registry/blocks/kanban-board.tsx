@@ -6,7 +6,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { KanbanCard } from "@tyohnn/blocks/kanban-card";
 import { BODY } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
@@ -52,7 +52,7 @@ export const KanbanBoard = ({
     <div {...pendingFrame(loading)} className={cn("flex min-h-0 flex-1 gap-3 overflow-x-auto", className)}>
         {(columns ?? (loading ? Array.from({ length: loadingColumns }, (_, index): KanbanColumn => ({ id: String(index), title: "", count: null })) : [])).map((column) => (
             <section key={column.id} className="flex min-h-0 min-w-64 flex-1 basis-0 flex-col gap-3 rounded-[var(--radius-xl)] bg-muted p-2" aria-label={loading ? undefined : column.title}>
-                <div className="flex items-center gap-2 px-1 pt-1 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:text-muted-foreground">
+                <div className={cn("flex items-center gap-2 px-1 pt-1 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:text-muted-foreground", BARS_ON_MUTED)}>
                     {column.icon}
                     <span className={cn(BODY, "font-medium text-foreground")}>{loading ? <PendingText length={9} /> : column.title}</span>
                     {column.count !== undefined && <Badge variant="secondary">{loading ? <PendingText length={2} /> : column.count}</Badge>}

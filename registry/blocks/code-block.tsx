@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 const BAR_TITLE = "font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground";
@@ -55,7 +55,7 @@ export const CodeBlock = ({
           * The waiting lines take the page colour, as the title bar does: on this muted ground a system whose skeleton
           * colour is its muted colour would draw nothing.
           */}
-        <pre className={cn("m-0 overflow-x-auto px-4 py-3 font-mono [&_[data-slot=skeleton]]:bg-background", SIZE[size], "leading-[1.6]")}>
+        <pre className={cn("m-0 overflow-x-auto px-4 py-3 font-mono", BARS_ON_MUTED, SIZE[size], "leading-[1.6]")}>
             <code>
                 {loading ? Array.from({ length: loadingLines }, (_, index) => (
                     <Fragment key={index}>

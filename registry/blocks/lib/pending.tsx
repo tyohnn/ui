@@ -19,3 +19,10 @@ export const PendingText = ({ length = 8, className }: { length?: number; classN
 
 /** The attributes a block's frame carries while it waits */
 export const pendingFrame = (loading: boolean | undefined) => (loading ? { "data-loading": "", "aria-busy": true as const } : {});
+
+/**
+ * For a surface on the muted colour (a code body, a file header, a board column, a hero band): the bars inside it
+ * take the page background, because a system without a `--skeleton` of its own draws a bar in `--muted` and it
+ * would vanish there.
+ */
+export const BARS_ON_MUTED = "[&_[data-slot=skeleton]]:bg-background";

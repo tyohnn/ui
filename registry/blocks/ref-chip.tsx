@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -12,7 +12,8 @@ import { cn } from "@tyohnn/lib/utils";
 export const RefChip = ({ loading, children, className }: { loading?: boolean; children?: ReactNode; className?: string }) => (
     <span
         className={cn(
-            "flex items-center gap-1.5 rounded-[var(--radius-sm)] bg-muted px-1.5 font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0 [&_[data-slot=skeleton]]:bg-background",
+            "flex items-center gap-1.5 rounded-[var(--radius-sm)] bg-muted px-1.5 font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0",
+            BARS_ON_MUTED,
             className,
         )}
     >

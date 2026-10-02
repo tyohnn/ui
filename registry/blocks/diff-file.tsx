@@ -8,7 +8,7 @@ import { Button } from "@tyohnn/components/button";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Label } from "@tyohnn/components/label";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
@@ -55,7 +55,7 @@ export const DiffFile = ({
 }) => (
     <section {...pendingFrame(loading)} className={cn("shrink-0 overflow-hidden rounded-[var(--radius-lg)] border border-border [&>*+*]:border-t [&>*+*]:border-border", className)}>
         {/* The waiting bars take the page colour: on this muted ground a system whose skeleton colour is its muted colour would draw nothing. */}
-        <div className="flex flex-wrap items-center gap-2 bg-muted px-3 py-2 [&_[data-slot=skeleton]]:bg-background">
+        <div className={cn("flex flex-wrap items-center gap-2 bg-muted px-3 py-2", BARS_ON_MUTED)}>
             <Button variant="ghost" size="icon-xs" aria-label={toggleLabel ?? (open ? strings.blocks.diff.collapse : strings.blocks.diff.expand)} onClick={onToggle}>
                 {open ? <ChevronDown /> : <ChevronRight />}
             </Button>

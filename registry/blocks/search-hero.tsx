@@ -8,7 +8,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@tyohnn/components/input-group";
 import { Kbd } from "@tyohnn/components/kbd";
 import { HEADING_XL, LEAD, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
@@ -57,7 +57,7 @@ export const SearchHero = ({
     suggestionCount?: number;
     className?: string;
 }) => (
-    <section {...pendingFrame(loading)} className={cn("flex flex-col items-center gap-4 border-b border-border bg-muted px-6 py-10 text-center", className)}>
+    <section {...pendingFrame(loading)} className={cn("flex flex-col items-center gap-4 border-b border-border bg-muted px-6 py-10 text-center", BARS_ON_MUTED, className)}>
         {status}
         <h1 className={cn("m-0", HEADING_XL)}>{loading ? <PendingText length={20} /> : title}</h1>
         {description !== undefined && <p className={LEAD}>{loading ? <PendingText length={64} /> : description}</p>}
