@@ -20,6 +20,7 @@ import {
     PaginationPrevious,
 } from "@tyohnn/components/pagination";
 
+import { LOADING } from "../../loading";
 import { CHANNEL_FILTERS, METRICS, type Order, type OrderStatus, ORDER_TABS, ORDERS, STATUS_FILTERS } from "./data";
 
 /**
@@ -55,7 +56,7 @@ const ROW_ACTIONS = [
 
 const COLUMNS: DataTableColumn<Order>[] = [
     { id: "order", header: "Order", kind: "code", cell: (order) => order.id },
-    { id: "customer", header: "Customer", cell: (order) => <Person name={order.customer} detail={order.email} initials={order.initials} /> },
+    { id: "customer", header: "Customer", pending: <Person loading detail />, cell: (order) => <Person name={order.customer} detail={order.email} initials={order.initials} /> },
     { id: "date", header: "Date", kind: "nowrap", onSort: () => {}, cell: (order) => order.date },
     { id: "status", header: "Status", cell: (order) => <StatusBadge status={order.status} /> },
     { id: "channel", header: "Channel", kind: "nowrap", cell: (order) => order.channel },
@@ -82,6 +83,7 @@ const Pages = () => (
 export const Orders = () => (
     <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 p-4 [contain:inline-size]">
         <PageHeading
+            loading={LOADING}
             title="Orders"
             meta="Wednesday, January 14 · all locations · prices include tax"
             actions={(
@@ -92,8 +94,10 @@ export const Orders = () => (
                 </>
             )}
         />
-        <MetricCards metrics={METRICS} />
+        <MetricCards metrics={METRICS} loading={LOADING} />
         <DataTableCard
+            loading={LOADING}
+            loadingRows={12}
             columns={COLUMNS}
             rows={ORDERS}
             rowId={(order) => order.id}

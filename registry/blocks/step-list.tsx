@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { MUTED_BODY } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type Step = {
@@ -10,14 +11,41 @@ export type Step = {
     content?: ReactNode;
 };
 
-/** Numbered steps to follow in order: a number in a circle, the step's title, what to do, and a code block or figure when the step has one. */
-export const StepList = ({ steps, className }: { steps: readonly Step[]; className?: string }) => (
-    <ol className={cn("mx-0 flex list-none flex-col gap-5 p-0", className)}>
-        {steps.map((step, index) => (
+const NUMBER = "flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-[length:var(--ui-text-sm)] leading-none text-foreground tabular-nums";
+
+const STEP_TITLE = "m-0 text-[length:var(--ui-text-lg)] leading-[var(--ui-line-height-lg)] font-semibold";
+
+/**
+ * Numbered steps to follow in order: a number in a circle, the step's title, what to do, and a code block or figure
+ * when the step has one. `loading` draws `count` numbered steps with bars for the title and one line of what to do.
+ */
+export const StepList = ({
+    steps = [],
+    loading,
+    count = 3,
+    className,
+}: {
+    steps?: readonly Step[];
+    loading?: boolean;
+    /** How many steps to draw while loading */
+    count?: number;
+    className?: string;
+}) => (
+    <ol {...pendingFrame(loading)} className={cn("mx-0 flex list-none flex-col gap-5 p-0", className)}>
+        {loading && Array.from({ length: count }, (_, index) => (
             <li key={index} className="flex gap-3">
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-[length:var(--ui-text-sm)] leading-none text-foreground tabular-nums">{index + 1}</span>
+                <span className={NUMBER}>{index + 1}</span>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
-                    <h3 className="m-0 text-[length:var(--ui-text-lg)] leading-[var(--ui-line-height-lg)] font-semibold">{step.title}</h3>
+                    <h3 className={STEP_TITLE}><PendingText length={24} /></h3>
+                    <p className={cn("m-0", MUTED_BODY)}><PendingText length={56} /></p>
+                </div>
+            </li>
+        ))}
+        {!loading && steps.map((step, index) => (
+            <li key={index} className="flex gap-3">
+                <span className={NUMBER}>{index + 1}</span>
+                <div className="flex min-w-0 flex-1 flex-col gap-2">
+                    <h3 className={STEP_TITLE}>{step.title}</h3>
                     {step.body !== undefined && <p className={cn("m-0", MUTED_BODY)}>{step.body}</p>}
                     {step.content}
                 </div>

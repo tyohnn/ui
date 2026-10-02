@@ -6,6 +6,7 @@ import { CodeTabs } from "@tyohnn/blocks/code-tabs";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { IN_PROSE, INLINE_CODE, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { OnThisPage } from "@tyohnn/blocks/on-this-page";
 import { PagerCards } from "@tyohnn/blocks/pager-cards";
 import { Prose } from "@tyohnn/blocks/prose";
@@ -17,6 +18,7 @@ import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { CONFIG_EXAMPLE, DOCTOR_EXAMPLE, ENV_EXAMPLE, INSTALL_COMMANDS, OPTIONS, STEPS, TOC } from "./data";
 
 /**
@@ -35,7 +37,7 @@ const CopyButton = ({ copied = false }: { copied?: boolean }) => (
 );
 
 const Code = ({ title, code, className }: { title: string; code: string; className?: string }) => (
-    <CodeBlock title={title} icon={<Terminal />} code={code} action={<CopyButton />} className={className} />
+    <CodeBlock loading={LOADING} loadingLines={code.split("\n").length} title={title} icon={<Terminal />} code={code} action={<CopyButton />} className={className} />
 );
 
 type Option = (typeof OPTIONS)[number];
@@ -59,6 +61,7 @@ const OPTION_COLUMNS: DataTableColumn<Option>[] = [
 const Article = () => (
     <Prose as="article" className="max-w-[52rem] min-w-0 flex-1">
         <ArticleHeading
+            loading={LOADING}
             eyebrow="Getting started"
             title="Installation"
             lead={(
@@ -69,10 +72,10 @@ const Article = () => (
             )}
             meta={(
                 <>
-                    <Badge variant="secondary">v2.4.0</Badge>
-                    <Badge variant="outline">Stable</Badge>
+                    <Badge variant="secondary">{LOADING ? <PendingText length={6} /> : "v2.4.0"}</Badge>
+                    <Badge variant="outline">{LOADING ? <PendingText length={6} /> : "Stable"}</Badge>
                     <IconNote className="gap-1.5" icon={<Clock />}>6 min read</IconNote>
-                    <span>Updated Jan 12, 2026 by Ines Varga</span>
+                    <span>{LOADING ? <PendingText length={34} /> : "Updated Jan 12, 2026 by Ines Varga"}</span>
                 </>
             )}
         />
@@ -89,6 +92,8 @@ const Article = () => (
         <h2 id="install">Install the SDK</h2>
         <p>Install the package with your package manager. The CLI ships in the same package, so there is nothing else to add.</p>
         <CodeTabs
+            loading={LOADING}
+            loadingLines={1}
             defaultTab="npm"
             icon={<Terminal />}
             tabs={INSTALL_COMMANDS.map((item) => ({ value: item.id, label: item.label, title: "Terminal", code: item.command, action: <CopyButton copied={item.id === "npm"} /> }))}
@@ -131,6 +136,7 @@ const Article = () => (
 
         <h2 id="next">Next steps</h2>
         <PagerCards
+            loading={LOADING}
             previous={{ title: "Requirements", description: "Runtimes, databases and network access" }}
             next={{ title: "First workflow", description: "Write, run and replay a three-step workflow" }}
             className={IN_PROSE}
@@ -154,6 +160,8 @@ export const DocsPage = () => (
         <div className="flex gap-10 px-10 pt-8 pb-16">
             <Article />
             <OnThisPage
+                loading={LOADING}
+                count={TOC.length}
                 items={TOC}
                 note="Found a problem? Open an issue from the docs repository or ask in the community forum."
                 className="hidden w-56 shrink-0 xl:flex"

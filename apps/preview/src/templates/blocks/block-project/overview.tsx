@@ -6,6 +6,7 @@ import { DetailHeading } from "@tyohnn/blocks/detail-heading";
 import { FileTiles } from "@tyohnn/blocks/file-tiles";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { ListCard } from "@tyohnn/blocks/list-card";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { StatCards } from "@tyohnn/blocks/stat-cards";
@@ -15,6 +16,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
 
+import { LOADING } from "../../loading";
 import { ACTIVITY, FILES, MEMBER_COUNT, MEMBERS, type Priority, SCOPES, STATS, TASKS } from "./data";
 
 /**
@@ -35,12 +37,13 @@ const FILE_ICON = { doc: FileText, archive: Archive, image: Image } as const;
 
 const ProjectHead = () => (
     <DetailHeading
+        loading={LOADING}
         title="Atlas app relaunch"
         status={<Badge variant="secondary">On track</Badge>}
         description="Rebuild of the Atlas field app for iOS and Android · owned by Priya Raman · started Dec 2, 2025"
         actions={(
             <>
-                <AvatarStack people={MEMBERS.map((member) => ({ initials: member.initials[0], name: member.name }))} max={MEMBERS.length} total={MEMBER_COUNT} />
+                <AvatarStack loading={LOADING} people={MEMBERS.map((member) => ({ initials: member.initials[0], name: member.name }))} max={MEMBERS.length} total={MEMBER_COUNT} />
                 <Button variant="outline" size="sm">
                     <Share data-icon="inline-start" />
                     Share
@@ -56,6 +59,7 @@ const ProjectHead = () => (
 
 const TaskCard = () => (
     <ListCard
+        loading={LOADING}
         title="This week"
         description="Jan 12 – Jan 18 · 2 of 8 done"
         controls={(
@@ -66,6 +70,8 @@ const TaskCard = () => (
         )}
     >
         <TaskList
+            loading={LOADING}
+            loadingRows={TASKS.length}
             tasks={TASKS.map((task) => ({
                 id: task.id,
                 title: task.title,
@@ -90,6 +96,7 @@ const TaskCard = () => (
 
 const ActivityCard = () => (
     <InfoCard
+        loading={LOADING}
         title="Activity"
         action={<Button variant="ghost" size="xs">View all</Button>}
         className="min-h-0 flex-1 gap-2"
@@ -103,8 +110,10 @@ const ActivityCard = () => (
 );
 
 const FilesCard = () => (
-    <InfoCard title="Recent files" action={<Button variant="ghost" size="icon-xs" aria-label="More"><MoreHorizontal /></Button>} className="gap-2">
+    <InfoCard loading={LOADING} title="Recent files" action={<Button variant="ghost" size="icon-xs" aria-label="More"><MoreHorizontal /></Button>} className="gap-2">
         <FileTiles
+            loading={LOADING}
+            count={FILES.length}
             files={FILES.map((file) =>
             {
                 const Icon = FILE_ICON[file.kind];
@@ -124,7 +133,7 @@ const FilesCard = () => (
 export const Overview = () => (
     <div className="flex h-[calc(100svh-5rem)] min-h-0 flex-col gap-4 p-4 pt-0 [contain:inline-size]">
         <ProjectHead />
-        <StatCards stats={STATS} />
+        <StatCards stats={STATS} loading={LOADING} count={STATS.length} />
         <div className="flex min-h-0 flex-1 gap-4">
             <TaskCard />
             <div className="flex min-h-0 w-[26rem] shrink-0 flex-col gap-4">
@@ -132,6 +141,6 @@ export const Overview = () => (
                 <FilesCard />
             </div>
         </div>
-        <IconNote icon={<SquareCheck />} className="gap-1.5">Synced with the Atlas board · 2 min ago</IconNote>
+        <IconNote icon={<SquareCheck />} className="gap-1.5">{LOADING ? <span><PendingText length={32} /></span> : "Synced with the Atlas board · 2 min ago"}</IconNote>
     </div>
 );

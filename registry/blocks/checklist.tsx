@@ -4,6 +4,7 @@ import { type ReactNode, useState } from "react";
 
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Label } from "@tyohnn/components/label";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type ChecklistItem = {
@@ -14,15 +15,23 @@ export type ChecklistItem = {
     done?: boolean;
 };
 
-/** A list of things to tick off: a checkbox with its label, which is struck through and muted once it is done. */
+/**
+ * A list of things to tick off: a checkbox with its label, which is struck through and muted once it is done.
+ * `loading` draws `count` rows with a checkbox that cannot be ticked and a bar for the label.
+ */
 export const Checklist = ({
-    items,
+    items = [],
     onChange,
+    loading,
+    count = 4,
     className,
 }: {
-    items: readonly ChecklistItem[];
+    items?: readonly ChecklistItem[];
     /** The ids that are done, after every change */
     onChange?: (done: string[]) => void;
+    loading?: boolean;
+    /** How many rows to draw while loading */
+    count?: number;
     className?: string;
 }) =>
 {
@@ -34,8 +43,14 @@ export const Checklist = ({
     };
 
     return (
-        <div className={cn("flex flex-col gap-2.5", className)}>
-            {items.map((item) => (
+        <div {...pendingFrame(loading)} className={cn("flex flex-col gap-2.5", className)}>
+            {loading && Array.from({ length: count }, (_, index) => (
+                <div key={index} className="flex items-start gap-3">
+                    <Checkbox disabled aria-hidden tabIndex={-1} className="mt-0.5" />
+                    <Label><span><PendingText length={26} /></span></Label>
+                </div>
+            ))}
+            {!loading && items.map((item) => (
                 <div key={item.id} className="flex items-start gap-3">
                     <Checkbox
                         id={item.id}

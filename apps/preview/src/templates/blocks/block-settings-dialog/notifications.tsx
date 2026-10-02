@@ -10,6 +10,7 @@ import { SwitchRow } from "@tyohnn/blocks/switch-row";
 import { Button } from "@tyohnn/components/button";
 import { FieldDescription, FieldGroup, FieldSeparator } from "@tyohnn/components/field";
 
+import { LOADING } from "../../loading";
 import { ACTIVITY_SWITCHES, CHANNEL_ROWS, CHANNELS, EMAIL_FREQUENCY, HOURS } from "./data";
 
 /**
@@ -22,14 +23,14 @@ export const NotificationSettings = () => (
     <div className="flex flex-col gap-6">
         <SettingsSection title="Activity" description="Choose what reaches you in Parley. Muted channels never notify.">
             <FieldGroup className="gap-3">
-                {ACTIVITY_SWITCHES.map((item) => <SwitchRow key={item.id} id={item.id} label={item.label} hint={item.description} defaultChecked={item.on} />)}
+                {ACTIVITY_SWITCHES.map((item) => <SwitchRow loading={LOADING} key={item.id} id={item.id} label={item.label} hint={item.description} defaultChecked={item.on} />)}
             </FieldGroup>
         </SettingsSection>
 
         <FieldSeparator />
 
         <SettingsSection title="Email" description="Unread notifications are sent to dana.whitfield@northvale.io.">
-            <RadioCards id="sd-email" label="Email frequency" options={EMAIL_FREQUENCY} defaultValue="hourly" />
+            <RadioCards loading={LOADING} id="sd-email" label="Email frequency" options={EMAIL_FREQUENCY} defaultValue="hourly" />
         </SettingsSection>
 
         <FieldSeparator />
@@ -37,6 +38,7 @@ export const NotificationSettings = () => (
         <SettingsSection title="Quiet hours">
             <FieldGroup className="gap-4">
                 <SwitchField
+                    loading={LOADING}
                     id="sd-quiet"
                     icon={<Moon />}
                     label="Pause notifications overnight"
@@ -44,8 +46,8 @@ export const NotificationSettings = () => (
                     defaultChecked
                 />
                 <div className="grid grid-cols-2 gap-3">
-                    <SelectField id="sd-quiet-from" label="From" name="Quiet hours start" options={HOURS} defaultValue="22:00" />
-                    <SelectField id="sd-quiet-to" label="To" name="Quiet hours end" options={HOURS} defaultValue="07:00" />
+                    <SelectField loading={LOADING} id="sd-quiet-from" label="From" name="Quiet hours start" options={HOURS} defaultValue="22:00" />
+                    <SelectField loading={LOADING} id="sd-quiet-to" label="To" name="Quiet hours end" options={HOURS} defaultValue="07:00" />
                 </div>
                 <FieldDescription>Times are in your workspace time zone, Europe/Lisbon (UTC+00:00).</FieldDescription>
             </FieldGroup>
@@ -55,6 +57,7 @@ export const NotificationSettings = () => (
 
         <SettingsSection title="Channels" description="Where each kind of notification is delivered.">
             <CheckboxMatrix
+                loading={LOADING}
                 rowHeader="Event"
                 columns={CHANNELS}
                 rows={CHANNEL_ROWS.map((row) => ({ label: row.event, checked: row.on }))}

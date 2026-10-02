@@ -17,6 +17,7 @@ import type { ComponentType } from "react";
 
 import { ContactOptions } from "@tyohnn/blocks/contact-options";
 import { InfoCard } from "@tyohnn/blocks/info-card";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
 import { SearchHero } from "@tyohnn/blocks/search-hero";
 import { SectionCard } from "@tyohnn/blocks/section-card";
@@ -27,6 +28,7 @@ import { TopicCards } from "@tyohnn/blocks/topic-cards";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { POPULAR_SEARCHES, RECENT_ARTICLES, SERVICES, TICKETS, TOPICS } from "./data";
 
 /**
@@ -47,7 +49,9 @@ const TOPIC_ICONS: Record<(typeof TOPICS)[number]["icon"], ComponentType> = {
 
 const Hero = () => (
     <SearchHero
-        status={(
+        loading={LOADING}
+        suggestionCount={POPULAR_SEARCHES.length}
+        status={LOADING ? <Badge variant="outline"><PendingText length={28} /></Badge> : (
             <Badge variant="outline">
                 <CircleCheck data-icon="inline-start" />
                 All core systems operational
@@ -66,6 +70,7 @@ const Hero = () => (
 const Topics = () => (
     <section className="flex flex-col gap-4">
         <SectionHeading
+            loading={LOADING}
             title="Popular topics"
             description="Guides grouped by what you are trying to do"
             action={<Button variant="ghost" size="sm">All 12 topics<ArrowRight data-icon="inline-end" /></Button>}
@@ -83,6 +88,7 @@ const Topics = () => (
 
 const RecentArticles = () => (
     <SectionCard
+        loading={LOADING}
         className="min-w-0"
         title="Recently updated"
         description="Articles changed in the last two weeks"
@@ -91,6 +97,8 @@ const RecentArticles = () => (
         footerAction={<Button variant="ghost" size="sm">Subscribe to updates</Button>}
     >
         <LinkItemList
+            loading={LOADING}
+            count={RECENT_ARTICLES.length}
             items={RECENT_ARTICLES.map((article) => ({
                 id: article.id,
                 href: "#",
@@ -120,8 +128,10 @@ const Contact = () => (
 );
 
 const Tickets = () => (
-    <InfoCard title="Your open requests" action={<Badge variant="secondary">2</Badge>}>
+    <InfoCard loading={LOADING} title="Your open requests" action={<Badge variant="secondary">{LOADING ? <PendingText length={1} /> : 2}</Badge>}>
         <TicketList
+            loading={LOADING}
+            count={TICKETS.length}
             tickets={TICKETS.map((ticket) => ({
                 id: ticket.id,
                 title: ticket.title,
@@ -135,8 +145,8 @@ const Tickets = () => (
 );
 
 const Status = () => (
-    <InfoCard title="System status" action={<Badge variant="outline">Updated 09:40</Badge>}>
-        <ServiceStatus services={SERVICES.map((service) => ({ name: service.name, state: service.state === "Operational" ? "ok" : "degraded", label: service.state }))} />
+    <InfoCard loading={LOADING} title="System status" action={<Badge variant="outline">{LOADING ? <PendingText length={13} /> : "Updated 09:40"}</Badge>}>
+        <ServiceStatus loading={LOADING} count={SERVICES.length} services={SERVICES.map((service) => ({ name: service.name, state: service.state === "Operational" ? "ok" : "degraded", label: service.state }))} />
     </InfoCard>
 );
 

@@ -4,6 +4,7 @@ import { CategoryBarChart } from "@tyohnn/blocks/category-bar-chart";
 import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { InfoCard } from "@tyohnn/blocks/info-card";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { MetricCards } from "@tyohnn/blocks/metric-cards";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
@@ -13,6 +14,7 @@ import { TrendAreaChart } from "@tyohnn/blocks/trend-area-chart";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { COMPARISONS, FUNNEL, KPIS, PERIODS, SOURCES, TOP_PAGES, VISITS, VISITS_SERIES } from "./data";
 
 /**
@@ -36,14 +38,18 @@ const PAGE_COLUMNS: DataTableColumn<TopPage>[] = [
 
 const Controls = () => (
     <PageHeading
+        loading={LOADING}
         title="Traffic"
         meta="fernhill.shop · Dec 16, 2025 – Jan 14, 2026 · times in UTC"
         actions={(
             <>
-                <Badge variant="outline">
-                    <Users data-icon="inline-start" />
-                    38 online now
-                </Badge>
+                {/* How many are online is a value: its badge is left out while it waits. */}
+                {!LOADING && (
+                    <Badge variant="outline">
+                        <Users data-icon="inline-start" />
+                        38 online now
+                    </Badge>
+                )}
                 <SegmentedControl label="Period" options={PERIODS} defaultValue="30d" />
                 <CompactSelect label="Comparison" options={COMPARISONS} defaultValue="previous" className="min-w-44" />
                 <Button variant="outline" size="sm"><Download data-icon="inline-start" />Export</Button>
@@ -53,39 +59,42 @@ const Controls = () => (
 );
 
 const VisitsChart = () => (
-    <InfoCard title="Visits" description="Daily visitors and page views" className="min-w-0">
-        <TrendAreaChart data={VISITS} xKey="date" series={VISITS_SERIES} formatValue={formatThousands} />
+    <InfoCard loading={LOADING} title="Visits" description="Daily visitors and page views" className="min-w-0">
+        <TrendAreaChart loading={LOADING} data={VISITS} xKey="date" series={VISITS_SERIES} formatValue={formatThousands} />
     </InfoCard>
 );
 
 const SourcesChart = () => (
-    <InfoCard title="Traffic sources" description="Visitors by channel" className="min-w-0">
-        <CategoryBarChart data={SOURCES} categoryKey="source" valueKey="visitors" valueLabel="Visitors" formatValue={formatThousands} />
+    <InfoCard loading={LOADING} title="Traffic sources" description="Visitors by channel" className="min-w-0">
+        <CategoryBarChart loading={LOADING} data={SOURCES} categoryKey="source" valueKey="visitors" valueLabel="Visitors" formatValue={formatThousands} />
     </InfoCard>
 );
 
 const TopPages = () => (
     <InfoCard
+        loading={LOADING}
         title="Top pages"
         description="By views, last 30 days"
         action={<Button variant="ghost" size="sm">View all<ExternalLink data-icon="inline-end" /></Button>}
         className="min-h-0 min-w-0"
         contentClassName="min-h-0 flex-1 overflow-y-auto"
     >
-        <DataTable columns={PAGE_COLUMNS} rows={TOP_PAGES} rowId={(page) => page.path} />
+        <DataTable loading={LOADING} loadingRows={TOP_PAGES.length} columns={PAGE_COLUMNS} rows={TOP_PAGES} rowId={(page) => page.path} />
     </InfoCard>
 );
 
 const Funnel = () => (
     <InfoCard
+        loading={LOADING}
         title="Checkout funnel"
         description="Share of product viewers"
-        action={<Badge variant="outline">7.4% converted</Badge>}
+        // The conversion is a value: its badge is left out while it waits.
+        action={LOADING ? undefined : <Badge variant="outline">7.4% converted</Badge>}
         className="min-h-0 min-w-0"
         contentClassName="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto"
-        footer={<span className={META}>Biggest drop: cart to checkout (−45%)</span>}
+        footer={<span className={META}>{LOADING ? <PendingText length={32} /> : "Biggest drop: cart to checkout (−45%)"}</span>}
     >
-        {FUNNEL.map((step) => <ShareMeter key={step.step} label={step.step} count={step.visitors} value={step.share} />)}
+        {FUNNEL.map((step) => <ShareMeter key={step.step} loading={LOADING} label={step.step} count={step.visitors} value={step.share} />)}
     </InfoCard>
 );
 
@@ -93,7 +102,7 @@ const Funnel = () => (
 export const Analytics = () => (
     <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 overflow-y-auto p-4 [contain:inline-size]">
         <Controls />
-        <MetricCards metrics={KPIS} changeVariant="secondary" />
+        <MetricCards metrics={KPIS} changeVariant="secondary" loading={LOADING} count={KPIS.length} />
         <div className="grid shrink-0 grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
             <VisitsChart />
             <SourcesChart />

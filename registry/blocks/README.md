@@ -26,6 +26,44 @@ gallery is the proof that every block renders with every design system.
    prop, and a screen should pass the specific name where there is one ("Actions for #1042", "Previous week"): a
    default repeated on every row tells a screen reader nothing.
 
+## Waiting faces
+
+A block that shows values that come from data takes `loading`: it draws the same frame with bars where the values
+go, so the screen does not jump when the data arrives. There is no separate skeleton component.
+
+- **Which blocks.** Headings, cards, tables, lists, figures, people — anything that shows a title, a name, a
+  number or rows the caller fetches. Not controls and inputs (a select, a search field, a composer), not layout
+  bands, not text the caller writes in place (`Prose`).
+- **What changes.** Only the value slots: `PendingText` (`lib/pending.tsx`) in place of a title, a figure, a
+  name. What waits for nothing — actions, column headers, tabs, icons, the frame, its paddings and dividers —
+  stays as it is. An avatar keeps its circle without initials; a badge, a progress bar or a chart is left out or
+  drawn empty, whichever keeps the frame's height.
+- **How many.** A block that maps over data takes a count for its waiting face (`loadingRows`, `count`); the
+  data props become optional and are set aside while loading.
+- **The frame.** The block's root spreads `pendingFrame(loading)`: `data-loading` and `aria-busy` while it waits.
+  A block that contains another loading block passes `loading` down; only the outer one need not repeat the bars.
+- **A cell's own face.** A table column's `pending` is what its cell draws while loading — `<Person loading detail />`
+  for a two-line person — so the row is as tall as it will be.
+- **Nothing the caller does not know yet decides the frame.** If a part appears only with the data (a selection
+  bar), the waiting face follows what the caller already passed (a known selection keeps its bar).
+
+What a waiting face cannot do:
+
+- **A bar does not wrap.** Where the real text runs over two lines (a description in a narrow card, a table cell
+  of prose, a long title that pushes the actions under it) the frame is shorter while waiting. Blocks with such a
+  slot take a line count where one was needed (`InfoCard` `descriptionLines`, `ChatReply` `lines`); otherwise the
+  screen leaves that use unwired rather than jump.
+- **It does not know what only the data knows.** A row is as tall as its tallest cell: a badge after one name, an
+  icon on one item. `LinkItemList` and `ActionItemList` therefore keep the icon and the badge's place of the
+  items the caller already passed; with none passed the rows are plain.
+- **Bars on a muted surface** take the page background (`BARS_ON_MUTED`): a system without a `--skeleton` of its
+  own draws a bar in `--muted`.
+
+In the preview every template passes `loading={LOADING}` (`apps/preview/src/templates/loading.ts`), so
+`?template=<id>&loading` shows the screen's waiting face. `node tooling/snapshot/check-loading.mjs --templates <id>`
+compares every `data-loading` frame with the same element once the data is there and fails when one moves or
+changes size.
+
 ## Cutting a block out of a template
 
 A template's own stylesheet (`XX_STYLE`, rules under `[data-template="…"]`) becomes utilities on the block's
@@ -212,7 +250,7 @@ Planning
 | `KanbanBoard` | `kanban-board.tsx` | Columns side by side, each with its name, count, add button and its cards scrolling inside |
 | `KanbanCard` | `kanban-card.tsx` | One board item: key, title, menu, badges, progress, people and facts |
 
-Shared: `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
+Shared: `lib/pending.tsx` (the bar a waiting value is, and the frame's attributes) · `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
 caption, inline code, the display size) · `lib/bands.ts` (a card's toolbar and footer bands) · `lib/chart.ts` (the
 chart colours in series order).
 

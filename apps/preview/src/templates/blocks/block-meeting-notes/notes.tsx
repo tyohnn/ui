@@ -7,6 +7,7 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { BODY, BULLETS, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { Person } from "@tyohnn/blocks/person";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionTitle } from "@tyohnn/blocks/section-title";
@@ -17,6 +18,7 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Separator } from "@tyohnn/components/separator";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { ACTION_ITEMS, AGENDA, ATTENDEES, DECISIONS } from "./data";
 
 /**
@@ -37,17 +39,18 @@ type ActionItem = (typeof ACTION_ITEMS)[number];
 
 const ACTION_COLUMNS: DataTableColumn<ActionItem>[] = [
     { id: "task", header: "Task", kind: "wrap", cell: (item) => item.task },
-    { id: "owner", header: "Owner", cell: (item) => <Person name={item.owner} initials={item.initials} /> },
+    { id: "owner", header: "Owner", pending: <Person loading />, cell: (item) => <Person name={item.owner} initials={item.initials} /> },
     { id: "due", header: "Due", cell: (item) => item.due },
     { id: "status", header: "Status", align: "end", cell: (item) => <Badge variant={STATUS_VARIANT[item.status]}>{item.status}</Badge> },
 ];
 
 const MetaLine = () => (
     <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <IconNote className="gap-1.5" icon={<Calendar />}>Wed, Jan 14, 2026</IconNote>
-        <IconNote className="gap-1.5" icon={<Clock />}>10:00 – 10:45</IconNote>
-        <IconNote className="gap-1.5" icon={<MapPin />}>Room Cedar · video</IconNote>
+        <IconNote className="gap-1.5" icon={<Calendar />}>{LOADING ? <span><PendingText length={12} /></span> : "Wed, Jan 14, 2026"}</IconNote>
+        <IconNote className="gap-1.5" icon={<Clock />}>{LOADING ? <span><PendingText length={10} /></span> : "10:00 – 10:45"}</IconNote>
+        <IconNote className="gap-1.5" icon={<MapPin />}>{LOADING ? <span><PendingText length={14} /></span> : "Room Cedar · video"}</IconNote>
         <AvatarStack
+            loading={LOADING}
             max={4}
             people={ATTENDEES.slice(0, 4).map((person) => ({ name: person.name, initials: person.initials.charAt(0) }))}
             more={<>+{ATTENDEES.length - 4}</>}
@@ -58,8 +61,10 @@ const MetaLine = () => (
 
 const AgendaSection = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Agenda" meta="45 min" />
+        <SectionTitle loading={LOADING} title="Agenda" meta="45 min" />
         <Agenda
+            loading={LOADING}
+            loadingRows={AGENDA.length}
             items={AGENDA.map((item) => ({ title: item.title, owner: item.owner, duration: <>{item.minutes} min</>, done: item.done }))}
             checkboxLabel={(item) => `Covered: ${item.title}`}
         />
@@ -68,7 +73,7 @@ const AgendaSection = () => (
 
 const Discussion = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Notes" />
+        <SectionTitle loading={LOADING} title="Notes" />
         <Prose>
             <p>
                 <strong>Metrics.</strong> Activation held at 41% for the third week. Week-4 retention for the December cohort rose to
@@ -88,9 +93,9 @@ const Discussion = () => (
 
 const ActionItems = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Action items" meta="1 of 5 done" />
+        <SectionTitle loading={LOADING} title="Action items" meta="1 of 5 done" />
         <TableFrame>
-            <DataTable columns={ACTION_COLUMNS} rows={ACTION_ITEMS} rowId={(item) => item.task} />
+            <DataTable loading={LOADING} loadingRows={ACTION_ITEMS.length} columns={ACTION_COLUMNS} rows={ACTION_ITEMS} rowId={(item) => item.task} />
         </TableFrame>
         <div>
             <Button variant="ghost" size="sm">
@@ -102,19 +107,19 @@ const ActionItems = () => (
 );
 
 const NextMeeting = () => (
-    <Card>
+    <Card {...pendingFrame(LOADING)}>
         <CardHeader>
-            <CardTitle>Next meeting</CardTitle>
-            <CardDescription>Weekly product sync · Wed, Jan 21, 10:00 – 10:45</CardDescription>
+            <CardTitle>{LOADING ? <PendingText length={12} /> : "Next meeting"}</CardTitle>
+            <CardDescription>{LOADING ? <PendingText length={48} /> : "Weekly product sync · Wed, Jan 21, 10:00 – 10:45"}</CardDescription>
             <CardAction>
-                <Badge variant="secondary">Recurring</Badge>
+                <Badge variant="secondary">{LOADING ? <PendingText length={9} /> : "Recurring"}</Badge>
             </CardAction>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
             <span className={NOTE}>Carried over</span>
             <ul className={cn("flex flex-col gap-1.5", BULLETS, BODY, "text-foreground")}>
-                <li>Q1 hiring: design and support roles — Maya Brennan</li>
-                <li>Photo picker crash on Android 11 — Sofia Lindgren</li>
+                <li>{LOADING ? <PendingText length={48} /> : "Q1 hiring: design and support roles — Maya Brennan"}</li>
+                <li>{LOADING ? <PendingText length={44} /> : "Photo picker crash on Android 11 — Sofia Lindgren"}</li>
             </ul>
         </CardContent>
         <CardFooter className="flex flex-wrap gap-2">
@@ -137,11 +142,13 @@ export const Notes = () => (
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pt-6 pb-12">
             <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">Product</Badge>
-                    <Badge variant="outline">
-                        <Sparkles data-icon="inline-start" />
-                        Summary ready
-                    </Badge>
+                    <Badge variant="secondary">{LOADING ? <PendingText length={7} /> : "Product"}</Badge>
+                    {LOADING ? <Badge variant="outline"><PendingText length={14} /></Badge> : (
+                        <Badge variant="outline">
+                            <Sparkles data-icon="inline-start" />
+                            Summary ready
+                        </Badge>
+                    )}
                     <div className="ml-auto flex items-center gap-1">
                         <Button variant="ghost" size="icon-sm" aria-label="Copy link"><Link /></Button>
                         <Button variant="outline" size="sm">
@@ -150,13 +157,13 @@ export const Notes = () => (
                         </Button>
                     </div>
                 </div>
-                <DocumentTitle title="Weekly product sync" />
+                <DocumentTitle loading={LOADING} title="Weekly product sync" />
                 <MetaLine />
             </div>
             <Separator />
             <AgendaSection />
             <Discussion />
-            <CalloutList icon={<CircleCheck />} title="Decisions" items={DECISIONS} />
+            <CalloutList loading={LOADING} count={DECISIONS.length} icon={<CircleCheck />} title="Decisions" items={DECISIONS} />
             <ActionItems />
             <NextMeeting />
         </article>
