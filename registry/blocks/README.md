@@ -223,4 +223,6 @@ token in the systems:
 - `WeekView`'s event corner `min(var(--control-radius), 8px)`, its primary tints and its grid geometry.
 - Chart stroke width, fill opacities and bar radius.
 
-The CLI does not install blocks yet.
+The CLI installs the blocks as one set: `tyohnn init --blocks`, or `tyohnn blocks` in a project that is set up
+(`packages/cli/README.md`, "Blocks"). Every `.ts` and `.tsx` file under this folder is copied, so a new block needs no
+manifest entry.
