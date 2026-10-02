@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 
 export type CompactSelectOption = string | { value: string; label: string };
 
@@ -10,10 +10,12 @@ export type CompactSelectOption = string | { value: string; label: string };
  * A small select for a toolbar filter or a cell: a role, a status, a sort order. Options are plain strings or
  * value and label pairs; the first is selected until `value` or `defaultValue` says otherwise. `label` names the
  * control for assistive technology, or — with `showLabel` — is written in the trigger before the value ("Sort by …").
+ * `labelInList` also writes it at the top of the open list, for a filter whose values do not say what they filter.
  */
 export const CompactSelect = ({
     label,
     showLabel,
+    labelInList,
     icon,
     options,
     value,
@@ -24,6 +26,7 @@ export const CompactSelect = ({
 }: {
     label: string;
     showLabel?: boolean;
+    labelInList?: boolean;
     icon?: ReactNode;
     options: readonly CompactSelectOption[];
     value?: string;
@@ -49,6 +52,7 @@ export const CompactSelect = ({
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
+                    {labelInList && <SelectLabel>{label}</SelectLabel>}
                     {items.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}
                 </SelectGroup>
             </SelectContent>

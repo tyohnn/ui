@@ -17,8 +17,11 @@ export type Metric = {
     note?: ReactNode;
 };
 
-/** A row of small metric cards: label, figure, the change as a trend badge and one line of context. */
-export const MetricCards = ({ metrics, className }: { metrics: readonly Metric[]; className?: string }) => (
+/**
+ * A row of small metric cards: label, figure, the change as a trend badge and one line of context.
+ * `changeVariant` picks the badge the change is written in: outlined, or filled where the cards are the page's subject.
+ */
+export const MetricCards = ({ metrics, changeVariant = "outline", className }: { metrics: readonly Metric[]; changeVariant?: "outline" | "secondary"; className?: string }) => (
     <div className={cn("grid grid-cols-2 gap-4 xl:grid-cols-4", className)}>
         {metrics.map((metric) =>
         {
@@ -31,7 +34,7 @@ export const MetricCards = ({ metrics, className }: { metrics: readonly Metric[]
                         <CardTitle className={FIGURE}>{metric.value}</CardTitle>
                         {metric.change !== undefined && (
                             <CardAction>
-                                <Badge variant="outline">
+                                <Badge variant={changeVariant}>
                                     {metric.trend !== undefined && <TrendIcon data-icon="inline-start" />}
                                     {metric.change}
                                 </Badge>

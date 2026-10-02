@@ -17,6 +17,8 @@ export type DataTableColumn<Row> = {
     hidden?: boolean;
     /** `number` right-aligns with tabular figures · `code` sets an identifier in the mono stack · `nowrap` keeps a short value on one line */
     kind?: "text" | "nowrap" | "code" | "number";
+    /** Utilities for the column's body cells on top of its kind, reading tokens: a smaller size for a long path */
+    cellClassName?: string;
     /** The least width in px; the table still lays out automatically, so a system with larger type widens the column */
     width?: number;
     /** Draws the header as a sort button and reports the press */
@@ -124,7 +126,7 @@ export const DataTable = <Row,>({
                                 </TableCell>
                             )}
                             {columns.map((column) => (
-                                <TableCell key={column.id} className={CELL[column.kind ?? "text"] || undefined}>{column.cell(row)}</TableCell>
+                                <TableCell key={column.id} className={cn(CELL[column.kind ?? "text"], column.cellClassName) || undefined}>{column.cell(row)}</TableCell>
                             ))}
                         </TableRow>
                     );
