@@ -61,7 +61,7 @@ const MetaLine = () => (
 
 const AgendaSection = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Agenda" meta="45 min" />
+        <SectionTitle loading={LOADING} title="Agenda" meta="45 min" />
         <Agenda
             loading={LOADING}
             loadingRows={AGENDA.length}
@@ -73,7 +73,7 @@ const AgendaSection = () => (
 
 const Discussion = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Notes" />
+        <SectionTitle loading={LOADING} title="Notes" />
         <Prose>
             <p>
                 <strong>Metrics.</strong> Activation held at 41% for the third week. Week-4 retention for the December cohort rose to
@@ -93,7 +93,7 @@ const Discussion = () => (
 
 const ActionItems = () => (
     <section className="flex flex-col gap-3">
-        <SectionTitle title="Action items" meta="1 of 5 done" />
+        <SectionTitle loading={LOADING} title="Action items" meta="1 of 5 done" />
         <TableFrame>
             <DataTable loading={LOADING} loadingRows={ACTION_ITEMS.length} columns={ACTION_COLUMNS} rows={ACTION_ITEMS} rowId={(item) => item.task} />
         </TableFrame>
@@ -157,7 +157,7 @@ export const Notes = () => (
                         </Button>
                     </div>
                 </div>
-                <DocumentTitle title="Weekly product sync" />
+                <DocumentTitle loading={LOADING} title="Weekly product sync" />
                 <MetaLine />
             </div>
             <Separator />
