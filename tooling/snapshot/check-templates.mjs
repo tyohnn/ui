@@ -20,7 +20,7 @@
 //
 // Usage:
 //   node tooling/snapshot/check-templates.mjs [--templates all|id,id] [--systems all|name,name] [--modes light,dark]
-//        [--port 5240] [--shots dir] [--no-build]
+//        [--port 5240] [--shots dir] [--no-build] [--query loading]
 //
 // Screenshots (the viewport): tooling/snapshot/out/templates/<system>-<mode>/<id>.png (gitignored).
 // Exit 0 when nothing is reported.
@@ -53,6 +53,8 @@ const templates = templatesArg === "all" ? TEMPLATE_CATALOG : list(templatesArg)
 const systems = systemsArg === "all" ? knownSystems : list(systemsArg);
 const modes = list(arg("modes", "light,dark")).map((mode) => (mode === "dark" ? "dark" : "light"));
 const port = Number(arg("port", "5240"));
+// Extra query for every page, e.g. `--query loading` for the templates' waiting faces.
+const query = arg("query", "");
 const origin = `http://localhost:${port}`;
 const shotsRoot = arg("shots", join(repoRoot, "tooling/snapshot/out/templates"));
 
@@ -258,7 +260,7 @@ try
 
                     try
                     {
-                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}&motion=off`, { waitUntil: "networkidle", timeout: 90000 });
+                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}&motion=off${query ? `&${query}` : ""}`, { waitUntil: "networkidle", timeout: 90000 });
                         await page.waitForSelector(`[data-template="${entry.id}"]`, { timeout: 15000 }).catch(() => {});
                         await page.evaluate(() => document.fonts.ready);
                         await page.waitForTimeout(400);
