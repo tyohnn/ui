@@ -136,6 +136,7 @@ const Article = () => (
 
         <h2 id="next">Next steps</h2>
         <PagerCards
+            loading={LOADING}
             previous={{ title: "Requirements", description: "Runtimes, databases and network access" }}
             next={{ title: "First workflow", description: "Write, run and replay a three-step workflow" }}
             className={IN_PROSE}
