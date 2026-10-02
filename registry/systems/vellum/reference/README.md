@@ -32,3 +32,27 @@ was chosen deliberately in that register and is documented in `DESIGN.md`:
 - the palette is authored in oklch (`registry/themes/vellum.json`), warm-tinted throughout
   (hue 70–85 for the neutrals, 192 for the teal), and passes AA on every pair `checkContrast` tests;
 - the density and shape steps are named in `DESIGN.md` → Key values, each with what it replaced in mira.
+
+## Foundation slot candidates
+
+Rules this system edited because foundation has no slot there (root `DESIGN.md` §5, "What a value
+changes, and what needs a rule"). Each reads `--input` directly in foundation, so a system that gives
+its fields an edge other than `--input` (`--input-border`, `--checkbox-border`) cannot reach them with a
+value. vellum points them at the slot the matching control already reads; the fallback keeps the
+foundation value.
+
+| Rule | Foundation reads | vellum reads | Candidate |
+|---|---|---|---|
+| `.cn-radio-group-item` (rest, and inside a focused field label) | `--input` | `--checkbox-border` | `--radio-border`, default `var(--checkbox-border, var(--input))` — rhea already made the same edit |
+| `.cn-questionnaire-choice-indicator` | `--input` | `--checkbox-border` | the same slot as the Checkbox it imitates |
+| `.cn-input-otp-slot` (block, inline-end, first child's inline-start) | `--input` | `--input-border` | read `--input-border` like Input |
+| `.cn-combobox-chips` | `--input` | `--input-border` | read `--input-border` like Input |
+| `.cn-questionnaire-input` | `--input` | `--input-border` | read `--input-border` like Input |
+| `.cn-sidebar-input` | `--input` | `--input-border` | `--sidebar-input-border`, default `var(--input-border, var(--input))` |
+
+Why (2026-10-02): the first product built on vellum measured the field edge at 1.23:1 against the page
+and the field fill at 1.04:1, below the 3:1 WCAG 1.4.11 asks of a component's boundary. The edge is now
+`color-mix(in oklab, var(--foreground) 50%, var(--background))`; measured in the preview on every field
+of the coverage template, it is 3.8:1 on the page, 3.9 on a card and 3.7 on the shell in light, and
+4.0 · 3.7 · 4.2 in dark. The fill is unchanged — with the edge drawn, the fill no longer has to say
+where the field is.

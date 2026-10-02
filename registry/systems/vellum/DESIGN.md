@@ -19,6 +19,11 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   document surface (`--background`, `--card`), and everything inside it is separated by a 1px hairline
   (`--border`) plus the one subtle inner ring cards and menus share. `--shadow-card` is empty; depth
   comes from the parchment/white step at the shell boundary, not from lift.
+- **Two weights of line**: the hairline (`--border`) separates, and it may stay faint because the
+  content on either side says where each part is. The edge of a field (`--input-border`) locates: it is
+  the only thing that says where a field starts, so it is ink at half strength and clears 3:1 against
+  every surface a field sits on (WCAG 1.4.11), in both modes. A form reads like a printed form — ruled
+  boxes on a page of faint rules.
 - **Density**: 32px controls with 13px text — a step taller than mira, because the controls sit in a
   document and want to be comfortable. The table goes the other way: a 36px head, 7px cell padding, and
   rows that size to their content.
@@ -38,6 +43,7 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 | `--ring` · `--link` · `--chart-1` | `oklch(0.4 0.05 192)` | the one teal signal |
 | `--sidebar` | `oklch(0.982 0.005 80)` | the parchment shell: the rail, and the gutter around an inset |
 | `--checked` | `oklch(0.215 0.004 70)` | a checked box is ink, not teal |
+| `--input-border` · `--checkbox-border` · `--switch-track-off` | `color-mix(in oklab, var(--foreground) 50%, var(--background))` | the edge of a field, half-strength ink: 3.8:1 on the page in light, 4.0:1 in dark (the hairline is 1.3 and 1.5) |
 | `--control-height-md` | `32px` | comfortable controls (mira: 28) |
 | `--table-head-height-default` | `36px` | tight rows (mira: 40) |
 | `--tag-radius` · `--badge-radius` | `6px` | a label is a small rounded rectangle, never a pill |
@@ -52,6 +58,11 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   column of forty avatars reads as texture, not confetti.
 - **One teal per view.** If focus, a link and a chart series are all on screen, that is already three
   places the teal appears; do not add a fourth by tinting a surface with it.
+- **The field edge is for what a person fills in.** Input, Textarea, Select, Native Select, Input Group,
+  Input OTP, the Combobox chip box, Checkbox, Radio and the off Switch read it. A button does not: the
+  outline Button and the outline Toggle keep the hairline, because their label is what identifies them
+  and a page of dark-edged buttons would compete with the fields. An invalid field keeps the same weight
+  in red (`--border-invalid` is the full `--destructive` in both modes).
 - **Serif for titles, sans for everything else.** A serif label inside a control, a serif table header,
   or serif body copy all break the voice. The marker `.cn-font-heading` is the boundary.
 
@@ -63,6 +74,9 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   every focus ring on the page.
 - Do not turn labels back into pills (`9999px`). The 6px rectangle is a system-wide voice — badges,
   tags and the select chips all share it.
+- Do not draw a field with the hairline, and do not rule the page with the field edge. Setting
+  `--input-border` back to `--border` makes a form on white paper invisible (1.3:1); using the field edge
+  for separators, table rules or card rings turns the document into a grid of boxes.
 - Do not tint the document surface to match the shell. The parchment belongs to the rail and the
   gutter; the moment the reading surface goes warm, the page loses the plane that says "this is the
   document". In dark mode the same split holds, one step deeper: the rail sits below the page, not above.

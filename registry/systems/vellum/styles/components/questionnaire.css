@@ -112,7 +112,9 @@
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
     border-radius: var(--control-indicator-radius);
-    border-color: var(--input);
+    /* vellum: the Checkbox's edge slot (foundation reads --input here and has no slot;
+       reference/README.md → Foundation slot candidates). */
+    border-color: var(--checkbox-border, var(--input));
     background-color: var(--checkbox-fill);
     /* ⚠ 켜졌을 때의 색은 유틸리티로 남긴다. `data-checked` 변형이
        [data-state=checked] 와 [data-checked]:not([data-checked=false]) 둘을
@@ -171,7 +173,9 @@
     height: var(--control-height-md);
     padding-inline: var(--control-padding-x-md);
     padding-block: 2px;   /* mira: py-0.5, Input 과 같다 */
-    border: var(--control-border-width) solid var(--input);
+    /* vellum: the field edge slot Input reads (foundation reads --input here and has no slot;
+       reference/README.md → Foundation slot candidates). */
+    border: var(--control-border-width) solid var(--input-border, var(--input));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     font-size: var(--control-font-size-md);
