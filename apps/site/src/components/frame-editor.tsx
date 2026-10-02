@@ -110,63 +110,46 @@ const Copy = ({ label, text, disabled }: { label: string; text: string; disabled
 /**
  * The layout panel: every frame token by axis with a slider. The tokens and their defaults are read out of the
  * frames' own classes (registry/blocks/lib/frame.ts), so what the reader moves here is what a system or a product
- * would declare.
+ * would declare. It is the first tab of the side panel (system-view.tsx), which stands beside the screens all the
+ * time, so a slider and what it moves are in view together. Its children are the panel's own: the intro, a section
+ * a group, and the footer that stays at the bottom.
  */
-export const FrameEditor = ({ frames }: { frames: FrameTokens }) =>
-{
-    const [open, setOpen] = useState(false);
+export const FramePanel = ({ frames }: { frames: FrameTokens }) => (
+    <>
+        <p className="side-intro">Adjust spacing and widths. Every screen on this page updates as you drag.</p>
 
-    return (
-        <div className="th-root">
-            <button type="button" className="th-trigger fr-trigger" onClick={() => setOpen(!open)} aria-expanded={open}>
-                Layout
-                {frames.changed > 0 && <span className="th-badge">edited</span>}
-            </button>
+        {FRAME_TOKEN_GROUPS.map((group) => (
+            <section key={group.id}>
+                <h4>{group.title} <code>{group.prefix}*</code></h4>
+                <p className="fr-hint">{group.hint}</p>
+                <div className="fr-grid">
+                    {group.tokens.map((token) =>
+                    {
+                        const value = frames.values[token.name] ?? token.rem;
+                        const edited = frames.values[token.name] !== undefined;
 
-            {open && (
-                <div className="th-panel fr-panel">
-                    <header>
-                        <div>
-                            <b>Layout</b>
-                            <small>Where the blocks of a page stand. The same components, more or less room. Changes land in the frames as you make them.</small>
-                        </div>
-                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label="Close">×</button>
-                    </header>
-
-                    {FRAME_TOKEN_GROUPS.map((group) => (
-                        <section key={group.id}>
-                            <h4>{group.title} <small>{group.hint}</small></h4>
-                            <div className="fr-grid">
-                                {group.tokens.map((token) =>
-                                {
-                                    const value = frames.values[token.name] ?? token.rem;
-                                    const edited = frames.values[token.name] !== undefined;
-
-                                    return (
-                                        <label key={token.name} className={edited ? "fr-token edited" : "fr-token"}>
-                                            <span className="th-name">{token.name}</span>
-                                            <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
-                                            <input
-                                                type="range"
-                                                min={0}
-                                                max={group.max}
-                                                step={group.step}
-                                                value={value}
-                                                onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
-                                            />
-                                        </label>
-                                    );
-                                })}
-                            </div>
-                        </section>
-                    ))}
-
-                    <footer>
-                        <Copy label="Copy CSS" text={frames.css ?? ""} disabled={frames.changed === 0} />
-                        <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title="Back to the defaults">Reset all</button>
-                    </footer>
+                        return (
+                            <label key={token.name} className={edited ? "fr-token edited" : "fr-token"} title={token.name}>
+                                <span className="fr-label">{token.label} <code>{token.key}</code></span>
+                                <span className="fr-value">{value}rem · {Math.round(value * 16)}px</span>
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={group.max}
+                                    step={group.step}
+                                    value={value}
+                                    onChange={(event) => frames.set(token.name, Number(event.target.value), token.rem)}
+                                />
+                            </label>
+                        );
+                    })}
                 </div>
-            )}
-        </div>
-    );
-};
+            </section>
+        ))}
+
+        <footer>
+            <Copy label="Copy CSS" text={frames.css ?? ""} disabled={frames.changed === 0} />
+            <button type="button" className="th-action ghost" onClick={frames.reset} disabled={frames.changed === 0} title="Back to the defaults">Reset all</button>
+        </footer>
+    </>
+);

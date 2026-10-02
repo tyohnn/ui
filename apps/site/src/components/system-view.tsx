@@ -6,15 +6,18 @@ import { type ReactNode, useEffect, useState } from "react";
 import { CATEGORIES, type Mode, previewUrl, screenSource, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
-import { FrameEditor, useFrameTokens } from "./frame-editor";
+import { FramePanel, useFrameTokens } from "./frame-editor";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
-import { ThemeEditor } from "./theme-editor";
+import { ThemePanel } from "./theme-editor";
+import { useTheme } from "./theme-provider";
 
 /**
  * A system page below the breadcrumb: the intro (server-rendered, passed in), the install panel, the sticky
  * category bar and every screen stacked by category. The bar's buttons scroll to their category and follow the
- * scroll position; both mode switches drive every frame.
+ * scroll position; both mode switches drive every frame. Beside the screens stands a side panel that is always there,
+ * with Layout and Colours as its tabs, so what a slider moves can be watched while it moves. Each screen is a row: its title and
+ * links on one line, the preview under it.
  */
 export const SystemView = ({
     system,
@@ -29,6 +32,8 @@ export const SystemView = ({
 {
     const [mode, setMode] = useState<Mode>(system.defaultMode);
     const [current, setCurrent] = useState<string>(CATEGORIES[0].id);
+    const [tab, setTab] = useState<"layout" | "colours">("layout");
+    const theme = useTheme();
     const frames = useFrameTokens();
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
 
@@ -73,48 +78,66 @@ export const SystemView = ({
                 </div>
             </div>
 
-            <nav className="catbar" aria-label="Screen categories">
-                {CATEGORIES.map((category) => (
-                    <a
-                        key={category.id}
-                        href={`#${category.id}`}
-                        className="cat"
-                        aria-current={current === category.id ? "true" : undefined}
-                    >
-                        {category.label}<small>{category.screens.length}</small>
-                    </a>
-                ))}
-                <span className="end"><FrameEditor frames={frames} /><ThemeEditor systemName={system.name} />{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
-            </nav>
+            <div className="sys-body">
+                <aside className="th-panel side-panel" aria-label="Layout and colours">
+                    <div className="side-tabs" role="tablist">
+                        <button type="button" role="tab" aria-selected={tab === "layout"} onClick={() => setTab("layout")}>
+                            Layout{frames.changed > 0 && <span className="th-badge">edited</span>}
+                        </button>
+                        <button type="button" role="tab" aria-selected={tab === "colours"} onClick={() => setTab("colours")}>
+                            Colours{theme && !theme.isOwn && <span className="th-badge">edited</span>}
+                        </button>
+                    </div>
+                    {tab === "layout" ? <FramePanel frames={frames} /> : <ThemePanel systemName={system.name} />}
+                </aside>
 
-            {CATEGORIES.map((category) => (
-                <section key={category.id} id={category.id} className="cat-block">
-                    <div className="cat-head"><h2>{category.label}</h2><span className="count">{category.screens.length} screens</span></div>
-                    {category.screens.map((screen) => (
-                        <div key={screen.id} className="shot-row">
-                            <div className="meta">
-                                <h3>{screen.label}</h3>
-                                <div className="src">{screenSource(screen)} · {screen.viewport.width}×{screen.viewport.height}</div>
-                                <div className="links">
-                                    <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">Full screen ↗</a>
-                                    <a href={`${previewUrl(system.name, screen.id, mode)}&frames=${frames.param}`} target="_blank" rel="noreferrer" title="Open with the frame controls: outlines and a slider per token">Frames ↗</a>
-                                    <Link href={`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`}>Compare</Link>
+                <div className="sys-main">
+                    <nav className="catbar" aria-label="Screen categories">
+                        {CATEGORIES.map((category) => (
+                            <a
+                                key={category.id}
+                                href={`#${category.id}`}
+                                className="cat"
+                                aria-current={current === category.id ? "true" : undefined}
+                            >
+                                {category.label}<small>{category.screens.length}</small>
+                            </a>
+                        ))}
+                        <span className="end">
+                            <span className="count">{screens} screens</span>
+                            <ModeSeg mode={mode} onChange={setMode} />
+                        </span>
+                    </nav>
+
+                    {CATEGORIES.map((category) => (
+                        <section key={category.id} id={category.id} className="cat-block">
+                            <div className="cat-head"><h2>{category.label}</h2><span className="count">{category.screens.length} screens</span></div>
+                            {category.screens.map((screen) => (
+                                <div key={screen.id} className="shot-row">
+                                    <div className="meta">
+                                        <h3>{screen.label}</h3>
+                                        <div className="src">{screenSource(screen)} · {screen.viewport.width}×{screen.viewport.height}</div>
+                                        <div className="links">
+                                            <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">Full screen ↗</a>
+                                            <Link href={`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`}>Compare</Link>
+                                        </div>
+                                    </div>
+                                    <div className="frame">
+                                        <ScaledFrame
+                                            src={previewUrl(system.name, screen.id, mode)}
+                                            title={`${system.name}: ${screen.label}`}
+                                            width={screen.viewport.width}
+                                            height={screen.viewport.height}
+                                            interactive
+                                            style={{ aspectRatio: `${screen.viewport.width} / ${screen.viewport.height}` }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="frame">
-                                <ScaledFrame
-                                    src={previewUrl(system.name, screen.id, mode)}
-                                    title={`${system.name}: ${screen.label}`}
-                                    width={screen.viewport.width}
-                                    height={screen.viewport.height}
-                                    interactive
-                                    style={{ aspectRatio: `${screen.viewport.width} / ${screen.viewport.height}` }}
-                                />
-                            </div>
-                        </div>
+                            ))}
+                        </section>
                     ))}
-                </section>
-            ))}
+                </div>
+            </div>
         </>
     );
 };

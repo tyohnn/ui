@@ -156,15 +156,18 @@ export const FrameControls = () =>
 
             {groups.map((group) => (
                 <fieldset key={group.id} style={{ border: 0, padding: 0, margin: "12px 0 0" }}>
-                    <legend style={{ padding: 0, fontWeight: 600 }}>{group.title} <span style={{ ...muted, fontWeight: 400 }}>{group.hint}</span></legend>
+                    <legend style={{ padding: 0, fontWeight: 600 }}>
+                        {group.title} <code style={{ ...muted, font: "400 11px/16px ui-monospace, monospace" }}>{group.prefix}*</code>
+                        <span style={{ ...muted, display: "block", fontWeight: 400 }}>{group.hint}</span>
+                    </legend>
                     {group.tokens.map((token) =>
                     {
                         const value = values[token.name] ?? token.rem;
                         const onScreen = used.has(token.name);
 
                         return (
-                            <label key={token.name} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "0 8px", marginTop: 6, opacity: onScreen ? 1 : 0.45 }} title={onScreen ? "Read by a frame on this screen" : "No frame on this screen reads it"}>
-                                <code style={{ font: "11px/16px ui-monospace, monospace" }}>{token.name}</code>
+                            <label key={token.name} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "0 8px", marginTop: 6, opacity: onScreen ? 1 : 0.45 }} title={`${token.name}: ${onScreen ? "this screen uses it" : "nothing on this screen uses it, so moving it changes nothing here"}`}>
+                                <span>{token.label} <code style={{ ...muted, font: "11px/16px ui-monospace, monospace" }}>{token.key}</code></span>
                                 <span style={{ fontVariantNumeric: "tabular-nums", color: values[token.name] === undefined ? "#a3a3a3" : "#facc15" }}>{value}rem · {Math.round(value * 16)}px</span>
                                 <input
                                     type="range"

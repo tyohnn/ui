@@ -85,14 +85,36 @@ const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
     );
 };
 
-/**
- * The colour panel. Everything in it edits the same 72 names a theme file holds, so what the reader sees
- * in the frames is what `tyohnn theme` would install.
- */
-export const ThemeEditor = ({ systemName }: { systemName: string }) =>
+/** The button that opens the colour popover, on the pages that have no side panel */
+export const ThemeTrigger = ({ mode, open, onToggle }: { mode: Mode; open: boolean; onToggle: () => void }) =>
 {
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
+
+    if (!theme) return null;
+
+    const values = theme.display[mode];
+
+    return (
+        <button type="button" className="th-trigger" onClick={onToggle} aria-expanded={open}>
+            <span className="th-dots" aria-hidden>
+                {["background", "primary", "muted", "foreground"].map((name) => (
+                    <i key={name} style={{ background: resolveValue(values, values[name] ?? "") }} />
+                ))}
+            </span>
+            Colours
+            {!theme.isOwn && <span className="th-badge">edited</span>}
+        </button>
+    );
+};
+
+/**
+ * The colour panel. Everything in it edits the same 72 names a theme file holds, so what the reader sees
+ * in the frames is what `tyohnn theme` would install. With `onClose` it is a popover under its button; without, it is
+ * the second tab of the side panel (system-view.tsx), whose children are the intro, the sections and the footer.
+ */
+export const ThemePanel = ({ systemName, onClose }: { systemName: string; onClose?: () => void }) =>
+{
+    const theme = useTheme();
     const [mode, setMode] = useState<Mode>("light");
     const [group, setGroup] = useState<string>("base");
 
@@ -101,7 +123,6 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
     const bases = theme.themes.filter((entry) => entry.kind === "base");
     const named = theme.themes.filter((entry) => entry.kind === "theme");
     const accents = theme.themes.filter((entry) => entry.kind === "accent");
-    const values = theme.display[mode];
     const edits = Object.keys(theme.state.edits.light).length + Object.keys(theme.state.edits.dark).length;
 
     const pick = (entry: typeof theme.themes[number]) => (
@@ -119,104 +140,111 @@ export const ThemeEditor = ({ systemName }: { systemName: string }) =>
         </button>
     );
 
+    const intro = `${systemName}’s feel, any palette. Changes land in the frames as you make them.`;
+    const body = (
+        <>
+            <section>
+                <h4>Themes <small>a whole palette, one per system</small></h4>
+                <div className="th-row">{named.map(pick)}</div>
+            </section>
+
+            <section>
+                <h4>Bases <small>shadcn&rsquo;s neutral ramps</small></h4>
+                <div className="th-row">{bases.map(pick)}</div>
+            </section>
+
+            <section>
+                <h4>Accent <small>moves primary, secondary, the charts and the sidebar accent</small></h4>
+                <div className="th-row">
+                    <button type="button" className={theme.state.accent === null ? "th-pick on" : "th-pick"} onClick={() => theme.setAccent(null)}>none</button>
+                    {accents.map((entry) => (
+                        <button
+                            key={entry.id}
+                            type="button"
+                            className={theme.state.accent === entry.id ? "th-pick on" : "th-pick"}
+                            onClick={() => theme.setAccent(entry.id)}
+                        >
+                            <span className="th-chip" style={{ background: entry[mode].primary }} aria-hidden />
+                            {entry.id}
+                        </button>
+                    ))}
+                </div>
+            </section>
+
+            <section>
+                <h4>
+                    Every colour
+                    {edits > 0 && (
+                        <button type="button" className="th-clear" onClick={theme.clearEdits}>
+                            {edits} changed by hand — clear
+                        </button>
+                    )}
+                    <span className="th-modes">
+                        {(["light", "dark"] as Mode[]).map((option) => (
+                            <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{option}</button>
+                        ))}
+                    </span>
+                </h4>
+                <div className="th-tabs">
+                    {Object.keys(PALETTE_GROUPS).map((id) => (
+                        <button key={id} type="button" className={group === id ? "on" : ""} onClick={() => setGroup(id)}>
+                            {GROUP_LABELS[id] ?? id}
+                        </button>
+                    ))}
+                </div>
+                <div className="th-grid">
+                    {PALETTE_GROUPS[group as keyof typeof PALETTE_GROUPS].map((name) => <Swatch key={name} name={name} mode={mode} />)}
+                </div>
+            </section>
+
+            {theme.warnings.length > 0 && (
+                <section className="th-warn">
+                    <h4>Contrast below AA</h4>
+                    <ul>
+                        {theme.warnings.slice(0, 6).map((row) => (
+                            <li key={`${row.mode}-${row.foreground}`}>
+                                <code>--{row.foreground}</code> on <code>--{row.background}</code> is {row.ratio}:1 in {row.mode}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+
+            <footer>
+                <Copy label="Copy CSS" text={theme.css ?? ""} />
+                <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>Download theme.json</button>
+                <Copy label="Copy install command" text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
+                <Copy label="Copy share link" text={typeof window === "undefined" ? "" : window.location.href} />
+                <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title="Back to the system's own colours">Reset all</button>
+            </footer>
+        </>
+    );
+
+    if (!onClose) return <><p className="side-intro">{intro}</p>{body}</>;
+
+    return (
+        <aside className="th-panel" aria-label="Colours">
+            <header>
+                <div>
+                    <b>Colours</b>
+                    <small>{intro}</small>
+                </div>
+                <button type="button" className="th-close" onClick={onClose} aria-label="Close">×</button>
+            </header>
+            {body}
+        </aside>
+    );
+};
+
+/** The panel as a popover under its button, for the pages with no column to put it in (compare, components) */
+export const ThemeEditor = ({ systemName }: { systemName: string }) =>
+{
+    const [open, setOpen] = useState(false);
+
     return (
         <div className="th-root">
-            <button type="button" className="th-trigger" onClick={() => setOpen(!open)} aria-expanded={open}>
-                <span className="th-dots" aria-hidden>
-                    {["background", "primary", "muted", "foreground"].map((name) => (
-                        <i key={name} style={{ background: resolveValue(values, values[name] ?? "") }} />
-                    ))}
-                </span>
-                Colours
-                {!theme.isOwn && <span className="th-badge">edited</span>}
-            </button>
-
-            {open && (
-                <div className="th-panel">
-                    <header>
-                        <div>
-                            <b>Colours</b>
-                            <small>{systemName}&rsquo;s feel, any palette. Changes land in the frames as you make them.</small>
-                        </div>
-                        <button type="button" className="th-close" onClick={() => setOpen(false)} aria-label="Close">×</button>
-                    </header>
-
-                    <section>
-                        <h4>Themes <small>a whole palette, one per system</small></h4>
-                        <div className="th-row">{named.map(pick)}</div>
-                    </section>
-
-                    <section>
-                        <h4>Bases <small>shadcn&rsquo;s neutral ramps</small></h4>
-                        <div className="th-row">{bases.map(pick)}</div>
-                    </section>
-
-                    <section>
-                        <h4>Accent <small>moves primary, secondary, the charts and the sidebar accent</small></h4>
-                        <div className="th-row">
-                            <button type="button" className={theme.state.accent === null ? "th-pick on" : "th-pick"} onClick={() => theme.setAccent(null)}>none</button>
-                            {accents.map((entry) => (
-                                <button
-                                    key={entry.id}
-                                    type="button"
-                                    className={theme.state.accent === entry.id ? "th-pick on" : "th-pick"}
-                                    onClick={() => theme.setAccent(entry.id)}
-                                >
-                                    <span className="th-chip" style={{ background: entry[mode].primary }} aria-hidden />
-                                    {entry.id}
-                                </button>
-                            ))}
-                        </div>
-                    </section>
-
-                    <section>
-                        <h4>
-                            Every colour
-                            {edits > 0 && (
-                                <button type="button" className="th-clear" onClick={theme.clearEdits}>
-                                    {edits} changed by hand — clear
-                                </button>
-                            )}
-                            <span className="th-modes">
-                                {(["light", "dark"] as Mode[]).map((option) => (
-                                    <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{option}</button>
-                                ))}
-                            </span>
-                        </h4>
-                        <div className="th-tabs">
-                            {Object.keys(PALETTE_GROUPS).map((id) => (
-                                <button key={id} type="button" className={group === id ? "on" : ""} onClick={() => setGroup(id)}>
-                                    {GROUP_LABELS[id] ?? id}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="th-grid">
-                            {PALETTE_GROUPS[group as keyof typeof PALETTE_GROUPS].map((name) => <Swatch key={name} name={name} mode={mode} />)}
-                        </div>
-                    </section>
-
-                    {theme.warnings.length > 0 && (
-                        <section className="th-warn">
-                            <h4>Contrast below AA</h4>
-                            <ul>
-                                {theme.warnings.slice(0, 6).map((row) => (
-                                    <li key={`${row.mode}-${row.foreground}`}>
-                                        <code>--{row.foreground}</code> on <code>--{row.background}</code> is {row.ratio}:1 in {row.mode}
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
-                    )}
-
-                    <footer>
-                        <Copy label="Copy CSS" text={theme.css ?? ""} />
-                        <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>Download theme.json</button>
-                        <Copy label="Copy install command" text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
-                        <Copy label="Copy share link" text={typeof window === "undefined" ? "" : window.location.href} />
-                        <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title="Back to the system's own colours">Reset all</button>
-                    </footer>
-                </div>
-            )}
+            <ThemeTrigger mode="light" open={open} onToggle={() => setOpen(!open)} />
+            {open && <ThemePanel systemName={systemName} onClose={() => setOpen(false)} />}
         </div>
     );
 };
