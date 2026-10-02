@@ -55,6 +55,9 @@ export const strings = {
     toEnd: "맨 아래로 가기",
     toStart: "맨 위로 가기",
   },
+  table: {
+    scrollRegion: "옆으로 넘겨 보는 표",
+  },
   questionnaire: {
     previous: "이전",
     skip: "건너뛰기",

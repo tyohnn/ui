@@ -44,6 +44,9 @@ export const strings = {
     toEnd: "Scroll to end",
     toStart: "Scroll to start",
   },
+  table: {
+    scrollRegion: "Scrollable table",
+  },
   questionnaire: {
     previous: "Previous",
     skip: "Skip",

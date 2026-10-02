@@ -52,6 +52,10 @@ export interface Strings {
     toEnd: string
     toStart: string
   }
+  table: {
+    /** Table: the name of the scroll region around a table wider than its place, when the table has no caption or label of its own */
+    scrollRegion: string
+  }
   questionnaire: {
     previous: string
     skip: string
