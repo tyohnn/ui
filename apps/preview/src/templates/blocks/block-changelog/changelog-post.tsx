@@ -1,89 +1,92 @@
-import { ArrowRight, Bell, Calendar, Check, Copy, Filter, Plus, Rocket, Sparkles, TriangleAlert, Zap } from "@tyohnn/icons";
+import { Bell, Calendar, Check, Copy, Filter, Plus, Rocket, Sparkles, TriangleAlert, Zap } from "@tyohnn/icons";
 
+import { Byline } from "@tyohnn/blocks/byline";
+import { CodeBlock } from "@tyohnn/blocks/code-block";
+import { IconFact } from "@tyohnn/blocks/icon-fact";
+import { InfoCard } from "@tyohnn/blocks/info-card";
+import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/prose";
+import { LinkItemList } from "@tyohnn/blocks/link-item-list";
+import { Prose } from "@tyohnn/blocks/prose";
+import { RuleSteps } from "@tyohnn/blocks/rule-steps";
+import { TimelineBars } from "@tyohnn/blocks/timeline-bars";
 import { Alert, AlertDescription, AlertTitle } from "@tyohnn/components/alert";
-import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@tyohnn/components/field";
 import { Input } from "@tyohnn/components/input";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemTitle } from "@tyohnn/components/item";
-import { Progress } from "@tyohnn/components/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@tyohnn/components/select";
 import { Separator } from "@tyohnn/components/separator";
 import { Switch } from "@tyohnn/components/switch";
 import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
+import { cn } from "@tyohnn/lib/utils";
 
 import { AUTHORS, EARLIER, FEATURES_SHORT, FIXES, IMPROVEMENTS, MIGRATION_EXAMPLE, RELEASE, TIMELINE_ROWS } from "./data";
 
 /**
  * The body of the changelog template: Orbitly's 4.0 release post, whose sections are the right sidebar's table of
  * contents. New features show real UI fragments in cards instead of screenshots. Fixed data, no time and no
- * randomness. Prose uses the system's typeset axis (`typeset typeset-tool`); primitives inside it are `not-typeset`.
- * Code, the timeline bars and small text read tokens in CHANGELOG_STYLE.
+ * randomness. The post is Prose on the system's typeset axis, composed from blocks (registry/blocks); what is set
+ * in the text carries IN_PROSE. The feature fragments are this release's own illustrations and stay here.
  */
 
+// A small icon in front of a card title or a row of controls.
+const LEAD_ICON = "size-[16px] shrink-0 text-muted-foreground";
+
 const TimelineFragment = () => (
-    <Card size="sm" className="not-typeset clg-figure">
-        <CardHeader>
-            <CardTitle>Q1 roadmap</CardTitle>
-            <CardDescription>Jan 5 – Mar 27 · 3 projects</CardDescription>
-            <CardAction>
-                <ToggleGroup variant="outline" size="sm" spacing={0} defaultValue={["weeks"]} aria-label="Scale">
-                    <ToggleGroupItem value="weeks">Weeks</ToggleGroupItem>
-                    <ToggleGroupItem value="months">Months</ToggleGroupItem>
-                </ToggleGroup>
-            </CardAction>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-            <div className="clg-scale grid grid-cols-3">
-                <span>January</span><span>February</span><span>March</span>
-            </div>
-            {TIMELINE_ROWS.map((row) => (
-                <div key={row.name} className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-3">
-                    <div className="flex min-w-0 flex-col">
-                        <span className="clg-row-name truncate">{row.name}</span>
-                        <span className="clg-small">{row.owner} · {row.state}</span>
-                    </div>
-                    <div className="clg-track">
-                        <div className="clg-bar flex items-center px-2" style={{ marginInlineStart: `${row.start}%`, width: `${row.span}%` }}>
-                            <Progress value={row.progress} aria-label={`${row.name} progress`} className="w-full" />
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </CardContent>
-    </Card>
+    <InfoCard
+        title="Q1 roadmap"
+        description="Jan 5 – Mar 27 · 3 projects"
+        action={(
+            <ToggleGroup variant="outline" size="sm" spacing={0} defaultValue={["weeks"]} aria-label="Scale">
+                <ToggleGroupItem value="weeks">Weeks</ToggleGroupItem>
+                <ToggleGroupItem value="months">Months</ToggleGroupItem>
+            </ToggleGroup>
+        )}
+        className={IN_PROSE}
+    >
+        <TimelineBars
+            scale={["January", "February", "March"]}
+            rows={TIMELINE_ROWS.map((row) => ({
+                id: row.name,
+                name: row.name,
+                meta: <>{row.owner} · {row.state}</>,
+                start: row.start,
+                span: row.span,
+                progress: row.progress,
+                progressLabel: `${row.name} progress`,
+            }))}
+        />
+    </InfoCard>
 );
 
 const AutomationFragment = () => (
-    <Card size="sm" className="not-typeset clg-figure">
+    <Card size="sm" className={IN_PROSE}>
         <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Zap className="clg-title-icon" />Ship finished work</CardTitle>
+            <CardTitle className="flex items-center gap-2"><Zap className={LEAD_ICON} />Ship finished work</CardTitle>
             <CardDescription>Runs on 3 projects · 214 runs this week</CardDescription>
             <CardAction><Switch defaultChecked aria-label="Rule enabled" /></CardAction>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-            <div className="clg-step flex flex-wrap items-center gap-2 px-3 py-2">
-                <Badge variant="secondary">When</Badge>
-                <span className="clg-step-text">Status changes to</span>
-                <Badge variant="outline"><Check data-icon="inline-start" />Done</Badge>
-            </div>
-            <div className="clg-step flex flex-wrap items-center gap-2 px-3 py-2">
-                <Badge variant="secondary">If</Badge>
-                <span className="clg-step-text">Label is</span>
-                <Badge variant="outline">customer-facing</Badge>
-            </div>
-            <div className="clg-step flex flex-wrap items-center gap-2 px-3 py-2">
-                <Badge>Then</Badge>
-                <span className="clg-step-text">Move to</span>
-                <Badge variant="outline"><Rocket data-icon="inline-start" />Shipped</Badge>
-                <span className="clg-step-text">and notify</span>
-                <Badge variant="outline"><Bell data-icon="inline-start" />#releases</Badge>
-            </div>
+        <CardContent>
+            <RuleSteps
+                steps={[
+                    { id: "when", keyword: <Badge variant="secondary">When</Badge>, parts: ["Status changes to", <Badge variant="outline"><Check data-icon="inline-start" />Done</Badge>] },
+                    { id: "if", keyword: <Badge variant="secondary">If</Badge>, parts: ["Label is", <Badge variant="outline">customer-facing</Badge>] },
+                    {
+                        id: "then",
+                        keyword: <Badge>Then</Badge>,
+                        parts: [
+                            "Move to",
+                            <Badge variant="outline"><Rocket data-icon="inline-start" />Shipped</Badge>,
+                            "and notify",
+                            <Badge variant="outline"><Bell data-icon="inline-start" />#releases</Badge>,
+                        ],
+                    },
+                ]}
+            />
         </CardContent>
         <CardFooter className="justify-between gap-2">
-            <span className="clg-small">Last run 4 min ago · 0 errors</span>
+            <span className={NOTE}>Last run 4 min ago · 0 errors</span>
             <Button variant="outline" size="sm"><Plus data-icon="inline-start" />Add action</Button>
         </CardFooter>
     </Card>
@@ -96,10 +99,10 @@ const FILTER_ITEMS = [
 ];
 
 const FiltersFragment = () => (
-    <Card size="sm" className="not-typeset clg-figure">
+    <Card size="sm" className={IN_PROSE}>
         <CardContent className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
-                <Filter className="clg-title-icon" />
+                <Filter className={LEAD_ICON} />
                 <Select items={FILTER_ITEMS} defaultValue="mine">
                     <SelectTrigger size="sm" className="min-w-40"><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -113,73 +116,61 @@ const FiltersFragment = () => (
             <div className="flex flex-wrap items-center gap-2">
                 <Input aria-label="Filter name" defaultValue="My urgent work" className="max-w-64" />
                 <Button size="sm">Save filter</Button>
-                <span className="clg-small">Shared with Platform team · 18 tasks</span>
+                <span className={NOTE}>Shared with Platform team · 18 tasks</span>
             </div>
         </CardContent>
     </Card>
 );
 
 const CustomFieldsFragment = () => (
-    <Card size="sm" className="not-typeset clg-figure">
-        <CardHeader>
-            <CardTitle>New field</CardTitle>
-            <CardDescription>Added to every task in Mobile app</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <FieldGroup className="grid gap-4 sm:grid-cols-2">
-                <Field>
-                    <FieldLabel htmlFor="clg-field-name">Name</FieldLabel>
-                    <Input id="clg-field-name" defaultValue="Story points" />
-                </Field>
-                <Field>
-                    <FieldLabel htmlFor="clg-field-type">Type</FieldLabel>
-                    <Select items={[{ value: "number", label: "Number" }, { value: "select", label: "Single select" }]} defaultValue="number">
-                        <SelectTrigger id="clg-field-type"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="number">Number</SelectItem>
-                            <SelectItem value="select">Single select</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </Field>
-                <Field orientation="horizontal" className="sm:col-span-2">
-                    <Switch id="clg-field-required" defaultChecked />
-                    <FieldLabel htmlFor="clg-field-required">Required before a task moves to In review</FieldLabel>
-                </Field>
-                <FieldDescription className="sm:col-span-2">Numbers can be summed per column and shown on cards.</FieldDescription>
-            </FieldGroup>
-        </CardContent>
-    </Card>
+    <InfoCard title="New field" description="Added to every task in Mobile app" className={IN_PROSE}>
+        <FieldGroup className="grid gap-4 sm:grid-cols-2">
+            <Field>
+                <FieldLabel htmlFor="clg-field-name">Name</FieldLabel>
+                <Input id="clg-field-name" defaultValue="Story points" />
+            </Field>
+            <Field>
+                <FieldLabel htmlFor="clg-field-type">Type</FieldLabel>
+                <Select items={[{ value: "number", label: "Number" }, { value: "select", label: "Single select" }]} defaultValue="number">
+                    <SelectTrigger id="clg-field-type"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="number">Number</SelectItem>
+                        <SelectItem value="select">Single select</SelectItem>
+                    </SelectContent>
+                </Select>
+            </Field>
+            <Field orientation="horizontal" className="sm:col-span-2">
+                <Switch id="clg-field-required" defaultChecked />
+                <FieldLabel htmlFor="clg-field-required">Required before a task moves to In review</FieldLabel>
+            </Field>
+            <FieldDescription className="sm:col-span-2">Numbers can be summed per column and shown on cards.</FieldDescription>
+        </FieldGroup>
+    </InfoCard>
 );
 
-const Anchor = ({ id }: { id: string }) => <span id={id} className="clg-anchor" />;
+// A place in the text the sidebar links to that has no heading of its own.
+const Anchor = ({ id }: { id: string }) => <span id={id} className="block" />;
 
 export const ChangelogPost = () => (
     <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
-        <article className="typeset typeset-tool clg-article px-10 pt-8 pb-16">
+        <Prose as="article" className="mx-auto max-w-[52rem] px-10 pt-8 pb-16">
             <div className="not-typeset flex flex-wrap items-center gap-2">
                 <Badge>{RELEASE.version}</Badge>
-                <span className="clg-small flex items-center gap-1.5"><Calendar />{RELEASE.date}</span>
+                <IconFact icon={<Calendar />}>{RELEASE.date}</IconFact>
                 <Separator orientation="vertical" className="data-vertical:h-4 data-vertical:self-auto" />
                 {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{tag}</Badge>)}
             </div>
-            <h1>Orbitly 4.0: timelines, automations and a faster editor</h1>
-            <div className="not-typeset clg-authors flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-4">
-                    {AUTHORS.map((author) => (
-                        <span key={author.name} className="flex items-center gap-2">
-                            <Avatar size="sm"><AvatarFallback>{author.initials}</AvatarFallback></Avatar>
-                            <span className="flex flex-col">
-                                <span className="clg-row-name">{author.name}</span>
-                                <span className="clg-small">{author.role}</span>
-                            </span>
-                        </span>
-                    ))}
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm"><Copy data-icon="inline-start" />Copy link</Button>
-                    <Button size="sm"><Bell data-icon="inline-start" />Subscribe</Button>
-                </div>
-            </div>
+            <h1 className="mt-4">Orbitly 4.0: timelines, automations and a faster editor</h1>
+            <Byline
+                authors={AUTHORS}
+                actions={(
+                    <>
+                        <Button variant="outline" size="sm"><Copy data-icon="inline-start" />Copy link</Button>
+                        <Button size="sm"><Bell data-icon="inline-start" />Subscribe</Button>
+                    </>
+                )}
+                className={IN_PROSE}
+            />
 
             <h2 id="highlights">Highlights</h2>
             <Anchor id="summary" />
@@ -188,7 +179,7 @@ export const ChangelogPost = () => (
                 <strong>automations</strong>, and the task editor opens more than three times faster. It is rolling out to every workspace
                 today; Enterprise workspaces on the scheduled channel get it on January 21.
             </p>
-            <Alert className="not-typeset clg-block" id="upgrade">
+            <Alert className={IN_PROSE} id="upgrade">
                 <Sparkles />
                 <AlertTitle>Nothing to do for most teams</AlertTitle>
                 <AlertDescription>
@@ -226,7 +217,7 @@ export const ChangelogPost = () => (
 
             {FEATURES_SHORT.slice(1).map((feature) => (
                 <div key={feature.id} className="contents">
-                    <h3 id={feature.id} className="clg-h3-badge">
+                    <h3 id={feature.id} className="flex flex-wrap items-center gap-2">
                         {feature.title}
                         {feature.badge ? <Badge variant="secondary" className="not-typeset">{feature.badge}</Badge> : null}
                     </h3>
@@ -254,14 +245,14 @@ export const ChangelogPost = () => (
                 Webhooks now send one envelope with a <code>type</code> and a <code>data</code> object, and statuses carry a stable{" "}
                 <code>key</code> instead of their display label. Version 1 payloads keep working until February 15, 2026.
             </p>
-            <div className="not-typeset clg-code">
-                <div className="clg-code-bar flex items-center justify-between gap-2 py-1 pr-1 pl-3">
-                    <span className="clg-code-title">webhooks.ts</span>
-                    <Button variant="ghost" size="xs"><Copy data-icon="inline-start" />Copy</Button>
-                </div>
-                <pre className="px-4 py-3"><code>{MIGRATION_EXAMPLE}</code></pre>
-            </div>
-            <Alert className="not-typeset clg-block">
+            <CodeBlock
+                title="webhooks.ts"
+                code={MIGRATION_EXAMPLE}
+                size="sm"
+                action={<Button variant="ghost" size="xs"><Copy data-icon="inline-start" />Copy</Button>}
+                className={IN_PROSE}
+            />
+            <Alert className={IN_PROSE}>
                 <TriangleAlert />
                 <AlertTitle>Renamed statuses break label checks</AlertTitle>
                 <AlertDescription>
@@ -270,53 +261,11 @@ export const ChangelogPost = () => (
                 </AlertDescription>
             </Alert>
 
-            <Separator className="not-typeset clg-block" />
-            <section className="not-typeset clg-block flex flex-col gap-3">
-                <span className="clg-row-name">Earlier releases</span>
-                <ItemGroup className="gap-2">
-                    {EARLIER.map((release) => (
-                        <Item key={release.version} variant="outline" size="sm" render={<a href="#" />}>
-                            <ItemContent>
-                                <ItemTitle>{release.title}</ItemTitle>
-                                <ItemDescription>{release.version} · {release.date}</ItemDescription>
-                            </ItemContent>
-                            <ItemActions><ArrowRight className="clg-title-icon" /></ItemActions>
-                        </Item>
-                    ))}
-                </ItemGroup>
+            <Separator className={IN_PROSE} />
+            <section className={cn(IN_PROSE, "flex flex-col gap-3")}>
+                <span className={cn(BODY, "font-medium")}>Earlier releases</span>
+                <LinkItemList items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
             </section>
-        </article>
+        </Prose>
     </div>
 );
-
-/**
- * The template's own stylesheet, tokens only: the article measure, spacing for primitives placed in the typeset flow,
- * the timeline track and bars, automation steps, the code block and small text.
- */
-export const CHANGELOG_STYLE = `
-[data-template="block-changelog"] .clg-article { max-width: 52rem; margin-inline: auto; }
-[data-template="block-changelog"] .clg-article > h1 { margin-block-start: 1rem; }
-[data-template="block-changelog"] .clg-authors { margin-block-start: 1.25rem; padding-block: 1rem; border-block: 1px solid var(--border); }
-[data-template="block-changelog"] .clg-anchor { display: block; }
-[data-template="block-changelog"] .clg-block,
-[data-template="block-changelog"] .clg-figure,
-[data-template="block-changelog"] .clg-code { margin-block-start: 1.25rem; }
-[data-template="block-changelog"] .clg-h3-badge { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-[data-template="block-changelog"] .clg-small { font-size: var(--ui-text-sm); line-height: var(--ui-line-height-sm); color: var(--muted-foreground); }
-[data-template="block-changelog"] .clg-small svg { width: 14px; height: 14px; flex-shrink: 0; }
-[data-template="block-changelog"] .clg-row-name { font-size: var(--ui-text-md); line-height: var(--ui-line-height-md); font-weight: 500; }
-[data-template="block-changelog"] .clg-title-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--muted-foreground); }
-[data-template="block-changelog"] .clg-scale { margin-inline-start: calc(11rem + 0.75rem); font-size: var(--ui-text-xs); line-height: var(--ui-line-height-xs); color: var(--muted-foreground); }
-[data-template="block-changelog"] .clg-scale > span { padding-inline-start: 0.5rem; border-inline-start: 1px solid var(--border); }
-[data-template="block-changelog"] .clg-track { border-radius: var(--radius-md); background-color: var(--muted); padding-block: 0.375rem; }
-[data-template="block-changelog"] .clg-bar { height: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius-md); background-color: var(--background); }
-[data-template="block-changelog"] .clg-step { border: 1px solid var(--border); border-radius: var(--radius-lg); background-color: var(--muted); }
-[data-template="block-changelog"] .clg-step-text { font-size: var(--ui-text-md); line-height: var(--ui-line-height-md); }
-[data-template="block-changelog"] .clg-code {
-    overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg);
-    background-color: var(--muted); color: var(--foreground);
-}
-[data-template="block-changelog"] .clg-code-bar { border-bottom: 1px solid var(--border); background-color: var(--background); }
-[data-template="block-changelog"] .clg-code-title { font-family: var(--font-mono); font-size: var(--ui-text-sm); line-height: var(--ui-line-height-sm); color: var(--muted-foreground); }
-[data-template="block-changelog"] .clg-code pre { margin: 0; overflow-x: auto; font-family: var(--font-mono); font-size: var(--ui-text-sm); line-height: 1.6; }
-`;
