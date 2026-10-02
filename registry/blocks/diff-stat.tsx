@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 const KIND = { add: "text-success", del: "text-destructive" } as const;

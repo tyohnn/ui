@@ -7,7 +7,7 @@ import { ArrowUpDown } from "@tyohnn/icons";
 import { Button } from "@tyohnn/components/button";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { CODE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";

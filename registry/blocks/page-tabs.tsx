@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { Badge } from "@tyohnn/components/badge";
 import { TabsList, TabsTrigger } from "@tyohnn/components/tabs";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type PageTab = { value: string; label: ReactNode; /** With `data-icon="inline-start"` */ icon?: ReactNode; count?: ReactNode };

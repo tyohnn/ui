@@ -7,7 +7,7 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { IN_PROSE, INLINE_CODE, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
 import { ASIDE_NARROW_HIDDEN, ASIDE_WIDTH, MEASURE } from "@tyohnn/blocks/lib/frame";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { OnThisPage } from "@tyohnn/blocks/on-this-page";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageSplit } from "@tyohnn/blocks/page-split";

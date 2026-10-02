@@ -4,7 +4,7 @@ import { ArrowRight, ChevronRight } from "@tyohnn/icons";
 
 import { Badge } from "@tyohnn/components/badge";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@tyohnn/components/item";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type LinkItem = {

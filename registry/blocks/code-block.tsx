@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 
-import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { BARS_ON_MUTED, PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 const BAR_TITLE = "font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground";

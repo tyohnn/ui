@@ -4,7 +4,7 @@ import { CategoryBarChart } from "@tyohnn/blocks/category-bar-chart";
 import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { InfoCard } from "@tyohnn/blocks/info-card";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { MetricCards } from "@tyohnn/blocks/metric-cards";
 import { Page } from "@tyohnn/blocks/page";

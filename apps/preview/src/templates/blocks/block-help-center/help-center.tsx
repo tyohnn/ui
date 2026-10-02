@@ -17,7 +17,7 @@ import type { ComponentType } from "react";
 
 import { ContactOptions } from "@tyohnn/blocks/contact-options";
 import { InfoCard } from "@tyohnn/blocks/info-card";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageAside, PageSplit } from "@tyohnn/blocks/page-split";

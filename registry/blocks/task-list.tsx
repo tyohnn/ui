@@ -4,7 +4,7 @@ import { type ReactNode, useId, useState } from "react";
 
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type Task = {

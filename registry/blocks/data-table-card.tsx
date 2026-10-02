@@ -6,7 +6,7 @@ import { Card, CardContent } from "@tyohnn/components/card";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 import { DataTable, type DataTableColumn, type DataTableSelection } from "@tyohnn/blocks/data-table";
 import { FOOTER_BAND, TOOLBAR_BAND } from "@tyohnn/blocks/lib/bands";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

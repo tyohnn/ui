@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { TITLE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 

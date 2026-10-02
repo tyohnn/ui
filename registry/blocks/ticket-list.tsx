@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Badge } from "@tyohnn/components/badge";
 import { Separator } from "@tyohnn/components/separator";
 import { NOTE, ROW_LABEL } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type Ticket = {

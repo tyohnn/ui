@@ -10,7 +10,7 @@ import {
     AttachmentMedia,
     AttachmentTitle,
 } from "@tyohnn/components/attachment";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 
 export type AttachmentFile = {
     name: string;

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { INLINE_CODE, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { TableFrame } from "@tyohnn/blocks/table-frame";
 import { Badge } from "@tyohnn/components/badge";
 import { cn } from "@tyohnn/lib/utils";

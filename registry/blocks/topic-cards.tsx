@@ -4,7 +4,7 @@ import { ChevronRight } from "@tyohnn/icons";
 
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type Topic = {

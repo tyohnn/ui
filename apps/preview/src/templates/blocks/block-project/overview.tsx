@@ -6,7 +6,7 @@ import { DetailHeading } from "@tyohnn/blocks/detail-heading";
 import { FileTiles } from "@tyohnn/blocks/file-tiles";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { ListCard } from "@tyohnn/blocks/list-card";
 import { Page } from "@tyohnn/blocks/page";
 import { PageAside, PageSplit } from "@tyohnn/blocks/page-split";

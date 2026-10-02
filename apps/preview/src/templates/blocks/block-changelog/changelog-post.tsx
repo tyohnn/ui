@@ -5,7 +5,7 @@ import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText } from "@tyohnn/blocks/lib/pending";
+import { PendingText } from "@tyohnn/blocks/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { Prose } from "@tyohnn/blocks/prose";

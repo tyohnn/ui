@@ -4,7 +4,7 @@ import { type ReactNode, useState } from "react";
 
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Label } from "@tyohnn/components/label";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type ChecklistItem = {

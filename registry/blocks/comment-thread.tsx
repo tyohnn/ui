@@ -5,7 +5,7 @@ import { Fragment, type ReactNode } from "react";
 import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Textarea } from "@tyohnn/components/textarea";
 import { PARAGRAPH, NOTE } from "@tyohnn/blocks/lib/copy";
-import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
