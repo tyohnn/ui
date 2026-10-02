@@ -72,6 +72,9 @@ scrolls, what sits beside what. It has no content of its own. The steps it picks
 defaults written in the read (`lib/frame.ts`), so changing one value moves every screen that stands at that step.
 `frames.md` has the measurements behind them.
 
+To try the values, open any template in the preview with `&frames=1`: a panel lists the tokens, outlines the
+frames on the screen, marks the tokens that screen reads, and moves them live; "Copy CSS" gives the declarations.
+
 | Block | File | What it is |
 |---|---|---|
 | `Page` | `page.tsx` | The content under the bar: the gutter and gap, and whether the page scrolls or is pinned so a region scrolls |

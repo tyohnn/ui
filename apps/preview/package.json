@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
-    "description": "Renders a template with one design system: SYSTEM=<name> (or --system=<name>) picks fonts and icons at start; ?system=<name>&mode=dark|light&template=<name> picks the stylesheet.",
+    "description": "Renders a template with one design system: SYSTEM=<name> (or --system=<name>) picks fonts and icons at start; ?system=<name>&mode=dark|light&template=<name> picks the stylesheet. &frames=1 opens a panel for trying the frame tokens.",
     "scripts": {
         "build-systems": "node ../../tooling/build-system --all",
         "dev": "npm run build-systems && node scripts/vite-system.mjs --port 5173 --strictPort",
