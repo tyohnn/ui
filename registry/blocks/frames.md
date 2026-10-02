@@ -1,6 +1,6 @@
 # Frames — how blocks sit on a page
 
-**Status (2026-10-02): the frames are built and 15 of the 17 templates stand on them.** `page.tsx`,
+**Status (2026-10-02): the frames are built and 16 of the 17 templates stand on them.** `page.tsx`,
 `page-split.tsx` and `lib/frame.ts` are in this folder; the README lists them with their tokens. This file is the
 evidence they were drawn from, what moved when they went in, and what is still open. The axis contract in the root
 `DESIGN.md` did not change: the tokens carry their defaults in the read.
@@ -49,11 +49,12 @@ on the same system come out with the same room around things.
 
 `node tooling/snapshot/audit-layout.mjs` measures the layer no system owns: the shell, the gutter, the title, what
 scrolls, what sits side by side, and what happens when the screen gets narrow. The 17 screen templates, at 1440px,
-wearing vellum (measured before and after the templates moved onto blocks: the same at 1440, 768 and 390):
+wearing vellum (measured before and after the templates moved onto blocks: the same at 1440, 768 and 390; the
+crm-dashboard row is from after it became a page that fills its viewport):
 
 | Screen | Shell | Bar | Gutter | Gap | Title | Scroll | Split / measure | At 390px |
 |---|---|---|---|---|---|---|---|---|
-| crm-dashboard | left 246 | 53 ruled · title · actions | 16 | 8 | 17 heading | document | — | overflows |
+| crm-dashboard | left 246 | 53 ruled · title · actions | 16 | 0 | 17 heading | regions | — | fits |
 | orders | left 256 | 64 ruled | 16 | 16 | 14 heading | regions | — | fits |
 | analytics | left 256 | 64 ruled | 16 | 16 | 14 heading | regions | — | fits |
 | roadmap | left 304 | 64 | 16 | 16 | 14 heading | regions | four columns (a board) | fits |
@@ -85,11 +86,11 @@ What the numbers say:
 2. **The title is half and half.** The template picks a step, the system gives the step its size and family.
    Under one system the titles still run from 14 to 29px, in three bands: 14 (dashboards), 17–18 (workspaces),
    25–29 (documents).
-3. **Two ways to scroll.** Nine screens pin the content to the viewport and scroll a region; seven scroll the page.
+3. **Two ways to scroll.** Ten screens pin the content to the viewport and scroll a region; seven scroll the page.
 4. **Six screens are the same split.** A main column and an aside of 288–480px: team, project, code-review,
    ai-playground, api-reference, help-center. It is the most repeated arrangement, and each template wrote it again.
 5. **Three screens read at a measure.** A centred column of 768–832px (editor, meeting-notes, changelog).
-6. **Narrow widths have no rule.** Five templates overflow at 390px, and where a split survives the aside simply
+6. **Narrow widths have no rule.** Four templates overflow at 390px, and where a split survives the aside simply
    drops under the main column or off the screen. The templates were drawn at 1440 and nothing says what a split
    becomes on a phone. This is the part of the layer that takes work.
 7. **The bar is copied markup.** `flex h-16 shrink-0 items-center gap-2 border-b px-4` appears in the template
@@ -153,13 +154,12 @@ The bar inside the inset is not a frame. Its markup is upstream's sidebar-block 
 | Frame use | Templates |
 |---|---|
 | `Page scroll="regions"` with gutter and gap | orders, team, roadmap, project, ai-playground |
-| `Page scroll="regions"`, bare, with a `PagePane` | code-review, inbox; calendar (bare, its grid scrolls) |
+| `Page scroll="regions"`, bare, with a `PagePane` | code-review, inbox, crm-dashboard; calendar (bare, its grid scrolls) |
 | `Page` scrolling with gutter and gap | analytics |
 | `Page` scrolling around a `PageContent` | editor, meeting-notes, changelog (measured documents) · docs, api-reference, help-center (full width) |
 | `PageSplit` | team, project, ai-playground, code-review, docs, api-reference, help-center |
 
-Not on a frame: crm-dashboard (a fixed-width app window drawn as an illustration, not a page in an inset) and
-settings-dialog (a dialog over upstream's placeholder page).
+Not on a frame: settings-dialog (a dialog over upstream's placeholder page).
 
 ### What moved, and what did not
 
@@ -177,10 +177,12 @@ ones that disagreed — but every value the templates had turned out to fit a st
 Everything else is where it was. `check-templates.mjs --shots` before and after, the 15 templates in all 15
 systems and both modes, compared with `diff-shots.mjs`: of 450 pairs, 375 are identical, 60 are editor and
 meeting-notes (the padding above), 2 are loam's roadmap (the fix above), and 13 differ by one or two levels of one
-channel on at most 191 pixels — the raster noise the blocks' README describes.
+channel on at most 191 pixels — the raster noise the blocks' README describes. crm-dashboard went onto the
+frames after it became a page: shot in four systems and both modes, six of eight pairs identical and two with the
+same noise.
 
 Below `xl` the splits stack as before (the row wraps). Layout facts at 768 and 390 are unchanged, which also means
-the five templates that overflowed at 390px still do.
+the templates that overflowed at 390px still do.
 
 ## Values: the frame picks the step, the system gives the value
 
@@ -214,8 +216,8 @@ A recipe is a named row of the three choices with the regions it uses, written d
 
 | Recipe | Scroll · width · split | Screens that are instances today |
 |---|---|---|
-| Collection | regions · full · none | orders, team (with an aside) |
-| Overview | page or regions · full · none | analytics, crm-dashboard, project (with an aside) |
+| Collection | regions · full · none | orders, crm-dashboard, team (with an aside) |
+| Overview | page or regions · full · none | analytics, project (with an aside) |
 | Workbench | regions · full · aside | code-review, ai-playground |
 | List and detail | regions · full · list | inbox, settings |
 | Document | page · measure · none or aside | editor, meeting-notes, changelog, docs, api-reference, help-center |
@@ -232,7 +234,7 @@ template cannot be rebuilt on the frames without overriding a gap, the frame is 
 
 ## Narrow widths
 
-Still open. Five templates overflow at 390px (crm-dashboard, team, project, code-review, settings-dialog), and
+Still open. Four templates overflow at 390px (team, project, code-review, settings-dialog), and
 where a split survives the aside drops under the main column or off the screen. The product's 18 screens never
 overflow, because they all pass through one shell. `PageSplit` is now the one place to give this a rule: stack on
 the frame's own width (a container query) rather than the viewport's `xl`, and say what a pinned page becomes when

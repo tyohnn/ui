@@ -30,6 +30,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { FilterBar } from "@tyohnn/blocks/filter-bar";
 import { InlineFacts } from "@tyohnn/blocks/inline-facts";
+import { Page, PagePane } from "@tyohnn/blocks/page";
 import { PageBar } from "@tyohnn/blocks/page-bar";
 import { Person } from "@tyohnn/blocks/person";
 import { SegmentMeter } from "@tyohnn/blocks/segment-meter";
@@ -275,6 +276,7 @@ export const CrmDashboard = () => (
             <CrmSidebar />
             <SidebarInset className="min-h-0 min-w-0">
                 <PageHeader />
+                <Page scroll="regions" gutter="none" gap="none">
                 <Tabs defaultValue="companies">
                     <TabsList variant="line" className="w-full justify-start gap-4 px-4">
                         <TabsTrigger value="companies" className="flex-none">Companies</TabsTrigger>
@@ -283,10 +285,11 @@ export const CrmDashboard = () => (
                     </TabsList>
                 </Tabs>
                 <Toolbar />
-                <div className="min-h-0 flex-1 overflow-y-auto">
+                <PagePane>
                     <CompaniesTable />
-                </div>
+                </PagePane>
                 <TableSummary />
+                </Page>
             </SidebarInset>
         </SidebarProvider>
     </div>
