@@ -6,6 +6,7 @@ import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@tyohnn/components/tooltip";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { GUTTER_INLINE, type Gutter } from "@tyohnn/blocks/lib/frame";
 import { cn } from "@tyohnn/lib/utils";
 
 export type IconToolbarAction = { label: string; icon: ReactNode; onClick?: () => void };
@@ -26,14 +27,17 @@ export const IconToolbar = ({
     groups,
     position,
     endActions,
+    gutter = "sm",
     className,
 }: {
     groups: readonly (readonly IconToolbarAction[])[];
     position?: ReactNode;
     endActions?: readonly IconToolbarAction[];
+    /** How far its ends stand from the page's edge: the page's small gutter by default */
+    gutter?: Gutter;
     className?: string;
 }) => (
-    <div className={cn("flex flex-wrap items-center gap-1 border-b border-border px-4 py-2", className)}>
+    <div className={cn("flex flex-wrap items-center gap-1 border-b border-border py-2", GUTTER_INLINE[gutter], className)}>
         {groups.map((actions, index) => (
             <Fragment key={actions.map((action) => action.label).join("|")}>
                 {index > 0 && <Separator orientation="vertical" className="mx-1 data-vertical:h-4 data-vertical:self-auto" />}

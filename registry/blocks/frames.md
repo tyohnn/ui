@@ -162,6 +162,12 @@ The bar inside the inset is not a frame. Its markup is upstream's sidebar-block 
 
 Not on a frame: settings-dialog (a dialog over upstream's placeholder page).
 
+A bare page (`gutter="none"`) still stands at a gutter: its bands do. A table, a diff or a calendar grid runs to the
+page's edge, and the bands over and under it — `PageBar`, `FilterBar`, `IconToolbar`, `CalendarToolbar`, a row of
+tabs — keep their ends at `--page-gutter-sm` (`gutter` on the band, `GUTTER_INLINE` on a row the template writes).
+So crm-dashboard, calendar and the inbox reader move with the small gutter like orders does. The bands inside a
+card (`lib/bands.ts`) do not: that room is the card's. Neither does upstream's shell bar above.
+
 ### What moved, and what did not
 
 A block is cut out of a template without moving a pixel. A frame exists to make screens agree, so it may move the

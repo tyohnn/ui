@@ -127,7 +127,7 @@ frames on the screen, marks the tokens that screen reads, and moves them live; "
 
 | Token (default in `lib/frame.ts`) | Default | Read by |
 |---|---|---|
-| `--page-gutter-sm` · `-md` · `-lg` · `-xl` | 1 · 1.5 · 2 · 2.5rem | `gutter` on Page · PagePane · PageContent |
+| `--page-gutter-sm` · `-md` · `-lg` · `-xl` | 1 · 1.5 · 2 · 2.5rem | `gutter` on Page · PagePane · PageContent, and on the bands that stand on a page's edge (PageBar · FilterBar · IconToolbar · CalendarToolbar, at `sm` unless told otherwise) |
 | `--page-gap-xs` · `-sm` · `-md` · `-lg` · `-xl` | 0.75 · 1 · 1.5 · 2 · 2.5rem | `gap` on every frame |
 | `--page-measure-sm` · `-md` · `-lg` | 48 · 52 · 64rem | `measure` on PageContent, `MEASURE` on a block that is the column |
 | `--page-aside-xs` · `-sm` · `-md` · `-lg` · `-xl` | 14 · 18 · 20 · 26 · 30rem | `width` on PageAside, `ASIDE_WIDTH` on a block that is the pane |

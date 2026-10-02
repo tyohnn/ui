@@ -33,7 +33,11 @@ export const GUTTER: Record<Gutter, string> = {
     xl: "p-[var(--page-gutter-xl,2.5rem)]",
 };
 
-/** The gutter on the two sides only: the block padding comes from somewhere else (a document's own padding) */
+/**
+ * The gutter on the two sides only: the block padding comes from somewhere else — a document's own padding, or a
+ * band's. A page with `gutter="none"` has no room of its own; the bands that stand on its edge (PageBar, FilterBar,
+ * IconToolbar, CalendarToolbar, a row of tabs) take this, so a flush page moves with the gutter like any other.
+ */
 export const GUTTER_INLINE: Record<Gutter, string> = {
     none: "",
     sm: "px-[var(--page-gutter-sm,1rem)]",

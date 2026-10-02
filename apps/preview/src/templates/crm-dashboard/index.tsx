@@ -30,6 +30,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { FilterBar } from "@tyohnn/blocks/filter-bar";
 import { InlineFacts } from "@tyohnn/blocks/inline-facts";
+import { GUTTER_INLINE } from "@tyohnn/blocks/lib/frame";
 import { Page, PagePane } from "@tyohnn/blocks/page";
 import { PageBar } from "@tyohnn/blocks/page-bar";
 import { Person } from "@tyohnn/blocks/person";
@@ -57,6 +58,7 @@ import {
     SidebarTrigger,
 } from "@tyohnn/components/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
+import { cn } from "@tyohnn/lib/utils";
 
 import { NoMotion } from "../coverage/frame";
 import { LOADING } from "../loading";
@@ -288,7 +290,7 @@ export const CrmDashboard = () => (
                 <PageHeader />
                 <Page scroll="regions" gutter="none" gap="none">
                 <Tabs defaultValue="companies">
-                    <TabsList variant="line" className="w-full justify-start gap-4 px-4">
+                    <TabsList variant="line" className={cn("w-full justify-start gap-4", GUTTER_INLINE.sm)}>
                         <TabsTrigger value="companies" className="flex-none">Companies</TabsTrigger>
                         <TabsTrigger value="deals" className="flex-none">Deals</TabsTrigger>
                         <TabsTrigger value="forecast" className="flex-none">Forecast</TabsTrigger>
