@@ -4,7 +4,7 @@ import { ArticleHeading } from "@tyohnn/blocks/article-heading";
 import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { CodeTabs } from "@tyohnn/blocks/code-tabs";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
-import { IconFact } from "@tyohnn/blocks/icon-fact";
+import { IconNote } from "@tyohnn/blocks/icon-note";
 import { IN_PROSE, INLINE_CODE, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
 import { OnThisPage } from "@tyohnn/blocks/on-this-page";
 import { PagerCards } from "@tyohnn/blocks/pager-cards";
@@ -71,7 +71,7 @@ const Article = () => (
                 <>
                     <Badge variant="secondary">v2.4.0</Badge>
                     <Badge variant="outline">Stable</Badge>
-                    <IconFact icon={<Clock />}>6 min read</IconFact>
+                    <IconNote className="gap-1.5" icon={<Clock />}>6 min read</IconNote>
                     <span>Updated Jan 12, 2026 by Ines Varga</span>
                 </>
             )}

@@ -5,7 +5,7 @@ import { AvatarStack } from "@tyohnn/blocks/avatar-stack";
 import { CalloutList } from "@tyohnn/blocks/callout-list";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
-import { IconFact } from "@tyohnn/blocks/icon-fact";
+import { IconNote } from "@tyohnn/blocks/icon-note";
 import { BODY, BULLETS, NOTE } from "@tyohnn/blocks/lib/copy";
 import { Person } from "@tyohnn/blocks/person";
 import { Prose } from "@tyohnn/blocks/prose";
@@ -44,9 +44,9 @@ const ACTION_COLUMNS: DataTableColumn<ActionItem>[] = [
 
 const MetaLine = () => (
     <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <IconFact icon={<Calendar />}>Wed, Jan 14, 2026</IconFact>
-        <IconFact icon={<Clock />}>10:00 – 10:45</IconFact>
-        <IconFact icon={<MapPin />}>Room Cedar · video</IconFact>
+        <IconNote className="gap-1.5" icon={<Calendar />}>Wed, Jan 14, 2026</IconNote>
+        <IconNote className="gap-1.5" icon={<Clock />}>10:00 – 10:45</IconNote>
+        <IconNote className="gap-1.5" icon={<MapPin />}>Room Cedar · video</IconNote>
         <AvatarStack
             max={4}
             people={ATTENDEES.slice(0, 4).map((person) => ({ name: person.name, initials: person.initials.charAt(0) }))}

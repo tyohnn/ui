@@ -2,7 +2,7 @@ import { Bell, Calendar, Check, Copy, Filter, Plus, Rocket, Sparkles, TriangleAl
 
 import { Byline } from "@tyohnn/blocks/byline";
 import { CodeBlock } from "@tyohnn/blocks/code-block";
-import { IconFact } from "@tyohnn/blocks/icon-fact";
+import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/copy";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
@@ -156,7 +156,7 @@ export const ChangelogPost = () => (
         <Prose as="article" className="mx-auto max-w-[52rem] px-10 pt-8 pb-16">
             <div className="not-typeset flex flex-wrap items-center gap-2">
                 <Badge>{RELEASE.version}</Badge>
-                <IconFact icon={<Calendar />}>{RELEASE.date}</IconFact>
+                <IconNote className="gap-1.5" icon={<Calendar />}>{RELEASE.date}</IconNote>
                 <Separator orientation="vertical" className="data-vertical:h-4 data-vertical:self-auto" />
                 {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{tag}</Badge>)}
             </div>

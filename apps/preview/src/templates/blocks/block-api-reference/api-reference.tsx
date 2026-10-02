@@ -4,7 +4,7 @@ import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { CodeTabs } from "@tyohnn/blocks/code-tabs";
 import { DefinitionList } from "@tyohnn/blocks/definition-list";
 import { EndpointHeader } from "@tyohnn/blocks/endpoint-header";
-import { IconFact } from "@tyohnn/blocks/icon-fact";
+import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
 import { ParameterTable, type ParameterTableLabels } from "@tyohnn/blocks/parameter-table";
@@ -77,7 +77,7 @@ const Endpoint = () => (
             <div className="flex flex-wrap items-center gap-2">
                 <Button size="sm"><Send data-icon="inline-start" />Try it</Button>
                 <Button variant="outline" size="sm"><Braces data-icon="inline-start" />OpenAPI spec</Button>
-                <IconFact icon={<Check />} className={BODY}>Idempotent with a key · Rate limit 100 writes/s</IconFact>
+                <IconNote icon={<Check />} className={`gap-1.5 ${BODY}`}>Idempotent with a key · Rate limit 100 writes/s</IconNote>
             </div>
         </EndpointHeader>
 
