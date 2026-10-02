@@ -89,8 +89,8 @@ export default function DocsPage()
                 </p>
 
                 <Section id="start" title="Getting started">
-                    <CommandCard label="A Next.js or Vite app" command="npx tyohnn init --system vega" />
-                    <CommandCard label="A monorepo: packages/ui plus one app" command="npx tyohnn init --system graphite --app apps/crm --scope @acme" />
+                    <CommandCard label="A Next.js or Vite app" command="npx tyohnn@latest init --system vega" />
+                    <CommandCard label="A monorepo: packages/ui plus one app" command="npx tyohnn@latest init --system graphite --app apps/crm --scope @acme" />
                     <p className="prose">Pick a system on the <Link href="/#systems">systems page</Link>. Available:</p>
                     <div className="chips-sys">
                         {systems.map((system) => (
@@ -148,8 +148,8 @@ export default function DocsPage()
                         <code>next/font/local</code> for Pretendard) in the root layout; Vite apps get the fontsource or npm package and an{" "}
                         <code>@import</code>. Each system names a sans, heading and mono font plus a Hangul fallback; override them per app:
                     </p>
-                    <CommandCard label="Other fonts at init" command="npx tyohnn init --system vega --font geist --font-heading playfair-display" />
-                    <CommandCard label="Back to the system's own" command="npx tyohnn fonts --reset" />
+                    <CommandCard label="Other fonts at init" command="npx tyohnn@latest init --system vega --font geist --font-heading playfair-display" />
+                    <CommandCard label="Back to the system's own" command="npx tyohnn@latest fonts --reset" />
                     <div className="dtable" role="table">
                         <div className="row cols-4" role="row"><div role="columnheader">Id</div><div role="columnheader">Family</div><div role="columnheader">Category</div><div role="columnheader">Licence</div></div>
                         {fonts.map((font) => (
@@ -169,8 +169,8 @@ export default function DocsPage()
                         package. The module maps every name onto one of {icons.length} libraries. Each system has a default; switch it at{" "}
                         <code>init</code> or later:
                     </p>
-                    <CommandCard label="Another library at init" command="npx tyohnn init --system mira --icons lucide" />
-                    <CommandCard label="Switch one app later" command="npx tyohnn icons phosphor --app apps/admin" />
+                    <CommandCard label="Another library at init" command="npx tyohnn@latest init --system mira --icons lucide" />
+                    <CommandCard label="Switch one app later" command="npx tyohnn@latest icons phosphor --app apps/admin" />
                     <ul className="libs">
                         {icons.map((library) => <li key={library.id}><b>{library.id}</b>{library.packages.join(" + ")}</li>)}
                     </ul>
@@ -183,10 +183,10 @@ export default function DocsPage()
                     </p>
                     <Tree
                         lines={[
-                            "npx tyohnn init --system graphite --app apps/crm --scope @acme",
-                            "npx tyohnn add mira --app apps/admin --icons hugeicons",
-                            "npx tyohnn use nova --app apps/admin          # switch that app's system; the TSX stays",
-                            "npx tyohnn doctor --built                     # also checks built CSS for the other system's tokens",
+                            "npx tyohnn@latest init --system graphite --app apps/crm --scope @acme",
+                            "npx tyohnn@latest add mira --app apps/admin --icons hugeicons",
+                            "npx tyohnn@latest use nova --app apps/admin          # switch that app's system; the TSX stays",
+                            "npx tyohnn@latest doctor --built                     # also checks built CSS for the other system's tokens",
                         ]}
                     />
                     <p className="prose">
@@ -202,8 +202,8 @@ export default function DocsPage()
                         branch by default), cached per commit, and the commit is recorded in <code>tyohnn.json</code>. Later commands read that commit,
                         so they never silently move a project to a newer version.
                     </p>
-                    <CommandCard label="Pin a version" command="npx tyohnn init --system sera --ref <commit>" />
-                    <CommandCard label="What changed since" command="npx tyohnn diff --ref main" />
+                    <CommandCard label="Pin a version" command="npx tyohnn@latest init --system sera --ref <commit>" />
+                    <CommandCard label="What changed since" command="npx tyohnn@latest diff --ref main" />
                 </Section>
 
                 <Section id="ownership" title="File ownership">

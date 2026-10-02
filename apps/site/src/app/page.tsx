@@ -35,7 +35,7 @@ export default function Home()
                     <h2>Copy a whole system.</h2>
                     <p>Components, three layers, fonts, icons and DESIGN.md — into Next.js, Vite or a Turborepo monorepo.</p>
                 </div>
-                <CopyCommand command={`npx tyohnn init --system ${systems[0].name}`} />
+                <CopyCommand command={`npx tyohnn@latest init --system ${systems[0].name}`} />
             </div>
         </>
     );

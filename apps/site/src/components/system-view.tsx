@@ -60,7 +60,7 @@ export const SystemView = ({
                 {intro}
                 <div className="panel">
                     <div className="eyebrow">Install</div>
-                    <CopyCommand command={`npx tyohnn init --system ${system.name}`} />
+                    <CopyCommand command={`npx tyohnn@latest init --system ${system.name}`} />
                     <div className="panel-row"><span>Preview mode</span><ModeSeg mode={mode} onChange={setMode} /></div>
                     <div className="panel-row">
                         <span>Palette</span>

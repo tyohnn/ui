@@ -3,6 +3,15 @@
     "version": "0.1.0",
     "description": "Scaffold tyohnn design systems (shadcn components on Base UI with a three-layer CSS architecture) into Next.js and Vite apps and monorepos.",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tyohnn/ui.git",
+        "directory": "packages/cli"
+    },
+    "homepage": "https://github.com/tyohnn/ui#readme",
+    "bugs": {
+        "url": "https://github.com/tyohnn/ui/issues"
+    },
     "type": "module",
     "bin": {
         "tyohnn": "dist/index.js"

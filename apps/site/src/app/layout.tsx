@@ -18,7 +18,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
     title: { default: "tyohnn — same screen, every system", template: "%s · tyohnn" },
-    description: "One set of shadcn components on Base UI, restyled by three CSS layers. Browse every design system live and install one with npx tyohnn init.",
+    description: "One set of shadcn components on Base UI, restyled by three CSS layers. Browse every design system live and install one with npx tyohnn@latest init.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode })

@@ -39,7 +39,7 @@ export const SiteHeader = () =>
                 <a href={REPOSITORY}>GitHub</a>
             </nav>
             <div className="nav-right">
-                <CopyCommand command="npx tyohnn init" />
+                <CopyCommand command="npx tyohnn@latest init" />
             </div>
         </header>
     );

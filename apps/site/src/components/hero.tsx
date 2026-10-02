@@ -83,7 +83,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                     </p>
                     <div className="hero-actions">
                         <a className="btn-solid" href="#systems">Browse systems</a>
-                        <CopyCommand command={`npx tyohnn init --system ${current.name}`} />
+                        <CopyCommand command={`npx tyohnn@latest init --system ${current.name}`} />
                     </div>
                 </div>
             </div>
