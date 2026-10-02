@@ -32,6 +32,10 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 - **Accents**: ink is the primary action (a near-black button, paper text). Teal
   (`oklch(0.4 0.05 192)`) is `--ring`, `--link`, `--chart-1` and the text-selection fill — focus and
   reference, never a fill for a button. Status colours stay in the alert/badge vocabulary.
+- **Charts**: `--chart-1` … `--chart-5` are one ramp of that teal, strongest first — an ordinal ramp
+  for order and amount, not five colours for five things. This system has no categorical chart
+  palette, on purpose: five hues strong enough to tell series apart would each be louder than the one
+  signal the page has.
 
 ## Key values
 
@@ -41,6 +45,7 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 | `--card` | `oklch(1 0 0)` | white on white — cards are drawn by their hairline, not by a tint |
 | `--primary` | `oklch(0.215 0.004 70)` | ink: the action is the same colour as the text |
 | `--ring` · `--link` · `--chart-1` | `oklch(0.4 0.05 192)` | the one teal signal |
+| `--chart-1` … `--chart-5` | `oklch(0.4 0.05 192)` → `oklch(0.74 0.05 192)`, 0.085 L apart | one teal ramp, strongest first (dark: `0.72` → `0.44`, brightest first); the faintest step is still 2.2:1 on the page |
 | `--sidebar` | `oklch(0.982 0.005 80)` | the parchment shell: the rail, and the gutter around an inset |
 | `--checked` | `oklch(0.215 0.004 70)` | a checked box is ink, not teal |
 | `--input-border` · `--checkbox-border` · `--switch-track-off` | `color-mix(in oklab, var(--foreground) 50%, var(--background))` | the edge of a field, half-strength ink: 3.8:1 on the page in light, 4.0:1 in dark (the hairline is 1.3 and 1.5) |
@@ -63,6 +68,13 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   outline Button and the outline Toggle keep the hairline, because their label is what identifies them
   and a page of dark-edged buttons would compete with the fields. An invalid field keeps the same weight
   in red (`--border-invalid` is the full `--destructive` in both modes).
+- **The chart ramp says order, never kind.** Use `--chart-1..5` where swapping the items would change
+  the meaning — funnel stages, tiers, age bands, this period against the last — or as one colour
+  (`--chart-1`) for a single series. Nominal bars (channels, teams, accounts) all take `--chart-1`; the
+  axis label says which is which. When several series have to be compared, draw **small multiples**:
+  one small chart per series on the same scale, each in `--chart-1`, each titled with its series. Two
+  series that must share a plot take steps far apart (`--chart-1` and `--chart-4`) and a direct label
+  each, so the reader never has to match a swatch.
 - **Serif for titles, sans for everything else.** A serif label inside a control, a serif table header,
   or serif body copy all break the voice. The marker `.cn-font-heading` is the boundary.
 
@@ -77,6 +89,9 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 - Do not draw a field with the hairline, and do not rule the page with the field edge. Setting
   `--input-border` back to `--border` makes a form on white paper invisible (1.3:1); using the field edge
   for separators, table rules or card rings turns the document into a grid of boxes.
+- Do not add hues to tell chart series apart, and do not borrow the tag tones or the status colours for
+  them. A tag tone is a soft plate, not a mark, and a status colour already means something. If a chart
+  needs more than two series in one plot, it is several charts.
 - Do not tint the document surface to match the shell. The parchment belongs to the rail and the
   gutter; the moment the reading surface goes warm, the page loses the plane that says "this is the
   document". In dark mode the same split holds, one step deeper: the rail sits below the page, not above.
