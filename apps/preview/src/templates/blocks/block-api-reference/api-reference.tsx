@@ -7,6 +7,7 @@ import { EndpointHeader } from "@tyohnn/blocks/endpoint-header";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { ParameterTable } from "@tyohnn/blocks/parameter-table";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionHeading } from "@tyohnn/blocks/section-heading";
@@ -15,6 +16,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
 
+import { LOADING } from "../../loading";
 import {
     BODY_PARAMETERS,
     ENDPOINT,
@@ -48,6 +50,7 @@ const CopyButton = () => <Button variant="ghost" size="xs"><Copy data-icon="inli
 const Endpoint = () => (
     <div className="flex min-w-0 flex-col gap-8">
         <EndpointHeader
+            loading={LOADING}
             method={ENDPOINT.method}
             path={ENDPOINT.path}
             pathAction={<Button variant="ghost" size="icon-xs" aria-label="Copy path"><Copy /></Button>}
@@ -99,7 +102,7 @@ const Endpoint = () => (
 
         <Separator />
         <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className={MUTED_BODY}>Last changed in 2026-01-01: capture accepts manual.</span>
+            <span className={MUTED_BODY}>{LOADING ? <PendingText length={48} /> : "Last changed in 2026-01-01: capture accepts manual."}</span>
             <Button variant="ghost" size="sm">Retrieve a payment<ArrowRight data-icon="inline-end" /></Button>
         </div>
     </div>
@@ -115,6 +118,8 @@ const Examples = () => (
             className="gap-3"
         >
             <CodeTabs
+                loading={LOADING}
+                loadingLines={REQUEST_EXAMPLES[0].code.split("\n").length}
                 defaultTab="curl"
                 icon={<Terminal />}
                 size="sm"
@@ -122,7 +127,7 @@ const Examples = () => (
             />
         </InfoCard>
         <InfoCard title="Response" description="application/json · 212 ms" action={<Badge variant="secondary">201 Created</Badge>} className="gap-3">
-            <CodeBlock title="payment" icon={<Terminal />} code={RESPONSE_EXAMPLE} size="sm" action={<CopyButton />} />
+            <CodeBlock loading={LOADING} loadingLines={RESPONSE_EXAMPLE.split("\n").length} title="payment" icon={<Terminal />} code={RESPONSE_EXAMPLE} size="sm" action={<CopyButton />} />
         </InfoCard>
     </div>
 );
