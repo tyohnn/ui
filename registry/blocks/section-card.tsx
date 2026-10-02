@@ -2,12 +2,14 @@ import type { ReactNode } from "react";
 
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@tyohnn/components/card";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
  * A titled card for a section of a page's main column: the title with one line of description, an action in the
  * corner, the content, and a footer with a note — behind an icon, or with an action at the other end. For a small
- * card in a side column use InfoCard.
+ * card in a side column use InfoCard. `loading` draws bars for the title, the description and the footer's note;
+ * the corner, the content and the footer's icon and action are the caller's.
  */
 export const SectionCard = ({
     title,
@@ -17,10 +19,11 @@ export const SectionCard = ({
     footerNote,
     footerAction,
     children,
+    loading,
     className,
     contentClassName,
 }: {
-    title: ReactNode;
+    title?: ReactNode;
     description?: ReactNode;
     /** The header's corner: a button or a badge */
     action?: ReactNode;
@@ -31,20 +34,22 @@ export const SectionCard = ({
     /** The footer's other end: a button */
     footerAction?: ReactNode;
     children?: ReactNode;
+    /** The waiting face: a description and a footer note that were passed (any value) keep their lines */
+    loading?: boolean;
     className?: string;
     contentClassName?: string;
 }) => (
-    <Card className={className}>
+    <Card {...pendingFrame(loading)} className={className}>
         <CardHeader>
-            <CardTitle>{title}</CardTitle>
-            {description !== undefined && <CardDescription>{description}</CardDescription>}
+            <CardTitle>{loading ? <PendingText length={16} /> : title}</CardTitle>
+            {description !== undefined && <CardDescription>{loading ? <PendingText length={32} /> : description}</CardDescription>}
             {action !== undefined && <CardAction>{action}</CardAction>}
         </CardHeader>
         {children !== undefined && <CardContent className={contentClassName}>{children}</CardContent>}
         {(footerNote !== undefined || footerAction !== undefined) && (
             <CardFooter className={cn("gap-2 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:shrink-0 [&>svg]:text-muted-foreground", footerAction !== undefined && "mt-auto justify-between")}>
                 {footerIcon}
-                {footerNote !== undefined && <span className={NOTE}>{footerNote}</span>}
+                {footerNote !== undefined && <span className={NOTE}>{loading ? <PendingText length={28} /> : footerNote}</span>}
                 {footerAction}
             </CardFooter>
         )}

@@ -5,6 +5,7 @@ import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { Prose } from "@tyohnn/blocks/prose";
@@ -22,6 +23,7 @@ import { Switch } from "@tyohnn/components/switch";
 import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { AUTHORS, EARLIER, FEATURES_SHORT, FIXES, IMPROVEMENTS, MIGRATION_EXAMPLE, RELEASE, TIMELINE_ROWS } from "./data";
 
 /**
@@ -36,6 +38,7 @@ const LEAD_ICON = "size-[16px] shrink-0 text-muted-foreground";
 
 const TimelineFragment = () => (
     <InfoCard
+        loading={LOADING}
         title="Q1 roadmap"
         description="Jan 5 – Mar 27 · 3 projects"
         action={(
@@ -47,6 +50,8 @@ const TimelineFragment = () => (
         className={IN_PROSE}
     >
         <TimelineBars
+            loading={LOADING}
+            loadingRows={TIMELINE_ROWS.length}
             scale={["January", "February", "March"]}
             rows={TIMELINE_ROWS.map((row) => ({
                 id: row.name,
@@ -70,6 +75,8 @@ const AutomationFragment = () => (
         </CardHeader>
         <CardContent>
             <RuleSteps
+                loading={LOADING}
+                count={3}
                 steps={[
                     { id: "when", keyword: <Badge variant="secondary">When</Badge>, parts: ["Status changes to", <Badge variant="outline"><Check data-icon="inline-start" />Done</Badge>] },
                     { id: "if", keyword: <Badge variant="secondary">If</Badge>, parts: ["Label is", <Badge variant="outline">customer-facing</Badge>] },
@@ -124,7 +131,7 @@ const FiltersFragment = () => (
 );
 
 const CustomFieldsFragment = () => (
-    <InfoCard title="New field" description="Added to every task in Mobile app" className={IN_PROSE}>
+    <InfoCard loading={LOADING} title="New field" description="Added to every task in Mobile app" className={IN_PROSE}>
         <FieldGroup className="grid gap-4 sm:grid-cols-2">
             <Field>
                 <FieldLabel htmlFor="clg-field-name">Name</FieldLabel>
@@ -157,13 +164,15 @@ export const ChangelogPost = () => (
         <PageContent measure="md" gutter="xl" gap="none" document>
         <Prose as="article">
             <div className="not-typeset flex flex-wrap items-center gap-2">
-                <Badge>{RELEASE.version}</Badge>
+                <Badge>{LOADING ? <PendingText length={RELEASE.version.length} /> : RELEASE.version}</Badge>
                 <IconNote className="gap-1.5" icon={<Calendar />}>{RELEASE.date}</IconNote>
                 <Separator orientation="vertical" className="data-vertical:h-4 data-vertical:self-auto" />
-                {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{tag}</Badge>)}
+                {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{LOADING ? <PendingText length={tag.length} /> : tag}</Badge>)}
             </div>
             <h1 className="mt-4">Orbitly 4.0: timelines, automations and a faster editor</h1>
             <Byline
+                loading={LOADING}
+                count={AUTHORS.length}
                 authors={AUTHORS}
                 actions={(
                     <>
@@ -248,6 +257,8 @@ export const ChangelogPost = () => (
                 <code>key</code> instead of their display label. Version 1 payloads keep working until February 15, 2026.
             </p>
             <CodeBlock
+                loading={LOADING}
+                loadingLines={MIGRATION_EXAMPLE.split("\n").length}
                 title="webhooks.ts"
                 code={MIGRATION_EXAMPLE}
                 size="sm"
@@ -266,7 +277,7 @@ export const ChangelogPost = () => (
             <Separator className={IN_PROSE} />
             <section className={cn(IN_PROSE, "flex flex-col gap-3")}>
                 <span className={cn(BODY, "font-medium")}>Earlier releases</span>
-                <LinkItemList trailing="arrow" items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
+                <LinkItemList loading={LOADING} count={EARLIER.length} trailing="arrow" items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
             </section>
         </Prose>
         </PageContent>

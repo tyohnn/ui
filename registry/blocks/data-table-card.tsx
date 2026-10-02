@@ -6,6 +6,7 @@ import { Card, CardContent } from "@tyohnn/components/card";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 import { DataTable, type DataTableColumn, type DataTableSelection } from "@tyohnn/blocks/data-table";
 import { FOOTER_BAND, TOOLBAR_BAND } from "@tyohnn/blocks/lib/bands";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { META } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 
@@ -34,10 +35,12 @@ export const DataTableCard = <Row,>({
     selection,
     summary,
     pagination,
+    loading,
+    loadingRows,
     className,
 }: {
     columns: readonly DataTableColumn<Row>[];
-    rows: readonly Row[];
+    rows?: readonly Row[];
     rowId: (row: Row) => string;
     tabs?: readonly DataTableTab[];
     defaultTab?: string;
@@ -49,11 +52,15 @@ export const DataTableCard = <Row,>({
     summary?: ReactNode;
     /** The footer's right side */
     pagination?: ReactNode;
+    /** The waiting face: the toolbar stays, the table draws rows of bars, the summary is a bar */
+    loading?: boolean;
+    loadingRows?: number;
     className?: string;
 }) =>
 {
     const [selected, setSelected] = useState<readonly string[]>(selection?.defaultSelected ?? []);
-    const count = rows.filter((row) => selected.includes(rowId(row))).length;
+    // While loading there are no rows to count: a selection the caller already knows keeps its bar, so the table does not move when the rows arrive.
+    const count = loading || rows === undefined ? selected.length : rows.filter((row) => selected.includes(rowId(row))).length;
 
     return (
         <Card className={cn("min-h-0 flex-1 gap-0 py-0", className)}>
@@ -65,7 +72,7 @@ export const DataTableCard = <Row,>({
                                 {tabs.map((tab) => (
                                     <TabsTrigger key={tab.value} value={tab.value}>
                                         {tab.label}
-                                        {tab.count !== undefined && <span className={META}>{tab.count}</span>}
+                                        {tab.count !== undefined && <span className={META}>{loading ? <PendingText length={3} /> : tab.count}</span>}
                                     </TabsTrigger>
                                 ))}
                             </TabsList>
@@ -84,6 +91,8 @@ export const DataTableCard = <Row,>({
                 <DataTable
                     columns={columns}
                     rows={rows}
+                    loading={loading}
+                    loadingRows={loadingRows}
                     rowId={rowId}
                     selection={selection && {
                         selected,
@@ -97,9 +106,9 @@ export const DataTableCard = <Row,>({
                     }}
                 />
             </CardContent>
-            {(summary !== undefined || pagination !== undefined) && (
+            {(loading || summary !== undefined || pagination !== undefined) && (
                 <div className={FOOTER_BAND}>
-                    {summary !== undefined && <span className={META}>{summary}</span>}
+                    {loading ? <span className={META}><PendingText length={28} /></span> : summary !== undefined && <span className={META}>{summary}</span>}
                     {pagination}
                 </div>
             )}

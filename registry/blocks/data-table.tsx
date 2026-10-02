@@ -7,6 +7,7 @@ import { ArrowUpDown } from "@tyohnn/icons";
 import { Button } from "@tyohnn/components/button";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { CODE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
@@ -27,6 +28,8 @@ export type DataTableColumn<Row> = {
     cellClassName?: string;
     /** The least width in px; the table still lays out automatically, so a system with larger type widens the column */
     width?: number;
+    /** The cell while the table is loading: a bar by default; pass the cell's own waiting face (`<Person loading detail />`) so the row keeps its height */
+    pending?: ReactNode;
     /** Draws the header as a sort button and reports the press */
     onSort?: () => void;
     cell: (row: Row) => ReactNode;
@@ -55,7 +58,8 @@ const CELL: Record<NonNullable<DataTableColumn<unknown>["kind"]>, string> = {
 /**
  * A table drawn from columns and rows: typed cells (text, one-line, wrapping, identifier, number), sortable headers and a
  * checkbox column when `selection` is given. It is the bare table — put it in a card (DataTableCard), a tab panel
- * (TabCard) or straight on the page. The rows come from the caller; the table fetches nothing.
+ * (TabCard) or straight on the page. The rows come from the caller; the table fetches nothing. `loading` keeps
+ * the header and draws rows of bars; a column's `pending` is its cell's own waiting face.
  */
 export const DataTable = <Row,>({
     columns,
@@ -63,18 +67,24 @@ export const DataTable = <Row,>({
     rowId,
     selection,
     wrapHeaders,
+    loading,
+    loadingRows = 6,
 }: {
     columns: readonly DataTableColumn<Row>[];
-    rows: readonly Row[];
+    rows?: readonly Row[];
     rowId: (row: Row) => string;
     selection?: DataTableSelection<Row>;
     /** Lets header labels wrap, so a narrow column follows its cells instead of its name */
     wrapHeaders?: boolean;
+    /** The waiting face: the same header over `loadingRows` rows of bars */
+    loading?: boolean;
+    loadingRows?: number;
 }) =>
 {
     const [own, setOwn] = useState<readonly string[]>(selection?.defaultSelected ?? []);
     const selected = selection?.selected ?? own;
-    const ids = rows.map(rowId);
+    const shown = loading || rows === undefined ? [] : rows;
+    const ids = shown.map(rowId);
     const here = ids.filter((id) => selected.includes(id));
     const update = (next: string[]) =>
     {
@@ -84,7 +94,7 @@ export const DataTable = <Row,>({
     const sized = selection?.width !== undefined || columns.some((column) => column.width !== undefined);
 
     return (
-        <Table>
+        <Table {...pendingFrame(loading)}>
             {sized && (
                 <colgroup>
                     {selection !== undefined && <col style={selection.width === undefined ? undefined : { width: selection.width }} />}
@@ -116,7 +126,17 @@ export const DataTable = <Row,>({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {rows.map((row) =>
+                {loading && Array.from({ length: loadingRows }, (_, index) => (
+                    <TableRow key={index}>
+                        {selection !== undefined && <TableCell><Checkbox disabled aria-hidden tabIndex={-1} /></TableCell>}
+                        {columns.map((column) => (
+                            <TableCell key={column.id} className={cn(CELL[column.kind ?? "text"], column.align === "end" && "text-right", column.cellClassName) || undefined}>
+                                {column.pending ?? (column.hidden ? null : <PendingText length={column.kind === "number" ? 5 : 10} />)}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                ))}
+                {shown.map((row) =>
                 {
                     const id = rowId(row);
                     const isSelected = selected.includes(id);

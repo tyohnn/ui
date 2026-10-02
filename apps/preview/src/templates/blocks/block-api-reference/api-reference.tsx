@@ -8,6 +8,7 @@ import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
 import { ASIDE_WIDTH } from "@tyohnn/blocks/lib/frame";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageSplit } from "@tyohnn/blocks/page-split";
 import { ParameterTable } from "@tyohnn/blocks/parameter-table";
@@ -19,6 +20,7 @@ import { Button } from "@tyohnn/components/button";
 import { Separator } from "@tyohnn/components/separator";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import {
     BODY_PARAMETERS,
     ENDPOINT,
@@ -39,7 +41,7 @@ import {
 
 const Parameters = ({ title, description, parameters }: { title: string; description: string; parameters: Parameter[] }) => (
     <section className="flex flex-col gap-3">
-        <SectionHeading title={title} description={description} />
+        <SectionHeading loading={LOADING} title={title} description={description} />
         <ParameterTable
             parameters={parameters.map((parameter) => ({ ...parameter, note: parameter.values ? <>One of {parameter.values}</> : undefined }))}
         />
@@ -52,6 +54,7 @@ const CopyButton = () => <Button variant="ghost" size="xs"><Copy data-icon="inli
 const Endpoint = () => (
     <div className="flex min-w-0 flex-1 flex-col gap-8">
         <EndpointHeader
+            loading={LOADING}
             method={ENDPOINT.method}
             path={ENDPOINT.path}
             pathAction={<Button variant="ghost" size="icon-xs" aria-label="Copy path"><Copy /></Button>}
@@ -90,7 +93,7 @@ const Endpoint = () => (
         <Parameters title="Body parameters" description="Form-encoded or JSON. Unknown parameters return 400." parameters={BODY_PARAMETERS} />
 
         <section className="flex flex-col gap-3">
-            <SectionHeading title="Status codes" description="Every error returns a JSON body with type, code, message and request_id." />
+            <SectionHeading loading={LOADING} title="Status codes" description="Every error returns a JSON body with type, code, message and request_id." />
             <DefinitionList
                 items={STATUS_CODES.map((status) => ({
                     id: status.code,
@@ -103,7 +106,7 @@ const Endpoint = () => (
 
         <Separator />
         <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className={MUTED_BODY}>Last changed in 2026-01-01: capture accepts manual.</span>
+            <span className={MUTED_BODY}>{LOADING ? <PendingText length={48} /> : "Last changed in 2026-01-01: capture accepts manual."}</span>
             <Button variant="ghost" size="sm">Retrieve a payment<ArrowRight data-icon="inline-end" /></Button>
         </div>
     </div>
@@ -113,20 +116,23 @@ const Endpoint = () => (
 const Examples = () => (
     <div className={cn("sticky top-8 flex min-w-0 flex-col gap-4 self-start", ASIDE_WIDTH.xl)}>
         <InfoCard
+            loading={LOADING}
             title="Request"
             description={<code className="block font-mono">{ENDPOINT.host}</code>}
-            action={<Badge variant="outline"><Key data-icon="inline-start" />sk_test_…9w2Q</Badge>}
+            action={<Badge variant="outline"><Key data-icon="inline-start" />{LOADING ? <PendingText length={13} /> : "sk_test_…9w2Q"}</Badge>}
             className="gap-3"
         >
             <CodeTabs
+                loading={LOADING}
+                loadingLines={REQUEST_EXAMPLES[0].code.split("\n").length}
                 defaultTab="curl"
                 icon={<Terminal />}
                 size="sm"
                 tabs={REQUEST_EXAMPLES.map((example) => ({ value: example.id, label: example.label, code: example.code, action: <CopyButton /> }))}
             />
         </InfoCard>
-        <InfoCard title="Response" description="application/json · 212 ms" action={<Badge variant="secondary">201 Created</Badge>} className="gap-3">
-            <CodeBlock title="payment" icon={<Terminal />} code={RESPONSE_EXAMPLE} size="sm" action={<CopyButton />} />
+        <InfoCard loading={LOADING} title="Response" description="application/json · 212 ms" action={<Badge variant="secondary">{LOADING ? <PendingText length={11} /> : "201 Created"}</Badge>} className="gap-3">
+            <CodeBlock loading={LOADING} loadingLines={RESPONSE_EXAMPLE.split("\n").length} title="payment" icon={<Terminal />} code={RESPONSE_EXAMPLE} size="sm" action={<CopyButton />} />
         </InfoCard>
     </div>
 );

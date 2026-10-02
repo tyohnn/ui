@@ -27,6 +27,7 @@ import { TableSearch } from "@tyohnn/blocks/table-search";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { AREAS, COLUMNS, type Person, QUARTERS, type RoadmapCard, type RoadmapColumn, TEAM } from "./data";
 
 /**
@@ -50,10 +51,12 @@ const VIEWS = [
     { value: "timeline", label: "Timeline", icon: <Calendar data-icon="inline-start" /> },
 ];
 
-const Owners = ({ owners }: { owners: Person[] }) => <AvatarStack people={owners.map((owner) => ({ initials: owner.initials }))} className="-space-x-1" />;
+// `total` is how many people there are when that is known before the people are: the stack keeps its "+2" bubble while it waits.
+const Owners = ({ owners, total }: { owners: Person[]; total?: number }) => <AvatarStack loading={LOADING} people={owners.map((owner) => ({ initials: owner.initials }))} total={total} className="-space-x-1" />;
 
 const Toolbar = () => (
     <PageHeading
+        loading={LOADING}
         className="items-center"
         title="Q1 2026 roadmap"
         meta="50 items · 4 areas behind schedule · updated Jan 14"
@@ -63,7 +66,7 @@ const Toolbar = () => (
                 <CompactSelect label="Quarter" heading="Quarter" options={QUARTERS} defaultValue="q1-2026" className="min-w-28" />
                 <CompactSelect label="Area" heading="Area" icon={<Filter />} options={AREAS} className="min-w-32" />
                 <TableSearch label="Search the roadmap" placeholder="Search items" className="w-48" />
-                <Owners owners={TEAM} />
+                <Owners owners={TEAM} total={TEAM.length} />
                 <Button variant="outline" size="sm"><Share data-icon="inline-start" />Share</Button>
                 <Button size="sm"><Plus data-icon="inline-start" />New item</Button>
             </>
@@ -97,11 +100,24 @@ const ItemCard = ({ card, column }: { card: RoadmapCard; column: RoadmapColumn["
     />
 );
 
+// A card before its item is there: the parts every card has, each as its waiting face.
+const PENDING_CARD = (
+    <KanbanCard
+        loading
+        code
+        badges
+        people={<AvatarStack loading count={2} className="-space-x-1" />}
+        facts={[{ icon: <SquareCheck /> }, { icon: <Calendar /> }]}
+    />
+);
+
 // [contain:inline-size]: the board's width never widens SidebarInset (upstream markup, no min-w-0); it scrolls in place.
 export const Roadmap = () => (
     <Page scroll="regions" flush>
         <Toolbar />
         <KanbanBoard
+            loading={LOADING}
+            pending={PENDING_CARD}
             columns={COLUMNS.map((column) =>
             {
                 const Icon = COLUMN_ICON[column.id];

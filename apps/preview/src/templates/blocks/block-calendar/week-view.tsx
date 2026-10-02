@@ -6,6 +6,7 @@ import { WeekView as WeekGrid } from "@tyohnn/blocks/week-view";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { ALL_DAY, DAYS, EVENTS, formatTime, HOURS, NOW } from "./data";
 
 /**
@@ -47,6 +48,7 @@ export const WeekView = () => (
             )}
         />
         <WeekGrid
+            loading={LOADING}
             days={DAYS}
             hours={HOURS}
             events={EVENTS}

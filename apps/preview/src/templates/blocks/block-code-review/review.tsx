@@ -24,6 +24,7 @@ import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
 import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
 import { GUTTER_INLINE } from "@tyohnn/blocks/lib/frame";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { Page, PagePane } from "@tyohnn/blocks/page";
 import { PageAside, PageAsideTrigger, PageSplit } from "@tyohnn/blocks/page-split";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
@@ -37,6 +38,7 @@ import { Button } from "@tyohnn/components/button";
 import { Tabs, TabsContent } from "@tyohnn/components/tabs";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { BACKOFF_DIFF, CHECKS, type DiffLine, HANDLER_DIFF, LABELS, PULL_REQUEST, REVIEWERS, THREAD } from "./data";
 
 /**
@@ -94,6 +96,8 @@ const PrHead = () => (
 
 const Thread = () => (
     <CommentThread
+        loading={LOADING}
+        loadingComments={[{ lines: 2 }, { lines: 1, badge: <Badge variant="outline"><PendingText length={6} /></Badge> }]}
         comments={THREAD.map((comment) => ({
             id: comment.when,
             name: comment.name,
@@ -126,6 +130,7 @@ const withThread = (lines: DiffLine[]) => lines.map((line) => (line.kind !== "hu
 
 const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; path: string; added: number; removed: number; viewed?: boolean; lines?: DiffLine[] }) => (
     <DiffFile
+        loading={LOADING}
         id={id}
         path={path}
         added={added}
@@ -134,7 +139,7 @@ const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; 
         viewed={viewed}
         menu={<Button variant="ghost" size="icon-xs" aria-label="File actions"><MoreHorizontal /></Button>}
     >
-        {lines !== undefined && <DiffView lines={lines} />}
+        {lines !== undefined && <DiffView loading={LOADING} loadingLines={lines.length} lines={lines} />}
     </DiffFile>
 );
 
@@ -143,7 +148,7 @@ const FilesChanged = () => (
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <span className={cn(NOTE, ICON_LINE, "whitespace-nowrap")}>
                 <GitCommit />
-                3 files changed · <DiffStat kind="add">+62</DiffStat> <DiffStat kind="del">−11</DiffStat> · 1 of 3 viewed
+                {LOADING ? <PendingText length={40} /> : <>3 files changed · <DiffStat kind="add">+62</DiffStat> <DiffStat kind="del">−11</DiffStat> · 1 of 3 viewed</>}
             </span>
             <SegmentedControl label="Diff view" options={[{ value: "unified", label: "Unified" }, { value: "split", label: "Split" }]} defaultValue="unified" />
         </div>
@@ -158,6 +163,7 @@ const CHECK_TONE = { pass: "success", fail: "destructive", running: "muted" } as
 
 const SidePanel = () => (
     <DetailSections
+        loading={LOADING}
         className="min-h-0 flex-1 px-5 pb-6"
         sections={[
             {
@@ -165,14 +171,16 @@ const SidePanel = () => (
                 title: "Reviewers",
                 content: REVIEWERS.map((reviewer) => (
                     <StatusLine
+                        loading={LOADING}
                         key={reviewer.initials}
                         leading={(
                             <Avatar size="sm">
-                                <AvatarFallback>{reviewer.initials}</AvatarFallback>
+                                <AvatarFallback>{LOADING ? null : reviewer.initials}</AvatarFallback>
                             </Avatar>
                         )}
                         label={reviewer.name}
-                        trailing={(
+                        // The verdict waits as an empty badge.
+                        trailing={LOADING ? <Badge variant="outline"><PendingText length={8} /></Badge> : (
                             <Badge variant={reviewer.state === "Approved" ? "secondary" : reviewer.state === "Pending" ? "outline" : "destructive"}>
                                 {reviewer.state === "Changes requested" ? "Changes" : reviewer.state}
                             </Badge>
@@ -188,7 +196,8 @@ const SidePanel = () => (
                 {
                     const Icon = CHECK_ICON[check.state];
 
-                    return <StatusLine key={check.name} leading={<Icon />} tone={CHECK_TONE[check.state]} label={check.name} note={check.time} />;
+                    // How a check went is a value: its icon waits muted.
+                    return <StatusLine loading={LOADING} key={check.name} leading={LOADING ? <Loader /> : <Icon />} tone={LOADING ? "muted" : CHECK_TONE[check.state]} label={check.name} note={check.time} />;
                 }),
             },
             {
@@ -196,7 +205,7 @@ const SidePanel = () => (
                 title: "Labels",
                 content: (
                     <div className="flex flex-wrap gap-1.5">
-                        {LABELS.map((label) => <Badge key={label} variant="outline"><Tag data-icon="inline-start" />{label}</Badge>)}
+                        {LABELS.map((label) => <Badge key={label} variant="outline"><Tag data-icon="inline-start" />{LOADING ? <PendingText length={label.length} /> : label}</Badge>)}
                     </div>
                 ),
             },
@@ -207,11 +216,11 @@ const SidePanel = () => (
                     <>
                         <span className={cn(PARAGRAPH, ICON_LINE)}>
                             <Link />
-                            LED-1297 Invoices stuck after 503s
+                            {LOADING ? <span><PendingText length={24} /></span> : "LED-1297 Invoices stuck after 503s"}
                         </span>
                         <span className={cn(NOTE, ICON_LINE, "whitespace-nowrap")}>
                             <FileText />
-                            Runbook: webhook retries
+                            {LOADING ? <span><PendingText length={20} /></span> : "Runbook: webhook retries"}
                         </span>
                     </>
                 ),
@@ -225,6 +234,7 @@ export const Review = () => (
         <PrHead />
         <Tabs defaultValue="files" className="min-h-0 flex-1 gap-4">
             <PageTabs
+                loading={LOADING}
                 className={GUTTER_INLINE.md}
                 tabs={[
                     { value: "conversation", label: "Conversation", icon: <MessageSquare data-icon="inline-start" />, count: "5" },

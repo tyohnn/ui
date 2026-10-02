@@ -18,6 +18,7 @@ import { UsageMeter } from "@tyohnn/blocks/usage-meter";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { INVITATIONS, type Member, MEMBERS, ROLES, SEATS } from "./data";
 
 /**
@@ -39,6 +40,7 @@ const COLUMNS: DataTableColumn<Member>[] = [
     {
         id: "member",
         header: "Member",
+        pending: <Person size="md" loading detail />,
         cell: (member) => (
             <Person
                 size="md"
@@ -59,6 +61,8 @@ const COLUMNS: DataTableColumn<Member>[] = [
     {
         id: "role",
         header: "Role",
+        // The control keeps its place, disabled and with no role in it.
+        pending: <CompactSelect label="Role" options={ROLE_ITEMS} value="" disabled className="min-w-28" />,
         cell: (member) => <CompactSelect label={`Role for ${member.name}`} options={ROLE_ITEMS} defaultValue={member.role} disabled={member.you || member.disabled} className="min-w-28" />,
     },
     { id: "last-active", header: "Last active", kind: "nowrap", cell: (member) => member.lastActive },
@@ -74,9 +78,10 @@ const COLUMNS: DataTableColumn<Member>[] = [
 
 const MembersPanel = () => (
     <TabCard
+        loading={LOADING}
         defaultTab="members"
         tabs={[
-            { value: "members", label: "Members", count: "18", content: <DataTable columns={COLUMNS} rows={MEMBERS} rowId={(member) => member.email} /> },
+            { value: "members", label: "Members", count: "18", content: <DataTable loading={LOADING} loadingRows={MEMBERS.length} columns={COLUMNS} rows={MEMBERS} rowId={(member) => member.email} /> },
             { value: "invitations", label: "Invitations", count: "3" },
             { value: "roles", label: "Roles", count: "5" },
         ]}
@@ -93,9 +98,13 @@ const MembersPanel = () => (
 
 const SeatsCard = () => (
     <InfoCard
+        loading={LOADING}
+        // The renewal terms run over two lines beside the plan.
+        descriptionLines={2}
         title="Seats"
         description={SEATS.renews}
-        action={<Badge>{SEATS.plan}</Badge>}
+        // The plan is a value: its badge is left out while it waits.
+        action={LOADING ? undefined : <Badge>{SEATS.plan}</Badge>}
         contentClassName="flex flex-col gap-4"
         footer={(
             <>
@@ -104,20 +113,21 @@ const SeatsCard = () => (
             </>
         )}
     >
-        <UsageMeter value={(SEATS.used / SEATS.total) * 100} label={<>{SEATS.used} of {SEATS.total} seats used</>} />
-        <FigureRow figures={[{ value: "15", label: "Members" }, { value: "3", label: "Invited" }, { value: "7", label: "Available" }]} />
+        <UsageMeter loading={LOADING} value={(SEATS.used / SEATS.total) * 100} label={<>{SEATS.used} of {SEATS.total} seats used</>} />
+        <FigureRow loading={LOADING} figures={[{ value: "15", label: "Members" }, { value: "3", label: "Invited" }, { value: "7", label: "Available" }]} />
     </InfoCard>
 );
 
 const SecurityCard = () => (
-    <InfoCard title="Sign-in security" description="Applies to every member of the workspace" contentClassName="flex flex-col gap-4">
-        <UsageMeter value={83} label="15 of 18 use two-factor" />
-        <SwitchField id="tm-require-2fa" label="Require two-factor" description="Members without it are asked at next sign-in" />
+    <InfoCard loading={LOADING} title="Sign-in security" description="Applies to every member of the workspace" contentClassName="flex flex-col gap-4">
+        <UsageMeter loading={LOADING} value={83} label="15 of 18 use two-factor" />
+        <SwitchField loading={LOADING} id="tm-require-2fa" label="Require two-factor" description="Members without it are asked at next sign-in" />
     </InfoCard>
 );
 
 const InvitationsCard = () => (
     <InfoCard
+        loading={LOADING}
         title="Pending invitations"
         description="Links expire after 7 days"
         action={<Button variant="ghost" size="icon-sm" aria-label="Invite people"><UserPlus /></Button>}
@@ -150,6 +160,7 @@ const InvitationsCard = () => (
 export const Team = () => (
     <Page scroll="regions">
         <PageHeading
+            loading={LOADING}
             title="Team members"
             meta="Manage who can use the Quillstone workspace and what they can change."
             actions={(

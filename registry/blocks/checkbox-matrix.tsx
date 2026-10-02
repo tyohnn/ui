@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@tyohnn/components/checkbox";
+import { pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
 import { cn } from "@tyohnn/lib/utils";
 
@@ -13,7 +14,8 @@ export type CheckboxMatrixRow = {
 /**
  * A grid of checkboxes in an outlined table: one row per thing, one narrow column per option, a box where they
  * meet — which notification goes to which channel, which role may do what. `cellLabel` names each box for
- * assistive technology from its row and its column.
+ * assistive technology from its row and its column. `loading` keeps the table and its words and draws every box
+ * disabled and unchecked: which ones are on is what it waits for.
  */
 export const CheckboxMatrix = ({
     rowHeader,
@@ -21,6 +23,7 @@ export const CheckboxMatrix = ({
     rows,
     cellLabel,
     onCheckedChange,
+    loading,
     className,
 }: {
     /** The heading of the first column: what the rows are */
@@ -29,9 +32,10 @@ export const CheckboxMatrix = ({
     rows: readonly CheckboxMatrixRow[];
     cellLabel: (row: string, column: string) => string;
     onCheckedChange?: (row: string, column: string, checked: boolean) => void;
+    loading?: boolean;
     className?: string;
 }) => (
-    <div className={cn("overflow-hidden rounded-[var(--radius-lg)] border border-border", className)}>
+    <div {...pendingFrame(loading)} className={cn("overflow-hidden rounded-[var(--radius-lg)] border border-border", className)}>
         <Table>
             <TableHeader>
                 <TableRow>
@@ -45,8 +49,11 @@ export const CheckboxMatrix = ({
                         <TableCell>{row.label}</TableCell>
                         {columns.map((column, index) => (
                             <TableCell key={column} className="text-center">
+                                {/* The key: a box that waited unchecked takes its value when it arrives. */}
                                 <Checkbox
-                                    defaultChecked={row.checked[index]}
+                                    key={loading ? "pending" : "value"}
+                                    defaultChecked={loading ? undefined : row.checked[index]}
+                                    disabled={loading}
                                     onCheckedChange={onCheckedChange && ((checked) => onCheckedChange(row.label, column, checked))}
                                     aria-label={cellLabel(row.label, column)}
                                 />

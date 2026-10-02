@@ -10,8 +10,10 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@tyohnn/components/input-group";
 import { Separator } from "@tyohnn/components/separator";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 
 import { NoMotion } from "../../coverage/frame";
+import { LOADING } from "../../loading";
 import { SettingsDialog } from "./settings-dialog";
 
 const CHANNELS = [
@@ -58,15 +60,16 @@ const Page = () => (
                 ))}
             </nav>
             <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-6">
+                {/* While it waits the pane is the frame: a message is as tall as its text. */}
+                <div {...pendingFrame(LOADING)} className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-6">
                     {MESSAGES.map((message) => (
                         <div key={message.time} className="flex gap-3">
                             <Avatar>
-                                <AvatarFallback>{message.initials}</AvatarFallback>
+                                <AvatarFallback>{LOADING ? null : message.initials}</AvatarFallback>
                             </Avatar>
                             <div className="flex min-w-0 flex-col gap-1">
-                                <span className="text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground"><strong>{message.name}</strong> · {message.time}</span>
-                                <p className="m-0 text-[length:var(--ui-text-md)] leading-[var(--ui-line-height-md)]">{message.text}</p>
+                                <span className="text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground">{LOADING ? <PendingText length={22} /> : <><strong>{message.name}</strong> · {message.time}</>}</span>
+                                <p className="m-0 text-[length:var(--ui-text-md)] leading-[var(--ui-line-height-md)]">{LOADING ? <PendingText length={72} className="overflow-hidden whitespace-nowrap" /> : message.text}</p>
                             </div>
                         </div>
                     ))}

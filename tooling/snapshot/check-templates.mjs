@@ -20,7 +20,7 @@
 //
 // Usage:
 //   node tooling/snapshot/check-templates.mjs [--templates all|id,id] [--systems all|name,name] [--modes light,dark]
-//        [--port 5240] [--shots dir] [--no-build] [--viewport 390x844]
+//        [--port 5240] [--shots dir] [--no-build] [--query loading] [--viewport 390x844]
 //
 // --viewport draws every template at that size instead of its catalog viewport: the check that a screen still fits
 // when it is narrow (a frame's split collapses, a tab strip scrolls) rather than widening the page.
@@ -56,6 +56,8 @@ const templates = templatesArg === "all" ? TEMPLATE_CATALOG : list(templatesArg)
 const systems = systemsArg === "all" ? knownSystems : list(systemsArg);
 const modes = list(arg("modes", "light,dark")).map((mode) => (mode === "dark" ? "dark" : "light"));
 const port = Number(arg("port", "5240"));
+// Extra query for every page, e.g. `--query loading` for the templates' waiting faces.
+const query = arg("query", "");
 const origin = `http://localhost:${port}`;
 const shotsRoot = arg("shots", join(repoRoot, "tooling/snapshot/out/templates"));
 const viewportArg = arg("viewport");
@@ -263,7 +265,7 @@ try
 
                     try
                     {
-                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}&motion=off`, { waitUntil: "networkidle", timeout: 90000 });
+                        await page.goto(`${origin}/?system=${system}&mode=${mode}&template=${entry.id}&motion=off${query ? `&${query}` : ""}`, { waitUntil: "networkidle", timeout: 90000 });
                         await page.waitForSelector(`[data-template="${entry.id}"]`, { timeout: 15000 }).catch(() => {});
                         await page.evaluate(() => document.fonts.ready);
                         await page.waitForTimeout(400);

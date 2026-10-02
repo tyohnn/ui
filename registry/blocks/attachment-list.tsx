@@ -10,6 +10,7 @@ import {
     AttachmentMedia,
     AttachmentTitle,
 } from "@tyohnn/components/attachment";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 
 export type AttachmentFile = {
     name: string;
@@ -20,10 +21,35 @@ export type AttachmentFile = {
     action?: { label: string; icon: ReactNode; onClick?: () => void };
 };
 
-/** Files as a group of attachment chips, each with an icon, its name, a detail line and one action: `sm` under a message, `xs` in a composer. */
-export const AttachmentList = ({ files, size = "sm", className }: { files: readonly AttachmentFile[]; size?: "sm" | "xs"; className?: string }) => (
-    <AttachmentGroup className={className}>
-        {files.map((file) => (
+/**
+ * Files as a group of attachment chips, each with an icon, its name, a detail line and one action: `sm` under a
+ * message, `xs` in a composer. `loading` draws `count` chips: the icon's tile empty, bars for the name and the detail.
+ */
+export const AttachmentList = ({
+    files = [],
+    size = "sm",
+    loading,
+    count = 2,
+    className,
+}: {
+    files?: readonly AttachmentFile[];
+    size?: "sm" | "xs";
+    loading?: boolean;
+    /** How many chips to draw while loading */
+    count?: number;
+    className?: string;
+}) => (
+    <AttachmentGroup {...pendingFrame(loading)} className={className}>
+        {loading && Array.from({ length: count }, (_, index) => (
+            <Attachment key={index} size={size}>
+                <AttachmentMedia />
+                <AttachmentContent>
+                    <AttachmentTitle><PendingText length={16} /></AttachmentTitle>
+                    <AttachmentDescription><PendingText length={10} /></AttachmentDescription>
+                </AttachmentContent>
+            </Attachment>
+        ))}
+        {!loading && files.map((file) => (
             <Attachment key={file.name} size={size}>
                 <AttachmentMedia>{file.icon}</AttachmentMedia>
                 <AttachmentContent>

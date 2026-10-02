@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Progress } from "@tyohnn/components/progress";
 import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type TimelineRow = {
@@ -20,17 +21,41 @@ export type TimelineRow = {
 
 /**
  * A plan on a time scale: the scale's steps (months, weeks) across the top, and a row per project with its name
- * and a bar placed along the scale that carries its progress.
+ * and a bar placed along the scale that carries its progress. `loading` keeps the scale and draws `loadingRows`
+ * rows: bars for the name and its meta line beside an empty lane.
  */
-export const TimelineBars = ({ scale, rows, className }: { scale: readonly string[]; rows: readonly TimelineRow[]; className?: string }) => (
-    <div className={cn("flex flex-col gap-3", className)}>
+export const TimelineBars = ({
+    scale,
+    rows = [],
+    loading,
+    loadingRows = 4,
+    className,
+}: {
+    scale: readonly string[];
+    rows?: readonly TimelineRow[];
+    loading?: boolean;
+    loadingRows?: number;
+    className?: string;
+}) => (
+    <div {...pendingFrame(loading)} className={cn("flex flex-col gap-3", className)}>
         <div
             className="ms-[calc(11rem+0.75rem)] grid text-[length:var(--ui-text-xs)] leading-[var(--ui-line-height-xs)] text-muted-foreground"
             style={{ gridTemplateColumns: `repeat(${scale.length}, minmax(0, 1fr))` }}
         >
             {scale.map((step) => <span key={step} className="border-s border-border ps-2">{step}</span>)}
         </div>
-        {rows.map((row) => (
+        {loading && Array.from({ length: loadingRows }, (_, index) => (
+            <div key={index} className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-3">
+                <div className="flex min-w-0 flex-col">
+                    <span className={cn(BODY, "truncate font-medium")}><PendingText length={14} /></span>
+                    <span className={NOTE}><PendingText length={18} /></span>
+                </div>
+                <div className="rounded-[var(--radius-md)] bg-muted py-1.5">
+                    <div className="h-6" />
+                </div>
+            </div>
+        ))}
+        {!loading && rows.map((row) => (
             <div key={row.id} className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-3">
                 <div className="flex min-w-0 flex-col">
                     <span className={cn(BODY, "truncate font-medium")}>{row.name}</span>

@@ -59,6 +59,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
 import { NoMotion } from "../coverage/frame";
+import { LOADING } from "../loading";
 
 import { activityLevels, avatarTone, COLUMN_WIDTHS, type CompanyRow, CURRENT_USER, initials, ROWS, TAG_TONE } from "./data";
 
@@ -171,6 +172,7 @@ const CrmSidebar = () => (
 const PageHeader = () => (
     <PageBar
         leading={<SidebarTrigger className="-ml-1 md:hidden" />}
+        loading={LOADING}
         title="Companies"
         status={(
             <Badge variant="outline">
@@ -217,6 +219,9 @@ const Toolbar = () => (
 // The reference table's column widths follow the checkbox column's (COLUMN_WIDTHS[0]); the actions column takes what is left.
 const [SELECT_WIDTH, ...WIDTHS] = COLUMN_WIDTHS;
 
+// How many bars a row's trend has, for its waiting face
+const TREND_BARS = activityLevels(0).length;
+
 const COLUMNS: DataTableColumn<CompanyRow>[] = [
     { id: "company", header: "Companies", width: WIDTHS[0], cell: (row) => <span style={{ fontWeight: "var(--ui-font-weight)" }}>{row.company}</span> },
     {
@@ -229,7 +234,7 @@ const COLUMNS: DataTableColumn<CompanyRow>[] = [
             </span>
         ),
     },
-    { id: "owner", header: "Account Owner", width: WIDTHS[2], cell: (row) => <Person name={row.owner} initials={initials(row.owner)} tone={avatarTone(row.owner)} /> },
+    { id: "owner", header: "Account Owner", width: WIDTHS[2], pending: <Person loading />, cell: (row) => <Person name={row.owner} initials={initials(row.owner)} tone={avatarTone(row.owner)} /> },
     { id: "deals", header: "Open Deals", width: WIDTHS[3], cell: (row) => <span className="tabular-nums">{row.deals}</span> },
     {
         id: "value",
@@ -242,14 +247,16 @@ const COLUMNS: DataTableColumn<CompanyRow>[] = [
             </span>
         ),
     },
-    { id: "win", header: "Win Probability", width: WIDTHS[5], cell: (row) => <SegmentMeter value={row.win} /> },
-    { id: "trend", header: "Activity Trend", width: WIDTHS[6], cell: (row) => <ActivityBars levels={activityLevels(ROWS.indexOf(row) + 3)} /> },
-    { id: "interaction", header: "Last Interaction", width: WIDTHS[7], cell: (row) => <InlineFacts icon={<Calendar />} facts={[row.date, row.touch]} /> },
-    { id: "actions", header: "Actions", cell: (row) => <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.company}`}><MoreHorizontal /></Button> },
+    { id: "win", header: "Win Probability", width: WIDTHS[5], pending: <SegmentMeter loading />, cell: (row) => <SegmentMeter value={row.win} /> },
+    { id: "trend", header: "Activity Trend", width: WIDTHS[6], pending: <ActivityBars loading count={TREND_BARS} />, cell: (row) => <ActivityBars levels={activityLevels(ROWS.indexOf(row) + 3)} /> },
+    { id: "interaction", header: "Last Interaction", width: WIDTHS[7], pending: <InlineFacts loading icon={<Calendar />} count={2} />, cell: (row) => <InlineFacts icon={<Calendar />} facts={[row.date, row.touch]} /> },
+    { id: "actions", header: "Actions", pending: <Button variant="ghost" size="icon-sm" disabled aria-hidden><MoreHorizontal /></Button>, cell: (row) => <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.company}`}><MoreHorizontal /></Button> },
 ];
 
 const CompaniesTable = () => (
     <DataTable
+        loading={LOADING}
+        loadingRows={ROWS.length}
         columns={COLUMNS}
         rows={ROWS}
         rowId={(row) => row.company}
@@ -267,7 +274,7 @@ const CompaniesTable = () => (
 const SUMMARY = ["Sum of pipeline", "Avg win probability", "Add Calculation"];
 
 const TableSummary = () => (
-    <SummaryBar className="border-t border-b-0" cells={[{ value: "20", label: "Companies in view" }, ...SUMMARY.map((label) => ({ icon: <Plus />, label }))]} />
+    <SummaryBar loading={LOADING} className="border-t border-b-0" cells={[{ value: "20", label: "Companies in view" }, ...SUMMARY.map((label) => ({ icon: <Plus />, label }))]} />
 );
 
 // The screen fills its viewport like the block templates: the sidebar and the page are as tall as the window, and
