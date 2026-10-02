@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-01/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider, sidebar, inset, header with trigger, separator and breadcrumb — is upstream's
 // markup and classes with the docs' breadcrumb labels; the body is the docs page (./docs-page).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { DOCS_STYLE, DocsPage } from "./docs-page"
+import { DocsPage } from "./docs-page"
 
 export function BlockDocs() {
   return (
     <div data-template="block-docs">
       <NoMotion />
-      <style>{DOCS_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

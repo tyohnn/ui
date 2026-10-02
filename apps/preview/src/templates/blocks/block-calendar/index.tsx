@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-12/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, sidebar, inset, sticky header with trigger, separator and breadcrumb —
 // is upstream's markup and classes with the calendar's month; the body is the week view (./week-view).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout.
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -18,13 +18,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { WeekView, WEEK_STYLE } from "./week-view"
+import { WeekView } from "./week-view"
 
 export function BlockCalendar() {
   return (
     <div data-template="block-calendar">
       <NoMotion />
-      <style>{WEEK_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

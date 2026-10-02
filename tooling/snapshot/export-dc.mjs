@@ -562,6 +562,9 @@ ${inner}
 
 // ---------------------------------------------------------------- verification
 
+// The company name is the span in the table's first data column and the title is the page bar's h1: the CRM
+// template is composed from blocks (registry/blocks), so neither carries a template class.
+
 const MEASURE = {
     "window w": ["[data-template]", "width"],
     "window h": ["[data-template]", "height"],
@@ -573,9 +576,9 @@ const MEASURE = {
     "sidebar w": ["[data-template] [data-slot=sidebar]", "width"],
     "sidebar item h": ["[data-template] .cn-sidebar-menu-button:not([data-active])", "height"],
     "tag h": ["[data-template] .cn-badge[data-tone]", "height"],
-    "company font-family": ["[data-template] .crm-company", "fontFamily"],
-    "company font-size": ["[data-template] .crm-company", "fontSize"],
-    "title font-weight": ["[data-template] .crm-page-title", "fontWeight"],
+    "company font-family": ["[data-template] .cn-table-body td:nth-child(2) > span", "fontFamily"],
+    "company font-size": ["[data-template] .cn-table-body td:nth-child(2) > span", "fontSize"],
+    "title font-weight": ["[data-template] header h1", "fontWeight"],
     "primary background": ["[data-template] .cn-button-variant-default", "backgroundColor"],
 };
 
@@ -601,7 +604,7 @@ const measure = async (page) =>
     const { root } = await session.send("DOM.getDocument", { depth: -1 });
     const rendered = {};
 
-    for (const [label, selector] of [["company rendered font", "[data-template] .crm-company"], ["title rendered font", "[data-template] .crm-page-title"]])
+    for (const [label, selector] of [["company rendered font", "[data-template] .cn-table-body td:nth-child(2) > span"], ["title rendered font", "[data-template] header h1"]])
     {
         const { nodeId } = await session.send("DOM.querySelector", { nodeId: root.nodeId, selector });
 

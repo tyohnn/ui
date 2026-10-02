@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-02/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider, sidebar, inset, sticky header with trigger, separator and breadcrumb — is upstream's
 // markup and classes with the reference's breadcrumb labels; the body is the endpoint page (./api-reference).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { API_REFERENCE_STYLE, ApiReference } from "./api-reference"
+import { ApiReference } from "./api-reference"
 
 export function BlockApiReference() {
   return (
     <div data-template="block-api-reference">
       <NoMotion />
-      <style>{API_REFERENCE_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

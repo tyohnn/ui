@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-14/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider, inset, header with breadcrumb and the right-hand trigger, and the right sidebar —
 // is upstream's markup and classes with the changelog's breadcrumb labels; the body is the release post (./changelog-post).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -19,13 +19,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { CHANGELOG_STYLE, ChangelogPost } from "./changelog-post"
+import { ChangelogPost } from "./changelog-post"
 
 export function BlockChangelog() {
   return (
     <div data-template="block-changelog">
       <NoMotion />
-      <style>{CHANGELOG_STYLE}</style>
       <SidebarProvider>
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">

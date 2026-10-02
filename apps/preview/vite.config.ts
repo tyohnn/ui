@@ -110,6 +110,8 @@ export default defineConfig({
         // @tyohnn/icons → the started system's icon library (ICONS=<library> overrides it for a trial build).
         // @tyohnn/strings → English, or LOCALE=<locale> (registry/ui/strings/locales) to read the components in another language.
         alias: [
+            // @tyohnn/blocks/* → registry/blocks/* (before the ui pattern: blocks has a lib folder of its own).
+            { find: /^@tyohnn\/blocks\//, replacement: `${repoRoot}registry/blocks/` },
             { find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` },
             { find: /^@tyohnn\/icons$/, replacement: `${repoRoot}registry/ui/icons/libraries/${iconLibrary}.tsx` },
             { find: /^@tyohnn\/strings$/, replacement: `${repoRoot}registry/ui/strings/locales/${locale}.ts` },

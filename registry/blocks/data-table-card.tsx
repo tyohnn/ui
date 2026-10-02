@@ -1,0 +1,108 @@
+"use client";
+
+import { type ReactNode, useState } from "react";
+
+import { Card, CardContent } from "@tyohnn/components/card";
+import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
+import { DataTable, type DataTableColumn, type DataTableSelection } from "@tyohnn/blocks/data-table";
+import { FOOTER_BAND, TOOLBAR_BAND } from "@tyohnn/blocks/lib/bands";
+import { META } from "@tyohnn/blocks/lib/text";
+import { cn } from "@tyohnn/lib/utils";
+
+export type DataTableTab = { value: string; label: string; count?: ReactNode };
+
+export type DataTableCardSelection<Row> = Omit<DataTableSelection<Row>, "selected" | "width"> & {
+    /** The line in the selection bar ("2 selected") */
+    summary: (count: number) => ReactNode;
+    /** Bulk actions in the selection bar */
+    actions?: ReactNode;
+};
+
+/**
+ * A table in a card that fills the height it is given and scrolls inside: views as tabs with counts and the
+ * filters in the toolbar, a bar of bulk actions while rows are selected, and the summary with the pages in the
+ * footer. The tabs filter the one table (the caller swaps the rows); for tabs that switch panels use TabCard.
+ */
+export const DataTableCard = <Row,>({
+    columns,
+    rows,
+    rowId,
+    tabs,
+    defaultTab,
+    onTabChange,
+    controls,
+    selection,
+    summary,
+    pagination,
+    className,
+}: {
+    columns: readonly DataTableColumn<Row>[];
+    rows: readonly Row[];
+    rowId: (row: Row) => string;
+    tabs?: readonly DataTableTab[];
+    defaultTab?: string;
+    onTabChange?: (value: string) => void;
+    /** The toolbar's right side: search, filters, column and filter buttons */
+    controls?: ReactNode;
+    selection?: DataTableCardSelection<Row>;
+    /** The footer's left side ("Showing 1–12 of 2,184 orders") */
+    summary?: ReactNode;
+    /** The footer's right side */
+    pagination?: ReactNode;
+    className?: string;
+}) =>
+{
+    const [selected, setSelected] = useState<readonly string[]>(selection?.defaultSelected ?? []);
+    const count = rows.filter((row) => selected.includes(rowId(row))).length;
+
+    return (
+        <Card className={cn("min-h-0 flex-1 gap-0 py-0", className)}>
+            {(tabs !== undefined || controls !== undefined) && (
+                <div className={TOOLBAR_BAND}>
+                    {tabs !== undefined && (
+                        <Tabs defaultValue={defaultTab ?? tabs[0]?.value} onValueChange={onTabChange && ((value) => onTabChange(String(value)))}>
+                            <TabsList>
+                                {tabs.map((tab) => (
+                                    <TabsTrigger key={tab.value} value={tab.value}>
+                                        {tab.label}
+                                        {tab.count !== undefined && <span className={META}>{tab.count}</span>}
+                                    </TabsTrigger>
+                                ))}
+                            </TabsList>
+                        </Tabs>
+                    )}
+                    {controls !== undefined && <div className="flex flex-wrap items-center gap-2">{controls}</div>}
+                </div>
+            )}
+            {selection !== undefined && count > 0 && (
+                <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted px-4 py-2">
+                    <span className={META}>{selection.summary(count)}</span>
+                    {selection.actions}
+                </div>
+            )}
+            <CardContent className="min-h-0 flex-1 overflow-y-auto px-0">
+                <DataTable
+                    columns={columns}
+                    rows={rows}
+                    rowId={rowId}
+                    selection={selection && {
+                        selected,
+                        onChange: (next) =>
+                        {
+                            setSelected(next);
+                            selection.onChange?.(next);
+                        },
+                        selectAllLabel: selection.selectAllLabel,
+                        selectRowLabel: selection.selectRowLabel,
+                    }}
+                />
+            </CardContent>
+            {(summary !== undefined || pagination !== undefined) && (
+                <div className={FOOTER_BAND}>
+                    {summary !== undefined && <span className={META}>{summary}</span>}
+                    {pagination}
+                </div>
+            )}
+        </Card>
+    );
+};

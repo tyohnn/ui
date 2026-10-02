@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-15/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, left sidebar, inset with its sticky header (trigger, separator,
 // breadcrumb) and the right sidebar — is upstream's markup and classes with the meeting's title; the body is the
-// notes (./notes). The root div carries data-template and the template's styles; it adds no box of its own.
+// notes (./notes), composed from blocks (registry/blocks). The root div carries data-template; it adds no box of its own.
 
 import { SidebarLeft } from "./sidebar-left"
 import { SidebarRight } from "./sidebar-right"
@@ -19,13 +19,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Notes, NOTES_STYLE } from "./notes"
+import { Notes } from "./notes"
 
 export function BlockMeetingNotes() {
   return (
     <div data-template="block-meeting-notes">
       <NoMotion />
-      <style>{NOTES_STYLE}</style>
       <SidebarProvider>
         <SidebarLeft />
         <SidebarInset>
