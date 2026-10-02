@@ -9,6 +9,15 @@ import { repoRoot, tempDir } from "./helpers.js";
 
 describe("registry", () =>
 {
+    it("keeps registry/blocks in the shape a monorepo's exports can reach: blocks as .tsx, lib as .ts", () =>
+    {
+        // sync.ts exports `./blocks/*` → `*.tsx` and `./blocks/lib/*` → `*.ts`; a file of the other kind would not resolve.
+        const files = new Registry(repoRoot).blockFiles().map((file) => file.slice("registry/blocks/".length));
+
+        expect(files.filter((file) => file.startsWith("lib/") && !file.endsWith(".ts") || file.endsWith(".tsx") && file.includes("/"))).toEqual([]);
+        expect(files.filter((file) => !file.includes("/") && !file.endsWith(".tsx"))).toEqual([]);
+    });
+
     it("never lists foundation", () =>
     {
         expect(listableSystems(["vega", "foundation", "graphite"])).toEqual(["graphite", "vega"]);
