@@ -129,8 +129,9 @@ proposal first sketched as "regions" are blocks already (`PageHeading` · `Detai
 | `Page` | the content under the bar | `scroll` page · regions — `gutter` — `gap` — `flush` under a bar without a rule |
 | `PagePane` | a region of a pinned page that scrolls by itself | `gutter` — `gap` — `flush` |
 | `PageContent` | a column of blocks inside something that scrolls | `gutter` — `gap` — `measure` (centred or at the start) — `document` padding — the element (`as="article"`) |
-| `PageSplit` | two panes side by side | `gap` — `stack` below `xl` |
-| `PageMain` · `PageAside` | the pane that takes the room · the narrower one | aside `width` — `gap` — `stack` — `scroll` |
+| `PageSplit` | two panes side by side | `gap` — `narrow`: what the aside does when the page is narrow (stack · sheet · hide) |
+| `PageMain` · `PageAside` | the pane that takes the room · the narrower one | aside `width` — `gap` — `scroll` — `label` |
+| `PageAsideTrigger` | the button that opens an aside that became a sheet | its `label` and icon |
 
 A block that is itself the aside (a settings panel, a record's side column, a table of contents) takes its width
 from `ASIDE_WIDTH` in `lib/frame.ts`, and a block that is itself the reading column takes `MEASURE`.
@@ -181,8 +182,7 @@ channel on at most 191 pixels — the raster noise the blocks' README describes.
 frames after it became a page: shot in four systems and both modes, six of eight pairs identical and two with the
 same noise.
 
-Below `xl` the splits stack as before (the row wraps). Layout facts at 768 and 390 are unchanged, which also means
-the templates that overflowed at 390px still do.
+That was the first step, and it left narrow widths as they were. The rule for them came next (below).
 
 ## Values: the frame picks the step, the system gives the value
 
@@ -234,26 +234,81 @@ template cannot be rebuilt on the frames without overriding a gap, the frame is 
 
 ## Narrow widths
 
-Still open. Four templates overflow at 390px (team, project, code-review, settings-dialog), and
-where a split survives the aside drops under the main column or off the screen. The product's 18 screens never
-overflow, because they all pass through one shell. `PageSplit` is now the one place to give this a rule: stack on
-the frame's own width (a container query) rather than the viewport's `xl`, and say what a pinned page becomes when
-its panes stack — today the wrapped row keeps each pane's height and the page overflows.
+Measured at 390 · 768 · 1024 before there was a rule, the splits failed in three ways:
+
+| What happened | Where | Measured |
+|---|---|---|
+| The aside kept its width and the main pane was squeezed | project, code-review, ai-playground | main pane 0 · 102 · 22px at 390; 40 · 224 · 144px at 768 |
+| The panes stacked inside a pinned page | team | a 730px card and a 771px aside in a box 787px tall |
+| The breakpoint was the viewport's | every stacking split | still stacked at 1024 with the sidebar closed and room to spare |
+
+The rule:
+
+1. **A split stands side by side while its page is at least 56rem wide** (`PAGE_SPLIT_MIN_REM`, Tailwind's `@4xl`).
+   The page's own width, not the viewport's: `Page` is a container (`@container/page`), so closing the sidebar gives
+   the room back. One threshold for every aside width. At the catalog viewport nothing changes.
+2. **Below that, the aside does one of three things, chosen by the screen for what the aside is** (`narrow` on
+   `PageSplit`):
+
+   | `narrow` | The aside is | Templates |
+   |---|---|---|
+   | `stack` | content read along with the main pane: it goes under it | team, project, help-center, api-reference |
+   | `sheet` | a tool that works on the main pane: it opens over the page from a `PageAsideTrigger`, and the main pane keeps its height | ai-playground (run settings), code-review (reviewers and checks) |
+   | `hide` | an aid the page works without: it is not drawn | docs (the table of contents) |
+
+   There is no "stay side by side". That was the squeeze.
+3. **A pinned page whose split has stacked is no longer pinned.** Two panes under each other do not fit a fixed
+   height, so the page scrolls as one and each pane keeps its own height.
+4. **The sheet's trigger is the frame's, its place is the screen's.** `PageAsideTrigger` is drawn only while the page
+   is narrow; the screen puts it with its actions (code-review's heading, ai-playground's toolbar) and gives it the
+   aside's name and an icon. The aside is in the page or in the sheet, never both, so its blocks keep one set of ids.
+
+The threshold is one number, not a token: a container query cannot read a custom property. `Page` asks the same
+question in script (a `ResizeObserver` on its frame) only for what CSS cannot do — moving the aside into a sheet.
+
+What was not the frame's:
+
+- **`PageTabs`** — three tabs were 437px wide and widened the page. In a narrow page the strip scrolls sideways.
+  It is a scroller only there, because text inside a scroll container is rastered differently and a wide page should
+  not change for it.
+- **`FilterBar` · `PageBar` · `CardToolbar`** — their two ends wrap onto a second line instead of running off the edge.
+- **The CRM's sidebar** could not close (`collapsible="none"`), which left 144px for the page at 390. It is an
+  off-canvas sidebar now, with its trigger in the page bar below `md`.
+- **The page behind the settings dialog** had a 256px search field in its bar and a channel list that did not
+  close; both are hidden below `sm`.
+- **`PageHeading`'s meta line** did not wrap, so in systems with wider type it ran past the page. It wraps.
+- **`SummaryBar`'s labels** did not break, so a long word ran out of its cell. They wrap, and break a word rather
+  than leave it.
+- **`StatCards`** drew four columns at any width, 78px each at 390. The row now holds as many cards as fit at
+  their least width (`--stat-card-min-width`, 10rem) and wraps the rest: no breakpoint, and it does not need a page
+  around it.
+
+After: all 17 screens fit at 390px in all 15 systems (`check-templates.mjs --viewport 390x844`, 255 renders, none
+with a problem), and at 768 and 1024 in the two systems tried.
+
+And nothing moved where the screens are wide. The 17 screens in all 15 systems and both modes, shot at their
+catalog viewports before and after the narrow rule: of 510 pairs, 463 are identical and 47 differ by one or two
+levels of one channel on at most 190 pixels. The last three fixes in the list above came after that run and were
+shot again in three systems and both modes: 102 pairs, the same noise and nothing else.
 
 ## Checks
 
 - `audit-layout.mjs` before and after, at 1440 · 768 · 390: every number stays or lands on a step.
 - `check-templates.mjs --shots` before and after and `diff-shots.mjs`: differences only where a move was announced.
+- `check-templates.mjs --viewport 390x844` (and 768 · 1024): no screen overflows its viewport.
 - `scan-tokens`: the frame tokens are reported as "undefined, falls back", which is what they are.
 
 ## Open decisions
 
 Decided: the steps stay as many as the templates use (gutter 0 · 16 · 24 · 32 · 40, gap five, measure three,
-aside five). Collapsing them would move pictures for the sake of a shorter list.
+aside five); one threshold for every split (56rem of the page's width); every split collapses.
 
-1. **The narrow rule** for `PageSplit`, above.
-2. **Whether a system should declare these.** They work undeclared. A dense system and a roomy one would want
+1. **Whether a system should declare the tokens.** They work undeclared. A dense system and a roomy one would want
    different numbers, and then the names belong in `tokens.css` with the axis contract's next version.
-3. **A product's shell.** The first product's own shell and page-header components do what `Page` and
-   `PageHeading` do. Replacing them is the test that matters, and it waits for the CLI to install blocks.
-4. **Recipes as code.** Recommended: no. A recipe is documentation plus a screen.
+2. **A product's shell.** The first product's own shell and page-header components do what `Page` and
+   `PageHeading` do. Replacing them is the test that matters.
+3. **List and detail when narrow.** The inbox keeps its list in the sidebar, which already becomes a sheet. A
+   list pane inside the page (one pane at a time, with a way back) has no template yet and no frame.
+4. **What a sheet's aside forgets.** The aside is mounted in the sheet only while it is open, so uncontrolled
+   state inside it (a slider nobody stores) starts again each time. A product that keeps the state does not notice.
+5. **Recipes as code.** Recommended: no. A recipe is documentation plus a screen.

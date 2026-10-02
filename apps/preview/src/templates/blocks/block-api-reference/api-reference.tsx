@@ -7,7 +7,7 @@ import { EndpointHeader } from "@tyohnn/blocks/endpoint-header";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
-import { ASIDE_WIDTH_STACKED } from "@tyohnn/blocks/lib/frame";
+import { ASIDE_WIDTH } from "@tyohnn/blocks/lib/frame";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageSplit } from "@tyohnn/blocks/page-split";
 import { ParameterTable } from "@tyohnn/blocks/parameter-table";
@@ -111,7 +111,7 @@ const Endpoint = () => (
 
 // The examples column stays in view beside the parameters while the page scrolls.
 const Examples = () => (
-    <div className={cn("sticky top-8 flex min-w-0 flex-col gap-4 self-start xl:shrink-0", ASIDE_WIDTH_STACKED.xl)}>
+    <div className={cn("sticky top-8 flex min-w-0 flex-col gap-4 self-start", ASIDE_WIDTH.xl)}>
         <InfoCard
             title="Request"
             description={<code className="block font-mono">{ENDPOINT.host}</code>}
@@ -137,7 +137,7 @@ const Examples = () => (
 export const ApiReference = () => (
     <Page gutter="none" gap="none">
         <PageContent gutter="lg" gap="none" document>
-            <PageSplit gap="lg" stack>
+            <PageSplit gap="lg">
                 <Endpoint />
                 <Examples />
             </PageSplit>

@@ -20,9 +20,12 @@ export type Stat = {
  * A row of small cards that say where something stands: a label, the value in the large size, a progress bar
  * when the value is part of a whole, and a line of detail. For figures that change against a period (with a trend
  * badge) use MetricCards.
+ *
+ * The row holds as many cards as fit at their least width (`--stat-card-min-width`, 10rem when a system does not
+ * say) and the rest go to the next line: four across on a wide page, two on a phone, with no breakpoint.
  */
 export const StatCards = ({ stats, className }: { stats: readonly Stat[]; className?: string }) => (
-    <div className={cn("grid grid-cols-4 gap-4", className)}>
+    <div className={cn("grid grid-cols-[repeat(auto-fit,minmax(var(--stat-card-min-width,10rem),1fr))] gap-4", className)}>
         {stats.map((stat) => (
             <Card key={stat.id} size="sm">
                 <CardHeader>

@@ -159,9 +159,9 @@ export const Team = () => (
                 </>
             )}
         />
-        <PageSplit stack>
+        <PageSplit>
             <MembersPanel />
-            <PageAside width="md" stack scroll>
+            <PageAside width="md" scroll>
                 <SeatsCard />
                 <InvitationsCard />
                 <SecurityCard />

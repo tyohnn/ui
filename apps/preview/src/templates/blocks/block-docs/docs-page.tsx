@@ -6,7 +6,7 @@ import { CodeTabs } from "@tyohnn/blocks/code-tabs";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { IN_PROSE, INLINE_CODE, MUTED_BODY } from "@tyohnn/blocks/lib/copy";
-import { ASIDE_WIDTH, MEASURE } from "@tyohnn/blocks/lib/frame";
+import { ASIDE_NARROW_HIDDEN, ASIDE_WIDTH, MEASURE } from "@tyohnn/blocks/lib/frame";
 import { OnThisPage } from "@tyohnn/blocks/on-this-page";
 import { Page, PageContent } from "@tyohnn/blocks/page";
 import { PageSplit } from "@tyohnn/blocks/page-split";
@@ -155,12 +155,12 @@ const Article = () => (
 export const DocsPage = () => (
     <Page gutter="none" gap="none">
         <PageContent gutter="xl" gap="none" document>
-        <PageSplit gap="xl">
+        <PageSplit gap="xl" narrow="hide">
             <Article />
             <OnThisPage
                 items={TOC}
                 note="Found a problem? Open an issue from the docs repository or ask in the community forum."
-                className={cn("hidden shrink-0 xl:flex", ASIDE_WIDTH.xs)}
+                className={cn(ASIDE_WIDTH.xs, ASIDE_NARROW_HIDDEN)}
             />
         </PageSplit>
         </PageContent>

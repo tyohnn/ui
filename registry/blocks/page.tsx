@@ -1,7 +1,23 @@
-import type { ComponentProps, ElementType, ReactNode } from "react";
+"use client";
 
-import { DOCUMENT_PADDING, GAP, type Gap, GUTTER, GUTTER_INLINE, type Gutter, MEASURE, type Measure } from "@tyohnn/blocks/lib/frame";
+import { type ComponentProps, createContext, type ElementType, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
+
+import { DOCUMENT_PADDING, GAP, type Gap, GUTTER, GUTTER_INLINE, type Gutter, MEASURE, type Measure, PAGE_SPLIT_MIN_REM } from "@tyohnn/blocks/lib/frame";
 import { cn } from "@tyohnn/lib/utils";
+
+/**
+ * What a page tells the frames inside it: whether it is too narrow for two panes, and whether the aside that
+ * became a sheet is open (page-split.tsx reads both).
+ */
+type PageFrame = { narrow: boolean; asideOpen: boolean; setAsideOpen: (open: boolean) => void };
+
+const PageFrameContext = createContext<PageFrame | null>(null);
+
+export const usePageFrame = () => useContext(PageFrameContext);
+
+// A pinned page whose split has stacked cannot stay pinned: two panes under each other do not fit a fixed height.
+// It scrolls as one, and what it holds keeps its own height.
+const UNPIN_WHEN_STACKED = "@max-4xl/page:has-[[data-slot=page-split][data-narrow=stack]]:overflow-y-auto @max-4xl/page:has-[[data-slot=page-split][data-narrow=stack]]:*:shrink-0";
 
 /**
  * The frame of a page: the content under the bar. It holds blocks and decides only where they stand — how far
@@ -15,7 +31,10 @@ import { cn } from "@tyohnn/lib/utils";
  *
  * `flush`: no gutter above, for a page under a bar that draws no rule — the bar's own height is the room.
  *
- * [contain:inline-size]: wide content (a table, a board) never widens the inset; it scrolls in place.
+ * The page is a container (`@container/page`): what is inside reacts to the page's own width, not the viewport's,
+ * so a split collapses when its page is narrow and comes back when the sidebar is closed. Being a container also
+ * means wide content (a table, a board) never widens the inset; it scrolls in place. The frame around the page
+ * is that container, because an element cannot answer a query about itself.
  */
 export const Page = ({
     scroll = "page",
@@ -31,16 +50,53 @@ export const Page = ({
     gap?: Gap;
     flush?: boolean;
     children?: ReactNode;
-} & ComponentProps<"div">) => (
-    <div
-        data-slot="page"
-        data-scroll={scroll}
-        className={cn("flex min-h-0 flex-[1_1_0px] flex-col [contain:inline-size]", GUTTER[gutter], gutter !== "none" && flush && "pt-0", GAP[gap], scroll === "page" && "overflow-y-auto", className)}
-        {...props}
-    >
-        {children}
-    </div>
-);
+} & ComponentProps<"div">) =>
+{
+    const frameRef = useRef<HTMLDivElement>(null);
+    const [narrow, setNarrow] = useState(false);
+    const [asideOpen, setAsideOpen] = useState(false);
+
+    // The same question the classes ask with `@4xl/page:`, for what cannot be done in CSS (an aside in a sheet).
+    useEffect(() =>
+    {
+        const frame = frameRef.current;
+
+        if (!frame || typeof ResizeObserver === "undefined") return;
+
+        const measure = () =>
+        {
+            const isNarrow = frame.clientWidth < PAGE_SPLIT_MIN_REM * parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+            setNarrow(isNarrow);
+            if (!isNarrow) setAsideOpen(false);
+        };
+
+        measure();
+
+        const observer = new ResizeObserver(measure);
+
+        observer.observe(frame);
+
+        return () => observer.disconnect();
+    }, []);
+
+    const frame = useMemo(() => ({ narrow, asideOpen: narrow && asideOpen, setAsideOpen }), [narrow, asideOpen]);
+
+    return (
+        <PageFrameContext.Provider value={frame}>
+            <div ref={frameRef} data-slot="page-frame" className="@container/page flex min-h-0 flex-[1_1_0px] flex-col">
+                <div
+                    data-slot="page"
+                    data-scroll={scroll}
+                    className={cn("flex min-h-0 flex-1 flex-col", GUTTER[gutter], gutter !== "none" && flush && "pt-0", GAP[gap], scroll === "page" ? "overflow-y-auto" : UNPIN_WHEN_STACKED, className)}
+                    {...props}
+                >
+                    {children}
+                </div>
+            </div>
+        </PageFrameContext.Provider>
+    );
+};
 
 /**
  * A region of a pinned page that scrolls by itself: the main column beside an aside, the reader under a toolbar.

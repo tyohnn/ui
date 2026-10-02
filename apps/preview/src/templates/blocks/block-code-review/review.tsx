@@ -7,6 +7,7 @@ import {
     GitBranch,
     GitCommit,
     GitPullRequest,
+    Info,
     Link,
     Loader,
     MessageSquare,
@@ -22,9 +23,9 @@ import { DiffFile } from "@tyohnn/blocks/diff-file";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
 import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
-import { ASIDE_WIDTH, GUTTER_INLINE } from "@tyohnn/blocks/lib/frame";
+import { GUTTER_INLINE } from "@tyohnn/blocks/lib/frame";
 import { Page, PagePane } from "@tyohnn/blocks/page";
-import { PageSplit } from "@tyohnn/blocks/page-split";
+import { PageAside, PageAsideTrigger, PageSplit } from "@tyohnn/blocks/page-split";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";
@@ -85,6 +86,7 @@ const PrHead = () => (
                     <Check data-icon="inline-start" />
                     Approve
                 </Button>
+                <PageAsideTrigger label="Review details"><Info /></PageAsideTrigger>
             </>
         )}
     />
@@ -156,7 +158,7 @@ const CHECK_TONE = { pass: "success", fail: "destructive", running: "muted" } as
 
 const SidePanel = () => (
     <DetailSections
-        className={cn(ASIDE_WIDTH.sm, "px-5 pb-6")}
+        className="min-h-0 flex-1 px-5 pb-6"
         sections={[
             {
                 id: "reviewers",
@@ -231,9 +233,11 @@ export const Review = () => (
                 ]}
             />
             <TabsContent value="files" className="flex min-h-0 flex-1">
-                <PageSplit gap="none">
+                <PageSplit gap="none" narrow="sheet">
                     <FilesChanged />
-                    <SidePanel />
+                    <PageAside width="sm" gap="none" label="Review details">
+                        <SidePanel />
+                    </PageAside>
                 </PageSplit>
             </TabsContent>
         </Tabs>

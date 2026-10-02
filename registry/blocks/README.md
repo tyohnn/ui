@@ -82,8 +82,9 @@ frames on the screen, marks the tokens that screen reads, and moves them live; "
 | `Page` | `page.tsx` | The content under the bar: the gutter and gap, and whether the page scrolls or is pinned so a region scrolls |
 | `PagePane` | `page.tsx` | A region of a pinned page that scrolls by itself |
 | `PageContent` | `page.tsx` | A column of blocks inside something that scrolls: gutter, gap, an optional reading measure, a document's own padding |
-| `PageSplit` | `page-split.tsx` | Two panes side by side, optionally stacking below `xl` |
+| `PageSplit` | `page-split.tsx` | Two panes side by side while the page is at least 56rem wide; below that the aside stacks, becomes a sheet, or hides (`narrow`) |
 | `PageMain` · `PageAside` | `page-split.tsx` | The pane that takes the room, and the narrower one at an aside width |
+| `PageAsideTrigger` | `page-split.tsx` | The button that opens an aside that became a sheet; drawn only while the page is narrow |
 
 | Token (default in `lib/frame.ts`) | Default | Read by |
 |---|---|---|

@@ -26,9 +26,8 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { FieldPanel } from "@tyohnn/blocks/field-panel";
 import { HintField } from "@tyohnn/blocks/hint-field";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
-import { ASIDE_WIDTH } from "@tyohnn/blocks/lib/frame";
 import { Page } from "@tyohnn/blocks/page";
-import { PageSplit } from "@tyohnn/blocks/page-split";
+import { PageAside, PageAsideTrigger, PageSplit } from "@tyohnn/blocks/page-split";
 import { PromptInput } from "@tyohnn/blocks/prompt-input";
 import { SliderField } from "@tyohnn/blocks/slider-field";
 import { SwitchField } from "@tyohnn/blocks/switch-field";
@@ -73,6 +72,7 @@ const Toolbar = () => (
                     <Share data-icon="inline-start" />
                     Share
                 </Button>
+                <PageAsideTrigger label="Settings"><SlidersHorizontal /></PageAsideTrigger>
             </>
         )}
     >
@@ -172,7 +172,7 @@ const Composer = () => (
 // still scrolls on its own (the footer's usage bar stays put) if a system's controls ever outgrow it.
 const SettingsPanel = () => (
     <FieldPanel
-        className={ASIDE_WIDTH.md}
+        className="flex-1"
         title="Run settings"
         description="Applies to the next message"
         action={<Button variant="ghost" size="icon-sm" aria-label="Reset to defaults"><RefreshCw /></Button>}
@@ -210,13 +210,15 @@ const SettingsPanel = () => (
 // a system with larger controls wraps the toolbar instead.
 export const Playground = () => (
     <Page scroll="regions" flush>
-        <PageSplit>
+        <PageSplit narrow="sheet">
         <Card className="min-w-0 flex-1 gap-0 py-0">
             <Toolbar />
             <Conversation />
             <Composer />
         </Card>
-        <SettingsPanel />
+        <PageAside width="md" gap="none" label="Settings">
+            <SettingsPanel />
+        </PageAside>
         </PageSplit>
     </Page>
 );

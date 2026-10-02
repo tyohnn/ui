@@ -397,9 +397,10 @@ removing one always bumps it.
   a report, not a check: for every screen template (or any page, with `--url`) the layer above the components — the
   shell and its bar, the gutter and gap, the title's size and family, which element scrolls, what sits side by side,
   a centred measure, and horizontal overflow — at several widths. It is the evidence behind `registry/blocks/frames.md`.
-- `node tooling/snapshot/check-templates.mjs [--templates all|ids] [--systems all|names] [--modes light,dark]` — every
+- `node tooling/snapshot/check-templates.mjs [--templates all|ids] [--systems all|names] [--modes light,dark] [--viewport 390x844]` — every
   template of `apps/preview/src/templates/catalog.ts` at its viewport: console and page errors, an empty `data-template`
-  root, horizontal overflow, platform-font fallback; screenshots in `tooling/snapshot/out/templates/`.
+  root, horizontal overflow, platform-font fallback; screenshots in `tooling/snapshot/out/templates/`. `--viewport`
+  draws every template at that size instead: the check that a screen still fits when it is narrow.
 
 ⚠ Put `.dark` on `<html>`: layer-2 compositions such as `--shadow-control` resolve on `:root`.
 

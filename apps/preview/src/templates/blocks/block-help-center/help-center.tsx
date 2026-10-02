@@ -148,9 +148,9 @@ export const HelpCenter = () => (
         <Hero />
         <PageContent gutter="lg" gap="lg" document>
             <Topics />
-            <PageSplit gap="md" stack>
+            <PageSplit gap="md">
                 <RecentArticles />
-                <PageAside width="lg" gap="md" stack>
+                <PageAside width="lg" gap="md">
                     <Contact />
                     <Tickets />
                     <Status />

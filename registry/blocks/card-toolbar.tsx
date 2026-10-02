@@ -11,6 +11,6 @@ import { cn } from "@tyohnn/lib/utils";
 export const CardToolbar = ({ children, actions, className }: { /** The start of the band */ children?: ReactNode; actions?: ReactNode; className?: string }) => (
     <div className={cn(TOOLBAR_BAND, className)}>
         <div className="flex min-w-0 items-center gap-2">{children}</div>
-        {actions !== undefined && <div className="flex items-center gap-1.5">{actions}</div>}
+        {actions !== undefined && <div className="flex min-w-0 flex-wrap items-center gap-1.5">{actions}</div>}
     </div>
 );

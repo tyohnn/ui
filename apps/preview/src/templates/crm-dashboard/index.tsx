@@ -54,6 +54,7 @@ import {
     SidebarMenuItem,
     SidebarProvider,
     SidebarSeparator,
+    SidebarTrigger,
 } from "@tyohnn/components/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@tyohnn/components/tabs";
 
@@ -126,7 +127,8 @@ const Menu = ({ items }: { items: NavItem[] }) => (
 );
 
 const CrmSidebar = () => (
-    <Sidebar collapsible="none" className="h-full border-e border-sidebar-border">
+    // bg-sidebar on the container: its edge is drawn over the sidebar's own colour, as it was when the sidebar could not close.
+    <Sidebar collapsible="offcanvas" className="border-e border-sidebar-border bg-sidebar">
         <SidebarHeader className="flex-row items-center gap-2.5">
             <span className="grid size-8 shrink-0 place-items-center rounded-[var(--radius-md)] border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground [&_svg]:size-[18px]"><BrandMark /></span>
             <TwoLineLabel title="Sales CRM" subtitle="Company pipeline" />
@@ -168,6 +170,7 @@ const CrmSidebar = () => (
 
 const PageHeader = () => (
     <PageBar
+        leading={<SidebarTrigger className="-ml-1 md:hidden" />}
         title="Companies"
         status={(
             <Badge variant="outline">
