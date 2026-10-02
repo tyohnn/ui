@@ -14,3 +14,6 @@ export const FIGURE = "tabular-nums";
 
 /** An identifier: order number, key, hash */
 export const CODE = "font-mono whitespace-nowrap";
+
+/** A figure that stands on its own: a count over its label */
+export const BIG_FIGURE = "font-heading text-[length:var(--ui-text-lg)] leading-[var(--ui-line-height-lg)] font-semibold tabular-nums text-foreground";

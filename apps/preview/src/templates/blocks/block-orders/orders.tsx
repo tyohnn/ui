@@ -1,11 +1,13 @@
 import { CircleCheck, Clock, Columns, Download, FileText, Filter, Package, Plus, RefreshCw, Tag } from "@tyohnn/icons";
 
-import { DataTableCard, type DataTableColumn } from "@tyohnn/blocks/data-table-card";
+import { CompactSelect } from "@tyohnn/blocks/compact-select";
+import type { DataTableColumn } from "@tyohnn/blocks/data-table";
+import { DataTableCard } from "@tyohnn/blocks/data-table-card";
 import { MetricCards } from "@tyohnn/blocks/metric-cards";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
 import { Person } from "@tyohnn/blocks/person";
 import { RowMenu } from "@tyohnn/blocks/row-menu";
-import { TableFilter, TableSearch } from "@tyohnn/blocks/table-filters";
+import { TableSearch } from "@tyohnn/blocks/table-search";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import {
@@ -99,8 +101,8 @@ export const Orders = () => (
             controls={(
                 <>
                     <TableSearch label="Search orders" placeholder="Order, customer or email" />
-                    <TableFilter label="Status" options={STATUS_FILTERS} />
-                    <TableFilter label="Channel" options={CHANNEL_FILTERS} />
+                    <CompactSelect label="Status" options={STATUS_FILTERS} className="min-w-36" />
+                    <CompactSelect label="Channel" options={CHANNEL_FILTERS} className="min-w-36" />
                     <Button variant="outline" size="icon-sm" aria-label="More filters"><Filter /></Button>
                     <Button variant="outline" size="icon-sm" aria-label="Columns"><Columns /></Button>
                 </>
