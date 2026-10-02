@@ -7,7 +7,7 @@ import { Search } from "@tyohnn/icons";
 import { Badge } from "@tyohnn/components/badge";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@tyohnn/components/input-group";
 import { Kbd } from "@tyohnn/components/kbd";
-import { LEAD, NOTE } from "@tyohnn/blocks/lib/copy";
+import { HEADING_XL, LEAD, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
@@ -51,7 +51,7 @@ export const SearchHero = ({
 }) => (
     <section className={cn("flex flex-col items-center gap-4 border-b border-border bg-muted px-6 py-10 text-center", className)}>
         {status}
-        <h1 className="m-0 font-heading text-[length:calc(var(--ui-text-lg)*1.75)] leading-[1.2] font-semibold">{title}</h1>
+        <h1 className={cn("m-0", HEADING_XL)}>{title}</h1>
         {description !== undefined && <p className={LEAD}>{description}</p>}
         <InputGroup className="h-12 w-full max-w-[40rem] bg-background">
             <InputGroupAddon>

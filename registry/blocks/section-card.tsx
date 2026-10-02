@@ -42,7 +42,7 @@ export const SectionCard = ({
         </CardHeader>
         {children !== undefined && <CardContent className={contentClassName}>{children}</CardContent>}
         {(footerNote !== undefined || footerAction !== undefined) && (
-            <CardFooter className={cn("gap-2 [&>svg]:size-[16px] [&>svg]:shrink-0 [&>svg]:text-muted-foreground", footerAction !== undefined && "mt-auto justify-between")}>
+            <CardFooter className={cn("gap-2 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:shrink-0 [&>svg]:text-muted-foreground", footerAction !== undefined && "mt-auto justify-between")}>
                 {footerIcon}
                 {footerNote !== undefined && <span className={NOTE}>{footerNote}</span>}
                 {footerAction}

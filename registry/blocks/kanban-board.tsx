@@ -31,7 +31,7 @@ export const KanbanBoard = ({ columns, className }: { columns: readonly KanbanCo
     <div className={cn("flex min-h-0 flex-1 gap-3 overflow-x-auto", className)}>
         {columns.map((column) => (
             <section key={column.id} className="flex min-h-0 min-w-64 flex-1 basis-0 flex-col gap-3 rounded-[var(--radius-xl)] bg-muted p-2" aria-label={column.title}>
-                <div className="flex items-center gap-2 px-1 pt-1 [&>svg]:size-[16px] [&>svg]:text-muted-foreground">
+                <div className="flex items-center gap-2 px-1 pt-1 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:text-muted-foreground">
                     {column.icon}
                     <span className={cn(BODY, "font-medium text-foreground")}>{column.title}</span>
                     {column.count !== undefined && <Badge variant="secondary">{column.count}</Badge>}

@@ -23,7 +23,7 @@ export const ListCard = ({
     className?: string;
 }) => (
     <Card className={cn("min-h-0 min-w-0 flex-1 gap-0", className)}>
-        <CardHeader className="border-b border-border pb-[12px]">
+        <CardHeader className="border-b border-border">
             <CardTitle>{title}</CardTitle>
             {description !== undefined && <CardDescription>{description}</CardDescription>}
             {controls !== undefined && <CardAction className="flex items-center gap-1.5">{controls}</CardAction>}

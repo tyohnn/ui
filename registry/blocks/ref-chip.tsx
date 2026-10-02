@@ -6,7 +6,7 @@ import { cn } from "@tyohnn/lib/utils";
 export const RefChip = ({ children, className }: { children: ReactNode; className?: string }) => (
     <span
         className={cn(
-            "flex items-center gap-1.5 rounded-[var(--radius-sm)] bg-muted px-1.5 font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[14px] [&_svg]:shrink-0",
+            "flex items-center gap-1.5 rounded-[var(--radius-sm)] bg-muted px-1.5 font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0",
             className,
         )}
     >

@@ -27,7 +27,7 @@ export const TicketList = ({ tickets, className }: { tickets: readonly Ticket[];
                 {index > 0 ? <Separator /> : null}
                 <div className="flex flex-col gap-1">
                     <span className={ROW_LABEL}>{ticket.title}</span>
-                    <span className={cn(NOTE, "flex flex-wrap items-center gap-x-2 gap-y-1 [&_svg]:size-[14px] [&_svg]:shrink-0")}>
+                    <span className={cn(NOTE, "flex flex-wrap items-center gap-x-2 gap-y-1 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0")}>
                         {ticket.reference}
                         {ticket.status}
                         {ticket.detail !== undefined && <span className="flex items-center gap-1">{ticket.detailIcon}{ticket.detail}</span>}

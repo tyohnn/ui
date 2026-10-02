@@ -30,7 +30,7 @@ export const SwitchField = ({
 }) => (
     <Field orientation="horizontal">
         <FieldContent>
-            <FieldLabel htmlFor={id} className={icon === undefined ? undefined : "[&_svg]:size-[14px] [&_svg]:shrink-0"}>{icon}{label}</FieldLabel>
+            <FieldLabel htmlFor={id} className={icon === undefined ? undefined : "[&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0"}>{icon}{label}</FieldLabel>
             {description !== undefined && <FieldDescription>{description}</FieldDescription>}
         </FieldContent>
         <Switch id={id} checked={checked} defaultChecked={defaultChecked} onCheckedChange={onCheckedChange} disabled={disabled} />

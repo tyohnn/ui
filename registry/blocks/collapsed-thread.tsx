@@ -27,7 +27,7 @@ export const CollapsedThread = ({ messages, onOpen, className }: { messages: rea
                 <span className="shrink-0 text-[length:var(--ui-text-md)] font-medium text-foreground">{message.name}</span>
                 <span className={cn(NOTE, "min-w-0 flex-1 truncate")}>{message.teaser}</span>
                 <span className={cn(NOTE, "shrink-0")}>{message.date}</span>
-                <ChevronDown className="size-[16px] shrink-0 text-muted-foreground" />
+                <ChevronDown className="size-[var(--control-icon-size-lg)] shrink-0 text-muted-foreground" />
             </button>
         ))}
     </div>

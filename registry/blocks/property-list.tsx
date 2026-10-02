@@ -19,7 +19,7 @@ export const PropertyList = ({ properties, actions, className }: { properties: r
     <div className={cn("flex flex-col gap-1", className)}>
         {properties.map((property) => (
             <div key={property.label} className="flex min-h-8 flex-wrap items-center gap-x-3 gap-y-1">
-                <span className={cn(NOTE, "flex w-32 shrink-0 items-center gap-2 [&_svg]:size-[14px] [&_svg]:shrink-0")}>
+                <span className={cn(NOTE, "flex w-32 shrink-0 items-center gap-2 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0")}>
                     {property.icon}
                     {property.label}
                 </span>

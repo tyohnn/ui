@@ -26,7 +26,7 @@ export const StatusLine = ({
     trailing?: ReactNode;
     className?: string;
 }) => (
-    <div className={cn("flex items-center gap-2 [&>svg]:size-[14px] [&>svg]:shrink-0", tone !== undefined && TONE[tone], className)}>
+    <div className={cn("flex items-center gap-2 [&>svg]:size-[var(--control-icon-size-md)] [&>svg]:shrink-0", tone !== undefined && TONE[tone], className)}>
         {leading}
         <span className={cn(PARAGRAPH, "min-w-0 flex-1 truncate")}>{label}</span>
         {note !== undefined && <span className={cn(NOTE, "whitespace-nowrap")}>{note}</span>}

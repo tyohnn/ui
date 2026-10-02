@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Badge } from "@tyohnn/components/badge";
+import { HEADING_XL } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -30,7 +31,7 @@ export const EndpointHeader = ({
             <code className="min-w-0 font-mono text-[length:var(--ui-text-md)] [overflow-wrap:anywhere]">{path}</code>
             {pathAction}
         </div>
-        <h1 className="m-0 font-heading text-[length:calc(var(--ui-text-lg)*1.75)] leading-[1.2] font-semibold">{title}</h1>
+        <h1 className={cn("m-0", HEADING_XL)}>{title}</h1>
         {children}
     </div>
 );
