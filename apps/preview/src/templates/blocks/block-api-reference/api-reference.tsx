@@ -37,7 +37,7 @@ import {
 
 const Parameters = ({ title, description, parameters }: { title: string; description: string; parameters: Parameter[] }) => (
     <section className="flex flex-col gap-3">
-        <SectionHeading title={title} description={description} />
+        <SectionHeading loading={LOADING} title={title} description={description} />
         <ParameterTable
             parameters={parameters.map((parameter) => ({ ...parameter, note: parameter.values ? <>One of {parameter.values}</> : undefined }))}
         />
@@ -89,7 +89,7 @@ const Endpoint = () => (
         <Parameters title="Body parameters" description="Form-encoded or JSON. Unknown parameters return 400." parameters={BODY_PARAMETERS} />
 
         <section className="flex flex-col gap-3">
-            <SectionHeading title="Status codes" description="Every error returns a JSON body with type, code, message and request_id." />
+            <SectionHeading loading={LOADING} title="Status codes" description="Every error returns a JSON body with type, code, message and request_id." />
             <DefinitionList
                 items={STATUS_CODES.map((status) => ({
                     id: status.code,
@@ -112,9 +112,10 @@ const Endpoint = () => (
 const Examples = () => (
     <div className="sticky top-8 flex min-w-0 flex-col gap-4 self-start">
         <InfoCard
+            loading={LOADING}
             title="Request"
             description={<code className="block font-mono">{ENDPOINT.host}</code>}
-            action={<Badge variant="outline"><Key data-icon="inline-start" />sk_test_…9w2Q</Badge>}
+            action={<Badge variant="outline"><Key data-icon="inline-start" />{LOADING ? <PendingText length={13} /> : "sk_test_…9w2Q"}</Badge>}
             className="gap-3"
         >
             <CodeTabs
@@ -126,7 +127,7 @@ const Examples = () => (
                 tabs={REQUEST_EXAMPLES.map((example) => ({ value: example.id, label: example.label, code: example.code, action: <CopyButton /> }))}
             />
         </InfoCard>
-        <InfoCard title="Response" description="application/json · 212 ms" action={<Badge variant="secondary">201 Created</Badge>} className="gap-3">
+        <InfoCard loading={LOADING} title="Response" description="application/json · 212 ms" action={<Badge variant="secondary">{LOADING ? <PendingText length={11} /> : "201 Created"}</Badge>} className="gap-3">
             <CodeBlock loading={LOADING} loadingLines={RESPONSE_EXAMPLE.split("\n").length} title="payment" icon={<Terminal />} code={RESPONSE_EXAMPLE} size="sm" action={<CopyButton />} />
         </InfoCard>
     </div>
