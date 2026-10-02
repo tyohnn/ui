@@ -40,6 +40,14 @@ describe("placeholder alias rewriting", () =>
         ].join("\n"));
     });
 
+    it("points a block's imports of other blocks at the project's blocks folder", () =>
+    {
+        const block = 'import { DataTable } from "@tyohnn/blocks/data-table";\nimport { META } from "@tyohnn/blocks/lib/text";\nimport { cn } from "@tyohnn/lib/utils";';
+
+        expect(rewriteMonorepo(block, "@acme/ui")).toBe('import { DataTable } from "@acme/ui/blocks/data-table";\nimport { META } from "@acme/ui/blocks/lib/text";\nimport { cn } from "@acme/ui/lib/utils";');
+        expect(rewriteApp(block, "@")).toBe('import { DataTable } from "@/components/blocks/data-table";\nimport { META } from "@/components/blocks/lib/text";\nimport { cn } from "@/lib/utils";');
+    });
+
     it("leaves names that only start like a placeholder alone", () =>
     {
         expect(rewriteApp('import x from "@tyohnn/iconset";', "~")).toBe('import x from "@tyohnn/iconset";');
@@ -58,6 +66,10 @@ describe("placeholder alias rewriting", () =>
         expect(mono.target("registry/ui/strings/names.ts")).toBe("/repo/packages/ui/src/strings/names.ts");
         expect(mono.target("registry/ui/strings/locales/ko.ts")).toBe("/repo/packages/ui/src/strings/locales/ko.ts");
         expect(mono.target("registry/ui/strings/index.ts")).toBeNull();
+        expect(mono.target("registry/blocks/data-table-card.tsx")).toBe("/repo/packages/ui/src/blocks/data-table-card.tsx");
+        expect(mono.target("registry/blocks/lib/text.ts")).toBe("/repo/packages/ui/src/blocks/lib/text.ts");
+        expect(app.target("registry/blocks/data-table-card.tsx")).toBe("/app/src/components/blocks/data-table-card.tsx");
+        expect(app.target("registry/blocks/lib/text.ts")).toBe("/app/src/components/blocks/lib/text.ts");
 
         expect(app.target("registry/ui/components/button.tsx")).toBe("/app/src/components/ui/button.tsx");
         expect(app.target("registry/ui/hooks/use-mobile.ts")).toBe("/app/src/hooks/use-mobile.ts");

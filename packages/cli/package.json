@@ -1,6 +1,6 @@
 {
     "name": "tyohnn",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Scaffold tyohnn design systems (shadcn components on Base UI with a three-layer CSS architecture) into Next.js and Vite apps and monorepos.",
     "license": "MIT",
     "repository": {

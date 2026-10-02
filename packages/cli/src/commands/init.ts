@@ -95,6 +95,7 @@ export const init = async (options: GlobalOptions): Promise<void> =>
     registry.iconLibrary(icons);
     validateFonts(fonts, registry);
     if (options.locale) registry.locale(options.locale);
+    if (options.blocks) registry.blockFiles();
 
     let record: TyohnnRecord;
 
@@ -132,7 +133,7 @@ export const init = async (options: GlobalOptions): Promise<void> =>
             source: info,
             project: "monorepo",
             packageManager: project.packageManager,
-            ui: { path: uiPath, importBase: `${scope}/ui`, systems: [], icons: [], ...(options.locale ? { locale: options.locale } : {}) },
+            ui: { path: uiPath, importBase: `${scope}/ui`, systems: [], icons: [], ...(options.locale ? { locale: options.locale } : {}), ...(options.blocks ? { blocks: true } : {}) },
             apps: { [appPath]: { framework: inspectApp(root, appPath).framework, system: systemName, icons, fonts, mode, css: "", ...(options.example ? { example: options.example } : {}) } },
             packages: {},
             files: {},
@@ -154,7 +155,7 @@ export const init = async (options: GlobalOptions): Promise<void> =>
             source: info,
             project: project.kind,
             packageManager: project.packageManager,
-            ui: { path: uiPath, importBase, systems: [], icons: [], ...(options.locale ? { locale: options.locale } : {}) },
+            ui: { path: uiPath, importBase, systems: [], icons: [], ...(options.locale ? { locale: options.locale } : {}), ...(options.blocks ? { blocks: true } : {}) },
             apps: { ".": { framework: app.framework, system: systemName, icons, fonts, mode, css: "", ...(options.example ? { example: options.example } : {}) } },
             packages: {},
             files: {},
@@ -168,7 +169,7 @@ export const init = async (options: GlobalOptions): Promise<void> =>
 
     if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
 
-    log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · colours ${describeTheme(app.theme, registry, app.system)} · ${mode} mode${registry.hasStrings ? ` · words ${localeOf(record)}` : ""}`);
+    log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · colours ${describeTheme(app.theme, registry, app.system)} · ${mode} mode${registry.hasStrings ? ` · words ${localeOf(record)}` : ""}${record.ui.blocks ? " · blocks" : ""}`);
     await sync({ root, registry, record, changes, options: { force: Boolean(options.force), install: options.install !== false } });
     printSummary(`Set up ${systemName} in ${project.kind === "monorepo" ? `${record.ui.path} and ${appPath}` : `this ${app.framework === "next" ? "Next.js" : "Vite"} app`}`, changes, root);
     log.info(`\nNext: run the app, then \`tyohnn doctor\`.${project.kind === "monorepo" ? " Add another app with `tyohnn add <system> --app <path>`." : ""}`);
@@ -197,6 +198,7 @@ const reinit = async (options: GlobalOptions, root: string, record: TyohnnRecord
     if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
     if (options.example) app.example = options.example;
     if (options.locale) record.ui.locale = options.locale;
+    if (options.blocks) record.ui.blocks = true;
 
     const changes = newChanges();
 

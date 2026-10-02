@@ -5,7 +5,7 @@ import { parseArgs } from "node:util";
 import { doctor } from "./commands/doctor.js";
 import { diff, list } from "./commands/info.js";
 import { init } from "./commands/init.js";
-import { add, fonts, icons, locale, theme, use } from "./commands/modify.js";
+import { add, blocks, fonts, icons, locale, theme, use } from "./commands/modify.js";
 import type { GlobalOptions } from "./commands/context.js";
 import { CliError, log } from "./lib/log.js";
 
@@ -21,6 +21,7 @@ Usage
   tyohnn use <system> [--app <path>]               switch an app's system (TSX stays)
   tyohnn icons <library> [--app <path>]            switch an app's icon library
   tyohnn locale <locale>                           switch the language the components speak (en · ko)
+  tyohnn blocks [remove]                           install (or remove) the blocks: screen pieces composed from the components
   tyohnn fonts [--sans --heading --mono] [--app]   switch an app's fonts (--reset: the system's)
   tyohnn theme <name|./file.json> [--app]          switch an app's colours (--reset: the system's)
   tyohnn list                                      systems, icon libraries and fonts
@@ -38,6 +39,7 @@ Options
   --ui <path>               UI package folder (monorepo init, default packages/ui)
   --scope <@scope>          UI package scope (monorepo init): <scope>/ui
   --example <name>          also copy an example page (component-sheet)
+  --blocks                  also install the blocks (init)
   --ref <ref>               tyohnn branch, tag or commit to read (default main)
   --source <path>           a local tyohnn checkout or tarball instead of GitHub
   --offline                 use the cache only
@@ -70,6 +72,7 @@ const main = async (): Promise<number> =>
             ui: { type: "string" },
             scope: { type: "string" },
             example: { type: "string" },
+            blocks: { type: "boolean" },
             ref: { type: "string" },
             source: { type: "string" },
             offline: { type: "boolean" },
@@ -109,6 +112,7 @@ const main = async (): Promise<number> =>
         case "use": await use(argument, options); return 0;
         case "icons": await icons(argument, options); return 0;
         case "locale": await locale(argument, options); return 0;
+        case "blocks": await blocks(argument, options); return 0;
         case "fonts": await fonts(options); return 0;
         case "theme": await theme(argument, options); return 0;
         case "list": await list(options); return 0;
