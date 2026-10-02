@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import {
     Archive,
     Clock,
@@ -21,6 +23,7 @@ import { AttachmentList } from "@tyohnn/blocks/attachment-list";
 import { CollapsedThread } from "@tyohnn/blocks/collapsed-thread";
 import { IconToolbar } from "@tyohnn/blocks/icon-toolbar";
 import { ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { MailHeader } from "@tyohnn/blocks/mail-header";
 import { Prose } from "@tyohnn/blocks/prose";
 import { ReplyComposer } from "@tyohnn/blocks/reply-composer";
@@ -28,6 +31,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { EARLIER_THREAD, OPEN_MAIL } from "./data";
 
 /**
@@ -75,6 +79,25 @@ const Attachments = () => (
     </div>
 );
 
+// The message while it waits: a paragraph of bars. How long the mail is comes with the mail, so what follows it in
+// the pane moves when it arrives.
+const BODY_BARS = [76, 80, 72, 48];
+
+const MailBody = () => (
+    <Prose size="md" className="max-w-[80ch] [&_p]:whitespace-pre-line">
+        {LOADING ? (
+            <p>
+                {BODY_BARS.map((length, index) => (
+                    <Fragment key={length}>
+                        {index > 0 && <br />}
+                        <PendingText length={length} className="overflow-hidden whitespace-nowrap" />
+                    </Fragment>
+                ))}
+            </p>
+        ) : OPEN_MAIL.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+    </Prose>
+);
+
 // flex-[1_1_0px]: the reader takes the inset's remaining height and scrolls inside; [contain:inline-size] keeps its
 // content from widening SidebarInset (upstream markup, no min-w-0). The page is 64rem wide at most, and the
 // composer's rows end where the page's content does (64rem less the page's padding).
@@ -83,12 +106,14 @@ export const Reader = () => (
         <IconToolbar groups={MAIL_ACTIONS} position="1 of 128" endActions={PAGE_ACTIONS} />
         <div className="min-h-0 flex-1 overflow-y-auto">
             <div className="flex max-w-[64rem] flex-col gap-6 px-6 py-6">
-                <CollapsedThread messages={EARLIER_THREAD.map((mail) => ({ id: mail.date, ...mail }))} />
+                <CollapsedThread loading={LOADING} count={EARLIER_THREAD.length} messages={EARLIER_THREAD.map((mail) => ({ id: mail.date, ...mail }))} />
                 <MailHeader
+                    loading={LOADING}
+                    loadingLines={2}
                     subject={OPEN_MAIL.subject}
                     aside={(
                         <>
-                            {OPEN_MAIL.labels.map((label) => <Badge key={label} variant="secondary">{label}</Badge>)}
+                            {OPEN_MAIL.labels.map((label) => <Badge key={label} variant="secondary">{LOADING ? <PendingText length={label.length} /> : label}</Badge>)}
                             <Button variant="ghost" size="icon-sm" aria-label="Star"><Star /></Button>
                         </>
                     )}
@@ -98,9 +123,7 @@ export const Reader = () => (
                     lines={[<>To: {OPEN_MAIL.to}</>, <>Cc: {OPEN_MAIL.cc}</>]}
                     date={OPEN_MAIL.date}
                 />
-                <Prose size="md" className="max-w-[80ch] [&_p]:whitespace-pre-line">
-                    {OPEN_MAIL.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
-                </Prose>
+                <MailBody />
                 <Attachments />
             </div>
         </div>

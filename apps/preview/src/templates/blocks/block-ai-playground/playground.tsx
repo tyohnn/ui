@@ -26,6 +26,7 @@ import { CompactSelect } from "@tyohnn/blocks/compact-select";
 import { FieldPanel } from "@tyohnn/blocks/field-panel";
 import { HintField } from "@tyohnn/blocks/hint-field";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { PromptInput } from "@tyohnn/blocks/prompt-input";
 import { SliderField } from "@tyohnn/blocks/slider-field";
 import { SwitchField } from "@tyohnn/blocks/switch-field";
@@ -40,6 +41,7 @@ import { Separator } from "@tyohnn/components/separator";
 import { Textarea } from "@tyohnn/components/textarea";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { ATTACHMENTS, MODELS, PARAMETERS, REQUEST_EXAMPLE, SYSTEM_PROMPT, TOOLS } from "./data";
 
 /**
@@ -106,18 +108,19 @@ const RequestExample = () => (
     </div>
 );
 
+// While it waits the pane is the frame: a message is as tall as its text, so the messages carry none of their own.
 const Conversation = () => (
-    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-5">
-        <ChatNotice icon={<SlidersHorizontal />}>Session started 09:12 · system prompt applied · temperature 0.4 · top-p 0.9</ChatNotice>
+    <div {...pendingFrame(LOADING)} className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-5">
+        <ChatNotice loading={LOADING} icon={<SlidersHorizontal />}>Session started 09:12 · system prompt applied · temperature 0.4 · top-p 0.9</ChatNotice>
 
         <MessageGroup>
-            <ChatPrompt avatar="MO" meta="Mara · 09:14">
+            <ChatPrompt loading={LOADING} avatar="MO" meta="Mara · 09:14">
                 Our invoice exports still run as a nightly CSV job. Draft a migration plan to the Events API — under 200 words,
                 and include the request we should send when an invoice is finalised.
             </ChatPrompt>
         </MessageGroup>
 
-        <ChatReply avatar={<Bot />} name="Aster 3 Pro" extra={<RequestExample />} actions={REPLY_ACTIONS} meta="1.8 s · 412 tokens · $0.004">
+        <ChatReply loading={LOADING} lines={6} avatar={<Bot />} name="Aster 3 Pro" extra={<RequestExample />} actions={REPLY_ACTIONS} meta="1.8 s · 412 tokens · $0.004">
             <p>Here is a four-step plan that keeps the CSV job as a fallback until the event stream is proven.</p>
             <ol>
                 <li><strong>Subscribe</strong> the billing service to <code>invoice.finalized</code> and write each event to the export queue.</li>
@@ -128,9 +131,9 @@ const Conversation = () => (
             <p>Send this when an invoice is finalised:</p>
         </ChatReply>
 
-        <ChatPrompt avatar="MO" meta="Mara · 09:16">Add a rollback step, and flag anything that changes for the finance team.</ChatPrompt>
+        <ChatPrompt loading={LOADING} lines={1} avatar="MO" meta="Mara · 09:16">Add a rollback step, and flag anything that changes for the finance team.</ChatPrompt>
 
-        <ChatReply avatar={<Bot />} name="Aster 3 Pro" actions={REPLY_ACTIONS} meta="1.1 s · 168 tokens · $0.002">
+        <ChatReply loading={LOADING} avatar={<Bot />} name="Aster 3 Pro" actions={REPLY_ACTIONS} meta="1.1 s · 168 tokens · $0.002">
             <p>
                 <strong>Rollback:</strong> keep the CSV job deployed but paused. If a reconciliation fails twice, pause the
                 subscriber, re-enable the job and replay the queue from the last matching checkpoint.
@@ -177,28 +180,28 @@ const SettingsPanel = () => (
             <>
                 <UsageMeter value={68} label="Monthly tokens" />
                 <Separator />
-                <span className={cn(NOTE, "whitespace-nowrap")}>6.8M of 10M · resets Feb 1</span>
+                <span className={cn(NOTE, "whitespace-nowrap")}>{LOADING ? <PendingText length={24} /> : "6.8M of 10M · resets Feb 1"}</span>
             </>
         )}
     >
-        <HintField id="aip-model" label="Model" hint="200k · tools · vision">
+        <HintField loading={LOADING} id="aip-model" label="Model" hint="200k · tools · vision">
             <ModelSelect id="aip-model" />
         </HintField>
         {PARAMETERS.map((parameter) => (
-            <SliderField key={parameter.id} id={parameter.id} label={parameter.label} defaultValue={parameter.value} min={parameter.min} max={parameter.max} step={parameter.step} />
+            <SliderField loading={LOADING} key={parameter.id} id={parameter.id} label={parameter.label} defaultValue={parameter.value} min={parameter.min} max={parameter.max} step={parameter.step} />
         ))}
-        <SwitchField id="aip-stream" label="Stream tokens" description="Show the reply as it is written" defaultChecked />
-        <SwitchField id="aip-json" label="JSON mode" description="Replies must parse as JSON" />
+        <SwitchField loading={LOADING} id="aip-stream" label="Stream tokens" description="Show the reply as it is written" defaultChecked />
+        <SwitchField loading={LOADING} id="aip-json" label="JSON mode" description="Replies must parse as JSON" />
         <Field>
             <FieldLabel>Tools</FieldLabel>
             <div className="flex flex-wrap items-center gap-1.5">
-                {TOOLS.map((tool) => <Badge key={tool} variant="outline"><Braces data-icon="inline-start" />{tool}</Badge>)}
+                {TOOLS.map((tool) => <Badge key={tool} variant="outline"><Braces data-icon="inline-start" />{LOADING ? <PendingText length={tool.length} /> : tool}</Badge>)}
                 <Button variant="ghost" size="xs">Add tool</Button>
             </div>
         </Field>
         <Field className="min-h-0 flex-1">
             <FieldLabel htmlFor="aip-system">System prompt</FieldLabel>
-            <Textarea id="aip-system" className="min-h-16 flex-1 resize-none" defaultValue={SYSTEM_PROMPT} />
+            <Textarea id="aip-system" className="min-h-16 flex-1 resize-none" defaultValue={LOADING ? undefined : SYSTEM_PROMPT} disabled={LOADING} />
         </Field>
     </FieldPanel>
 );

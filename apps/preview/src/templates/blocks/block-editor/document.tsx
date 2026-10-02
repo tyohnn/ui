@@ -4,6 +4,7 @@ import { Checklist } from "@tyohnn/blocks/checklist";
 import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { PropertyList, PropertyText } from "@tyohnn/blocks/property-list";
 import { Prose } from "@tyohnn/blocks/prose";
 import { TableFrame } from "@tyohnn/blocks/table-frame";
@@ -12,6 +13,7 @@ import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 
+import { LOADING } from "../../loading";
 import { CHECKLIST, FLAG_CONFIG, MILESTONES, PROPERTIES } from "./data";
 
 /**
@@ -30,11 +32,13 @@ const STATUS_VARIANT = {
 
 type Milestone = (typeof MILESTONES)[number];
 
+// The status waits as an empty badge, so a waiting row is as tall as it will be. Its bar takes the badge's own line
+// height: the badge then sits on the same baseline as one with a word in it.
 const MILESTONE_COLUMNS: DataTableColumn<Milestone>[] = [
     { id: "milestone", header: "Milestone", cell: (milestone) => milestone.name },
     { id: "owner", header: "Owner", cell: (milestone) => milestone.owner },
     { id: "date", header: "Date", cell: (milestone) => milestone.date },
-    { id: "status", header: "Status", align: "end", cell: (milestone) => <Badge variant={STATUS_VARIANT[milestone.status]}>{milestone.status}</Badge> },
+    { id: "status", header: "Status", align: "end", pending: <Badge variant="outline"><PendingText length={9} className="leading-[inherit]" /></Badge>, cell: (milestone) => <Badge variant={STATUS_VARIANT[milestone.status]}>{milestone.status}</Badge> },
 ];
 
 const Properties = () => (
@@ -97,7 +101,7 @@ const Properties = () => (
 export const Document = () => (
     <div className="min-h-0 flex-[1_1_0px] overflow-y-auto [contain:inline-size]">
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-10">
-            <DocumentTitle cover="📊" title="Checkout Redesign — Project Brief" />
+            <DocumentTitle loading={LOADING} cover="📊" title="Checkout Redesign — Project Brief" />
             <Properties />
             <Prose preset="document">
                 <p>
@@ -142,7 +146,7 @@ export const Document = () => (
                 <h2>Milestones</h2>
             </Prose>
             <TableFrame>
-                <DataTable columns={MILESTONE_COLUMNS} rows={MILESTONES} rowId={(milestone) => milestone.name} />
+                <DataTable loading={LOADING} loadingRows={MILESTONES.length} columns={MILESTONE_COLUMNS} rows={MILESTONES} rowId={(milestone) => milestone.name} />
             </TableFrame>
 
             <Alert variant="destructive">
@@ -160,6 +164,8 @@ export const Document = () => (
             </Prose>
             {/* This page's code bar is roomier than the block's default, and the whole bar — the copy button with the title — is muted mono text. */}
             <CodeBlock
+                loading={LOADING}
+                loadingLines={FLAG_CONFIG.split("\n").length}
                 title="TypeScript"
                 code={FLAG_CONFIG}
                 barClassName="px-3 py-1.5 font-mono text-muted-foreground"

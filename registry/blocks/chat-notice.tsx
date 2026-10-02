@@ -1,12 +1,17 @@
 import type { ReactNode } from "react";
 
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
-/** A note from the system in the middle of a conversation, in a dashed outline: when the session started, what changed between two messages. */
-export const ChatNotice = ({ icon, children, className }: { icon?: ReactNode; children: ReactNode; className?: string }) => (
+/**
+ * A note from the system in the middle of a conversation, in a dashed outline: when the session started, what changed
+ * between two messages. `loading` keeps the outline and the icon and draws a bar for the words. The note is as wide
+ * as its words, so it carries no frame of its own: the pane the conversation scrolls in is the frame.
+ */
+export const ChatNotice = ({ icon, loading, children, className }: { icon?: ReactNode; loading?: boolean; children?: ReactNode; className?: string }) => (
     <div className={cn(NOTE, "flex items-center gap-2 self-center rounded-[var(--radius-lg)] border border-dashed border-border px-3 py-2 [&_svg]:size-[var(--control-icon-size-md)]", className)}>
         {icon}
-        <span>{children}</span>
+        <span>{loading ? <PendingText length={48} /> : children}</span>
     </div>
 );

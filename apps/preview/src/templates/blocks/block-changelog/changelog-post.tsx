@@ -5,6 +5,7 @@ import { CodeBlock } from "@tyohnn/blocks/code-block";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
 import { Prose } from "@tyohnn/blocks/prose";
 import { RuleSteps } from "@tyohnn/blocks/rule-steps";
@@ -21,6 +22,7 @@ import { Switch } from "@tyohnn/components/switch";
 import { ToggleGroup, ToggleGroupItem } from "@tyohnn/components/toggle-group";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { AUTHORS, EARLIER, FEATURES_SHORT, FIXES, IMPROVEMENTS, MIGRATION_EXAMPLE, RELEASE, TIMELINE_ROWS } from "./data";
 
 /**
@@ -155,10 +157,10 @@ export const ChangelogPost = () => (
     <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
         <Prose as="article" className="mx-auto max-w-[52rem] px-10 pt-8 pb-16">
             <div className="not-typeset flex flex-wrap items-center gap-2">
-                <Badge>{RELEASE.version}</Badge>
+                <Badge>{LOADING ? <PendingText length={RELEASE.version.length} /> : RELEASE.version}</Badge>
                 <IconNote className="gap-1.5" icon={<Calendar />}>{RELEASE.date}</IconNote>
                 <Separator orientation="vertical" className="data-vertical:h-4 data-vertical:self-auto" />
-                {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{tag}</Badge>)}
+                {RELEASE.tags.map((tag) => <Badge key={tag} variant="outline">{LOADING ? <PendingText length={tag.length} /> : tag}</Badge>)}
             </div>
             <h1 className="mt-4">Orbitly 4.0: timelines, automations and a faster editor</h1>
             <Byline
@@ -246,6 +248,8 @@ export const ChangelogPost = () => (
                 <code>key</code> instead of their display label. Version 1 payloads keep working until February 15, 2026.
             </p>
             <CodeBlock
+                loading={LOADING}
+                loadingLines={MIGRATION_EXAMPLE.split("\n").length}
                 title="webhooks.ts"
                 code={MIGRATION_EXAMPLE}
                 size="sm"
