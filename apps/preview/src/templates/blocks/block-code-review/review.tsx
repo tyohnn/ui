@@ -158,6 +158,7 @@ const CHECK_TONE = { pass: "success", fail: "destructive", running: "muted" } as
 
 const SidePanel = () => (
     <DetailSections
+        loading={LOADING}
         className="w-72 px-5 pb-6"
         sections={[
             {
@@ -165,14 +166,16 @@ const SidePanel = () => (
                 title: "Reviewers",
                 content: REVIEWERS.map((reviewer) => (
                     <StatusLine
+                        loading={LOADING}
                         key={reviewer.initials}
                         leading={(
                             <Avatar size="sm">
-                                <AvatarFallback>{reviewer.initials}</AvatarFallback>
+                                <AvatarFallback>{LOADING ? null : reviewer.initials}</AvatarFallback>
                             </Avatar>
                         )}
                         label={reviewer.name}
-                        trailing={(
+                        // The verdict waits as an empty badge.
+                        trailing={LOADING ? <Badge variant="outline"><PendingText length={8} /></Badge> : (
                             <Badge variant={reviewer.state === "Approved" ? "secondary" : reviewer.state === "Pending" ? "outline" : "destructive"}>
                                 {reviewer.state === "Changes requested" ? "Changes" : reviewer.state}
                             </Badge>
@@ -188,7 +191,8 @@ const SidePanel = () => (
                 {
                     const Icon = CHECK_ICON[check.state];
 
-                    return <StatusLine key={check.name} leading={<Icon />} tone={CHECK_TONE[check.state]} label={check.name} note={check.time} />;
+                    // How a check went is a value: its icon waits muted.
+                    return <StatusLine loading={LOADING} key={check.name} leading={LOADING ? <Loader /> : <Icon />} tone={LOADING ? "muted" : CHECK_TONE[check.state]} label={check.name} note={check.time} />;
                 }),
             },
             {
@@ -196,7 +200,7 @@ const SidePanel = () => (
                 title: "Labels",
                 content: (
                     <div className="flex flex-wrap gap-1.5">
-                        {LABELS.map((label) => <Badge key={label} variant="outline"><Tag data-icon="inline-start" />{label}</Badge>)}
+                        {LABELS.map((label) => <Badge key={label} variant="outline"><Tag data-icon="inline-start" />{LOADING ? <PendingText length={label.length} /> : label}</Badge>)}
                     </div>
                 ),
             },
@@ -207,11 +211,11 @@ const SidePanel = () => (
                     <>
                         <span className={cn(PARAGRAPH, ICON_LINE)}>
                             <Link />
-                            LED-1297 Invoices stuck after 503s
+                            {LOADING ? <span><PendingText length={24} /></span> : "LED-1297 Invoices stuck after 503s"}
                         </span>
                         <span className={cn(NOTE, ICON_LINE, "whitespace-nowrap")}>
                             <FileText />
-                            Runbook: webhook retries
+                            {LOADING ? <span><PendingText length={20} /></span> : "Runbook: webhook retries"}
                         </span>
                     </>
                 ),
