@@ -37,6 +37,7 @@ const LEAD_ICON = "size-[16px] shrink-0 text-muted-foreground";
 
 const TimelineFragment = () => (
     <InfoCard
+        loading={LOADING}
         title="Q1 roadmap"
         description="Jan 5 – Mar 27 · 3 projects"
         action={(
@@ -48,6 +49,8 @@ const TimelineFragment = () => (
         className={IN_PROSE}
     >
         <TimelineBars
+            loading={LOADING}
+            loadingRows={TIMELINE_ROWS.length}
             scale={["January", "February", "March"]}
             rows={TIMELINE_ROWS.map((row) => ({
                 id: row.name,
@@ -125,7 +128,7 @@ const FiltersFragment = () => (
 );
 
 const CustomFieldsFragment = () => (
-    <InfoCard title="New field" description="Added to every task in Mobile app" className={IN_PROSE}>
+    <InfoCard loading={LOADING} title="New field" description="Added to every task in Mobile app" className={IN_PROSE}>
         <FieldGroup className="grid gap-4 sm:grid-cols-2">
             <Field>
                 <FieldLabel htmlFor="clg-field-name">Name</FieldLabel>
@@ -164,6 +167,8 @@ export const ChangelogPost = () => (
             </div>
             <h1 className="mt-4">Orbitly 4.0: timelines, automations and a faster editor</h1>
             <Byline
+                loading={LOADING}
+                count={AUTHORS.length}
                 authors={AUTHORS}
                 actions={(
                     <>
@@ -268,7 +273,7 @@ export const ChangelogPost = () => (
             <Separator className={IN_PROSE} />
             <section className={cn(IN_PROSE, "flex flex-col gap-3")}>
                 <span className={cn(BODY, "font-medium")}>Earlier releases</span>
-                <LinkItemList trailing="arrow" items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
+                <LinkItemList loading={LOADING} count={EARLIER.length} trailing="arrow" items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
             </section>
         </Prose>
     </div>
