@@ -224,3 +224,6 @@ token in the systems:
 - Chart stroke width, fill opacities and bar radius.
 
 The CLI does not install blocks yet.
+
+How blocks sit on a page — gutter, gap, what scrolls, what stands beside what — is still written by hand in each
+template. `frames.md` measures that layer and proposes layout blocks for it.

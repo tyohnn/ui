@@ -13,7 +13,7 @@
 //     document itself scrolls;
 //   - sticky elements, and horizontal overflow of the page.
 //
-// The output is the evidence for the frame contract (registry/frames/README.md): a frame is adopted when two or
+// The output is the evidence for the frame contract (registry/blocks/frames.md): a frame is adopted when two or
 // more screens share an arrangement, and these numbers say which do.
 //
 // The preview must be running (it is started per system, see check-coverage.mjs).
