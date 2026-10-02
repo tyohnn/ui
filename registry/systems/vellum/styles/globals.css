@@ -198,7 +198,9 @@
     /* 스위치. mira: data-unchecked:bg-input dark:data-unchecked:bg-input/80 ·
        손잡이 bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground.
        밝은 쪽 손잡이는 켜고 꺼도 같은 흰색이고, 어두운 쪽에서만 색이 뒤집힌다. */
-    --switch-track-off: var(--border);
+    /* vellum: an off switch is its track and nothing else, so the track takes the field edge colour
+       (mira's --border track measured 1.3:1 on the page; the thumb on it now reads 3.8:1). */
+    --switch-track-off: var(--input-border);
     --switch-thumb-off: var(--background);
     /* 드로어 틀의 테두리. mira: border-popover dark:border-border — 밝은 쪽은 판과 같은 색이라 보이지 않는다. */
     --drawer-border: var(--background);
@@ -210,6 +212,20 @@
     --button-outline-fill: transparent;
     /* 슬라이더 손잡이의 바탕. mira: bg-white — 두 모드에서 같은 흰색이다(--background 가 아니다). */
     --checkbox-fill: transparent;   /* mira: 밝은 쪽엔 바탕이 없고 어두운 쪽만 dark:bg-input/30 */
+
+    /* The edge of a field: Input · Textarea · Select · Native Select · Input Group · Combobox chips ·
+       Input OTP, and (through --checkbox-border) Checkbox and Radio. Half-strength ink on the paper.
+       A hairline (--border) separates two parts of a document and may stay faint, because the content on
+       either side says where each part is. A field's edge is the only thing that says where the field
+       is, so it has to be seen: WCAG 1.4.11 asks 3:1 against what it sits on. One formula gives both
+       modes — light 3.8:1 on --background, 3.9 on --card, 3.7 on --sidebar, 3.4 on --muted; dark 4.0 on
+       --background, 3.7 on --card, 4.2 on --sidebar, 3.2 on --muted (--border measures 1.3 and 1.5).
+       ⚠ Mixed with --background, not with transparent: an alpha edge would change with the surface under
+          it and lose the ratio on a card.
+       ⚠ The hairline is not this colour. Separators, table rules, card rings and the outline Button keep
+          --border; only what a person types or ticks into reads this. */
+    --input-border: color-mix(in oklab, var(--foreground) 50%, var(--background));
+    --checkbox-border: var(--input-border);
 
     /* shadcn create 의 radius "default". 10px. --radius-md 8px · --radius-lg 10px · --radius-xl 14px 를 낳는다.
        2층의 --control-radius 8px(mira 의 rounded-md)과 같은 계열이다. */
@@ -250,9 +266,11 @@
     --input-fill: color-mix(in oklab, var(--input) 29%, transparent);
     --select-hover: color-mix(in oklab, var(--border) 73%, transparent);
     --ring-invalid: color-mix(in oklab, var(--destructive) 40%, transparent);
-    --border-invalid: color-mix(in oklab, var(--destructive) 50%, transparent);
+    /* vellum: the full colour, not mira's destructive/50. At half strength the edge of an invalid field
+       measured 2.4:1 — fainter than the same field when nothing is wrong with it. */
+    --border-invalid: var(--destructive);
 
-    --switch-track-off: color-mix(in oklab, var(--input) 82%, transparent);  /* input/80 */
+    --switch-track-off: var(--input-border);   /* vellum: the field edge colour, as in :root */
     --switch-thumb-off: var(--foreground);    /* foreground */
     --drawer-border: var(--border);     /* border */
     --sidebar-input-fill: color-mix(in oklab, var(--sidebar-accent) 30%, transparent);
@@ -263,6 +281,11 @@
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
     --checkbox-fill: var(--input-fill);
+
+    /* The edge of a field. The same formula as :root (ratios there); declared again so the two scopes
+       stay a pair. */
+    --input-border: color-mix(in oklab, var(--foreground) 50%, var(--background));
+    --checkbox-border: var(--input-border);
 
     /* Sidebar count badge text on hover and when its item is active. mira: the accent text colour.
        ⚠ Both are read through Tailwind's `text-(color:--x)` shorthand, which cannot carry a fallback,

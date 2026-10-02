@@ -25,7 +25,9 @@
     display: flex;
     width: var(--control-indicator-size);
     height: var(--control-indicator-size);
-    border-color: var(--input);
+    /* vellum: the Checkbox's edge slot, so the two indicators keep one edge (foundation reads --input
+       here and has no slot; reference/README.md → Foundation slot candidates). */
+    border-color: var(--checkbox-border, var(--input));
     border-radius: 9999px;
     /* Checkbox 와 같은 축을 읽는다 — mira 는 밝은 쪽에 바탕이 없고 어두운 쪽만 dark:bg-input/30 이다. */
     background-color: var(--checkbox-fill);
@@ -46,7 +48,7 @@
     /* 라벨을 눌러 포커스가 들어온 경우 — checkbox.css 와 같다. */
     .group\/field-label:has(:focus-visible) & {
         box-shadow: none;
-        border-color: var(--input);
+        border-color: var(--checkbox-border, var(--input));
 
         &[data-checked] {
             border-color: var(--primary);

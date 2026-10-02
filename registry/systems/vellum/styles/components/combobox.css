@@ -119,7 +119,9 @@
     padding-inline: var(--control-padding-x-md);
     padding-block: 2px;
 
-    border: var(--control-border-width) solid var(--input);
+    /* vellum: the field edge slot Input reads (foundation reads --input here and has no slot;
+       reference/README.md → Foundation slot candidates). */
+    border: var(--control-border-width) solid var(--input-border, var(--input));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     background-clip: padding-box;
