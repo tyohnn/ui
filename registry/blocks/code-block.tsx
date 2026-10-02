@@ -33,7 +33,7 @@ export const CodeBlock = ({
     <div className={cn("overflow-hidden rounded-[var(--radius-lg)] border border-border bg-muted text-foreground", className)}>
         <div className={cn("flex items-center justify-between gap-2 border-b border-border bg-background py-1 pr-1 pl-3", barClassName)}>
             {icon === undefined ? <span className={BAR_TITLE}>{title}</span> : (
-                <span className={cn(BAR_TITLE, "flex min-w-0 items-center gap-1.5 [&_svg]:size-[14px] [&_svg]:shrink-0")}>
+                <span className={cn(BAR_TITLE, "flex min-w-0 items-center gap-1.5 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0")}>
                     {icon}
                     <span className="truncate">{title}</span>
                 </span>

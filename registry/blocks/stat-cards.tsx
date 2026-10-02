@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@tyohnn/components/card";
 import { Progress } from "@tyohnn/components/progress";
-import { DISPLAY_SIZE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { FIGURE_LG, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 export type Stat = {
@@ -27,7 +27,7 @@ export const StatCards = ({ stats, className }: { stats: readonly Stat[]; classN
             <Card key={stat.id} size="sm">
                 <CardHeader>
                     <CardDescription>{stat.label}</CardDescription>
-                    <CardTitle className={cn(DISPLAY_SIZE, "tabular-nums")}>{stat.value}</CardTitle>
+                    <CardTitle className={cn(FIGURE_LG, "tabular-nums")}>{stat.value}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
                     {stat.progress !== undefined && <Progress value={stat.progress} aria-label={stat.label} />}

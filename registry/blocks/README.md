@@ -42,6 +42,8 @@ elements; the template keeps no stylesheet. Translate each declaration literally
 - A rule keyed on a data attribute (`[data-tone="warning"]`) becomes a class picked in the component from a
   lookup table, so every class is a whole string Tailwind can read.
 - The geometry of a data graphic (tick, bar and dot sizes) may stay literal; it is not a look a system tunes.
+- Where the system already has a token for what the template derived by hand (a title size, an icon size), read
+  the token, even though the picture moves: the system decides ("What reads which token" below).
 - Keep the DOM the template had: the same elements in the same order, text in the same text nodes
   (`{a} of {b}` and `` `${a} of ${b}` `` kern differently), the same classes on the same `registry/ui` components.
 
@@ -240,17 +242,24 @@ Shared: `lib/frame.ts` (the steps a frame picks from and their tokens) · `lib/t
 caption, inline code, the display size) · `lib/bands.ts` (a card's toolbar and footer bands) · `lib/chart.ts` (the
 chart colours in series order).
 
+## What reads which token
+
+- Titles read the system's heading scale (`lib/copy.ts`): `HEADING_LG` — `--heading-font-size-lg`, its line height,
+  `--heading-letter-spacing`, the heading stack — for a route's or a record's title (DetailHeading, RecordHeading,
+  MailHeader); `HEADING_XL` for the title of a screen that stands on its own (SearchHero, EndpointHeader,
+  DocumentTitle). A stat card's value takes the `lg` size and line height (`FIGURE_LG`).
+- Small icons in meta lines, notes and hints read the control icon scale: `--control-icon-size-sm` · `-md` · `-lg`.
+- `ListCard`'s bordered header takes the systems' own rule for a card header over a divider.
+
 ## Values the systems have no token for yet
 
-These are carried over from the templates as literals, so the picture did not move. Each is a candidate for a
-token in the systems:
+These stay literals in the blocks; each is a candidate for a token in the systems:
 
-- Large titles derived from `--ui-text-lg`: ×1.25 (`DISPLAY_SIZE`: DetailHeading, RecordHeading, StatCards), ×1.3
-  (MailHeader), ×1.75 (SearchHero, EndpointHeader), ×2 and ×2.5 (DocumentTitle), with line heights 1.2–1.3.
-- Code line heights 1.6 (CodeBlock) and 1.7 (DiffView); the diff's gutter grid and paddings.
-- Reading measures (`72ch`, `80ch`, `52rem`) passed by templates.
-- Small icon sizes 11–18px inside meta lines, notes and hints.
-- `ListCard`'s 12px under its bordered header, where the systems' own rule gives the card spacing.
+- Code line heights 1.6 (CodeBlock) and 1.7 (DiffView); the diff's gutter grid and paddings. (The typeset's own
+  `pre` uses a literal 1.5 too.)
+- Reading measures (`72ch`, `80ch`, `52rem`) passed by templates; the typeset has `--typeset-*-measure`, which
+  `Prose` sets aside.
+- The 18px icon in `TopicCards`' icon tile, and the document cover at 1.25 × the title.
 - `WeekView`'s event corner `min(var(--control-radius), 8px)`, its primary tints and its grid geometry.
 - Chart stroke width, fill opacities and bar radius.
 

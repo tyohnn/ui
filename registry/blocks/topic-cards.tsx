@@ -31,8 +31,8 @@ export const TopicCards = ({ topics, className }: { topics: readonly Topic[]; cl
                     {topic.description !== undefined && <CardDescription>{topic.description}</CardDescription>}
                 </CardHeader>
                 <CardFooter className="justify-between gap-2">
-                    <span className={cn(NOTE, "flex items-center gap-1.5 [&_svg]:size-[14px] [&_svg]:shrink-0")}>{topic.metaIcon}{topic.meta}</span>
-                    <ChevronRight className="size-[16px] shrink-0 text-muted-foreground" />
+                    <span className={cn(NOTE, "flex items-center gap-1.5 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0")}>{topic.metaIcon}{topic.meta}</span>
+                    <ChevronRight className="size-[var(--control-icon-size-lg)] shrink-0 text-muted-foreground" />
                 </CardFooter>
             </Card>
         ))}

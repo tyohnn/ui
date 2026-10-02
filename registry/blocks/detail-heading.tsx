@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { DISPLAY_SIZE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { HEADING_LG, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
 
 /**
@@ -25,7 +25,7 @@ export const DetailHeading = ({
     <div className={cn("flex flex-wrap items-start justify-between gap-x-6 gap-y-3", className)}>
         <div className="flex min-w-0 flex-col gap-1">
             <div className="flex flex-wrap items-center gap-2">
-                <h1 className={cn("m-0", DISPLAY_SIZE, "leading-[1.3] font-semibold")}>{title}</h1>
+                <h1 className={cn("m-0", HEADING_LG)}>{title}</h1>
                 {status}
             </div>
             {description !== undefined && <p className={NOTE}>{description}</p>}

@@ -122,7 +122,7 @@ export const WeekView = ({
                                     <span className="truncate font-semibold">{event.title}</span>
                                     {!short && <span className="truncate text-muted-foreground">{formatTime(event.start)} – {formatTime(event.end)}</span>}
                                     {duration >= 1 && event.place && (
-                                        <span className="flex min-w-0 items-center gap-1 text-muted-foreground [&_svg]:size-[11px] [&_svg]:shrink-0">
+                                        <span className="flex min-w-0 items-center gap-1 text-muted-foreground [&_svg]:size-[var(--control-icon-size-sm)] [&_svg]:shrink-0">
                                             <MapPin />
                                             <span className="truncate">{event.place}</span>
                                         </span>

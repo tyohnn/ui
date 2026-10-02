@@ -37,7 +37,7 @@ export const LinkItemList = ({ items, trailing = "chevron", className }: { items
                         </ItemTitle>
                         {item.description !== undefined && <ItemDescription>{item.description}</ItemDescription>}
                     </ItemContent>
-                    <ItemActions><Trailing className="size-[16px] shrink-0 text-muted-foreground" /></ItemActions>
+                    <ItemActions><Trailing className="size-[var(--control-icon-size-lg)] shrink-0 text-muted-foreground" /></ItemActions>
                 </Item>
             ))}
         </ItemGroup>

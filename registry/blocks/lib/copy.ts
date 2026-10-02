@@ -29,13 +29,19 @@ export const ROW_LABEL = "text-[length:var(--ui-text-md)] leading-[var(--ui-line
 export const CAPTION = "text-[length:var(--ui-text-xs)] leading-[var(--ui-line-height-xs)] text-muted-foreground tabular-nums";
 
 /** A line of text behind a small icon; goes with NOTE or BODY */
-export const ICON_LINE = "flex items-center gap-1.5 [&_svg]:size-[14px] [&_svg]:shrink-0";
+export const ICON_LINE = "flex items-center gap-1.5 [&_svg]:size-[var(--control-icon-size-md)] [&_svg]:shrink-0";
 
 /**
- * The size of a title or a figure that leads a detail page: a quarter over the largest UI text size. The systems
- * have no token for this step yet, so it is derived from `--ui-text-lg` here, in one place.
+ * Titles on the system's heading scale (`--heading-font-size-*` · `--heading-line-height-*` ·
+ * `--heading-letter-spacing`, in the heading stack): `lg` is a route's or a record's title, `xl` the title of a
+ * screen that stands on its own — a hero, a document.
  */
-export const DISPLAY_SIZE = "text-[length:calc(var(--ui-text-lg)*1.25)]";
+export const HEADING_LG = "font-heading text-[length:var(--heading-font-size-lg)] leading-[var(--heading-line-height-lg)] tracking-[var(--heading-letter-spacing)] font-semibold";
+
+export const HEADING_XL = "font-heading text-[length:var(--heading-font-size-xl)] leading-[var(--heading-line-height-xl)] tracking-[var(--heading-letter-spacing)] font-semibold";
+
+/** A leading figure at the size of a route title: the value of a stat card */
+export const FIGURE_LG = "text-[length:var(--heading-font-size-lg)] leading-[var(--heading-line-height-lg)]";
 
 /** An identifier inside text or a table cell, in the mono stack at the small size */
 export const INLINE_CODE = "font-mono text-[length:var(--ui-text-sm)]";

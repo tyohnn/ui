@@ -46,7 +46,7 @@ export const ReplyComposer = ({
     className?: string;
 }) => (
     <div className={cn("flex flex-col gap-2 border-t border-border px-6 py-3", className)}>
-        <div className="flex items-center gap-2 [&>svg]:size-[16px] [&>svg]:text-muted-foreground">
+        <div className="flex items-center gap-2 [&>svg]:size-[var(--control-icon-size-lg)] [&>svg]:text-muted-foreground">
             {icon}
             <span className={cn(NOTE, "min-w-0 truncate")}>{heading}</span>
         </div>
