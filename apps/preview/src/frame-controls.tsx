@@ -1,6 +1,6 @@
-import { type CSSProperties, useEffect, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 
-import { ASIDE_WIDTH, DOCUMENT_PADDING, GAP, GUTTER, MEASURE } from "@tyohnn/blocks/lib/frame";
+import { FRAME_TOKEN_GROUPS } from "@tyohnn/blocks/lib/frame";
 
 import { TEMPLATE_CATALOG } from "./templates/catalog";
 
@@ -9,32 +9,11 @@ import { TEMPLATE_CATALOG } from "./templates/catalog";
  * and every frame on the screen that stands at that step moves with it. Nothing is written anywhere but this
  * document's `:root`; "Copy CSS" gives the declarations to put in a system's or a product's stylesheet.
  *
- * The tokens and their defaults are read out of the frame's own class strings, so the panel cannot drift from the
- * blocks. Its look is inline and fixed, like the mismatch banner: it belongs to the preview, not to a system, and
+ * The tokens and their defaults come from the frames' own class strings (FRAME_TOKEN_GROUPS), so the panel cannot
+ * drift from the blocks. `?frames=<json>` starts from those values (the site's Layout panel opens a screen that way);
+ * any other value just shows the panel. Its look is inline and fixed, like the mismatch banner: it belongs to the preview, not to a system, and
  * it never takes part in the template's layout.
  */
-
-type Token = { name: string; rem: number; group: string };
-
-const GROUPS: { title: string; hint: string; classes: string[]; max: number; step: number }[] = [
-    { title: "Gutter", hint: "between a page and its edge", classes: Object.values(GUTTER), max: 5, step: 0.25 },
-    { title: "Gap", hint: "between the blocks of a page", classes: Object.values(GAP), max: 5, step: 0.25 },
-    { title: "Measure", hint: "the widest a reading column gets", classes: Object.values(MEASURE), max: 90, step: 1 },
-    { title: "Aside", hint: "the narrower pane of a split", classes: Object.values(ASIDE_WIDTH), max: 40, step: 1 },
-    { title: "Document padding", hint: "above and below a document", classes: [DOCUMENT_PADDING], max: 8, step: 0.25 },
-];
-
-const tokensOf = (classes: string[], group: string): Token[] =>
-{
-    const found = new Map<string, Token>();
-
-    for (const text of classes)
-    {
-        for (const match of text.matchAll(/var\((--page-[a-z-]+),([0-9.]+)rem\)/g)) found.set(match[1], { name: match[1], rem: Number(match[2]), group });
-    }
-
-    return [...found.values()];
-};
 
 const STORE = "tyohnn-frame-tokens";
 
@@ -48,17 +27,24 @@ const SLOTS: { selector: string; label: string; color: string; dashed?: boolean 
 
 const OUTLINES = SLOTS.map((slot) => `${slot.selector}{outline:2px ${slot.dashed ? "dashed" : "solid"} ${slot.color};outline-offset:-2px}`).join("\n");
 
-const read = (): Record<string, number> =>
+const parse = (text: string | null): Record<string, number> | null =>
 {
     try
     {
-        return JSON.parse(sessionStorage.getItem(STORE) ?? "{}") as Record<string, number>;
+        const value: unknown = JSON.parse(text ?? "");
+
+        if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+
+        return Object.fromEntries(Object.entries(value).filter(([name, rem]) => name.startsWith("--page-") && typeof rem === "number")) as Record<string, number>;
     }
     catch
     {
-        return {};
+        return null;
     }
 };
+
+// The values the address carries win over the ones kept from the last template.
+const read = (): Record<string, number> => parse(new URLSearchParams(location.search).get("frames")) ?? parse(sessionStorage.getItem(STORE)) ?? {};
 
 const panel: CSSProperties = {
     position: "fixed",
@@ -80,7 +66,7 @@ const muted: CSSProperties = { color: "#a3a3a3" };
 
 export const FrameControls = () =>
 {
-    const groups = useMemo(() => GROUPS.map((group) => ({ ...group, tokens: tokensOf(group.classes, group.title) })), []);
+    const groups = FRAME_TOKEN_GROUPS;
     const [values, setValues] = useState<Record<string, number>>(read);
     const [open, setOpen] = useState(true);
     const [outlines, setOutlines] = useState(true);
@@ -101,7 +87,7 @@ export const FrameControls = () =>
         }
 
         sessionStorage.setItem(STORE, JSON.stringify(values));
-    }, [groups, values]);
+    }, [values]);
 
     // Which tokens the frames on this screen read: the ones worth moving.
     useEffect(() =>
@@ -169,7 +155,7 @@ export const FrameControls = () =>
             )}
 
             {groups.map((group) => (
-                <fieldset key={group.title} style={{ border: 0, padding: 0, margin: "12px 0 0" }}>
+                <fieldset key={group.id} style={{ border: 0, padding: 0, margin: "12px 0 0" }}>
                     <legend style={{ padding: 0, fontWeight: 600 }}>{group.title} <span style={{ ...muted, fontWeight: 400 }}>{group.hint}</span></legend>
                     {group.tokens.map((token) =>
                     {

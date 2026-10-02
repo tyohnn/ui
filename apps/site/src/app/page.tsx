@@ -10,6 +10,12 @@ const LAYERS = [
     { num: "3", title: "Component rules", body: <>One file per component, styling the <span className="mono">cn-*</span> hooks. The TSX never changes.</>, file: "styles/components/*.css" },
 ];
 
+// What stands on the three layers: the pieces of a screen, and where they stand on a page.
+const ABOVE = [
+    { num: "4", title: "Blocks", body: "Screen pieces composed from the components — a page heading, a table in a card, a kanban board. They read the system's tokens and nothing else, so a block changes with the system.", file: "blocks/*.tsx" },
+    { num: "5", title: "Frames", body: "Where the blocks stand: the gutter, the gap, what scrolls, and what an aside does when the page is narrow. A screen picks a step; a token says how much it is.", file: "blocks/page.tsx" },
+];
+
 export default function Home()
 {
     const systems = getSystems().map(summarize);
@@ -21,6 +27,17 @@ export default function Home()
 
             <div className="layers">
                 {LAYERS.map((layer) => (
+                    <div key={layer.num} className="layer">
+                        <div className="num" aria-hidden>{layer.num}</div>
+                        <h3>{layer.title}</h3>
+                        <p>{layer.body}</p>
+                        <code>{layer.file}</code>
+                    </div>
+                ))}
+            </div>
+
+            <div className="layers above">
+                {ABOVE.map((layer) => (
                     <div key={layer.num} className="layer">
                         <div className="num" aria-hidden>{layer.num}</div>
                         <h3>{layer.title}</h3>

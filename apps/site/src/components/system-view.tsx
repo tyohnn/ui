@@ -6,6 +6,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { CATEGORIES, type Mode, previewUrl, screenSource, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
+import { FrameEditor, useFrameTokens } from "./frame-editor";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
 import { ThemeEditor } from "./theme-editor";
@@ -28,6 +29,7 @@ export const SystemView = ({
 {
     const [mode, setMode] = useState<Mode>(system.defaultMode);
     const [current, setCurrent] = useState<string>(CATEGORIES[0].id);
+    const frames = useFrameTokens();
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
 
     useEffect(() =>
@@ -82,7 +84,7 @@ export const SystemView = ({
                         {category.label}<small>{category.screens.length}</small>
                     </a>
                 ))}
-                <span className="end"><ThemeEditor systemName={system.name} />{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
+                <span className="end"><FrameEditor frames={frames} /><ThemeEditor systemName={system.name} />{screens} screens<ModeSeg mode={mode} onChange={setMode} /></span>
             </nav>
 
             {CATEGORIES.map((category) => (
@@ -95,6 +97,7 @@ export const SystemView = ({
                                 <div className="src">{screenSource(screen)} · {screen.viewport.width}×{screen.viewport.height}</div>
                                 <div className="links">
                                     <a href={previewUrl(system.name, screen.id, mode)} target="_blank" rel="noreferrer">Full screen ↗</a>
+                                    <a href={`${previewUrl(system.name, screen.id, mode)}&frames=${frames.param}`} target="_blank" rel="noreferrer" title="Open with the frame controls: outlines and a slider per token">Frames ↗</a>
                                     <Link href={`/compare?a=${system.name}&b=${next}&screen=${screen.id}&mode=${mode}`}>Compare</Link>
                                 </div>
                             </div>
