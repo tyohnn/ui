@@ -40,9 +40,16 @@ elements; the template keeps no stylesheet. Translate each declaration literally
 - Keep the DOM the template had: the same elements in the same order, text in the same text nodes
   (`{a} of {b}` and `` `${a} of ${b}` `` kern differently), the same classes on the same `registry/ui` components.
 
+- With `cn`, class order matters: a font-size class after `leading-*` drops the line height. Put the size first.
+
 Then prove it: `check-templates.mjs --shots` before and after, `diff-shots.mjs`, zero differing pixels in every
-system and both modes. (cirrus light shows a one-level difference on the antialiased edge of the Orders
-avatars since more utilities were compiled in; nothing else is known to differ.)
+system and both modes. Two things to know when reading the result:
+
+- The raster is not perfectly repeatable. The same code, shot twice, can differ by one or two levels of one
+  channel on a few dozen antialiased pixels (avatar edges, rounded corners). Re-shoot a pair that differs like
+  that; a difference that stays, or is larger, is real.
+- The shot is the viewport. A page that scrolls is compared above the fold only; shoot a tall viewport as well
+  when the change is below it.
 
 ## Layout
 
@@ -53,32 +60,167 @@ Blocks import each other and their helpers as `@tyohnn/blocks/*`, and components
 
 ## Blocks
 
+Pages and sections
+
 | Block | File | What it is |
 |---|---|---|
-| `PageHeading` | `page-heading.tsx` | A page body's title, one meta line, and the page actions on the other side |
+| `PageHeading` | `page-heading.tsx` | A list page's title, one meta line, and the page actions on the other side |
+| `DetailHeading` | `detail-heading.tsx` | The head of a page about one thing: large title with a status badge, a description that may wrap, people and actions |
+| `RecordHeading` | `record-heading.tsx` | The head of one record's page: title with a muted number, a status line under it, people and actions |
 | `PageBar` | `page-bar.tsx` | The bar at the top of a page in an app window: title, status badge, global actions, a divider |
+| `PageTabs` | `page-tabs.tsx` | A page's underlined tab strip with icons and count badges |
+| `SectionHeading` | `section-heading.tsx` | A section's title over a sentence, with one action at the other end |
+| `SectionTitle` | `section-title.tsx` | A section's title with a short meta at the end of the line |
+| `SearchHero` | `search-hero.tsx` | A centred band around one large search field: badge, title, sentence, suggested searches |
+| `DetailSections` | `detail-sections.tsx` | The side column of a record's page: short titled sections with hairlines between |
+
+Cards
+
+| Block | File | What it is |
+|---|---|---|
+| `InfoCard` | `info-card.tsx` | A small titled card for a side column: title, description, corner action, content, footer buttons |
+| `SectionCard` | `section-card.tsx` | A default-size titled card for the main column, with a footer note |
+| `ListCard` | `list-card.tsx` | A card that fills its height: title and controls over a divider, a list scrolling edge to edge |
+| `FieldPanel` | `field-panel.tsx` | A full-height settings card: header, fields scrolling inside, a footer that stays |
+| `TabCard` | `tab-card.tsx` | A card of panels behind tabs, with toolbar controls and a footer |
+| `CardToolbar` | `card-toolbar.tsx` | The band at the top of a workspace card: a picker and a badge, actions at the other end |
 | `MetricCards` | `metric-cards.tsx` | A row of small cards: label, figure, change as a trend badge, one line of context |
+| `StatCards` | `stat-cards.tsx` | A row of small cards: label, large value, optional progress bar, a line of detail |
+| `TopicCards` | `topic-cards.tsx` | A grid of small cards that lead somewhere: icon tile, name, description, a footer meta line |
+| `PagerCards` | `pager-cards.tsx` | Previous and next page as two cards |
+| `FileTiles` | `file-tiles.tsx` | A grid of small outlined tiles: icon, name, one line of detail |
+
+Tables
+
+| Block | File | What it is |
+|---|---|---|
 | `DataTable` | `data-table.tsx` | The bare table from columns and rows: typed cells, sortable headers, column widths, a checkbox column |
-| `DataTableCard` | `data-table-card.tsx` | A DataTable in a card that scrolls inside: filter tabs with counts, toolbar controls, a bulk-action bar while rows are selected, summary and pages in the footer |
-| `TabCard` | `tab-card.tsx` | A card of panels behind tabs: tabs and controls in the toolbar, the open panel scrolling inside, summary and an action in the footer |
+| `DataTableCard` | `data-table-card.tsx` | A DataTable in a card that scrolls inside: filter tabs, toolbar controls, a bulk-action bar, summary and pages |
+| `TableFrame` | `table-frame.tsx` | An outline with the system's corners around a bare DataTable on a page or in an article |
+| `ParameterTable` | `parameter-table.tsx` | A framed table of parameters: name, type, required badge, description with a note |
+| `CheckboxMatrix` | `checkbox-matrix.tsx` | An outlined table of checkboxes, rows by narrow columns |
 | `FilterBar` | `filter-bar.tsx` | The band over a table: filters on one side, actions on the other |
 | `SummaryBar` | `summary-bar.tsx` | The band under a table: equal cells with a figure or an icon and a label |
 | `TableSearch` | `table-search.tsx` | The search field of a table toolbar |
-| `CompactSelect` | `compact-select.tsx` | A small select for a toolbar filter or a cell, with an optional visible label or icon |
 | `RowMenu` | `row-menu.tsx` | One row's actions behind a "more" button, in groups |
-| `Person` | `person.tsx` | An avatar with a name and one line of detail; presence badge, badges after the name, avatar tone |
-| `InfoCard` | `info-card.tsx` | A small titled card for a side column: title, description, corner action, content, footer buttons |
-| `UsageMeter` | `usage-meter.tsx` | A progress bar with what it measures and the percentage |
-| `FigureRow` | `figure-row.tsx` | A few figures side by side, each over its label |
-| `SwitchField` | `switch-field.tsx` | One setting as a switch with its name and description |
-| `ActionItemList` | `action-item-list.tsx` | A short list of outlined items with an icon, title, description, an extra line and stacked actions |
-| `IconMeta` | `icon-meta.tsx` | One line of meta text behind a small icon |
-| `SegmentMeter` | `segment-meter.tsx` | A percentage as a row of ticks running destructive → warning → success, with the figure |
-| `ActivityBars` | `activity-bars.tsx` | A trend as a row of small bars at levels 0–4 |
-| `ToneDot` | `tone-dot.tsx` | A dot in a status colour, small in a badge or in place of an icon |
-| `InlineFacts` | `inline-facts.tsx` | A few short facts on one line behind an icon, with hairlines between |
-| `TwoLineLabel` | `two-line-label.tsx` | A name over a caption, each on one line |
 
-Shared: `lib/text.ts` (title, meta, figure and code text recipes) · `lib/bands.ts` (a card's toolbar and footer bands).
+Lists
+
+| Block | File | What it is |
+|---|---|---|
+| `ActionItemList` | `action-item-list.tsx` | Outlined items with an icon, title, description, an extra line and stacked actions |
+| `LinkItemList` | `link-item-list.tsx` | Outlined items that are links: optional icon, title with a badge, one line of detail, a chevron or an arrow |
+| `ContactOptions` | `contact-options.tsx` | Stacked outlined items, each with an icon, a name, what to expect and one button |
+| `TicketList` | `ticket-list.tsx` | Titles over a line of number, status badge and time, with hairlines between |
+| `ServiceStatus` | `service-status.tsx` | One row per service: its name and its state in words behind an icon |
+| `StatusLine` | `status-line.tsx` | One row of a side list: an avatar or a toned state icon, a name, a badge or a note |
+| `TaskList` | `task-list.tsx` | Rows with a checkbox, a title over a meta line and the caller's end of row |
+| `Checklist` | `checklist.tsx` | Checkbox and label rows; a done item is struck through and muted |
+| `Agenda` | `agenda.tsx` | An outlined numbered agenda: checkbox, index, title, owner, timebox |
+| `StepList` | `step-list.tsx` | Numbered steps: a number in a circle, a title, a body, optional content |
+| `DefinitionList` | `definition-list.tsx` | An outlined list with hairlines: a badge, its name, what it means |
+| `PropertyList` · `PropertyText` | `property-list.tsx` | Property rows: icon and name in a fixed column, the value beside it |
+| `ActivityFeed` | `activity-feed.tsx` | Who did what and when, one entry per row |
+| `AttachmentList` | `attachment-list.tsx` | Files as chips: icon, name, detail, one action |
+| `CalloutList` | `callout-list.tsx` | A callout that lists points under its title |
+| `RuleSteps` | `rule-steps.tsx` | A rule read as When / If / Then rows |
+
+People and small pieces
+
+| Block | File | What it is |
+|---|---|---|
+| `Person` | `person.tsx` | An avatar with a name and one line of detail; presence badge, badges after the name, avatar tone |
+| `AvatarStack` | `avatar-stack.tsx` | People as overlapping avatars with a count for the rest and an optional label |
+| `Byline` | `byline.tsx` | Authors and post actions in a band between two hairlines |
+| `TwoLineLabel` | `two-line-label.tsx` | A name over a caption, each on one line |
+| `IconMeta` | `icon-meta.tsx` | One line of meta behind a small icon, tabular and unbroken |
+| `IconNote` | `icon-note.tsx` | A short note behind a small icon that may wrap |
+| `InlineFacts` | `inline-facts.tsx` | A few short facts on one line behind an icon, with hairlines between |
+| `ToneDot` | `tone-dot.tsx` | A dot in a status colour |
+| `RefChip` | `ref-chip.tsx` | A reference in mono on a muted chip |
+
+Figures and charts
+
+| Block | File | What it is |
+|---|---|---|
+| `FigureRow` | `figure-row.tsx` | A few figures side by side, each over its label |
+| `UsageMeter` | `usage-meter.tsx` | A progress bar with what it measures and the percentage |
+| `ShareMeter` | `share-meter.tsx` | One part of a whole as a progress bar: name, count, percentage |
+| `SegmentMeter` | `segment-meter.tsx` | A percentage as ticks running destructive → warning → success, with the figure |
+| `ActivityBars` | `activity-bars.tsx` | A trend as a row of small bars at levels 0–4 |
+| `TrendAreaChart` | `trend-area-chart.tsx` | A trend over time as filled areas with a legend |
+| `CategoryBarChart` | `category-bar-chart.tsx` | One figure across a few categories as horizontal bars |
+| `TimelineBars` | `timeline-bars.tsx` | A plan on a time scale: a row per project with a placed bar carrying progress |
+
+Forms and controls
+
+| Block | File | What it is |
+|---|---|---|
+| `CompactSelect` | `compact-select.tsx` | A small select for a toolbar or a cell: visible label, icon, a heading over the options |
+| `SegmentedControl` | `segmented-control.tsx` | A few choices as one joined control with exactly one on |
+| `SelectField` | `select-field.tsx` | A label over a full-width select |
+| `SwitchField` | `switch-field.tsx` | One setting as a switch with its name and description |
+| `SwitchRow` | `switch-row.tsx` | One setting on a single line: name, hint, switch |
+| `SliderField` | `slider-field.tsx` | One number set with a slider, its value on the label line |
+| `HintField` | `hint-field.tsx` | A field whose label line ends in a hint or the current value |
+| `RadioCards` | `radio-cards.tsx` | A choice where each option is a card with a name and a sentence |
+| `SettingsSection` | `settings-section.tsx` | One fieldset of a settings form: legend, sentence, fields |
+| `FormFooter` | `form-footer.tsx` | The sticky foot of a scrolling form: a note and the buttons |
+| `IconToolbar` | `icon-toolbar.tsx` | A toolbar of icon buttons with tooltips over a divider |
+
+Reading and writing
+
+| Block | File | What it is |
+|---|---|---|
+| `Prose` | `prose.tsx` | Written text on the system's typeset, as a tool or a document, optionally at a UI text step |
+| `ArticleHeading` | `article-heading.tsx` | How an article opens: eyebrow, title, lead, a meta line |
+| `DocumentTitle` | `document-title.tsx` | The large title of a document page, with an optional cover |
+| `OnThisPage` | `on-this-page.tsx` | The sticky table of contents with the active link |
+| `CodeBlock` | `code-block.tsx` | Code under a title bar with an action slot |
+| `CodeTabs` | `code-tabs.tsx` | The same code in several forms behind tabs |
+| `EndpointHeader` | `endpoint-header.tsx` | An API endpoint's method badge, mono path and title |
+
+Conversations and review
+
+| Block | File | What it is |
+|---|---|---|
+| `MailHeader` | `mail-header.tsx` | An open message's subject, labels, sender, recipients and date |
+| `CollapsedThread` | `collapsed-thread.tsx` | The earlier messages of a thread, one row each |
+| `ReplyComposer` | `reply-composer.tsx` | The reply box under a message: who it goes to, text, tools, send |
+| `ChatPrompt` | `chat-prompt.tsx` | What the person sent: avatar and a bubble on the end side |
+| `ChatReply` | `chat-reply.tsx` | What the assistant answered: avatar, name, prose, actions and a run meta line |
+| `ChatNotice` | `chat-notice.tsx` | A system note inside a conversation, in a dashed outline |
+| `PromptInput` | `prompt-input.tsx` | The one-field message box: attached files, text, tools, send |
+| `CommentThread` | `comment-thread.tsx` | Comments on one spot with a reply field |
+| `DiffFile` | `diff-file.tsx` | One changed file: fold button, path, counts, a "viewed" checkbox, the diff inside |
+| `DiffView` | `diff-view.tsx` | A unified diff: hunks, two line-number gutters, a slot under each line |
+| `DiffStat` | `diff-stat.tsx` | An added or removed count in mono in the success or destructive colour |
+
+Planning
+
+| Block | File | What it is |
+|---|---|---|
+| `CalendarToolbar` | `calendar-toolbar.tsx` | The bar over a calendar: today, previous and next, the range, tools, the view choice, the main action |
+| `WeekView` | `week-view.tsx` | Day headings, the all-day row and the hour grid with events placed by time and the "now" line |
+| `KanbanBoard` | `kanban-board.tsx` | Columns side by side, each with its name, count, add button and its cards scrolling inside |
+| `KanbanCard` | `kanban-card.tsx` | One board item: key, title, menu, badges, progress, people and facts |
+
+Shared: `lib/text.ts` (one-line recipes: title, meta, figure, code) · `lib/copy.ts` (running text: note, body, lead,
+caption, inline code, the display size) · `lib/bands.ts` (a card's toolbar and footer bands) · `lib/chart.ts` (the
+chart colours in series order).
+
+## Values the systems have no token for yet
+
+These are carried over from the templates as literals, so the picture did not move. Each is a candidate for a
+token in the systems:
+
+- Large titles derived from `--ui-text-lg`: ×1.25 (`DISPLAY_SIZE`: DetailHeading, RecordHeading, StatCards), ×1.3
+  (MailHeader), ×1.75 (SearchHero, EndpointHeader), ×2 and ×2.5 (DocumentTitle), with line heights 1.2–1.3.
+- Code line heights 1.6 (CodeBlock) and 1.7 (DiffView); the diff's gutter grid and paddings.
+- Reading measures (`72ch`, `80ch`, `52rem`) passed by templates.
+- Small icon sizes 11–18px inside meta lines, notes and hints.
+- `ListCard`'s 12px under its bordered header, where the systems' own rule gives the card spacing.
+- `WeekView`'s event corner `min(var(--control-radius), 8px)`, its primary tints and its grid geometry.
+- Chart stroke width, fill opacities and bar radius.
 
 The CLI does not install blocks yet.
