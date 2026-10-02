@@ -1,7 +1,7 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-04/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports). The page shell — provider with --sidebar-width 19rem, floating sidebar, inset, header with trigger, separator
 // and breadcrumb — is upstream's markup and classes with the roadmap's breadcrumb labels; the body is the board (./roadmap).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout.
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +20,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Roadmap, ROADMAP_STYLE } from "./roadmap"
+import { Roadmap } from "./roadmap"
 
 export function BlockRoadmap() {
   return (
     <div data-template="block-roadmap">
       <NoMotion />
-      <style>{ROADMAP_STYLE}</style>
       <SidebarProvider
         style={
           {

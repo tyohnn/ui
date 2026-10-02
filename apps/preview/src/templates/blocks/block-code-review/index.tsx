@@ -1,7 +1,8 @@
 // shadcn 4.21.0 apps/v4/registry/bases/base/blocks/sidebar-11/page.tsx, ported with tooling/preset/port-block.mjs
 // (imports, icons). The page shell — provider, sidebar, inset, header with trigger, separator and breadcrumb — is
 // upstream's markup and classes with the reviewed file's path; the body is the code review (./review).
-// The root div carries data-template and the template's styles; it adds no box of its own to the layout.
+// The root div carries data-template; it adds no box of its own to the layout. The body is composed from blocks
+// (registry/blocks).
 
 import { AppSidebar } from "./app-sidebar"
 import {
@@ -20,13 +21,12 @@ import {
 } from "@tyohnn/components/sidebar"
 
 import { NoMotion } from "../../coverage/frame"
-import { Review, REVIEW_STYLE } from "./review"
+import { Review } from "./review"
 
 export function BlockCodeReview() {
   return (
     <div data-template="block-code-review">
       <NoMotion />
-      <style>{REVIEW_STYLE}</style>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
