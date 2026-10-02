@@ -34,7 +34,7 @@ export const StepList = ({
     <ol {...pendingFrame(loading)} className={cn("mx-0 flex list-none flex-col gap-5 p-0", className)}>
         {loading && Array.from({ length: count }, (_, index) => (
             <li key={index} className="flex gap-3">
-                <span className={NUMBER}>{index + 1}</span>
+                <span className={NUMBER} aria-hidden>{index + 1}</span>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
                     <h3 className={STEP_TITLE}><PendingText length={24} /></h3>
                     <p className={cn("m-0", MUTED_BODY)}><PendingText length={56} /></p>
@@ -43,7 +43,7 @@ export const StepList = ({
         ))}
         {!loading && steps.map((step, index) => (
             <li key={index} className="flex gap-3">
-                <span className={NUMBER}>{index + 1}</span>
+                <span className={NUMBER} aria-hidden>{index + 1}</span>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
                     <h3 className={STEP_TITLE}>{step.title}</h3>
                     {step.body !== undefined && <p className={cn("m-0", MUTED_BODY)}>{step.body}</p>}

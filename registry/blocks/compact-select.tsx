@@ -9,7 +9,7 @@ export type CompactSelectOption = string | { value: string; label: string };
 /**
  * A small select for a toolbar filter or a cell: a role, a status, a sort order. Options are plain strings or
  * value and label pairs; the first is selected until `value` or `defaultValue` says otherwise. `label` names the
- * control for assistive technology, or — with `showLabel` — is written in the trigger before the value ("Sort by …").
+ * control for assistive technology, and — with `showLabel` — is also written in the trigger before the value ("Sort by …").
  * `id` lets a field's label point at the trigger, and `heading` is a line over the options in the open list.
  */
 export const CompactSelect = ({
@@ -44,10 +44,10 @@ export const CompactSelect = ({
         <Select
             items={items}
             {...(value === undefined ? { defaultValue: defaultValue ?? items[0]?.value } : { value })}
-            onValueChange={onValueChange && ((next) => onValueChange(String(next)))}
+            onValueChange={onValueChange && ((next) => { if (next != null) onValueChange(String(next)); })}
             disabled={disabled}
         >
-            <SelectTrigger id={id} size="sm" aria-label={showLabel ? undefined : label} className={className}>
+            <SelectTrigger id={id} size="sm" aria-label={label} className={className}>
                 {icon}
                 {showLabel && <span className="text-muted-foreground">{label}</span>}
                 <SelectValue />
