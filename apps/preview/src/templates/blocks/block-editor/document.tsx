@@ -43,6 +43,7 @@ const MILESTONE_COLUMNS: DataTableColumn<Milestone>[] = [
 
 const Properties = () => (
     <PropertyList
+        loading={LOADING}
         properties={[
             { icon: <CircleDashed />, label: "Status", value: <Badge>{PROPERTIES.status}</Badge> },
             {
@@ -131,7 +132,7 @@ export const Document = () => (
                 <h2>Scope</h2>
                 <h3>Discovery checklist</h3>
             </Prose>
-            <Checklist items={CHECKLIST} />
+            <Checklist loading={LOADING} count={CHECKLIST.length} items={CHECKLIST} />
 
             <Prose preset="document">
                 <h3>What we heard</h3>
