@@ -7,6 +7,14 @@ export const MEMBERS = [
     { initials: "DM", name: "Dev Mahajan" },
 ] as const;
 
+// Everyone on the project; MEMBERS are the ones the head shows.
+export const MEMBER_COUNT = 7;
+
+export const SCOPES = [
+    { value: "all", label: "All" },
+    { value: "mine", label: "Mine" },
+];
+
 export const STATS = [
     { id: "milestone", label: "Milestone", value: "Beta release", detail: "18 of 28 tasks done", progress: 64 },
     { id: "open", label: "Open tasks", value: "23", detail: "8 due this week · 2 blocked" },
