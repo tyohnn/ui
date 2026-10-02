@@ -22,6 +22,7 @@ import { DiffFile } from "@tyohnn/blocks/diff-file";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
 import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText } from "@tyohnn/blocks/lib/pending";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";
@@ -33,6 +34,7 @@ import { Button } from "@tyohnn/components/button";
 import { Tabs, TabsContent } from "@tyohnn/components/tabs";
 import { cn } from "@tyohnn/lib/utils";
 
+import { LOADING } from "../../loading";
 import { BACKOFF_DIFF, CHECKS, type DiffLine, HANDLER_DIFF, LABELS, PULL_REQUEST, REVIEWERS, THREAD } from "./data";
 
 /**
@@ -89,6 +91,8 @@ const PrHead = () => (
 
 const Thread = () => (
     <CommentThread
+        loading={LOADING}
+        loadingComments={[{ lines: 2 }, { lines: 1, badge: <Badge variant="outline"><PendingText length={6} /></Badge> }]}
         comments={THREAD.map((comment) => ({
             id: comment.when,
             name: comment.name,
@@ -121,6 +125,7 @@ const withThread = (lines: DiffLine[]) => lines.map((line) => (line.kind !== "hu
 
 const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; path: string; added: number; removed: number; viewed?: boolean; lines?: DiffLine[] }) => (
     <DiffFile
+        loading={LOADING}
         id={id}
         path={path}
         added={added}
@@ -129,7 +134,7 @@ const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; 
         viewed={viewed}
         menu={<Button variant="ghost" size="icon-xs" aria-label="File actions"><MoreHorizontal /></Button>}
     >
-        {lines !== undefined && <DiffView lines={lines} />}
+        {lines !== undefined && <DiffView loading={LOADING} loadingLines={lines.length} lines={lines} />}
     </DiffFile>
 );
 
@@ -138,7 +143,7 @@ const FilesChanged = () => (
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <span className={cn(NOTE, ICON_LINE, "whitespace-nowrap")}>
                 <GitCommit />
-                3 files changed · <DiffStat kind="add">+62</DiffStat> <DiffStat kind="del">−11</DiffStat> · 1 of 3 viewed
+                {LOADING ? <PendingText length={40} /> : <>3 files changed · <DiffStat kind="add">+62</DiffStat> <DiffStat kind="del">−11</DiffStat> · 1 of 3 viewed</>}
             </span>
             <SegmentedControl label="Diff view" options={[{ value: "unified", label: "Unified" }, { value: "split", label: "Split" }]} defaultValue="unified" />
         </div>
@@ -220,6 +225,7 @@ export const Review = () => (
         <PrHead />
         <Tabs defaultValue="files" className="min-h-0 flex-1 gap-4">
             <PageTabs
+                loading={LOADING}
                 className="px-6"
                 tabs={[
                     { value: "conversation", label: "Conversation", icon: <MessageSquare data-icon="inline-start" />, count: "5" },
