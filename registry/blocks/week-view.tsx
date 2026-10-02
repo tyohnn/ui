@@ -1,6 +1,7 @@
 import { MapPin } from "@tyohnn/icons";
 
 import { CAPTION } from "@tyohnn/blocks/lib/copy";
+import { pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 import { strings } from "@tyohnn/strings";
 
@@ -33,7 +34,9 @@ const clock = (hours: number) => `${String(Math.floor(hours)).padStart(2, "0")}:
  * events placed by their start and end and a line at the current time. It fills the height it is given; the grid
  * keeps a least height and scrolls inside. Days, hours and events are the caller's — a work week is five days,
  * a day view is one. The geometry (an event's top and height as a share of the hours on show, the hour lines)
- * is the view's own; the colours, the type and the event radius are the system's.
+ * is the view's own; the colours, the type and the event radius are the system's. `loading` keeps the day headings,
+ * the gutter and the hour grid and draws no events; the all-day row keeps the height of one event, and the "now"
+ * line is drawn when the caller passes it.
  */
 export const WeekView = ({
     days,
@@ -44,12 +47,13 @@ export const WeekView = ({
     zoneLabel,
     now,
     formatTime = clock,
+    loading,
     className,
 }: {
     days: readonly WeekDay[];
     /** The hours on show, from midnight: `{ start: 8, end: 18 }` */
     hours: { start: number; end: number };
-    events: readonly WeekEvent[];
+    events?: readonly WeekEvent[];
     allDay?: readonly WeekAllDayEvent[];
     /** The gutter label of the all-day row */
     allDayLabel?: string;
@@ -59,15 +63,17 @@ export const WeekView = ({
     now?: { at: number; label?: string };
     /** How an hour is written on the axis and in an event; 24-hour `HH:MM` when left out */
     formatTime?: (hours: number) => string;
+    loading?: boolean;
     className?: string;
 }) =>
 {
     const span = hours.end - hours.start;
     const percent = (at: number) => `${((at - hours.start) / span) * 100}%`;
+    const shown = loading || events === undefined ? [] : events;
     const columns = { gridTemplateColumns: `4rem repeat(${days.length}, minmax(0, 1fr))` };
 
     return (
-        <div className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", className)}>
+        <div {...pendingFrame(loading)} className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto", className)}>
             <div className="grid border-b border-border" style={columns}>
                 <span className={GUTTER_LABEL}>{zoneLabel}</span>
                 {days.map((day) => (
@@ -81,7 +87,9 @@ export const WeekView = ({
                 <div className="grid border-b border-border" style={columns}>
                     <span className={GUTTER_LABEL}>{allDayLabel}</span>
                     <div className="col-[2/-1] grid gap-1 px-1 py-1.5" style={{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }}>
-                        {allDay.map((event) => (
+                        {/* The row is as tall as one event while there are none to draw */}
+                        {loading && <div aria-hidden className={cn(EVENT, "invisible px-2 py-0.5 font-medium")}>&nbsp;</div>}
+                        {!loading && allDay.map((event) => (
                             <div
                                 key={`${event.title}-${event.from}`}
                                 className={cn(EVENT, TONE[event.tone ?? "primary"], "truncate px-2 py-0.5 font-medium")}
@@ -108,7 +116,7 @@ export const WeekView = ({
                         )}
                         style={{ backgroundSize: `100% calc(100% / ${span})` }}
                     >
-                        {events.filter((event) => event.day === index).map((event) =>
+                        {shown.filter((event) => event.day === index).map((event) =>
                         {
                             const duration = event.end - event.start;
                             const short = duration < 0.75;
