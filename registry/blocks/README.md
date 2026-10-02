@@ -17,9 +17,14 @@ gallery is the proof that every block renders with every design system.
 3. **One block, one shape.** A concept may have several blocks (a table in a card with tabs and bulk actions is
    one; a members table with inline role selects is another). Do not grow one block's props to cover another
    shape — cut a second block.
-4. **Data and words come from the caller.** A block fetches nothing and knows no domain type: rows, labels,
-   accessible names and callbacks are props. What belongs to the product (which statuses exist, which columns,
-   which actions) stays in the screen that uses the block.
+4. **Data comes from the caller.** A block fetches nothing and knows no domain type: rows, callbacks and the
+   product's words (titles, column names, statuses) are props. What belongs to the product (which statuses exist,
+   which columns, which actions) stays in the screen that uses the block.
+5. **A block's own words come from `@tyohnn/strings`.** The few things a block says by itself — "Today", "Viewed",
+   "Search", the name of a "more" button or of a select-all checkbox — are `strings.blocks.*`
+   (`registry/ui/strings`: `names.ts` and every locale), so a project gets them in its language. Each is still a
+   prop, and a screen should pass the specific name where there is one ("Actions for #1042", "Previous week"): a
+   default repeated on every row tells a screen reader nothing.
 
 ## Cutting a block out of a template
 

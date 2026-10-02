@@ -6,6 +6,7 @@ import { Badge } from "@tyohnn/components/badge";
 import { Button } from "@tyohnn/components/button";
 import { BODY } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type KanbanColumn = {
     id: string;
@@ -14,7 +15,7 @@ export type KanbanColumn = {
     icon?: ReactNode;
     /** How many items the column holds */
     count?: ReactNode;
-    /** Names the column's add button ("Add to Backlog"); without it there is no button */
+    /** The column's add button: shown when either is given; `addLabel` names it ("Add to Backlog"), the locale's own words when left out */
     addLabel?: string;
     onAdd?: () => void;
     /** The column's cards (KanbanCard), and whatever ends the list: a "show more" button */
@@ -34,7 +35,7 @@ export const KanbanBoard = ({ columns, className }: { columns: readonly KanbanCo
                     {column.icon}
                     <span className={cn(BODY, "font-medium text-foreground")}>{column.title}</span>
                     {column.count !== undefined && <Badge variant="secondary">{column.count}</Badge>}
-                    {column.addLabel !== undefined && <Button variant="ghost" size="icon-xs" className="ml-auto" aria-label={column.addLabel} onClick={column.onAdd}><Plus /></Button>}
+                    {(column.addLabel !== undefined || column.onAdd !== undefined) && <Button variant="ghost" size="icon-xs" className="ml-auto" aria-label={column.addLabel ?? strings.blocks.kanban.add} onClick={column.onAdd}><Plus /></Button>}
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">{column.cards}</div>
             </section>

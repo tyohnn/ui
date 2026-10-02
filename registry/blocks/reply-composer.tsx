@@ -6,6 +6,7 @@ import { Button } from "@tyohnn/components/button";
 import { Textarea } from "@tyohnn/components/textarea";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type ReplyComposerTool = { label: string; icon: ReactNode; onClick?: () => void };
 
@@ -17,7 +18,7 @@ export type ReplyComposerTool = { label: string; icon: ReactNode; onClick?: () =
 export const ReplyComposer = ({
     icon,
     heading,
-    label,
+    label = strings.blocks.reply.label,
     value,
     defaultValue,
     onValueChange,
@@ -31,7 +32,8 @@ export const ReplyComposer = ({
     icon?: ReactNode;
     /** "Reply to …" */
     heading: ReactNode;
-    label: string;
+    /** Names the text field for assistive technology; the locale's own word when left out */
+    label?: string;
     value?: string;
     defaultValue?: string;
     onValueChange?: (value: string) => void;

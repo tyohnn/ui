@@ -9,6 +9,7 @@ import { Checkbox } from "@tyohnn/components/checkbox";
 import { Label } from "@tyohnn/components/label";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 /**
  * One changed file of a review: a header with the button that folds it, the path, the lines added and removed,
@@ -25,7 +26,7 @@ export const DiffFile = ({
     toggleLabel,
     viewed,
     onViewedChange,
-    viewedLabel,
+    viewedLabel = strings.blocks.diff.viewed,
     menu,
     children,
     className,
@@ -37,10 +38,11 @@ export const DiffFile = ({
     removed: number;
     open: boolean;
     onToggle?: () => void;
-    toggleLabel: string;
+    /** Names the fold button; "Collapse file" or "Expand file" in the locale's words when left out */
+    toggleLabel?: string;
     viewed?: boolean;
     onViewedChange?: (viewed: boolean) => void;
-    viewedLabel: ReactNode;
+    viewedLabel?: ReactNode;
     /** The end of the header: a "more" button or a RowMenu */
     menu?: ReactNode;
     children?: ReactNode;
@@ -48,7 +50,7 @@ export const DiffFile = ({
 }) => (
     <section className={cn("shrink-0 overflow-hidden rounded-[var(--radius-lg)] border border-border [&>*+*]:border-t [&>*+*]:border-border", className)}>
         <div className="flex flex-wrap items-center gap-2 bg-muted px-3 py-2">
-            <Button variant="ghost" size="icon-xs" aria-label={toggleLabel} onClick={onToggle}>
+            <Button variant="ghost" size="icon-xs" aria-label={toggleLabel ?? (open ? strings.blocks.diff.collapse : strings.blocks.diff.expand)} onClick={onToggle}>
                 {open ? <ChevronDown /> : <ChevronRight />}
             </Button>
             <span className="min-w-0 truncate font-mono text-[length:var(--ui-text-sm)] leading-[var(--ui-line-height-sm)] font-semibold">{path}</span>

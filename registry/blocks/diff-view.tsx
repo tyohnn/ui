@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type DiffViewLine =
     | { kind: "hunk"; text: string }
@@ -29,7 +30,7 @@ const SIGN = { context: " ", add: "+", del: "−" } as const;
  * something `below` it (the comments on that line). A long line is cut, not wrapped. `label` names the diff for
  * assistive technology. Put it in a DiffFile under the file's header.
  */
-export const DiffView = ({ lines, label, className }: { lines: readonly DiffViewLine[]; label: string; className?: string }) => (
+export const DiffView = ({ lines, label = strings.blocks.diff.label, className }: { lines: readonly DiffViewLine[]; label?: string; className?: string }) => (
     <div className={cn("bg-background font-mono text-[length:var(--ui-text-sm)] leading-[1.7]", className)} role="table" aria-label={label}>
         {lines.map((line, index) =>
         {

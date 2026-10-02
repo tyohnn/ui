@@ -146,7 +146,6 @@ const Conversation = () => (
 const Composer = () => (
     <div className="px-4 pt-2 pb-4">
         <PromptInput
-            label="Message"
             defaultValue="Turn the plan into a checklist for the rollout ticket, one line per owner."
             files={ATTACHMENTS.map((file) => ({ name: file.name, detail: file.size, icon: <FileText />, action: { label: `Remove ${file.name}`, icon: <X /> } }))}
             tools={[
@@ -160,7 +159,7 @@ const Composer = () => (
                 </>
             )}
             shortcut="⌘ ↵"
-            send={{ label: "Send", icon: <ArrowUp /> }}
+            send={{ icon: <ArrowUp /> }}
         />
     </div>
 );

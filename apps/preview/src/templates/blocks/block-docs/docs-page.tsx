@@ -131,8 +131,8 @@ const Article = () => (
 
         <h2 id="next">Next steps</h2>
         <PagerCards
-            previous={{ label: "Previous", title: "Requirements", description: "Runtimes, databases and network access" }}
-            next={{ label: "Next", title: "First workflow", description: "Write, run and replay a three-step workflow" }}
+            previous={{ title: "Requirements", description: "Runtimes, databases and network access" }}
+            next={{ title: "First workflow", description: "Write, run and replay a three-step workflow" }}
             className={IN_PROSE}
         />
 
@@ -154,8 +154,6 @@ export const DocsPage = () => (
         <div className="flex gap-10 px-10 pt-8 pb-16">
             <Article />
             <OnThisPage
-                label="On this page"
-                title="On this page"
                 items={TOC}
                 note="Found a problem? Open an issue from the docs repository or ask in the community forum."
                 className="hidden w-56 shrink-0 xl:flex"

@@ -9,6 +9,7 @@ import { Checkbox } from "@tyohnn/components/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@tyohnn/components/table";
 import { CODE } from "@tyohnn/blocks/lib/text";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type DataTableColumn<Row> = {
     id: string;
@@ -36,9 +37,9 @@ export type DataTableSelection<Row> = {
     defaultSelected?: readonly string[];
     selected?: readonly string[];
     onChange?: (selected: string[]) => void;
-    /** Names for the checkboxes: the one in the header and each row's */
-    selectAllLabel: string;
-    selectRowLabel: (row: Row) => string;
+    /** Names for the checkboxes: the one in the header and each row's (the locale's own words when left out) */
+    selectAllLabel?: string;
+    selectRowLabel?: (row: Row) => string;
     /** The checkbox column's least width in px, when the columns have widths */
     width?: number;
 };
@@ -98,7 +99,7 @@ export const DataTable = <Row,>({
                                 checked={ids.length > 0 && here.length === ids.length}
                                 indeterminate={here.length > 0 && here.length < ids.length}
                                 onCheckedChange={(checked) => update(checked ? [...new Set([...selected, ...ids])] : selected.filter((id) => !ids.includes(id)))}
-                                aria-label={selection.selectAllLabel}
+                                aria-label={selection.selectAllLabel ?? strings.blocks.dataTable.selectAll}
                             />
                         </TableHead>
                     )}
@@ -127,7 +128,7 @@ export const DataTable = <Row,>({
                                     <Checkbox
                                         checked={isSelected}
                                         onCheckedChange={(checked) => update(checked ? [...selected, id] : selected.filter((other) => other !== id))}
-                                        aria-label={selection.selectRowLabel(row)}
+                                        aria-label={selection.selectRowLabel?.(row) ?? strings.blocks.dataTable.selectRow}
                                     />
                                 </TableCell>
                             )}

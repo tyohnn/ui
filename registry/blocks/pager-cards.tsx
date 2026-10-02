@@ -4,10 +4,11 @@ import { ArrowLeft, ArrowRight } from "@tyohnn/icons";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@tyohnn/components/card";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type PagerPage = {
-    /** The direction in words ("Previous", "Next") */
-    label: string;
+    /** The direction in words; the locale's "Previous" or "Next" when left out */
+    label?: string;
     title: ReactNode;
     description?: ReactNode;
 };
@@ -18,7 +19,7 @@ export const PagerCards = ({ previous, next, className }: { previous?: PagerPage
         {previous !== undefined && (
             <Card size="sm" className="[&_svg]:size-[14px]">
                 <CardHeader>
-                    <CardDescription className="flex items-center gap-1.5"><ArrowLeft />{previous.label}</CardDescription>
+                    <CardDescription className="flex items-center gap-1.5"><ArrowLeft />{previous.label ?? strings.blocks.pager.previous}</CardDescription>
                     <CardTitle>{previous.title}</CardTitle>
                     {previous.description !== undefined && <CardDescription>{previous.description}</CardDescription>}
                 </CardHeader>
@@ -27,7 +28,7 @@ export const PagerCards = ({ previous, next, className }: { previous?: PagerPage
         {next !== undefined && (
             <Card size="sm" className="text-end [&_svg]:size-[14px]">
                 <CardHeader>
-                    <CardDescription className="flex items-center justify-end gap-1.5">{next.label}<ArrowRight /></CardDescription>
+                    <CardDescription className="flex items-center justify-end gap-1.5">{next.label ?? strings.blocks.pager.next}<ArrowRight /></CardDescription>
                     <CardTitle>{next.title}</CardTitle>
                     {next.description !== undefined && <CardDescription>{next.description}</CardDescription>}
                 </CardHeader>

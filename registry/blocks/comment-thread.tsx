@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@tyohnn/components/avatar";
 import { Textarea } from "@tyohnn/components/textarea";
 import { PARAGRAPH, NOTE } from "@tyohnn/blocks/lib/copy";
 import { cn } from "@tyohnn/lib/utils";
+import { strings } from "@tyohnn/strings";
 
 export type ThreadComment = { id: string; name: ReactNode; initials: string; when: ReactNode; /** After the time: the commenter's role */ badge?: ReactNode; body: ReactNode };
 
@@ -17,7 +18,7 @@ export type ThreadComment = { id: string; name: ReactNode; initials: string; whe
  */
 export const CommentThread = ({
     comments,
-    replyLabel,
+    replyLabel = strings.blocks.comments.reply,
     replyPlaceholder,
     replyValue,
     onReplyChange,
@@ -26,7 +27,7 @@ export const CommentThread = ({
     className,
 }: {
     comments: readonly ThreadComment[];
-    replyLabel: string;
+    replyLabel?: string;
     replyPlaceholder?: string;
     replyValue?: string;
     onReplyChange?: (value: string) => void;
