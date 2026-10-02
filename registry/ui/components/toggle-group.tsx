@@ -26,6 +26,7 @@ function ToggleGroup({
   size,
   spacing = 2,
   orientation = "horizontal",
+  style,
   children,
   ...props
 }: ToggleGroupPrimitive.Props &
