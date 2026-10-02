@@ -1,7 +1,7 @@
 // Makes the project match tyohnn.json. Every command edits the record (which system, icons, fonts and mode each app
 // has) and then calls sync, so running a command twice changes nothing the second time.
 //
-//   1. CLI-owned files: the shared TSX, the icon libraries in use, the locale's words, the systems in use, examples;
+//   1. CLI-owned files: the shared TSX, the blocks when asked for, the icon libraries in use, the locale's words, the systems in use, examples;
 //      unused ones removed
 //   2. package.json dependencies (the UI package, and each app)
 //   3. install, when a package.json changed or nothing is installed yet
@@ -80,6 +80,11 @@ const planOwnedFiles = (ctx: SyncContext, placement: Placement, apps: AppFiles[]
         if (!isSharedFile(file)) continue;
 
         copy(`registry/ui/${file}`, placement.target(`registry/ui/${file}`)!);
+    }
+
+    if (record.ui.blocks)
+    {
+        for (const from of registry.blockFiles()) copy(from, placement.target(from)!);
     }
 
     const libraries = usedIcons(record);
@@ -217,11 +222,18 @@ const syncPackages = (ctx: SyncContext, placement: Placement, apps: AppFiles[]):
                 "./components/*": "./src/components/*.tsx",
                 "./hooks/*": "./src/hooks/*.ts",
                 "./lib/*": "./src/lib/*.ts",
+                ...(record.ui.blocks ? { "./blocks/*": "./src/blocks/*.tsx", "./blocks/lib/*": "./src/blocks/lib/*.ts" } : {}),
                 "./icons": "./src/icons/index.ts",
                 "./icons/names": "./src/icons/names.ts",
                 ...(registry.hasStrings ? { "./strings": "./src/strings/index.ts" } : {}),
                 "./systems/*": "./src/systems/*",
             };
+            if (!record.ui.blocks)
+            {
+                delete (pkg.exports as Record<string, string>)["./blocks/*"];
+                delete (pkg.exports as Record<string, string>)["./blocks/lib/*"];
+            }
+
             pkg.scripts = { ...pkg.scripts, typecheck: pkg.scripts?.typecheck ?? "tsc --noEmit" };
         }, {
             name: record.ui.importBase,
@@ -474,6 +486,7 @@ export const sync = async (ctx: SyncContext): Promise<void> =>
 
     if (ctx.registry.hasStrings) record.ui.locale = localeOf(record);
     if (record.ui.locale) ctx.registry.locale(record.ui.locale);
+    if (record.ui.blocks) ctx.registry.blockFiles();
 
     const owned = planOwnedFiles(ctx, placement, apps);
 

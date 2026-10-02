@@ -8,11 +8,13 @@
 //   registry/ui/icons/libraries/l.tsx      <ui>/src/icons/libraries/l.tsx         <base>/components/icons/libraries/l.tsx
 //   registry/ui/strings/names.ts           <ui>/src/strings/names.ts              <base>/lib/strings/names.ts
 //   registry/ui/strings/locales/l.ts       <ui>/src/strings/locales/l.ts          <base>/lib/strings/locales/l.ts
+//   registry/blocks/x.tsx · lib/x.ts       <ui>/src/blocks/x.tsx · lib/x.ts       <base>/components/blocks/x.tsx · lib/x.ts
 //   registry/systems/s/styles/…            <ui>/src/systems/s/…                   <base>/styles/tyohnn/s/…
 //   registry/systems/s/{DESIGN.md,system.json}  same folder as the styles
 //
 //   @tyohnn/components/x                   <scope>/ui/components/x                @/components/ui/x
 //   @tyohnn/lib/x · @tyohnn/hooks/x        <scope>/ui/lib/x · …/hooks/x           @/lib/x · @/hooks/x
+//   @tyohnn/blocks/x                       <scope>/ui/blocks/x                    @/components/blocks/x
 //   @tyohnn/icons                          <scope>/ui/icons                       @/components/icons
 //   @tyohnn/strings                        <scope>/ui/strings                     @/lib/strings
 
@@ -40,13 +42,14 @@ export interface Placement
 
 export const rewriteMonorepo = (content: string, pkg: string): string =>
     content
-        .replace(/@tyohnn\/(components|lib|hooks)\//g, `${pkg}/$1/`)
+        .replace(/@tyohnn\/(components|lib|hooks|blocks)\//g, `${pkg}/$1/`)
         .replace(/@tyohnn\/icons\b/g, `${pkg}/icons`)
         .replace(/@tyohnn\/strings\b/g, `${pkg}/strings`);
 
 export const rewriteApp = (content: string, alias: string): string =>
     content
         .replace(/@tyohnn\/components\//g, `${alias}/components/ui/`)
+        .replace(/@tyohnn\/blocks\//g, `${alias}/components/blocks/`)
         .replace(/@tyohnn\/(lib|hooks)\//g, `${alias}/$1/`)
         .replace(/@tyohnn\/icons\b/g, `${alias}/components/icons`)
         .replace(/@tyohnn\/strings\b/g, `${alias}/lib/strings`);
@@ -57,6 +60,7 @@ export const placementOf = (root: string, record: Pick<TyohnnRecord, "project" |
     const base = monorepo ? join(root, record.ui.path, "src") : join(root, record.ui.path);
     const importBase = record.ui.importBase;
     const componentsDir = monorepo ? join(base, "components") : join(base, "components/ui");
+    const blocksDir = monorepo ? join(base, "blocks") : join(base, "components/blocks");
     const iconsDir = monorepo ? join(base, "icons") : join(base, "components/icons");
     const systemsDir = monorepo ? join(base, "systems") : join(base, "styles/tyohnn");
     const stringsDir = monorepo ? join(base, "strings") : join(base, "lib/strings");
@@ -67,6 +71,7 @@ export const placementOf = (root: string, record: Pick<TyohnnRecord, "project" |
 
         if (match) return join(componentsDir, match[1]);
         if ((match = from.match(/^registry\/ui\/(hooks|lib)\/(.+)$/))) return join(base, match[1], match[2]);
+        if ((match = from.match(/^registry\/blocks\/(.+)$/))) return join(blocksDir, match[1]);
         if (from === "registry/ui/icons/names.ts") return join(iconsDir, "names.ts");
         if ((match = from.match(/^registry\/ui\/icons\/libraries\/(.+)$/))) return join(iconsDir, "libraries", match[1]);
         if (from === "registry/ui/strings/names.ts") return join(stringsDir, "names.ts");
