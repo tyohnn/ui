@@ -178,7 +178,7 @@ const SettingsPanel = () => (
         action={<Button variant="ghost" size="icon-sm" aria-label="Reset to defaults"><RefreshCw /></Button>}
         footer={(
             <>
-                <UsageMeter value={68} label="Monthly tokens" />
+                <UsageMeter loading={LOADING} value={68} label="Monthly tokens" />
                 <Separator />
                 <span className={cn(NOTE, "whitespace-nowrap")}>{LOADING ? <PendingText length={24} /> : "6.8M of 10M · resets Feb 1"}</span>
             </>
