@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@tyohnn/components/avatar";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@tyohnn/components/item";
 import { IconNote } from "@tyohnn/blocks/icon-note";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type ActivityEntry = {
@@ -19,11 +20,41 @@ export type ActivityEntry = {
 
 /**
  * What happened lately, newest first: who, what they did and when, one entry per row. `whenIcon` is the small
- * icon before each time. It is the bare list — put it in a card (InfoCard) that scrolls.
+ * icon before each time. It is the bare list — put it in a card (InfoCard) that scrolls. `loading` draws
+ * `loadingRows` entries: an avatar without initials, bars for who and what, and a bar behind the time's icon.
  */
-export const ActivityFeed = ({ entries, whenIcon, className }: { entries: readonly ActivityEntry[]; whenIcon: ReactNode; className?: string }) => (
-    <ItemGroup className={cn("gap-0", className)}>
-        {entries.map((entry) => (
+export const ActivityFeed = ({
+    entries = [],
+    whenIcon,
+    loading,
+    loadingRows = 5,
+    className,
+}: {
+    entries?: readonly ActivityEntry[];
+    whenIcon: ReactNode;
+    loading?: boolean;
+    /** How many entries to draw while loading */
+    loadingRows?: number;
+    className?: string;
+}) => (
+    <ItemGroup {...pendingFrame(loading)} className={cn("gap-0", className)}>
+        {loading && Array.from({ length: loadingRows }, (_, index) => (
+            <Item key={index} size="xs" className="px-0">
+                <ItemMedia>
+                    <Avatar size="sm">
+                        <AvatarFallback />
+                    </Avatar>
+                </ItemMedia>
+                <ItemContent>
+                    <ItemTitle><span><PendingText length={12} /></span></ItemTitle>
+                    <ItemDescription><PendingText length={28} /></ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                    <IconNote icon={whenIcon}><span><PendingText length={8} /></span></IconNote>
+                </ItemActions>
+            </Item>
+        ))}
+        {!loading && entries.map((entry) => (
             <Item key={entry.id} size="xs" className="px-0">
                 <ItemMedia>
                     <Avatar size="sm">

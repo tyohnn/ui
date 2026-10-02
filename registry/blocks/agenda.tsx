@@ -5,6 +5,7 @@ import { type ReactNode, useState } from "react";
 import { Badge } from "@tyohnn/components/badge";
 import { Checkbox } from "@tyohnn/components/checkbox";
 import { BODY, NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type AgendaItem = {
@@ -19,24 +20,39 @@ export type AgendaItem = {
 
 /**
  * A meeting's agenda as an outlined, numbered list: a checkbox to mark an item covered (its title goes muted),
- * who leads it and its timebox.
+ * who leads it and its timebox. `loading` draws `loadingRows` numbered rows with a checkbox that cannot be ticked,
+ * bars for the title and the owner, and an empty timebox badge.
  */
 export const Agenda = ({
-    items,
+    items = [],
     checkboxLabel,
+    loading,
+    loadingRows = 4,
     className,
 }: {
-    items: readonly AgendaItem[];
+    items?: readonly AgendaItem[];
     /** The accessible name of an item's checkbox */
     checkboxLabel: (item: AgendaItem) => string;
+    loading?: boolean;
+    /** How many rows to draw while loading */
+    loadingRows?: number;
     className?: string;
 }) =>
 {
     const [done, setDone] = useState<readonly string[]>(() => items.filter((item) => item.done).map((item) => item.title));
 
     return (
-        <ol className={cn("flex flex-col rounded-[var(--radius-lg)] border border-border", className)}>
-            {items.map((item, index) => (
+        <ol {...pendingFrame(loading)} className={cn("flex flex-col rounded-[var(--radius-lg)] border border-border", className)}>
+            {loading && Array.from({ length: loadingRows }, (_, index) => (
+                <li key={index} className="flex items-center gap-3 border-t border-border px-3 py-2.5 first:border-t-0">
+                    <Checkbox disabled aria-hidden tabIndex={-1} />
+                    <span className="min-w-5 text-[length:var(--ui-text-sm)] text-muted-foreground tabular-nums">{index + 1}</span>
+                    <span className={cn(BODY, "min-w-0 flex-1 text-foreground")}><PendingText length={30} /></span>
+                    <span className={cn(NOTE, "hidden shrink-0 sm:inline")}><PendingText length={12} /></span>
+                    <Badge variant="outline"><PendingText length={6} /></Badge>
+                </li>
+            ))}
+            {!loading && items.map((item, index) => (
                 <li key={item.title} className="flex items-center gap-3 border-t border-border px-3 py-2.5 first:border-t-0">
                     <Checkbox
                         checked={done.includes(item.title)}
