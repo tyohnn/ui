@@ -7,6 +7,8 @@ import { FileTiles } from "@tyohnn/blocks/file-tiles";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { ListCard } from "@tyohnn/blocks/list-card";
+import { Page } from "@tyohnn/blocks/page";
+import { PageAside, PageSplit } from "@tyohnn/blocks/page-split";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { StatCards } from "@tyohnn/blocks/stat-cards";
 import { TaskList } from "@tyohnn/blocks/task-list";
@@ -122,16 +124,16 @@ const FilesCard = () => (
 
 // [contain:inline-size]: the body never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
 export const Overview = () => (
-    <div className="flex h-[calc(100svh-5rem)] min-h-0 flex-col gap-4 p-4 pt-0 [contain:inline-size]">
+    <Page scroll="regions" flush>
         <ProjectHead />
         <StatCards stats={STATS} />
-        <div className="flex min-h-0 flex-1 gap-4">
+        <PageSplit>
             <TaskCard />
-            <div className="flex min-h-0 w-[26rem] shrink-0 flex-col gap-4">
+            <PageAside width="lg">
                 <ActivityCard />
                 <FilesCard />
-            </div>
-        </div>
+            </PageAside>
+        </PageSplit>
         <IconNote icon={<SquareCheck />} className="gap-1.5">Synced with the Atlas board · 2 min ago</IconNote>
-    </div>
+    </Page>
 );

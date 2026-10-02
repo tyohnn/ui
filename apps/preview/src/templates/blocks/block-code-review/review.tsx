@@ -22,6 +22,9 @@ import { DiffFile } from "@tyohnn/blocks/diff-file";
 import { DiffStat } from "@tyohnn/blocks/diff-stat";
 import { DiffView } from "@tyohnn/blocks/diff-view";
 import { PARAGRAPH, ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
+import { ASIDE_WIDTH, GUTTER_INLINE } from "@tyohnn/blocks/lib/frame";
+import { Page, PagePane } from "@tyohnn/blocks/page";
+import { PageSplit } from "@tyohnn/blocks/page-split";
 import { PageTabs } from "@tyohnn/blocks/page-tabs";
 import { RecordHeading } from "@tyohnn/blocks/record-heading";
 import { RefChip } from "@tyohnn/blocks/ref-chip";
@@ -44,7 +47,7 @@ import { BACKOFF_DIFF, CHECKS, type DiffLine, HANDLER_DIFF, LABELS, PULL_REQUEST
 
 const PrHead = () => (
     <RecordHeading
-        className="px-6 pt-5"
+        className={cn(GUTTER_INLINE.md, "pt-5")}
         title={PULL_REQUEST.title}
         number={<>#{PULL_REQUEST.number}</>}
         status={(
@@ -137,7 +140,7 @@ const ChangedFile = ({ id, path, added, removed, viewed, lines }: { id: string; 
 );
 
 const FilesChanged = () => (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-y-auto px-6 pb-6">
+    <PagePane gutter="md" gap="xs" flush>
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <span className={cn(NOTE, ICON_LINE, "whitespace-nowrap")}>
                 <GitCommit />
@@ -148,7 +151,7 @@ const FilesChanged = () => (
         <ChangedFile id="cr-viewed-backoff" path="webhooks/retry/backoff.ts" added={17} removed={6} lines={withThread(BACKOFF_DIFF)} />
         <ChangedFile id="cr-viewed-policy" path="webhooks/retry/policy.ts" added={38} removed={0} viewed />
         <ChangedFile id="cr-viewed-handler" path="webhooks/handler.ts" added={7} removed={2} lines={HANDLER_DIFF} />
-    </div>
+    </PagePane>
 );
 
 const CHECK_ICON = { pass: CircleCheck, fail: OctagonX, running: Loader } as const;
@@ -156,7 +159,7 @@ const CHECK_TONE = { pass: "success", fail: "destructive", running: "muted" } as
 
 const SidePanel = () => (
     <DetailSections
-        className="w-72 px-5 pb-6"
+        className={cn(ASIDE_WIDTH.sm, "px-5 pb-6")}
         sections={[
             {
                 id: "reviewers",
@@ -219,11 +222,11 @@ const SidePanel = () => (
 );
 
 export const Review = () => (
-    <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 [contain:inline-size]">
+    <Page scroll="regions" gutter="none">
         <PrHead />
         <Tabs defaultValue="files" className="min-h-0 flex-1 gap-4">
             <PageTabs
-                className="px-6"
+                className={GUTTER_INLINE.md}
                 tabs={[
                     { value: "conversation", label: "Conversation", icon: <MessageSquare data-icon="inline-start" />, count: "5" },
                     { value: "files", label: "Files changed", icon: <FileText data-icon="inline-start" />, count: "3" },
@@ -231,9 +234,11 @@ export const Review = () => (
                 ]}
             />
             <TabsContent value="files" className="flex min-h-0 flex-1">
-                <FilesChanged />
-                <SidePanel />
+                <PageSplit gap="none">
+                    <FilesChanged />
+                    <SidePanel />
+                </PageSplit>
             </TabsContent>
         </Tabs>
-    </div>
+    </Page>
 );

@@ -22,6 +22,7 @@ import { CollapsedThread } from "@tyohnn/blocks/collapsed-thread";
 import { IconToolbar } from "@tyohnn/blocks/icon-toolbar";
 import { ICON_LINE, NOTE } from "@tyohnn/blocks/lib/copy";
 import { MailHeader } from "@tyohnn/blocks/mail-header";
+import { Page, PageContent, PagePane } from "@tyohnn/blocks/page";
 import { Prose } from "@tyohnn/blocks/prose";
 import { ReplyComposer } from "@tyohnn/blocks/reply-composer";
 import { Badge } from "@tyohnn/components/badge";
@@ -79,10 +80,10 @@ const Attachments = () => (
 // content from widening SidebarInset (upstream markup, no min-w-0). The page is 64rem wide at most, and the
 // composer's rows end where the page's content does (64rem less the page's padding).
 export const Reader = () => (
-    <div className="flex min-h-0 flex-[1_1_0px] flex-col [contain:inline-size]">
+    <Page scroll="regions" gutter="none" gap="none">
         <IconToolbar groups={MAIL_ACTIONS} position="1 of 128" endActions={PAGE_ACTIONS} />
-        <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="flex max-w-[64rem] flex-col gap-6 px-6 py-6">
+        <PagePane>
+            <PageContent gutter="md" gap="md" measure="lg" align="start">
                 <CollapsedThread messages={EARLIER_THREAD.map((mail) => ({ id: mail.date, ...mail }))} />
                 <MailHeader
                     subject={OPEN_MAIL.subject}
@@ -102,8 +103,8 @@ export const Reader = () => (
                     {OPEN_MAIL.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
                 </Prose>
                 <Attachments />
-            </div>
-        </div>
+            </PageContent>
+        </PagePane>
         <ReplyComposer
             className="[&>*]:max-w-[61rem]"
             icon={<Reply />}
@@ -125,5 +126,5 @@ export const Reader = () => (
                 </>
             )}
         />
-    </div>
+    </Page>
 );

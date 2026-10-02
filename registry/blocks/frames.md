@@ -1,7 +1,9 @@
 # Frames — how blocks sit on a page
 
-**Status: proposal (2026-10-02). Nothing here is built.** This file is the evidence and the design to argue with.
-The contract in the root `DESIGN.md` does not change until a slice of this is adopted.
+**Status (2026-10-02): the frames are built and 15 of the 17 templates stand on them.** `page.tsx`,
+`page-split.tsx` and `lib/frame.ts` are in this folder; the README lists them with their tokens. This file is the
+evidence they were drawn from, what moved when they went in, and what is still open. The axis contract in the root
+`DESIGN.md` did not change: the tokens carry their defaults in the read.
 
 ## Where this sits
 
@@ -10,8 +12,8 @@ The contract in the root `DESIGN.md` does not change until a slice of this is ad
     (this proposal)    frames              where the blocks stand: gutter, gap, what scrolls, what sits beside what
     apps/preview       templates           a frame filled with blocks and a product's data
 
-Since the templates were cut into blocks, what a template still writes by hand is exactly the frame. Counted in
-the template sources:
+Once the templates were cut into blocks, what a template still wrote by hand was exactly the frame. Counted in
+the template sources before the frames went in:
 
 - **the content root**: 15 templates, 10 different class strings
   (`flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 p-4 [contain:inline-size]`, the same with `pt-0`, with
@@ -21,7 +23,8 @@ the template sources:
 - **the second pane**: `w-72` five times, `w-80` three, `26rem` twice, `30rem` once, and `2fr 1fr` twice;
 - **the bar**: eleven `<header className="…">` strings.
 
-Every one of these is a decision about room, made again in each file.
+Every one of these was a decision about room, made again in each file. The first three are frames now; the bar
+is left as it is (below).
 
 ## Why
 
@@ -116,68 +119,94 @@ nothing about what is inside.
 ## Frames are layout blocks
 
 A frame is a block whose only content is slots. It lives in `registry/blocks`, reads tokens through utilities and
-takes its data and words from the caller, like every block. The headings, sections, toolbars and tab strips this
-proposal first sketched as "regions" exist already as blocks (`PageHeading` · `DetailHeading` · `RecordHeading` ·
-`DocumentTitle` · `SectionHeading` · `FilterBar` · `CardToolbar` · `PageTabs`); a frame does not repeat them. What
-is missing is small:
+takes everything else from the caller, like every block. The headings, sections, toolbars and tab strips this
+proposal first sketched as "regions" are blocks already (`PageHeading` · `DetailHeading` · `RecordHeading` ·
+`DocumentTitle` · `SectionHeading` · `FilterBar` · `CardToolbar` · `PageTabs`); a frame does not repeat them.
 
-| Frame | What it is | Choices (props) |
+| Frame | What it is | What the screen chooses |
 |---|---|---|
-| `Page` | the content under the bar | `scroll` page · regions — `width` full · measure — `gutter` step |
-| `PageSplit` · `PageMain` · `PageAside` | two panes side by side | aside width step · which pane leads · what the aside does when narrow (stack · sheet · hide) |
+| `Page` | the content under the bar | `scroll` page · regions — `gutter` — `gap` — `flush` under a bar without a rule |
+| `PagePane` | a region of a pinned page that scrolls by itself | `gutter` — `gap` — `flush` |
+| `PageContent` | a column of blocks inside something that scrolls | `gutter` — `gap` — `measure` (centred or at the start) — `document` padding — the element (`as="article"`) |
+| `PageSplit` | two panes side by side | `gap` — `stack` below `xl` |
+| `PageMain` · `PageAside` | the pane that takes the room · the narrower one | aside `width` — `gap` — `stack` — `scroll` |
+
+A block that is itself the aside (a settings panel, a record's side column, a table of contents) takes its width
+from `ASIDE_WIDTH` in `lib/frame.ts`, and a block that is itself the reading column takes `MEASURE`.
 
 What a frame owns:
 
 - **The space between** the blocks it holds, and between them and the edge. Never the inside of a block.
-- **Who scrolls.** `Page` with `scroll="regions"` is the one place that pins the height; the panes are the scroll
-  owners. Today three different `calc(100svh - …)` forms do this, each knowing the bar's height by heart.
-- **What it becomes when narrow.** A frame sits inside the inset, so it reacts to its own width (a container
-  query), not the viewport: the same page works with the sidebar open or collapsed.
-- **Its meaning.** `Page` is the `main` landmark and where the skip link lands; `PageAside` is a named
-  `complementary` region.
+- **Who scrolls.** `Page` with `scroll="regions"` pins the height; a `PagePane`, an aside or a card inside is the
+  scroll owner. The audit now reports them by name (`page`, `page-pane`, `page-aside`) where it used to say `div`.
+- **Its height, without knowing the bar.** `Page` is `min-h-0 flex-[1_1_0px]` in the inset's column, so it takes
+  what the bar leaves. Three `calc(100svh - …)` forms — 4rem, 5rem for the inset variant, `--header-height` plus
+  a pixel — are gone, and the pictures did not move.
 
 What a frame never holds: data, a domain type, a heading, or a component it chose for you.
 
-The bar inside the inset is not a frame here. Its markup is upstream's sidebar-block shell, kept as it is so
+The bar inside the inset is not a frame. Its markup is upstream's sidebar-block shell, kept as it is so
 `compare-blocks.mjs` can pair it with the reference app.
 
-### One rule of the blocks does not apply
+### Which templates
 
-A block is cut out of a template and must not move a pixel (`registry/blocks/README.md`, rule 2). A frame cannot
-promise that, because it exists to make screens agree: adopting `Page` moves every screen that disagreed. What
-would move, from the counts above:
+| Frame use | Templates |
+|---|---|
+| `Page scroll="regions"` with gutter and gap | orders, team, roadmap, project, ai-playground |
+| `Page scroll="regions"`, bare, with a `PagePane` | code-review, inbox; calendar (bare, its grid scrolls) |
+| `Page` scrolling with gutter and gap | analytics |
+| `Page` scrolling around a `PageContent` | editor, meeting-notes, changelog (measured documents) · docs, api-reference, help-center (full width) |
+| `PageSplit` | team, project, ai-playground, code-review, docs, api-reference, help-center |
 
-- gutter 16 on most app screens, 24 on inbox and code-review, 16 · 32 · 40 on documents → three steps;
-- `pt-0` under a bar without a rule against `p-4` under a ruled one → one rule for both;
-- a document's block padding (40 · 24/48 · 32/64) → one value;
-- the measure (48rem · 52rem · 64rem) → one or two steps;
-- the aside (288 · 320 · 416 · 480 · a third) → three steps.
+Not on a frame: crm-dashboard (a fixed-width app window drawn as an illustration, not a page in an inset) and
+settings-dialog (a dialog over upstream's placeholder page).
 
-So the proof is different. `audit-layout.mjs` before and after: every number either stays or lands on a step, and
-`diff-shots.mjs` differs only on the screens this list names. Each move is a decision to show, not a regression
-to hide.
+### What moved, and what did not
+
+A block is cut out of a template without moving a pixel. A frame exists to make screens agree, so it may move the
+ones that disagreed — but every value the templates had turned out to fit a step, except one:
+
+- **A document's own padding.** Above and below the column it was 40/40 (editor), 24/48 (meeting-notes), 32/64
+  (changelog, docs, api-reference) and 32/48 (help-center). It is now `--page-document-padding-start` · `-end`,
+  2rem and 4rem. Editor's title sits 8px higher, meeting-notes' 8px lower; the rest of the change is below the fold.
+
+- **A pinned page in a system that draws the inset as a panel.** loam gives the inset a margin, so
+  `calc(100svh - 4rem)` was 16px taller than the panel and the roadmap's board ran past its bottom edge. `Page`
+  takes the height the inset has, and the board ends inside the panel with its gutter. This one is a fix.
+
+Everything else is where it was. `check-templates.mjs --shots` before and after, the 15 templates in all 15
+systems and both modes, compared with `diff-shots.mjs`: of 450 pairs, 375 are identical, 60 are editor and
+meeting-notes (the padding above), 2 are loam's roadmap (the fix above), and 13 differ by one or two levels of one
+channel on at most 191 pixels — the raster noise the blocks' README describes.
+
+Below `xl` the splits stack as before (the row wraps). Layout facts at 768 and 390 are unchanged, which also means
+the five templates that overflowed at 390px still do.
 
 ## Values: the frame picks the step, the system gives the value
 
 The frame reads a token with its default written in the read — `p-[var(--page-gutter-sm,1rem)]` — the way the
-root contract already hoists a slot's default into the rule that reads it. No system has to declare anything and
-the axis contract does not change; a system (or a product, in its own CSS) declares a name only when it wants
-another value.
+root contract hoists a slot's default into the rule that reads it. No system declares anything and the axis
+contract does not change; a system, or a product in its own CSS, declares a name only when it wants another value.
 
-| Token | Default | From |
+| Token | Default | Stands for |
 |---|---|---|
-| `--page-gutter-sm` · `-md` · `-lg` | 16 · 24 · 32 | dashboards · inbox and code-review · documents and the product |
-| `--page-gap` | 16 | every app screen |
-| `--page-measure` · `--page-measure-wide` | 48rem · 52rem | editor and meeting-notes · docs and changelog |
-| `--page-aside-width-sm` · `-md` · `-lg` | 288 · 320 · 416 | the splits |
+| `--page-gutter-sm` · `-md` · `-lg` · `-xl` | 1 · 1.5 · 2 · 2.5rem | app screens · inbox and code-review · api-reference and help-center · docs and changelog |
+| `--page-gap-xs` · `-sm` · `-md` · `-lg` · `-xl` | 0.75 · 1 · 1.5 · 2 · 2.5rem | the room between blocks |
+| `--page-measure-sm` · `-md` · `-lg` | 48 · 52 · 64rem | editor and meeting-notes · docs and changelog · the inbox reader |
+| `--page-aside-xs` · `-sm` · `-md` · `-lg` · `-xl` | 14 · 18 · 20 · 26 · 30rem | a table of contents · code-review · team and ai-playground · project and help-center · api-reference |
+| `--page-document-padding-start` · `-end` | 2 · 4rem | above and below a document |
 
 "This page stands at the large gutter" is the frame's choice and belongs to the screen. "The large gutter is
-32px" is the system's value. A product that wants more room moves to a larger step; a dense system gives every
-step a smaller number. Two products on one system then agree by default.
+32px" is the value. Declared on `:root` in the preview — every gutter step up by 1rem, the asides 4rem wider, the
+measures 8rem narrower — the templates follow without a change to any of them: orders' gutter 16 → 32, inbox's
+24 → 40, api-reference's 32 → 48, editor's column 768 → 640, team's aside 320 → 384, project's 416 → 480.
+
+Five steps of gutter and five of aside is what it took to cover the templates as they are. That is decided: the
+steps stay, so no template has to move to fit a shorter scale.
 
 The title is the same question one layer down, and the blocks already name it: their README lists the large
-titles derived from `--ui-text-lg` (×1.25 to ×2.5) and the reading measures as values the systems have no token
-for. Title steps belong with that list, not with the frames.
+titles derived from `--ui-text-lg` (×1.25 to ×2.5) as values the systems have no token for. Title steps belong
+with that list, not with the frames.
 
 ## Recipes and screens
 
@@ -203,29 +232,26 @@ template cannot be rebuilt on the frames without overriding a gap, the frame is 
 
 ## Narrow widths
 
-Five templates overflow at 390px (crm-dashboard, team, project, code-review, settings-dialog), and where a split
-survives the aside drops under the main column or off the screen. The product's 18 screens never overflow,
-because they all pass through one shell. `PageSplit` is where this gets a rule, and it is the part that takes
-work: the split in code-review sits inside a tab panel and its aside is a block that draws its own edge and
-scrolls by itself.
+Still open. Five templates overflow at 390px (crm-dashboard, team, project, code-review, settings-dialog), and
+where a split survives the aside drops under the main column or off the screen. The product's 18 screens never
+overflow, because they all pass through one shell. `PageSplit` is now the one place to give this a rule: stack on
+the frame's own width (a container query) rather than the viewport's `xl`, and say what a pinned page becomes when
+its panes stack — today the wrapped row keeps each pane's height and the page overflows.
 
-## Adoption and checks
+## Checks
 
-- A frame is adopted when two or more screens use it, the rule the slot contract already follows.
-- `audit-layout.mjs` before and after: numbers stay or land on a step. `diff-shots.mjs` differs only where the
-  move was announced.
-- Every template on a frame fits at 390px (`check-templates.mjs` reports horizontal overflow; it would run at a
-  second width).
-- A product's own shell and page components are replaced by blocks and frames, which is the test that matters.
+- `audit-layout.mjs` before and after, at 1440 · 768 · 390: every number stays or lands on a step.
+- `check-templates.mjs --shots` before and after and `diff-shots.mjs`: differences only where a move was announced.
+- `scan-tokens`: the frame tokens are reported as "undefined, falls back", which is what they are.
 
 ## Open decisions
 
-1. **The steps.** Gutter 16 · 24 · 32, measure 48rem · 52rem, aside 288 · 320 · 416 are read off the templates.
-   Fewer is better; say which survive.
-2. **Which pictures may move.** The list under "One rule of the blocks does not apply". The alternative is frames
-   with enough props to reproduce every template as it is, which is the hand-written class string again.
-3. **How `Page` knows its height.** Recommended: the inset is a column of fixed height and `Page` takes the rest
-   (`min-h-0 flex-1`), so no frame knows the bar's height. The alternative is a `--page-top` token the bar sets.
-4. **First slice.** Recommended: `Page` alone, on every template's content root, with the moves listed and shown
-   in before-and-after shots. `PageSplit` second, once the narrow rule is agreed on code-review.
-5. **Recipes as code.** Recommended: no. A recipe is documentation plus a screen.
+Decided: the steps stay as many as the templates use (gutter 0 · 16 · 24 · 32 · 40, gap five, measure three,
+aside five). Collapsing them would move pictures for the sake of a shorter list.
+
+1. **The narrow rule** for `PageSplit`, above.
+2. **Whether a system should declare these.** They work undeclared. A dense system and a roomy one would want
+   different numbers, and then the names belong in `tokens.css` with the axis contract's next version.
+3. **A product's shell.** The first product's own shell and page-header components do what `Page` and
+   `PageHeading` do. Replacing them is the test that matters, and it waits for the CLI to install blocks.
+4. **Recipes as code.** Recommended: no. A recipe is documentation plus a screen.

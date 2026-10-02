@@ -6,6 +6,7 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { META } from "@tyohnn/blocks/lib/text";
 import { MetricCards } from "@tyohnn/blocks/metric-cards";
+import { Page } from "@tyohnn/blocks/page";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
 import { SegmentedControl } from "@tyohnn/blocks/segmented-control";
 import { ShareMeter } from "@tyohnn/blocks/share-meter";
@@ -91,7 +92,7 @@ const Funnel = () => (
 
 // [contain:inline-size]: the body never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
 export const Analytics = () => (
-    <div className="flex h-[calc(100svh-4rem)] min-h-0 flex-col gap-4 overflow-y-auto p-4 [contain:inline-size]">
+    <Page>
         <Controls />
         <MetricCards metrics={KPIS} changeVariant="secondary" />
         <div className="grid shrink-0 grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
@@ -102,5 +103,5 @@ export const Analytics = () => (
             <TopPages />
             <Funnel />
         </div>
-    </div>
+    </Page>
 );

@@ -6,6 +6,7 @@ import { IconNote } from "@tyohnn/blocks/icon-note";
 import { InfoCard } from "@tyohnn/blocks/info-card";
 import { BODY, IN_PROSE, NOTE } from "@tyohnn/blocks/lib/copy";
 import { LinkItemList } from "@tyohnn/blocks/link-item-list";
+import { Page, PageContent } from "@tyohnn/blocks/page";
 import { Prose } from "@tyohnn/blocks/prose";
 import { RuleSteps } from "@tyohnn/blocks/rule-steps";
 import { TimelineBars } from "@tyohnn/blocks/timeline-bars";
@@ -152,8 +153,9 @@ const CustomFieldsFragment = () => (
 const Anchor = ({ id }: { id: string }) => <span id={id} className="block" />;
 
 export const ChangelogPost = () => (
-    <div className="h-[calc(100svh-4rem)] min-h-0 overflow-y-auto [contain:inline-size]">
-        <Prose as="article" className="mx-auto max-w-[52rem] px-10 pt-8 pb-16">
+    <Page gutter="none" gap="none">
+        <PageContent measure="md" gutter="xl" gap="none" document>
+        <Prose as="article">
             <div className="not-typeset flex flex-wrap items-center gap-2">
                 <Badge>{RELEASE.version}</Badge>
                 <IconNote className="gap-1.5" icon={<Calendar />}>{RELEASE.date}</IconNote>
@@ -267,5 +269,6 @@ export const ChangelogPost = () => (
                 <LinkItemList trailing="arrow" items={EARLIER.map((release) => ({ id: release.version, href: "#", title: release.title, description: <>{release.version} · {release.date}</> }))} />
             </section>
         </Prose>
-    </div>
+        </PageContent>
+    </Page>
 );

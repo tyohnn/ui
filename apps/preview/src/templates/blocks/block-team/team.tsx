@@ -6,7 +6,9 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { FigureRow } from "@tyohnn/blocks/figure-row";
 import { IconMeta } from "@tyohnn/blocks/icon-meta";
 import { InfoCard } from "@tyohnn/blocks/info-card";
+import { Page } from "@tyohnn/blocks/page";
 import { PageHeading } from "@tyohnn/blocks/page-heading";
+import { PageAside, PageSplit } from "@tyohnn/blocks/page-split";
 import { Person } from "@tyohnn/blocks/person";
 import { RowMenu } from "@tyohnn/blocks/row-menu";
 import { SwitchField } from "@tyohnn/blocks/switch-field";
@@ -144,9 +146,9 @@ const InvitationsCard = () => (
 );
 
 // [contain:inline-size]: the table's width never widens SidebarInset (upstream markup, no min-w-0) past the viewport.
-// The height is the viewport below the site header and its 1px bottom border, so the sidebar row keeps upstream's height.
+// Page takes the height the inset has under the site header, so the sidebar row keeps upstream's height.
 export const Team = () => (
-    <div className="flex h-[calc(100svh-var(--header-height)-1px)] min-h-0 flex-col gap-4 p-4 [contain:inline-size]">
+    <Page scroll="regions">
         <PageHeading
             title="Team members"
             meta="Manage who can use the Quillstone workspace and what they can change."
@@ -157,13 +159,13 @@ export const Team = () => (
                 </>
             )}
         />
-        <div className="flex min-h-0 flex-1 flex-wrap gap-4 xl:flex-nowrap">
+        <PageSplit stack>
             <MembersPanel />
-            <div className="flex min-h-0 w-full flex-col gap-4 overflow-y-auto xl:w-80 xl:shrink-0">
+            <PageAside width="md" stack scroll>
                 <SeatsCard />
                 <InvitationsCard />
                 <SecurityCard />
-            </div>
-        </div>
-    </div>
+            </PageAside>
+        </PageSplit>
+    </Page>
 );

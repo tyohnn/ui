@@ -7,6 +7,7 @@ import { DataTable, type DataTableColumn } from "@tyohnn/blocks/data-table";
 import { DocumentTitle } from "@tyohnn/blocks/document-title";
 import { IconNote } from "@tyohnn/blocks/icon-note";
 import { BODY, BULLETS, NOTE } from "@tyohnn/blocks/lib/copy";
+import { Page, PageContent } from "@tyohnn/blocks/page";
 import { Person } from "@tyohnn/blocks/person";
 import { Prose } from "@tyohnn/blocks/prose";
 import { SectionTitle } from "@tyohnn/blocks/section-title";
@@ -133,8 +134,8 @@ const NextMeeting = () => (
 // flex-[1_1_0px]: the notes take the inset's remaining height and scroll inside; [contain:inline-size] keeps them from
 // widening SidebarInset (upstream markup, no min-w-0) between the two sidebars.
 export const Notes = () => (
-    <div className="min-h-0 flex-[1_1_0px] overflow-y-auto [contain:inline-size]">
-        <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pt-6 pb-12">
+    <Page gutter="none" gap="none">
+        <PageContent as="article" measure="sm" gap="lg" document>
             <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">Product</Badge>
@@ -159,6 +160,6 @@ export const Notes = () => (
             <CalloutList icon={<CircleCheck />} title="Decisions" items={DECISIONS} />
             <ActionItems />
             <NextMeeting />
-        </article>
-    </div>
+        </PageContent>
+    </Page>
 );
