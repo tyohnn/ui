@@ -47,6 +47,18 @@ go, so the screen does not jump when the data arrives. There is no separate skel
 - **Nothing the caller does not know yet decides the frame.** If a part appears only with the data (a selection
   bar), the waiting face follows what the caller already passed (a known selection keeps its bar).
 
+What a waiting face cannot do:
+
+- **A bar does not wrap.** Where the real text runs over two lines (a description in a narrow card, a table cell
+  of prose, a long title that pushes the actions under it) the frame is shorter while waiting. Blocks with such a
+  slot take a line count where one was needed (`InfoCard` `descriptionLines`, `ChatReply` `lines`); otherwise the
+  screen leaves that use unwired rather than jump.
+- **It does not know what only the data knows.** A row is as tall as its tallest cell: a badge after one name, an
+  icon on one item. `LinkItemList` and `ActionItemList` therefore keep the icon and the badge's place of the
+  items the caller already passed; with none passed the rows are plain.
+- **Bars on a muted surface** take the page background (`BARS_ON_MUTED`): a system without a `--skeleton` of its
+  own draws a bar in `--muted`.
+
 In the preview every template passes `loading={LOADING}` (`apps/preview/src/templates/loading.ts`), so
 `?template=<id>&loading` shows the screen's waiting face. `node tooling/snapshot/check-loading.mjs --templates <id>`
 compares every `data-loading` frame with the same element once the data is there and fails when one moves or
