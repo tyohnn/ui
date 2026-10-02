@@ -2,6 +2,7 @@ import { Fragment, type ReactNode } from "react";
 
 import { Separator } from "@tyohnn/components/separator";
 import { NOTE } from "@tyohnn/blocks/lib/copy";
+import { PendingText, pendingFrame } from "@tyohnn/blocks/lib/pending";
 import { cn } from "@tyohnn/lib/utils";
 
 export type DetailSection = { id: string; title: ReactNode; /** At the end of the title's line: a count ("4 of 6 passed") */ note?: ReactNode; content: ReactNode };
@@ -9,10 +10,12 @@ export type DetailSection = { id: string; title: ReactNode; /** At the end of th
 /**
  * The side column of a record's page: short titled sections with a hairline between them — who reviews, which
  * checks ran, labels, links — behind a divider on its start edge, scrolling on its own. A section's content is
- * its own rows (StatusLine, badges, links). Give the width and padding with `className`.
+ * its own rows (StatusLine, badges, links). Give the width and padding with `className`. `loading` draws a bar
+ * for each section's note; the section titles stay, and the content is the caller's, which passes `loading` to
+ * the rows inside.
  */
-export const DetailSections = ({ sections, className }: { sections: readonly DetailSection[]; className?: string }) => (
-    <aside className={cn("flex shrink-0 flex-col gap-5 overflow-y-auto border-l border-border", className)}>
+export const DetailSections = ({ sections, loading, className }: { sections: readonly DetailSection[]; loading?: boolean; className?: string }) => (
+    <aside {...pendingFrame(loading)} className={cn("flex shrink-0 flex-col gap-5 overflow-y-auto border-l border-border", className)}>
         {sections.map((section, index) => (
             <Fragment key={section.id}>
                 {index > 0 && <Separator />}
@@ -22,7 +25,7 @@ export const DetailSections = ({ sections, className }: { sections: readonly Det
                         : (
                             <div className="flex items-center justify-between gap-2">
                                 <span className={cn(NOTE, "font-semibold")}>{section.title}</span>
-                                <span className={cn(NOTE, "whitespace-nowrap")}>{section.note}</span>
+                                <span className={cn(NOTE, "whitespace-nowrap")}>{loading ? <PendingText length={10} /> : section.note}</span>
                             </div>
                         )}
                     {section.content}
