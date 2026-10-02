@@ -245,7 +245,7 @@ const COLUMNS: DataTableColumn<CompanyRow>[] = [
     },
     { id: "win", header: "Win Probability", width: WIDTHS[5], pending: <SegmentMeter loading />, cell: (row) => <SegmentMeter value={row.win} /> },
     { id: "trend", header: "Activity Trend", width: WIDTHS[6], pending: <ActivityBars loading count={TREND_BARS} />, cell: (row) => <ActivityBars levels={activityLevels(ROWS.indexOf(row) + 3)} /> },
-    { id: "interaction", header: "Last Interaction", width: WIDTHS[7], cell: (row) => <InlineFacts icon={<Calendar />} facts={[row.date, row.touch]} /> },
+    { id: "interaction", header: "Last Interaction", width: WIDTHS[7], pending: <InlineFacts loading icon={<Calendar />} count={2} />, cell: (row) => <InlineFacts icon={<Calendar />} facts={[row.date, row.touch]} /> },
     { id: "actions", header: "Actions", pending: <Button variant="ghost" size="icon-sm" disabled aria-hidden><MoreHorizontal /></Button>, cell: (row) => <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${row.company}`}><MoreHorizontal /></Button> },
 ];
 
