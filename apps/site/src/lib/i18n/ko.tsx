@@ -64,8 +64,8 @@ export const ko: Messages = {
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 한 단씩, 그림자로 뜨게.",
-            captions: { nocturne: "바닥에 붙은 면", graphite: "한 단씩 쌓인 면", luma: "테두리 없이 그림자로 뜬 면" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 살짝, 그림자로 뜨게.",
+            captions: { nocturne: "바닥에 붙은 면", rhea: "옅은 그림자로 살짝 뜬 면", luma: "테두리 없이 그림자로 뜬 면" },
         },
         texture: {
             title: "질감",

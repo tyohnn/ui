@@ -79,8 +79,8 @@ export const en = {
         },
         depth: {
             title: "Depth",
-            body: "How far surfaces lift off the page — flat, stepped, or lifted.",
-            captions: { nocturne: "Flat on the page", graphite: "Planes a step apart", luma: "No borders · lifted by shadow" } as Record<string, string>,
+            body: "How far surfaces lift off the page — flat, set down lightly, or lifted.",
+            captions: { nocturne: "Flat on the page", rhea: "Set down on a light shadow", luma: "No borders · lifted by shadow" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
