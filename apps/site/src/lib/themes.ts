@@ -2,7 +2,8 @@
 // Server components only (Node fs).
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 
 import { PALETTE, resolveTheme, type PresetLists, type Theme } from "@tyohnn/theme";
 
@@ -102,4 +103,34 @@ export const readPresetLists = (): PresetLists =>
     const { systems, palettes, accents } = JSON.parse(readFileSync(join(themesRoot, "../presets.json"), "utf8")) as PresetLists;
 
     return { systems, palettes, accents };
+};
+
+export interface TailwindFamily
+{
+    name: string;
+    /** 50 … 950, each as Tailwind writes it (oklch) */
+    shades: { shade: string; value: string }[];
+}
+
+/**
+ * Tailwind's default palette, read from the tailwindcss package the site builds with, so a pick is the exact
+ * value `bg-red-500` would paint. Chromatic families first (in Tailwind's own order), the greys after.
+ */
+export const readTailwindColours = (): TailwindFamily[] =>
+{
+    // tailwindcss is @tyohnn/build-system's dependency (it compiles every system), so resolve it from there.
+    const require = createRequire(join(process.cwd(), "../../tooling/build-system/package.json"));
+    const css = readFileSync(join(dirname(require.resolve("tailwindcss/package.json")), "theme.css"), "utf8");
+    const families = new Map<string, TailwindFamily>();
+
+    for (const [, name, shade, value] of css.matchAll(/--color-([a-z]+)-(\d+):\s*([^;]+);/g))
+    {
+        if (!families.has(name)) families.set(name, { name, shades: [] });
+        families.get(name)!.shades.push({ shade, value: value.trim() });
+    }
+
+    const greys = ["slate", "gray", "zinc", "neutral", "stone", "mauve", "olive", "mist", "taupe"];
+    const all = [...families.values()];
+
+    return [...all.filter((family) => !greys.includes(family.name)), ...all.filter((family) => greys.includes(family.name))];
 };

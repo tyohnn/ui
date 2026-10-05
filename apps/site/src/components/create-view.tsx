@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { Preset, PresetLists } from "@tyohnn/theme";
 
 import type { SystemSummary } from "@/lib/site";
-import type { ThemeInfo } from "@/lib/themes";
+import type { TailwindFamily, ThemeInfo } from "@/lib/themes";
 
 import { Combobox } from "./combobox";
 import { useLocale } from "./locale-provider";
@@ -41,12 +41,15 @@ export const CreateView = ({
     themes,
     owns,
     presets,
+    families,
 }: {
     /** In the order presets.json counts them: tyohnn's own systems first, then the shadcn ports */
     systems: SystemSummary[];
     themes: ThemeInfo[];
     owns: Record<string, string>;
     presets: PresetLists;
+    /** Tailwind's palette, for the colour picker */
+    families: TailwindFamily[];
 }) =>
 {
     const names = systems.map((system) => system.name);
@@ -65,12 +68,12 @@ export const CreateView = ({
 
     return (
         <ThemeProvider themes={themes} own={owns[name] ?? name} system={name} presets={presets}>
-            <CreateBody systems={systems} name={name} onSystem={choose} />
+            <CreateBody systems={systems} name={name} onSystem={choose} families={families} />
         </ThemeProvider>
     );
 };
 
-const CreateBody = ({ systems, name, onSystem }: { systems: SystemSummary[]; name: string; onSystem: (name: string) => void }) =>
+const CreateBody = ({ systems, name, onSystem, families }: { systems: SystemSummary[]; name: string; onSystem: (name: string) => void; families: TailwindFamily[] }) =>
 {
     const { t } = useLocale();
     const theme = useTheme()!;
@@ -95,8 +98,7 @@ const CreateBody = ({ systems, name, onSystem }: { systems: SystemSummary[]; nam
         <SystemView
             system={system}
             next={next}
-            onOtherSystem={open}
-            onShuffle={shuffle}
+            create={{ families, onOtherSystem: open, onShuffle: shuffle }}
             head={(
                 <div className="page-head">
                     <div>

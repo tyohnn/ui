@@ -4,7 +4,7 @@ import { CreateView } from "@/components/create-view";
 import { type Locale, localizeSystems } from "@/lib/i18n";
 import { getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
-import { readPresetLists, readThemes, systemThemes } from "@/lib/themes";
+import { readPresetLists, readTailwindColours, readThemes, systemThemes } from "@/lib/themes";
 
 export function CreatePageView({ locale }: { locale: Locale })
 {
@@ -15,7 +15,7 @@ export function CreatePageView({ locale }: { locale: Locale })
 
     return (
         <Suspense>
-            <CreateView systems={systems.map(summarize)} themes={readThemes()} owns={systemThemes()} presets={presets} />
+            <CreateView systems={systems.map(summarize)} themes={readThemes()} owns={systemThemes()} presets={presets} families={readTailwindColours()} />
         </Suspense>
     );
 }

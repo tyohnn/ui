@@ -78,5 +78,6 @@ export function presetTheme(preset: Preset): Theme;
 export function parseColour(value: string): [number, number, number] | null;
 export function resolveValue(values: Colours, value: string): string;
 export function toHex(value: string): string | null;
+export function toOklch(value: string): [number, number, number, number] | null;
 export function contrast(a: string, b: string): number | null;
 export function checkContrast(resolved: ResolvedTheme, minimum?: number): ContrastFailure[];

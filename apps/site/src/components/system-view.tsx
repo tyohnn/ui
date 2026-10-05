@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import type { Preset } from "@tyohnn/theme";
+
+import type { TailwindFamily } from "@/lib/themes";
 import { type ReactNode, useEffect, useState } from "react";
 
 import { CATEGORIES, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
@@ -14,7 +15,7 @@ import { useLocale } from "./locale-provider";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
 import { ThemePanel } from "./theme-editor";
-import { stateHash, useTheme } from "./theme-provider";
+import { useTheme } from "./theme-provider";
 
 /**
  * A system page below the breadcrumb: the intro (server-rendered, passed in), the install panel, the sticky
@@ -29,8 +30,7 @@ export const SystemView = ({
     intro,
     head,
     panelTop,
-    onOtherSystem,
-    onShuffle,
+    create,
 }: {
     system: SystemSummary;
     /** The neighbour after this one: the Compare link's other side. 이웃 이동 링크는 빵부스러기 줄이 갖는다. */
@@ -40,9 +40,8 @@ export const SystemView = ({
     head?: ReactNode;
     /** Above the side panel's tabs (the create page's system picker) */
     panelTop?: ReactNode;
-    /** A preset opened for another system; by default the page goes to that system's page wearing it */
-    onOtherSystem?: (preset: Preset) => void;
-    onShuffle?: () => void;
+    /** The create page: the full colour panel (every colour, chart colour, presets) and the Layout tab */
+    create?: { families: TailwindFamily[]; onOtherSystem: (preset: Preset) => void; onShuffle: () => void };
 }) =>
 {
     const { t, labels, href } = useLocale();
@@ -51,9 +50,6 @@ export const SystemView = ({
     const [tab, setTab] = useState<"layout" | "colours">("colours");
     const theme = useTheme();
     const frames = useFrameTokens();
-    const router = useRouter();
-    // Another system's preset is another page: go there with the colours in the link, as a share link would.
-    const goTo = onOtherSystem ?? ((preset: Preset) => router.push(`${href(`/systems/${preset.system}`)}#${stateHash({ base: preset.palette, accent: preset.accent, chart: preset.chart, edits: preset.edits ?? { light: {}, dark: {} } })}`));
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
 
     useEffect(() =>
@@ -99,16 +95,19 @@ export const SystemView = ({
 
             <div className="sys-body">
                 <aside className="th-panel side-panel" aria-label={t.systemView.sidePanel}>
-                    <div className="side-tabs" role="tablist">
+                    {/* The system page tries colours; making — layout included — happens on Create */}
+                    {create ? <div className="side-tabs" role="tablist">
                         <button type="button" role="tab" aria-selected={tab === "colours"} onClick={() => setTab("colours")}>
                             {t.theme.title}{theme && !theme.isOwn && <span className="th-badge">{t.theme.edited}</span>}
                         </button>
                         <button type="button" role="tab" aria-selected={tab === "layout"} onClick={() => setTab("layout")}>
                             {t.frames.title}{frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
                         </button>
-                    </div>
+                    </div> : <div className="side-tabs"><span className="side-title">{t.theme.title}{theme && !theme.isOwn && <span className="th-badge">{t.theme.edited}</span>}</span></div>}
                     {panelTop}
-                    {tab === "colours" ? <ThemePanel systemName={system.name} onOtherSystem={goTo} onShuffle={onShuffle} /> : <FramePanel frames={frames} />}
+                    {tab === "colours" || !create
+                        ? <ThemePanel systemName={system.name} variant={create ? "full" : "lite"} families={create?.families} onOtherSystem={create?.onOtherSystem} onShuffle={create?.onShuffle} />
+                        : <FramePanel frames={frames} />}
                 </aside>
 
                 <div className="sys-main">

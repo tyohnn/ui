@@ -2,14 +2,15 @@
 
 import { useState, type ReactNode } from "react";
 
-import { PALETTE_GROUPS, contrast, decodePreset, resolveValue, toHex, type Preset } from "@tyohnn/theme";
+import { PALETTE_GROUPS, contrast, decodePreset, resolveValue, type Preset } from "@tyohnn/theme";
 
-import type { ThemeInfo } from "@/lib/themes";
+import type { TailwindFamily, ThemeInfo } from "@/lib/themes";
 
+import { TokenEditor } from "./colour-tokens";
 import { Combobox } from "./combobox";
 import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
-import { useTheme, type Mode } from "./theme-provider";
+import { stateHash, useTheme, type Mode } from "./theme-provider";
 
 const download = (name: string, text: string) =>
 {
@@ -40,45 +41,6 @@ const Copy = ({ label, text, className = "th-action" }: { label: string; text: s
         >
             {done ? t.copy.copied : label}
         </button>
-    );
-};
-
-/**
- * One colour: the value as it resolves (an alias shows what it stands for), a picker on the chip and the
- * text as written. The picker speaks hex only, so it replaces the value with one; the text field is how a
- * precise `oklch(…)`, a `color-mix(…)` or an alias is written.
- */
-const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
-{
-    const { t } = useLocale();
-    const theme = useTheme()!;
-    const values = theme.display[mode];
-    const written = values[name] ?? "";
-    const value = resolveValue(values, written);
-    const edited = theme.state.edits[mode][name] !== undefined;
-
-    return (
-        <div className={edited ? "th-swatch edited" : "th-swatch"}>
-            <label className="th-chip" style={{ background: value }}>
-                <span className="sr-only">{t.theme.pick(name, t.modeTag[mode])}</span>
-                <input type="color" value={toHex(value) ?? "#000000"} onChange={(event) => theme.setColour(mode, name, event.target.value)} />
-            </label>
-            <label className="th-field">
-                <span className="th-name">{name}</span>
-                <input
-                    type="text"
-                    value={theme.state.edits[mode][name] ?? written}
-                    spellCheck={false}
-                    onChange={(event) => theme.setColour(mode, name, event.target.value)}
-                    aria-label={t.theme.fieldLabel(name, t.modeTag[mode])}
-                />
-            </label>
-            {edited && (
-                <button type="button" className="th-undo" onClick={() => theme.clearColour(mode, name)} title={t.theme.undoTitle(written === value ? null : value)}>
-                    <span className="sr-only">{t.theme.undo(name)}</span>↺
-                </button>
-            )}
-        </div>
     );
 };
 
@@ -195,11 +157,20 @@ export const ThemeTrigger = ({ mode, open, onToggle }: { mode: Mode; open: boole
  */
 export const ThemePanel = ({
     systemName,
+    variant = "lite",
+    families = [],
     onClose,
     onOtherSystem,
     onShuffle,
 }: {
     systemName: string;
+    /**
+     * lite: palette and accent, then a way on to Create (the system, compare and components pages, where colour is
+     * something to try). full: everything, and the only place a preset code comes from (the create page).
+     */
+    variant?: "lite" | "full";
+    /** Tailwind's palette, for the full variant's colour picker */
+    families?: TailwindFamily[];
     onClose?: () => void;
     /** A preset opened for another system: the page decides how to get there (a link, or a switch in place) */
     onOtherSystem?: (preset: Preset) => void;
@@ -207,18 +178,20 @@ export const ThemePanel = ({
     onShuffle?: () => void;
 }) =>
 {
-    const { t } = useLocale();
+    const { t, href } = useLocale();
     const theme = useTheme();
-    const [mode, setMode] = useState<Mode>("light");
-    const [group, setGroup] = useState<string>("base");
     const [getCode, setGetCode] = useState(false);
+    // The swatches in the picks show light: the colour a palette is known by
+    const mode: Mode = "light";
 
     if (!theme) return null;
 
     const bases = theme.themes.filter((entry) => entry.kind === "base");
     const named = theme.themes.filter((entry) => entry.kind === "theme");
     const accents = theme.themes.filter((entry) => entry.kind === "accent");
-    const edits = Object.keys(theme.state.edits.light).length + Object.keys(theme.state.edits.dark).length;
+    const full = variant === "full";
+    // Create opens on this system wearing what is showing here, hand edits and all
+    const toCreate = `${href("/create")}#system=${systemName}${theme.isOwn ? "" : `&${stateHash(theme.state)}`}`;
 
     const dots = (entry: ThemeInfo) => (
         <span className="th-dots" aria-hidden>
@@ -276,43 +249,27 @@ export const ThemePanel = ({
                     display={theme.state.accent ?? t.theme.none}
                     swatch={accentOptions.find((option) => option.value === (theme.state.accent ?? NONE))?.swatch}
                 />
-                <Select
+                {full && <Select
                     label={t.theme.chart}
                     options={chartOptions}
                     value={theme.state.chart ?? NONE}
                     onChange={(id) => theme.setChart(id || null)}
                     display={theme.state.chart ?? t.theme.chartDefault}
                     swatch={ramp(theme.display[mode])}
-                />
+                />}
             </section>
 
-            <section>
-                <h4>
-                    {t.theme.every}
-                    {edits > 0 && (
-                        <button type="button" className="th-clear" onClick={theme.clearEdits}>
-                            {t.theme.clear(edits)}
-                        </button>
-                    )}
-                    <span className="th-modes">
-                        {(["light", "dark"] as Mode[]).map((option) => (
-                            <button key={option} type="button" className={mode === option ? "on" : ""} onClick={() => setMode(option)}>{t.mode[option]}</button>
-                        ))}
-                    </span>
-                </h4>
-                <div className="th-tabs">
-                    {Object.keys(PALETTE_GROUPS).map((id) => (
-                        <button key={id} type="button" className={group === id ? "on" : ""} onClick={() => setGroup(id)}>
-                            {t.theme.groups[id] ?? id}
-                        </button>
-                    ))}
-                </div>
-                <div className="th-grid">
-                    {PALETTE_GROUPS[group as keyof typeof PALETTE_GROUPS].map((name) => <Swatch key={name} name={name} mode={mode} />)}
-                </div>
-            </section>
+            {full && <TokenEditor families={families} />}
 
-            <footer className="th-preset">
+            {!full && (
+                <footer className="th-preset">
+                    <p className="side-intro">{t.theme.moreInCreate}</p>
+                    <a className="th-action wide primary" href={toCreate}>{t.theme.continueInCreate}</a>
+                    <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title={t.theme.resetTitle}>{t.theme.resetAll}</button>
+                </footer>
+            )}
+
+            {full && <footer className="th-preset">
                 {getCode && (
                     <div className="th-get">
                         <b>{t.theme.getCodeTitle}</b>
@@ -332,7 +289,7 @@ export const ThemePanel = ({
                 <button type="button" className="th-action wide" onClick={onShuffle ?? theme.shuffle}>{t.theme.shuffle}</button>
                 <button type="button" className="th-action wide primary" aria-expanded={getCode} onClick={() => setGetCode(!getCode)}>{t.theme.getCode}</button>
                 <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title={t.theme.resetTitle}>{t.theme.resetAll}</button>
-            </footer>
+            </footer>}
         </>
     );
 
