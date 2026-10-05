@@ -155,6 +155,12 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .chiprow .group { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-3); width: 128px; }
 .chip-foot { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 12px; font-size: 13px; color: var(--fg-3); }
 .chip-foot a { color: var(--fg); }
+.chipbar-sentinel { height: 1px; margin-bottom: -1px; }
+.chipbar.stuck { flex-direction: row; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 6px; border-radius: 999px; }
+.chipbar.stuck .chiprow { display: contents; }
+.chipbar.stuck .chiprow .group, .chipbar.stuck .chip-foot { display: none; }
+.chipbar.stuck .chiprow + .chiprow::before { content: ""; flex: none; width: 1px; height: 16px; margin: 0 6px; background: var(--line-strong); }
+.chipbar.stuck .chip { flex: none; white-space: nowrap; padding: 3px 10px; font-size: 12.5px; }
 .chip { font-size: 13px; color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; line-height: 1.5; }
 .chip:hover { color: var(--fg); border-color: var(--line-strong); }
 .chip[aria-pressed="true"] { color: var(--ink-0); background: var(--fg); border-color: var(--fg); font-weight: 500; }

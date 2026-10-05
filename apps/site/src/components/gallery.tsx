@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { CATEGORIES, DEFAULT_SCREEN, previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
@@ -16,7 +16,7 @@ const STAGGER_MS = 35;
 /**
  * Every system on one screen. A chip switches the screen for all cards together: the cards turn away one after
  * another, their frames swap, and they turn back. The chips stay pinned to the top while the cards scroll
- * under them, so the screen can be switched from anywhere in the grid.
+ * under them, so the screen can be switched from anywhere in the grid; once pinned they fold into one thin row.
  */
 export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 {
@@ -24,13 +24,62 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
     const [screen, setScreen] = useState<string>(DEFAULT_SCREEN);
     const [sort, setSort] = useState<Sort>("newest");
     const [flipping, setFlipping] = useState(false);
+    const [stuck, setStuck] = useState(false);
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+    const sentinel = useRef<HTMLDivElement>(null);
+    const bar = useRef<HTMLDivElement>(null);
+    const open = useRef({ height: 0, margin: 0 });
     const entry = screenOf(screen);
 
     const ordered = useMemo(() => (sort === "newest" ? systems : [...systems].sort((a, b) => a.name.localeCompare(b.name))), [systems, sort]);
     const newest = systems[0]?.name;
 
     useEffect(() => () => clearTimeout(timer.current), []);
+
+    // The sentinel sits where the bar's top rests: once it passes under the sticky offset, the bar is pinned.
+    useEffect(() =>
+    {
+        const node = sentinel.current;
+        if (!node) return;
+
+        const top = parseFloat(getComputedStyle(bar.current!).top) || 0;
+        const observer = new IntersectionObserver(
+            ([item]) => setStuck(!item.isIntersecting && item.boundingClientRect.top < top),
+            { rootMargin: `-${top}px 0px 0px 0px` },
+        );
+        observer.observe(node);
+
+        return () => observer.disconnect();
+    }, []);
+
+    // The thin bar is shorter than the open one: the difference goes into its bottom margin, so the cards
+    // below stay where they were instead of jumping up as it folds.
+    useLayoutEffect(() =>
+    {
+        const node = bar.current;
+        if (!node) return;
+
+        if (!stuck)
+        {
+            node.style.marginBottom = "";
+            open.current = { height: node.offsetHeight, margin: parseFloat(getComputedStyle(node).marginBottom) || 0 };
+            return;
+        }
+
+        node.style.marginBottom = `${open.current.margin + open.current.height - node.offsetHeight}px`;
+    }, [stuck]);
+
+    // In the thin row the chosen chip may sit past the edge: bring it into view.
+    useEffect(() =>
+    {
+        const node = bar.current;
+        const chip = node?.querySelector<HTMLElement>(".chip[aria-pressed=\"true\"]");
+        if (!node || !chip || node.scrollWidth <= node.clientWidth) return;
+
+        const left = chip.offsetLeft - node.offsetLeft;
+        if (left < node.scrollLeft || left + chip.offsetWidth > node.scrollLeft + node.clientWidth)
+            node.scrollTo({ left: left - (node.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
+    }, [stuck, screen]);
 
     const choose = (id: string) =>
     {
@@ -68,7 +117,8 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 
             {/* The bar is sticky inside this wrapper, so it lets go once the grid has scrolled past */}
             <div className="gallery-body">
-                <div className="chipbar">
+                <div ref={sentinel} className="chipbar-sentinel" aria-hidden />
+                <div ref={bar} className={stuck ? "chipbar stuck" : "chipbar"}>
                     {CATEGORIES.map((category) => (
                         <div key={category.id} className="chiprow" role="group" aria-label={labels.category(category.id, category.label)}>
                             <span className="group">{labels.category(category.id, category.label)}</span>
