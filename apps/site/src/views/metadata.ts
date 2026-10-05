@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 
 import { getMessages, type Locale } from "@/lib/i18n";
 
-/** The title template and default description every page of a language inherits */
+/** The title template, default description and favicon (the nav's brand mark, public/icon.svg) every page of a language inherits */
 export const siteMetadata = (locale: Locale): Metadata =>
 {
     const { site } = getMessages(locale);
 
-    return { title: { default: site.title, template: site.titleTemplate }, description: site.description };
+    return { title: { default: site.title, template: site.titleTemplate }, description: site.description, icons: { icon: "/icon.svg" } };
 };
 
 export const componentsMetadata = (locale: Locale): Metadata => getMessages(locale).meta.components;

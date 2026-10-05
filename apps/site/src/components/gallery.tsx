@@ -15,7 +15,8 @@ const STAGGER_MS = 35;
 
 /**
  * Every system on one screen. A chip switches the screen for all cards together: the cards turn away one after
- * another, their frames swap, and they turn back. Newest first puts the newest system in a wide card.
+ * another, their frames swap, and they turn back. The chips stay pinned to the top while the cards scroll
+ * under them, so the screen can be switched from anywhere in the grid.
  */
 export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 {
@@ -65,30 +66,28 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                 </div>
             </div>
 
-            <div className="chipbar">
-                {CATEGORIES.map((category) => (
-                    <div key={category.id} className="chiprow" role="group" aria-label={labels.category(category.id, category.label)}>
-                        <span className="group">{labels.category(category.id, category.label)}</span>
-                        {category.screens.map((item) => (
-                            <button key={item.id} type="button" className="chip" aria-pressed={item.id === screen} onClick={() => choose(item.id)}>
-                                {labels.screen(item.id, item.label)}
-                            </button>
-                        ))}
-                    </div>
-                ))}
-                <div className="chip-foot">{t.gallery.chipFoot((label) => <Link href={href("/components")}>{label}</Link>)}</div>
-            </div>
+            {/* The bar is sticky inside this wrapper, so it lets go once the grid has scrolled past */}
+            <div className="gallery-body">
+                <div className="chipbar">
+                    {CATEGORIES.map((category) => (
+                        <div key={category.id} className="chiprow" role="group" aria-label={labels.category(category.id, category.label)}>
+                            <span className="group">{labels.category(category.id, category.label)}</span>
+                            {category.screens.map((item) => (
+                                <button key={item.id} type="button" className="chip" aria-pressed={item.id === screen} onClick={() => choose(item.id)}>
+                                    {labels.screen(item.id, item.label)}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
+                    <div className="chip-foot">{t.gallery.chipFoot((label) => <Link href={href("/components")}>{label}</Link>)}</div>
+                </div>
 
-            <div className="grid">
-                {ordered.map((system, position) =>
-                {
-                    const featured = sort === "newest" && position === 0;
-
-                    return (
+                <div className="grid">
+                    {ordered.map((system, position) => (
                         <Link
                             key={system.name}
                             href={href(`/systems/${system.name}`)}
-                            className={["card", featured ? "featured" : "", flipping ? "flip" : ""].filter(Boolean).join(" ")}
+                            className={flipping ? "card flip" : "card"}
                             style={{ transitionDelay: `${position * STAGGER_MS}ms` }}
                         >
                             <div className="card-shot">
@@ -109,12 +108,12 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                                 <div className="card-spec">{system.tagline}</div>
                             </div>
                         </Link>
-                    );
-                })}
-                <Link href={href("/compare")} className="all-tile">
-                    <b>{t.gallery.compareTitle}</b>
-                    <span>{t.gallery.compareBody(systems.length)}</span>
-                </Link>
+                    ))}
+                    <Link href={href("/compare")} className="all-tile">
+                        <b>{t.gallery.compareTitle}</b>
+                        <span>{t.gallery.compareBody(systems.length)}</span>
+                    </Link>
+                </div>
             </div>
         </>
     );
