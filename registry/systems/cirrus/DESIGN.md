@@ -44,7 +44,7 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 |---|---|---|
 | `--glass-fill` · `--glass-filter` | `popover 76%` · `blur(24px) saturate(1.6)` | the material, and it only applies to floating layers |
 | `--glass-sheen` | `linear-gradient(180deg, card 42%, transparent 42%)` | the light on the top of the pane — what says "glass" when the ground is quiet |
-| `--overlay-backdrop` · `--overlay-backdrop-blur` | `oklch(0.55 0.03 250 / 26%)` · `20px` | a pale blue scrim; the blur is the effect, the colour steps aside |
+| `--overlay-backdrop` · `--overlay-backdrop-blur` | `oklch(0.55 0.03 250 / 26%)` · `4px` | a pale blue scrim with a light blur; the page behind stays legible so you keep your place. The floating surface's glass does the real blurring |
 | `--background` / `--foreground` | `oklch(0.985 0.004 240)` / `oklch(0.22 0.02 255)` | cool daylight page, blue-ink text |
 | `--primary` | `oklch(0.26 0.03 255)` | ink-navy: the pill CTA |
 | `--ring` · `--link` · `--checked` · `--chart-1` | `oklch(0.62 0.16 250)` | the one sky blue |
