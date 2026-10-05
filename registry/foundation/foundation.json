@@ -2,7 +2,7 @@
     "name": "foundation",
     "theme": "foundation",
     "description": "The tyohnn foundation: shadcn + Base UI + the three CSS layers with mira values. Maintainer and skill master copy; new systems fork it.",
-    "axisContractVersion": 5,
+    "axisContractVersion": 6,
     "fonts": {
         "sans": "inter",
         "heading": "inherit",

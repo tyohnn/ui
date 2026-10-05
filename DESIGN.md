@@ -311,6 +311,35 @@ declarations read it with the size radius as fallback.
 Adding a name that systems must define bumps `axisContractVersion` in `foundation.json`; renaming or
 removing one always bumps it.
 
+### Motion
+
+Motion is a layer-2 axis like density. Every system picks one of five characters and sets the same
+names; a value never goes into a layer-3 rule.
+
+| Name | Read by |
+|---|---|
+| `--motion-fast` | popover · dropdown/context menu · menubar · select · combobox · hover card · dialog · alert dialog · navigation-menu viewport · every backdrop (was mira's `duration-100`) |
+| `--motion-base` | `--control-duration` (colour · border · shadow transitions of the nine controls) · tooltip (was tw-animate's 150ms default) |
+| `--motion-slow` | sheet slide |
+| `--motion-ease` | `--control-ease` · sheet |
+| `--motion-enter-scale` | the size a floating surface grows from and shrinks back to (`zoom-in-*` / `zoom-out-*`; `1` = no zoom) |
+| `--motion-enter-blur` | the blur that clears as a floating surface opens (`blur-in-*`) |
+| `--motion-enter-ease` | the opening curve only, so an overshooting curve never overshoots on close |
+| `--control-press-offset` · `--control-press-scale` | `.cn-button:active` — how far it sinks and how much it shrinks |
+
+| Character | Systems | fast / base / slow | Enter | Press |
+|---|---|---|---|---|
+| instant | lyra · graphite | 60 / 100 / 160ms | scale 1, `ease` | 1px |
+| basic (mira) | foundation · mira · nova · vega · rhea · clover | 100 / 150 / 200ms | scale .95, `ease` | 1px |
+| soft | cirrus · halo · luma · maia | 140 / 200 / 320ms | scale .96, blur 4px, `--ease-out` | 0px, scale .98 |
+| editorial | sera · vellum | 120 / 180 / 280ms | scale 1, `ease` | 0px |
+| pill | loam · nocturne | 120 / 180 / 260ms | scale .95, `cubic-bezier(0.34, 1.36, 0.64, 1)` | 0px |
+
+The basic values are exactly what mira renders, so foundation and mira are unchanged. Each
+`tokens.css` ends with a `prefers-reduced-motion: reduce` block that sets the three durations to 0 and
+the enter scale, blur and press back to rest, whatever the character. Tooling that measures opens
+pages with `&motion=off`, so none of this reaches the shadcn comparisons.
+
 ## 6. Adding a component
 
 1. `registry/ui/components/<name>.tsx` with `cn-*` hooks and `@tyohnn/{components,lib,hooks}/*` imports

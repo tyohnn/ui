@@ -122,6 +122,21 @@ layer 3 by `.dark`: `--button-outline-fill` and `--slider-thumb-fill`. `foundati
 Not covered by the comparison: nothing. The coverage template renders all 62 `registry/ui` components and the
 comparison pairs every one that carries a `data-slot`.
 
+## Axis contract v6 — motion characters (2026-10-05)
+
+The motion axis existed but every system shared mira's values, and `--motion-fast` was read by nothing:
+the floating surfaces carried mira's literal `duration-100`. v6 wires them to the axis and adds four
+names, so a system's motion is chosen in `tokens.css` like its density (DESIGN.md §5 "Motion").
+
+- Layer 3: every `duration-100` on a floating surface or backdrop now reads `--motion-fast`; the tooltip
+  reads `--motion-base` (it ran on tw-animate's 150ms default); `zoom-in-95` / `zoom-out-95` read
+  `--motion-enter-scale`; the opening side adds `blur-in-(--motion-enter-blur)` and
+  `ease-(--motion-enter-ease)`; `.cn-button:active` adds `scale: var(--control-press-scale)`.
+- Layer 2, new names: `--motion-enter-scale` (`0.95`), `--motion-enter-blur` (`0px`),
+  `--motion-enter-ease` (`ease`, tw-animate's default), `--control-press-scale` (`1`). With these
+  defaults foundation and mira compute exactly what they did under v5.
+- Every `tokens.css` ends with a `prefers-reduced-motion: reduce` block.
+
 ## Axis contract v5 — one slot, one meaning (2026-09-17)
 
 Stage 2 of v4 moved each system's layer-3 literals into the slots and recorded, under "slot-meaning
