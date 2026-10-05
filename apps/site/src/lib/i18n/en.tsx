@@ -52,9 +52,8 @@ export const en = {
         play: "▶ Play",
         pause: "❚❚ Pause",
         frameTitle: (name: string) => `${name} CRM dashboard`,
-        nowShowing: "Now showing",
-        count: (count: number) => `${count} systems`,
-        all: "All systems →",
+        samePalette: "one neutral palette",
+        compareAny: "Compare any two →",
     },
 
     gallery: {
@@ -81,18 +80,18 @@ export const en = {
         },
         depth: {
             title: "Depth",
-            body: "How far surfaces lift off the page — laid flat, stepped, or floating.",
-            captions: { loam: "Flat veils", graphite: "Planes a step apart", halo: "Floating · 50px shadow" } as Record<string, string>,
+            body: "How far surfaces lift off the page — ruled flat, set down lightly, or lifted.",
+            captions: { vellum: "Flat · hairline rules", rhea: "A light shadow", cirrus: "Wide, soft lift" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
-            body: "What a surface is made of — pills and gradients, or no edges at all.",
-            captions: { cirrus: "Pills · soft gradient", clover: "A gradient into the action", luma: "Borderless · 26px corners" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, moulded clay, smoked glass.",
+            captions: { loam: "White veils · sheen", graphite: "Clay controls", halo: "Smoked glass" } as Record<string, string>,
         },
         type: {
             title: "Type",
             body: "The voice — which face, how tight, how labels speak.",
-            captions: { vellum: "Source Serif titles", nocturne: "Bricolage · mono labels", lyra: "JetBrains Mono throughout" } as Record<string, string>,
+            captions: { clover: "Inter throughout", sera: "Playfair titles · caps labels", nocturne: "Bricolage · mono labels" } as Record<string, string>,
         },
     },
 

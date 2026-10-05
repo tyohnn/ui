@@ -37,9 +37,8 @@ export const ko: Messages = {
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
         frameTitle: (name) => `${name} CRM 대시보드`,
-        nowShowing: "지금 보는 시스템",
-        count: (count) => `시스템 ${count}개`,
-        all: "모든 시스템 →",
+        samePalette: "같은 무채색 팔레트",
+        compareAny: "아무 시스템이나 둘 비교하기 →",
     },
 
     gallery: {
@@ -66,18 +65,18 @@ export const ko: Messages = {
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 한 단씩, 붕 떠 있게.",
-            captions: { loam: "평평한 베일", graphite: "한 단씩 쌓인 면", halo: "떠 있는 창 · 50px 그림자" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 선으로 평평하게, 살짝 내려앉게, 떠오르게.",
+            captions: { vellum: "평평함 · 가는 선", rhea: "옅은 그림자", cirrus: "넓고 부드럽게 뜬 면" },
         },
         texture: {
             title: "질감",
-            body: "면이 무엇으로 만들어졌는지 정해요. 알약과 그라데이션, 아예 테두리 없는 면까지.",
-            captions: { cirrus: "알약 · 부드러운 그라데이션", clover: "행동으로 번지는 그라데이션", luma: "테두리 없음 · 26px 모서리" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 빚은 점토, 연기 낀 유리.",
+            captions: { loam: "흰 베일 · 광택", graphite: "점토 컨트롤", halo: "연기 낀 유리" },
         },
         type: {
             title: "타이포",
             body: "목소리를 정해요. 어떤 글꼴을, 얼마나 조여서, 라벨은 어떻게 말하는지.",
-            captions: { vellum: "Source Serif 제목", nocturne: "Bricolage · mono 라벨", lyra: "모두 JetBrains Mono" },
+            captions: { clover: "모두 Inter", sera: "Playfair 제목 · 대문자 라벨", nocturne: "Bricolage · mono 라벨" },
         },
     },
 

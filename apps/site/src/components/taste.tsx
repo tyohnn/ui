@@ -6,14 +6,14 @@ type Pillar = "density" | "depth" | "texture" | "type";
 
 /**
  * Which systems stand side by side for each axis, and the one mode a row is drawn in (never mixed, so the tiles
- * compare). Density uses the ports of shadcn create presets — the axis they already vary on; depth, texture and
- * type show each of tyohnn's own systems once.
+ * compare). Density uses the ports of shadcn create presets — the axis they already vary on; the other rows show
+ * each of tyohnn's own systems once.
  */
 const PILLARS: { id: Pillar; mode: Mode; systems: [string, string, string]; tokens: string[] }[] = [
     { id: "density", mode: "light", systems: ["mira", "nova", "maia"], tokens: ["--control-height-md", "--surface-padding-md", "--control-font-size-md"] },
-    { id: "depth", mode: "dark", systems: ["loam", "graphite", "halo"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
-    { id: "texture", mode: "light", systems: ["cirrus", "clover", "luma"], tokens: ["--surface-primary", "--control-radius", "--input-fill"] },
-    { id: "type", mode: "light", systems: ["vellum", "nocturne", "lyra"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
+    { id: "depth", mode: "light", systems: ["vellum", "rhea", "cirrus"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
+    { id: "texture", mode: "dark", systems: ["loam", "graphite", "halo"], tokens: ["--card-sheen", "--clay-highlight", "--glass-card-filter"] },
+    { id: "type", mode: "light", systems: ["clover", "sera", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
 ];
 
 const ROWS: [string, string][] = [["Acme Corp", "$24,000"], ["Globex", "$8,400"], ["Initech", "$12,900"]];
