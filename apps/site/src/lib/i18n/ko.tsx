@@ -8,7 +8,7 @@ export const ko: Messages = {
     htmlLang: "ko",
 
     site: {
-        title: "tyohnn · 색 놀음은 그만, 취향을 만드세요",
+        title: "tyohnn · 색 놀음은 이제 그만, 나만의 취향을 만드세요",
         titleTemplate: "%s · tyohnn",
         description: "색 테마만으로는 모든 shadcn 앱이 비슷해 보여요. tyohnn은 밀도, 깊이, 질감을 컴포넌트에서 꺼내 직접 가질 수 있는 토큰으로 만들었어요. 모든 디자인 시스템을 실제 화면으로 둘러보고, npx tyohnn@latest init 명령으로 설치해 보세요.",
     },
@@ -30,8 +30,8 @@ export const ko: Messages = {
     },
 
     hero: {
-        titleFirst: "색 놀음은 그만,",
-        titleSecond: "취향을 만드세요",
+        titleFirst: "색 놀음은 이제 그만,",
+        titleSecond: "나만의 취향을 만드세요",
         body: <>다들 색에서 멈춰요.<br /><b>밀도, 깊이, 질감</b>까지 내 토큰으로 바꿔 보세요.</>,
         browse: "시스템 둘러보기",
         play: "▶ 재생",
@@ -64,13 +64,13 @@ export const ko: Messages = {
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 그림자로 뜨게, 붕 떠 있게.",
-            captions: { nocturne: "바닥에 붙은 면", luma: "테두리 없이 그림자로 뜬 면", halo: "떠 있는 창 · 50px 그림자" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 한 단씩, 그림자로 뜨게.",
+            captions: { nocturne: "바닥에 붙은 면", graphite: "한 단씩 쌓인 면", luma: "테두리 없이 그림자로 뜬 면" },
         },
         texture: {
             title: "질감",
-            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 빚은 점토, 그라데이션.",
-            captions: { loam: "흰 베일 · 광택", graphite: "점토 컨트롤", clover: "행동으로 번지는 그라데이션" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 빚은 점토, 연기 낀 유리.",
+            captions: { loam: "흰 베일 · 광택", graphite: "점토 컨트롤", halo: "연기 낀 유리" },
         },
         type: {
             title: "타이포",

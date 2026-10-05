@@ -1,6 +1,6 @@
 # tyohnn
 
-### Enough color tweak, build your taste.
+### Enough with color tweaks, build your own taste.
 
 **Density · Depth · Texture**
 

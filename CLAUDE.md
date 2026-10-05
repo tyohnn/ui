@@ -1,6 +1,6 @@
 # tyohnn — read this first
 
-**Enough color tweak, build your taste.** tyohnn is shadcn with the *feel* pulled out into tokens:
+**Enough with color tweaks, build your own taste.** tyohnn is shadcn with the *feel* pulled out into tokens:
 density, depth and texture, not just colour. This file holds the concept and the voice. The engineering
 contract (hooks, layers, slots, icons, strings) is [DESIGN.md](DESIGN.md); the long-form pitch is the
 **Why** section of [README.md](README.md).
@@ -51,6 +51,6 @@ Say *taste* or *feel* for all of them together, never *theme* (a theme is colour
 
 ## Headline copy
 
-- EN: **Enough color tweak, / Build your Taste** — *Colour is where everyone stops. Go further — density, depth
+- EN: **Enough with color tweaks, / Build your own taste** — *Colour is where everyone stops. Go further — density, depth
   and texture, as tokens you own.*
-- KO: **색 놀음은 그만, / 취향을 만드세요** — *다들 색에서 멈춰요. 밀도, 깊이, 질감까지 내 토큰으로 바꿔 보세요.*
+- KO: **색 놀음은 이제 그만, / 나만의 취향을 만드세요** — *다들 색에서 멈춰요. 밀도, 깊이, 질감까지 내 토큰으로 바꿔 보세요.*

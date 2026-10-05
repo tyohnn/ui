@@ -22,7 +22,7 @@ export const en = {
     htmlLang: "en",
 
     site: {
-        title: "tyohnn — enough color tweak, build your taste",
+        title: "tyohnn — enough with color tweaks, build your own taste",
         titleTemplate: "%s · tyohnn",
         description: "Color themes made every shadcn app look the same. tyohnn pulls density, depth and texture out of the components and into tokens you own. Browse every design system live and install one with npx tyohnn@latest init.",
     },
@@ -45,8 +45,8 @@ export const en = {
     },
 
     hero: {
-        titleFirst: "Enough color tweak,",
-        titleSecond: "Build your Taste",
+        titleFirst: "Enough with color tweaks,",
+        titleSecond: "Build your own taste",
         body: <>Colour is where everyone stops.<br />Go further — <b>density, depth and texture</b>, as tokens you own.</>,
         browse: "Browse systems",
         play: "▶ Play",
@@ -79,13 +79,13 @@ export const en = {
         },
         depth: {
             title: "Depth",
-            body: "How far surfaces lift off the page — flat, lifted, or floating.",
-            captions: { nocturne: "Flat on the page", luma: "No borders · lifted by shadow", halo: "Floating · 50px shadow" } as Record<string, string>,
+            body: "How far surfaces lift off the page — flat, stepped, or lifted.",
+            captions: { nocturne: "Flat on the page", graphite: "Planes a step apart", luma: "No borders · lifted by shadow" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
-            body: "What a surface is made of — a sheen, moulded clay, a gradient.",
-            captions: { loam: "White veils · sheen", graphite: "Clay controls", clover: "A gradient into the action" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, moulded clay, smoked glass.",
+            captions: { loam: "White veils · sheen", graphite: "Clay controls", halo: "Smoked glass" } as Record<string, string>,
         },
         type: {
             title: "Type",
