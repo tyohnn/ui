@@ -150,11 +150,17 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .section-head p { margin: 0; color: var(--fg-2); font-size: 16px; }
 .gallery-side { display: flex; flex-direction: column; gap: 16px; }
 .sortbar { display: flex; align-items: center; justify-content: space-between; }
-.chipbar { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px 20px; background: rgba(18, 19, 22, 0.86); border: 1px solid var(--line); border-radius: 16px; margin-bottom: 28px; }
+.chipbar { position: sticky; top: 16px; z-index: 20; display: flex; flex-direction: column; gap: 10px; padding: 16px 20px; background: rgba(18, 19, 22, 0.9); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 16px; margin-bottom: 28px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
 .chiprow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .chiprow .group { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-3); width: 128px; }
 .chip-foot { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 12px; font-size: 13px; color: var(--fg-3); }
 .chip-foot a { color: var(--fg); }
+.chipbar-sentinel { height: 1px; margin-bottom: -1px; }
+.chipbar.stuck { flex-direction: row; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 6px; border-radius: 999px; }
+.chipbar.stuck .chiprow { display: contents; }
+.chipbar.stuck .chiprow .group, .chipbar.stuck .chip-foot { display: none; }
+.chipbar.stuck .chiprow + .chiprow::before { content: ""; flex: none; width: 1px; height: 16px; margin: 0 6px; background: var(--line-strong); }
+.chipbar.stuck .chip { flex: none; white-space: nowrap; padding: 3px 10px; font-size: 12.5px; }
 .chip { font-size: 13px; color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; line-height: 1.5; }
 .chip:hover { color: var(--fg); border-color: var(--line-strong); }
 .chip[aria-pressed="true"] { color: var(--ink-0); background: var(--fg); border-color: var(--fg); font-weight: 500; }
@@ -169,9 +175,6 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .card-title .open { margin-left: auto; font-size: 13px; color: var(--fg-2); }
 .card:hover .card-title .open { color: var(--fg); }
 .card-spec { font-size: 13px; color: var(--fg-2); }
-.card.featured { grid-column: span 2; }
-.card.featured .card-shot { flex: 1; min-height: 0; }
-.card.featured .card-shot .scaled { position: absolute; inset: 8px 8px 0; aspect-ratio: auto; }
 .card.flip { transform: perspective(1400px) rotateY(-9deg) scale(0.985); opacity: 0.72; }
 .all-tile { border: 1px dashed var(--line-strong); border-radius: 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding: 22px; min-height: 200px; }
 .all-tile b { font-family: var(--display); font-size: 28px; letter-spacing: -0.03em; }
@@ -383,7 +386,6 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .hero h1 { font-size: 80px; }
     .hero, .section-head, .sys-head, .comp-head, .page-head { grid-template-columns: 1fr; gap: 28px; }
     .taste-row { grid-template-columns: 1fr; gap: 24px; }
-    .grid { grid-template-columns: repeat(2, 1fr); }
     .sys-name { font-size: 120px; }
     .meta.active::before { display: none; }
     .catbar { overflow-x: auto; border-radius: 16px; }
@@ -411,9 +413,10 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .section-head h2, .install h2, .cat-head h2 { font-size: 40px; }
     .sys-name { font-size: 80px; }
     .grid, .masonry, .layers { grid-template-columns: 1fr; columns: 1; }
-    .card.featured { grid-column: auto; }
-    .card.featured .card-shot { flex: none; }
-    .card.featured .card-shot .scaled { position: relative; inset: auto; aspect-ratio: 1435 / 760; }
+    .chipbar { flex-direction: row; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 10px 12px; }
+    .chiprow { flex-wrap: nowrap; }
+    .chiprow .group, .chip-foot { display: none; }
+    .chip { white-space: nowrap; }
     .layer + .layer { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
     .install { grid-template-columns: 1fr; padding: 28px; }
     .diff { grid-template-columns: 100px 1fr 1fr; }
