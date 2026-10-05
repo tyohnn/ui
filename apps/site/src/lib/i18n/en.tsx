@@ -47,15 +47,7 @@ export const en = {
     hero: {
         titleFirst: "Enough color tweak,",
         titleSecond: "Build your Taste",
-        sub: ["Density", "Depth", "Texture"],
-        body: (
-            <>
-                Everyone is on shadcn now, and everyone recolours it the same way — so every app looks the same. A design system
-                is more than a palette. shadcn&apos;s create presets proved it, then baked the result into the components.
-                tyohnn pulls <b>density, depth, texture and type</b> back out into tokens you own, so changing the feel is
-                as easy as changing the colours.
-            </>
-        ),
+        body: <>A theme changes the colour. Taste lives in the <b>density, depth and texture</b> — and now those are tokens too.</>,
         browse: "Browse systems",
         play: "▶ Play",
         pause: "❚❚ Pause",
@@ -80,10 +72,29 @@ export const en = {
         compareBody: (count: number) => `Any two of ${count} systems, side by side`,
     },
 
+    taste: {
+        note: "Same palette in every card. Only the tokens change.",
+        density: {
+            title: "Density",
+            body: "How much air a screen has — control heights, padding, row rhythm.",
+            captions: { mira: "28px controls · 16px padding", vega: "36px controls · 16px padding", sera: "40px controls · 24px padding" } as Record<string, string>,
+        },
+        depth: {
+            title: "Depth",
+            body: "How far things lift off the page — flat, softly raised, or floating.",
+            captions: { lyra: "Flat · hairline", luma: "Soft lift", halo: "Floating glow" } as Record<string, string>,
+        },
+        texture: {
+            title: "Texture",
+            body: "What a surface feels like — corners, edges, gradients and type.",
+            captions: { sera: "Square · serif", cirrus: "Pill · gradient", maia: "Round · 26px" } as Record<string, string>,
+        },
+    },
+
     home: {
         layers: [
             { num: "1", title: "Colour", body: "The palette for light and dark, as semantic tokens.", file: "styles/globals.css" },
-            { num: "2", title: "Tokens", body: "Density, shape and shadow slots: control heights, radii, surface depth.", file: "styles/tokens.css" },
+            { num: "2", title: "Tokens", body: "Density, depth and texture: control heights, radii, shadows, surfaces.", file: "styles/tokens.css" },
             { num: "3", title: "Component rules", body: <>One file per component, styling the <span className="mono">cn-*</span> hooks. The TSX never changes.</>, file: "styles/components/*.css" },
         ] as { num: string; title: string; body: ReactNode; file: string }[],
         // What stands on the three layers: the pieces of a screen, and where they stand on a page.

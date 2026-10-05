@@ -32,14 +32,7 @@ export const ko: Messages = {
     hero: {
         titleFirst: "색 놀음은 그만,",
         titleSecond: "취향을 만드세요",
-        sub: ["밀도", "깊이", "질감"],
-        body: (
-            <>
-                이제 모두가 shadcn을 쓰고, 모두가 같은 방식으로 색만 바꿔요. 그래서 모든 앱이 비슷해 보여요. 디자인 시스템은
-                팔레트보다 커요. shadcn의 create 프리셋이 그걸 보여 줬지만, 결과는 컴포넌트 안에 구워져 나왔어요. tyohnn은
-                <b> 밀도, 깊이, 질감, 글꼴</b>을 다시 토큰으로 꺼내서, 느낌을 바꾸는 일도 색을 바꾸는 일만큼 쉽게 만들어요.
-            </>
-        ),
+        body: <>테마는 색을 바꿔요. 취향은 <b>밀도, 깊이, 질감</b>에 있어요. 이제 그것도 토큰이에요.</>,
         browse: "시스템 둘러보기",
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
@@ -64,10 +57,29 @@ export const ko: Messages = {
         compareBody: (count) => `시스템 ${count}개 중 아무거나 둘을 나란히 볼 수 있어요`,
     },
 
+    taste: {
+        note: "모든 카드가 같은 팔레트예요. 토큰만 달라요.",
+        density: {
+            title: "밀도",
+            body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
+            captions: { mira: "컨트롤 28px · 여백 16px", vega: "컨트롤 36px · 여백 16px", sera: "컨트롤 40px · 여백 24px" },
+        },
+        depth: {
+            title: "깊이",
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 살짝 들리게, 떠 있게.",
+            captions: { lyra: "평평함 · 가는 선", luma: "살짝 들림", halo: "떠 있는 빛" },
+        },
+        texture: {
+            title: "질감",
+            body: "면의 감촉을 정해요. 모서리, 테두리, 그라데이션, 글꼴이 여기에 속해요.",
+            captions: { sera: "각진 모서리 · 세리프", cirrus: "알약 · 그라데이션", maia: "둥근 26px" },
+        },
+    },
+
     home: {
         layers: [
             { num: "1", title: "색", body: "라이트와 다크 팔레트를 시맨틱 토큰으로 담아요.", file: "styles/globals.css" },
-            { num: "2", title: "토큰", body: "밀도, 모양, 그림자 값을 담아요. 컨트롤 높이, 모서리 반경, 표면 깊이가 여기에 있어요.", file: "styles/tokens.css" },
+            { num: "2", title: "토큰", body: "밀도, 깊이, 질감을 담아요. 컨트롤 높이, 모서리 반경, 그림자, 표면이 여기에 있어요.", file: "styles/tokens.css" },
             { num: "3", title: "컴포넌트 규칙", body: <>컴포넌트마다 파일 하나로 <span className="mono">cn-*</span> 훅의 스타일을 정해요. TSX는 바뀌지 않아요.</>, file: "styles/components/*.css" },
         ],
         above: [

@@ -81,13 +81,40 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .hero { padding-block: 88px 56px; display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: end; }
 .hero h1 { font-size: 84px; line-height: 0.95; letter-spacing: -0.055em; font-weight: 800; }
 .hero h1 span { color: var(--fg-3); }
-.hero-sub { display: flex; flex-wrap: wrap; gap: 6px 28px; margin: 28px 0 0; font-family: var(--mono); font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); }
-.hero-sub span + span::before { content: "·"; margin-right: 28px; color: var(--fg-3); }
-.hero-sub:lang(ko) { letter-spacing: 0.02em; font-family: inherit; font-size: 16px; }
+
 .hero-side { display: flex; flex-direction: column; gap: 28px; padding-bottom: 12px; }
-.hero-side p { margin: 0; color: var(--fg-2); font-size: 17px; line-height: 1.55; }
+.hero-side p { margin: 0; color: var(--fg-2); font-size: 20px; line-height: 1.5; }
 .hero-side p b { color: var(--fg); font-weight: 500; }
 .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+/* Density · depth · texture: one row per axis, three real systems on one shared palette. */
+.taste { padding-bottom: 120px; display: flex; flex-direction: column; gap: 72px; }
+.taste-note { margin: 0; }
+.taste-row { display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: start; }
+.taste-head { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.taste-num { font-family: var(--mono); font-size: 13px; color: var(--fg-3); }
+.taste-head h2 { margin: 0; font-size: 56px; line-height: 1; letter-spacing: -0.045em; font-weight: 800; }
+.taste-head p { margin: 0; color: var(--fg-2); font-size: 16px; line-height: 1.55; }
+.taste-tokens { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+.taste-tokens code { font-family: var(--mono); font-size: 12px; color: var(--fg-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
+.taste-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.spec { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.spec figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 18px; color: var(--fg); }
+.spec figcaption small { font-family: var(--mono); font-size: 11.5px; color: var(--fg-3); text-align: right; }
+.spec-tile { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 380px; padding: 28px 22px; border-radius: 16px; background: color-mix(in oklab, var(--muted) 70%, var(--background)); color: var(--foreground); }
+
+/* The specimen reads only the system's own token names, so it is a faithful sketch of what its components do. */
+.spec-card { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: var(--surface-gap-lg, 16px); padding: var(--surface-padding-md); border-radius: var(--card-radius); background: var(--card); color: var(--card-foreground); box-shadow: 0 0 0 var(--surface-border-width, 1px) var(--card-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))), var(--card-shadow, 0 0 #0000); font-family: var(--font-sans); font-size: var(--control-font-size-md); line-height: var(--control-line-height-md); }
+.spec-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.spec-title { font-family: var(--font-heading, var(--font-sans)); font-weight: var(--card-title-font-weight, 600); font-size: 16px; }
+.spec-tag { display: inline-flex; align-items: center; height: var(--tag-height, 22px); padding-inline: var(--tag-padding-x, 8px); border-radius: var(--tag-radius, var(--control-radius)); border: 1px solid var(--tag-green-border); background: var(--tag-green-bg); color: var(--tag-green-fg); box-shadow: var(--tag-shadow, none); font-size: var(--tag-font-size, 12px); }
+.spec-input { display: flex; align-items: center; height: var(--control-height-md); padding-inline: var(--control-padding-x-md); border-radius: var(--control-radius); border: var(--control-border-width) solid var(--input-border, var(--input)); background-color: var(--input-fill, transparent); color: var(--muted-foreground); }
+.spec-rows > div { display: flex; justify-content: space-between; align-items: center; min-height: var(--table-row-height); padding: var(--table-cell-padding-y-default, 8px) var(--table-cell-padding-x, 8px); border-bottom: 1px solid var(--table-row-divider, var(--border)); font-size: var(--table-font-size, 14px); }
+.spec-rows > div:last-child { border-bottom: 0; }
+.spec-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.spec-btn { display: inline-flex; align-items: center; height: var(--control-height-md); padding-inline: var(--control-padding-x-md); border-radius: var(--control-radius); font-size: var(--control-font-size-md); font-weight: var(--control-font-weight); letter-spacing: var(--control-letter-spacing); white-space: nowrap; }
+.spec-btn.primary { background-color: var(--primary); background-image: var(--surface-primary, none); color: var(--primary-foreground); box-shadow: var(--shadow-control-primary, none); }
+.spec-btn.outline { border: var(--control-border-width) solid var(--button-outline-border, var(--border)); background-color: var(--button-outline-fill, var(--background)); background-image: var(--surface-control, none); box-shadow: var(--shadow-control, none); }
 
 .stage { display: grid; grid-template-columns: 1fr 272px; gap: 24px; padding-bottom: 120px; align-items: start; }
 .stage-frame { background: var(--ink-1); border: 1px solid var(--line); border-radius: 18px; padding: 10px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.4); }
@@ -359,6 +386,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .hero h1 { font-size: 88px; }
     .hero, .section-head, .sys-head, .comp-head, .page-head { grid-template-columns: 1fr; gap: 28px; }
     .stage { grid-template-columns: 1fr; }
+    .taste-row { grid-template-columns: 1fr; gap: 24px; }
     .rail { max-height: 320px; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .sys-name { font-size: 120px; }
@@ -380,8 +408,9 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .lang-switch { font-size: 12px; padding: 4px 10px; }
     .hero h1, .page-head h1, .doc h1 { font-size: 60px; }
     .hero h1 { font-size: 48px; }
-    .hero-sub { margin-top: 18px; font-size: 13px; gap: 6px 16px; }
-    .hero-sub span + span::before { margin-right: 16px; }
+    .taste-specs { grid-template-columns: 1fr; }
+    .spec-tile { min-height: 0; }
+    .taste-head h2 { font-size: 44px; }
     .comp-head h1 { font-size: 52px; }
     .section-head h2, .install h2, .cat-head h2 { font-size: 40px; }
     .sys-name { font-size: 80px; }

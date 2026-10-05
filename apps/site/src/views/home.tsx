@@ -1,6 +1,7 @@
 import { CopyCommand } from "@/components/copy-command";
 import { Gallery } from "@/components/gallery";
 import { Hero } from "@/components/hero";
+import { Taste } from "@/components/taste";
 import { getMessages, type Locale, localizeSystems } from "@/lib/i18n";
 import { getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
@@ -13,6 +14,7 @@ export function HomeView({ locale }: { locale: Locale })
     return (
         <>
             <Hero systems={systems} />
+            <Taste locale={locale} />
             <Gallery systems={systems} />
 
             <div className="layers">
