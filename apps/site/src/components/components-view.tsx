@@ -2,10 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { COVERAGE, COVERAGE_POPUPS, previewUrl, type SystemSummary } from "@/lib/site";
+import { COVERAGE, COVERAGE_POPUPS, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
 
 import { useLocale } from "./locale-provider";
-import { useMode } from "./mode-provider";
 import { ModeSeg, SystemCombobox } from "./pickers";
 import { ThemeEditor } from "./theme-editor";
 import { ThemeProvider } from "./theme-provider";
@@ -25,7 +24,7 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
     const { t, labels } = useLocale();
     const [name, setName] = useState(systems[0].name);
     const system = systems.find((entry) => entry.name === name) ?? systems[0];
-    const { mode, setMode } = useMode();
+    const [mode, setMode] = useState<Mode>("dark");
     const [query, setQuery] = useState("");
     const [current, setCurrent] = useState<string>(COVERAGE[0].sections[0]);
     const search = useRef<HTMLInputElement>(null);

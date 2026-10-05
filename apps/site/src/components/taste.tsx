@@ -1,5 +1,4 @@
 import { getMessages, type Locale } from "@/lib/i18n";
-import type { Mode } from "@/lib/site";
 import { declareTokens, getSystem, getSystemPalette, getSystemTokens } from "@/lib/registry";
 
 type Pillar = "density" | "depth" | "texture" | "type";
@@ -8,11 +7,11 @@ type Pillar = "density" | "depth" | "texture" | "type";
  * Which systems stand side by side for each axis. Density uses the ports of shadcn create presets — the axis they already vary on; the other rows show
  * each of tyohnn's own systems once.
  */
-const PILLARS: { id: Pillar; systems: [string, string, string]; tokens: string[] }[] = [
-    { id: "density", systems: ["mira", "nova", "maia"], tokens: ["--control-height-md", "--surface-padding-md", "--control-font-size-md"] },
-    { id: "depth", systems: ["vellum", "rhea", "cirrus"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
-    { id: "texture", systems: ["loam", "graphite", "halo"], tokens: ["--card-sheen", "--clay-highlight", "--glass-card-filter"] },
-    { id: "type", systems: ["clover", "sera", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
+const PILLARS: { id: Pillar; systems: [string, string, string] }[] = [
+    { id: "density", systems: ["mira", "nova", "maia"] },
+    { id: "depth", systems: ["vellum", "rhea", "cirrus"] },
+    { id: "texture", systems: ["loam", "graphite", "halo"] },
+    { id: "type", systems: ["clover", "sera", "nocturne"] },
 ];
 
 const ROWS: [string, string][] = [["Acme Corp", "$24,000"], ["Globex", "$8,400"], ["Initech", "$12,900"]];
@@ -37,18 +36,16 @@ const Specimen = () => (
 );
 
 /**
- * Density, depth, texture and type, one row each. Every tile is a real system in the site's mode — its own
+ * Density, depth, texture and type, one row each. Every tile is a real system in its dark mode — its own
  * palette, layer-1 formulas and materials, and every layer-2 token — drawn into the same small card.
  */
 export function Taste({ locale }: { locale: Locale })
 {
     const t = getMessages(locale).taste;
     const names = [...new Set(PILLARS.flatMap((pillar) => pillar.systems))];
-    const modes: Mode[] = ["light", "dark"];
-    // Both modes go out as CSS; the site's mode (<html data-preview-mode>) chooses which one applies.
-    const css = names.flatMap((name) => modes.map((mode) =>
-        `html[data-preview-mode="${mode}"] .spec-tile[data-system="${name}"] { ${getSystemPalette(name, mode)} ${declareTokens(getSystemTokens(name, mode))} }`)).join("\n");
-    const glassy = (name: string) => modes.some((mode) => (getSystemTokens(name, mode).get("--glass-card-filter") ?? "none") !== "none");
+    // The site is dark, so every tile is its system's dark mode.
+    const css = names.map((name) => `.spec-tile[data-system="${name}"] { ${getSystemPalette(name, "dark")} ${declareTokens(getSystemTokens(name, "dark"))} }`).join("\n");
+    const glassy = (name: string) => (getSystemTokens(name, "dark").get("--glass-card-filter") ?? "none") !== "none";
 
     return (
         <section className="taste">
@@ -60,7 +57,6 @@ export function Taste({ locale }: { locale: Locale })
                         <span className="taste-num">0{index + 1}</span>
                         <h2>{t[pillar.id].title}</h2>
                         <p>{t[pillar.id].body}</p>
-                        <ul className="taste-tokens">{pillar.tokens.map((token) => <li key={token}><code>{token}</code></li>)}</ul>
                     </div>
                     <div className="taste-specs">
                         {pillar.systems.map((name) => (

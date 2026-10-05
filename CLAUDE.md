@@ -41,8 +41,8 @@ Say *taste* or *feel* for all of them together, never *theme* (a theme is colour
   `apps/site/src/components/taste.tsx` and the live screens. The story above belongs in the README, docs and
   posts, not in home-page paragraphs.
 - Show, don't claim. Every visual on the site is drawn from real registry tokens, never hand-tuned to look good.
-  Each system appears in its own colours, and every preview on the site follows one light/dark mode — the header
-  toggle (`components/mode-provider.tsx`) — so nothing on a page mixes modes.
+  Each system appears in its own colours. The site is dark, and so is every preview on the home page; the system,
+  components and compare pages start dark and keep a light/dark switch of their own.
 - Show tyohnn's own systems (graphite, loam, cirrus, halo, nocturne, vellum, clover) first. The ones
   ported from shadcn create presets (mira, vega, nova, maia, lyra, luma, sera, rhea) prove the port, not the taste.
 - Credit shadcn, Base UI and tweakcn plainly. tyohnn builds on them; it is not against them.

@@ -6,7 +6,6 @@ import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState }
 import { DEFAULT_SCREEN, isScreen, type Mode, previewUrl, screenOf, type SystemInfo, type SystemSummary } from "@/lib/site";
 
 import { useLocale } from "./locale-provider";
-import { useMode } from "./mode-provider";
 import { ModeSeg, ScreenPicker, SystemPicker } from "./pickers";
 import { ThemeEditor } from "./theme-editor";
 import { ThemeProvider } from "./theme-provider";
@@ -26,7 +25,6 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
     const router = useRouter();
     const pathname = usePathname();
     const params = useSearchParams();
-    const site = useMode();
     const names = systems.map((system) => system.name);
     const pick = (value: string | null, fallback: string) => (value && names.includes(value) ? value : fallback);
 
@@ -34,7 +32,7 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
     const b = pick(params.get("b"), names.includes("sera") ? "sera" : names[1] ?? names[0]);
     const screen = isScreen(params.get("screen")) ? params.get("screen")! : "block-analytics";
     const asked = params.get("mode");
-    const mode: Mode = asked === "dark" || asked === "light" ? asked : site.mode;
+    const mode: Mode = asked === "dark" || asked === "light" ? asked : "dark";
     const entry = screenOf(isScreen(screen) ? screen : DEFAULT_SCREEN);
 
     const [split, setSplit] = useState(54);
@@ -82,7 +80,7 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
                 <div className="right">
                     <ThemeEditor systemName={t.compare.pair(a, b)} />
                     <ScreenPicker value={screen} onChange={(value) => update({ screen: value })} />
-                    <ModeSeg mode={mode} onChange={(value) => { site.setMode(value); update({ mode: value }); }} />
+                    <ModeSeg mode={mode} onChange={(value) => update({ mode: value })} />
                 </div>
             </div>
 

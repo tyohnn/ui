@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
 
-import { CATEGORIES, previewUrl, type SystemSummary } from "@/lib/site";
+import { CATEGORIES, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { FramePanel, useFrameTokens } from "./frame-editor";
 import { useLocale } from "./locale-provider";
-import { useMode } from "./mode-provider";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
 import { ThemePanel } from "./theme-editor";
@@ -33,7 +32,7 @@ export const SystemView = ({
 }) =>
 {
     const { t, labels, href } = useLocale();
-    const { mode, setMode } = useMode();
+    const [mode, setMode] = useState<Mode>("dark");
     const [current, setCurrent] = useState<string>(CATEGORIES[0].id);
     const [tab, setTab] = useState<"layout" | "colours">("colours");
     const theme = useTheme();

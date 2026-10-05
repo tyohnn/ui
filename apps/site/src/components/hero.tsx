@@ -7,7 +7,6 @@ import { previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
-import { useMode } from "./mode-provider";
 import { ScaledFrame } from "./scaled-frame";
 
 const ROTATE_MS = 7000;
@@ -20,14 +19,14 @@ export interface HeroPair
 }
 
 /**
- * The home hero: one screen split between two systems, each in its own colours and tokens, both in the site's mode. Pairs turn every few seconds and the divider sweeps on its own;
+ * The home hero: one screen split between two systems, each in its own colours and tokens, both dark, like the rest of the site. Pairs turn every few seconds and the divider sweeps on its own;
  * a drag (or ← →) takes over and stops both. Only the current pair and the next are mounted, so a switch
  * crossfades into frames that have already loaded.
  */
 export const Hero = ({ systems, pairs }: { systems: SystemSummary[]; pairs: HeroPair[] }) =>
 {
     const { t, href } = useLocale();
-    const { mode } = useMode();
+    const mode = "dark";
     const [index, setIndex] = useState(0);
     const [split, setSplit] = useState(50);
     const [held, setHeld] = useState(false);

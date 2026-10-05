@@ -16,7 +16,6 @@ import "@/app/site.css";
 import { getMessages, type Locale } from "@/lib/i18n";
 
 import { LocaleProvider } from "./locale-provider";
-import { ModeProvider } from "./mode-provider";
 import { SiteFooter, SiteHeader } from "./site-chrome";
 
 /**
@@ -24,18 +23,16 @@ import { SiteFooter, SiteHeader } from "./site-chrome";
  * own `lang` on the page the first byte arrives in.
  */
 export const SiteDocument = ({ locale, children }: { locale: Locale; children: ReactNode }) => (
-    <html lang={getMessages(locale).htmlLang} data-preview-mode="light">
+    <html lang={getMessages(locale).htmlLang}>
         <body>
             <LocaleProvider locale={locale}>
-                <ModeProvider>
-                    <div className="page">
-                        <SiteHeader />
-                        <main className="wrap">{children}</main>
-                        <div className="wrap">
-                            <SiteFooter />
-                        </div>
+                <div className="page">
+                    <SiteHeader />
+                    <main className="wrap">{children}</main>
+                    <div className="wrap">
+                        <SiteFooter />
                     </div>
-                </ModeProvider>
+                </div>
             </LocaleProvider>
         </body>
     </html>

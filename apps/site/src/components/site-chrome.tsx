@@ -8,8 +8,6 @@ import { REPOSITORY } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
-import { useMode } from "./mode-provider";
-import { ModeSeg } from "./pickers";
 
 export const BrandMark = () => (
     <span className="brand-mark" aria-hidden>
@@ -49,7 +47,6 @@ const LanguageSwitch = () =>
 export const SiteHeader = () =>
 {
     const { t, href } = useLocale();
-    const { mode, setMode } = useMode();
     const { path } = splitPathname(usePathname());
     const { nav } = t.chrome;
     const items = [
@@ -74,7 +71,6 @@ export const SiteHeader = () =>
                 <a href={REPOSITORY}>{nav.github}</a>
             </nav>
             <div className="nav-right">
-                <ModeSeg mode={mode} onChange={setMode} />
                 <LanguageSwitch />
                 <CopyCommand command="npx tyohnn@latest init" />
             </div>
