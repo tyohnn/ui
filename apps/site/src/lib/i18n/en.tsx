@@ -22,9 +22,9 @@ export const en = {
     htmlLang: "en",
 
     site: {
-        title: "tyohnn — same screen, every system",
+        title: "tyohnn — enough with color tweaks, build your own taste",
         titleTemplate: "%s · tyohnn",
-        description: "One set of shadcn components on Base UI, restyled by three CSS layers. Browse every design system live and install one with npx tyohnn@latest init.",
+        description: "Color themes made every shadcn app look the same. tyohnn pulls density, depth and texture out of the components and into tokens you own. Browse every design system live and install one with npx tyohnn@latest init.",
     },
 
     mode: { light: "Light", dark: "Dark" },
@@ -45,21 +45,14 @@ export const en = {
     },
 
     hero: {
-        titleFirst: "Same screen.",
-        titleSecond: "Every system.",
-        body: (
-            <>
-                One set of shadcn components on Base UI, restyled by three CSS layers. <b>Spacing, corners, depth and type</b> change
-                with the system — not only colour. New systems land as complete snapshots, so the shelf keeps growing.
-            </>
-        ),
+        titleFirst: "Enough with color tweaks,",
+        titleSecond: "Build your own taste",
+        body: <>Colour is where everyone stops.<br />Go further — <b>density, depth and texture</b>, as tokens you own.</>,
         browse: "Browse systems",
         play: "▶ Play",
         pause: "❚❚ Pause",
         frameTitle: (name: string) => `${name} CRM dashboard`,
-        nowShowing: "Now showing",
-        count: (count: number) => `${count} systems`,
-        all: "All systems →",
+        compareAny: "Compare any two →",
     },
 
     gallery: {
@@ -77,10 +70,34 @@ export const en = {
         compareBody: (count: number) => `Any two of ${count} systems, side by side`,
     },
 
+    taste: {
+        note: "Every card is a real system — its own colours, its own tokens.",
+        density: {
+            title: "Density",
+            body: "How much air a screen has — control heights, padding, row rhythm.",
+            captions: { mira: "28px controls · 12px text", nova: "32px controls · 16px padding", sera: "40px controls · 24px padding" } as Record<string, string>,
+        },
+        depth: {
+            title: "Depth",
+            body: "How far surfaces lift off the page — flat, set down lightly, or lifted.",
+            captions: { nocturne: "Flat on the page", rhea: "Set down on a light shadow", luma: "No borders · lifted by shadow" } as Record<string, string>,
+        },
+        texture: {
+            title: "Texture",
+            body: "What a surface is made of — a sheen, moulded clay, smoked glass.",
+            captions: { loam: "White veils · sheen", graphite: "Clay controls", halo: "Smoked glass" } as Record<string, string>,
+        },
+        type: {
+            title: "Typography",
+            body: "The voice — which face, how tight, how labels speak.",
+            captions: { vellum: "Source Serif titles", lyra: "JetBrains Mono throughout", maia: "Figtree · round" } as Record<string, string>,
+        },
+    },
+
     home: {
         layers: [
             { num: "1", title: "Colour", body: "The palette for light and dark, as semantic tokens.", file: "styles/globals.css" },
-            { num: "2", title: "Tokens", body: "Density, shape and shadow slots: control heights, radii, surface depth.", file: "styles/tokens.css" },
+            { num: "2", title: "Tokens", body: "Density, depth and texture: control heights, radii, shadows, surfaces.", file: "styles/tokens.css" },
             { num: "3", title: "Component rules", body: <>One file per component, styling the <span className="mono">cn-*</span> hooks. The TSX never changes.</>, file: "styles/components/*.css" },
         ] as { num: string; title: string; body: ReactNode; file: string }[],
         // What stands on the three layers: the pieces of a screen, and where they stand on a page.

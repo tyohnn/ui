@@ -8,9 +8,9 @@ export const ko: Messages = {
     htmlLang: "ko",
 
     site: {
-        title: "tyohnn · 같은 화면, 모든 시스템",
+        title: "tyohnn · 색 놀음은 이제 그만, 나만의 취향을 만드세요",
         titleTemplate: "%s · tyohnn",
-        description: "Base UI 기반 shadcn 컴포넌트 한 벌을 CSS 세 층으로 바꿔 가며 쓸 수 있어요. 모든 디자인 시스템을 실제 화면으로 둘러보고, npx tyohnn@latest init 명령으로 설치해 보세요.",
+        description: "색 테마만으로는 모든 shadcn 앱이 비슷해 보여요. tyohnn은 밀도, 깊이, 질감을 컴포넌트에서 꺼내 직접 가질 수 있는 토큰으로 만들었어요. 모든 디자인 시스템을 실제 화면으로 둘러보고, npx tyohnn@latest init 명령으로 설치해 보세요.",
     },
 
     mode: { light: "라이트", dark: "다크" },
@@ -30,21 +30,14 @@ export const ko: Messages = {
     },
 
     hero: {
-        titleFirst: "한 화면,",
-        titleSecond: "모든 시스템.",
-        body: (
-            <>
-                Base UI 기반 shadcn 컴포넌트 한 벌을 CSS 세 층으로 다시 꾸며요. 색뿐 아니라 <b>간격, 모서리, 깊이, 글꼴</b>까지
-                시스템마다 달라져요. 새 시스템은 완성된 스냅숏으로 추가되기 때문에 목록은 계속 늘어나요.
-            </>
-        ),
+        titleFirst: "색 놀음은 이제 그만,",
+        titleSecond: "나만의 취향을 만드세요",
+        body: <>다들 색에서 멈춰요.<br /><b>밀도, 깊이, 질감</b>까지 내 토큰으로 바꿔 보세요.</>,
         browse: "시스템 둘러보기",
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
         frameTitle: (name) => `${name} CRM 대시보드`,
-        nowShowing: "지금 보는 시스템",
-        count: (count) => `시스템 ${count}개`,
-        all: "모든 시스템 →",
+        compareAny: "아무 시스템이나 둘 비교하기 →",
     },
 
     gallery: {
@@ -62,10 +55,34 @@ export const ko: Messages = {
         compareBody: (count) => `시스템 ${count}개 중 아무거나 둘을 나란히 볼 수 있어요`,
     },
 
+    taste: {
+        note: "모든 카드가 실제 시스템이에요. 색도 토큰도 그 시스템 그대로예요.",
+        density: {
+            title: "밀도",
+            body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
+            captions: { mira: "컨트롤 28px · 글자 12px", nova: "컨트롤 32px · 여백 16px", sera: "컨트롤 40px · 여백 24px" },
+        },
+        depth: {
+            title: "깊이",
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 살짝, 그림자로 뜨게.",
+            captions: { nocturne: "바닥에 붙은 면", rhea: "옅은 그림자로 살짝 뜬 면", luma: "테두리 없이 그림자로 뜬 면" },
+        },
+        texture: {
+            title: "질감",
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 빚은 점토, 연기 낀 유리.",
+            captions: { loam: "흰 베일 · 광택", graphite: "점토 컨트롤", halo: "연기 낀 유리" },
+        },
+        type: {
+            title: "타이포",
+            body: "목소리를 정해요. 어떤 글꼴을, 얼마나 조여서, 라벨은 어떻게 말하는지.",
+            captions: { vellum: "Source Serif 제목", lyra: "모두 JetBrains Mono", maia: "Figtree · 둥근 형태" },
+        },
+    },
+
     home: {
         layers: [
             { num: "1", title: "색", body: "라이트와 다크 팔레트를 시맨틱 토큰으로 담아요.", file: "styles/globals.css" },
-            { num: "2", title: "토큰", body: "밀도, 모양, 그림자 값을 담아요. 컨트롤 높이, 모서리 반경, 표면 깊이가 여기에 있어요.", file: "styles/tokens.css" },
+            { num: "2", title: "토큰", body: "밀도, 깊이, 질감을 담아요. 컨트롤 높이, 모서리 반경, 그림자, 표면이 여기에 있어요.", file: "styles/tokens.css" },
             { num: "3", title: "컴포넌트 규칙", body: <>컴포넌트마다 파일 하나로 <span className="mono">cn-*</span> 훅의 스타일을 정해요. TSX는 바뀌지 않아요.</>, file: "styles/components/*.css" },
         ],
         above: [

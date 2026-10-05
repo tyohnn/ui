@@ -31,7 +31,8 @@ export const CompareView = ({ systems, facts, themes, owns }: { systems: SystemS
     const a = pick(params.get("a"), names.includes("graphite") ? "graphite" : names[0]);
     const b = pick(params.get("b"), names.includes("sera") ? "sera" : names[1] ?? names[0]);
     const screen = isScreen(params.get("screen")) ? params.get("screen")! : "block-analytics";
-    const mode: Mode = params.get("mode") === "dark" ? "dark" : "light";
+    const asked = params.get("mode");
+    const mode: Mode = asked === "dark" || asked === "light" ? asked : "dark";
     const entry = screenOf(isScreen(screen) ? screen : DEFAULT_SCREEN);
 
     const [split, setSplit] = useState(54);

@@ -1,6 +1,7 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { type CSSProperties, type PointerEvent as ReactPointerEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import { previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
@@ -8,27 +9,37 @@ import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
 import { ScaledFrame } from "./scaled-frame";
 
-const ROTATE_MS = 5000;
+const ROTATE_MS = 7000;
 const SCREEN = "crm-dashboard";
 
-/**
- * The home hero: one large live CRM that turns through every system, newest first. The rail lists them all
- * (it scrolls once the list outgrows the stage); a click jumps, Pause stops. Only the current system and the
- * next one are mounted, so a switch crossfades into an already-loaded frame.
- */
-export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
+export interface HeroPair
 {
-    const { t } = useLocale();
+    a: string;
+    b: string;
+}
+
+/**
+ * The home hero: one screen split between two systems, each in its own colours and tokens, both dark, like the rest of the site. Pairs turn every few seconds and the divider sweeps on its own;
+ * a drag (or ← →) takes over and stops both. Only the current pair and the next are mounted, so a switch
+ * crossfades into frames that have already loaded.
+ */
+export const Hero = ({ systems, pairs }: { systems: SystemSummary[]; pairs: HeroPair[] }) =>
+{
+    const { t, href } = useLocale();
+    const mode = "dark";
     const [index, setIndex] = useState(0);
+    const [split, setSplit] = useState(50);
+    const [held, setHeld] = useState(false);
     const [paused, setPaused] = useState(false);
     const [visible, setVisible] = useState(true);
     const [cycle, setCycle] = useState(0);
     const section = useRef<HTMLDivElement>(null);
-    const list = useRef<HTMLDivElement>(null);
-    const running = !paused && visible;
-    const current = systems[index];
-    const next = systems[(index + 1) % systems.length];
+    const inner = useRef<HTMLDivElement>(null);
+    const running = !paused && !held && visible;
+    const current = pairs[index];
+    const next = pairs[(index + 1) % pairs.length];
     const viewport = screenOf(SCREEN).viewport;
+    const fontOf = (name: string) => systems.find((system) => system.name === name)?.nameFont;
 
     useEffect(() =>
     {
@@ -43,36 +54,58 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
         return () => observer.disconnect();
     }, []);
 
+    // Turn to the next pair
     useEffect(() =>
     {
         if (!running) return;
 
-        const timer = setTimeout(() => setIndex((value) => (value + 1) % systems.length), ROTATE_MS);
+        const timer = setTimeout(() => setIndex((value) => (value + 1) % pairs.length), ROTATE_MS);
 
         return () => clearTimeout(timer);
-    }, [running, index, cycle, systems.length]);
+    }, [running, index, cycle, pairs.length]);
 
-    // Keep the current system in view inside the rail without scrolling the page.
+    // Sweep the divider while nobody holds it (not at all for reduced motion)
     useEffect(() =>
     {
-        const container = list.current;
-        const item = container?.querySelector<HTMLElement>(`[data-index="${index}"]`);
+        if (!running || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-        if (!container || !item) return;
-
-        const top = item.offsetTop - container.offsetTop;
-
-        if (top < container.scrollTop || top + item.offsetHeight > container.scrollTop + container.clientHeight * 0.8)
+        let frame = 0;
+        const start = performance.now();
+        const tick = (now: number) =>
         {
-            container.scrollTo({ top: Math.max(0, top - container.clientHeight / 3), behavior: "smooth" });
-        }
-    }, [index]);
+            setSplit(50 + 24 * Math.sin(((now - start) / ROTATE_MS) * Math.PI * 2));
+            frame = requestAnimationFrame(tick);
+        };
+
+        frame = requestAnimationFrame(tick);
+
+        return () => cancelAnimationFrame(frame);
+    }, [running, index, cycle]);
+
+    const moveTo = useCallback((clientX: number) =>
+    {
+        const rect = inner.current?.getBoundingClientRect();
+
+        if (!rect) return;
+
+        setSplit(Math.min(98, Math.max(2, ((clientX - rect.left) / rect.width) * 100)));
+    }, []);
+
+    const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) =>
+    {
+        event.currentTarget.setPointerCapture(event.pointerId);
+        setHeld(true);
+        moveTo(event.clientX);
+    };
 
     const jump = (to: number) =>
     {
         setIndex(to);
+        setHeld(false);
         setCycle((value) => value + 1);
     };
+
+    const compareHref = `${href("/compare")}?${new URLSearchParams({ a: current.a, b: current.b, screen: SCREEN, mode })}`;
 
     return (
         <div ref={section}>
@@ -82,53 +115,74 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                     <p>{t.hero.body}</p>
                     <div className="hero-actions">
                         <a className="btn-solid" href="#systems">{t.hero.browse}</a>
-                        <CopyCommand command={`npx tyohnn@latest init --system ${current.name}`} />
+                        <CopyCommand command={`npx tyohnn@latest init --system ${current.b}`} />
                     </div>
                 </div>
             </div>
 
-            <div className="stage">
+            <div className="hero-split">
                 <div className="stage-frame">
                     <div className="stage-bar">
                         <span className="dots" aria-hidden><i /><i /><i /></span>
-                        <span className="path">{SCREEN} · {current.name} · {current.defaultMode}</span>
-                        <button type="button" className="pause" onClick={() => { setPaused((value) => !value); setCycle((value) => value + 1); }}>
-                            {paused ? t.hero.play : t.hero.pause}
+                        <span className="path">{SCREEN} · {current.a} ↔ {current.b} · {t.modeTag[mode]}</span>
+                        <button type="button" className="pause" onClick={() => { setPaused((value) => !value); setHeld(false); setCycle((value) => value + 1); }}>
+                            {paused || held ? t.hero.play : t.hero.pause}
                         </button>
                     </div>
-                    <div className="stage-shot">
-                        {[current, next].map((system) => (
-                            <div key={system.name} className="layer-frame" style={{ opacity: system === current ? 1 : 0 }} aria-hidden={system !== current}>
-                                <ScaledFrame
-                                    src={previewUrl(system.name, SCREEN, system.defaultMode)}
-                                    title={t.hero.frameTitle(system.name)}
-                                    width={viewport.width}
-                                    height={viewport.height}
-                                    eager
-                                    style={{ position: "absolute", inset: 0 }}
-                                />
+                    <div
+                        ref={inner}
+                        className="split-inner"
+                        style={{ aspectRatio: `${viewport.width} / ${viewport.height}` }}
+                        onPointerDown={onPointerDown}
+                        onPointerMove={(event) => event.buttons === 1 && moveTo(event.clientX)}
+                    >
+                        {[current, next].map((pair) => (
+                            <div key={`${pair.a}-${pair.b}`} className="layer-frame" style={{ opacity: pair === current ? 1 : 0 }} aria-hidden={pair !== current}>
+                                <div className="side">
+                                    <ScaledFrame src={previewUrl(pair.a, SCREEN, mode)} title={t.hero.frameTitle(pair.a)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
+                                </div>
+                                <div className="side" style={pair === current ? { clipPath: `inset(0 0 0 ${split}%)` } : undefined}>
+                                    <ScaledFrame src={previewUrl(pair.b, SCREEN, mode)} title={t.hero.frameTitle(pair.b)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
+                                </div>
                             </div>
                         ))}
+                        <span className="side-tag a" style={{ fontFamily: fontOf(current.a) }}>{current.a}</span>
+                        <span className="side-tag b" style={{ fontFamily: fontOf(current.b) }}>{current.b}</span>
+                        <div
+                            className="handle"
+                            style={{ left: `${split}%` }}
+                            role="slider"
+                            tabIndex={0}
+                            aria-label={t.compare.divider(current.a, current.b)}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            aria-valuenow={Math.round(split)}
+                            onKeyDown={(event) =>
+                            {
+                                if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+                                setHeld(true);
+                                setSplit((value) => event.key === "ArrowLeft" ? Math.max(2, value - 2) : Math.min(98, value + 2));
+                            }}
+                        >
+                            <span className="knob" aria-hidden>‹ ›</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="rail">
-                    <div className="rail-head">
-                        <span className="eyebrow">{t.hero.nowShowing}</span>
-                        <span className="eyebrow">{t.hero.count(systems.length)}</span>
-                    </div>
-                    <div className="rail-list" ref={list}>
-                        {systems.map((system, position) => (
+                <div className="pair-bar">
+                    <div className="pair-list">
+                        {pairs.map((pair, position) => (
                             <button
-                                key={system.name}
+                                key={`${pair.a}-${pair.b}`}
                                 type="button"
-                                data-index={position}
-                                className={position === index ? "rail-item on" : "rail-item"}
+                                className={position === index ? "pair on" : "pair"}
                                 aria-pressed={position === index}
                                 onClick={() => jump(position)}
                             >
-                                <span className="name"><span style={{ fontFamily: system.nameFont }}>{system.name}</span><small>{t.modeTag[system.defaultMode]}</small></span>
-                                <span className="spec">{system.tagline}</span>
+                                <span style={{ fontFamily: fontOf(pair.a) }}>{pair.a}</span>
+                                <i aria-hidden>↔</i>
+                                <span style={{ fontFamily: fontOf(pair.b) }}>{pair.b}</span>
                                 {position === index && (
                                     <span className="progress" style={{ "--rotate-ms": `${ROTATE_MS}ms` } as CSSProperties}>
                                         <i key={`${index}-${cycle}`} className={running ? undefined : "paused"} />
@@ -137,7 +191,7 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
                             </button>
                         ))}
                     </div>
-                    <a className="rail-foot" href="#systems">{t.hero.all}</a>
+                    <Link className="pair-more" href={compareHref}>{t.hero.compareAny}</Link>
                 </div>
             </div>
         </div>

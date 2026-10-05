@@ -1,9 +1,18 @@
 import { CopyCommand } from "@/components/copy-command";
 import { Gallery } from "@/components/gallery";
-import { Hero } from "@/components/hero";
+import { type HeroPair, Hero } from "@/components/hero";
+import { Taste } from "@/components/taste";
 import { getMessages, type Locale, localizeSystems } from "@/lib/i18n";
 import { getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
+
+/** The pairs the hero splits: shadcn's own baseline against ours first, then ours against ours */
+const PAIRS: HeroPair[] = [
+    { a: "mira", b: "graphite" },
+    { a: "cirrus", b: "vellum" },
+    { a: "loam", b: "halo" },
+    { a: "clover", b: "nocturne" },
+];
 
 export function HomeView({ locale }: { locale: Locale })
 {
@@ -12,7 +21,8 @@ export function HomeView({ locale }: { locale: Locale })
 
     return (
         <>
-            <Hero systems={systems} />
+            <Hero systems={systems} pairs={PAIRS} />
+            <Taste locale={locale} />
             <Gallery systems={systems} />
 
             <div className="layers">

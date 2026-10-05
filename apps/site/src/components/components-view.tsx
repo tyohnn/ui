@@ -24,7 +24,7 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
     const { t, labels } = useLocale();
     const [name, setName] = useState(systems[0].name);
     const system = systems.find((entry) => entry.name === name) ?? systems[0];
-    const [mode, setMode] = useState<Mode>(system.defaultMode);
+    const [mode, setMode] = useState<Mode>("dark");
     const [query, setQuery] = useState("");
     const [current, setCurrent] = useState<string>(COVERAGE[0].sections[0]);
     const search = useRef<HTMLInputElement>(null);
@@ -119,7 +119,6 @@ export const ComponentsView = ({ systems, components, themes, owns }: { systems:
     const pickSystem = (next: string) =>
     {
         setName(next);
-        setMode(systems.find((entry) => entry.name === next)?.defaultMode ?? "light");
     };
 
     return (

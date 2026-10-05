@@ -152,3 +152,56 @@ export const getFonts = () => [...fontCatalog().values()].sort((a, b) => a.id.lo
 
 /** How many components registry/ui ships */
 export const getComponentCount = () => readdirSync(join(registryRoot, "ui/components")).filter((file) => file.endsWith(".tsx")).length;
+
+/** Every custom property a stylesheet declares in its `:root` and `@theme static` blocks — and, for dark, its
+    `.dark` blocks after them — in source order (`@layer` and `@theme inline` are left out). A declaration that
+    reads itself is dropped: outside Tailwind it would be a cycle. */
+const rootDeclarations = (css: string, mode: Mode): [string, string][] =>
+{
+    const source = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const found: [string, string][] = [];
+    const opener = mode === "dark" ? /(?:^|\n)\s*(:root|@theme static|\.dark)\s*\{/g : /(?:^|\n)\s*(:root|@theme static)\s*\{/g;
+    let match: RegExpExecArray | null;
+
+    while ((match = opener.exec(source)))
+    {
+        let depth = 1;
+        let end = opener.lastIndex;
+
+        while (end < source.length && depth > 0)
+        {
+            if (source[end] === "{") depth++;
+            else if (source[end] === "}") depth--;
+            end++;
+        }
+
+        for (const [, name, value] of source.slice(opener.lastIndex, end - 1).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
+        {
+            if (!value.includes(`var(${name})`) && !value.includes(`var(${name},`)) found.push([name, value.trim()]);
+        }
+    }
+
+    return found;
+};
+
+/** A token map as one CSS declaration list */
+export const declareTokens = (values: Map<string, string>) => [...values].map(([key, value]) => `${key}: ${value};`).join(" ");
+
+/** A system's own palette (theme.css) in one mode */
+export const getSystemPalette = (name: string, mode: Mode) =>
+    declareTokens(new Map(rootDeclarations(readFileSync(join(registryRoot, "systems", name, "styles/theme.css"), "utf8"), mode)));
+
+/** A system's layer-1 formulas and materials (globals.css) and its layer-2 tokens (tokens.css) in one mode */
+export const getSystemTokens = (name: string, mode: Mode) =>
+{
+    const styles = join(registryRoot, "systems", name, "styles");
+    const values = new Map<string, string>();
+
+    for (const file of ["globals.css", "tokens.css"])
+    {
+        for (const [key, value] of rootDeclarations(readFileSync(join(styles, file), "utf8"), mode)) values.set(key, value);
+    }
+
+    return values;
+};
+

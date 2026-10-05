@@ -78,15 +78,48 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .scaled.inert iframe { pointer-events: none; }
 
 /* HOME HERO */
-.hero { padding-block: 88px 56px; display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: end; }
-.hero h1 { font-size: 128px; line-height: 0.9; letter-spacing: -0.055em; font-weight: 800; }
+.hero { padding-block: 96px 56px; display: flex; flex-direction: column; gap: 32px; }
+.hero h1 { font-size: 112px; line-height: 0.92; letter-spacing: -0.055em; font-weight: 800; }
 .hero h1 span { color: var(--fg-3); }
-.hero-side { display: flex; flex-direction: column; gap: 28px; padding-bottom: 12px; }
-.hero-side p { margin: 0; color: var(--fg-2); font-size: 17px; line-height: 1.55; }
+
+.hero-side { display: flex; flex-direction: column; gap: 28px; max-width: 760px; }
+.hero-side p { margin: 0; color: var(--fg-2); font-size: 20px; line-height: 1.5; }
 .hero-side p b { color: var(--fg); font-weight: 500; }
 .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
-.stage { display: grid; grid-template-columns: 1fr 272px; gap: 24px; padding-bottom: 120px; align-items: start; }
+/* Density · depth · texture: one row per axis, three real systems on one shared palette. */
+.taste { padding-bottom: 120px; display: flex; flex-direction: column; gap: 72px; }
+.taste-note { margin: 0; }
+.taste-row { display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: start; }
+.taste-head { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.taste-num { font-family: var(--mono); font-size: 13px; color: var(--fg-3); }
+.taste-head h2 { margin: 0; font-size: 56px; line-height: 1; letter-spacing: -0.045em; font-weight: 800; }
+.taste-head p { margin: 0; color: var(--fg-2); font-size: 16px; line-height: 1.55; }
+.taste-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.spec { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.spec figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 18px; color: var(--fg); }
+.spec figcaption small { font-family: var(--mono); font-size: 11.5px; color: var(--fg-3); text-align: right; }
+.spec-tile { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 400px; padding: 28px 22px; border-radius: 16px; background: var(--background); color: var(--foreground); color-scheme: dark; box-shadow: inset 0 0 0 1px var(--line); }
+.spec-tile[data-mode="light"] { background: color-mix(in oklab, var(--muted) 70%, var(--background)); color-scheme: light; box-shadow: none; }
+/* Glass needs something behind it to blur: a soft scene in the palette's own chart colours. */
+.spec-tile[data-glass] { background: radial-gradient(60% 50% at 25% 30%, var(--chart-1), transparent 70%), radial-gradient(55% 45% at 80% 75%, var(--chart-2), transparent 70%), var(--background); }
+
+/* The specimen reads only the system's own token names, so it is a faithful sketch of what its components do. */
+.spec-card { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: var(--surface-gap-lg, 16px); padding: var(--surface-padding-md); border-radius: var(--card-radius); background-color: var(--card); background-image: var(--card-sheen, none); color: var(--card-foreground); letter-spacing: var(--ui-letter-spacing, normal); box-shadow: 0 0 0 var(--surface-border-width, 1px) var(--card-ring, var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent))), var(--card-shadow, 0 0 #0000); font-family: var(--font-sans); font-size: var(--control-font-size-md); line-height: var(--control-line-height-md); }
+.spec-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.spec-tile[data-glass] .spec-card { background-color: var(--glass-card-fill, var(--card)); background-image: var(--glass-sheen, none); backdrop-filter: var(--glass-card-filter, none); }
+.spec-title { font-family: var(--font-heading, var(--font-sans)); font-weight: var(--title-font-weight, var(--card-title-font-weight, 600)); letter-spacing: var(--title-letter-spacing, normal); font-size: 20px; line-height: 1.2; }
+.spec-label { display: block; padding: 0 var(--table-cell-padding-x, 8px) 4px; font-family: var(--sidebar-group-label-font-family, inherit); font-size: var(--sidebar-group-label-font-size, 12px); font-weight: var(--sidebar-group-label-font-weight, 500); letter-spacing: var(--sidebar-group-label-letter-spacing, normal); text-transform: var(--sidebar-group-label-text-transform, none); color: var(--muted-foreground); }
+.spec-tag { display: inline-flex; align-items: center; height: var(--tag-height, 22px); padding-inline: var(--tag-padding-x, 8px); border-radius: var(--tag-radius, var(--control-radius)); border: 1px solid var(--tag-green-border); background: var(--tag-green-bg); color: var(--tag-green-fg); box-shadow: var(--tag-shadow, none); font-size: var(--tag-font-size, 12px); }
+.spec-input { display: flex; align-items: center; height: var(--control-height-md); padding-inline: var(--control-padding-x-md); border-radius: var(--control-radius); border: var(--control-border-width) solid var(--input-border, var(--input)); background-color: var(--input-fill, transparent); color: var(--muted-foreground); }
+.spec-rows > div { display: flex; justify-content: space-between; align-items: center; min-height: var(--table-row-height); padding: var(--table-cell-padding-y-default, 8px) var(--table-cell-padding-x, 8px); border-bottom: 1px solid var(--table-row-divider, var(--border)); font-size: var(--table-font-size, 14px); }
+.spec-rows > div:last-child { border-bottom: 0; }
+.spec-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.spec-btn { display: inline-flex; align-items: center; height: var(--control-height-md); padding-inline: var(--control-padding-x-md); border-radius: var(--control-radius); font-size: var(--control-font-size-md); font-weight: var(--control-font-weight); letter-spacing: var(--control-letter-spacing); white-space: nowrap; }
+.spec-btn.primary { background-color: var(--primary); background-image: var(--surface-primary, none); color: var(--primary-foreground); box-shadow: var(--shadow-control-primary, none); }
+.spec-btn.outline { border: var(--control-border-width) solid var(--button-outline-border, var(--border)); background-color: var(--button-outline-fill, var(--background)); background-image: var(--surface-control, none); box-shadow: var(--shadow-control, none); }
+
+.hero-split { padding-bottom: 120px; }
 .stage-frame { background: var(--ink-1); border: 1px solid var(--line); border-radius: 18px; padding: 10px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.4); }
 .stage-bar { display: flex; align-items: center; gap: 12px; padding: 4px 8px 12px; font-size: 12px; color: var(--fg-3); }
 .dots { display: flex; gap: 6px; }
@@ -94,24 +127,18 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .stage-bar .path { font-family: var(--mono); color: var(--fg-2); }
 .stage-bar .pause { margin-left: auto; white-space: nowrap; font-family: var(--mono); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
 .stage-bar .pause:hover { color: var(--fg); }
-.stage-shot { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 1435 / 760; }
-.stage-shot .layer-frame { position: absolute; inset: 0; transition: opacity 0.6s ease; }
-
-.rail { display: flex; flex-direction: column; max-height: 588px; }
-.rail-head { display: flex; justify-content: space-between; padding: 0 4px 12px 16px; border-bottom: 1px solid var(--line); }
-.rail-list { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent); mask-image: linear-gradient(180deg, #000 85%, transparent); }
-.rail-list::-webkit-scrollbar { display: none; }
-.rail-foot { padding: 12px 4px 0 16px; font-size: 13px; color: var(--fg-2); border-top: 1px solid var(--line); }
-.rail-foot:hover { color: var(--fg); }
-.rail-item { position: relative; width: 100%; padding: 12px 4px 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 2px; }
-.rail-item .name { font-family: var(--display); font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: var(--fg-3); display: flex; align-items: baseline; gap: 8px; }
-.rail-item .name small { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0; }
-.rail-item .spec { display: none; font-size: 12.5px; color: var(--fg-2); }
-.rail-item:hover .name { color: var(--fg-2); }
-.rail-item.on { background: linear-gradient(90deg, rgba(185, 194, 255, 0.08), transparent 80%); }
-.rail-item.on .name { color: var(--fg); }
-.rail-item.on .spec { display: block; }
-.rail-item.on::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; background: var(--glow); border-radius: 2px; }
+.hero-split .split-inner { border-radius: 10px; }
+.hero-split .layer-frame { position: absolute; inset: 0; transition: opacity 0.6s ease; }
+.pair-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; }
+.pair-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.pair { position: relative; display: inline-flex; align-items: baseline; gap: 8px; padding: 8px 14px 10px; border: 1px solid var(--line); border-radius: 12px; font-size: 16px; color: var(--fg-3); }
+.pair i { font-style: normal; font-family: var(--mono); font-size: 12px; }
+.pair small { font-family: var(--mono); font-size: 11px; }
+.pair:hover { color: var(--fg-2); }
+.pair.on { color: var(--fg); border-color: color-mix(in oklab, var(--glow) 50%, var(--line)); background: rgba(185, 194, 255, 0.06); }
+.pair .progress { position: absolute; left: 14px; right: 14px; bottom: 4px; margin: 0; }
+.pair-more { white-space: nowrap; font-size: 14px; color: var(--fg-2); }
+.pair-more:hover { color: var(--fg); }
 .progress { display: block; margin-top: 8px; height: 2px; background: var(--ink-3); border-radius: 2px; overflow: hidden; }
 .progress i { display: block; height: 100%; background: var(--glow); transform-origin: left; animation: rail-progress var(--rotate-ms, 5000ms) linear forwards; }
 .progress i.paused { animation-play-state: paused; }
@@ -353,10 +380,9 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 /* Narrow screens: the canvas is drawn at 1440; below that the grids fold. */
 @media (max-width: 1180px) {
     .wrap { padding-inline: 32px; }
-    .hero h1 { font-size: 96px; }
+    .hero h1 { font-size: 80px; }
     .hero, .section-head, .sys-head, .comp-head, .page-head { grid-template-columns: 1fr; gap: 28px; }
-    .stage { grid-template-columns: 1fr; }
-    .rail { max-height: 320px; }
+    .taste-row { grid-template-columns: 1fr; gap: 24px; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .sys-name { font-size: 120px; }
     .meta.active::before { display: none; }
@@ -376,6 +402,11 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
     .nav-right { margin-left: 0; }
     .lang-switch { font-size: 12px; padding: 4px 10px; }
     .hero h1, .page-head h1, .doc h1 { font-size: 60px; }
+    .hero h1 { font-size: 48px; }
+    .pair-bar { flex-direction: column; align-items: flex-start; }
+    .taste-specs { grid-template-columns: 1fr; }
+    .spec-tile { min-height: 0; }
+    .taste-head h2 { font-size: 44px; }
     .comp-head h1 { font-size: 52px; }
     .section-head h2, .install h2, .cat-head h2 { font-size: 40px; }
     .sys-name { font-size: 80px; }
@@ -512,7 +543,7 @@ html:lang(ko) .cat-head h2 { font-size: 44px; line-height: 1.15; letter-spacing:
 html:lang(ko) .comp-head h1 { font-size: 56px; line-height: 1.1; letter-spacing: -0.03em; }
 html:lang(ko) .gsec-head h3, html:lang(ko) .dsec h2 { font-size: 32px; line-height: 1.25; letter-spacing: -0.02em; }
 html:lang(ko) .page-head h1, html:lang(ko) .doc h1 { font-size: 64px; line-height: 1.1; letter-spacing: -0.03em; }
-html:lang(ko) .rail-item .spec, html:lang(ko) .card-spec { word-break: keep-all; }
+html:lang(ko) .card-spec { word-break: keep-all; }
 @media (max-width: 1180px) {
     html:lang(ko) .hero h1 { font-size: 80px; }
 }

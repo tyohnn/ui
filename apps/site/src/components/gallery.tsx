@@ -93,7 +93,7 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                         >
                             <div className="card-shot">
                                 <ScaledFrame
-                                    src={previewUrl(system.name, screen, system.defaultMode)}
+                                    src={previewUrl(system.name, screen, "dark")}
                                     title={`${system.name}: ${labels.screen(entry.id, entry.label)}`}
                                     width={entry.viewport.width}
                                     height={entry.viewport.height}
