@@ -393,16 +393,16 @@
 
     /* 읽는 문서 */
     --typeset-doc-size: 18px;
-    --typeset-doc-leading: 1.8;
+    --typeset-doc-leading: 1.85;
     --typeset-doc-flow: 0.9em;
-    --typeset-doc-measure: 720px;
-    --typeset-doc-scale-h1: 1.9em;
-    --typeset-doc-scale-h2: 1.556em;
-    --typeset-doc-scale-h3: 1.222em;
+    --typeset-doc-measure: 680px;
+    --typeset-doc-scale-h1: 2em;
+    --typeset-doc-scale-h2: 1.6em;
+    --typeset-doc-scale-h3: 1.25em;
 
     /* 도구 화면 */
     --typeset-tool-size: 16px;
-    --typeset-tool-leading: 1.75;
+    --typeset-tool-leading: 1.8;
     --typeset-tool-flow: 1em;
     --typeset-tool-measure: 672px;
     --typeset-tool-scale-h1: 1.8em;
@@ -413,7 +413,10 @@
     --typeset-space-h1: 1.8;
     --typeset-space-h2: 2.2;
     --typeset-space-h3: 1.8;
-    --typeset-tracking: -0.01em;
+    --typeset-tracking: normal;
+    /* Long-form headings (h1–h4): Source Serif 4 at the vendor's 600, tracked a touch tighter. */
+    --typeset-heading-weight: 600;
+    --typeset-heading-tracking: -0.01em;
 }
 
 :root {

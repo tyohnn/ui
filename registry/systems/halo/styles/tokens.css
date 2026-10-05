@@ -414,17 +414,17 @@
        -------------------------------------------------------- */
 
     /* 읽는 문서 */
-    --typeset-doc-size: 18px;
-    --typeset-doc-leading: 1.8;
+    --typeset-doc-size: 17px;
+    --typeset-doc-leading: 1.7;
     --typeset-doc-flow: 0.9em;
-    --typeset-doc-measure: 720px;
+    --typeset-doc-measure: 680px;
     --typeset-doc-scale-h1: 1.9em;
     --typeset-doc-scale-h2: 1.556em;
     --typeset-doc-scale-h3: 1.222em;
 
     /* 도구 화면 */
-    --typeset-tool-size: 16px;
-    --typeset-tool-leading: 1.75;
+    --typeset-tool-size: 15px;
+    --typeset-tool-leading: 1.65;
     --typeset-tool-flow: 1em;
     --typeset-tool-measure: 672px;
     --typeset-tool-scale-h1: 1.8em;

@@ -468,13 +468,13 @@
        -------------------------------------------------------- */
 
     /* 읽는 문서 */
-    --typeset-doc-size: 18px;
+    --typeset-doc-size: 19px;
     --typeset-doc-leading: 1.8;
     --typeset-doc-flow: 0.9em;
-    --typeset-doc-measure: 720px;
-    --typeset-doc-scale-h1: 1.9em;
-    --typeset-doc-scale-h2: 1.556em;
-    --typeset-doc-scale-h3: 1.222em;
+    --typeset-doc-measure: 680px;
+    --typeset-doc-scale-h1: 2.2em;
+    --typeset-doc-scale-h2: 1.7em;
+    --typeset-doc-scale-h3: 1.3em;
 
     /* 도구 화면 */
     --typeset-tool-size: 16px;
@@ -490,6 +490,9 @@
     --typeset-space-h2: 2.2;
     --typeset-space-h3: 1.8;
     --typeset-tracking: -0.01em;
+    /* Long-form headings (h1–h4): Playfair Display at 500, a touch tighter: the display cut reads heavy at the vendor's 600. */
+    --typeset-heading-weight: 500;
+    --typeset-heading-tracking: -0.01em;
 }
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */

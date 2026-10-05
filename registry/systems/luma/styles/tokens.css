@@ -447,7 +447,7 @@
 
     /* 읽는 문서 */
     --typeset-doc-size: 18px;
-    --typeset-doc-leading: 1.8;
+    --typeset-doc-leading: 1.85;
     --typeset-doc-flow: 0.9em;
     --typeset-doc-measure: 720px;
     --typeset-doc-scale-h1: 1.9em;
@@ -456,7 +456,7 @@
 
     /* 도구 화면 */
     --typeset-tool-size: 16px;
-    --typeset-tool-leading: 1.75;
+    --typeset-tool-leading: 1.8;
     --typeset-tool-flow: 1em;
     --typeset-tool-measure: 672px;
     --typeset-tool-scale-h1: 1.8em;

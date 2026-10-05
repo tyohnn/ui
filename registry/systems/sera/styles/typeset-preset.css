@@ -98,6 +98,11 @@
                 [data-not-typeset] *
             )
         ) {
+        /* sera: Playfair headings at 500, tracked a touch tighter than the vendor's 600 · normal. */
+        &:where(h1, h2, h3, h4) {
+            font-weight: var(--typeset-heading-weight);
+            letter-spacing: var(--typeset-heading-tracking);
+        }
         &:where(h1) {
             font-size: var(--typeset-scale-h1);
             margin-block-start: calc(var(--typeset-flow) * var(--typeset-space-h1));
