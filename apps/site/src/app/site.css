@@ -506,6 +506,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .th-get b { font-size: 14px; }
 .th-get small { font-size: 12px; line-height: 1.5; color: var(--fg-3); }
 .th-get .cmd { display: flex; justify-content: space-between; border-radius: 10px; font-size: 12px; white-space: normal; word-break: break-all; }
+.th-get .cmd .copy { flex: none; white-space: nowrap; }
 .th-get-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .side-panel > .th-selects { margin-top: 2px; }
 
