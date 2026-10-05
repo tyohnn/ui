@@ -85,7 +85,7 @@ const Attachments = () => (
 const BODY_BARS = [76, 80, 72, 48];
 
 const MailBody = () => (
-    <Prose size="md" className="max-w-[80ch] [&_p]:whitespace-pre-line">
+    <Prose className="max-w-[var(--typeset-measure)] [&_p]:whitespace-pre-line">
         {LOADING ? (
             <p>
                 {BODY_BARS.map((length, index) => (

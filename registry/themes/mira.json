@@ -10,5 +10,8 @@
         "base": "neutral"
     },
     "light": {},
-    "dark": {}
+    "dark": {
+        "sidebar-primary": "var(--primary)",
+        "sidebar-primary-foreground": "var(--primary-foreground)"
+    }
 }

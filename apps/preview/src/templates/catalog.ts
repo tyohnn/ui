@@ -6,7 +6,7 @@
  *   shadcn's sidebar blocks (`sidebar-01` … `sidebar-16`, shadcn 4.21.0) with the sidebar ported as it is and
  *   the body filled as a product screen (templates/blocks/<id>); the CRM is tyohnn's own. A screen is a page
  *   that fills its viewport, so the viewport is the size it is designed, compared and screenshotted at.
- * - `sheet` — a component sheet for checking a system (component sheet, coverage, icons). The site shows none
+ * - `sheet` — a component sheet for checking a system (component sheet, coverage, icons, typeset). The site shows none
  *   of them as a screen; its Components page embeds coverage section by section.
  *
  * `built: false` renders a placeholder page until the block's template exists (and the site hides it).
@@ -73,6 +73,7 @@ export const TEMPLATE_CATALOG = [
     { id: "component-sheet", label: "Component sheet", kind: "sheet", viewport: FRAME, built: true },
     { id: "coverage", label: "Coverage", kind: "sheet", viewport: FRAME, built: true },
     { id: "icons", label: "Icons", kind: "sheet", viewport: FRAME, built: true },
+    { id: "typeset", label: "Typeset", kind: "sheet", viewport: { width: 1440, height: 900 }, built: true },
 ] as const satisfies readonly TemplateEntry[];
 
 export type TemplateId = (typeof TEMPLATE_CATALOG)[number]["id"];

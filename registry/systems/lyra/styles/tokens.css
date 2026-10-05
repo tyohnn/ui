@@ -451,28 +451,31 @@
        -------------------------------------------------------- */
 
     /* 읽는 문서 */
-    --typeset-doc-size: 18px;
-    --typeset-doc-leading: 1.8;
+    --typeset-doc-size: 16px;
+    --typeset-doc-leading: 1.7;
     --typeset-doc-flow: 0.9em;
-    --typeset-doc-measure: 720px;
-    --typeset-doc-scale-h1: 1.9em;
-    --typeset-doc-scale-h2: 1.556em;
-    --typeset-doc-scale-h3: 1.222em;
+    --typeset-doc-measure: 640px;
+    --typeset-doc-scale-h1: 1.5em;
+    --typeset-doc-scale-h2: 1.3em;
+    --typeset-doc-scale-h3: 1.1em;
 
     /* 도구 화면 */
-    --typeset-tool-size: 16px;
-    --typeset-tool-leading: 1.75;
+    --typeset-tool-size: 14px;
+    --typeset-tool-leading: 1.6;
     --typeset-tool-flow: 1em;
     --typeset-tool-measure: 672px;
-    --typeset-tool-scale-h1: 1.8em;
-    --typeset-tool-scale-h2: 1.5em;
-    --typeset-tool-scale-h3: 1.2em;
+    --typeset-tool-scale-h1: 1.5em;
+    --typeset-tool-scale-h2: 1.3em;
+    --typeset-tool-scale-h3: 1.1em;
 
     /* 두 프리셋이 함께 쓰는 축. 제목 위 여백 배수(flow 에 곱한다)와 자간. */
     --typeset-space-h1: 1.8;
     --typeset-space-h2: 2.2;
     --typeset-space-h3: 1.8;
-    --typeset-tracking: -0.01em;
+    --typeset-tracking: 0;
+    /* Long-form headings (h1–h4): JetBrains Mono at 700 with no tracking: in one monospace face, weight is the only step a heading has. */
+    --typeset-heading-weight: 700;
+    --typeset-heading-tracking: 0;
 }
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */

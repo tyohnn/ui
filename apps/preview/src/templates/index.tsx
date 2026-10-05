@@ -22,6 +22,7 @@ import { ComponentSheet } from "./component-sheet";
 import { Coverage } from "./coverage";
 import { CrmDashboard } from "./crm-dashboard";
 import { IconSheet } from "./icons";
+import { TypesetSheet } from "./typeset";
 
 /** `?section=<name>` renders one coverage section with its popups open (see coverage/index.tsx). */
 const CoverageTemplate = () => <Coverage section={new URLSearchParams(location.search).get("section")} />;
@@ -51,6 +52,7 @@ const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     coverage: CoverageTemplate,
     "crm-dashboard": CrmDashboard,
     icons: IconSheet,
+    typeset: TypesetSheet,
 };
 
 export const templates: Record<string, ComponentType> = Object.fromEntries(
