@@ -32,7 +32,7 @@ export const ko: Messages = {
     hero: {
         titleFirst: "색 놀음은 그만,",
         titleSecond: "취향을 만드세요",
-        body: <>다들 색에서 멈춰요. <b>밀도, 깊이, 질감</b>까지 내 토큰으로 바꿔 보세요.</>,
+        body: <>다들 색에서 멈춰요.<br /><b>밀도, 깊이, 질감</b>까지 내 토큰으로 바꿔 보세요.</>,
         browse: "시스템 둘러보기",
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
@@ -69,8 +69,8 @@ export const ko: Messages = {
         },
         texture: {
             title: "질감",
-            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 연기 낀 유리, 반투명한 알약.",
-            captions: { loam: "흰 베일 · 광택", halo: "연기 낀 유리", cirrus: "알약 · 반투명 레이어" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 연기 낀 유리, 그라데이션.",
+            captions: { loam: "흰 베일 · 광택", halo: "연기 낀 유리", clover: "행동으로 번지는 그라데이션" },
         },
         type: {
             title: "타이포",

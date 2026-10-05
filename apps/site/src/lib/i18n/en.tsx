@@ -47,7 +47,7 @@ export const en = {
     hero: {
         titleFirst: "Enough color tweak,",
         titleSecond: "Build your Taste",
-        body: <>Colour is where everyone stops. Go further — <b>density, depth and texture</b>, as tokens you own.</>,
+        body: <>Colour is where everyone stops.<br />Go further — <b>density, depth and texture</b>, as tokens you own.</>,
         browse: "Browse systems",
         play: "▶ Play",
         pause: "❚❚ Pause",
@@ -84,8 +84,8 @@ export const en = {
         },
         texture: {
             title: "Texture",
-            body: "What a surface is made of — a sheen, smoked glass, frosted pills.",
-            captions: { loam: "White veils · sheen", halo: "Smoked glass", cirrus: "Pills · frosted layers" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, smoked glass, a gradient.",
+            captions: { loam: "White veils · sheen", halo: "Smoked glass", clover: "A gradient into the action" } as Record<string, string>,
         },
         type: {
             title: "Type",

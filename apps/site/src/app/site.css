@@ -82,7 +82,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .hero h1 { font-size: 112px; line-height: 0.92; letter-spacing: -0.055em; font-weight: 800; }
 .hero h1 span { color: var(--fg-3); }
 
-.hero-side { display: flex; flex-direction: column; gap: 28px; max-width: 640px; }
+.hero-side { display: flex; flex-direction: column; gap: 28px; max-width: 760px; }
 .hero-side p { margin: 0; color: var(--fg-2); font-size: 20px; line-height: 1.5; }
 .hero-side p b { color: var(--fg); font-weight: 500; }
 .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }

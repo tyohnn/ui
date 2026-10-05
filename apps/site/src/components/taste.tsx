@@ -10,7 +10,7 @@ type Pillar = "density" | "depth" | "texture" | "type";
 const PILLARS: { id: Pillar; systems: [string, string, string] }[] = [
     { id: "density", systems: ["mira", "nova", "sera"] },
     { id: "depth", systems: ["nocturne", "graphite", "luma"] },
-    { id: "texture", systems: ["loam", "halo", "cirrus"] },
+    { id: "texture", systems: ["loam", "halo", "clover"] },
     { id: "type", systems: ["vellum", "lyra", "maia"] },
 ];
 
