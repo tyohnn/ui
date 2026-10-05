@@ -457,9 +457,9 @@
     --typeset-tool-leading: 1.6;
     --typeset-tool-flow: 1em;
     --typeset-tool-measure: 672px;
-    --typeset-tool-scale-h1: 1.8em;
-    --typeset-tool-scale-h2: 1.5em;
-    --typeset-tool-scale-h3: 1.2em;
+    --typeset-tool-scale-h1: 1.5em;
+    --typeset-tool-scale-h2: 1.3em;
+    --typeset-tool-scale-h3: 1.1em;
 
     /* 두 프리셋이 함께 쓰는 축. 제목 위 여백 배수(flow 에 곱한다)와 자간. */
     --typeset-space-h1: 1.8;
