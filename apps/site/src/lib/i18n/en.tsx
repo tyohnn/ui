@@ -88,7 +88,7 @@ export const en = {
             captions: { loam: "White veils · sheen", graphite: "Clay controls", halo: "Smoked glass" } as Record<string, string>,
         },
         type: {
-            title: "Type",
+            title: "Typography",
             body: "The voice — which face, how tight, how labels speak.",
             captions: { vellum: "Source Serif titles", lyra: "JetBrains Mono throughout", maia: "Figtree · round" } as Record<string, string>,
         },
