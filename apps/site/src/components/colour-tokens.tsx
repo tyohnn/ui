@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type ReactNode, type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { PALETTE_GROUPS, resolveValue, toOklch } from "@tyohnn/theme";
 
@@ -183,12 +184,104 @@ const ColourPicker = ({ written, resolved, families, onPick }: {
     );
 };
 
-/** One token: chip, name and what it holds; a click opens the picker under it */
-const Token = ({ name, mode, open, onToggle, families, names }: {
+const GAP = 10;
+const EDGE = 12;
+
+/**
+ * The picker as a popover to the right of the colour panel, level with its row. It lives in a portal with fixed
+ * coordinates because the panel scrolls and sticks, which would clip anything positioned inside it. With no room
+ * on the right (a narrow screen, where the panel is the full width) it opens under the row instead. It follows
+ * the row while the page or the panel scrolls, and closes on Escape or a click outside it and its row.
+ */
+const Popover = ({ anchor, onClose, label, children }: { anchor: RefObject<HTMLElement | null>; onClose: () => void; label: string; children: ReactNode }) =>
+{
+    const pop = useRef<HTMLDivElement>(null);
+    const [place, setPlace] = useState<{ left: number; top: number } | null>(null);
+
+    useLayoutEffect(() =>
+    {
+        const measure = () =>
+        {
+            const row = anchor.current;
+            const box = pop.current;
+
+            if (!row || !box) return;
+
+            const rowRect = row.getBoundingClientRect();
+            const panelRect = (row.closest(".th-panel") ?? row).getBoundingClientRect();
+            const { width, height } = box.getBoundingClientRect();
+            const clampTop = (top: number) => Math.max(EDGE, Math.min(top, window.innerHeight - height - EDGE));
+            const right = panelRect.right + GAP;
+
+            setPlace(right + width <= window.innerWidth - EDGE
+                ? { left: right, top: clampTop(rowRect.top - 8) }
+                : { left: Math.max(EDGE, Math.min(rowRect.left, window.innerWidth - width - EDGE)), top: clampTop(rowRect.bottom + 6) });
+        };
+
+        measure();
+        window.addEventListener("resize", measure);
+        // capture: the panel's own scroll does not bubble to window
+        window.addEventListener("scroll", measure, true);
+
+        return () =>
+        {
+            window.removeEventListener("resize", measure);
+            window.removeEventListener("scroll", measure, true);
+        };
+    }, [anchor]);
+
+    useEffect(() =>
+    {
+        const onPointer = (event: PointerEvent) =>
+        {
+            const target = event.target as Node;
+
+            if (!pop.current?.contains(target) && !anchor.current?.contains(target)) onClose();
+        };
+        const onKey = (event: KeyboardEvent) =>
+        {
+            if (event.key === "Escape") onClose();
+        };
+
+        // A click in a preview frame never reaches this document; the page losing focus to the frame says it instead.
+        const onBlur = () =>
+        {
+            if (document.activeElement instanceof HTMLIFrameElement) onClose();
+        };
+
+        document.addEventListener("pointerdown", onPointer);
+        document.addEventListener("keydown", onKey);
+        window.addEventListener("blur", onBlur);
+
+        return () =>
+        {
+            document.removeEventListener("pointerdown", onPointer);
+            document.removeEventListener("keydown", onKey);
+            window.removeEventListener("blur", onBlur);
+        };
+    }, [anchor, onClose]);
+
+    return createPortal(
+        <div
+            ref={pop}
+            className="ck-pop"
+            role="dialog"
+            aria-label={label}
+            style={place ? { left: place.left, top: place.top } : { left: -9999, top: 0, visibility: "hidden" }}
+        >
+            {children}
+        </div>,
+        document.body,
+    );
+};
+
+/** One token: chip, name and what it holds; a click opens the picker beside the panel */
+const Token = ({ name, mode, open, onToggle, onClose, families, names }: {
     name: string;
     mode: Mode;
     open: boolean;
     onToggle: () => void;
+    onClose: () => void;
     families: TailwindFamily[];
     names: Map<string, string>;
 }) =>
@@ -199,9 +292,10 @@ const Token = ({ name, mode, open, onToggle, families, names }: {
     const written = values[name] ?? "";
     const resolved = resolveValue(values, written);
     const edited = theme.state.edits[mode][name] !== undefined;
+    const row = useRef<HTMLDivElement>(null);
 
     return (
-        <div className={["ck-token", edited ? "edited" : "", open ? "open" : ""].filter(Boolean).join(" ")}>
+        <div ref={row} className={["ck-token", edited ? "edited" : "", open ? "open" : ""].filter(Boolean).join(" ")}>
             <div className="ck-row">
                 <button type="button" className="ck-head" aria-expanded={open} onClick={onToggle}>
                     <span className="ck-chip" style={{ background: resolved }} aria-hidden />
@@ -214,7 +308,17 @@ const Token = ({ name, mode, open, onToggle, families, names }: {
                     </button>
                 )}
             </div>
-            {open && <ColourPicker key={mode} written={written} resolved={resolved} families={families} onPick={(value) => theme.setColour(mode, name, value)} />}
+            {open && (
+                <Popover anchor={row} onClose={onClose} label={`--${name}`}>
+                    <div className="ck-pop-head">
+                        <span className="ck-chip" style={{ background: resolved }} aria-hidden />
+                        <b>--{name}</b>
+                        <small>{t.modeTag[mode]}</small>
+                        <button type="button" className="th-close" onClick={onClose} aria-label={t.theme.close}>×</button>
+                    </div>
+                    <ColourPicker key={mode} written={written} resolved={resolved} families={families} onPick={(value) => theme.setColour(mode, name, value)} />
+                </Popover>
+            )}
         </div>
     );
 };
@@ -227,6 +331,7 @@ export const TokenEditor = ({ families }: { families: TailwindFamily[] }) =>
     const [mode, setMode] = useState<Mode>("light");
     const [group, setGroup] = useState<string>("base");
     const [open, setOpen] = useState<string | null>(null);
+    const closePicker = useCallback(() => setOpen(null), []);
     const names = useMemo(() => new Map(families.flatMap((family) => family.shades.map((entry) => [keyOf(entry.value), `${family.name}-${entry.shade}`] as const))), [families]);
     const edits = Object.keys(theme.state.edits.light).length + Object.keys(theme.state.edits.dark).length;
 
@@ -256,6 +361,7 @@ export const TokenEditor = ({ families }: { families: TailwindFamily[] }) =>
                         mode={mode}
                         open={open === name}
                         onToggle={() => setOpen(open === name ? null : name)}
+                        onClose={closePicker}
                         families={families}
                         names={names}
                     />

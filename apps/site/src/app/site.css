@@ -526,7 +526,9 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 /* Without the room for a column the panel goes above the screens, as tall as its content up to a limit. */
 @media (max-width: 900px) {
     .sys-body { display: block; }
-    .th-panel.side-panel { position: relative; top: auto; max-height: 460px; margin-bottom: 24px; }
+    /* Narrow: the panel is a block in the page, not a scroller of its own, so nothing sticky covers its rows */
+    .th-panel.side-panel { position: relative; top: auto; max-height: none; overflow: visible; margin-bottom: 24px; }
+    .side-panel footer, .side-tabs { position: static; }
 }
 
 /* The layout panel: the frame tokens by axis, a slider each. */
@@ -554,7 +556,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .ck { display: flex; flex-direction: column; }
 .ck-list { display: flex; flex-direction: column; gap: 2px; }
 .ck-token { border: 1px solid transparent; border-radius: 10px; }
-.ck-token.open { border-color: var(--line-strong); background: var(--ink-1); }
+.ck-token.open { border-color: var(--line-strong); background: var(--ink-2); }
 .ck-token.edited:not(.open) { border-color: rgba(185, 194, 255, 0.3); }
 .ck-row { display: flex; align-items: center; }
 .ck-head { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 10px; text-align: start; }
@@ -563,7 +565,12 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .ck-name { font-family: var(--mono); font-size: 11.5px; color: var(--fg-2); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ck-label { font-family: var(--mono); font-size: 11px; color: var(--fg-3); max-width: 46%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ck-token .th-undo { margin-right: 6px; }
-.ck-picker { display: flex; flex-direction: column; gap: 10px; padding: 4px 10px 12px; }
+.ck-pop { position: fixed; z-index: 80; width: min(340px, calc(100vw - 24px)); max-height: calc(100vh - 24px); overflow: auto; padding: 14px; background: rgb(18, 19, 22); border: 1px solid var(--line-strong); border-radius: 14px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6); }
+.ck-pop-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.ck-pop-head b { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+.ck-pop-head .th-close { margin-left: 0; font-size: 18px; }
+.ck-pop-head small { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--fg-3); }
+.ck-picker { display: flex; flex-direction: column; gap: 12px; }
 .ck-tabs { display: inline-flex; align-self: flex-start; background: var(--ink-0); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
 .ck-tabs button { font-size: 11px; color: var(--fg-3); border-radius: 999px; padding: 3px 12px; }
 .ck-tabs button[aria-selected="true"] { color: var(--ink-0); background: var(--fg); }
