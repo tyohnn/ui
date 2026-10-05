@@ -1,19 +1,18 @@
 import { getMessages, type Locale } from "@/lib/i18n";
 import type { Mode } from "@/lib/site";
-import { declareTokens, getSpecimenPalette, getSystem, getSystemTokens } from "@/lib/registry";
+import { declareTokens, getSystem, getSystemPalette, getSystemTokens } from "@/lib/registry";
 
 type Pillar = "density" | "depth" | "texture" | "type";
 
 /**
- * Which systems stand side by side for each axis, and the one mode a row is drawn in (never mixed, so the tiles
- * compare). Density uses the ports of shadcn create presets — the axis they already vary on; the other rows show
+ * Which systems stand side by side for each axis. Density uses the ports of shadcn create presets — the axis they already vary on; the other rows show
  * each of tyohnn's own systems once.
  */
-const PILLARS: { id: Pillar; mode: Mode; systems: [string, string, string]; tokens: string[] }[] = [
-    { id: "density", mode: "light", systems: ["mira", "nova", "maia"], tokens: ["--control-height-md", "--surface-padding-md", "--control-font-size-md"] },
-    { id: "depth", mode: "light", systems: ["vellum", "rhea", "cirrus"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
-    { id: "texture", mode: "dark", systems: ["loam", "graphite", "halo"], tokens: ["--card-sheen", "--clay-highlight", "--glass-card-filter"] },
-    { id: "type", mode: "light", systems: ["clover", "sera", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
+const PILLARS: { id: Pillar; systems: [string, string, string]; tokens: string[] }[] = [
+    { id: "density", systems: ["mira", "nova", "maia"], tokens: ["--control-height-md", "--surface-padding-md", "--control-font-size-md"] },
+    { id: "depth", systems: ["vellum", "rhea", "cirrus"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
+    { id: "texture", systems: ["loam", "graphite", "halo"], tokens: ["--card-sheen", "--clay-highlight", "--glass-card-filter"] },
+    { id: "type", systems: ["clover", "sera", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
 ];
 
 const ROWS: [string, string][] = [["Acme Corp", "$24,000"], ["Globex", "$8,400"], ["Initech", "$12,900"]];
@@ -38,25 +37,22 @@ const Specimen = () => (
 );
 
 /**
- * Density, depth, texture and type, one row each. Every tile shares foundation's neutral palette and takes the
- * rest — layer-1 formulas and materials, every layer-2 token — from a real system in the row's one mode, so
- * what differs between tiles is only what the tokens say.
+ * Density, depth, texture and type, one row each. Every tile is a real system in the site's mode — its own
+ * palette, layer-1 formulas and materials, and every layer-2 token — drawn into the same small card.
  */
 export function Taste({ locale }: { locale: Locale })
 {
     const t = getMessages(locale).taste;
-    const tiles = PILLARS.flatMap((pillar) => pillar.systems.map((name) =>
-    {
-        const tokens = getSystemTokens(name, pillar.mode);
-        const glass = (tokens.get("--glass-card-filter") ?? "none") !== "none";
-
-        return { name, mode: pillar.mode, glass, css: `.spec-tile[data-system="${name}"][data-mode="${pillar.mode}"] { ${getSpecimenPalette(pillar.mode)} ${declareTokens(tokens)} }` };
-    }));
-    const glassy = (name: string, mode: Mode) => tiles.some((entry) => entry.name === name && entry.mode === mode && entry.glass);
+    const names = [...new Set(PILLARS.flatMap((pillar) => pillar.systems))];
+    const modes: Mode[] = ["light", "dark"];
+    // Both modes go out as CSS; the site's mode (<html data-preview-mode>) chooses which one applies.
+    const css = names.flatMap((name) => modes.map((mode) =>
+        `html[data-preview-mode="${mode}"] .spec-tile[data-system="${name}"] { ${getSystemPalette(name, mode)} ${declareTokens(getSystemTokens(name, mode))} }`)).join("\n");
+    const glassy = (name: string) => modes.some((mode) => (getSystemTokens(name, mode).get("--glass-card-filter") ?? "none") !== "none");
 
     return (
         <section className="taste">
-            <style dangerouslySetInnerHTML={{ __html: tiles.map((entry) => entry.css).join("\n") }} />
+            <style dangerouslySetInnerHTML={{ __html: css }} />
             <p className="taste-note eyebrow">{t.note}</p>
             {PILLARS.map((pillar, index) => (
                 <div key={pillar.id} className="taste-row" id={pillar.id}>
@@ -70,10 +66,9 @@ export function Taste({ locale }: { locale: Locale })
                         {pillar.systems.map((name) => (
                             <figure key={name} className="spec">
                                 <div
-                                    className={pillar.mode === "dark" ? "spec-tile dark" : "spec-tile"}
+                                    className="spec-tile"
                                     data-system={name}
-                                    data-mode={pillar.mode}
-                                    data-glass={glassy(name, pillar.mode) || undefined}
+                                    data-glass={glassy(name) || undefined}
                                 >
                                     <Specimen />
                                 </div>

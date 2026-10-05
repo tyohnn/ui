@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CATEGORIES, DEFAULT_SCREEN, previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
 import { useLocale } from "./locale-provider";
+import { useMode } from "./mode-provider";
 import { ScaledFrame } from "./scaled-frame";
 
 type Sort = "newest" | "az";
@@ -20,6 +21,7 @@ const STAGGER_MS = 35;
 export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
 {
     const { t, labels, href } = useLocale();
+    const { mode } = useMode();
     const [screen, setScreen] = useState<string>(DEFAULT_SCREEN);
     const [sort, setSort] = useState<Sort>("newest");
     const [flipping, setFlipping] = useState(false);
@@ -93,7 +95,7 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
                         >
                             <div className="card-shot">
                                 <ScaledFrame
-                                    src={previewUrl(system.name, screen, system.defaultMode)}
+                                    src={previewUrl(system.name, screen, mode)}
                                     title={`${system.name}: ${labels.screen(entry.id, entry.label)}`}
                                     width={entry.viewport.width}
                                     height={entry.viewport.height}

@@ -187,12 +187,11 @@ const rootDeclarations = (css: string, mode: Mode): [string, string][] =>
 /** A token map as one CSS declaration list */
 export const declareTokens = (values: Map<string, string>) => [...values].map(([key, value]) => `${key}: ${value};`).join(" ");
 
-/** The palette every taste specimen shares (foundation's neutral theme, in either mode), so colour never differs */
-export const getSpecimenPalette = (mode: Mode) =>
-    declareTokens(new Map(rootDeclarations(readFileSync(join(registryRoot, "foundation/styles/theme.css"), "utf8"), mode)));
+/** A system's own palette (theme.css) in one mode */
+export const getSystemPalette = (name: string, mode: Mode) =>
+    declareTokens(new Map(rootDeclarations(readFileSync(join(registryRoot, "systems", name, "styles/theme.css"), "utf8"), mode)));
 
-/** A system's layer-1 formulas and materials (globals.css) and its layer-2 tokens (tokens.css) in one mode,
-    without its palette (theme.css) */
+/** A system's layer-1 formulas and materials (globals.css) and its layer-2 tokens (tokens.css) in one mode */
 export const getSystemTokens = (name: string, mode: Mode) =>
 {
     const styles = join(registryRoot, "systems", name, "styles");

@@ -52,7 +52,6 @@ export const en = {
         play: "▶ Play",
         pause: "❚❚ Pause",
         frameTitle: (name: string) => `${name} CRM dashboard`,
-        samePalette: "one neutral palette",
         compareAny: "Compare any two →",
     },
 
@@ -72,7 +71,7 @@ export const en = {
     },
 
     taste: {
-        note: "One neutral palette in every card. Only the tokens change.",
+        note: "Every card is a real system — its own colours, its own tokens.",
         density: {
             title: "Density",
             body: "How much air a screen has — control heights, padding, row rhythm.",

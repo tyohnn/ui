@@ -5,27 +5,23 @@ import { Taste } from "@/components/taste";
 import { getMessages, type Locale, localizeSystems } from "@/lib/i18n";
 import { getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
-import { readThemes } from "@/lib/themes";
-import { themeToCss } from "@tyohnn/theme";
 
-/** The pairs the hero splits, each in one mode: shadcn's own baseline against ours first, then ours against ours */
+/** The pairs the hero splits: shadcn's own baseline against ours first, then ours against ours */
 const PAIRS: HeroPair[] = [
-    { a: "mira", b: "graphite", mode: "dark" },
-    { a: "cirrus", b: "vellum", mode: "light" },
-    { a: "loam", b: "halo", mode: "dark" },
-    { a: "clover", b: "nocturne", mode: "light" },
+    { a: "mira", b: "graphite" },
+    { a: "cirrus", b: "vellum" },
+    { a: "loam", b: "halo" },
+    { a: "clover", b: "nocturne" },
 ];
 
 export function HomeView({ locale }: { locale: Locale })
 {
     const t = getMessages(locale);
     const systems = localizeSystems(locale, getSystems()).map(summarize);
-    const neutral = readThemes().find((theme) => theme.id === "neutral")!;
-    const paletteCss = themeToCss({ name: "neutral", title: "neutral", light: neutral.light, dark: neutral.dark });
 
     return (
         <>
-            <Hero systems={systems} pairs={PAIRS} paletteCss={paletteCss} />
+            <Hero systems={systems} pairs={PAIRS} />
             <Taste locale={locale} />
             <Gallery systems={systems} />
 

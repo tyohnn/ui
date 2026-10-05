@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { type CSSProperties, type PointerEvent as ReactPointerEvent, useCallback, useEffect, useRef, useState } from "react";
 
-import { type Mode, previewUrl, screenOf, type SystemSummary } from "@/lib/site";
+import { previewUrl, screenOf, type SystemSummary } from "@/lib/site";
 
 import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
+import { useMode } from "./mode-provider";
 import { ScaledFrame } from "./scaled-frame";
 
 const ROTATE_MS = 7000;
@@ -16,59 +17,17 @@ export interface HeroPair
 {
     a: string;
     b: string;
-    mode: Mode;
 }
 
-/** Paint one stylesheet into every same-origin preview frame under `root`, now and whenever a frame (re)loads. */
-const usePaint = (root: React.RefObject<HTMLElement | null>, css: string) =>
-{
-    useEffect(() =>
-    {
-        const element = root.current;
-
-        if (!element) return;
-
-        const watched = new WeakSet<HTMLIFrameElement>();
-        const paint = (frame: HTMLIFrameElement) =>
-        {
-            const doc = frame.contentDocument;
-
-            if (!doc?.head) return;
-
-            const style = doc.getElementById("tyohnn-editor-theme") ?? Object.assign(doc.createElement("style"), { id: "tyohnn-editor-theme" });
-
-            style.textContent = css;
-            if (!style.isConnected) doc.head.append(style);
-        };
-        const apply = () => element.querySelectorAll("iframe").forEach((frame) =>
-        {
-            paint(frame);
-
-            if (watched.has(frame)) return;
-
-            watched.add(frame);
-            frame.addEventListener("load", () => paint(frame));
-        });
-
-        apply();
-
-        const observer = new MutationObserver(apply);
-
-        observer.observe(element, { childList: true, subtree: true });
-
-        return () => observer.disconnect();
-    }, [root, css]);
-};
-
 /**
- * The home hero: one screen split between two systems, both wearing the same neutral palette, so the only
- * thing the divider moves across is the feel. Pairs turn every few seconds and the divider sweeps on its own;
+ * The home hero: one screen split between two systems, each in its own colours and tokens, both in the site's mode. Pairs turn every few seconds and the divider sweeps on its own;
  * a drag (or ← →) takes over and stops both. Only the current pair and the next are mounted, so a switch
  * crossfades into frames that have already loaded.
  */
-export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[]; pairs: HeroPair[]; paletteCss: string }) =>
+export const Hero = ({ systems, pairs }: { systems: SystemSummary[]; pairs: HeroPair[] }) =>
 {
     const { t, href } = useLocale();
+    const { mode } = useMode();
     const [index, setIndex] = useState(0);
     const [split, setSplit] = useState(50);
     const [held, setHeld] = useState(false);
@@ -76,15 +35,12 @@ export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[];
     const [visible, setVisible] = useState(true);
     const [cycle, setCycle] = useState(0);
     const section = useRef<HTMLDivElement>(null);
-    const stage = useRef<HTMLDivElement>(null);
     const inner = useRef<HTMLDivElement>(null);
     const running = !paused && !held && visible;
     const current = pairs[index];
     const next = pairs[(index + 1) % pairs.length];
     const viewport = screenOf(SCREEN).viewport;
     const fontOf = (name: string) => systems.find((system) => system.name === name)?.nameFont;
-
-    usePaint(stage, paletteCss);
 
     useEffect(() =>
     {
@@ -150,7 +106,7 @@ export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[];
         setCycle((value) => value + 1);
     };
 
-    const compareHref = `${href("/compare")}?${new URLSearchParams({ a: current.a, b: current.b, screen: SCREEN, mode: current.mode })}`;
+    const compareHref = `${href("/compare")}?${new URLSearchParams({ a: current.a, b: current.b, screen: SCREEN, mode })}`;
 
     return (
         <div ref={section}>
@@ -165,11 +121,11 @@ export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[];
                 </div>
             </div>
 
-            <div className="hero-split" ref={stage}>
+            <div className="hero-split">
                 <div className="stage-frame">
                     <div className="stage-bar">
                         <span className="dots" aria-hidden><i /><i /><i /></span>
-                        <span className="path">{SCREEN} · {t.hero.samePalette} · {t.mode[current.mode].toLowerCase()}</span>
+                        <span className="path">{SCREEN} · {current.a} ↔ {current.b} · {t.modeTag[mode]}</span>
                         <button type="button" className="pause" onClick={() => { setPaused((value) => !value); setHeld(false); setCycle((value) => value + 1); }}>
                             {paused || held ? t.hero.play : t.hero.pause}
                         </button>
@@ -184,10 +140,10 @@ export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[];
                         {[current, next].map((pair) => (
                             <div key={`${pair.a}-${pair.b}`} className="layer-frame" style={{ opacity: pair === current ? 1 : 0 }} aria-hidden={pair !== current}>
                                 <div className="side">
-                                    <ScaledFrame src={previewUrl(pair.a, SCREEN, pair.mode)} title={t.hero.frameTitle(pair.a)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
+                                    <ScaledFrame src={previewUrl(pair.a, SCREEN, mode)} title={t.hero.frameTitle(pair.a)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
                                 </div>
                                 <div className="side" style={pair === current ? { clipPath: `inset(0 0 0 ${split}%)` } : undefined}>
-                                    <ScaledFrame src={previewUrl(pair.b, SCREEN, pair.mode)} title={t.hero.frameTitle(pair.b)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
+                                    <ScaledFrame src={previewUrl(pair.b, SCREEN, mode)} title={t.hero.frameTitle(pair.b)} width={viewport.width} height={viewport.height} eager style={{ height: "100%" }} />
                                 </div>
                             </div>
                         ))}
@@ -228,7 +184,6 @@ export const Hero = ({ systems, pairs, paletteCss }: { systems: SystemSummary[];
                                 <span style={{ fontFamily: fontOf(pair.a) }}>{pair.a}</span>
                                 <i aria-hidden>↔</i>
                                 <span style={{ fontFamily: fontOf(pair.b) }}>{pair.b}</span>
-                                <small>{t.modeTag[pair.mode]}</small>
                                 {position === index && (
                                     <span className="progress" style={{ "--rotate-ms": `${ROTATE_MS}ms` } as CSSProperties}>
                                         <i key={`${index}-${cycle}`} className={running ? undefined : "paused"} />

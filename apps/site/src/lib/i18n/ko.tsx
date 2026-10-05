@@ -37,7 +37,6 @@ export const ko: Messages = {
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
         frameTitle: (name) => `${name} CRM 대시보드`,
-        samePalette: "같은 무채색 팔레트",
         compareAny: "아무 시스템이나 둘 비교하기 →",
     },
 
@@ -57,7 +56,7 @@ export const ko: Messages = {
     },
 
     taste: {
-        note: "모든 카드가 같은 무채색 팔레트예요. 토큰만 달라요.",
+        note: "모든 카드가 실제 시스템이에요. 색도 토큰도 그 시스템 그대로예요.",
         density: {
             title: "밀도",
             body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
