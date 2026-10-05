@@ -8,6 +8,7 @@
 //   resolveTheme   compose extends { base, accent, chart } into one complete theme
 //   themeToCss     render it as the generated styles/theme.css (`:root` and `.dark`)
 //   encodeTheme    pack a theme into a URL-safe string for a share link, decodeTheme unpacks it
+//   encodePreset   pack system · palette · accent · chart into a five-character code, decodePreset unpacks it
 //   contrast       WCAG contrast ratio between two theme colours (oklch · hex · rgb)
 
 /** The finite colour set, by group. Every theme defines every one of these in both modes. */
@@ -187,6 +188,67 @@ export const decodeTheme = (encoded) =>
         light: payload.l ?? {},
         dark: payload.d ?? {},
         ...(payload.m === undefined ? {} : { material: payload.m }),
+    };
+};
+
+// ---- presets ------------------------------------------------------------------------------------
+// A preset is a handful of picks, each one a place in a list the registry ships (registry/presets.json),
+// so it fits in a few characters the way shadcn's `--preset b0` does, and needs nothing stored anywhere:
+// whoever holds the lists can read the code. The lists are append-only for exactly that reason.
+//
+//   1 · system · palette · accent · chart        one base-62 character each; accent and chart count
+//                                                from 1, and 0 is "none"
+
+const DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const PRESET_VERSION = "1";
+
+/** The code for a preset, or null when one of its picks is not in the lists (a newer registry than the site's). */
+export const encodePreset = (lists, preset) =>
+{
+    const at = (list, id) => list.indexOf(id);
+    const system = at(lists.systems, preset.system);
+    const palette = at(lists.palettes, preset.palette);
+    // An optional pick counts from 1, so a missing one (-1) must stay below 0 rather than become "none".
+    const optional = (id) => (id ? (at(lists.accents, id) < 0 ? -1 : at(lists.accents, id) + 1) : 0);
+    const accent = optional(preset.accent);
+    const chart = optional(preset.chart);
+
+    if ([system, palette, accent, chart].some((index) => index < 0 || index >= DIGITS.length)) return null;
+
+    return PRESET_VERSION + [system, palette, accent, chart].map((index) => DIGITS[index]).join("");
+};
+
+/** The picks inside a preset code, or null when it is not one (wrong length, version or a place past a list's end). */
+export const decodePreset = (lists, code) =>
+{
+    const text = String(code ?? "").trim().replace(/^--preset[= ]/, "").trim();
+
+    if (text.length !== 5 || text[0] !== PRESET_VERSION) return null;
+
+    const [system, palette, accent, chart] = [...text.slice(1)].map((character) => DIGITS.indexOf(character));
+    const pick = (list, index) => (index >= 0 && index < list.length ? list[index] : undefined);
+
+    const preset = {
+        system: pick(lists.systems, system),
+        palette: pick(lists.palettes, palette),
+        accent: accent === 0 ? null : pick(lists.accents, accent - 1),
+        chart: chart === 0 ? null : pick(lists.accents, chart - 1),
+    };
+
+    return Object.values(preset).includes(undefined) ? null : preset;
+};
+
+/** The theme a preset wears: its palette, with the accent and the chart colour over it. */
+export const presetTheme = (preset) =>
+{
+    const layers = [preset.palette, preset.accent, preset.chart && `${preset.chart}-charts`].filter(Boolean);
+
+    return {
+        name: layers.join("-"),
+        title: layers.join(" + "),
+        extends: { base: preset.palette, ...(preset.accent ? { accent: preset.accent } : {}), ...(preset.chart ? { chart: preset.chart } : {}) },
+        light: {},
+        dark: {},
     };
 };
 

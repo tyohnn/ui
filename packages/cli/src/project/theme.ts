@@ -11,18 +11,21 @@
 //                            not a palette, so it is composed over whatever the app wears now
 //   ./brand.json             a theme file in the project
 //   tyohnn-theme:<encoded>   a share link from the site's editor, written into the project as a file
+//
+// A preset code from the site (`--preset 1a2b0`) names a system and its colours at once: a palette, an
+// accent and a chart colour, each a place in registry/presets.json (see presetChoice).
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
-import { checkTheme, decodeTheme, resolveTheme, themeToCss, type Theme } from "@tyohnn/theme";
+import { checkTheme, decodePreset, decodeTheme, presetTheme, resolveTheme, themeToCss, type Preset, type PresetLists, type Theme } from "@tyohnn/theme";
 
 import { writeFile } from "../lib/fs.js";
 import { CliError } from "../lib/log.js";
 import type { Registry } from "../source/registry.js";
 
-/** What tyohnn.json remembers: a theme of the registry, a composition of two, or a file in the project. */
-export type ThemeChoice = { id: string } | { file: string } | { base: string; accent: string };
+/** What tyohnn.json remembers: a theme of the registry, a composition over one, or a file in the project. */
+export type ThemeChoice = { id: string } | { file: string } | { base: string; accent?: string; chart?: string };
 
 export const ENCODED_PREFIX = "tyohnn-theme:";
 
@@ -150,7 +153,7 @@ export const resolveThemeInput = (input: string, root: string, registry: Registr
 export const loadTheme = (choice: ThemeChoice, root: string, registry: Registry): Theme =>
 {
     if ("id" in choice) return fromRegistry(registry, choice.id);
-    if ("base" in choice) return { name: `${choice.base}+${choice.accent}`, extends: { base: choice.base, accent: choice.accent }, light: {}, dark: {} };
+    if ("base" in choice) return presetTheme({ system: "", palette: choice.base, accent: choice.accent ?? null, chart: choice.chart ?? null });
 
     const absolute = join(root, choice.file);
 
@@ -181,7 +184,29 @@ export const describeTheme = (choice: ThemeChoice | undefined, registry: Registr
 {
     if (!choice) return `${systemTheme(registry, system)} (the system's own)`;
     if ("id" in choice) return choice.id;
-    if ("base" in choice) return `${choice.base} + ${choice.accent}`;
+    if ("base" in choice) return describeComposition(choice);
 
     return choice.file;
 };
+
+/** "zinc + blue + violet charts" */
+export const describeComposition = (choice: { base: string; accent?: string; chart?: string }): string =>
+    [choice.base, choice.accent, choice.chart && `${choice.chart} charts`].filter(Boolean).join(" + ");
+
+/** The picks inside a preset code from the site, read against this registry's lists. */
+export const readPreset = (code: string, registry: Registry): Preset =>
+{
+    if (!registry.has("registry/presets.json")) throw new CliError("this tyohnn source has no presets", "Use a newer --ref, or pass --system and --theme instead.");
+
+    const preset = decodePreset(registry.json<PresetLists>("registry/presets.json"), code);
+
+    if (!preset) throw new CliError(`"${code}" is not a preset code`, "Copy it again from the site; it looks like `--preset 1a2b0`.");
+
+    return preset;
+};
+
+/** The colours a preset names, as tyohnn.json remembers them (a bare palette is just that palette). */
+export const presetChoice = (preset: Preset): ThemeChoice =>
+    preset.accent || preset.chart
+        ? { base: preset.palette, ...(preset.accent ? { accent: preset.accent } : {}), ...(preset.chart ? { chart: preset.chart } : {}) }
+        : { id: preset.palette };

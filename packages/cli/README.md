@@ -35,6 +35,7 @@ motion. They are separate axes, so any theme goes on any system:
 
 ```sh
 tyohnn init --system mira --theme nocturne   # mira's density, nocturne's colours
+tyohnn init --preset 1992g                   # a system and its colours at once, from the site's Get code
 tyohnn theme stone                           # a neutral ramp (shadcn's baseColor)
 tyohnn theme blue                            # an accent: primary, secondary, charts and the sidebar
                                              # accent move; the rest of the palette stays
@@ -52,7 +53,7 @@ imports that instead — the same place in the cascade, so nothing else moves. `
 is still what the theme renders.
 
 Common options: `--yes` (no prompts, take defaults) · `--force` (overwrite files that exist or were edited) ·
-`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--theme <name|file|link>`, `--icons <library>`, `--locale <locale>`, `--blocks`, `--font <id>`,
+`--no-install` · `--mode light|dark` · `--cwd <path>`. `init` also takes `--preset <code>`, `--theme <name|file|link>`, `--icons <library>`, `--locale <locale>`, `--blocks`, `--font <id>`,
 `--font-heading <id|inherit>`, `--font-mono <id|system>`, and in a monorepo `--app <path>`, `--ui <folder>`
 (default `packages/ui`) and `--scope <@scope>` (the package becomes `<scope>/ui`). `--example component-sheet`
 copies the preview's component sheet into the app (a page at `/tyohnn/component-sheet` in Next.js).

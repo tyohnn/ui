@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { PALETTE, PALETTE_GROUPS, encodeTheme, themeToCss, type Theme } from "@tyohnn/theme";
+import { PALETTE, PALETTE_GROUPS, encodePreset, encodeTheme, themeToCss, type PresetLists, type Theme } from "@tyohnn/theme";
 
 import type { ThemeInfo } from "@/lib/themes";
 
@@ -33,9 +33,20 @@ interface ThemeValue
     css: string | null;
     theme: Theme;
     link: string;
+    /**
+     * The preset code for what is showing (system · palette · accent · chart), or null when it cannot be one:
+     * colours changed by hand, or a page with no system.
+     */
+    code: string | null;
+    system?: string;
+    presets?: PresetLists;
     setBase: (id: string) => void;
     setAccent: (id: string | null) => void;
     setChart: (id: string | null) => void;
+    /** Palette, accent and chart at once, as a preset or a shuffle sets them; hand edits are dropped */
+    setPicks: (picks: Picks) => void;
+    /** A random palette, accent and chart colour */
+    shuffle: () => void;
     setColour: (mode: Mode, name: string, value: string) => void;
     /** Put one colour back to what the base and accent say */
     clearColour: (mode: Mode, name: string) => void;
@@ -45,12 +56,36 @@ interface ThemeValue
     isOwn: boolean;
 }
 
+export interface Picks
+{
+    base: string;
+    accent: string | null;
+    chart: string | null;
+}
+
+const randomOf = <T,>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
+
+/** A shuffle: any whole palette, an accent two times in three, a chart colour of its own one time in two. */
+export const shufflePicks = (themes: ThemeInfo[]): Picks =>
+{
+    const palettes = themes.filter((entry) => entry.kind !== "accent").map((entry) => entry.id);
+    const accents = themes.filter((entry) => entry.kind === "accent").map((entry) => entry.id);
+
+    return {
+        base: randomOf(palettes),
+        accent: Math.random() < 2 / 3 ? randomOf(accents) : null,
+        chart: Math.random() < 1 / 2 ? randomOf(accents) : null,
+    };
+};
+
 const Context = createContext<ThemeValue | null>(null);
 
 /** The editor's state, or null on a page without the editor. */
 export const useTheme = () => useContext(Context);
 
 const empty = () => ({ light: {}, dark: {} });
+
+const hasEdits = (state: ThemeState) => Object.keys(state.edits.light).length + Object.keys(state.edits.dark).length > 0;
 
 const compose = (themes: ThemeInfo[], state: ThemeState) =>
 {
@@ -99,11 +134,14 @@ const readHash = (): ThemeState | null =>
     }
 };
 
+/** The `theme=` hash value for a state, so a link can open a page already wearing it */
+export const stateHash = (state: ThemeState) => `${HASH_KEY}=${btoa(JSON.stringify(state)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+
 const writeHash = (state: ThemeState | null) =>
 {
     const params = new URLSearchParams(window.location.hash.slice(1));
 
-    if (state) params.set(HASH_KEY, btoa(JSON.stringify(state)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""));
+    if (state) params.set(HASH_KEY, stateHash(state).slice(HASH_KEY.length + 1));
     else params.delete(HASH_KEY);
 
     const hash = params.toString();
@@ -119,18 +157,42 @@ const writeHash = (state: ThemeState | null) =>
  * `:root` / `.dark` blocks the CLI would generate, in the same place in the cascade, which is why a
  * change lands instantly and looks exactly like a build would.
  */
-export const ThemeProvider = ({ themes, own, always = false, children }: { themes: ThemeInfo[]; own: string; always?: boolean; children: ReactNode }) =>
+export const ThemeProvider = ({
+    themes,
+    own,
+    system,
+    presets,
+    always = false,
+    children,
+}: {
+    themes: ThemeInfo[];
+    own: string;
+    /** The system the frames show, for the preset code */
+    system?: string;
+    presets?: PresetLists;
+    always?: boolean;
+    children: ReactNode;
+}) =>
 {
     const [state, setState] = useState<ThemeState>({ base: own, accent: null, chart: null, edits: empty() });
     const [ready, setReady] = useState(false);
+    const previousOwn = useRef<string | null>(null);
 
     useEffect(() =>
     {
-        setState(readHash() ?? { base: own, accent: null, chart: null, edits: empty() });
+        // First the link's colours. After that `own` only changes when the create page switches system: a
+        // palette still on the old system's own follows to the new one's, and every other pick stays.
+        // The updater runs later, so it must see the old own as it is now, not the ref.
+        const before = previousOwn.current;
+
+        if (before === null) setState(readHash() ?? { base: own, accent: null, chart: null, edits: empty() });
+        else setState((current) => (current.base === before ? { ...current, base: own } : current));
+
+        previousOwn.current = own;
         setReady(true);
     }, [own]);
 
-    const isOwn = state.base === own && !state.accent && !state.chart && Object.keys(state.edits.light).length === 0 && Object.keys(state.edits.dark).length === 0;
+    const isOwn = state.base === own && !state.accent && !state.chart && !hasEdits(state);
     const display = useMemo(() => compose(themes, state), [themes, state]);
     // `always` is for a page comparing two systems: both sides wear the same colours from the start, so what
     // is left between them is the feel. Elsewhere the frames are left exactly as built until something changes.
@@ -205,6 +267,9 @@ export const ThemeProvider = ({ themes, own, always = false, children }: { theme
             css,
             theme,
             link: encodeTheme(theme),
+            system,
+            presets,
+            code: presets && system && !hasEdits(state) ? encodePreset(presets, { system, palette: state.base, accent: state.accent, chart: state.chart }) : null,
             isOwn,
             setBase: (id) => setState((current) => ({ ...current, base: id })),
             setAccent: (id) => setState((current) => ({ ...current, accent: id })),
@@ -223,10 +288,12 @@ export const ThemeProvider = ({ themes, own, always = false, children }: { theme
 
                 return { ...current, edits: { ...current.edits, [mode]: rest } };
             }),
+            setPicks: (picks) => setState({ ...picks, edits: empty() }),
+            shuffle: () => setState({ ...shufflePicks(themes), edits: empty() }),
             clearEdits: () => setState((current) => ({ ...current, edits: empty() })),
             reset: () => setState({ base: own, accent: null, chart: null, edits: empty() }),
         };
-    }, [themes, own, state, display, colours, css, isOwn]);
+    }, [themes, own, system, presets, state, display, colours, css, isOwn]);
 
     return <Context.Provider value={value}>{children}</Context.Provider>;
 };

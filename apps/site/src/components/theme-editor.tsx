@@ -2,11 +2,12 @@
 
 import { useState, type ReactNode } from "react";
 
-import { PALETTE_GROUPS, contrast, resolveValue, toHex } from "@tyohnn/theme";
+import { PALETTE_GROUPS, contrast, decodePreset, resolveValue, toHex, type Preset } from "@tyohnn/theme";
 
 import type { ThemeInfo } from "@/lib/themes";
 
 import { Combobox } from "./combobox";
+import { CopyCommand } from "./copy-command";
 import { useLocale } from "./locale-provider";
 import { useTheme, type Mode } from "./theme-provider";
 
@@ -19,7 +20,7 @@ const download = (name: string, text: string) =>
     URL.revokeObjectURL(url);
 };
 
-const Copy = ({ label, text }: { label: string; text: string }) =>
+const Copy = ({ label, text, className = "th-action" }: { label: string; text: string; className?: string }) =>
 {
     const { t } = useLocale();
     const [done, setDone] = useState(false);
@@ -27,7 +28,7 @@ const Copy = ({ label, text }: { label: string; text: string }) =>
     return (
         <button
             type="button"
-            className="th-action"
+            className={className}
             onClick={() =>
             {
                 void navigator.clipboard.writeText(text).then(() =>
@@ -78,6 +79,48 @@ const Swatch = ({ name, mode }: { name: string; mode: Mode }) =>
                 </button>
             )}
         </div>
+    );
+};
+
+/** "Open preset": a button that becomes a field for a code, and opens it on Enter */
+const OpenPreset = ({ onOpen }: { onOpen: (preset: Preset) => void }) =>
+{
+    const { t } = useLocale();
+    const theme = useTheme()!;
+    const [editing, setEditing] = useState(false);
+    const [text, setText] = useState("");
+    const [wrong, setWrong] = useState(false);
+
+    if (!editing)
+    {
+        return <button type="button" className="th-action wide" onClick={() => setEditing(true)} disabled={!theme.presets}>{t.theme.openPreset}</button>;
+    }
+
+    const submit = () =>
+    {
+        const preset = theme.presets ? decodePreset(theme.presets, text) : null;
+
+        if (!preset) return setWrong(true);
+
+        onOpen(preset);
+        setEditing(false);
+        setText("");
+    };
+
+    return (
+        <form className={wrong ? "th-open wrong" : "th-open"} onSubmit={(event) => { event.preventDefault(); submit(); }}>
+            <input
+                autoFocus
+                value={text}
+                placeholder="--preset 1a2b0"
+                spellCheck={false}
+                aria-label={t.theme.openPreset}
+                onChange={(event) => { setText(event.target.value); setWrong(false); }}
+                onKeyDown={(event) => { if (event.key === "Escape") setEditing(false); }}
+            />
+            <button type="submit">{t.theme.open}</button>
+            {wrong && <small role="alert">{t.theme.notACode}</small>}
+        </form>
     );
 };
 
@@ -150,12 +193,25 @@ export const ThemeTrigger = ({ mode, open, onToggle }: { mode: Mode; open: boole
  * in the frames is what `tyohnn theme` would install. With `onClose` it is a popover under its button; without, it is
  * the second tab of the side panel (system-view.tsx), whose children are the intro, the sections and the footer.
  */
-export const ThemePanel = ({ systemName, onClose }: { systemName: string; onClose?: () => void }) =>
+export const ThemePanel = ({
+    systemName,
+    onClose,
+    onOtherSystem,
+    onShuffle,
+}: {
+    systemName: string;
+    onClose?: () => void;
+    /** A preset opened for another system: the page decides how to get there (a link, or a switch in place) */
+    onOtherSystem?: (preset: Preset) => void;
+    /** Shuffle the system too (the create page); without it Shuffle changes colours only */
+    onShuffle?: () => void;
+}) =>
 {
     const { t } = useLocale();
     const theme = useTheme();
     const [mode, setMode] = useState<Mode>("light");
     const [group, setGroup] = useState<string>("base");
+    const [getCode, setGetCode] = useState(false);
 
     if (!theme) return null;
 
@@ -191,6 +247,15 @@ export const ThemePanel = ({ systemName, onClose }: { systemName: string; onClos
         { value: NONE, search: t.theme.chartDefault, swatch: null as ReactNode },
         ...accents.map((entry) => ({ value: entry.id, search: entry.id, swatch: ramp(entry[mode]) as ReactNode })),
     ];
+
+    const install = theme.code ? `npx tyohnn@latest init --preset ${theme.code}` : `npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`;
+
+    const open = (preset: Preset) =>
+    {
+        if (preset.system !== systemName && onOtherSystem) return onOtherSystem(preset);
+
+        theme.setPicks({ base: preset.palette, accent: preset.accent, chart: preset.chart });
+    };
 
     const intro = t.theme.intro(systemName);
     const content = (
@@ -247,11 +312,25 @@ export const ThemePanel = ({ systemName, onClose }: { systemName: string; onClos
                 </div>
             </section>
 
-            <footer>
-                <Copy label={t.theme.copyCss} text={theme.css ?? ""} />
-                <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>{t.theme.download}</button>
-                <Copy label={t.theme.copyInstall} text={`npx tyohnn@latest init --system ${systemName} --theme ${theme.link}`} />
-                <Copy label={t.theme.copyShare} text={typeof window === "undefined" ? "" : window.location.href} />
+            <footer className="th-preset">
+                {getCode && (
+                    <div className="th-get">
+                        <b>{t.theme.getCodeTitle}</b>
+                        <small>{theme.code ? t.theme.getCodeHint : t.theme.getCodeEdited}</small>
+                        <CopyCommand command={install} />
+                        <div className="th-get-row">
+                            <Copy label={t.theme.copyCss} text={theme.css ?? ""} />
+                            <button type="button" className="th-action" onClick={() => download(`${theme.theme.name}.json`, `${JSON.stringify(theme.theme, null, 4)}\n`)}>{t.theme.download}</button>
+                            <Copy label={t.theme.copyShare} text={typeof window === "undefined" ? "" : window.location.href} />
+                        </div>
+                    </div>
+                )}
+                {theme.code
+                    ? <Copy label={`--preset ${theme.code}`} text={`--preset ${theme.code}`} className="th-code" />
+                    : <span className="th-code off" title={t.theme.getCodeEdited}>{t.theme.noCode}</span>}
+                <OpenPreset onOpen={open} />
+                <button type="button" className="th-action wide" onClick={onShuffle ?? theme.shuffle}>{t.theme.shuffle}</button>
+                <button type="button" className="th-action wide primary" aria-expanded={getCode} onClick={() => setGetCode(!getCode)}>{t.theme.getCode}</button>
                 <button type="button" className="th-action ghost" onClick={theme.reset} disabled={theme.isOwn} title={t.theme.resetTitle}>{t.theme.resetAll}</button>
             </footer>
         </>

@@ -34,6 +34,7 @@ Options
   --locale <locale>         the components' own words: screen-reader names and default labels (init; default en)
   --font <id>               sans font (init, add, use); --font-heading <id|inherit> · --font-mono <id|system>
   --theme <name|file|link>  colour set (init): a registry theme, a JSON file, or a tyohnn-theme: link
+  --preset <code>           system and colours at once (init), the code the site's Get code gives
   --mode <light|dark>       default colour mode (the system's by default)
   --app <path>              app folder (monorepo)
   --ui <path>               UI package folder (monorepo init, default packages/ui)
@@ -61,6 +62,7 @@ const main = async (): Promise<number> =>
             locale: { type: "string" },
             font: { type: "string" },
             theme: { type: "string" },
+            preset: { type: "string" },
             "font-heading": { type: "string" },
             "font-mono": { type: "string" },
             sans: { type: "string" },

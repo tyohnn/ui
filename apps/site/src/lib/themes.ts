@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { PALETTE, resolveTheme, type Theme } from "@tyohnn/theme";
+import { PALETTE, resolveTheme, type PresetLists, type Theme } from "@tyohnn/theme";
 
 import type { Mode } from "./site";
 
@@ -94,4 +94,12 @@ export const systemThemes = (): Record<string, string> =>
 
             return [name, meta.theme ?? name];
         }));
+};
+
+/** registry/presets.json: the append-only lists a preset code counts in */
+export const readPresetLists = (): PresetLists =>
+{
+    const { systems, palettes, accents } = JSON.parse(readFileSync(join(themesRoot, "../presets.json"), "utf8")) as PresetLists;
+
+    return { systems, palettes, accents };
 };

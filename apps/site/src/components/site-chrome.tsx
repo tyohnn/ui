@@ -52,6 +52,7 @@ export const SiteHeader = () =>
     const items = [
         { href: "/#systems", label: nav.systems, match: path === "/" || path.startsWith("/systems") },
         { href: "/components", label: nav.components, match: path.startsWith("/components") },
+        { href: "/create", label: nav.create, match: path.startsWith("/create") },
         { href: "/compare", label: nav.compare, match: path.startsWith("/compare") },
         { href: "/docs", label: nav.docs, match: path.startsWith("/docs") },
     ];

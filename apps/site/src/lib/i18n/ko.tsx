@@ -18,7 +18,7 @@ export const ko: Messages = {
 
     chrome: {
         navLabel: "사이트 메뉴",
-        nav: { systems: "시스템", components: "컴포넌트", compare: "비교", docs: "문서", github: "GitHub" },
+        nav: { systems: "시스템", components: "컴포넌트", create: "만들기", compare: "비교", docs: "문서", github: "GitHub" },
         footerNote: "shadcn · Base UI · MIT",
         language: { label: "언어", other: "English", otherLang: "en" },
     },
@@ -142,9 +142,17 @@ export const ko: Messages = {
         fieldLabel: (name, mode) => `--${name} (${mode})`,
         undo: (name) => `--${name} 되돌리기`,
         undoTitle: (original) => `원래 값: ${original ?? "테마의 값"}`,
+        openPreset: "프리셋 열기",
+        open: "열기",
+        notACode: "프리셋 코드가 아니에요.",
+        shuffle: "섞기",
+        getCode: "코드 받기",
+        getCodeTitle: "이대로 설치하기",
+        getCodeHint: "시스템과 지금 색을 한 줄 명령으로 설치해요. 프리셋 코드만 있으면 돼서 어디에도 저장하지 않아요.",
+        getCodeEdited: "직접 바꾼 색은 프리셋 코드에 담기지 않아서, 이 명령에 색을 통째로 실어요.",
+        noCode: "직접 수정함: 코드 없음",
         copyCss: "CSS 복사",
         download: "theme.json 내려받기",
-        copyInstall: "설치 명령 복사",
         copyShare: "공유 링크 복사",
         resetAll: "모두 되돌리기",
         resetTitle: "시스템의 원래 색으로 되돌려요",
@@ -168,6 +176,14 @@ export const ko: Messages = {
         empty: (query) => `“${query}”에 맞는 컴포넌트가 없어요.`,
         sections: (count) => `섹션 ${count}개`,
         openPopup: "팝업 열림",
+    },
+
+    create: {
+        eyebrow: "만들기",
+        title: "내 것으로 만들기",
+        body: <>느낌은 시스템으로 고르고, 팔레트, 강조색, 차트 색을 바꿔 보세요. <b>코드 받기</b>를 누르면 보이는 그대로 설치돼요. 프리셋 코드 자체가 레시피라서 어디에도 저장하지 않아요.</>,
+        system: "시스템",
+        systemSearch: "시스템 찾기…",
     },
 
     compare: {
@@ -195,6 +211,7 @@ export const ko: Messages = {
     meta: {
         components: { title: "컴포넌트", description: "tyohnn의 모든 컴포넌트를 변형, 크기, 상태와 함께 보여 줘요. 고른 디자인 시스템으로 실시간 렌더링돼요." },
         compare: { title: "비교" },
+        create: { title: "만들기", description: "tyohnn 시스템을 고르고 팔레트, 강조색, 차트 색을 바꾼 다음, 프리셋 코드 하나로 그대로 설치해요." },
         docs: {
             title: "문서",
             description: "tyohnn CLI의 init, add, use, icons, fonts, blocks, doctor, diff 명령과 파일 위치, 글꼴과 아이콘, 블록과 프레임, 모노레포에서 여러 시스템 쓰기를 설명해요.",
@@ -499,7 +516,7 @@ export const ko: Messages = {
             character: "밤의 정원 같은 다크",
         },
         luma: {
-            description: "부드럽고 여유로워요. 중성 회색을 테두리 없이 그려요. 옅은 채움, 헤어라인 링, 실제 그림자만 쓰고, 컨트롤은 높이 36px에 14px 글자, 카드와 버튼은 모서리 26px예요.",
+            description: "부드럽고 여유로워요. 따뜻한 stone 회색을 테두리 없이 그려요. 옅은 채움, 헤어라인 링, 실제 그림자만 쓰고, 컨트롤은 높이 36px에 14px 글자, 카드와 버튼은 모서리 26px예요.",
             tagline: "Inter · 테두리 없음 · 모서리 26px",
             character: "부드럽고 여유로운 화면",
         },
@@ -509,12 +526,12 @@ export const ko: Messages = {
             character: "터미널처럼 담백한 화면",
         },
         maia: {
-            description: "둥글고 넉넉해요. 중성 회색, 높이 36px에 14px 글자의 컨트롤, 모서리 26px의 버튼과 입력창, 모서리 18px의 카드, 두께 3px의 포커스 링을 써요.",
+            description: "둥글고 넉넉해요. 분홍빛 mauve 회색, 높이 36px에 14px 글자의 컨트롤, 모서리 26px의 버튼과 입력창, 모서리 18px의 카드, 두께 3px의 포커스 링을 써요.",
             tagline: "Figtree · 컨트롤 36px · 둥근 모서리",
             character: "둥글고 넉넉한 화면",
         },
         mira: {
-            description: "조용하고 작고 정확해요. 중성 회색, 높이 28px에 12px 글자의 컨트롤, 그림자 없는 평평한 면, 그림자 대신 헤어라인 링을 써요.",
+            description: "조용하고 작고 정확해요. 차가운 mist 회색, 높이 28px에 12px 글자의 컨트롤, 그림자 없는 평평한 면, 그림자 대신 헤어라인 링을 써요.",
             tagline: "Inter · 컨트롤 28px · 헤어라인 링",
             character: "조용하고 정확한 화면",
         },
@@ -524,9 +541,9 @@ export const ko: Messages = {
             character: "전시장 같은 다크",
         },
         nova: {
-            description: "중성 색 단계 위에 Geist를 올렸어요. 모서리는 부드러운 10px, 컨트롤은 14px 글자에 높이 32px로 넉넉하고, 깊이는 헤어라인 링과 옅은 푸터 띠로 표현해요.",
+            description: "zinc 색 단계 위에 Geist를 올렸어요. 모서리는 부드러운 10px, 컨트롤은 14px 글자에 높이 32px로 넉넉하고, 깊이는 헤어라인 링과 옅은 푸터 띠로 표현해요.",
             tagline: "Geist · 컨트롤 32px · 모서리 10px",
-            character: "Geist와 중성 색의 조합",
+            character: "Geist와 zinc 색의 조합",
         },
         rhea: {
             description: "부드럽고 넉넉해요. 모서리 16px, 테두리 없이 채워진 입력창, 모든 카드 아래의 옅은 그림자를 써요.",

@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { describeTheme, isOwnTheme, listThemes, loadTheme, normalizeTheme, resolveThemeInput, systemTheme, themeCss } from "../src/project/theme.js";
+import { describeTheme, isOwnTheme, listThemes, loadTheme, normalizeTheme, presetChoice, readPreset, resolveThemeInput, systemTheme, themeCss } from "../src/project/theme.js";
 import { Registry } from "../src/source/registry.js";
 import { repoRoot, tempDir } from "./helpers.js";
 
@@ -144,5 +144,35 @@ describe("the registry's themes", () =>
 
             expect(() => themeCss({ id }, tempDir(), registry), `${name} wears ${id}`).not.toThrow();
         }
+    });
+});
+
+describe("a preset code", () =>
+{
+    it("names a system and its colours, read against registry/presets.json", () =>
+    {
+        const lists = registry.json<{ systems: string[]; palettes: string[]; accents: string[] }>("registry/presets.json");
+        const digit = (list: string[], id: string, from = 0) => "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"[list.indexOf(id) + from];
+        const code = `1${digit(lists.systems, "nova")}${digit(lists.palettes, "zinc")}${digit(lists.accents, "blue", 1)}0`;
+        const preset = readPreset(code, registry);
+
+        expect(preset).toEqual({ system: "nova", palette: "zinc", accent: "blue", chart: null });
+        expect(presetChoice(preset)).toEqual({ base: "zinc", accent: "blue" });
+        expect(describeTheme(presetChoice({ ...preset, chart: "violet" }), registry, "nova")).toBe("zinc + blue + violet charts");
+        expect(themeCss(presetChoice({ ...preset, chart: "violet" }), tempDir(), registry)).toContain("--chart-1");
+    });
+
+    it("leaves a system on its own colours when the preset keeps them", () =>
+    {
+        const lists = registry.json<{ systems: string[]; palettes: string[] }>("registry/presets.json");
+        const at = (list: string[], id: string) => "0123456789abcdefghijklmnopqrstuvwxyz"[list.indexOf(id)];
+        const preset = readPreset(`1${at(lists.systems, "nova")}${at(lists.palettes, "nova")}00`, registry);
+
+        expect(normalizeTheme(presetChoice(preset), registry, "nova")).toBeUndefined();
+    });
+
+    it("refuses what is not a code", () =>
+    {
+        expect(() => readPreset("b0", registry)).toThrowError(/not a preset code/);
     });
 });

@@ -32,6 +32,7 @@ export interface GlobalOptions
     mode?: string;
     system?: string;
     theme?: string;
+    preset?: string;
     ui?: string;
     scope?: string;
     example?: string;

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { PALETTE, PALETTE_GROUPS, checkContrast, checkTheme, contrast, decodeTheme, encodeTheme, groupOf, parseColour, resolveTheme, resolveValue, themeToCss } from "../index.mjs";
+import { PALETTE, PALETTE_GROUPS, checkContrast, checkTheme, contrast, decodePreset, decodeTheme, encodePreset, encodeTheme, presetTheme, groupOf, parseColour, resolveTheme, resolveValue, themeToCss } from "../index.mjs";
 
 const full = (value) => Object.fromEntries(PALETTE.map((name) => [name, value]));
 const theme = (extra) => ({ name: "test", light: full("#111111"), dark: full("#eeeeee"), ...extra });
@@ -116,4 +116,19 @@ test("checkContrast follows aliases and reports the failing pair", () =>
 
     assert.ok(failures.some((row) => row.mode === "light" && row.foreground === "foreground" && row.ratio < 1.1));
     assert.ok(failures.some((row) => row.foreground === "primary-foreground"), "an alias is resolved before the ratio");
+});
+
+test("a preset is five characters, and reads back to the same picks", () =>
+{
+    const lists = { systems: ["graphite", "mira"], palettes: ["graphite", "mira", "zinc"], accents: ["amber", "blue"] };
+    const preset = { system: "mira", palette: "zinc", accent: "blue", chart: null };
+    const code = encodePreset(lists, preset);
+
+    assert.equal(code, "11220");
+    assert.deepEqual(decodePreset(lists, code), preset);
+    assert.deepEqual(decodePreset(lists, `--preset ${code}`), preset);
+    assert.equal(encodePreset(lists, { ...preset, accent: "teal" }), null);
+    assert.equal(decodePreset(lists, "11920"), null);
+    assert.equal(decodePreset(lists, "2122"), null);
+    assert.deepEqual(presetTheme(preset).extends, { base: "zinc", accent: "blue" });
 });

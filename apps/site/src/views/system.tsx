@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { getMessages, type Locale, localeHref, localizeSystems } from "@/lib/i18n";
 import { getSystem, getSystems } from "@/lib/registry";
 import { summarize } from "@/lib/site";
-import { readThemes, systemThemes } from "@/lib/themes";
+import { readPresetLists, readThemes, systemThemes } from "@/lib/themes";
 
 export const systemParams = () => getSystems().map((system) => ({ name: system.name }));
 
@@ -44,7 +44,7 @@ export function SystemPageView({ locale, name }: { locale: Locale; name: string 
     const own = systemThemes()[system.name] ?? system.name;
 
     return (
-        <ThemeProvider themes={themes} own={own}>
+        <ThemeProvider themes={themes} own={own} system={system.name} presets={readPresetLists()}>
             <nav className="crumbs" aria-label={t.system.crumbsLabel}>
                 <Link href={localeHref(locale, "/#systems")}>{t.system.crumbsRoot}</Link>
                 <span aria-hidden>/</span>

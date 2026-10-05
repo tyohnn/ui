@@ -14,6 +14,9 @@
 //                 icons/libraries/<library>.tsx files and nothing else is; the libraries match the
 //                 schema enum and manifest.json iconLibraries; registry/ui components, hooks and lib
 //                 import no icon package directly (only @tyohnn/icons)                            → FAIL
+//   6. presets    (once) registry/presets.json lists every system, every whole palette (a system's
+//                 theme or a base) and every accent exactly once, each list short enough for one
+//                 base-62 character, and names nothing that is gone (the lists are append-only)   → FAIL
 //
 // Usage: node tooling/validate-system [foundation|<system>…]
 
@@ -182,9 +185,42 @@ console.log(`\nicons: ${icons.names.length} names × ${icons.libraries.length} l
 icons.failures.forEach((failure) => console.log(`  ✗ ${failure}`));
 if (icons.failures.length === 0) console.log("  ✓ every library exports every name · no direct icon-package imports in registry/ui");
 
+const checkPresets = () =>
+{
+    const failures = [];
+    const lists = readJson(join(repoRoot, "registry/presets.json"));
+    const themesRoot = join(repoRoot, "registry/themes");
+    const ids = (dir) => readdirSync(join(themesRoot, dir)).filter((file) => file.endsWith(".json")).map((file) => file.slice(0, -".json".length));
+    const expected = {
+        systems: listSystems(),
+        palettes: [...ids("."), ...ids("bases")],
+        accents: ids("accents"),
+    };
+
+    for (const [list, wanted] of Object.entries(expected))
+    {
+        const listed = lists[list] ?? [];
+
+        wanted.filter((id) => !listed.includes(id)).forEach((id) => failures.push(`registry/presets.json ${list} lacks "${id}" — append it at the end`));
+        listed.filter((id) => !wanted.includes(id)).forEach((id) => failures.push(`registry/presets.json ${list} names "${id}", which is gone`));
+        listed.filter((id, index) => listed.indexOf(id) !== index).forEach((id) => failures.push(`registry/presets.json ${list} names "${id}" twice`));
+        // accents count from 1 (0 is "none"), so they get one place fewer
+        if (listed.length > (list === "accents" ? 61 : 62)) failures.push(`registry/presets.json ${list} has outgrown one base-62 character; preset codes need a version 2`);
+    }
+
+    return failures;
+};
+
+const presets = checkPresets();
+
+console.log(`
+presets: registry/presets.json`);
+presets.forEach((failure) => console.log(`  ✗ ${failure}`));
+if (presets.length === 0) console.log("  ✓ every system, palette and accent has its place");
+
 const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const names = requested.length > 0 ? requested : ["foundation", ...listSystems()];
-let failed = catalogFailures.length > 0 || icons.failures.length > 0;
+let failed = catalogFailures.length > 0 || icons.failures.length > 0 || presets.length > 0;
 
 console.log(`\nfont catalog: ${catalog.size} fonts`);
 catalogFailures.forEach((failure) => console.log(`  ✗ ${failure}`));

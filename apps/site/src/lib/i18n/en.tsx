@@ -33,7 +33,7 @@ export const en = {
 
     chrome: {
         navLabel: "Site",
-        nav: { systems: "Systems", components: "Components", compare: "Compare", docs: "Docs", github: "GitHub" },
+        nav: { systems: "Systems", components: "Components", create: "Create", compare: "Compare", docs: "Docs", github: "GitHub" },
         footerNote: "shadcn · Base UI · MIT",
         language: { label: "Language", other: "한국어", otherLang: "ko" },
     },
@@ -158,9 +158,17 @@ export const en = {
         fieldLabel: (name: string, mode: string) => `--${name} (${mode})`,
         undo: (name: string) => `Undo --${name}`,
         undoTitle: (original: string | null) => `Back to ${original ?? "the theme's value"}`,
+        openPreset: "Open preset",
+        open: "Open",
+        notACode: "That is not a preset code.",
+        shuffle: "Shuffle",
+        getCode: "Get code",
+        getCodeTitle: "Install this",
+        getCodeHint: "The system and these colours, in one command. The preset code is all it needs: nothing is stored.",
+        getCodeEdited: "Colours changed by hand do not fit in a preset code, so this command carries them whole.",
+        noCode: "edited by hand: no code",
         copyCss: "Copy CSS",
         download: "Download theme.json",
-        copyInstall: "Copy install command",
         copyShare: "Copy share link",
         resetAll: "Reset all",
         resetTitle: "Back to the system's own colours",
@@ -184,6 +192,14 @@ export const en = {
         empty: (query: string) => `No component matches “${query}”.`,
         sections: (count: number) => `${count} sections`,
         openPopup: "open popup",
+    },
+
+    create: {
+        eyebrow: "Create",
+        title: "Make it yours",
+        body: <>Pick a system for the feel, then a palette, an accent and a chart colour. <b>Get code</b> installs exactly what you see — the preset code is the whole recipe, so nothing is saved anywhere.</>,
+        system: "System",
+        systemSearch: "Search systems…",
     },
 
     compare: {
@@ -211,6 +227,7 @@ export const en = {
     meta: {
         components: { title: "Components", description: "Every tyohnn component with its variants, sizes and states, rendered live in the design system you pick." },
         compare: { title: "Compare" },
+        create: { title: "Create", description: "Pick a tyohnn system, then its palette, accent and chart colour, and install exactly that with one preset code." },
         docs: {
             title: "Docs",
             description: "The tyohnn CLI: init, add, use, icons, fonts, blocks, doctor and diff; where files go; fonts and icons; blocks and frames; several systems in one monorepo.",

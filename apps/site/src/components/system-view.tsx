@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import type { Preset } from "@tyohnn/theme";
 import { type ReactNode, useEffect, useState } from "react";
 
 import { CATEGORIES, type Mode, previewUrl, type SystemSummary } from "@/lib/site";
@@ -11,7 +14,7 @@ import { useLocale } from "./locale-provider";
 import { ModeSeg } from "./pickers";
 import { ScaledFrame } from "./scaled-frame";
 import { ThemePanel } from "./theme-editor";
-import { useTheme } from "./theme-provider";
+import { stateHash, useTheme } from "./theme-provider";
 
 /**
  * A system page below the breadcrumb: the intro (server-rendered, passed in), the install panel, the sticky
@@ -24,11 +27,22 @@ export const SystemView = ({
     system,
     next,
     intro,
+    head,
+    panelTop,
+    onOtherSystem,
+    onShuffle,
 }: {
     system: SystemSummary;
     /** The neighbour after this one: the Compare link's other side. 이웃 이동 링크는 빵부스러기 줄이 갖는다. */
     next: string;
-    intro: ReactNode;
+    intro?: ReactNode;
+    /** In place of the intro and install panel (the create page has its own) */
+    head?: ReactNode;
+    /** Above the side panel's tabs (the create page's system picker) */
+    panelTop?: ReactNode;
+    /** A preset opened for another system; by default the page goes to that system's page wearing it */
+    onOtherSystem?: (preset: Preset) => void;
+    onShuffle?: () => void;
 }) =>
 {
     const { t, labels, href } = useLocale();
@@ -37,6 +51,9 @@ export const SystemView = ({
     const [tab, setTab] = useState<"layout" | "colours">("colours");
     const theme = useTheme();
     const frames = useFrameTokens();
+    const router = useRouter();
+    // Another system's preset is another page: go there with the colours in the link, as a share link would.
+    const goTo = onOtherSystem ?? ((preset: Preset) => router.push(`${href(`/systems/${preset.system}`)}#${stateHash({ base: preset.palette, accent: preset.accent, chart: preset.chart, edits: { light: {}, dark: {} } })}`));
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
 
     useEffect(() =>
@@ -65,7 +82,7 @@ export const SystemView = ({
 
     return (
         <>
-            <div className="sys-head">
+            {head ?? <div className="sys-head">
                 {intro}
                 <div className="panel">
                     <div className="eyebrow">{t.systemView.install}</div>
@@ -78,7 +95,7 @@ export const SystemView = ({
                         </span>
                     </div>
                 </div>
-            </div>
+            </div>}
 
             <div className="sys-body">
                 <aside className="th-panel side-panel" aria-label={t.systemView.sidePanel}>
@@ -90,7 +107,8 @@ export const SystemView = ({
                             {t.frames.title}{frames.changed > 0 && <span className="th-badge">{t.frames.edited}</span>}
                         </button>
                     </div>
-                    {tab === "colours" ? <ThemePanel systemName={system.name} /> : <FramePanel frames={frames} />}
+                    {panelTop}
+                    {tab === "colours" ? <ThemePanel systemName={system.name} onOtherSystem={goTo} onShuffle={onShuffle} /> : <FramePanel frames={frames} />}
                 </aside>
 
                 <div className="sys-main">

@@ -98,7 +98,7 @@ export const serializeRecord = (record: TyohnnRecord): string =>
             system: app.system,
             icons: app.icons,
             fonts: { sans: app.fonts.sans, heading: app.fonts.heading, mono: app.fonts.mono, hangulFallback: app.fonts.hangulFallback },
-            ...(app.theme ? { theme: "id" in app.theme ? { id: app.theme.id } : "base" in app.theme ? { base: app.theme.base, accent: app.theme.accent } : { file: app.theme.file } } : {}),
+            ...(app.theme ? { theme: "id" in app.theme ? { id: app.theme.id } : "base" in app.theme ? { base: app.theme.base, ...(app.theme.accent ? { accent: app.theme.accent } : {}), ...(app.theme.chart ? { chart: app.theme.chart } : {}) } : { file: app.theme.file } } : {}),
             mode: app.mode,
             css: app.css,
             ...(app.example ? { example: app.example } : {}),
