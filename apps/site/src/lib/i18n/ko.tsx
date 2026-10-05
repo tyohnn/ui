@@ -62,22 +62,22 @@ export const ko: Messages = {
         density: {
             title: "밀도",
             body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
-            captions: { graphite: "컨트롤 28px · 행 41px", clover: "컨트롤 36px · 여백 20px", cirrus: "컨트롤 36px · 여백 24px" },
+            captions: { mira: "컨트롤 28px · 글자 12px", nova: "컨트롤 32px · 여백 16px", maia: "컨트롤 36px · 여백 24px" },
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 선으로 평평하게, 한 단씩, 붕 떠 있게.",
-            captions: { vellum: "평평함 · 가는 선", graphite: "한 단씩 쌓인 면", halo: "떠 있는 창 · 50px 그림자" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 한 단씩, 붕 떠 있게.",
+            captions: { loam: "평평한 베일", graphite: "한 단씩 쌓인 면", halo: "떠 있는 창 · 50px 그림자" },
         },
         texture: {
             title: "질감",
-            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 그라데이션, 연기 낀 유리.",
-            captions: { loam: "흰 베일 · 광택", cirrus: "알약 · 부드러운 그라데이션", halo: "연기 낀 유리" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 알약과 그라데이션, 아예 테두리 없는 면까지.",
+            captions: { cirrus: "알약 · 부드러운 그라데이션", clover: "행동으로 번지는 그라데이션", luma: "테두리 없음 · 26px 모서리" },
         },
         type: {
             title: "타이포",
             body: "목소리를 정해요. 어떤 글꼴을, 얼마나 조여서, 라벨은 어떻게 말하는지.",
-            captions: { vellum: "Source Serif 제목", clover: "모두 Inter", nocturne: "Bricolage · mono 라벨" },
+            captions: { vellum: "Source Serif 제목", nocturne: "Bricolage · mono 라벨", lyra: "모두 JetBrains Mono" },
         },
     },
 

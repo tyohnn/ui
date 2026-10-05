@@ -78,11 +78,11 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 .scaled.inert iframe { pointer-events: none; }
 
 /* HOME HERO */
-.hero { padding-block: 88px 56px; display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: end; }
-.hero h1 { font-size: 84px; line-height: 0.95; letter-spacing: -0.055em; font-weight: 800; }
+.hero { padding-block: 96px 56px; display: flex; flex-direction: column; gap: 32px; }
+.hero h1 { font-size: 112px; line-height: 0.92; letter-spacing: -0.055em; font-weight: 800; }
 .hero h1 span { color: var(--fg-3); }
 
-.hero-side { display: flex; flex-direction: column; gap: 28px; padding-bottom: 12px; }
+.hero-side { display: flex; flex-direction: column; gap: 28px; max-width: 640px; }
 .hero-side p { margin: 0; color: var(--fg-2); font-size: 20px; line-height: 1.5; }
 .hero-side p b { color: var(--fg); font-weight: 500; }
 .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
@@ -388,7 +388,7 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; }
 /* Narrow screens: the canvas is drawn at 1440; below that the grids fold. */
 @media (max-width: 1180px) {
     .wrap { padding-inline: 32px; }
-    .hero h1 { font-size: 88px; }
+    .hero h1 { font-size: 80px; }
     .hero, .section-head, .sys-head, .comp-head, .page-head { grid-template-columns: 1fr; gap: 28px; }
     .stage { grid-template-columns: 1fr; }
     .taste-row { grid-template-columns: 1fr; gap: 24px; }

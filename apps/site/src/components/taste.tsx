@@ -1,14 +1,19 @@
 import { getMessages, type Locale } from "@/lib/i18n";
+import type { Mode } from "@/lib/site";
 import { declareTokens, getSpecimenPalette, getSystem, getSystemTokens } from "@/lib/registry";
 
 type Pillar = "density" | "depth" | "texture" | "type";
 
-/** Which systems stand side by side for each axis: the three of tyohnn's own that differ most on it */
-const PILLARS: { id: Pillar; systems: [string, string, string]; tokens: string[] }[] = [
-    { id: "density", systems: ["graphite", "clover", "cirrus"], tokens: ["--control-height-md", "--surface-padding-md", "--table-row-height"] },
-    { id: "depth", systems: ["vellum", "graphite", "halo"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
-    { id: "texture", systems: ["loam", "cirrus", "halo"], tokens: ["--card-sheen", "--surface-primary", "--glass-card-filter"] },
-    { id: "type", systems: ["vellum", "clover", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
+/**
+ * Which systems stand side by side for each axis, and the one mode a row is drawn in (never mixed, so the tiles
+ * compare). Density uses the ports of shadcn create presets — the axis they already vary on; depth, texture and
+ * type show each of tyohnn's own systems once.
+ */
+const PILLARS: { id: Pillar; mode: Mode; systems: [string, string, string]; tokens: string[] }[] = [
+    { id: "density", mode: "light", systems: ["mira", "nova", "maia"], tokens: ["--control-height-md", "--surface-padding-md", "--control-font-size-md"] },
+    { id: "depth", mode: "dark", systems: ["loam", "graphite", "halo"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
+    { id: "texture", mode: "light", systems: ["cirrus", "clover", "luma"], tokens: ["--surface-primary", "--control-radius", "--input-fill"] },
+    { id: "type", mode: "light", systems: ["vellum", "nocturne", "lyra"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
 ];
 
 const ROWS: [string, string][] = [["Acme Corp", "$24,000"], ["Globex", "$8,400"], ["Initech", "$12,900"]];
@@ -34,21 +39,20 @@ const Specimen = () => (
 
 /**
  * Density, depth, texture and type, one row each. Every tile shares foundation's neutral palette and takes the
- * rest — layer-1 formulas and materials, every layer-2 token — from a real system in its own default mode, so
+ * rest — layer-1 formulas and materials, every layer-2 token — from a real system in the row's one mode, so
  * what differs between tiles is only what the tokens say.
  */
 export function Taste({ locale }: { locale: Locale })
 {
     const t = getMessages(locale).taste;
-    const tiles = [...new Set(PILLARS.flatMap((pillar) => pillar.systems))].map((name) =>
+    const tiles = PILLARS.flatMap((pillar) => pillar.systems.map((name) =>
     {
-        const mode = getSystem(name)?.defaultMode ?? "light";
-        const tokens = getSystemTokens(name, mode);
+        const tokens = getSystemTokens(name, pillar.mode);
         const glass = (tokens.get("--glass-card-filter") ?? "none") !== "none";
 
-        return { name, mode, glass, css: `.spec-tile[data-system="${name}"] { ${getSpecimenPalette(mode)} ${declareTokens(tokens)} }` };
-    });
-    const tile = (name: string) => tiles.find((entry) => entry.name === name)!;
+        return { name, mode: pillar.mode, glass, css: `.spec-tile[data-system="${name}"][data-mode="${pillar.mode}"] { ${getSpecimenPalette(pillar.mode)} ${declareTokens(tokens)} }` };
+    }));
+    const glassy = (name: string, mode: Mode) => tiles.some((entry) => entry.name === name && entry.mode === mode && entry.glass);
 
     return (
         <section className="taste">
@@ -66,9 +70,10 @@ export function Taste({ locale }: { locale: Locale })
                         {pillar.systems.map((name) => (
                             <figure key={name} className="spec">
                                 <div
-                                    className={tile(name).mode === "dark" ? "spec-tile dark" : "spec-tile"}
+                                    className={pillar.mode === "dark" ? "spec-tile dark" : "spec-tile"}
                                     data-system={name}
-                                    data-glass={tile(name).glass || undefined}
+                                    data-mode={pillar.mode}
+                                    data-glass={glassy(name, pillar.mode) || undefined}
                                 >
                                     <Specimen />
                                 </div>
