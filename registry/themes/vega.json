@@ -25,6 +25,8 @@
         "tag-orange-bg": "transparent",
         "tag-red-bg": "transparent",
         "tag-yellow-bg": "transparent",
-        "tag-gray-bg": "transparent"
+        "tag-gray-bg": "transparent",
+        "sidebar-primary": "var(--primary)",
+        "sidebar-primary-foreground": "var(--primary-foreground)"
     }
 }
