@@ -4,10 +4,11 @@
     "title": "Lyra",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what lyra moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what lyra moves; tyohnn gives each ported preset its own base (mist) and chart colour (teal) so they are told apart side by side"
     },
     "extends": {
-        "base": "neutral"
+        "base": "mist",
+        "chart": "teal"
     },
     "light": {},
     "dark": {

@@ -4,10 +4,11 @@
     "title": "Mira",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what mira moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what mira moves; tyohnn gives each ported preset its own base (zinc) and chart colour (blue) so they are told apart side by side"
     },
     "extends": {
-        "base": "neutral"
+        "base": "zinc",
+        "chart": "blue"
     },
     "light": {},
     "dark": {

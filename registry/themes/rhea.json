@@ -4,10 +4,11 @@
     "title": "Rhea",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what rhea moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what rhea moves; tyohnn gives each ported preset its own base (neutral) and chart colour (indigo) so they are told apart side by side"
     },
     "extends": {
-        "base": "neutral"
+        "base": "neutral",
+        "chart": "indigo"
     },
     "light": {},
     "dark": {

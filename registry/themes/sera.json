@@ -4,10 +4,11 @@
     "title": "Sera",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves"
+        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves; tyohnn gives each ported preset its own base (taupe) and chart colour (amber) so they are told apart side by side"
     },
     "extends": {
-        "base": "taupe"
+        "base": "taupe",
+        "chart": "amber"
     },
     "light": {},
     "dark": {

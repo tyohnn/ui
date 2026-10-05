@@ -4,10 +4,11 @@
     "title": "Maia",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what maia moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what maia moves; tyohnn gives each ported preset its own base (mauve) and chart colour (violet) so they are told apart side by side"
     },
     "extends": {
-        "base": "neutral"
+        "base": "mauve",
+        "chart": "violet"
     },
     "light": {},
     "dark": {

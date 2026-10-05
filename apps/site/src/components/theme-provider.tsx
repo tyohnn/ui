@@ -2,17 +2,21 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { PALETTE, checkContrast, encodeTheme, themeToCss, type Theme } from "@tyohnn/theme";
+import { PALETTE, PALETTE_GROUPS, encodeTheme, themeToCss, type Theme } from "@tyohnn/theme";
 
 import type { ThemeInfo } from "@/lib/themes";
 
 export type Mode = "light" | "dark";
 
-/** What the editor is showing: a base, an accent over it, and any colour the reader has changed by hand. */
+/**
+ * What the editor is showing: a base, an accent over it, a chart colour over that (only the chart ramp; null
+ * keeps the ramp the base and accent give), and any colour the reader has changed by hand.
+ */
 export interface ThemeState
 {
     base: string;
     accent: string | null;
+    chart: string | null;
     edits: { light: Record<string, string>; dark: Record<string, string> };
 }
 
@@ -27,11 +31,11 @@ interface ThemeValue
     /** null while the state is the system's own theme: the frames are then left exactly as built */
     colours: { light: Record<string, string>; dark: Record<string, string> } | null;
     css: string | null;
-    warnings: ReturnType<typeof checkContrast>;
     theme: Theme;
     link: string;
     setBase: (id: string) => void;
     setAccent: (id: string | null) => void;
+    setChart: (id: string | null) => void;
     setColour: (mode: Mode, name: string, value: string) => void;
     /** Put one colour back to what the base and accent say */
     clearColour: (mode: Mode, name: string) => void;
@@ -52,19 +56,26 @@ const compose = (themes: ThemeInfo[], state: ThemeState) =>
 {
     const base = themes.find((entry) => entry.id === state.base);
     const accent = state.accent ? themes.find((entry) => entry.id === state.accent) : undefined;
-    const merge = (mode: Mode) => ({ ...base?.[mode], ...accent?.[mode], ...state.edits[mode] });
+    const chart = state.chart ? themes.find((entry) => entry.id === state.chart) : undefined;
+    const ramp = (mode: Mode) => Object.fromEntries(PALETTE_GROUPS.chart.filter((name) => chart?.[mode][name]).map((name) => [name, chart![mode][name]]));
+    const merge = (mode: Mode) => ({ ...base?.[mode], ...accent?.[mode], ...ramp(mode), ...state.edits[mode] });
 
     return { light: merge("light"), dark: merge("dark") };
 };
 
 /** The theme as it would be written down: the layers it extends, plus the colours changed by hand. */
-const themeOf = (state: ThemeState): Theme => ({
-    name: state.accent ? `${state.base}-${state.accent}` : state.base,
-    title: state.accent ? `${state.base} + ${state.accent}` : state.base,
-    extends: state.accent ? { base: state.base, accent: state.accent } : { base: state.base },
-    light: state.edits.light,
-    dark: state.edits.dark,
-});
+const themeOf = (state: ThemeState): Theme =>
+{
+    const layers = [state.base, state.accent, state.chart && `${state.chart} charts`].filter(Boolean);
+
+    return {
+        name: layers.join("-").replace(/ /g, "-"),
+        title: layers.join(" + "),
+        extends: { base: state.base, ...(state.accent ? { accent: state.accent } : {}), ...(state.chart ? { chart: state.chart } : {}) },
+        light: state.edits.light,
+        dark: state.edits.dark,
+    };
+};
 
 const HASH_KEY = "theme";
 
@@ -80,7 +91,7 @@ const readHash = (): ThemeState | null =>
     {
         const parsed = JSON.parse(atob(found.replace(/-/g, "+").replace(/_/g, "/"))) as ThemeState;
 
-        return parsed.base ? { base: parsed.base, accent: parsed.accent ?? null, edits: { light: parsed.edits?.light ?? {}, dark: parsed.edits?.dark ?? {} } } : null;
+        return parsed.base ? { base: parsed.base, accent: parsed.accent ?? null, chart: parsed.chart ?? null, edits: { light: parsed.edits?.light ?? {}, dark: parsed.edits?.dark ?? {} } } : null;
     }
     catch
     {
@@ -110,16 +121,16 @@ const writeHash = (state: ThemeState | null) =>
  */
 export const ThemeProvider = ({ themes, own, always = false, children }: { themes: ThemeInfo[]; own: string; always?: boolean; children: ReactNode }) =>
 {
-    const [state, setState] = useState<ThemeState>({ base: own, accent: null, edits: empty() });
+    const [state, setState] = useState<ThemeState>({ base: own, accent: null, chart: null, edits: empty() });
     const [ready, setReady] = useState(false);
 
     useEffect(() =>
     {
-        setState(readHash() ?? { base: own, accent: null, edits: empty() });
+        setState(readHash() ?? { base: own, accent: null, chart: null, edits: empty() });
         setReady(true);
     }, [own]);
 
-    const isOwn = state.base === own && !state.accent && Object.keys(state.edits.light).length === 0 && Object.keys(state.edits.dark).length === 0;
+    const isOwn = state.base === own && !state.accent && !state.chart && Object.keys(state.edits.light).length === 0 && Object.keys(state.edits.dark).length === 0;
     const display = useMemo(() => compose(themes, state), [themes, state]);
     // `always` is for a page comparing two systems: both sides wear the same colours from the start, so what
     // is left between them is the feel. Elsewhere the frames are left exactly as built until something changes.
@@ -192,12 +203,12 @@ export const ThemeProvider = ({ themes, own, always = false, children }: { theme
             display,
             colours,
             css,
-            warnings: checkContrast({ name: "editor", title: "editor", ...display }),
             theme,
             link: encodeTheme(theme),
             isOwn,
             setBase: (id) => setState((current) => ({ ...current, base: id })),
             setAccent: (id) => setState((current) => ({ ...current, accent: id })),
+            setChart: (id) => setState((current) => ({ ...current, chart: id })),
             setColour: (mode, name, colour) => setState((current) =>
             {
                 if (!PALETTE.includes(name)) return current;
@@ -213,7 +224,7 @@ export const ThemeProvider = ({ themes, own, always = false, children }: { theme
                 return { ...current, edits: { ...current.edits, [mode]: rest } };
             }),
             clearEdits: () => setState((current) => ({ ...current, edits: empty() })),
-            reset: () => setState({ base: own, accent: null, edits: empty() }),
+            reset: () => setState({ base: own, accent: null, chart: null, edits: empty() }),
         };
     }, [themes, own, state, display, colours, css, isOwn]);
 

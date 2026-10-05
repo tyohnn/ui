@@ -4,10 +4,11 @@
     "title": "Vega",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what vega moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what vega moves; tyohnn gives each ported preset its own base (neutral) and chart colour (orange) so they are told apart side by side"
     },
     "extends": {
-        "base": "neutral"
+        "base": "neutral",
+        "chart": "orange"
     },
     "light": {
         "tag-blue-bg": "transparent",
