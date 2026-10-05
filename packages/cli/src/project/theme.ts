@@ -13,7 +13,8 @@
 //   tyohnn-theme:<encoded>   a share link from the site's editor, written into the project as a file
 //
 // A preset code from the site (`--preset 1a2b0`) names a system and its colours at once: a palette, an
-// accent and a chart colour, each a place in registry/presets.json (see presetChoice).
+// accent and a chart colour, each a place in registry/presets.json, and after a dot any colour changed by
+// hand (see presetChoice).
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { isAbsolute, join, relative, resolve } from "node:path";
@@ -205,8 +206,27 @@ export const readPreset = (code: string, registry: Registry): Preset =>
     return preset;
 };
 
-/** The colours a preset names, as tyohnn.json remembers them (a bare palette is just that palette). */
-export const presetChoice = (preset: Preset): ThemeChoice =>
-    preset.accent || preset.chart
+/**
+ * The colours a preset names, as tyohnn.json remembers them: a bare palette is just that palette, picks are a
+ * composition, and hand edits make it a file in the project, the way a share link does, because the record
+ * points at files and never holds colours itself.
+ */
+export const presetChoice = (preset: Preset, root: string, registry: Registry): ThemeChoice =>
+{
+    const edited = preset.edits && Object.keys(preset.edits.light).length + Object.keys(preset.edits.dark).length > 0;
+
+    if (edited)
+    {
+        const theme = presetTheme(preset);
+        const file = `tyohnn-theme.${theme.name}.json`;
+
+        resolve72(theme, registry);
+        writeFile(join(root, file), `${JSON.stringify(theme, null, 4)}\n`);
+
+        return { file };
+    }
+
+    return preset.accent || preset.chart
         ? { base: preset.palette, ...(preset.accent ? { accent: preset.accent } : {}), ...(preset.chart ? { chart: preset.chart } : {}) }
         : { id: preset.palette };
+};

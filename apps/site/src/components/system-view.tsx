@@ -53,7 +53,7 @@ export const SystemView = ({
     const frames = useFrameTokens();
     const router = useRouter();
     // Another system's preset is another page: go there with the colours in the link, as a share link would.
-    const goTo = onOtherSystem ?? ((preset: Preset) => router.push(`${href(`/systems/${preset.system}`)}#${stateHash({ base: preset.palette, accent: preset.accent, chart: preset.chart, edits: { light: {}, dark: {} } })}`));
+    const goTo = onOtherSystem ?? ((preset: Preset) => router.push(`${href(`/systems/${preset.system}`)}#${stateHash({ base: preset.palette, accent: preset.accent, chart: preset.chart, edits: preset.edits ?? { light: {}, dark: {} } })}`));
     const screens = CATEGORIES.reduce((count, category) => count + category.screens.length, 0);
 
     useEffect(() =>

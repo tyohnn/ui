@@ -157,9 +157,9 @@ describe("a preset code", () =>
         const preset = readPreset(code, registry);
 
         expect(preset).toEqual({ system: "nova", palette: "zinc", accent: "blue", chart: null });
-        expect(presetChoice(preset)).toEqual({ base: "zinc", accent: "blue" });
-        expect(describeTheme(presetChoice({ ...preset, chart: "violet" }), registry, "nova")).toBe("zinc + blue + violet charts");
-        expect(themeCss(presetChoice({ ...preset, chart: "violet" }), tempDir(), registry)).toContain("--chart-1");
+        expect(presetChoice(preset, tempDir(), registry)).toEqual({ base: "zinc", accent: "blue" });
+        expect(describeTheme(presetChoice({ ...preset, chart: "violet" }, tempDir(), registry), registry, "nova")).toBe("zinc + blue + violet charts");
+        expect(themeCss(presetChoice({ ...preset, chart: "violet" }, tempDir(), registry), tempDir(), registry)).toContain("--chart-1");
     });
 
     it("leaves a system on its own colours when the preset keeps them", () =>
@@ -168,7 +168,21 @@ describe("a preset code", () =>
         const at = (list: string[], id: string) => "0123456789abcdefghijklmnopqrstuvwxyz"[list.indexOf(id)];
         const preset = readPreset(`1${at(lists.systems, "nova")}${at(lists.palettes, "nova")}00`, registry);
 
-        expect(normalizeTheme(presetChoice(preset), registry, "nova")).toBeUndefined();
+        expect(normalizeTheme(presetChoice(preset, tempDir(), registry), registry, "nova")).toBeUndefined();
+    });
+
+    it("writes hand edits into a theme file in the project", () =>
+    {
+        const lists = registry.json<{ systems: string[]; palettes: string[] }>("registry/presets.json");
+        const at = (list: string[], id: string) => "0123456789abcdefghijklmnopqrstuvwxyz"[list.indexOf(id)];
+        const root = tempDir();
+        const base = readPreset(`1${at(lists.systems, "nova")}${at(lists.palettes, "zinc")}00`, registry);
+        const preset = { ...base, edits: { light: { primary: "#3d4ef5" }, dark: { primary: "#6b78ff" } } };
+        const choice = presetChoice(preset, root, registry);
+
+        expect(choice).toEqual({ file: "tyohnn-theme.zinc.json" });
+        expect(JSON.parse(readFileSync(join(root, "tyohnn-theme.zinc.json"), "utf8")).light).toEqual({ primary: "#3d4ef5" });
+        expect(themeCss(choice, root, registry)).toContain("--primary: #3d4ef5");
     });
 
     it("refuses what is not a code", () =>

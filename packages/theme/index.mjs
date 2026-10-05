@@ -35,6 +35,7 @@ export const PALETTE_GROUPS = {
 };
 
 /** Every palette name, in file order. */
+// The order matters beyond this file: a preset code names an edited colour by its place here. Append only.
 export const PALETTE = Object.values(PALETTE_GROUPS).flat();
 
 const PALETTE_SET = new Set(PALETTE);
@@ -198,11 +199,131 @@ export const decodeTheme = (encoded) =>
 //
 //   1 · system · palette · accent · chart        one base-62 character each; accent and chart count
 //                                                from 1, and 0 is "none"
+//   . edits                                      only when colours were changed by hand: each change
+//                                                packed into bytes (below), the lot in base64url
+//
+// An edit is [name, flags, value…]: the name is its place in PALETTE (so PALETTE's order is part of the
+// format too: append only), flags say light · dark · both and how the value is held — a hex colour as its
+// 3 or 4 bytes, anything else (oklch, color-mix, an alias) as its text. A colour set the same in both modes
+// is written once. One hex change costs 7 characters; an oklch one about 30.
 
 const DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const PRESET_VERSION = "1";
 
-/** The code for a preset, or null when one of its picks is not in the lists (a newer registry than the site's). */
+const LIGHT = 1;
+const DARK = 2;
+const HEX = 4;
+const HEX_ALPHA = 8;
+
+const toBase64Url = (bytes) =>
+{
+    const binary = String.fromCharCode(...bytes);
+    const base64 = typeof btoa === "function" ? btoa(binary) : Buffer.from(bytes).toString("base64");
+
+    return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
+const fromBase64Url = (text) =>
+{
+    const base64 = text.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (text.length % 4)) % 4);
+
+    return typeof atob === "function" ? Uint8Array.from(atob(base64), (character) => character.charCodeAt(0)) : new Uint8Array(Buffer.from(base64, "base64"));
+};
+
+/** #rgb · #rgba · #rrggbb · #rrggbbaa as bytes, or null for anything that is not a hex colour */
+const hexBytes = (value) =>
+{
+    const match = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.exec(value.trim());
+
+    if (!match) return null;
+
+    const digits = match[1].length <= 4 ? [...match[1]].map((digit) => digit + digit).join("") : match[1];
+
+    return digits.match(/../g).map((pair) => parseInt(pair, 16));
+};
+
+/** Hand edits ({ light, dark }) as the part after the dot, or "" when there are none. */
+const encodeEdits = (edits) =>
+{
+    const bytes = [];
+    const light = edits?.light ?? {};
+    const dark = edits?.dark ?? {};
+
+    for (const [index, name] of PALETTE.entries())
+    {
+        const both = light[name] !== undefined && light[name] === dark[name];
+        const writes = both ? [[LIGHT | DARK, light[name]]] : [[LIGHT, light[name]], [DARK, dark[name]]].filter(([, value]) => value !== undefined);
+
+        for (const [modes, value] of writes)
+        {
+            const hex = hexBytes(value);
+
+            if (hex) bytes.push(index, modes | (hex.length === 4 ? HEX_ALPHA : HEX), ...hex);
+            else
+            {
+                const text = [...new TextEncoder().encode(value)].slice(0, 255);
+
+                bytes.push(index, modes, text.length, ...text);
+            }
+        }
+    }
+
+    return bytes.length ? toBase64Url(bytes) : "";
+};
+
+/** The edits after the dot, or null when the bytes do not read as edits. */
+const decodeEdits = (text) =>
+{
+    const edits = { light: {}, dark: {} };
+    let bytes;
+
+    try
+    {
+        bytes = fromBase64Url(text);
+    }
+    catch
+    {
+        return null;
+    }
+
+    for (let at = 0; at < bytes.length;)
+    {
+        const name = PALETTE[bytes[at]];
+        const flags = bytes[at + 1];
+        let value;
+
+        if (name === undefined || flags === undefined || !(flags & (LIGHT | DARK))) return null;
+
+        at += 2;
+
+        if (flags & (HEX | HEX_ALPHA))
+        {
+            const size = flags & HEX_ALPHA ? 4 : 3;
+
+            if (at + size > bytes.length) return null;
+            value = `#${[...bytes.slice(at, at + size)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+            at += size;
+        }
+        else
+        {
+            const size = bytes[at];
+
+            if (size === undefined || at + 1 + size > bytes.length) return null;
+            value = new TextDecoder().decode(bytes.slice(at + 1, at + 1 + size));
+            at += 1 + size;
+        }
+
+        if (flags & LIGHT) edits.light[name] = value;
+        if (flags & DARK) edits.dark[name] = value;
+    }
+
+    return edits;
+};
+
+/**
+ * The code for a preset, with its hand edits after a dot when it has any, or null when one of its picks is not
+ * in the lists (a newer registry than the site's).
+ */
 export const encodePreset = (lists, preset) =>
 {
     const at = (list, id) => list.indexOf(id);
@@ -215,7 +336,9 @@ export const encodePreset = (lists, preset) =>
 
     if ([system, palette, accent, chart].some((index) => index < 0 || index >= DIGITS.length)) return null;
 
-    return PRESET_VERSION + [system, palette, accent, chart].map((index) => DIGITS[index]).join("");
+    const edits = encodeEdits(preset.edits);
+
+    return PRESET_VERSION + [system, palette, accent, chart].map((index) => DIGITS[index]).join("") + (edits ? `.${edits}` : "");
 };
 
 /** The picks inside a preset code, or null when it is not one (wrong length, version or a place past a list's end). */
@@ -223,9 +346,15 @@ export const decodePreset = (lists, code) =>
 {
     const text = String(code ?? "").trim().replace(/^--preset[= ]/, "").trim();
 
-    if (text.length !== 5 || text[0] !== PRESET_VERSION) return null;
+    const [picks, packed, extra] = text.split(".");
 
-    const [system, palette, accent, chart] = [...text.slice(1)].map((character) => DIGITS.indexOf(character));
+    if (extra !== undefined || picks.length !== 5 || picks[0] !== PRESET_VERSION) return null;
+
+    const edits = packed ? decodeEdits(packed) : null;
+
+    if (packed !== undefined && !edits) return null;
+
+    const [system, palette, accent, chart] = [...picks.slice(1)].map((character) => DIGITS.indexOf(character));
     const pick = (list, index) => (index >= 0 && index < list.length ? list[index] : undefined);
 
     const preset = {
@@ -235,10 +364,12 @@ export const decodePreset = (lists, code) =>
         chart: chart === 0 ? null : pick(lists.accents, chart - 1),
     };
 
-    return Object.values(preset).includes(undefined) ? null : preset;
+    if (Object.values(preset).includes(undefined)) return null;
+
+    return edits ? { ...preset, edits } : preset;
 };
 
-/** The theme a preset wears: its palette, with the accent and the chart colour over it. */
+/** The theme a preset wears: its palette, the accent and the chart colour over it, and its hand edits last. */
 export const presetTheme = (preset) =>
 {
     const layers = [preset.palette, preset.accent, preset.chart && `${preset.chart}-charts`].filter(Boolean);
@@ -247,8 +378,8 @@ export const presetTheme = (preset) =>
         name: layers.join("-"),
         title: layers.join(" + "),
         extends: { base: preset.palette, ...(preset.accent ? { accent: preset.accent } : {}), ...(preset.chart ? { chart: preset.chart } : {}) },
-        light: {},
-        dark: {},
+        light: { ...preset.edits?.light },
+        dark: { ...preset.edits?.dark },
     };
 };
 

@@ -185,7 +185,7 @@ export const init = async (options: GlobalOptions): Promise<void> =>
 const themeFrom = (options: GlobalOptions, preset: Preset | null, root: string, registry: Registry, app: TyohnnRecord["apps"][string]) =>
 {
     if (options.theme) return normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
-    if (preset) return normalizeTheme(presetChoice(preset), registry, app.system);
+    if (preset) return normalizeTheme(presetChoice(preset, root, registry), registry, app.system);
 
     return app.theme;
 };

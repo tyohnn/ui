@@ -68,6 +68,8 @@ export interface Preset
     palette: string;
     accent: string | null;
     chart: string | null;
+    /** Colours changed by hand, after the dot in the code */
+    edits?: { light: Colours; dark: Colours };
 }
 
 export function encodePreset(lists: PresetLists, preset: Preset): string | null;

@@ -33,18 +33,15 @@ interface ThemeValue
     css: string | null;
     theme: Theme;
     link: string;
-    /**
-     * The preset code for what is showing (system · palette · accent · chart), or null when it cannot be one:
-     * colours changed by hand, or a page with no system.
-     */
+    /** The preset code for what is showing (system · palette · accent · chart, then any hand edits), or null on a page with no system */
     code: string | null;
     system?: string;
     presets?: PresetLists;
     setBase: (id: string) => void;
     setAccent: (id: string | null) => void;
     setChart: (id: string | null) => void;
-    /** Palette, accent and chart at once, as a preset or a shuffle sets them; hand edits are dropped */
-    setPicks: (picks: Picks) => void;
+    /** Palette, accent and chart at once, as a preset or a shuffle sets them, with the preset's hand edits or none */
+    setPicks: (picks: Picks, edits?: ThemeState["edits"]) => void;
     /** A random palette, accent and chart colour */
     shuffle: () => void;
     setColour: (mode: Mode, name: string, value: string) => void;
@@ -269,7 +266,7 @@ export const ThemeProvider = ({
             link: encodeTheme(theme),
             system,
             presets,
-            code: presets && system && !hasEdits(state) ? encodePreset(presets, { system, palette: state.base, accent: state.accent, chart: state.chart }) : null,
+            code: presets && system ? encodePreset(presets, { system, palette: state.base, accent: state.accent, chart: state.chart, edits: state.edits }) : null,
             isOwn,
             setBase: (id) => setState((current) => ({ ...current, base: id })),
             setAccent: (id) => setState((current) => ({ ...current, accent: id })),
@@ -288,7 +285,7 @@ export const ThemeProvider = ({
 
                 return { ...current, edits: { ...current.edits, [mode]: rest } };
             }),
-            setPicks: (picks) => setState({ ...picks, edits: empty() }),
+            setPicks: (picks, edits) => setState({ ...picks, edits: edits ?? empty() }),
             shuffle: () => setState({ ...shufflePicks(themes), edits: empty() }),
             clearEdits: () => setState((current) => ({ ...current, edits: empty() })),
             reset: () => setState({ base: own, accent: null, chart: null, edits: empty() }),

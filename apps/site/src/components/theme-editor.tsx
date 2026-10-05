@@ -254,7 +254,7 @@ export const ThemePanel = ({
     {
         if (preset.system !== systemName && onOtherSystem) return onOtherSystem(preset);
 
-        theme.setPicks({ base: preset.palette, accent: preset.accent, chart: preset.chart });
+        theme.setPicks({ base: preset.palette, accent: preset.accent, chart: preset.chart }, preset.edits);
     };
 
     const intro = t.theme.intro(systemName);
@@ -316,7 +316,7 @@ export const ThemePanel = ({
                 {getCode && (
                     <div className="th-get">
                         <b>{t.theme.getCodeTitle}</b>
-                        <small>{theme.code ? t.theme.getCodeHint : t.theme.getCodeEdited}</small>
+                        <small>{t.theme.getCodeHint}</small>
                         <CopyCommand command={install} />
                         <div className="th-get-row">
                             <Copy label={t.theme.copyCss} text={theme.css ?? ""} />
@@ -327,7 +327,7 @@ export const ThemePanel = ({
                 )}
                 {theme.code
                     ? <Copy label={`--preset ${theme.code}`} text={`--preset ${theme.code}`} className="th-code" />
-                    : <span className="th-code off" title={t.theme.getCodeEdited}>{t.theme.noCode}</span>}
+                    : null}
                 <OpenPreset onOpen={open} />
                 <button type="button" className="th-action wide" onClick={onShuffle ?? theme.shuffle}>{t.theme.shuffle}</button>
                 <button type="button" className="th-action wide primary" aria-expanded={getCode} onClick={() => setGetCode(!getCode)}>{t.theme.getCode}</button>

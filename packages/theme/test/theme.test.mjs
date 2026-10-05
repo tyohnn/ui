@@ -132,3 +132,33 @@ test("a preset is five characters, and reads back to the same picks", () =>
     assert.equal(decodePreset(lists, "2122"), null);
     assert.deepEqual(presetTheme(preset).extends, { base: "zinc", accent: "blue" });
 });
+
+test("a preset carries hand edits after a dot, and reads them back", () =>
+{
+    const lists = { systems: ["mira"], palettes: ["mira", "zinc"], accents: ["blue"] };
+    const edits = {
+        light: { primary: "#3D4EF5", ring: "oklch(0.645 0.215 145)", border: "#ff000080" },
+        dark: { primary: "#3d4ef5", ring: "var(--primary)" },
+    };
+    const code = encodePreset(lists, { system: "mira", palette: "zinc", accent: null, chart: null, edits });
+    const back = decodePreset(lists, code);
+
+    assert.match(code, /^10100\.[A-Za-z0-9_-]+$/);
+    // hex comes back lower-case and long-form; a colour the same in both modes is written once
+    assert.deepEqual(back.edits, {
+        light: { primary: "#3d4ef5", ring: "oklch(0.645 0.215 145)", border: "#ff000080" },
+        dark: { primary: "#3d4ef5", ring: "var(--primary)" },
+    });
+    assert.ok(encodePreset(lists, { system: "mira", palette: "zinc", accent: null, chart: null, edits: { light: { primary: "#3d4ef5" }, dark: { primary: "#3d4ef5" } } }).length <= 13);
+    assert.equal(encodePreset(lists, { system: "mira", palette: "zinc", accent: null, chart: null, edits: { light: {}, dark: {} } }), "10100");
+    assert.deepEqual(presetTheme(back).light.ring, "oklch(0.645 0.215 145)");
+    assert.equal(decodePreset(lists, "10100.%%%"), null);
+    assert.equal(decodePreset(lists, "10100.AQ"), null);
+});
+
+test("PALETTE keeps its order, because preset codes count in it", () =>
+{
+    assert.deepEqual(PALETTE.slice(0, ORDER.length), ORDER);
+});
+
+const ORDER = ["background","foreground","card","card-foreground","popover","popover-foreground","primary","primary-foreground","secondary","secondary-foreground","muted","muted-foreground","accent","accent-foreground","destructive","border","input","ring","chart-1","chart-2","chart-3","chart-4","chart-5","sidebar","sidebar-foreground","sidebar-primary","sidebar-primary-foreground","sidebar-accent","sidebar-accent-foreground","sidebar-border","sidebar-ring","info","info-soft","success","success-soft","warning","warning-soft","tag-blue-bg","tag-blue-border","tag-blue-fg","tag-purple-bg","tag-purple-border","tag-purple-fg","tag-green-bg","tag-green-border","tag-green-fg","tag-orange-bg","tag-orange-border","tag-orange-fg","tag-red-bg","tag-red-border","tag-red-fg","tag-yellow-bg","tag-yellow-border","tag-yellow-fg","tag-gray-bg","tag-gray-border","tag-gray-fg","avatar-tone-foreground","avatar-tone-slate","avatar-tone-teal","avatar-tone-plum","avatar-tone-olive","avatar-tone-rust","avatar-tone-navy","avatar-tone-moss","avatar-tone-mauve","checked","checked-foreground","selection","selection-foreground","link"];

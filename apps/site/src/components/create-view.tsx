@@ -82,7 +82,7 @@ const CreateBody = ({ systems, name, onSystem }: { systems: SystemSummary[]; nam
     const open = (preset: Preset) =>
     {
         onSystem(preset.system);
-        theme.setPicks({ base: preset.palette, accent: preset.accent, chart: preset.chart });
+        theme.setPicks({ base: preset.palette, accent: preset.accent, chart: preset.chart }, preset.edits);
     };
 
     const shuffle = () =>
