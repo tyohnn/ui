@@ -8,9 +8,9 @@ export const ko: Messages = {
     htmlLang: "ko",
 
     site: {
-        title: "tyohnn · 같은 화면, 모든 시스템",
+        title: "tyohnn · 색 놀음은 그만, 취향을 만드세요",
         titleTemplate: "%s · tyohnn",
-        description: "Base UI 기반 shadcn 컴포넌트 한 벌을 CSS 세 층으로 바꿔 가며 쓸 수 있어요. 모든 디자인 시스템을 실제 화면으로 둘러보고, npx tyohnn@latest init 명령으로 설치해 보세요.",
+        description: "색 테마만으로는 모든 shadcn 앱이 비슷해 보여요. tyohnn은 밀도, 깊이, 질감을 컴포넌트에서 꺼내 직접 가질 수 있는 토큰으로 만들었어요. 모든 디자인 시스템을 실제 화면으로 둘러보고, npx tyohnn@latest init 명령으로 설치해 보세요.",
     },
 
     mode: { light: "라이트", dark: "다크" },
@@ -30,12 +30,14 @@ export const ko: Messages = {
     },
 
     hero: {
-        titleFirst: "한 화면,",
-        titleSecond: "모든 시스템.",
+        titleFirst: "색 놀음은 그만,",
+        titleSecond: "취향을 만드세요",
+        sub: ["밀도", "깊이", "질감"],
         body: (
             <>
-                Base UI 기반 shadcn 컴포넌트 한 벌을 CSS 세 층으로 다시 꾸며요. 색뿐 아니라 <b>간격, 모서리, 깊이, 글꼴</b>까지
-                시스템마다 달라져요. 새 시스템은 완성된 스냅숏으로 추가되기 때문에 목록은 계속 늘어나요.
+                이제 모두가 shadcn을 쓰고, 모두가 같은 방식으로 색만 바꿔요. 그래서 모든 앱이 비슷해 보여요. 디자인 시스템은
+                팔레트보다 커요. shadcn의 create 프리셋이 그걸 보여 줬지만, 결과는 컴포넌트 안에 구워져 나왔어요. tyohnn은
+                <b> 밀도, 깊이, 질감, 글꼴</b>을 다시 토큰으로 꺼내서, 느낌을 바꾸는 일도 색을 바꾸는 일만큼 쉽게 만들어요.
             </>
         ),
         browse: "시스템 둘러보기",

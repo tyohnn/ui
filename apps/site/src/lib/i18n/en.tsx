@@ -22,9 +22,9 @@ export const en = {
     htmlLang: "en",
 
     site: {
-        title: "tyohnn — same screen, every system",
+        title: "tyohnn — enough color tweak, build your taste",
         titleTemplate: "%s · tyohnn",
-        description: "One set of shadcn components on Base UI, restyled by three CSS layers. Browse every design system live and install one with npx tyohnn@latest init.",
+        description: "Color themes made every shadcn app look the same. tyohnn pulls density, depth and texture out of the components and into tokens you own. Browse every design system live and install one with npx tyohnn@latest init.",
     },
 
     mode: { light: "Light", dark: "Dark" },
@@ -45,12 +45,15 @@ export const en = {
     },
 
     hero: {
-        titleFirst: "Same screen.",
-        titleSecond: "Every system.",
+        titleFirst: "Enough color tweak,",
+        titleSecond: "Build your Taste",
+        sub: ["Density", "Depth", "Texture"],
         body: (
             <>
-                One set of shadcn components on Base UI, restyled by three CSS layers. <b>Spacing, corners, depth and type</b> change
-                with the system — not only colour. New systems land as complete snapshots, so the shelf keeps growing.
+                Everyone is on shadcn now, and everyone recolours it the same way — so every app looks the same. A design system
+                is more than a palette. shadcn&apos;s create presets proved it, then baked the result into the components.
+                tyohnn pulls <b>density, depth, texture and type</b> back out into tokens you own, so changing the feel is
+                as easy as changing the colours.
             </>
         ),
         browse: "Browse systems",

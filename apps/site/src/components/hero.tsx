@@ -77,7 +77,10 @@ export const Hero = ({ systems }: { systems: SystemSummary[] }) =>
     return (
         <div ref={section}>
             <div className="hero">
-                <h1>{t.hero.titleFirst}<br /><span>{t.hero.titleSecond}</span></h1>
+                <div className="hero-title">
+                    <h1>{t.hero.titleFirst}<br /><span>{t.hero.titleSecond}</span></h1>
+                    <p className="hero-sub">{t.hero.sub.map((word) => <span key={word}>{word}</span>)}</p>
+                </div>
                 <div className="hero-side">
                     <p>{t.hero.body}</p>
                     <div className="hero-actions">

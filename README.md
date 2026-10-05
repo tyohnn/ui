@@ -1,9 +1,11 @@
 # tyohnn
 
-**Design systems you can swap, not just themes you can recolour.**
+### Enough color tweak, build your taste.
 
-shadcn components on [Base UI](https://base-ui.com) primitives, with every visual decision — colour,
-density, shape, material, motion — pulled out of the TSX and into three layers of plain CSS. Twelve complete
+**Density · Depth · Texture**
+
+shadcn components on [Base UI](https://base-ui.com) primitives, with every visual decision — not just colour,
+but density, depth, texture and type — pulled out of the TSX and into three layers of plain CSS. Twelve complete
 systems ship with the registry. A CLI copies one into your project, source and all.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
@@ -17,28 +19,29 @@ systems ship with the registry. A CLI copies one into your project, source and a
 
 ## Why
 
-This started as a list of things that were nearly right.
+**Everything is shadcn now.** The AI era made it the default: Tailwind components whose code you *own*,
+built on bare primitives like Radix and Base UI. The libraries before it shipped compiled, props-driven
+components you could configure but not really change. shadcn fixed that, and tyohnn keeps all of it — same
+`cn-*` class contract, same component names, so upstream components port over with little work.
 
-**shadcn got the hard part right.** Component anatomy, accessible behaviour, and the code in *your*
-repository instead of a dependency you cannot reach into. That is the foundation, and tyohnn keeps it —
-same `cn-*` class contract, same component names, so upstream components port over with little work.
+**Then everything started to look the same.** The one escape hatch was colour: swap `--primary` in
+`globals.css` and the whole app follows, and services like [tweakcn](https://tweakcn.com) made that a
+pleasure. Call it **layer 1**.
 
-**Colour was already solved.** A theme swaps `--primary` and the whole app follows; services like
-[tweakcn](https://tweakcn.com) made that a pleasure. Call it **layer 1**.
+**It still looked the same.** A design system is not a palette. Two apps with identical colours can feel
+nothing alike, because what separates them is *density* (how tall a control is, how much air a table row
+has), *depth* (flat, or raised with a gradient and a shadow), *texture* (hairline rings or soft fills, an
+inner highlight, 4px or 26px corners) and *type*. None of that is a colour, and none of it was themeable.
 
-**But a design system is not a palette.** Two apps with identical colours can feel nothing alike. What
-separates them is *density* (how tall a control is, how much air a table row has), *material* (flat, or
-raised with a gradient and an inner highlight), *shape* (hairline rings versus 26px corners) and *motion*
-(how fast anything responds). None of that is a colour, and none of it was themeable.
+**shadcn's [create](https://ui.shadcn.com/create) page showed what changes that.** Styles like Mira and
+Nova set density, depth, texture and type differently, and for the first time two shadcn apps felt
+genuinely different — more than a recolour.
 
-**shadcn's `create` presets fixed density — beautifully.** Suddenly you could pick a feel, not just a hue.
-That was the real unlock.
+**But the values come out of the CLI baked into the components.** Heights, paddings, radii and shadows land
+inline on the button, the chip, the table. You can edit them, of course — in fifty files, and again next
+time. There is no `globals.css` for feel. What should have been one variable was fifty literals.
 
-**But the values came out baked into the components.** Heights, paddings and radii landed inline on the
-button, the chip, the table. You can edit them, of course — in fifty files, and again next time. What
-should have been one variable was fifty literals.
-
-**So we made that a layer too.** **Layer 2** holds the density, shape and motion tokens
+**So we made that a layer too.** **Layer 2** holds the density, depth and texture tokens
 (`--control-height-md`, `--table-row-height`, `--motion-base`), and **layer 3** holds one CSS file per
 component that assembles layers 1 and 2 into rules. Change one token; every component that reads it moves
 together, by construction.
