@@ -4,11 +4,11 @@
     "title": "Rhea",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what rhea moves; tyohnn gives each ported preset its own base (neutral) and chart colour (indigo) so they are told apart side by side"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what rhea moves. tyohnn gives each ported preset its own base and chart colour so they can be told apart side by side: base neutral (soft and plain, on neutral; its charts tell it from vega); charts emerald, a hue near that base's tint, a different one for each preset"
     },
     "extends": {
         "base": "neutral",
-        "chart": "indigo"
+        "chart": "emerald"
     },
     "light": {},
     "dark": {

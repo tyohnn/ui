@@ -4,11 +4,11 @@
     "title": "Luma",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what luma moves; tyohnn gives each ported preset its own base (olive) and chart colour (lime) so they are told apart side by side"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what luma moves. tyohnn gives each ported preset its own base and chart colour so they can be told apart side by side: base stone (soft fills and real shadows, so the warm stone ramp); charts orange, a hue near that base's tint, a different one for each preset"
     },
     "extends": {
-        "base": "olive",
-        "chart": "lime"
+        "base": "stone",
+        "chart": "orange"
     },
     "light": {},
     "dark": {
