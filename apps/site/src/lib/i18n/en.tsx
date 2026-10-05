@@ -79,13 +79,13 @@ export const en = {
         },
         depth: {
             title: "Depth",
-            body: "How far surfaces lift off the page — flat, stepped, or lifted.",
-            captions: { nocturne: "Flat on the page", graphite: "Planes a step apart", luma: "No borders · lifted by shadow" } as Record<string, string>,
+            body: "How far surfaces lift off the page — flat, lifted, or floating.",
+            captions: { nocturne: "Flat on the page", luma: "No borders · lifted by shadow", halo: "Floating · 50px shadow" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
-            body: "What a surface is made of — a sheen, smoked glass, a gradient.",
-            captions: { loam: "White veils · sheen", halo: "Smoked glass", clover: "A gradient into the action" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, moulded clay, a gradient.",
+            captions: { loam: "White veils · sheen", graphite: "Clay controls", clover: "A gradient into the action" } as Record<string, string>,
         },
         type: {
             title: "Type",
