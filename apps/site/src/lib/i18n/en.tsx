@@ -75,22 +75,22 @@ export const en = {
         density: {
             title: "Density",
             body: "How much air a screen has — control heights, padding, row rhythm.",
-            captions: { mira: "28px controls · 12px text", nova: "32px controls · 16px padding", maia: "36px controls · 24px padding" } as Record<string, string>,
+            captions: { mira: "28px controls · 12px text", nova: "32px controls · 16px padding", sera: "40px controls · 24px padding" } as Record<string, string>,
         },
         depth: {
             title: "Depth",
-            body: "How far surfaces lift off the page — ruled flat, set down lightly, or lifted.",
-            captions: { vellum: "Flat · hairline rules", rhea: "A light shadow", cirrus: "Wide, soft lift" } as Record<string, string>,
+            body: "How far surfaces lift off the page — flat, stepped, or floating.",
+            captions: { nocturne: "Flat on the page", graphite: "Planes a step apart", halo: "Floating · 50px shadow" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
-            body: "What a surface is made of — a sheen, moulded clay, smoked glass.",
-            captions: { loam: "White veils · sheen", graphite: "Clay controls", halo: "Smoked glass" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, a gradient, frosted pills.",
+            captions: { loam: "White veils · sheen", clover: "A gradient into the action", cirrus: "Pills · frosted layers" } as Record<string, string>,
         },
         type: {
             title: "Type",
             body: "The voice — which face, how tight, how labels speak.",
-            captions: { clover: "Inter throughout", sera: "Playfair titles · caps labels", nocturne: "Bricolage · mono labels" } as Record<string, string>,
+            captions: { vellum: "Source Serif titles", lyra: "JetBrains Mono throughout", maia: "Figtree · round" } as Record<string, string>,
         },
     },
 

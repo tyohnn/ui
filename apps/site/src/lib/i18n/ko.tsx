@@ -60,22 +60,22 @@ export const ko: Messages = {
         density: {
             title: "밀도",
             body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
-            captions: { mira: "컨트롤 28px · 글자 12px", nova: "컨트롤 32px · 여백 16px", maia: "컨트롤 36px · 여백 24px" },
+            captions: { mira: "컨트롤 28px · 글자 12px", nova: "컨트롤 32px · 여백 16px", sera: "컨트롤 40px · 여백 24px" },
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 선으로 평평하게, 살짝 내려앉게, 떠오르게.",
-            captions: { vellum: "평평함 · 가는 선", rhea: "옅은 그림자", cirrus: "넓고 부드럽게 뜬 면" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 한 단씩, 붕 떠 있게.",
+            captions: { nocturne: "바닥에 붙은 면", graphite: "한 단씩 쌓인 면", halo: "떠 있는 창 · 50px 그림자" },
         },
         texture: {
             title: "질감",
-            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 빚은 점토, 연기 낀 유리.",
-            captions: { loam: "흰 베일 · 광택", graphite: "점토 컨트롤", halo: "연기 낀 유리" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 그라데이션, 반투명한 알약.",
+            captions: { loam: "흰 베일 · 광택", clover: "행동으로 번지는 그라데이션", cirrus: "알약 · 반투명 레이어" },
         },
         type: {
             title: "타이포",
             body: "목소리를 정해요. 어떤 글꼴을, 얼마나 조여서, 라벨은 어떻게 말하는지.",
-            captions: { clover: "모두 Inter", sera: "Playfair 제목 · 대문자 라벨", nocturne: "Bricolage · mono 라벨" },
+            captions: { vellum: "Source Serif 제목", lyra: "모두 JetBrains Mono", maia: "Figtree · 둥근 형태" },
         },
     },
 
