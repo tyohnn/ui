@@ -153,14 +153,14 @@ export const getFonts = () => [...fontCatalog().values()].sort((a, b) => a.id.lo
 /** How many components registry/ui ships */
 export const getComponentCount = () => readdirSync(join(registryRoot, "ui/components")).filter((file) => file.endsWith(".tsx")).length;
 
-/** Every custom property a stylesheet declares in its `:root` and `@theme static` blocks (`.dark`, `@layer` and
-    `@theme inline` are left out), in source order. A declaration that reads itself is dropped: outside Tailwind
-    it would be a cycle. */
-const rootDeclarations = (css: string): [string, string][] =>
+/** Every custom property a stylesheet declares in its `:root` and `@theme static` blocks — and, for dark, its
+    `.dark` blocks after them — in source order (`@layer` and `@theme inline` are left out). A declaration that
+    reads itself is dropped: outside Tailwind it would be a cycle. */
+const rootDeclarations = (css: string, mode: Mode): [string, string][] =>
 {
     const source = css.replace(/\/\*[\s\S]*?\*\//g, "");
     const found: [string, string][] = [];
-    const opener = /(?:^|\n)\s*(:root|@theme static)\s*\{/g;
+    const opener = mode === "dark" ? /(?:^|\n)\s*(:root|@theme static|\.dark)\s*\{/g : /(?:^|\n)\s*(:root|@theme static)\s*\{/g;
     let match: RegExpExecArray | null;
 
     while ((match = opener.exec(source)))
@@ -184,22 +184,25 @@ const rootDeclarations = (css: string): [string, string][] =>
     return found;
 };
 
-/** The palette every taste specimen shares (foundation's light theme), so only density, depth and texture differ */
-export const getSpecimenPalette = () =>
-    rootDeclarations(readFileSync(join(registryRoot, "foundation/styles/theme.css"), "utf8"))
-        .map(([name, value]) => `${name}: ${value};`).join(" ");
+/** A token map as one CSS declaration list */
+export const declareTokens = (values: Map<string, string>) => [...values].map(([key, value]) => `${key}: ${value};`).join(" ");
 
-/** A system's layer-1 formulas and materials (globals.css) and its layer-2 tokens (tokens.css), as one
-    declaration list, without its palette (theme.css) */
-export const getSystemTokens = (name: string) =>
+/** The palette every taste specimen shares (foundation's neutral theme, in either mode), so colour never differs */
+export const getSpecimenPalette = (mode: Mode) =>
+    declareTokens(new Map(rootDeclarations(readFileSync(join(registryRoot, "foundation/styles/theme.css"), "utf8"), mode)));
+
+/** A system's layer-1 formulas and materials (globals.css) and its layer-2 tokens (tokens.css) in one mode,
+    without its palette (theme.css) */
+export const getSystemTokens = (name: string, mode: Mode) =>
 {
     const styles = join(registryRoot, "systems", name, "styles");
     const values = new Map<string, string>();
 
     for (const file of ["globals.css", "tokens.css"])
     {
-        for (const [key, value] of rootDeclarations(readFileSync(join(styles, file), "utf8"))) values.set(key, value);
+        for (const [key, value] of rootDeclarations(readFileSync(join(styles, file), "utf8"), mode)) values.set(key, value);
     }
 
-    return [...values].map(([key, value]) => `${key}: ${value};`).join(" ");
+    return values;
 };
+

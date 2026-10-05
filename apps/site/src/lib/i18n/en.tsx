@@ -47,7 +47,7 @@ export const en = {
     hero: {
         titleFirst: "Enough color tweak,",
         titleSecond: "Build your Taste",
-        body: <>A theme changes the colour. Taste lives in the <b>density, depth and texture</b> — and now those are tokens too.</>,
+        body: <>Colour is where everyone stops. Go further — <b>density, depth and texture</b>, as tokens you own.</>,
         browse: "Browse systems",
         play: "▶ Play",
         pause: "❚❚ Pause",
@@ -73,21 +73,26 @@ export const en = {
     },
 
     taste: {
-        note: "Same palette in every card. Only the tokens change.",
+        note: "One neutral palette in every card. Only the tokens change.",
         density: {
             title: "Density",
             body: "How much air a screen has — control heights, padding, row rhythm.",
-            captions: { mira: "28px controls · 16px padding", vega: "36px controls · 16px padding", sera: "40px controls · 24px padding" } as Record<string, string>,
+            captions: { graphite: "28px controls · 41px rows", clover: "36px controls · 20px padding", cirrus: "36px controls · 24px padding" } as Record<string, string>,
         },
         depth: {
             title: "Depth",
-            body: "How far things lift off the page — flat, softly raised, or floating.",
-            captions: { lyra: "Flat · hairline", luma: "Soft lift", halo: "Floating glow" } as Record<string, string>,
+            body: "How far surfaces lift off the page — ruled flat, stepped, or floating.",
+            captions: { vellum: "Flat · hairline rules", graphite: "Planes a step apart", halo: "Floating · 50px shadow" } as Record<string, string>,
         },
         texture: {
             title: "Texture",
-            body: "What a surface feels like — corners, edges, gradients and type.",
-            captions: { sera: "Square · serif", cirrus: "Pill · gradient", maia: "Round · 26px" } as Record<string, string>,
+            body: "What a surface is made of — a sheen, a gradient, smoked glass.",
+            captions: { loam: "White veils · sheen", cirrus: "Pills · soft gradient", halo: "Smoked glass" } as Record<string, string>,
+        },
+        type: {
+            title: "Type",
+            body: "The voice — which face, how tight, how labels speak.",
+            captions: { vellum: "Source Serif titles", clover: "Inter throughout", nocturne: "Bricolage · mono labels" } as Record<string, string>,
         },
     },
 

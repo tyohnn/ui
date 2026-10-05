@@ -32,7 +32,7 @@ export const ko: Messages = {
     hero: {
         titleFirst: "색 놀음은 그만,",
         titleSecond: "취향을 만드세요",
-        body: <>테마는 색을 바꿔요. 취향은 <b>밀도, 깊이, 질감</b>에 있어요. 이제 그것도 토큰이에요.</>,
+        body: <>다들 색에서 멈춰요. <b>밀도, 깊이, 질감</b>까지 내 토큰으로 바꿔 보세요.</>,
         browse: "시스템 둘러보기",
         play: "▶ 재생",
         pause: "❚❚ 일시정지",
@@ -58,21 +58,26 @@ export const ko: Messages = {
     },
 
     taste: {
-        note: "모든 카드가 같은 팔레트예요. 토큰만 달라요.",
+        note: "모든 카드가 같은 무채색 팔레트예요. 토큰만 달라요.",
         density: {
             title: "밀도",
             body: "화면이 얼마나 촘촘한지 정해요. 컨트롤 높이, 안쪽 여백, 행 간격이 여기에 속해요.",
-            captions: { mira: "컨트롤 28px · 여백 16px", vega: "컨트롤 36px · 여백 16px", sera: "컨트롤 40px · 여백 24px" },
+            captions: { graphite: "컨트롤 28px · 행 41px", clover: "컨트롤 36px · 여백 20px", cirrus: "컨트롤 36px · 여백 24px" },
         },
         depth: {
             title: "깊이",
-            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 평평하게, 살짝 들리게, 떠 있게.",
-            captions: { lyra: "평평함 · 가는 선", luma: "살짝 들림", halo: "떠 있는 빛" },
+            body: "면이 바닥에서 얼마나 떠 있는지 정해요. 선으로 평평하게, 한 단씩, 붕 떠 있게.",
+            captions: { vellum: "평평함 · 가는 선", graphite: "한 단씩 쌓인 면", halo: "떠 있는 창 · 50px 그림자" },
         },
         texture: {
             title: "질감",
-            body: "면의 감촉을 정해요. 모서리, 테두리, 그라데이션, 글꼴이 여기에 속해요.",
-            captions: { sera: "각진 모서리 · 세리프", cirrus: "알약 · 그라데이션", maia: "둥근 26px" },
+            body: "면이 무엇으로 만들어졌는지 정해요. 광택, 그라데이션, 연기 낀 유리.",
+            captions: { loam: "흰 베일 · 광택", cirrus: "알약 · 부드러운 그라데이션", halo: "연기 낀 유리" },
+        },
+        type: {
+            title: "타이포",
+            body: "목소리를 정해요. 어떤 글꼴을, 얼마나 조여서, 라벨은 어떻게 말하는지.",
+            captions: { vellum: "Source Serif 제목", clover: "모두 Inter", nocturne: "Bricolage · mono 라벨" },
         },
     },
 

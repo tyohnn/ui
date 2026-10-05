@@ -24,13 +24,16 @@ contract (hooks, layers, slots, icons, strings) is [DESIGN.md](DESIGN.md); the l
 | Word | Means | Lives in (tokens.css / globals.css) |
 | --- | --- | --- |
 | Density | control heights, paddings, gaps, row rhythm | `--control-height-*`, `--control-padding-*`, `--surface-padding-*`, `--table-*` |
-| Depth | shadows, rings, raised vs. flat surfaces | `--card-shadow`, `--shadow-control*`, `--shadow-raised`, `--dialog-shadow` |
-| Texture | radii, border widths, gradients, materials | `--control-radius`, `--card-radius`, `--surface-primary`, `--surface-control`, `--clay-*` |
-| Type | font stacks, weights, tracking | `--font-sans`, `--font-heading`, `--control-font-*` |
+| Depth | how far a surface sits off the ground: outer shadows, rings, steps between planes | `--card-shadow`, `--shadow-control*`, `--dialog-shadow`, `--clay-contact`, `--clay-ambient` |
+| Texture | what a surface is made of: fills, gradients and sheens, inner highlights, blur, radii, edges | `--card-sheen`, `--surface-primary`, `--surface-control`, `--clay-highlight`, `--glass-*`, `--control-radius` |
+| Type | font stacks, weights, tracking, how labels speak | `--font-sans`, `--font-heading`, `--title-*`, `--sidebar-group-label-*`, `--control-font-*` |
 | Colour | the palette, layer 1 — the part everyone already had | `theme.css`, derived colours in `globals.css` |
 
-Lead with **density, depth, texture** (the tagline's three). Type is the fourth axis; name it when the
-context has room. Say *taste* or *feel* for all of them together, never *theme* (a theme is colour only).
+Lead with **density, depth, texture** (the tagline's three). Type is the fourth axis: it has its own row on
+the home page; name it when the context has room. A material that mixes two axes splits by this rule —
+graphite's clay highlight is texture, its contact shadow is depth; loam's sheen is texture. Icons (one of six
+libraries per system) and motion (`--motion-*`, the same in every system today) are real but not headline axes.
+Say *taste* or *feel* for all of them together, never *theme* (a theme is colour only).
 
 ## Voice
 
@@ -38,12 +41,14 @@ context has room. Say *taste* or *feel* for all of them together, never *theme* 
   `apps/site/src/components/taste.tsx` and the live screens. The story above belongs in the README, docs and
   posts, not in home-page paragraphs.
 - Show, don't claim. Every visual on the site is drawn from real registry tokens, never hand-tuned to look good.
+- Show tyohnn's own systems (graphite, loam, cirrus, halo, nocturne, vellum, clover) first. The ones
+  ported from shadcn create presets (mira, vega, nova, maia, lyra, luma, sera, rhea) prove the port, not the taste.
 - Credit shadcn, Base UI and tweakcn plainly. tyohnn builds on them; it is not against them.
 - Site copy lives in `apps/site/src/lib/i18n/en.tsx` and `ko.tsx`; change both together. Korean follows the
   rules at the top of `ko.tsx` (해요체, 「토큰」, 「층」).
 
 ## Headline copy
 
-- EN: **Enough color tweak, / Build your Taste** — *A theme changes the colour. Taste lives in the density,
-  depth and texture — and now those are tokens too.*
-- KO: **색 놀음은 그만, / 취향을 만드세요** — *테마는 색을 바꿔요. 취향은 밀도, 깊이, 질감에 있어요. 이제 그것도 토큰이에요.*
+- EN: **Enough color tweak, / Build your Taste** — *Colour is where everyone stops. Go further — density, depth
+  and texture, as tokens you own.*
+- KO: **색 놀음은 그만, / 취향을 만드세요** — *다들 색에서 멈춰요. 밀도, 깊이, 질감까지 내 토큰으로 바꿔 보세요.*

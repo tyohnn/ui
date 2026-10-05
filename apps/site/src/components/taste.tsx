@@ -1,13 +1,14 @@
 import { getMessages, type Locale } from "@/lib/i18n";
-import { getSpecimenPalette, getSystem, getSystemTokens } from "@/lib/registry";
+import { declareTokens, getSpecimenPalette, getSystem, getSystemTokens } from "@/lib/registry";
 
-type Pillar = "density" | "depth" | "texture";
+type Pillar = "density" | "depth" | "texture" | "type";
 
-/** Which systems stand side by side for each axis: the three that differ most on it */
+/** Which systems stand side by side for each axis: the three of tyohnn's own that differ most on it */
 const PILLARS: { id: Pillar; systems: [string, string, string]; tokens: string[] }[] = [
-    { id: "density", systems: ["mira", "vega", "sera"], tokens: ["--control-height-md", "--surface-padding-md", "--table-row-height"] },
-    { id: "depth", systems: ["lyra", "luma", "halo"], tokens: ["--card-shadow", "--shadow-control", "--shadow-control-primary"] },
-    { id: "texture", systems: ["sera", "cirrus", "maia"], tokens: ["--control-radius", "--surface-primary", "--font-heading"] },
+    { id: "density", systems: ["graphite", "clover", "cirrus"], tokens: ["--control-height-md", "--surface-padding-md", "--table-row-height"] },
+    { id: "depth", systems: ["vellum", "graphite", "halo"], tokens: ["--card-shadow", "--shadow-card", "--shadow-control"] },
+    { id: "texture", systems: ["loam", "cirrus", "halo"], tokens: ["--card-sheen", "--surface-primary", "--glass-card-filter"] },
+    { id: "type", systems: ["vellum", "clover", "nocturne"], tokens: ["--font-heading", "--title-letter-spacing", "--sidebar-group-label-*"] },
 ];
 
 const ROWS: [string, string][] = [["Acme Corp", "$24,000"], ["Globex", "$8,400"], ["Initech", "$12,900"]];
@@ -21,6 +22,7 @@ const Specimen = () => (
         </div>
         <div className="spec-input">Search deals</div>
         <div className="spec-rows">
+            <span className="spec-label">Open deals</span>
             {ROWS.map(([name, amount]) => <div key={name}><span>{name}</span><span>{amount}</span></div>)}
         </div>
         <div className="spec-actions">
@@ -31,20 +33,26 @@ const Specimen = () => (
 );
 
 /**
- * Density, depth and texture, one row each. Every tile shares foundation's palette and takes the rest — layer-1
- * formulas and materials, every layer-2 token — from a real system, so what differs between tiles is only what
- * the tokens say.
+ * Density, depth, texture and type, one row each. Every tile shares foundation's neutral palette and takes the
+ * rest — layer-1 formulas and materials, every layer-2 token — from a real system in its own default mode, so
+ * what differs between tiles is only what the tokens say.
  */
 export function Taste({ locale }: { locale: Locale })
 {
     const t = getMessages(locale).taste;
-    const names = [...new Set(PILLARS.flatMap((pillar) => pillar.systems))];
-    const palette = getSpecimenPalette();
-    const css = names.map((name) => `.spec-tile[data-system="${name}"] { ${palette} ${getSystemTokens(name)} }`).join("\n");
+    const tiles = [...new Set(PILLARS.flatMap((pillar) => pillar.systems))].map((name) =>
+    {
+        const mode = getSystem(name)?.defaultMode ?? "light";
+        const tokens = getSystemTokens(name, mode);
+        const glass = (tokens.get("--glass-card-filter") ?? "none") !== "none";
+
+        return { name, mode, glass, css: `.spec-tile[data-system="${name}"] { ${getSpecimenPalette(mode)} ${declareTokens(tokens)} }` };
+    });
+    const tile = (name: string) => tiles.find((entry) => entry.name === name)!;
 
     return (
         <section className="taste">
-            <style dangerouslySetInnerHTML={{ __html: css }} />
+            <style dangerouslySetInnerHTML={{ __html: tiles.map((entry) => entry.css).join("\n") }} />
             <p className="taste-note eyebrow">{t.note}</p>
             {PILLARS.map((pillar, index) => (
                 <div key={pillar.id} className="taste-row" id={pillar.id}>
@@ -57,7 +65,13 @@ export function Taste({ locale }: { locale: Locale })
                     <div className="taste-specs">
                         {pillar.systems.map((name) => (
                             <figure key={name} className="spec">
-                                <div className="spec-tile" data-system={name}><Specimen /></div>
+                                <div
+                                    className={tile(name).mode === "dark" ? "spec-tile dark" : "spec-tile"}
+                                    data-system={name}
+                                    data-glass={tile(name).glass || undefined}
+                                >
+                                    <Specimen />
+                                </div>
                                 <figcaption>
                                     <span style={{ fontFamily: getSystem(name)?.nameFont }}>{name}</span>
                                     <small>{t[pillar.id].captions[name]}</small>
