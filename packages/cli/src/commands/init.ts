@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import type { Preset } from "@tyohnn/theme";
 
 import { aliasFor, effectivePaths } from "../codemods/tsconfig.js";
-import { exists, readJson, rel } from "../lib/fs.js";
+import { exists, posix, readJson, rel } from "../lib/fs.js";
 import { CliError, log } from "../lib/log.js";
 import { inspectApp } from "../project/app.js";
 import { detectProject, frameworkOf, isCoveredByWorkspaces, type PackageJson, workspaceDirs, workspaceGlobs } from "../project/detect.js";
@@ -15,7 +15,7 @@ import { sync } from "../project/sync.js";
 import { describeTheme, normalizeTheme, presetChoice, readPreset, resolveThemeInput } from "../project/theme.js";
 import { openSource } from "../source/index.js";
 import type { Registry } from "../source/registry.js";
-import { appPathFrom, describeSource, type GlobalOptions, interactive, newChanges, parseMode, printSummary, recordRoot, select, text, workingDir } from "./context.js";
+import { appPathFrom, confirm, describeSource, type GlobalOptions, interactive, newChanges, parseMode, printSummary, recordRoot, select, text, workingDir } from "./context.js";
 
 export const initFontOverrides = (options: GlobalOptions): FontOverrides => ({ sans: options.font, heading: options["font-heading"], mono: options["font-mono"] });
 
@@ -51,6 +51,22 @@ const enclosingMonorepo = (dir: string): string | null =>
     }
 
     return null;
+};
+
+/**
+ * A single app made with shadcn's CLI: the folders its components.json aliases name (ui · hooks · lib), under the
+ * import base init chose, which is where tyohnn writes the same files. null when there is no components.json.
+ */
+export const shadcnFolders = (root: string, ui: { path: string; importBase: string }): string[] | null =>
+{
+    const config = readJson<{ aliases?: Record<string, string> }>(join(root, "components.json"));
+
+    if (!config) return null;
+
+    return ["ui", "hooks", "lib"]
+        .map((key) => config.aliases?.[key])
+        .filter((alias): alias is string => Boolean(alias?.startsWith(`${ui.importBase}/`)))
+        .map((alias) => posix(join(ui.path || ".", alias.slice(ui.importBase.length + 1))));
 };
 
 /** "@acme" from a root package named "acme" or "@acme/monorepo" */
@@ -176,7 +192,22 @@ export const init = async (options: GlobalOptions): Promise<void> =>
     app.theme = themeFrom(options, preset, root, registry, app);
 
     log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · colours ${describeTheme(app.theme, registry, app.system)} · ${mode} mode${registry.hasStrings ? ` · words ${localeOf(record)}` : ""}${record.ui.blocks ? " · blocks" : ""}`);
-    await sync({ root, registry, record, changes, options: { force: Boolean(options.force), install: options.install !== false } });
+
+    // A shadcn app: tyohnn's components replace the ones shadcn copied (same names), and shadcn's default colours,
+    // radius and mappings leave the entry CSS, where they would override the system.
+    const adopt = project.kind === "monorepo" ? null : shadcnFolders(root, record.ui);
+
+    if (adopt)
+    {
+        log.step(`shadcn app: tyohnn replaces the components shadcn copied${adopt.length ? ` (${adopt.join(", ")})` : ""} and takes shadcn's default colours and radius out of the entry CSS`);
+
+        if (interactive(options) && !options.force && !(await confirm(`Switch this shadcn app to ${systemName}? Edits you made to shadcn's components and colours are replaced.`)))
+        {
+            throw new CliError("cancelled", "Nothing was written.");
+        }
+    }
+
+    await sync({ root, registry, record, changes, options: { force: Boolean(options.force), install: options.install !== false, ...(adopt ? { adopt } : {}) } });
     printSummary(`Set up ${systemName} in ${project.kind === "monorepo" ? `${record.ui.path} and ${appPath}` : `this ${app.framework === "next" ? "Next.js" : "Vite"} app`}`, changes, root);
     log.info(`\nNext: run the app, then \`tyohnn doctor\`.${project.kind === "monorepo" ? " Add another app with `tyohnn add <system> --app <path>`." : ""}`);
 };

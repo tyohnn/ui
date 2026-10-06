@@ -10,7 +10,7 @@
 
 import { dirname, join } from "node:path";
 
-import { applyEntryCss, userCustomProperties } from "../codemods/css.js";
+import { applyEntryCss, removeSystemDefaults, userCustomProperties } from "../codemods/css.js";
 import { applyLayout, HTML_CLASS_IDENTIFIER, layoutBlock } from "../codemods/layout.js";
 import { ensureTranspilePackage, newNextConfig } from "../codemods/next-config.js";
 import { effectivePaths, setPaths } from "../codemods/tsconfig.js";
@@ -32,6 +32,11 @@ export interface SyncOptions
 {
     force: boolean;
     install: boolean;
+    /**
+     * init on a shadcn app: root-relative folders where shadcn's CLI copied components (replaced by tyohnn's, same
+     * names), and shadcn's defaults leave the entry CSS where the system sets them (removeSystemDefaults).
+     */
+    adopt?: string[];
 }
 
 export interface SyncContext
@@ -72,7 +77,7 @@ const appThemeCss = (app: AppFiles): string => join(dirname(app.css), "tyohnn-th
 const planOwnedFiles = (ctx: SyncContext, placement: Placement, apps: AppFiles[]): OwnedFiles =>
 {
     const { registry, record } = ctx;
-    const owned = new OwnedFiles(ctx.root, record, ctx.changes, ctx.options.force);
+    const owned = new OwnedFiles(ctx.root, record, ctx.changes, ctx.options.force, ctx.options.adopt);
     const copy = (from: string, to: string) => owned.plan(to, from, isCode(from) ? placement.rewrite(registry.read(from)) : registry.read(from));
 
     for (const file of registry.manifest.files)
@@ -360,7 +365,27 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
             : []),
     ].join("\n");
 
-    edit(app.css, (content) => applyEntryCss(content, { system: systemBlock, theme: themeBlock }), "");
+    let adopted: Record<string, number> = {};
+
+    edit(app.css, (content) =>
+    {
+        const css = applyEntryCss(content, { system: systemBlock, theme: themeBlock });
+
+        if (!ctx.options.adopt) return css;
+
+        const result = removeSystemDefaults(css, { tokens: systemTokenNames(registry, system), globals: registry.read(`${registry.systemDir(system)}/styles/globals.css`) });
+
+        adopted = result.removed;
+
+        return result.css;
+    }, "");
+
+    if (Object.keys(adopted).length)
+    {
+        const places = Object.entries(adopted).map(([place, n]) => `${place} ${n}`).join(" · ");
+
+        changes.note(`took shadcn's defaults out of ${rel(root, app.css)} so ${system} sets them (${places}); bring your own colours back with \`tyohnn theme\``);
+    }
 
     const shadowed = userCustomProperties(read(app.css)).filter((name) => systemTokenNames(registry, system).has(name));
 
