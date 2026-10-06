@@ -4,10 +4,11 @@
     "title": "Nova",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what nova moves"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what nova moves. tyohnn gives each ported preset its own base and chart colour so they can be told apart side by side: base zinc (Geist reads cool, so the cool zinc ramp); charts violet, a hue near that base's tint, a different one for each preset"
     },
     "extends": {
-        "base": "neutral"
+        "base": "zinc",
+        "chart": "violet"
     },
     "light": {},
     "dark": {

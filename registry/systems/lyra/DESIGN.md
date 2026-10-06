@@ -1,5 +1,9 @@
 # lyra
 
+> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
+> ported presets can be told apart side by side, lyra wears the **olive** base ramp and **lime** charts
+> (`registry/themes/lyra.json`). Where this page names shadcn's neutral values, read them as the reference app's.
+
 lyra is the shadcn `lyra` preset: a terminal-plain system typeset entirely in JetBrains Mono, with
 square corners on every surface and 1px rings doing the work that shadows do elsewhere. It reads like a
 well-set config file — one type size, one corner radius (none), everything on a 4px grid. Use it for

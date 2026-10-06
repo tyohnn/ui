@@ -1,5 +1,9 @@
 # maia
 
+> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
+> ported presets can be told apart side by side, maia wears the **mauve** base ramp and **fuchsia** charts
+> (`registry/themes/maia.json`). Where this page names shadcn's neutral values, read them as the reference app's.
+
 The round, roomy end of the shadcn neutral family. Every control is a 26px round — buttons, inputs, selects,
 switches, the OTP box, the progress bar — so at 36px control height they read as soft capsules rather than
 boxes; the surfaces behind them step down to 18px cards and menus with a 14px menu row inside. Controls carry

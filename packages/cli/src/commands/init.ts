@@ -2,6 +2,8 @@
 
 import { dirname, join } from "node:path";
 
+import type { Preset } from "@tyohnn/theme";
+
 import { aliasFor, effectivePaths } from "../codemods/tsconfig.js";
 import { exists, readJson, rel } from "../lib/fs.js";
 import { CliError, log } from "../lib/log.js";
@@ -10,7 +12,7 @@ import { detectProject, frameworkOf, isCoveredByWorkspaces, type PackageJson, wo
 import { describeFonts, type FontOverrides, resolveFonts, validateFonts } from "../project/fonts.js";
 import { localeOf, readRecord, RECORD_VERSION, type TyohnnRecord } from "../project/record.js";
 import { sync } from "../project/sync.js";
-import { describeTheme, normalizeTheme, resolveThemeInput } from "../project/theme.js";
+import { describeTheme, normalizeTheme, presetChoice, readPreset, resolveThemeInput } from "../project/theme.js";
 import { openSource } from "../source/index.js";
 import type { Registry } from "../source/registry.js";
 import { appPathFrom, describeSource, type GlobalOptions, interactive, newChanges, parseMode, printSummary, recordRoot, select, text, workingDir } from "./context.js";
@@ -86,7 +88,11 @@ export const init = async (options: GlobalOptions): Promise<void> =>
 
     log.step(`Source: ${describeSource(info)}`);
 
-    const systemName = await chooseSystem(options, registry);
+    const preset = options.preset ? readPreset(options.preset, registry) : null;
+
+    if (preset && options.system && options.system !== preset.system) throw new CliError(`--preset ${options.preset} is ${preset.system}, not ${options.system}`, "Pass one or the other.");
+
+    const systemName = preset?.system ?? await chooseSystem(options, registry);
     const system = registry.system(systemName);
     const icons = options.icons ?? system.icons.library;
     const fonts = resolveFonts(system.fonts, initFontOverrides(options));
@@ -167,12 +173,21 @@ export const init = async (options: GlobalOptions): Promise<void> =>
     const changes = newChanges();
     const [appPath, app] = Object.entries(record.apps)[0];
 
-    if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
+    app.theme = themeFrom(options, preset, root, registry, app);
 
     log.step(`${systemName} → ${appPath === "." ? "this app" : appPath} · icons ${icons} · ${describeFonts(fonts)} · colours ${describeTheme(app.theme, registry, app.system)} · ${mode} mode${registry.hasStrings ? ` · words ${localeOf(record)}` : ""}${record.ui.blocks ? " · blocks" : ""}`);
     await sync({ root, registry, record, changes, options: { force: Boolean(options.force), install: options.install !== false } });
     printSummary(`Set up ${systemName} in ${project.kind === "monorepo" ? `${record.ui.path} and ${appPath}` : `this ${app.framework === "next" ? "Next.js" : "Vite"} app`}`, changes, root);
     log.info(`\nNext: run the app, then \`tyohnn doctor\`.${project.kind === "monorepo" ? " Add another app with `tyohnn add <system> --app <path>`." : ""}`);
+};
+
+/** The colours init gives an app: --theme wins over the preset's, and the system's own is remembered as nothing. */
+const themeFrom = (options: GlobalOptions, preset: Preset | null, root: string, registry: Registry, app: TyohnnRecord["apps"][string]) =>
+{
+    if (options.theme) return normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
+    if (preset) return normalizeTheme(presetChoice(preset, root, registry), registry, app.system);
+
+    return app.theme;
 };
 
 /** init on a project that already has tyohnn.json: re-apply the same choices (idempotent), or explain what to use */
@@ -190,12 +205,15 @@ const reinit = async (options: GlobalOptions, root: string, record: TyohnnRecord
 
     const { registry, info } = await openSource({ source: options.source, ref: options.ref, offline: options.offline, cwd: workingDir(options) });
     const system = registry.system(app.system);
+    const preset = options.preset ? readPreset(options.preset, registry) : null;
+
+    if (preset && preset.system !== app.system) throw new CliError(`--preset ${options.preset} is ${preset.system}, and ${appPath === "." ? "this app" : appPath} uses ${app.system}`, `Switch first with \`tyohnn use ${preset.system}${appPath === "." ? "" : ` --app ${appPath}`}\`.`);
 
     record.source = info;
     if (options.icons) app.icons = options.icons;
     if (options.font || options["font-heading"] || options["font-mono"]) app.fonts = resolveFonts(system.fonts, initFontOverrides(options));
     if (options.mode) app.mode = parseMode(options.mode)!;
-    if (options.theme) app.theme = normalizeTheme(resolveThemeInput(options.theme, root, registry, app), registry, app.system);
+    app.theme = themeFrom(options, preset, root, registry, app);
     if (options.example) app.example = options.example;
     if (options.locale) record.ui.locale = options.locale;
     if (options.blocks) record.ui.blocks = true;

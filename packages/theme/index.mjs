@@ -8,6 +8,7 @@
 //   resolveTheme   compose extends { base, accent, chart } into one complete theme
 //   themeToCss     render it as the generated styles/theme.css (`:root` and `.dark`)
 //   encodeTheme    pack a theme into a URL-safe string for a share link, decodeTheme unpacks it
+//   encodePreset   pack system · palette · accent · chart into a five-character code, decodePreset unpacks it
 //   contrast       WCAG contrast ratio between two theme colours (oklch · hex · rgb)
 
 /** The finite colour set, by group. Every theme defines every one of these in both modes. */
@@ -34,6 +35,7 @@ export const PALETTE_GROUPS = {
 };
 
 /** Every palette name, in file order. */
+// The order matters beyond this file: a preset code names an edited colour by its place here. Append only.
 export const PALETTE = Object.values(PALETTE_GROUPS).flat();
 
 const PALETTE_SET = new Set(PALETTE);
@@ -190,6 +192,197 @@ export const decodeTheme = (encoded) =>
     };
 };
 
+// ---- presets ------------------------------------------------------------------------------------
+// A preset is a handful of picks, each one a place in a list the registry ships (registry/presets.json),
+// so it fits in a few characters the way shadcn's `--preset b0` does, and needs nothing stored anywhere:
+// whoever holds the lists can read the code. The lists are append-only for exactly that reason.
+//
+//   1 · system · palette · accent · chart        one base-62 character each; accent and chart count
+//                                                from 1, and 0 is "none"
+//   . edits                                      only when colours were changed by hand: each change
+//                                                packed into bytes (below), the lot in base64url
+//
+// An edit is [name, flags, value…]: the name is its place in PALETTE (so PALETTE's order is part of the
+// format too: append only), flags say light · dark · both and how the value is held — a hex colour as its
+// 3 or 4 bytes, anything else (oklch, color-mix, an alias) as its text. A colour set the same in both modes
+// is written once. One hex change costs 7 characters; an oklch one about 30.
+
+const DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const PRESET_VERSION = "1";
+
+const LIGHT = 1;
+const DARK = 2;
+const HEX = 4;
+const HEX_ALPHA = 8;
+
+const toBase64Url = (bytes) =>
+{
+    const binary = String.fromCharCode(...bytes);
+    const base64 = typeof btoa === "function" ? btoa(binary) : Buffer.from(bytes).toString("base64");
+
+    return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
+const fromBase64Url = (text) =>
+{
+    const base64 = text.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (text.length % 4)) % 4);
+
+    return typeof atob === "function" ? Uint8Array.from(atob(base64), (character) => character.charCodeAt(0)) : new Uint8Array(Buffer.from(base64, "base64"));
+};
+
+/** #rgb · #rgba · #rrggbb · #rrggbbaa as bytes, or null for anything that is not a hex colour */
+const hexBytes = (value) =>
+{
+    const match = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.exec(value.trim());
+
+    if (!match) return null;
+
+    const digits = match[1].length <= 4 ? [...match[1]].map((digit) => digit + digit).join("") : match[1];
+
+    return digits.match(/../g).map((pair) => parseInt(pair, 16));
+};
+
+/** Hand edits ({ light, dark }) as the part after the dot, or "" when there are none. */
+const encodeEdits = (edits) =>
+{
+    const bytes = [];
+    const light = edits?.light ?? {};
+    const dark = edits?.dark ?? {};
+
+    for (const [index, name] of PALETTE.entries())
+    {
+        const both = light[name] !== undefined && light[name] === dark[name];
+        const writes = both ? [[LIGHT | DARK, light[name]]] : [[LIGHT, light[name]], [DARK, dark[name]]].filter(([, value]) => value !== undefined);
+
+        for (const [modes, value] of writes)
+        {
+            const hex = hexBytes(value);
+
+            if (hex) bytes.push(index, modes | (hex.length === 4 ? HEX_ALPHA : HEX), ...hex);
+            else
+            {
+                const text = [...new TextEncoder().encode(value)].slice(0, 255);
+
+                bytes.push(index, modes, text.length, ...text);
+            }
+        }
+    }
+
+    return bytes.length ? toBase64Url(bytes) : "";
+};
+
+/** The edits after the dot, or null when the bytes do not read as edits. */
+const decodeEdits = (text) =>
+{
+    const edits = { light: {}, dark: {} };
+    let bytes;
+
+    try
+    {
+        bytes = fromBase64Url(text);
+    }
+    catch
+    {
+        return null;
+    }
+
+    for (let at = 0; at < bytes.length;)
+    {
+        const name = PALETTE[bytes[at]];
+        const flags = bytes[at + 1];
+        let value;
+
+        if (name === undefined || flags === undefined || !(flags & (LIGHT | DARK))) return null;
+
+        at += 2;
+
+        if (flags & (HEX | HEX_ALPHA))
+        {
+            const size = flags & HEX_ALPHA ? 4 : 3;
+
+            if (at + size > bytes.length) return null;
+            value = `#${[...bytes.slice(at, at + size)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+            at += size;
+        }
+        else
+        {
+            const size = bytes[at];
+
+            if (size === undefined || at + 1 + size > bytes.length) return null;
+            value = new TextDecoder().decode(bytes.slice(at + 1, at + 1 + size));
+            at += 1 + size;
+        }
+
+        if (flags & LIGHT) edits.light[name] = value;
+        if (flags & DARK) edits.dark[name] = value;
+    }
+
+    return edits;
+};
+
+/**
+ * The code for a preset, with its hand edits after a dot when it has any, or null when one of its picks is not
+ * in the lists (a newer registry than the site's).
+ */
+export const encodePreset = (lists, preset) =>
+{
+    const at = (list, id) => list.indexOf(id);
+    const system = at(lists.systems, preset.system);
+    const palette = at(lists.palettes, preset.palette);
+    // An optional pick counts from 1, so a missing one (-1) must stay below 0 rather than become "none".
+    const optional = (id) => (id ? (at(lists.accents, id) < 0 ? -1 : at(lists.accents, id) + 1) : 0);
+    const accent = optional(preset.accent);
+    const chart = optional(preset.chart);
+
+    if ([system, palette, accent, chart].some((index) => index < 0 || index >= DIGITS.length)) return null;
+
+    const edits = encodeEdits(preset.edits);
+
+    return PRESET_VERSION + [system, palette, accent, chart].map((index) => DIGITS[index]).join("") + (edits ? `.${edits}` : "");
+};
+
+/** The picks inside a preset code, or null when it is not one (wrong length, version or a place past a list's end). */
+export const decodePreset = (lists, code) =>
+{
+    const text = String(code ?? "").trim().replace(/^--preset[= ]/, "").trim();
+
+    const [picks, packed, extra] = text.split(".");
+
+    if (extra !== undefined || picks.length !== 5 || picks[0] !== PRESET_VERSION) return null;
+
+    const edits = packed ? decodeEdits(packed) : null;
+
+    if (packed !== undefined && !edits) return null;
+
+    const [system, palette, accent, chart] = [...picks.slice(1)].map((character) => DIGITS.indexOf(character));
+    const pick = (list, index) => (index >= 0 && index < list.length ? list[index] : undefined);
+
+    const preset = {
+        system: pick(lists.systems, system),
+        palette: pick(lists.palettes, palette),
+        accent: accent === 0 ? null : pick(lists.accents, accent - 1),
+        chart: chart === 0 ? null : pick(lists.accents, chart - 1),
+    };
+
+    if (Object.values(preset).includes(undefined)) return null;
+
+    return edits ? { ...preset, edits } : preset;
+};
+
+/** The theme a preset wears: its palette, the accent and the chart colour over it, and its hand edits last. */
+export const presetTheme = (preset) =>
+{
+    const layers = [preset.palette, preset.accent, preset.chart && `${preset.chart}-charts`].filter(Boolean);
+
+    return {
+        name: layers.join("-"),
+        title: layers.join(" + "),
+        extends: { base: preset.palette, ...(preset.accent ? { accent: preset.accent } : {}), ...(preset.chart ? { chart: preset.chart } : {}) },
+        light: { ...preset.edits?.light },
+        dark: { ...preset.edits?.dark },
+    };
+};
+
 // ---- colour maths -------------------------------------------------------------------------------
 // Enough of it to check contrast. Values are parsed to sRGB in 0…1; alpha is kept but ignored by the
 // ratio, which is a question about two opaque colours.
@@ -249,6 +442,36 @@ export const parseColour = (value) =>
     if (rgb) return [1, 2, 3].map((index) => clamp01(Number(rgb[index]) / 255));
 
     return null;
+};
+
+/**
+ * A colour as [lightness 0…1, chroma, hue 0…360, alpha 0…1], for an OKLCH picker; null when it cannot be read.
+ * An oklch() value is taken as written (out-of-gamut chroma included); anything else goes through sRGB.
+ */
+export const toOklch = (value) =>
+{
+    const text = String(value).trim().toLowerCase();
+    const alphaOf = (found) => (found === undefined ? 1 : found.endsWith("%") ? Number(found.slice(0, -1)) / 100 : Number(found));
+    const written = new RegExp(`^oklch\\(\\s*(${NUMBER})(%?)\\s+(${NUMBER})\\s+(${NUMBER})(?:\\s*/\\s*(${NUMBER}%?))?\\s*\\)$`).exec(text);
+
+    if (written) return [written[2] === "%" ? Number(written[1]) / 100 : Number(written[1]), Number(written[3]), Number(written[4]), alphaOf(written[5])];
+
+    const rgb = parseColour(text);
+
+    if (!rgb) return null;
+
+    const hexAlpha = /^#(?:[0-9a-f]{4}|[0-9a-f]{8})$/.exec(text) ? Number.parseInt(text.length === 5 ? text[4] + text[4] : text.slice(7), 16) / 255 : 1;
+    const [r, g, b] = rgb.map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4));
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const lightness = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
+    const a = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s;
+    const bb = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s;
+    const chroma = Math.hypot(a, bb);
+    const hue = chroma < 1e-4 ? 0 : ((Math.atan2(bb, a) * 180) / Math.PI + 360) % 360;
+
+    return [lightness, chroma, hue, hexAlpha];
 };
 
 /** A colour as `#rrggbb`, for the browser inputs that only speak hex; null when it cannot be read. */

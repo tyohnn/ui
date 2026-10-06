@@ -19,4 +19,6 @@ export const compareMetadata = (locale: Locale): Metadata =>
     return { title: meta.compare.title, description: compare.metaDescription };
 };
 
+export const createMetadata = (locale: Locale): Metadata => getMessages(locale).meta.create;
+
 export const docsMetadata = (locale: Locale): Metadata => getMessages(locale).meta.docs;

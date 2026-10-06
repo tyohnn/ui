@@ -30,7 +30,7 @@ import { CliError, color, log } from "../lib/log.js";
 import { packageDir } from "../project/detect.js";
 import { cssFontImports, fontPackages } from "../project/fonts.js";
 import { placementOf } from "../project/placement.js";
-import { describeTheme, themeCss } from "../project/theme.js";
+import { describeComposition, describeTheme, themeCss } from "../project/theme.js";
 import { localeOf, readRecord, usedIcons } from "../project/record.js";
 import { SYSTEM_CSS_FILES } from "../project/sync.js";
 import { openCachedCommit } from "../source/index.js";
@@ -141,7 +141,7 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
                 if (readIfExists(generated) !== expected) add("FAIL", where, `${rel(root, generated)} is not what the theme renders (run \`tyohnn theme\` again)`);
                 else add("ok", where, `colours: ${describeTheme(app.theme, registry, app.system)}`);
             }
-            else add("ok", where, `colours: ${"file" in app.theme ? app.theme.file : "id" in app.theme ? app.theme.id : `${app.theme.base} + ${app.theme.accent}`}`);
+            else add("ok", where, `colours: ${"file" in app.theme ? app.theme.file : "id" in app.theme ? app.theme.id : describeComposition(app.theme)}`);
         }
 
         if (placement.monorepo)

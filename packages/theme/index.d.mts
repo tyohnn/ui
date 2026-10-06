@@ -52,8 +52,32 @@ export function checkTheme(resolved: ResolvedTheme): string[];
 export function themeToCss(resolved: ResolvedTheme, options?: { partial?: boolean }): string;
 export function encodeTheme(theme: Theme): string;
 export function decodeTheme(encoded: string): Theme;
+
+/** registry/presets.json: the append-only lists a preset code counts in */
+export interface PresetLists
+{
+    systems: string[];
+    palettes: string[];
+    accents: string[];
+}
+
+export interface Preset
+{
+    system: string;
+    /** A whole palette: a system's own theme or a base */
+    palette: string;
+    accent: string | null;
+    chart: string | null;
+    /** Colours changed by hand, after the dot in the code */
+    edits?: { light: Colours; dark: Colours };
+}
+
+export function encodePreset(lists: PresetLists, preset: Preset): string | null;
+export function decodePreset(lists: PresetLists, code: string): Preset | null;
+export function presetTheme(preset: Preset): Theme;
 export function parseColour(value: string): [number, number, number] | null;
 export function resolveValue(values: Colours, value: string): string;
 export function toHex(value: string): string | null;
+export function toOklch(value: string): [number, number, number, number] | null;
 export function contrast(a: string, b: string): number | null;
 export function checkContrast(resolved: ResolvedTheme, minimum?: number): ContrastFailure[];

@@ -6,10 +6,10 @@ import { CATEGORIES, screenSource } from "@/lib/site";
 import { Combobox } from "./combobox";
 import { useLocale } from "./locale-provider";
 
-const systemOptions = (systems: SystemSummary[]) =>
+export const systemOptions = (systems: SystemSummary[]) =>
     systems.map((system) => ({ value: system.name, search: `${system.name} ${system.tagline}`, system }));
 
-const SystemOption = ({ system, selected }: { system: SystemSummary; selected: boolean }) =>
+export const SystemOption = ({ system, selected }: { system: SystemSummary; selected: boolean }) =>
 {
     const { t } = useLocale();
     const mode = t.modeTag[system.defaultMode];
