@@ -554,9 +554,9 @@ export const ko: Messages = {
             character: "부드럽고 넉넉한 화면",
         },
         sera: {
-            description: "에디토리얼 톤의 토프(회갈색)예요. 각진 모서리, 대문자 라벨, 모든 제목에 쓰는 Playfair Display 세리프가 특징이에요.",
+            description: "에디토리얼 톤의 중성 회색이에요. 각진 모서리, 대문자 라벨, 모든 제목에 쓰는 Playfair Display 세리프가 특징이에요.",
             tagline: "Playfair Display · 각진 모서리 · 대문자 라벨",
-            character: "에디토리얼 토프",
+            character: "에디토리얼 중성 회색",
         },
         vega: {
             description: "차분하고 고전적이고 편안해요. 중성 회색, 높이 36px에 14px 글자의 컨트롤, 윤곽선 컨트롤 아래의 옅은 shadow-xs, 헤어라인 링으로 그린 모서리 14px 카드를 써요.",

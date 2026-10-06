@@ -4,13 +4,14 @@ The editorial end of the shadcn family: nothing is rounded and almost every labe
 dialog, sheet and drawer titles are a serif (Playfair Display) at 18px with a widened track; buttons, tabs,
 menu rows, table heads and badges are small uppercase sans (Noto Sans) with `tracking-wide` to
 `tracking-widest`. The input family is not a box at all — it is a single underline: transparent border,
-transparent fill, no horizontal padding. The palette is **taupe**, a warm grey with a hint of ochre, so the
-page reads as printed paper rather than as a screen. Controls are large (28 · 36 · 40 · 44px) and the
+transparent fill, no horizontal padding. The palette is shadcn's **neutral**, so the type carries the
+character and the page reads as printed paper rather than as a screen. Controls are large (28 · 36 · 40 · 44px) and the
 spacing around them is generous. It suits publishing, documentation and brand surfaces where the type is
 the design.
 
 sera ports the shadcn create preset `base-sera` (shadcn 4.21.0): style sera, base colour and theme **taupe**,
-chart colours taupe, lucide icons, Noto Sans with a Playfair Display heading, radius default.
+chart colours taupe, lucide icons, Noto Sans with a Playfair Display heading, radius default. tyohnn
+wears it on **neutral** with the default charts, like the other ported presets.
 `reference/README.md` records the sources, the reference app and the comparison results.
 
 Forked from `foundation` (see `system.json` → `forkedFrom`). This folder is a complete, frozen snapshot:
@@ -20,9 +21,10 @@ rule's origin.
 
 ## Character
 
-- **Mode: both.** Light and dark are the shadcn **taupe** theme; neither is primary. Every derived layer-1
-  colour (hover fills, rings, backdrops, tag tones) was recomputed from the taupe values with the alpha the
-  preset's utility carries — no neutral grey is left in `globals.css`.
+- **Mode: both.** Light and dark are the shadcn **neutral** theme; neither is primary. The preset ships on
+  taupe; tyohnn puts every ported preset on neutral so the side-by-side comparison is about feel, not colour.
+  Derived layer-1 colours (hover fills, rings, backdrops, tag tones) mix from the theme values with the alpha
+  the preset's utility carries, so a different base flows through them.
 - **Two type families.** `--font-sans` is Noto Sans; `--font-heading` is its own stack, Playfair Display with
   a serif platform fallback (`ui-serif, Georgia, …`). The `cn-font-heading` titles — card, dialog, sheet,
   drawer, alert-dialog, empty, questionnaire — are the only place the serif appears, and their metrics
@@ -39,14 +41,14 @@ rule's origin.
   group, combobox chips and the questionnaire input draw `border-transparent border-b-input` over a
   transparent fill with `px-0`. Focus and validation move that one edge and draw **no ring**
   (`--input-border` · `--input-border-bottom`, and the split focus/invalid rules in `_control-family.css`).
-- **Planes and depth.** White (light) or taupe-950 (dark) page. Menus, popovers and floating surfaces carry
+- **Planes and depth.** White (light) or neutral-950 (dark) page. Menus, popovers and floating surfaces carry
   a 1px `foreground/10` ring plus `shadow-md`; the card carries a lighter `foreground/5` ring
   (`--card-ring`) with `shadow-sm`. The modal backdrop is a light 20% black.
 - **Density: large.** Controls 28 · 36 · 40 · 44px with 12px uppercase text and 14px icons (xs 12px).
   Menu rows are `py-2` with 12px uppercase text, Command and Combobox rows 14px sentence case, sidebar items
   36px, table heads 48px with 12px cell padding, cards `--card-spacing` 32px, dialogs `p-6`, sheets `p-8`,
   Empty `p-12`.
-- **Accents.** `--primary` is near-black taupe; the checked checkbox and switch take it, but the radio and
+- **Accents.** `--primary` is near-black neutral; the checked checkbox and switch take it, but the radio and
   the questionnaire dot mark themselves with `--foreground` on a transparent box. Badges have no box at
   all: `border-0 bg-transparent px-0`, coloured text only.
 
@@ -54,9 +56,9 @@ rule's origin.
 
 | Slot | Value | Meaning |
 |---|---|---|
-| `--background` / `--foreground` | `oklch(1 0 0)` / `oklch(0.147 0.004 49.3)` | paper and ink (taupe-950) |
-| `--primary` | `oklch(0.214 0.009 43.1)` | filled buttons, checked checkbox and switch |
-| `--input` | `oklch(0.922 0.005 34.3)` | the one edge the input family draws |
+| `--background` / `--foreground` | `oklch(1 0 0)` / `oklch(0.145 0 0)` | paper and ink (neutral-950) |
+| `--primary` | `oklch(0.205 0 0)` | filled buttons, checked checkbox and switch |
+| `--input` | `oklch(0.922 0 0)` | the one edge the input family draws |
 | `--input-border` / `--input-border-bottom` | `transparent` / `var(--input)` | the underline split |
 | `--ring-subtle` / `--card-ring` | `foreground/10` / `foreground/5` | menu ring vs card ring |
 | `--control-height-md` | `40px` | the default control |

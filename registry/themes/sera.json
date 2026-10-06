@@ -4,10 +4,10 @@
     "title": "Sera",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves"
+        "note": "shadcn@4.21.0 sera ships on baseColor \"taupe\"; tyohnn puts it on \"neutral\" like the other ported presets, plus what sera moves"
     },
     "extends": {
-        "base": "taupe"
+        "base": "neutral"
     },
     "light": {},
     "dark": {
