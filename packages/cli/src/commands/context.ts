@@ -62,6 +62,9 @@ export const select = async (message: string, choices: { value: string; label: s
 export const text = async (message: string, initial: string, validate?: (value: string) => string | undefined): Promise<string> =>
     cancelled<string>(await prompts.text({ message, initialValue: initial, validate: (value) => validate?.(value ?? "") }));
 
+export const confirm = async (message: string, initial = true): Promise<boolean> =>
+    cancelled<boolean>(await prompts.confirm({ message, initialValue: initial }));
+
 export const parseMode = (mode: string | undefined): "light" | "dark" | undefined =>
 {
     if (mode === undefined) return undefined;

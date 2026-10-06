@@ -2,7 +2,8 @@
 //
 // A file is only overwritten when it is new, unchanged since the CLI wrote it, or already identical. A file the user
 // changed is kept (reported; `--force` overwrites), and a file that exists but was never written by the CLI stops the
-// command before anything is written.
+// command before anything is written — unless it sits in a folder init adopts (the components shadcn's CLI copied,
+// which tyohnn replaces under the same names).
 
 import { dirname } from "node:path";
 
@@ -26,7 +27,14 @@ export class OwnedFiles
         private readonly record: TyohnnRecord,
         private readonly changes: Changes,
         private readonly force: boolean,
+        /** Root-relative folders whose unrecorded files may be replaced (shadcn's, when init adopts a shadcn app) */
+        private readonly adopt: string[] = [],
     ) {}
+
+    private adoptable(path: string): boolean
+    {
+        return this.adopt.some((dir) => dir === "." || path.startsWith(`${dir}/`));
+    }
 
     plan(to: string, from: string, content: string)
     {
@@ -38,17 +46,23 @@ export class OwnedFiles
         return new Set(this.planned.keys());
     }
 
-    /** Unrecorded files in the way; call before writing anything */
-    conflicts(): string[]
+    /** Unrecorded files that differ from what the CLI would write */
+    private unrecorded(): string[]
     {
-        if (this.force) return [];
-
         return [...this.planned].filter(([path, file]) =>
         {
             const existing = readIfExists(file.to);
 
             return existing !== null && existing !== file.content && !this.record.files[path];
         }).map(([path]) => path);
+    }
+
+    /** Unrecorded files in the way; call before writing anything */
+    conflicts(): string[]
+    {
+        if (this.force) return [];
+
+        return this.unrecorded().filter((path) => !this.adoptable(path));
     }
 
     assertNoConflicts()
@@ -61,6 +75,10 @@ export class OwnedFiles
 
             throw new CliError(`${conflicts.length} file(s) already exist and were not created by tyohnn: ${list}`, "Move or delete them, or pass --force to overwrite them.");
         }
+
+        const replaced = this.unrecorded().filter((path) => this.adoptable(path));
+
+        if (replaced.length) this.changes.note(`replaced ${replaced.length} file(s) shadcn's CLI made with tyohnn's, same names: ${replaced.slice(0, 3).join(", ")}${replaced.length > 3 ? " …" : ""}`);
     }
 
     write()

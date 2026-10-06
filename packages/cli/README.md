@@ -28,6 +28,26 @@ monorepos (with or without Turborepo).
 | `doctor [--built]` | Checks the setup against `tyohnn.json` (see below). Exit code 1 on a failure. |
 | `diff [--files]` | Compares the project's copies with the source: changed upstream, changed locally, both, added, removed. |
 
+## In a shadcn app
+
+`init` works in an app made with shadcn's CLI. It reads `components.json` and, after one confirmation:
+
+- replaces the components shadcn copied (its `ui`, `hooks` and `lib` folders) with tyohnn's, which have the same
+  names and the same `cn-*` contract, so your imports keep working;
+- takes shadcn's defaults out of the entry CSS — the `:root`, `.dark` and `@theme` declarations of names the
+  system sets (colours, `--radius`, the Tailwind mappings), and the `@custom-variant dark` line and `@layer base`
+  rules identical to the system's own. Left there, they would override the system. Anything else in the file stays,
+  including declarations of names the system does not have.
+
+```sh
+npx tyohnn@latest init --system graphite   # in the shadcn app
+npx tyohnn use halo                        # later: another system, one command
+```
+
+Edits you made to shadcn's components or colours are replaced (the summary lists what changed; your colours come
+back with `tyohnn theme ./brand.json`). `--yes` answers the confirmation. This runs once, on `init`: later commands
+leave declarations you add after the blocks alone and only warn.
+
 ## Colours
 
 A **theme** is 72 colour values, light and dark. A **system** is the feel — density, shape, material,
@@ -112,7 +132,7 @@ The npm package holds only the CLI. The components and systems come from the tyo
 
 | Kind | Files | What the CLI does |
 |---|---|---|
-| **CLI-owned** | the TSX, icon mapping files, system folders, examples | Written whole, hash recorded in `tyohnn.json`. A later command overwrites a file only if it is unchanged since it was written; a file you edited is kept and reported (`--force` overwrites). A file that exists but was never written by tyohnn stops `init` before anything is written. Files no longer needed (a system or icon library no app uses) are removed unless edited. |
+| **CLI-owned** | the TSX, icon mapping files, system folders, examples | Written whole, hash recorded in `tyohnn.json`. A later command overwrites a file only if it is unchanged since it was written; a file you edited is kept and reported (`--force` overwrites). A file that exists but was never written by tyohnn stops `init` before anything is written, except the components shadcn's CLI copied in a shadcn app, which `init` replaces (see above). Files no longer needed (a system or icon library no app uses) are removed unless edited. |
 | **Managed blocks** | entry CSS, `layout.tsx`, `next.config.*`, `vite.config.*`, the Vite entry module | Codemods (a Babel parse for positions; everything outside the edit stays byte-identical) insert blocks between `tyohnn:begin <name>` / `tyohnn:end <name>` comments and rewrite only those blocks later. Deleting a block undoes it. A value added to an existing array carries a `/* tyohnn */` comment. |
 | **Merged** | `tsconfig.json` (`compilerOptions.paths`), `package.json` (dependencies), `index.html` (`<html>` classes) | Only the entries tyohnn needs change; comments and formatting stay (JSONC edits). A dependency you already declare is never changed; the icon and font packages tyohnn added are removed when no longer needed. |
 | **Yours** | everything else | Never touched. |
@@ -124,7 +144,8 @@ The entry CSS gets two blocks: `system` at the top (`tailwindcss` → font CSS f
 → layer 3 in `layer(base)`) and `theme` after the last `@import` (`@source` lines and font stacks). A standalone
 `@import "tailwindcss"` is folded into the first block. Custom properties you declare after the blocks override the
 system's tokens; `init` and `doctor` warn when they shadow a system token (the create-next-app and create-vite
-starter CSS does this with `--background`, `--foreground` and font variables).
+starter CSS does this with `--background`, `--foreground` and font variables). In a shadcn app `init` takes shadcn's
+defaults out instead (see [In a shadcn app](#in-a-shadcn-app)).
 
 ## Fonts
 
