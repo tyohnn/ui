@@ -12,7 +12,8 @@
 //   FAIL  icons: the app resolves a different library than recorded, or the library file is missing
 //   WARN  the entry CSS redeclares the system's tokens outside the tyohnn blocks
 // Project
-//   FAIL  a copied component imports an icon package directly · a CLI-owned file is missing · a package is not installed ·
+//   FAIL  a copied component imports an icon package directly (own sources only: no node_modules, build output or
+//         .gitignore'd files) · a CLI-owned file is missing · a package is not installed ·
 //         strings/index.ts exports a different locale than recorded
 //   WARN  icon libraries diverge across apps · CLI-owned files changed since they were written (user edits)
 // --built (Next): the app's built CSS carries no token value that only another system of the UI package declares
@@ -24,7 +25,7 @@ import { readCssImports, readCssSources, userCustomProperties } from "../codemod
 import { HTML_CLASS_IDENTIFIER } from "../codemods/layout.js";
 import { parseTsconfig } from "../codemods/tsconfig.js";
 import { cssImportsOf, viteEntryModule } from "../codemods/vite.js";
-import { hash, read, readIfExists, rel, walk } from "../lib/fs.js";
+import { hash, read, readIfExists, rel, sourceFiles, walk } from "../lib/fs.js";
 import { findBlock } from "../lib/markers.js";
 import { CliError, color, log } from "../lib/log.js";
 import { packageDir } from "../project/detect.js";
@@ -284,7 +285,7 @@ export const doctor = async (options: GlobalOptions): Promise<number> =>
         else add("ok", "project", `strings → ${locale}`);
     }
 
-    const direct = walk(placement.base)
+    const direct = sourceFiles(placement.base)
         .filter((file) => /\.(ts|tsx)$/.test(file) && !file.includes("/icons/libraries/") && !file.includes("/icons/check.ts"))
         .filter((file) => ICON_PACKAGE_IMPORT.test(read(file)));
 
