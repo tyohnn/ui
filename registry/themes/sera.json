@@ -4,11 +4,10 @@
     "title": "Sera",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves. tyohnn gives each ported preset its own base and chart colour so they can be told apart side by side: base taupe (editorial, on the taupe shadcn gave it); charts amber, a hue near that base's tint, a different one for each preset"
+        "note": "shadcn@4.21.0 baseColor \"taupe\", plus what sera moves"
     },
     "extends": {
-        "base": "taupe",
-        "chart": "amber"
+        "base": "taupe"
     },
     "light": {},
     "dark": {

@@ -519,7 +519,7 @@ export const ko: Messages = {
             character: "밤의 정원 같은 다크",
         },
         luma: {
-            description: "부드럽고 여유로워요. 따뜻한 stone 회색을 테두리 없이 그려요. 옅은 채움, 헤어라인 링, 실제 그림자만 쓰고, 컨트롤은 높이 36px에 14px 글자, 카드와 버튼은 모서리 26px예요.",
+            description: "부드럽고 여유로워요. 중성 회색을 테두리 없이 그려요. 옅은 채움, 헤어라인 링, 실제 그림자만 쓰고, 컨트롤은 높이 36px에 14px 글자, 카드와 버튼은 모서리 26px예요.",
             tagline: "Inter · 테두리 없음 · 모서리 26px",
             character: "부드럽고 여유로운 화면",
         },
@@ -529,12 +529,12 @@ export const ko: Messages = {
             character: "터미널처럼 담백한 화면",
         },
         maia: {
-            description: "둥글고 넉넉해요. 분홍빛 mauve 회색, 높이 36px에 14px 글자의 컨트롤, 모서리 26px의 버튼과 입력창, 모서리 18px의 카드, 두께 3px의 포커스 링을 써요.",
+            description: "둥글고 넉넉해요. 중성 회색, 높이 36px에 14px 글자의 컨트롤, 모서리 26px의 버튼과 입력창, 모서리 18px의 카드, 두께 3px의 포커스 링을 써요.",
             tagline: "Figtree · 컨트롤 36px · 둥근 모서리",
             character: "둥글고 넉넉한 화면",
         },
         mira: {
-            description: "조용하고 작고 정확해요. 차가운 mist 회색, 높이 28px에 12px 글자의 컨트롤, 그림자 없는 평평한 면, 그림자 대신 헤어라인 링을 써요.",
+            description: "조용하고 작고 정확해요. 중성 회색, 높이 28px에 12px 글자의 컨트롤, 그림자 없는 평평한 면, 그림자 대신 헤어라인 링을 써요.",
             tagline: "Inter · 컨트롤 28px · 헤어라인 링",
             character: "조용하고 정확한 화면",
         },
@@ -544,9 +544,9 @@ export const ko: Messages = {
             character: "전시장 같은 다크",
         },
         nova: {
-            description: "zinc 색 단계 위에 Geist를 올렸어요. 모서리는 부드러운 10px, 컨트롤은 14px 글자에 높이 32px로 넉넉하고, 깊이는 헤어라인 링과 옅은 푸터 띠로 표현해요.",
+            description: "neutral 색 단계 위에 Geist를 올렸어요. 모서리는 부드러운 10px, 컨트롤은 14px 글자에 높이 32px로 넉넉하고, 깊이는 헤어라인 링과 옅은 푸터 띠로 표현해요.",
             tagline: "Geist · 컨트롤 32px · 모서리 10px",
-            character: "Geist와 zinc 색의 조합",
+            character: "Geist와 neutral 색의 조합",
         },
         rhea: {
             description: "부드럽고 넉넉해요. 모서리 16px, 테두리 없이 채워진 입력창, 모든 카드 아래의 옅은 그림자를 써요.",

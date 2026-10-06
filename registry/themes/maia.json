@@ -4,11 +4,10 @@
     "title": "Maia",
     "source": {
         "kind": "shadcn",
-        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what maia moves. tyohnn gives each ported preset its own base and chart colour so they can be told apart side by side: base mauve (round and playful, so the pink-grey mauve ramp); charts fuchsia, a hue near that base's tint, a different one for each preset"
+        "note": "shadcn@4.21.0 baseColor \"neutral\", plus what maia moves"
     },
     "extends": {
-        "base": "mauve",
-        "chart": "fuchsia"
+        "base": "neutral"
     },
     "light": {},
     "dark": {

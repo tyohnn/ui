@@ -1,9 +1,5 @@
 # sera
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, sera wears the **taupe** base ramp and **amber** charts
-> (`registry/themes/sera.json`). Where this page names shadcn's taupe values, read them as the reference app's.
-
 The editorial end of the shadcn family: nothing is rounded and almost every label is set in capitals. Card,
 dialog, sheet and drawer titles are a serif (Playfair Display) at 18px with a widened track; buttons, tabs,
 menu rows, table heads and badges are small uppercase sans (Noto Sans) with `tracking-wide` to

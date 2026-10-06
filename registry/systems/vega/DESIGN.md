@@ -1,9 +1,5 @@
 # vega
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, vega wears the **neutral** base ramp and **blue** charts
-> (`registry/themes/vega.json`). Where this page names shadcn's neutral values, read them as the reference app's.
-
 The classic shadcn look: calm neutral greys, comfortable 36px controls with 14px text, and depth drawn
 with hairline rings and the faintest shadow rather than with colour steps. It is the everyday product UI
 that most shadcn apps start from — forms, settings, tables and dialogs that should read clearly and stay

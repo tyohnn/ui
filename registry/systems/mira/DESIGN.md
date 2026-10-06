@@ -1,9 +1,5 @@
 # mira
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, mira wears the **mist** base ramp and **cyan** charts
-> (`registry/themes/mira.json`). Where this page names shadcn's neutral values, read them as the reference app's.
-
 mira is the quiet, compact system: neutral greys, small controls, no colour of its own. It is the shadcn
 `mira` preset ported whole, and it is also what `registry/foundation` holds — so it is the system to reach
 for when a product wants shadcn's own look with nothing added, and the one to fork when a new system should

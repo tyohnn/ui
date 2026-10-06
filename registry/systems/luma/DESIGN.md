@@ -1,9 +1,5 @@
 # luma
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, luma wears the **stone** base ramp and **orange** charts
-> (`registry/themes/luma.json`). Where this page names shadcn's neutral values, read them as the reference app's.
-
 The soft end of the shadcn neutral family: nothing is drawn with a line. Inputs, selects, switches and
 checkboxes are tinted fills with a transparent border; cards and dialogs are big 26px rounds carried by a
 hairline ring and a real shadow; buttons and tab bars are pills. Controls are comfortable — 36px with 14px

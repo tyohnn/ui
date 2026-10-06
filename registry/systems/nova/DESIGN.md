@@ -1,9 +1,5 @@
 # nova
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, nova wears the **zinc** base ramp and **violet** charts
-> (`registry/themes/nova.json`). Where this page names shadcn's neutral values, read them as the reference app's.
-
 Geist on the shadcn neutral ramp, one step roomier and one step softer than mira: 32px controls with 14px
 text, 10px corners on every control and 14px on cards and dialogs, and a 3px focus ring at 50%. Depth is a
 hairline `foreground/10` ring plus a `muted/50` band under card and dialog footers — no drop shadows on the

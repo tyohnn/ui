@@ -1,9 +1,5 @@
 # rhea
 
-> **Colour in tyohnn.** The shape, density and depth below are the shadcn preset's. The colours are not: so the
-> ported presets can be told apart side by side, rhea wears the **neutral** base ramp and **emerald** charts
-> (`registry/themes/rhea.json`). Where this page names shadcn's neutral values, read them as the reference app's.
-
 rhea is the shadcn **rhea** preset: a soft, roomy neutral system. Where mira packs a dense
 interface into 12px text and 28px controls, rhea gives everything one step more — 14px text,
 32px controls, 12px paddings — and rounds it hard: 16px on every control, 24px on a card, 22px

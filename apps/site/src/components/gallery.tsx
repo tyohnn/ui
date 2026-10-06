@@ -10,6 +10,7 @@ import { ScaledFrame } from "./scaled-frame";
 
 type Sort = "newest" | "az";
 
+const FLAGSHIP = "graphite";
 const FLIP_MS = 260;
 const STAGGER_MS = 35;
 
@@ -31,7 +32,13 @@ export const Gallery = ({ systems }: { systems: SystemSummary[] }) =>
     const open = useRef({ height: 0, margin: 0 });
     const entry = screenOf(screen);
 
-    const ordered = useMemo(() => (sort === "newest" ? systems : [...systems].sort((a, b) => a.name.localeCompare(b.name))), [systems, sort]);
+    // Newest first, but graphite (the flagship) always leads; A–Z is plain alphabetical.
+    const ordered = useMemo(
+        () => sort === "newest"
+            ? [...systems].sort((a, b) => Number(b.name === FLAGSHIP) - Number(a.name === FLAGSHIP))
+            : [...systems].sort((a, b) => a.name.localeCompare(b.name)),
+        [systems, sort],
+    );
     const newest = systems[0]?.name;
 
     useEffect(() => () => clearTimeout(timer.current), []);
