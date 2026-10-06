@@ -1,5 +1,6 @@
 // File helpers. Paths in records and messages are POSIX and relative to the project root.
 
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
@@ -57,6 +58,42 @@ export const walk = (root: string): string[] =>
             .flatMap((entry) => (entry.isDirectory() ? walk(join(root, entry.name)) : [join(root, entry.name)]))
             .sort()
         : [];
+
+/** Folders that hold dependencies, tool state or build output, never a project's own sources */
+const NOT_SOURCES = new Set(["node_modules", ".git", ".next", ".turbo", ".vercel", ".output", "dist", "build", "out", "coverage"]);
+
+/** The files git counts under dir (tracked, plus untracked ones .gitignore does not exclude); null outside a work tree */
+const gitFiles = (dir: string): Set<string> | null =>
+{
+    try
+    {
+        const output = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { cwd: dir, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] });
+
+        return new Set(output.split("\0").filter(Boolean).map((path) => join(dir, path)));
+    }
+    catch
+    {
+        return null;
+    }
+};
+
+/**
+ * The project's own files under dir (absolute paths, sorted): skips dependency and build-output folders at any depth
+ * and, inside a git work tree, whatever .gitignore excludes
+ */
+export const sourceFiles = (dir: string): string[] =>
+{
+    const visit = (folder: string): string[] =>
+        readdirSync(folder, { withFileTypes: true })
+            .flatMap((entry) => (entry.isDirectory() ? (NOT_SOURCES.has(entry.name) ? [] : visit(join(folder, entry.name))) : [join(folder, entry.name)]));
+
+    if (!existsSync(dir)) return [];
+
+    const files = visit(dir).sort();
+    const listed = gitFiles(dir);
+
+    return listed ? files.filter((file) => listed.has(file)) : files;
+};
 
 /** A relative specifier from a directory to a file, always starting with "." */
 export const relSpecifier = (fromDir: string, file: string): string =>
