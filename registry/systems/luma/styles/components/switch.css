@@ -5,8 +5,14 @@
 
    트랙 크기만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
      손잡이 = 트랙 높이 − 안쪽 여백 × 2
-     이동 거리 = 트랙 너비 − 트랙 높이
+     이동 거리 = 트랙 너비 − 손잡이 너비 − (트랙 높이 − 손잡이 높이)
    셋을 따로 적으면 트랙을 바꿀 때 손잡이가 트랙 밖으로 나가거나 덜 간다.
+
+   ⚠ 이 시스템의 손잡이는 알약이라 너비와 높이가 다르다. 이동 거리를 「트랙 너비 − 트랙 높이」로
+   두면 둥근 손잡이에서만 맞고, 여기서는 손잡이가 트랙 오른쪽 밖으로 나간다(md 에서 6px 넘침).
+   괄호 안은 위아래 여백의 합이고 좌우 여백도 같은 값이라, 둥근 손잡이에서는 종전 식과 같아진다.
+     md  44 − 24 − (20 − 16) = 16   → 손잡이 오른쪽 끝 2 + 16 + 24 = 42 = 44 − 2 ✓
+     sm  28 − 16 − (16 − 12) = 8    → 2 + 8 + 16 = 26 = 28 − 2 ✓
 
    mira 의 값으로 검산한 것:
      default  트랙 w-[28px] h-[16.6px] → 2층은 28×16(하위픽셀을 버림) · 손잡이 size-3.5(14)
@@ -69,7 +75,7 @@
 
     &[data-checked] {
         background-color: var(--switch-thumb-on, var(--background));
-        translate: calc(var(--switch-track-width-md) - var(--switch-track-height-md));
+        translate: calc(var(--switch-track-width-md) - var(--switch-thumb-width-md) - (var(--switch-track-height-md) - var(--switch-thumb-size-md)));
     }
 
     .cn-switch[data-size="sm"] & {
@@ -77,7 +83,7 @@
         height: var(--switch-thumb-size-sm);
 
         &[data-checked] {
-            translate: calc(var(--switch-track-width-sm) - var(--switch-track-height-sm));
+            translate: calc(var(--switch-track-width-sm) - var(--switch-thumb-width-sm) - (var(--switch-track-height-sm) - var(--switch-thumb-size-sm)));
         }
     }
 }
