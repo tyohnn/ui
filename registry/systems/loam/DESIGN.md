@@ -27,7 +27,7 @@ every file under `styles/` belongs to this system. Tune values in place.
   bleeds through softened, and catch the top-left light a little stronger than a card (6% white). Dialogs,
   sheets and drawers are reading surfaces and stay opaque, and so does a submenu inside a glass menu.
 - **Panels on a ground:** with a floating sidebar the workspace is two panels on the `#111` ground, each with
-  an edge — the sidebar at 10% white on 12px corners, the main pane at 6% on 18px corners with an 8px gap.
+  an edge — the sidebar at 10% white and the main pane at 6%, both on 18px corners, with an 8px gap.
 - **Density:** 36px controls with 14px Geist text; pills at 24 · 30 · 36 · 40; compact 30px sidebar rows on
   12px corners; 26px group labels.
 - **Accents:** sage `#73b490` (light `#3a7854`) is the signal: focus rings, progress, the slider range, the
@@ -68,7 +68,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 | 8px | menu rows and command rows inside a popup |
 | 12px | input, textarea, select trigger, native select, combobox, input group, OTP cells, field choice cards; popover, hover card, menus, select and combobox content, tooltip; sidebar items |
 | 16px | card, empty state, chat bubble |
-| 18px | dialog, alert dialog, command palette, drawer, sheet — and an app's panes |
+| 18px | dialog, alert dialog, command palette, drawer, sheet — and an app's panes (the floating sidebar and the main pane beside it) |
 
 ## Combination rules
 

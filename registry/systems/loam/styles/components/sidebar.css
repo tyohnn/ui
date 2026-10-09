@@ -59,7 +59,9 @@
     background-color: var(--sidebar);
 
     .group[data-variant="floating"] & {
-        border-radius: var(--surface-radius);
+        /* loam: the sidebar is the pane's sibling on the same ground, so it takes the pane corner
+           (--surface-radius-lg), not the popup corner. Two panels side by side read as one set. */
+        border-radius: var(--surface-radius-lg);
         /* loam: the shadow is a slot (--sidebar-floating-shadow, foundation --shadow-chip) and the
            panel carries the pane sheen, so the floating sidebar reads as a lit panel with an edge. */
         box-shadow:
