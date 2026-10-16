@@ -204,7 +204,11 @@
     /* cirrus: 카드의 테두리만 한 단 진하게. 유리를 벗은 카드는 선으로 바닥과 갈린다.
        --ring-subtle 은 메뉴 · 팝오버 · 셀렉트 · 차트 툴팁도 읽으므로 올리지 않는다. */
     --card-ring: color-mix(in oklab, var(--foreground) 9%, transparent);
-    --overlay-backdrop: oklch(0.55 0.03 250 / 26%);    /* cirrus: 옅은 푸른 막 — 흐림이 주인공이라 색은 비킨다 */
+    /* cirrus: 잉크 남색(--primary 와 같은 색) 막. dialog · alert-dialog · sheet · drawer 가 모두 이 하나를 읽는다
+       (_surface-family.css). 옅은 하늘색 26% 이던 때는 흰 판과 흰 카드 바닥이 한 덩어리로 읽혀 모달이 바닥과
+       갈리지 않았다(2026-10-16 실사용 앱의 폼 dialog). ⚠ 40% 넘게 올리지 말 것 — 모달 면도 76% 유리라 막의 색이
+       판에 비치고, 그 위에서는 흰 판이 회색으로 탁해진다. */
+    --overlay-backdrop: oklch(0.26 0.03 255 / 32%);
 
     /* 스위치. mira: data-unchecked:bg-input dark:data-unchecked:bg-input/80 ·
        손잡이 bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground.
@@ -305,7 +309,7 @@
     --ring-invalid: color-mix(in oklab, var(--destructive) 40%, transparent);
     --border-invalid: color-mix(in oklab, var(--destructive) 50%, transparent);
 
-    --overlay-backdrop: oklch(0.12 0.02 258 / 48%);    /* cirrus dark: 밤의 막 */
+    --overlay-backdrop: oklch(0.1 0.02 258 / 62%);    /* cirrus dark: 밤의 막 — 밝은 쪽과 같은 까닭으로 48% 에서 한 단 진하게 */
 
     --switch-track-off: color-mix(in oklab, var(--input) 90%, transparent);    /* data-unchecked:bg-input/90 */
     --switch-thumb-off: var(--foreground);    /* foreground */
