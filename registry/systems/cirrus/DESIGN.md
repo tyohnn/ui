@@ -21,7 +21,8 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   (`blur(24px) saturate(1.6)`) live in `tokens.css` with the four contracts that keep glass honest:
   fill and blur move together; 72% is the opacity floor; a nested layer turns glass **off** (a
   `backdrop-filter` makes a stacking context, and a submenu inside one gets trapped); and only one
-  blur per stack. Sub-menus, the chart tooltip and the toast are the documented opaque exceptions.
+  blur per stack. Sub-menus, the chart tooltip, the toast and every popup that opens over a modal
+  (a menu, select, combobox or popover inside a dialog or sheet) are the documented opaque exceptions.
 - **Ground**: the page carries two very faint lights — blue at the top left, mint at the top right —
   painted as a fixed `background-image` on `body` (never on `--background`, which is also a control
   fill). Glass only exists if there is something behind it: on a flat single colour a 76% frosted panel
@@ -58,6 +59,11 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
 
 - **Glass floats, opaque sits.** The test is not "is it pretty here" but "does it float?" If the layer
   is portalled and has a backdrop behind it, it is glass; if it is in the document flow, it is opaque.
+- **A popup over a modal is opaque.** Base UI portals a popup opened inside a dialog, alert dialog,
+  sheet or drawer into that modal's portal, so `_surface-family.css` finds it there and sets the three
+  glass slots to `--popover` / `none` / `none`. Over a modal the stack is already scrim, pane and popup —
+  three blurs over one spot — and a form dialog in a product app showed the popup's blur missing, with
+  the field label under the 76% fill reading straight through. An opaque popup reads the same either way.
 - **One blur per ground.** The modal backdrop blurs the page; the dialog blurs what is behind the
   dialog; a sticky footer inside it blurs the body scrolling under itself. Three blurs, three different
   grounds — that is allowed. What is not allowed is two blurs over the *same* ground (the dead

@@ -56,7 +56,8 @@
 
 /* cirrus: 목록 면도 유리다. ⚠ 하위 목록(sub-content)은 뺀다 — 부모 유리 위에 또 유리를
    얹으면 흐림이 두 겹이 되고(tokens.css glass 계약 ④), backdrop-filter 가 만드는
-   stacking context 안에 갇히는 층이 생긴다(계약 ③). 하위 목록은 불투명이 정답이다. */
+   stacking context 안에 갇히는 층이 생긴다(계약 ③). 하위 목록은 불투명이 정답이다.
+   모달 위에서 뜬 목록도 같은 까닭으로 불투명이다 — 그 규칙은 _surface-family.css 에 있다. */
 @supports (backdrop-filter: blur(1px)) {
     .cn-dropdown-menu-content,
     .cn-context-menu-content,
