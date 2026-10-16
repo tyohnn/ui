@@ -31,11 +31,15 @@ export const resolveFonts = (systemFonts: FontsChoice, overrides: FontOverrides 
 });
 
 export const sameFonts = (a: FontsChoice, b: FontsChoice): boolean =>
-    a.sans === b.sans && a.heading === b.heading && a.mono === b.mono && a.hangulFallback === b.hangulFallback;
+    a.sans === b.sans && a.heading === b.heading && a.mono === b.mono && a.hangulFallback === b.hangulFallback && a.hangulHeading === b.hangulHeading;
 
-/** Catalog ids that need loading (heading `inherit` and mono `system` load nothing) */
+/** Catalog ids that need loading (heading `inherit` and mono `system` load nothing, nor a Hangul heading font under `inherit`) */
 export const fontIds = (fonts: FontsChoice): string[] =>
-    [...new Set([fonts.sans, fonts.heading, fonts.mono, fonts.hangulFallback].filter((id) => id && id !== "inherit" && id !== "system"))];
+{
+    const hangulHeading = fonts.heading === "inherit" ? undefined : fonts.hangulHeading;
+
+    return [...new Set([fonts.sans, fonts.heading, fonts.mono, fonts.hangulFallback, hangulHeading].filter((id): id is string => Boolean(id) && id !== "inherit" && id !== "system"))];
+};
 
 /** Checks override values before anything is written */
 export const validateFonts = (fonts: FontsChoice, registry: Registry): void =>
@@ -44,6 +48,7 @@ export const validateFonts = (fonts: FontsChoice, registry: Registry): void =>
     if (fonts.heading !== "inherit") registry.font(fonts.heading);
     if (fonts.mono !== "system") registry.font(fonts.mono);
     registry.font(fonts.hangulFallback);
+    if (fonts.hangulHeading) registry.font(fonts.hangulHeading);
 };
 
 type Families = (font: FontEntry) => string[];
@@ -51,17 +56,18 @@ type Families = (font: FontEntry) => string[];
 const stacksWith = (fonts: FontsChoice, registry: Registry, families: Families): Record<string, string> =>
 {
     const hangul = registry.font(fonts.hangulFallback);
-    const stack = (id: string) =>
+    const stack = (id: string, before: string[] = []) =>
     {
         const font = registry.font(id);
 
-        return [...families(font), ...(id === fonts.hangulFallback ? [] : families(hangul)), ...FALLBACKS[font.category]].join(", ");
+        return [...families(font), ...before, ...(id === fonts.hangulFallback ? [] : families(hangul)), ...FALLBACKS[font.category]].join(", ");
     };
+    const headingHangul = fonts.hangulHeading ? families(registry.font(fonts.hangulHeading)) : [];
     const mono = FALLBACKS.mono;
 
     return {
         "--font-sans": stack(fonts.sans),
-        "--font-heading": fonts.heading === "inherit" ? "var(--font-sans)" : stack(fonts.heading),
+        "--font-heading": fonts.heading === "inherit" ? "var(--font-sans)" : stack(fonts.heading, headingHangul),
         "--font-mono": fonts.mono === "system" ? [...mono.slice(0, -1), ...families(hangul), mono.at(-1)!].join(", ") : stack(fonts.mono),
     };
 };
@@ -179,6 +185,6 @@ export const nextFontCode = (fonts: FontsChoice, registry: Registry, layoutDir: 
 };
 
 export const describeFonts = (fonts: FontsChoice): string =>
-    `sans ${fonts.sans} · heading ${fonts.heading} · mono ${fonts.mono} · hangul ${fonts.hangulFallback}`;
+    `sans ${fonts.sans} · heading ${fonts.heading} · mono ${fonts.mono} · hangul ${fonts.hangulFallback}${fonts.hangulHeading ? ` · hangul heading ${fonts.hangulHeading}` : ""}`;
 
 export const relativeTo = (from: string, to: string) => posix(relative(from, to));

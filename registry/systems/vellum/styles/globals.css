@@ -151,11 +151,12 @@
 
 :root {
     /* Typography — built from system.json fonts (sans inter · heading source-serif-4 · mono system ·
-       hangulFallback pretendard) and the registry/fonts catalog; tooling/validate-system checks
-       these three lines. Order: the system font (catalog family, then the family its package registers) →
-       the Hangul fallback → platform fallbacks. Fonts are loaded by the app, never by these files. */
+       hangulFallback pretendard · hangulHeading maru-buri) and the registry/fonts catalog; tooling/validate-system
+       checks these three lines. Order: the system font (catalog family, then the family its package registers) →
+       the Hangul heading font (headings only) → the Hangul fallback → platform fallbacks. Fonts are loaded by the
+       app, never by these files. */
     --font-sans: "Inter", "Inter Variable", "Pretendard", ui-sans-serif, system-ui, sans-serif;
-    --font-heading: "Source Serif 4", "Source Serif 4 Variable", "Pretendard", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-heading: "Source Serif 4", "Source Serif 4 Variable", "MaruBuri", "마루 부리", "Pretendard", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Pretendard", monospace;
 
     /* 네이티브 위젯(스크롤바 · <option> 목록 · 기본 폼 컨트롤)의 색은 CSS 가 아니라 color-scheme 이

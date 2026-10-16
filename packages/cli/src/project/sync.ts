@@ -444,7 +444,7 @@ const wireApp = (ctx: SyncContext, placement: Placement, app: AppFiles) =>
         const font = nextFontCode(appRecord.fonts, registry, dirname(layout), (name) => packageDir(app.dir, name, root), (name) => expectedPackageDir(app.dir, name, root, record.packageManager));
         const htmlClasses = [...(appRecord.mode === "dark" ? ['"dark"'] : []), '"font-sans"', ...font.variables];
         const body = layoutBlock([
-            `// Fonts of ${system}: ${[appRecord.fonts.sans, appRecord.fonts.heading, appRecord.fonts.mono, appRecord.fonts.hangulFallback].join(" · ")} (sans · heading · mono · hangul), self-hosted by next/font.`,
+            `// Fonts of ${system}: ${[appRecord.fonts.sans, appRecord.fonts.heading, appRecord.fonts.mono, appRecord.fonts.hangulFallback, ...(appRecord.fonts.hangulHeading ? [appRecord.fonts.hangulHeading] : [])].join(" · ")} (sans · heading · mono · hangul${appRecord.fonts.hangulHeading ? " · hangul heading" : ""}), self-hosted by next/font.`,
             ...font.lines,
         ], htmlClasses);
         const blockWithMode = body.replace(`const ${HTML_CLASS_IDENTIFIER}`, `// <html>: ${appRecord.mode} mode${appRecord.mode === "dark" ? " (`dark` belongs on <html>: layer-2 values resolve on :root)" : ""} · font-sans · next/font variables\nconst ${HTML_CLASS_IDENTIFIER}`);

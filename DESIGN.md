@@ -447,6 +447,7 @@ pages with `&motion=off`, so none of this reaches the shadcn comparisons.
 | `heading` | `inherit` or catalog id | titles marked `cn-font-heading` (card, dialog, sheet, drawer, alert-dialog, empty, questionnaire) and typeset headings |
 | `mono` | `system` or catalog id | `font-mono` (chart values, questionnaire keys) and typeset code; `system` = the platform monospace stack |
 | `hangulFallback` | catalog id with `hangul: true` | Hangul glyphs for every role; Latin fonts have none |
+| `hangulHeading` | optional; catalog id with `hangul: true` | Hangul glyphs for headings only, ahead of `hangulFallback`; needs a heading font (not `inherit`) |
 
 Ids name files in `registry/fonts/` (section 9). foundation, mira and vega are `inter`; graphite is `pretendard`
 for every role (its reference app used Pretendard). shadcn presets set no mono font, so all three use `system`.
@@ -465,6 +466,8 @@ names, and `@theme inline` maps Tailwind's `font-sans` · `font-heading` · `fon
 1. The role's font: its catalog `family`, then the family its package registers when different
    (`"Inter Variable"` from `@fontsource-variable/inter`), so the stack works whichever way the app installs it.
 2. The Hangul fallback, right after (omitted when the role's font is the fallback itself, as in graphite).
+   In the heading stack a `hangulHeading` font comes first, between the heading font and the fallback
+   (vellum: `"Source Serif 4", "Source Serif 4 Variable", "MaruBuri", "마루 부리", "Pretendard", ui-serif …`).
 3. Platform fallbacks for the font's category: sans/display `ui-sans-serif, system-ui, sans-serif` · serif
    `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif` · mono `ui-monospace … monospace`. For
    `mono: system` the Hangul fallback sits before the final `monospace`.

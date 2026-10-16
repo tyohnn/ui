@@ -1,0 +1,50 @@
+{
+    "$schema": "../schema/font.schema.json",
+    "id": "maru-buri",
+    "family": "MaruBuri",
+    "category": "serif",
+    "provider": "local",
+    "next": {
+        "import": "localFont",
+        "variable": "--font-serif-maru-buri"
+    },
+    "npm": {
+        "package": "@kfonts/maruburi",
+        "css": "@kfonts/maruburi/index.css",
+        "family": "마루 부리"
+    },
+    "local": {
+        "files": [
+            {
+                "path": "@kfonts/maruburi/MaruBuri-Regular.woff2",
+                "weight": 400,
+                "style": "normal"
+            },
+            {
+                "path": "@kfonts/maruburi/MaruBuri-SemiBold.woff2",
+                "weight": 600,
+                "style": "normal"
+            },
+            {
+                "path": "@kfonts/maruburi/MaruBuri-Bold.woff2",
+                "weight": 700,
+                "style": "normal"
+            }
+        ]
+    },
+    "weights": [
+        400,
+        600,
+        700
+    ],
+    "axes": [],
+    "subsets": [
+        "latin",
+        "korean"
+    ],
+    "hangul": true,
+    "license": {
+        "name": "OFL-1.1",
+        "url": "https://openfontlicense.org"
+    }
+}

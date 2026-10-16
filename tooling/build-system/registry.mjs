@@ -142,7 +142,8 @@ export const fontFamilies = (font) =>
 /**
  * The layer-1 stacks a system's fonts produce:
  *   --font-sans     system font → Hangul fallback → platform fallbacks
- *   --font-heading  var(--font-sans) for `inherit`, otherwise a stack like sans
+ *   --font-heading  var(--font-sans) for `inherit`, otherwise a stack like sans with the Hangul heading font
+ *                   (hangulHeading, when set) between the heading font and the Hangul fallback
  *   --font-mono     like sans; `system` = platform monospace with the Hangul fallback before `monospace`
  */
 export const fontStacks = (fonts, catalog = readFontCatalog()) =>
@@ -156,26 +157,31 @@ export const fontStacks = (fonts, catalog = readFontCatalog()) =>
         return font;
     };
     const hangulId = fonts.hangulFallback;
-    const stack = (id) =>
+    const stack = (id, before = []) =>
     {
         const hangul = id === hangulId ? [] : fontFamilies(get(hangulId));
 
-        return [...fontFamilies(get(id)), ...hangul, ...FALLBACKS[get(id).category]].join(", ");
+        return [...fontFamilies(get(id)), ...before, ...hangul, ...FALLBACKS[get(id).category]].join(", ");
     };
+    const headingHangul = fonts.hangulHeading ? fontFamilies(get(fonts.hangulHeading)) : [];
     const mono = FALLBACKS.mono;
 
     return {
         "--font-sans": stack(fonts.sans),
-        "--font-heading": fonts.heading === "inherit" ? "var(--font-sans)" : stack(fonts.heading),
+        "--font-heading": fonts.heading === "inherit" ? "var(--font-sans)" : stack(fonts.heading, headingHangul),
         "--font-mono": fonts.mono === "system"
             ? [...mono.slice(0, -1), ...fontFamilies(get(hangulId)), mono.at(-1)].join(", ")
             : stack(fonts.mono),
     };
 };
 
-/** Catalog ids a system's fonts need installed (heading `inherit` and mono `system` need none) */
+/** Catalog ids a system's fonts need installed (heading `inherit` and mono `system` need none, nor a Hangul heading font under `inherit`) */
 export const fontIds = (fonts) =>
-    [...new Set([fonts.sans, fonts.heading, fonts.mono, fonts.hangulFallback].filter((id) => id && id !== "inherit" && id !== "system"))];
+{
+    const hangulHeading = fonts.heading === "inherit" ? undefined : fonts.hangulHeading;
+
+    return [...new Set([fonts.sans, fonts.heading, fonts.mono, fonts.hangulFallback, hangulHeading].filter((id) => id && id !== "inherit" && id !== "system"))];
+};
 
 /** Short commit hash of the repository HEAD, or null outside git */
 export const currentCommit = () =>

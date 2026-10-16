@@ -11,6 +11,8 @@ export interface FontsChoice
     heading: string;
     mono: string;
     hangulFallback: string;
+    /** Hangul glyphs for headings only, ahead of hangulFallback (optional) */
+    hangulHeading?: string;
 }
 
 export interface SystemMeta

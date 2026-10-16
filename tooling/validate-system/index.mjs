@@ -3,8 +3,8 @@
 //   1. schema     system.json against registry/schema/system.schema.json (foundation.json: its `fonts`
 //                 against the same definition) · every registry/fonts/<id>.json against
 //                 font.schema.json, with id = file name                                          → FAIL
-//   2. fonts      every font id a system names exists in the catalog; hangulFallback is a font
-//                 with `hangul: true`                                                             → FAIL
+//   2. fonts      every font id a system names exists in the catalog; hangulFallback and hangulHeading
+//                 are fonts with `hangul: true`, and hangulHeading needs a heading font           → FAIL
 //   3. stacks     layer-1 --font-sans / --font-heading / --font-mono in :root equal the stacks built
 //                 from the fonts and the catalog (system font → Hangul fallback → platform)       → FAIL
 //   4. theme      system.json `theme` names a theme in registry/themes, it resolves to the whole
@@ -84,6 +84,13 @@ const check = (name) =>
     if (catalog.has(meta.fonts.hangulFallback) && !catalog.get(meta.fonts.hangulFallback).hangul)
     {
         failures.push(`hangulFallback "${meta.fonts.hangulFallback}" has no Hangul (hangul: false)`);
+    }
+
+    if (meta.fonts.hangulHeading)
+    {
+        if (catalog.has(meta.fonts.hangulHeading) && !catalog.get(meta.fonts.hangulHeading).hangul) failures.push(`hangulHeading "${meta.fonts.hangulHeading}" has no Hangul (hangul: false)`);
+
+        if (meta.fonts.heading === "inherit") failures.push(`hangulHeading "${meta.fonts.hangulHeading}" needs a heading font; heading is inherit`);
     }
 
     if (failures.length > 0) return failures;

@@ -14,7 +14,8 @@
         "sans": "inter",
         "heading": "source-serif-4",
         "mono": "system",
-        "hangulFallback": "pretendard"
+        "hangulFallback": "pretendard",
+        "hangulHeading": "maru-buri"
     },
     "icons": {
         "library": "lucide"
