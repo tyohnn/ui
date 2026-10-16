@@ -80,7 +80,7 @@
         "weights": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 1, "maximum": 1000 } },
         "axes": { "type": "array", "items": { "type": "string", "pattern": "^[a-zA-Z]{4}$" } },
         "subsets": { "type": "array", "minItems": 1, "items": { "type": "string" } },
-        "hangul": { "type": "boolean", "description": "Covers Hangul; only such a font can be a hangulFallback" },
+        "hangul": { "type": "boolean", "description": "Covers Hangul; only such a font can be a hangulFallback or a hangulHeading" },
         "license": {
             "type": "object",
             "required": ["name", "url"],

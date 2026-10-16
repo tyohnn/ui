@@ -6,6 +6,7 @@ export interface SystemFonts
     heading: string;
     mono: string;
     hangulFallback: string;
+    hangulHeading?: string;
 }
 
 export interface SystemMeta
