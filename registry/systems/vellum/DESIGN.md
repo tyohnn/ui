@@ -28,6 +28,9 @@ This folder is a complete, frozen snapshot: every file under `styles/` belongs t
   rows that size to their content.
 - **Two type voices**: Source Serif 4 for headings (`--font-heading`, read by `.cn-font-heading`),
   Inter for everything else. The serif is what makes a panel read as a document rather than an app pane.
+  Source Serif 4 has no Hangul, so Korean headings take MaruBuri (`hangulHeading: maru-buri`): a light,
+  small-serif Hangul that keeps the document voice without the old-print look of a Batang-style serif.
+  Korean body and UI text stay in Pretendard (`hangulFallback`).
 - **Accents**: ink is the primary action (a near-black button, paper text). Teal
   (`oklch(0.4 0.05 192)`) is `--ring`, `--link`, `--chart-1` and the text-selection fill — focus and
   reference, never a fill for a button. Status colours stay in the alert/badge vocabulary.
