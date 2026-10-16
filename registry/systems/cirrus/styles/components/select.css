@@ -215,7 +215,7 @@
 
 /* cirrus: 고른 값을 담는 목록도 떠 있는 층이라 유리다. 스크롤 버튼은 목록 위에 덧대는
    같은 면이므로 같은 채움을 쓴다 — 불투명으로 두면 유리 위에 불투명 띠가 뜬다.
-   (값·계약은 tokens.css 의 glass 축) */
+   (값·계약은 tokens.css 의 glass 축). 모달 위에서 뜬 목록은 불투명이다(_surface-family.css). */
 @supports (backdrop-filter: blur(1px)) {
     .cn-select-content {
         background-color: var(--glass-fill, var(--popover));
