@@ -7,6 +7,7 @@ import { iconLibrary, system } from "virtual:tyohnn-system";
 
 import { FrameControls } from "./frame-controls";
 import { templates } from "./templates";
+import { listenForTokens } from "./token-bridge";
 
 document.documentElement.dataset.iconLibrary = iconLibrary;
 
@@ -46,7 +47,16 @@ if (window.self !== window.top)
         }
     };
 
-    if (new URLSearchParams(location.search).get("template") === "coverage") document.documentElement.style.overflow = "hidden";
+    listenForTokens();
+
+    if (new URLSearchParams(location.search).get("template") === "coverage")
+    {
+        document.documentElement.style.overflow = "hidden";
+
+        // A frame on another origin (the plugin's cards, packages/mcp) cannot measure this document, so tell it
+        // how tall the section is; the site measures its own-origin frames and ignores the message.
+        new ResizeObserver(() => window.parent.postMessage({ type: "tyohnn:coverage-size", height: document.body.scrollHeight }, "*")).observe(document.body);
+    }
 }
 
 const params = new URLSearchParams(location.search);

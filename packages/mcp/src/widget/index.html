@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tyohnn primitives</title>
+<style>
+:root {
+    --bg: #0b0b0c; --fg: #f2f2f3; --muted: #8b8b92; --line: #26262a; --card: #121214; --chip: #1c1c1f;
+    color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --bg: #ffffff; --fg: #111113; --muted: #6b6b73; --line: #e6e6ea; --card: #ffffff; --chip: #f3f3f5; color-scheme: light; }
+}
+:root[data-theme="light"] { --bg: #ffffff; --fg: #111113; --muted: #6b6b73; --line: #e6e6ea; --card: #ffffff; --chip: #f3f3f5; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+#root { padding: 20px 16px 32px; max-width: 1180px; margin: 0 auto; }
+.bar { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
+.title small, .group h2 small, .system small { font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.title h1 { margin: 6px 0 0; font-size: 28px; letter-spacing: -.02em; }
+.tagline { margin: 6px 0 0; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+input[type=search], select { height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--fg); padding: 0 10px; font: inherit; }
+input[type=search] { width: 180px; }
+.system { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 0 0 0 10px; }
+.system select { border: 0; background: transparent; font-weight: 600; }
+.segmented { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.segmented button { border: 0; background: transparent; color: var(--muted); font: inherit; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.segmented button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.group { margin-top: 28px; }
+.group h2 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 20px; letter-spacing: -.01em; }
+.cards { display: grid; gap: 14px; }
+.card { border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
+.card header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.card header b { font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.card .variants { color: var(--muted); font-size: 11px; }
+.card .tag { margin-left: auto; font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
+.card p { margin: 10px 14px 0; color: var(--muted); font-size: 12.5px; }
+.frame { position: relative; overflow: hidden; margin-top: 8px; }
+.frame iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: transparent; }
+.waiting { color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">/*WIDGET_SCRIPT*/</script>
+</body>
+</html>
