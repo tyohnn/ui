@@ -1,0 +1,30 @@
+{
+    "name": "@tyohnn/mcp",
+    "version": "0.0.0",
+    "private": true,
+    "description": "An MCP server that lets a coding agent browse tyohnn's primitives, read their source and preview them as cards in any design system.",
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+        "tyohnn-mcp": "dist/index.js"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "build": "node build.mjs",
+        "typecheck": "tsc --noEmit",
+        "test": "node build.mjs && vitest run"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.32.1",
+        "zod": "^3.25.76"
+    },
+    "devDependencies": {
+        "@modelcontextprotocol/ext-apps": "^2.0.3",
+        "@types/node": "^20.19.43",
+        "esbuild": "^0.28.2",
+        "typescript": "^5.9.3",
+        "vitest": "^5.0.1"
+    }
+}
