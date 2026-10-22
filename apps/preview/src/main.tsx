@@ -7,6 +7,7 @@ import { iconLibrary, system } from "virtual:tyohnn-system";
 
 import { FrameControls } from "./frame-controls";
 import { templates } from "./templates";
+import { listenForTokens } from "./token-bridge";
 
 document.documentElement.dataset.iconLibrary = iconLibrary;
 
@@ -45,6 +46,8 @@ if (window.self !== window.top)
             }
         }
     };
+
+    listenForTokens();
 
     if (new URLSearchParams(location.search).get("template") === "coverage")
     {
