@@ -47,7 +47,7 @@ Say *taste* or *feel* for all of them together, never *theme* (a theme is colour
   ported from shadcn create presets (mira, vega, nova, maia, lyra, luma, sera, rhea) prove the port, not the taste.
 - Credit shadcn, Base UI and tweakcn plainly. tyohnn builds on them; it is not against them.
 - Site copy lives in `apps/site/src/lib/i18n/en.tsx` and `ko.tsx`; change both together. Korean follows the
-  rules at the top of `ko.tsx` (해요체, 「토큰」, 「층」).
+  rules at the top of `ko.tsx` (해요체, 「토큰」, 「레이어」).
 
 ## Headline copy
 
