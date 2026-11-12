@@ -1,5 +1,5 @@
 // 사이트의 한국어 문구다. 화면에 보이는 문장은 해요체로 쓰고, 버튼은 동사로 맺고, 용어는 한국어 사용자가 이미 쓰는 말을
-// 따른다(레이아웃의 gutter 는 「가장자리 여백」, token 은 「토큰」, layer 는 코드 주석이 쓰는 「층」). 코드 식별자, 명령어,
+// 따른다(레이아웃의 gutter 는 「가장자리 여백」, token 은 「토큰」, layer 는 「레이어」). 코드 식별자, 명령어,
 // 컴포넌트 이름은 번역하지 않는다. 구조는 en.tsx 의 `Messages` 와 같아야 한다.
 
 import type { Messages, SystemText } from "./en";
@@ -90,7 +90,7 @@ export const ko: Messages = {
             { num: "5", title: "프레임", body: "블록이 놓이는 자리를 정해요. 가장자리 여백, 블록 사이 간격, 스크롤되는 영역, 페이지가 좁아질 때 보조 패널이 하는 일이 여기에 속해요. 화면은 단계를 고르고, 토큰이 그 크기를 정해요.", file: "blocks/page.tsx" },
         ],
         installTitle: "시스템을 통째로 복사하세요.",
-        installBody: "컴포넌트, 세 층, 글꼴, 아이콘, DESIGN.md를 Next.js, Vite, Turborepo 모노레포 프로젝트로 복사해요.",
+        installBody: "컴포넌트, 세 레이어, 글꼴, 아이콘, DESIGN.md를 Next.js, Vite, Turborepo 모노레포 프로젝트로 복사해요.",
     },
 
     system: {
@@ -298,7 +298,7 @@ export const ko: Messages = {
         ],
         filesOrder: (
             <>
-                엔트리 CSS는 시스템을 정해진 순서로 가져와요. tailwindcss, 1층 색, 2층 토큰, 글자 설정, <code>layer(base)</code> 안의 3층 규칙
+                엔트리 CSS는 시스템을 정해진 순서로 가져와요. tailwindcss, 레이어 1 색, 레이어 2 토큰, 글자 설정, <code>layer(base)</code> 안의 레이어 3 규칙
                 순서예요. 그래서 <code>className</code>으로 넘기는 유틸리티가 항상 우선해요.
             </>
         ),
@@ -494,7 +494,7 @@ export const ko: Messages = {
 
     systems: {
         cirrus: {
-            description: "한낮의 햇빛과 유리 같은 시스템이에요. 차가운 흰색에 가까운 페이지 위에 넓고 부드러운 그림자의 흰 카드가 놓이고, 버튼은 알약 모양이에요. 메뉴, 팝오버, 대화상자, 시트처럼 떠 있는 층은 모두 블러 처리된 반투명 유리 질감이에요. 어두운 남색이 행동 색이고, 하늘색 하나가 신호 색이며, 차트에서는 민트가 하늘색 옆에 놓여요.",
+            description: "한낮의 햇빛과 유리 같은 시스템이에요. 차가운 흰색에 가까운 페이지 위에 넓고 부드러운 그림자의 흰 카드가 놓이고, 버튼은 알약 모양이에요. 메뉴, 팝오버, 대화상자, 시트처럼 떠 있는 레이어는 모두 블러 처리된 반투명 유리 질감이에요. 어두운 남색이 행동 색이고, 하늘색 하나가 신호 색이며, 차트에서는 민트가 하늘색 옆에 놓여요.",
             tagline: "Pretendard · 블러 레이어 · 알약 버튼",
             character: "한낮의 햇빛과 유리",
         },
