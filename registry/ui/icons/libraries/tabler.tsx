@@ -59,6 +59,7 @@ import {
     IconDots,
     IconDotsVertical,
     IconDownload,
+    IconArrowsDiagonal,
     IconEye,
     IconFile,
     IconFileText,
@@ -209,6 +210,7 @@ export const Database = icon(IconDatabase);
 export const DeletedPages = icon(IconTrash);
 export const DollarSign = icon(IconCurrencyDollar);
 export const Download = icon(IconDownload);
+export const Expand = icon(IconArrowsDiagonal);
 export const Export = icon(IconArrowDown);
 export const ExternalLink = icon(IconArrowUpRight);
 export const Eye = icon(IconEye);

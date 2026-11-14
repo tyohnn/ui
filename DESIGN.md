@@ -621,6 +621,7 @@ and native-select triggers: tabler `IconSelector`, hugeicons `UnfoldMoreIcon`) a
 | `DeletedPages` | show deleted pages / trash view | TrashIcon | IconTrash | DeleteIcon | TrashIcon | RiDeleteBinLine | TrashIcon* |
 | `DollarSign` | revenue / price | DollarSignIcon | IconCurrencyDollar† | DollarCircleIcon† | CurrencyDollarIcon† | RiMoneyDollarCircleLine† | TokensIcon* |
 | `Download` | download / export | DownloadIcon | IconDownload | Download01Icon | DownloadIcon | RiDownloadLine | DownloadIcon* |
+| `Expand` | expand to full screen | Maximize2Icon | IconArrowsDiagonal† | Maximize01Icon† | ArrowsOutSimpleIcon† | RiExpandDiagonalLine† | EnterFullScreenIcon* |
 | `Export` | export (page actions menu) | ArrowDownIcon | IconArrowDown | ArrowDownIcon | ArrowDownIcon | RiArrowDownLine | ArrowDownIcon* |
 | `ExternalLink` | open elsewhere / external link | ArrowUpRightIcon | IconArrowUpRight | ArrowUpRightIcon | ArrowUpRightIcon | RiArrowRightUpLine | ExternalLinkIcon* |
 | `Eye` | view / visible | EyeIcon | IconEye† | ViewIcon† | EyeIcon† | RiEyeLine† | EyeOpenIcon* |

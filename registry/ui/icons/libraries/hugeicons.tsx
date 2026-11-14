@@ -59,6 +59,7 @@ import {
     DeliveryTruck01Icon,
     DollarCircleIcon,
     Download01Icon,
+    Maximize01Icon,
     File01Icon,
     FileIcon,
     FilterIcon,
@@ -216,6 +217,7 @@ export const Database = icon(Database01Icon);
 export const DeletedPages = icon(DeleteIcon);
 export const DollarSign = icon(DollarCircleIcon);
 export const Download = icon(Download01Icon);
+export const Expand = icon(Maximize01Icon);
 export const Export = icon(ArrowDownIcon);
 export const ExternalLink = icon(ArrowUpRightIcon);
 export const Eye = icon(ViewIcon);

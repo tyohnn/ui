@@ -53,6 +53,7 @@ import {
     RiDeleteBinLine,
     RiDoubleQuotesL,
     RiDownloadLine,
+    RiExpandDiagonalLine,
     RiEmotionLine,
     RiEqualizerLine,
     RiErrorWarningLine,
@@ -208,6 +209,7 @@ export const Database = icon(RiDatabase2Line);
 export const DeletedPages = icon(RiDeleteBinLine);
 export const DollarSign = icon(RiMoneyDollarCircleLine);
 export const Download = icon(RiDownloadLine);
+export const Expand = icon(RiExpandDiagonalLine);
 export const Export = icon(RiArrowDownLine);
 export const ExternalLink = icon(RiArrowRightUpLine);
 export const Eye = icon(RiEyeLine);
