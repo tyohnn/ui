@@ -46,6 +46,7 @@ import {
     DotsVerticalIcon,
     DoubleArrowLeftIcon,
     DownloadIcon,
+    EnterFullScreenIcon,
     DrawingPinFilledIcon,
     DrawingPinIcon,
     EnvelopeClosedIcon,
@@ -171,6 +172,7 @@ export const Database = icon(StackIcon);
 export const DeletedPages = icon(TrashIcon);
 export const DollarSign = icon(TokensIcon);
 export const Download = icon(DownloadIcon);
+export const Expand = icon(EnterFullScreenIcon);
 export const Export = icon(ArrowDownIcon);
 export const ExternalLink = icon(ExternalLinkIcon);
 export const Eye = icon(EyeOpenIcon);

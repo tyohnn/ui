@@ -51,6 +51,7 @@ export {
     TrashIcon as DeletedPages,
     DollarSignIcon as DollarSign,
     DownloadIcon as Download,
+    Maximize2Icon as Expand,
     ArrowDownIcon as Export,
     ArrowUpRightIcon as ExternalLink,
     EyeIcon as Eye,
