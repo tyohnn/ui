@@ -230,8 +230,10 @@
 
     /* outline 버튼의 바탕. mira 는 밝은 쪽에 아무 색도 두지 않고 어두운 쪽만 bg-input/30 이다 —
        Input 의 bg-input/20 과 다른 자리라 --input-fill 을 그대로 읽을 수 없다. */
-    --button-outline-fill: var(--background);
-    --button-outline-hover-fill: var(--muted);
+    --control-outline-fill: var(--background);
+    --button-outline-fill: var(--control-outline-fill);
+    --control-outline-hover-fill: var(--muted);
+    --button-outline-hover-fill: var(--control-outline-hover-fill);
     /* 꺼진 체크박스도 흰 칸이다. 켜진 것 · 일부만 켜진 것은 같은 초록으로 채운다. */
     --checkbox-fill: var(--background);
     --checkbox-indeterminate-fill: var(--checked);
@@ -255,7 +257,8 @@
        inheritance); the indeterminate mark takes the checked ink, since clover fills that box green.
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: var(--checked-foreground);
     /* 켜진 스위치 손잡이. 밝은 쪽은 흰색, 어두운 쪽은 --foreground(초록 위의 밝은 손잡이)다 —
        어두운 쪽의 --primary-foreground 는 어두운 잉크라 손잡이로 쓰지 않는다. */
@@ -296,8 +299,10 @@
 
     /* Button variant edges and ghost text. mira: secondary has the transparent button border,
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
-    --button-outline-fill: var(--input-fill);
-    --button-outline-hover-fill: color-mix(in oklab, var(--input) 55%, transparent);
+    --control-outline-fill: var(--input-fill);
+    --button-outline-fill: var(--control-outline-fill);
+    --control-outline-hover-fill: color-mix(in oklab, var(--input) 55%, transparent);
+    --button-outline-hover-fill: var(--control-outline-hover-fill);
     /* Checkbox fill when unchecked, and the indeterminate look: the same green as checked. */
     --checkbox-fill: var(--input-fill);
     --checkbox-indeterminate-fill: var(--checked);
@@ -315,7 +320,8 @@
        inheritance); the indeterminate mark takes the checked ink, since clover fills that box green.
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: var(--checked-foreground);
     --switch-thumb-on: var(--foreground);
 }
@@ -346,4 +352,10 @@
   html {
     @apply font-sans;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --surface-sheen: none;
+    --surface-ring: var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
 }

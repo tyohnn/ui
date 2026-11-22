@@ -214,7 +214,10 @@
     --surface-radius-lg: 24px;   /* rhea: min(radius-4xl,24px) */   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
     /* Per-component corners. rhea: card rounded-4xl (min 24) · chart tooltip rounded-xl ·
        bubble and empty state rounded-3xl. */
-    --card-radius: var(--surface-radius-lg);
+    --surface-raised-radius: var(--surface-radius-lg);
+    --surface-raised-spacing: 20px;    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --chart-tooltip-radius: var(--surface-radius-sm);
     --empty-radius: var(--surface-radius-xl);
     --bubble-radius: var(--surface-radius-xl);
@@ -408,10 +411,13 @@
     --tag-line-height: var(--ui-line-height-xs);
     --tag-font-size: var(--ui-text-xs);
     /* The badge box. rhea: h-5 · px-2 · has-data-[icon]:px-1.5 · rounded-2xl. */
-    --badge-height: var(--control-height-2xs);
-    --badge-padding-x: 8px;
+    --indicator-height: var(--control-height-2xs);
+    --badge-height: var(--indicator-height);
+    --indicator-padding-x-lg: 8px;
+    --badge-padding-x: var(--indicator-padding-x-lg);
     --badge-padding-x-icon: 6px;
-    --badge-radius: var(--indicator-radius-pill);
+    --indicator-radius: var(--indicator-radius-pill);
+    --badge-radius: var(--indicator-radius);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
@@ -494,14 +500,22 @@
 :root {
     --indicator-padding-y: 2px;
     --badge-padding-y: var(--indicator-padding-y);
-    --badge-gap: var(--control-gap-xs);
-    --badge-icon-size: var(--control-icon-size-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
-    --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;
+    --indicator-gap: var(--control-gap-xs);
+    --badge-gap: var(--indicator-gap);
+    --indicator-icon-size: var(--control-icon-size-xs);
+    --badge-icon-size: var(--indicator-icon-size);
+    --indicator-border-width: var(--control-border-width);
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-font-size: var(--ui-text-xs);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--ui-line-height-xs);
+    --badge-line-height: var(--indicator-line-height);
+    --indicator-letter-spacing: var(--ui-letter-spacing);
+    --badge-letter-spacing: var(--indicator-letter-spacing);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
+    --indicator-text-transform: initial;
+    --badge-text-transform: var(--indicator-text-transform);
     --kbd-min-width: var(--kbd-height);
     --indicator-padding-x: 4px;
     --kbd-padding-x: var(--indicator-padding-x);
@@ -610,7 +624,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-chip);   /* rhea: shadow-sm under the ring */
+    --surface-shadow: var(--shadow-chip);
+    --card-shadow: var(--surface-shadow);   /* rhea: shadow-sm under the ring */
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -625,4 +640,13 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-radius: var(--control-radius);
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }

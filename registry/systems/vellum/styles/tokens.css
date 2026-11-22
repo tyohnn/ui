@@ -463,20 +463,31 @@
        they are simply written here instead of being read from --control-*-xs.
        Asked for by lyra · maia · nova (height · radius) and sera (the whole box).
        -------------------------------------------------------- */
-    --badge-height: var(--control-height-xs);
-    --badge-padding-x: var(--control-padding-x-xs);
+    --indicator-height: var(--control-height-xs);
+    --badge-height: var(--indicator-height);
+    --indicator-padding-x-lg: var(--control-padding-x-xs);
+    --badge-padding-x: var(--indicator-padding-x-lg);
     --badge-padding-x-icon: var(--control-padding-x-icon-xs);
     --indicator-padding-y: 2px;
     --badge-padding-y: var(--indicator-padding-y);                              /* mira: py-0.5 — was a literal */
-    --badge-gap: var(--control-gap-xs);
-    --badge-icon-size: var(--control-icon-size-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-radius: var(--indicator-radius-pill);                              /* mira: rounded-full — was a literal */
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
-    --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;                     /* `initial` = inherit (mira sets none) */
+    --indicator-gap: var(--control-gap-xs);
+    --badge-gap: var(--indicator-gap);
+    --indicator-icon-size: var(--control-icon-size-xs);
+    --badge-icon-size: var(--indicator-icon-size);
+    --indicator-border-width: var(--control-border-width);
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-radius: var(--indicator-radius-pill);
+    --badge-radius: var(--indicator-radius);                              /* mira: rounded-full — was a literal */
+    --indicator-font-size: var(--ui-text-xs);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--ui-line-height-xs);
+    --badge-line-height: var(--indicator-line-height);
+    --indicator-letter-spacing: var(--ui-letter-spacing);
+    --badge-letter-spacing: var(--indicator-letter-spacing);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
+    --indicator-text-transform: initial;
+    --badge-text-transform: var(--indicator-text-transform);                     /* `initial` = inherit (mira sets none) */
 
     /* --------------------------------------------------------
        kbd — its own axis (v4)
@@ -572,7 +583,10 @@
     /* --------------------------------------------------------
        surfaces (v4 additions) — each was --surface-radius* in the rule
        -------------------------------------------------------- */
-    --card-radius: var(--surface-radius);
+    --surface-raised-radius: var(--surface-radius);
+    --surface-raised-spacing: var(--surface-padding-md);    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --bubble-radius: var(--surface-radius);
     --bubble-padding-x: var(--surface-padding-sm);
     --surface-padding-xs: 6px;
@@ -675,7 +689,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-card);
+    --surface-shadow: var(--shadow-card);
+    --card-shadow: var(--surface-shadow);
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -690,4 +705,13 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-radius: var(--control-radius);
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }

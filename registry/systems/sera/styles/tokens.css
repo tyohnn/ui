@@ -369,8 +369,10 @@
     --title-letter-spacing: 0.05em;
     --ui-label-text-transform: uppercase;
     --ui-label-letter-spacing: 0.025em;
-    --badge-text-transform: uppercase;
-    --badge-letter-spacing: 0.1em;
+    --indicator-text-transform: uppercase;
+    --badge-text-transform: var(--indicator-text-transform);
+    --indicator-letter-spacing: 0.1em;
+    --badge-letter-spacing: var(--indicator-letter-spacing);
     --table-head-text-transform: uppercase;
     --table-head-letter-spacing: 0.05em;
 
@@ -422,21 +424,29 @@
        -------------------------------------------------------- */
     --indicator-radius-pill: 0px;
     --tag-radius: var(--indicator-radius-pill);
-    --badge-height: auto;
+    --indicator-height: auto;
+    --badge-height: var(--indicator-height);
     --indicator-padding-y: 0px;
     --badge-padding-y: var(--indicator-padding-y);
-    --badge-gap: 6px;
-    --badge-border-width: 0px;
-    --badge-icon-size: 12px;
+    --indicator-gap: 6px;
+    --badge-gap: var(--indicator-gap);
+    --indicator-border-width: 0px;
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-icon-size: 12px;
+    --badge-icon-size: var(--indicator-icon-size);
     --badge-padding-x-icon: 0px;
     --tag-padding-x: 0px;
     --tag-line-height: 15px;
     --tag-font-size: 10px;
     /* The plain badge wears the tone tag's box: flat, unpadded, 10/15. */
-    --badge-padding-x: var(--tag-padding-x);
-    --badge-radius: var(--indicator-radius-pill);
-    --badge-font-size: var(--tag-font-size);
-    --badge-line-height: var(--tag-line-height);
+    --indicator-padding-x-lg: var(--tag-padding-x);
+    --badge-padding-x: var(--indicator-padding-x-lg);
+    --indicator-radius: var(--indicator-radius-pill);
+    --badge-radius: var(--indicator-radius);
+    --indicator-font-size: var(--tag-font-size);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--tag-line-height);
+    --badge-line-height: var(--indicator-line-height);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
@@ -528,7 +538,8 @@
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
 :root {
-    --badge-font-weight: var(--ui-font-weight);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
     --kbd-min-width: var(--kbd-height);
     --kbd-gap: var(--control-gap-xs);
     --kbd-font-size: var(--ui-text-xs);
@@ -552,7 +563,10 @@
     --command-item-gap: var(--menu-item-gap);
     --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
-    --card-radius: var(--surface-radius);
+    --surface-raised-radius: var(--surface-radius);
+    --surface-raised-spacing: 32px;    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --bubble-radius: var(--surface-radius);
     --chart-tooltip-radius: var(--surface-radius);
     --empty-radius: var(--surface-radius-lg);
@@ -612,7 +626,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-card);
+    --surface-shadow: var(--shadow-card);
+    --card-shadow: var(--surface-shadow);
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -627,4 +642,13 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-radius: var(--control-radius);
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }

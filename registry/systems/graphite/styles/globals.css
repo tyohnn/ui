@@ -241,10 +241,14 @@
     --table-head-foreground: var(--muted-foreground);
     /* Button variant edges and ghost text. mira: secondary has the transparent button border,
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
-    --button-secondary-border: var(--border-strong);
-    --button-outline-border: var(--input);
-    --button-outline-fill: var(--input-fill);
-    --button-ghost-foreground: var(--muted-foreground);
+    --control-secondary-border: var(--border-strong);
+    --button-secondary-border: var(--control-secondary-border);
+    --control-outline-border: var(--input);
+    --button-outline-border: var(--control-outline-border);
+    --control-outline-fill: var(--input-fill);
+    --button-outline-fill: var(--control-outline-fill);
+    --control-ghost-foreground: var(--muted-foreground);
+    --button-ghost-foreground: var(--control-ghost-foreground);
     /* 슬라이더 손잡이의 바탕(foundation 슬롯). 이 시스템은 면 색을 그대로 쓴다. */
     --slider-thumb-fill: var(--background);
     --checkbox-fill: transparent;
@@ -338,10 +342,14 @@
     --table-head-foreground: var(--muted-foreground);
     /* Button variant edges and ghost text. mira: secondary has the transparent button border,
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
-    --button-secondary-border: var(--border-strong);
-    --button-outline-border: var(--input);
-    --button-outline-fill: var(--input-fill);
-    --button-ghost-foreground: var(--muted-foreground);
+    --control-secondary-border: var(--border-strong);
+    --button-secondary-border: var(--control-secondary-border);
+    --control-outline-border: var(--input);
+    --button-outline-border: var(--control-outline-border);
+    --control-outline-fill: var(--input-fill);
+    --button-outline-fill: var(--control-outline-fill);
+    --control-ghost-foreground: var(--muted-foreground);
+    --button-ghost-foreground: var(--control-ghost-foreground);
     /* 슬라이더 손잡이의 바탕(foundation 슬롯). 이 시스템은 면 색을 그대로 쓴다. */
     --slider-thumb-fill: var(--background);
     --checkbox-fill: transparent;
@@ -402,4 +410,10 @@
 }
 
 .dark {
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --surface-sheen: none;
+    --surface-ring: var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
 }

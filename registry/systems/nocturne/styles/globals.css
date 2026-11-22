@@ -191,16 +191,20 @@
     --sidebar-group-label-foreground: #6b6e75;
     --table-head-foreground: #6b6e75;
     /* The outline pill draws the strong edge on no fill of its own. */
-    --button-outline-border: var(--border-strong);
-    --button-outline-fill: transparent;
+    --control-outline-border: var(--border-strong);
+    --button-outline-border: var(--control-outline-border);
+    --control-outline-fill: transparent;
+    --button-outline-fill: var(--control-outline-fill);
     --slider-thumb-fill: var(--card);
     --checkbox-fill: var(--input-fill);
 
     /* ---- Axis contract v4 — layer-1 slots ---- */
     --input-fill-disabled: var(--muted);
-    --button-outline-hover-fill: var(--muted);
+    --control-outline-hover-fill: var(--muted);
+    --button-outline-hover-fill: var(--control-outline-hover-fill);
     /* Resting cards: a hairline. Popups: the strong edge. */
-    --card-ring: var(--border);
+    --surface-ring: var(--border);
+    --card-ring: var(--surface-ring);
     --menu-ring: var(--border-strong);
     --slider-track-fill: var(--secondary);
     /* A checked selection card is marked by the lavender edge, its fill stays neutral. */
@@ -233,7 +237,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     --ring-focus: color-mix(in oklab, var(--ring) 30%, transparent);
 }
@@ -290,15 +295,19 @@
        The spec's subtle #6b6e75 is 3.8:1, below AA for 11px text, so labels take this step. */
     --sidebar-group-label-foreground: #868990;
     --table-head-foreground: #868990;
-    --button-outline-border: var(--border-strong);
-    --button-outline-fill: transparent;
+    --control-outline-border: var(--border-strong);
+    --button-outline-border: var(--control-outline-border);
+    --control-outline-fill: transparent;
+    --button-outline-fill: var(--control-outline-fill);
     --slider-thumb-fill: var(--foreground);
     --checkbox-fill: var(--input-fill);
 
     /* ---- Axis contract v4 — layer-1 slots ---- */
     --input-fill-disabled: var(--muted);
-    --button-outline-hover-fill: var(--muted);
-    --card-ring: var(--border);
+    --control-outline-hover-fill: var(--muted);
+    --button-outline-hover-fill: var(--control-outline-hover-fill);
+    --surface-ring: var(--border);
+    --card-ring: var(--surface-ring);
     --menu-ring: var(--border-strong);
     --slider-track-fill: var(--secondary);
     --field-label-checked-border: var(--ring);
@@ -323,7 +332,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     --ring-focus-strong: color-mix(in oklab, var(--ring) 50%, transparent);
 }
@@ -353,4 +363,9 @@
   html {
     @apply font-sans;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --surface-sheen: none;
 }

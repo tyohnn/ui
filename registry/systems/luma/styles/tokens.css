@@ -96,6 +96,7 @@
        combobox chips · questionnaire input) is rounded-3xl (22px) while the button family is
        rounded-4xl (26px). The v4 slot --control-radius-sm carries the smaller step. */
     --control-radius-sm: 22px;    /* luma gives the xs button no radius of its own */
+    --field-radius: var(--control-radius-sm);
     --toggle-group-joined-radius: var(--control-radius-sm);    /* joined toggle-group item corners rounded-3xl */
     /* ⚠ 1px 미만으로 내리지 말 것. 하위픽셀 테두리는 축소 렌더링에서 한 변이 사라진다.
        ⚠ 올릴 때는 2px 이 상한이다. --switch-thumb-inset 과 switch.css 의 계산이 음수가 된다. */
@@ -211,7 +212,10 @@
     --sheet-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);    /* shadow-xl */
     /* luma: the card is rounded-4xl (26) while popovers and menus are rounded-3xl (22);
        the v4 slot --card-radius splits them. */
-    --card-radius: 26px;
+    --surface-raised-radius: 26px;
+    --surface-raised-spacing: var(--surface-padding-md);    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --chart-tooltip-radius: 14px;    /* chart tooltip rounded-xl */
     --empty-radius: 18px;    /* empty rounded-2xl */
     /* luma: the chat bubble is px-3.5 py-2.5 with leading-relaxed on text-sm (14 × 1.625). */
@@ -409,10 +413,13 @@
 
     /* Plain badge (v4 --badge-*). luma: h-5 · px-2 · pl-1.5 with an icon · rounded-3xl — the xs
        control grew to h-6, the badge did not. */
-    --badge-height: 20px;
-    --badge-padding-x: var(--tag-padding-x);
+    --indicator-height: 20px;
+    --badge-height: var(--indicator-height);
+    --indicator-padding-x-lg: var(--tag-padding-x);
+    --badge-padding-x: var(--indicator-padding-x-lg);
     --badge-padding-x-icon: 6px;
-    --badge-radius: var(--indicator-radius-pill);
+    --indicator-radius: var(--indicator-radius-pill);
+    --badge-radius: var(--indicator-radius);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
@@ -504,14 +511,22 @@
 :root {
     --indicator-padding-y: 2px;
     --badge-padding-y: var(--indicator-padding-y);
-    --badge-gap: var(--control-gap-xs);
-    --badge-icon-size: var(--control-icon-size-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
-    --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;
+    --indicator-gap: var(--control-gap-xs);
+    --badge-gap: var(--indicator-gap);
+    --indicator-icon-size: var(--control-icon-size-xs);
+    --badge-icon-size: var(--indicator-icon-size);
+    --indicator-border-width: var(--control-border-width);
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-font-size: var(--ui-text-xs);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--ui-line-height-xs);
+    --badge-line-height: var(--indicator-line-height);
+    --indicator-letter-spacing: var(--ui-letter-spacing);
+    --badge-letter-spacing: var(--indicator-letter-spacing);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
+    --indicator-text-transform: initial;
+    --badge-text-transform: var(--indicator-text-transform);
     --kbd-min-width: var(--kbd-height);
     --kbd-gap: var(--control-gap-xs);
     --kbd-font-size: var(--ui-text-xs);
@@ -604,7 +619,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-card);
+    --surface-shadow: var(--shadow-card);
+    --card-shadow: var(--surface-shadow);
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -619,4 +635,12 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }

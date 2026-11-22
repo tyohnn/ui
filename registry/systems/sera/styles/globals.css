@@ -207,7 +207,8 @@
 
     /* 떠 있는 면(카드·팝오버·드롭다운)의 테두리와 모달 뒤에 까는 막.
        mira: ring-1 ring-foreground/10 · bg-black/80 supports-backdrop-filter:backdrop-blur-xs */
-    --card-ring: color-mix(in oklab, var(--card-foreground) 5%, transparent);     /* sera: the card's ring-foreground/5 */
+    --surface-ring: color-mix(in oklab, var(--card-foreground) 5%, transparent);
+    --card-ring: var(--surface-ring);     /* sera: the card's ring-foreground/5 */
     --overlay-backdrop: oklch(0 0 0 / 20%);   /* sera: bg-black/20 */
 
     /* 스위치. mira: data-unchecked:bg-input dark:data-unchecked:bg-input/80 ·
@@ -227,7 +228,8 @@
     --table-head-foreground: var(--muted-foreground);   /* sera: text-muted-foreground */
     /* outline 버튼의 바탕. mira 는 밝은 쪽에 아무 색도 두지 않고 어두운 쪽만 bg-input/30 이다 —
        Input 의 bg-input/20 과 다른 자리라 --input-fill 을 그대로 읽을 수 없다. */
-    --button-outline-fill: transparent;
+    --control-outline-fill: transparent;
+    --button-outline-fill: var(--control-outline-fill);
     /* 슬라이더 손잡이의 바탕. mira: bg-white — 두 모드에서 같은 흰색이다(--background 가 아니다). */
     --slider-thumb-fill: var(--primary);   /* sera: bg-primary */
     --slider-track-fill: color-mix(in oklab, var(--input) 50%, transparent);   /* sera: bg-input/50 */
@@ -247,7 +249,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     --checkbox-invalid-checked-border: var(--checked);
     /* 켜진 스위치 손잡이. mira: bg-background, 어두운 쪽은 dark:data-checked:bg-primary-foreground —
@@ -281,7 +284,9 @@
     --ring-invalid: color-mix(in oklab, var(--destructive) 40%, transparent);
     --border-invalid: color-mix(in oklab, var(--destructive) 50%, transparent);
 
-    --card-ring: color-mix(in oklab, var(--card-foreground) 5%, transparent);
+    --surface-ring: color-mix(in oklab, var(--card-foreground) 5%, transparent);
+
+    --card-ring: var(--surface-ring);
     --overlay-backdrop: oklch(0 0 0 / 20%);   /* sera: bg-black/20 */
 
     --switch-track-off: var(--input);  /* sera: data-unchecked:bg-input */
@@ -295,7 +300,8 @@
     --table-head-foreground: var(--muted-foreground);   /* sera: text-muted-foreground */
     /* Button variant edges and ghost text. mira: secondary has the transparent button border,
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
-    --button-outline-fill: var(--input-fill);
+    --control-outline-fill: var(--input-fill);
+    --button-outline-fill: var(--control-outline-fill);
     /* Checkbox fill when unchecked, and the indeterminate look. mira: --input-fill, and indeterminate
        looks unchecked (foreground `initial` = inherit). */
     --slider-thumb-fill: var(--primary);   /* sera: bg-primary */
@@ -314,7 +320,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     --switch-thumb-on: var(--primary-foreground);
 }
@@ -356,4 +363,9 @@
 
 .dark {
     --switch-thumb-on: var(--primary-foreground);
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --surface-sheen: none;
 }

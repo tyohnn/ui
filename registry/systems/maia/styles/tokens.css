@@ -153,11 +153,15 @@
        Places where mira gives one value and maia gives two, so the value cannot move
        in a shared layer-2 axis alone. maia proposed the first group as slot candidates and v4
        adopted them; the foundation default that reproduces mira is written next to each. */
-    --badge-height: 20px;                       /* foundation: var(--control-height-xs) — maia's xs button is h-6, the badge stays h-5 */
-    --badge-radius: var(--control-radius);      /* foundation: 9999px — maia: rounded-4xl */
-    --badge-padding-x: 8px;                     /* foundation: var(--control-padding-x-xs) — maia: px-2 */
+    --indicator-height: 20px;
+    --badge-height: var(--indicator-height);                       /* foundation: var(--control-height-xs) — maia's xs button is h-6, the badge stays h-5 */
+    --indicator-radius: var(--control-radius);
+    --badge-radius: var(--indicator-radius);      /* foundation: 9999px — maia: rounded-4xl */
+    --indicator-padding-x-lg: 8px;
+    --badge-padding-x: var(--indicator-padding-x-lg);                     /* foundation: var(--control-padding-x-xs) — maia: px-2 */
     --badge-padding-x-icon: 6px;                /* foundation: var(--control-padding-x-icon-xs) — maia: pl-1.5 */
-    --badge-icon-size: 12px;                    /* foundation: var(--control-icon-size-xs) — maia: size-3! */
+    --indicator-icon-size: 12px;
+    --badge-icon-size: var(--indicator-icon-size);                    /* foundation: var(--control-icon-size-xs) — maia: size-3! */
     --kbd-height: 20px;                         /* foundation: var(--control-height-xs) — a keycap is not an xs button */
     --avatar-font-size: var(--ui-text-sm);      /* foundation: var(--ui-text-lg) — maia's fallback is text-sm, its lg UI step text-base */
     --avatar-line-height: var(--ui-line-height-sm);
@@ -489,13 +493,20 @@
 :root {
     --indicator-padding-y: 2px;
     --badge-padding-y: var(--indicator-padding-y);
-    --badge-gap: var(--control-gap-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
-    --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;
+    --indicator-gap: var(--control-gap-xs);
+    --badge-gap: var(--indicator-gap);
+    --indicator-border-width: var(--control-border-width);
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-font-size: var(--ui-text-xs);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--ui-line-height-xs);
+    --badge-line-height: var(--indicator-line-height);
+    --indicator-letter-spacing: var(--ui-letter-spacing);
+    --badge-letter-spacing: var(--indicator-letter-spacing);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
+    --indicator-text-transform: initial;
+    --badge-text-transform: var(--indicator-text-transform);
     --kbd-min-width: var(--kbd-height);
     --indicator-padding-x: 4px;
     --kbd-padding-x: var(--indicator-padding-x);
@@ -534,7 +545,10 @@
     --menubar-padding: var(--menu-padding);
     --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
-    --card-radius: var(--surface-radius);
+    --surface-raised-radius: var(--surface-radius);
+    --surface-raised-spacing: var(--surface-padding-md);    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
     --control-track-padding: 3px;
@@ -592,7 +606,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-card);
+    --surface-shadow: var(--shadow-card);
+    --card-shadow: var(--surface-shadow);
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -607,4 +622,13 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-radius: var(--control-radius);
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }
