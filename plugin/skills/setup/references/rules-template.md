@@ -21,7 +21,8 @@ This app wears the tyohnn system **<system name>**. Its files are in `<styles pa
 
 - Use the primitives in `<components folder>` (button, input, card, menu …) for what they are.
 - For anything they do not cover (a new widget, a one-off panel, a toy like a tape recorder), take behaviour from
-  Base UI (`@base-ui/react`: focus, keyboard, selection, popups, sliders) and the look from roles: put
+  the app's headless library (Base UI `@base-ui/react` or UI SDK `@ui-sdk/react`: focus, keyboard, selection,
+  popups, sliders) and the look from roles: put
   `data-role` on each part.
 
   | data-role | For | Options |

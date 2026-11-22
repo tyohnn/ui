@@ -8,5 +8,5 @@
     "homepage": "https://tyohnn.vercel.app",
     "repository": "https://github.com/tyohnn/ui",
     "license": "MIT",
-    "keywords": ["design-system", "shadcn", "tailwind", "tokens", "base-ui"]
+    "keywords": ["design-system", "shadcn", "tailwind", "tokens", "base-ui", "ui-sdk"]
 }

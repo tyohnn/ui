@@ -1,14 +1,15 @@
 ---
 name: craft-component
-description: Builds a component the design system does not have (a mixtape recorder, a pricing toggle, a timeline, a game HUD) so it takes the system's feel and keeps it when the system changes. Takes behaviour from Base UI and the look from tyohnn's roles (data-role), never from literal colours, radii, shadows or sizes. Use when the person asks for any new UI piece in a repo with tyohnn.json, or for something the primitives (button, card, menu …) do not cover.
+description: Builds a component the design system does not have (a mixtape recorder, a pricing toggle, a timeline, a game HUD) so it takes the system's feel and keeps it when the system changes. Takes behaviour from a headless library (Base UI or UI SDK) and the look from tyohnn's roles (data-role), never from literal colours, radii, shadows or sizes. Use when the person asks for any new UI piece in a repo with tyohnn.json, or for something the primitives (button, card, menu …) do not cover.
 ---
 
 # Craft a component that wears the system
 
 A component has two halves that come from different places:
 
-- **Behaviour** (focus, keyboard, selection, dragging, opening and dismissing, ARIA) comes from Base UI
-  (`@base-ui/react`), or from a tyohnn primitive that already wraps it.
+- **Behaviour** (focus, keyboard, selection, dragging, opening and dismissing, ARIA) comes from a headless
+  library: Base UI (`@base-ui/react`), which tyohnn's primitives already use, or UI SDK (`@ui-sdk/react`). Use the
+  one the app already depends on; with neither, use Base UI. A tyohnn primitive that already wraps it counts too.
 - **Look** (colour, density, depth, texture, type) comes from the system: each part says which **role** it plays
   with `data-role`, and the system's role rules and tokens dress it.
 
@@ -30,9 +31,9 @@ folder. Craft only what no primitive covers.
 
 ## 3. Split into parts, give each a behaviour
 
-List the component's parts and what each must do. Pick the Base UI part for every interactive one:
-`references/behaviour.md` maps behaviours to parts (a transport bar is a Toolbar, a position bar is a Slider, a
-level is a Meter, play is a Toggle …). Never hand-roll keyboard handling Base UI already has.
+List the component's parts and what each must do. Pick the headless part for every interactive one:
+`references/behaviour.md` maps behaviours to parts in both libraries (a transport bar is a Toolbar, a position bar
+is a Slider, a level is a Meter, play is a Toggle …). Never hand-roll keyboard handling the library already has.
 
 ## 4. Give each part a role
 
@@ -52,7 +53,8 @@ Run the swap test in `references/swap-test.md`: render the component in the app'
 systems, both modes. If anything looks off in one of them, the component decided something it should not have;
 fix the component, not the system.
 
-`references/example-mixtape.md` is a whole worked component (a mixtape recorder) to copy patterns from.
+`references/example-mixtape.md` is a whole worked component (a mixtape recorder) to copy patterns from, and
+`references/example-mixtape-uisdk.md` is the same recorder on UI SDK: only the behaviour imports differ.
 
 ## Keep to
 
@@ -60,5 +62,5 @@ fix the component, not the system.
   enforces it; run it.
 - Do not edit the system's CSS to make one component look right. If a look recurs and no role or token says it,
   follow "When a role step is missing" in `references/beyond-roles.md`.
-- Keep ARIA from Base UI; add labels for icon-only controls (`aria-label`).
+- Keep the ARIA the library gives; add labels for icon-only controls (`aria-label`).
 - Use the app's icon set the way its other components do.

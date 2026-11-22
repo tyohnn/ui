@@ -26,7 +26,8 @@ seam. The role rules read role tokens and theme colours only.
 - Does it show a state or a number? `indicator`.
 - Is it words that name or describe? `label` or `meta`.
 
-A part can be both a Base UI part and a role: `<Toolbar.Button data-role="control" data-variant="ghost">`.
+A part can be both a headless part and a role: `<Toolbar.Button data-role="control" data-variant="ghost">` in Base UI,
+`<ToolbarButton data-role="control" data-variant="ghost">` in UI SDK.
 
 ## Specificity
 
