@@ -47,7 +47,9 @@ export interface Axis
 
 /**
  * The tokens each axis shows first: the few that move it most. Any other token a system declares can still be
- * set (set_tokens checks the name against the system's CSS); these are the ones with a control.
+ * set (set_tokens checks the name against the system's CSS); these are the ones with a control. Where a role token
+ * carries the value (item height, surface shadow), the control sets the role token, so every component that plays
+ * that role follows, including ones written later with data-role.
  */
 export const AXES: Axis[] = [
     { id: "density", title: "Density", hint: "heights · padding · rhythm", controls: [
@@ -55,10 +57,10 @@ export const AXES: Axis[] = [
         { token: "--control-padding-x-md", label: "Control padding", range: { min: 4, max: 20, step: 1, unit: "px" } },
         { token: "--surface-padding-md", label: "Surface padding", range: { min: 8, max: 40, step: 1, unit: "px" } },
         { token: "--table-row-height", label: "Table row height", range: { min: 24, max: 64, step: 1, unit: "px" } },
-        { token: "--sidebar-item-height", label: "Sidebar item height", range: { min: 24, max: 44, step: 1, unit: "px" } },
+        { token: "--item-height-md", label: "Row height (menus, lists, sidebar)", range: { min: 24, max: 44, step: 1, unit: "px" } },
     ] },
     { id: "depth", title: "Depth", hint: "how far surfaces lift", controls: [
-        { token: "--card-shadow", label: "Card shadow", options: [
+        { token: "--surface-shadow", label: "Surface shadow", options: [
             { label: "Flat", value: "none", hint: "no shadow" },
             { label: "Hairline", value: "0 0 0 1px rgb(0 0 0 / .06)", hint: "1px ring" },
             { label: "Soft", value: "0 1px 2px rgb(0 0 0 / .06), 0 4px 12px rgb(0 0 0 / .06)", hint: "4 · 12px" },
@@ -306,8 +308,6 @@ export const previewVars = (state: SystemState, library: ThemeLibrary): Record<s
 export const describe = (state: SystemState, library: ThemeLibrary) =>
 {
     const lines = [`${state.system}, ${state.mode}.`];
-    const code = presetCode(state, library);
-
     lines.push(`Colours: ${state.palette} palette${state.palette === state.system ? " (the system's own)" : ""}${state.accent ? `, ${state.accent} accent` : ""}${state.chart ? `, ${state.chart} charts` : ""}.`);
 
     for (const mode of ["light", "dark"] as const)
@@ -320,7 +320,6 @@ export const describe = (state: SystemState, library: ThemeLibrary) =>
     const tokens = Object.entries(state.tokens);
 
     lines.push(tokens.length > 0 ? `Tokens changed: ${tokens.map(([name, value]) => `${name} ${value}`).join(", ")}.` : "No other token changed.");
-    if (code) lines.push(`Colour preset: --preset ${code}`);
 
     return lines.join("\n");
 };
