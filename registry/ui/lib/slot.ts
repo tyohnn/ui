@@ -1,3 +1,4 @@
+import type * as React from "react"
 import { renderElement, type RenderProp } from "@ui-sdk/react/primitive"
 
 /**
@@ -30,4 +31,32 @@ function slot<State>(
 /** 참이면 빈 문자열(속성이 있다), 거짓이면 undefined(속성이 없다) */
 const flag = (value: unknown) => (value ? "" : undefined)
 
-export { flag, slot }
+/** 동작 없이 render 를 받는 부분의 props. 태그의 props 에 render 하나를 더한다 */
+type RenderableProps<Tag extends keyof React.JSX.IntrinsicElements, State = Record<string, unknown>> =
+  React.ComponentProps<Tag> & { render?: RenderProp<State> }
+
+/**
+ * 상태를 data-* 로 펼쳐 태그나 render 로 그린다. shadcn 의 Base UI 판이 useRender 에 맡기던 일이다.
+ * 참은 빈 값, 문자열과 숫자는 그 값, 거짓과 undefined 는 속성이 없다. 넘긴 props 가 상태의 속성을 이긴다.
+ * 훅을 쓰지 않아 서버 컴포넌트에서도 부른다.
+ */
+function renderPart<State extends Record<string, unknown>>(
+  tag: string,
+  props: Record<string, unknown>,
+  render: RenderProp<State> | undefined,
+  state: State
+) {
+  const attrs: Record<string, string> = {}
+
+  for (const [key, value] of Object.entries(state)) {
+    if (value === true) attrs[`data-${key.toLowerCase()}`] = ""
+    else if (value) attrs[`data-${key.toLowerCase()}`] = String(value)
+  }
+
+  // Base UI 의 useRender 는 태그 그대로 그린 button 에 type="button" 을 달았다(폼 안에서 제출하지 않게).
+  const native = tag === "button" && !render ? { type: "button" } : {}
+
+  return renderElement(tag, { ...native, ...attrs, ...props }, render, state)
+}
+
+export { flag, renderPart, slot, type RenderableProps }

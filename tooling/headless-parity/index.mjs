@@ -56,8 +56,8 @@ const BEHAVE_SYSTEMS = ["foundation", "graphite"];
  */
 /** 처음부터 열린(defaultOpen) 팝업 안 요소의 포커스 표시. Base UI 는 열린 채 붙어도 첫 입력칸으로 포커스를 옮겼다 */
 const POPUP_SECTIONS = "popover|hover-card|tooltip|dropdown-menu|context-menu|menubar|select|combobox|navigation-menu";
-const FOCUS_ON_MOUNT = new RegExp(` · (${POPUP_SECTIONS}): [a-z-]+#\\d+(>[a-z-]+#\\d+)* (border-(top|right|bottom|left)-color|box-shadow|outline-(width|color|style|offset)) `);
-const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기지 않는다(UI SDK). 눌러 열면 첫 입력칸으로 간다. Base UI 는 열린 채 붙어도 옮겨 포커스 표시가 보였다";
+const FOCUS_ON_MOUNT = new RegExp(` · (${POPUP_SECTIONS}): ([a-z-]+#\\d+(>[a-z-]+#\\d+)* (border-(top|right|bottom|left)-color|box-shadow|outline-(width|color|style|offset))|select-item#\\d+ (color|background-color)) `);
+const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기지 않고 고른 항목도 강조하지 않는다(UI SDK). 눌러 열면 첫 입력칸이나 고른 항목으로 간다. Base UI 는 열린 채 붙어도 옮겨 포커스 표시와 강조가 보였다";
 
 /**
  * 구역이 함께 재는 팝업의 선택자를 기록할 때 바꾼다. 빌드에는 그때의 coverage 템플릿이 들어 있어, 템플릿을 고쳐도
@@ -67,6 +67,8 @@ const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기
  */
 const PORTALS = {
     "navigation-menu": [".cn-navigation-menu-popup"],
+    // Base UI 의 뷰포트(toast-viewport)와 UI SDK 의 영역(toast-region)이 같은 자리다
+    toast: ['[data-slot="toast-viewport"], [data-slot="toast-region"]'],
 };
 
 /**
@@ -92,8 +94,8 @@ const PRE_MEASURE = {
 const KNOWN = [
     [FOCUS_ON_MOUNT, FOCUS_ON_MOUNT_REASON],
     [new RegExp(` · (${POPUP_SECTIONS}): element root\\d+>span#\\d+ gone$`), "Base UI 가 팝업 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
-    [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+-trigger#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
-    [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
+    [/ · ((command-)?dialog|alert-dialog(-[a-z]+)?|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
+    [/ · ((command-)?dialog|alert-dialog(-[a-z]+)?|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
     [/ · drawer(-[a-z]+)?: element drawer-viewport#\d+ new$/, "서랍을 화면 가장자리에 붙이는 viewport 를 UI SDK 가 그리고 인라인 스타일로 자리를 잡는다. Base UI 의 viewport 는 body 로 포털돼 섹션 밖에 있어 재지 않았다"],
     [/ · (dropdown-menu|context-menu|menubar): [a-z-]+-label#\d+ aria-hidden=true → \(none\)$/, "Base UI 는 묶음 이름표를 aria-hidden 으로 숨기고 묶음의 aria-labelledby 로만 읽게 했다. UI SDK 는 이름표를 숨기지 않고 묶음이 그것을 가리킨다"],
     [/ · (dropdown-menu|context-menu|menubar): [a-z-]+-sub-trigger#\d+ (tabindex=0 → -1|data-highlighted= → \(none\))$/, "처음부터 열린 하위 메뉴의 단추를 강조하지 않는다(UI SDK). 포인터나 키보드로 열면 강조하고 포커스가 따라간다. Base UI 는 열린 채 붙어도 그 단추로 포커스를 옮겼다. 열린 단추는 data-popup-open 으로 같은 바탕을 칠해 화면은 같다"],
@@ -104,6 +106,7 @@ const KNOWN = [
     [/ · menubar: menubar-trigger#\d+ (disabled= → \(none\)|aria-disabled=\(none\) → true|tabindex=\(none\) → -1)$/, "메뉴바의 꺼진 트리거는 native disabled 가 아니라 aria-disabled · data-disabled 로 끈다(UI SDK, APG 메뉴바). 열리지 않고 모양도 data-disabled 로 같다"],
     [/ · navigation-menu: element navigation-menu-item#\d+>span#\d+ gone$/, "Base UI 가 열린 항목 안에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
     [/ · navigation-menu: (element root\d+>div#\d+ gone|root\d+ <nav> → <div>)$/, "Base UI 의 판은 자리 잡이 · 팝업(nav) · 뷰포트(div) 세 겹이었다. UI SDK 의 뷰포트는 한 겹의 div 이고 내용이 바로 그 안에 든다. 랜드마크 nav 는 루트 하나다"],
+    [/ · sidebar: element tooltip-(content|arrow)#\d+ new$/, "UI SDK 의 툴팁 내용은 닫혀 있어도 hidden 으로 제자리에 남는다(트리거의 aria-describedby 가 늘 가리킬 수 있게). Base UI 는 열 때만 그렸다. 사이드바가 펼쳐진 동안 메뉴 단추의 툴팁은 닫혀 있어 보이지 않는다"],
     [/ · tooltip: (root\d+ (width|data-closed|data-instant|data-ending-style|tabindex|role)[ =]|element (root\d+>div#\d+ gone|(tooltip-arrow|tooltip-content|kbd)#\d+ new)$)/, "Base UI 는 한 Provider 안에서 툴팁을 하나만 열어 두어, 처음부터 열린 둘 가운데 앞의 것을 닫히는 중으로 두었다. UI SDK 는 둘 다 연다(마우스로는 어차피 하나만 열린다). 위치를 잡는 Positioner div 가 없어 부분의 이름이 한 칸씩 밀린다"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
@@ -121,6 +124,23 @@ const KNOWN = [
     [/ · behaviour tabs: tabs-trigger\(tab\) "(Account|Password)"(#\d+)? · (ArrowRight|ArrowLeft|PageUp) focus /, "세로 탭은 위아래 화살표로 움직이고 좌우 화살표는 움직이지 않는다(shadcn 래퍼가 Base UI 에 방향을 넘기지 않던 것을 고쳤다). 뒤의 키는 그 자리를 이어받는다"],
     [/ · behaviour (toggle-group|tabs): step only (before|after) /, "Tab 으로 닿는 자리가 달라 그 자리에서 시작하는 단계가 다르다(아래 Tab 순서의 까닭과 같다)"],
     [/ · behaviour (toggle-group|tabs): tab order /,"Tab 으로 들어올 자리가 첫 항목이 아니라 눌린 항목 · 고른 탭이다(UI SDK)"],
+    [/ · (select|combobox(-[a-z]+)?): element (root\d+>input#\d+ gone|(select|combobox)-(form|value)-input#\d+ new)$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다. 여럿을 고르면 값마다 하나씩 둔다"],
+    [/ · (select|combobox(-[a-z]+)?): (element root1>div#0 gone|root1 role=presentation → listbox)$/, "Base UI 의 목록은 자리 잡이(role=presentation) · 팝업 · 목록(listbox) 세 겹이었다. UI SDK 의 내용은 한 겹이고 스스로 listbox 다"],
+    [/ · (select|combobox(-[a-z]+)?): element ((select|combobox)-item#\d+>(div|span|svg)#\d+ gone|(select|combobox)-item-(text|indicator)#\d+(>svg#\d+)? new)$/, "항목의 글과 고른 표시에 UI SDK 가 이름(data-slot=*-item-text · *-item-indicator)을 붙였다. 고른 표시는 고른 항목에만 그린다"],
+    [/ · (select|combobox(-[a-z]+)?): (select|combobox)-label#\d+ aria-hidden=true → \(none\)$/, "Base UI 는 묶음 이름표를 aria-hidden 으로 숨기고 묶음의 aria-labelledby 로만 읽게 했다. UI SDK 는 이름표를 숨기지 않고 묶음이 그것을 가리킨다"],
+    [/ · (select|combobox(-[a-z]+)?): (select|combobox)-separator#\d+ (data-orientation=horizontal → \(none\)|role=presentation → none|aria-hidden=\(none\) → true)$/, "목록 안의 구분선은 listbox 가 가질 수 있는 자식이 아니라서 UI SDK 는 role=none 과 aria-hidden 으로 감춘다. 모양은 같다"],
+    [/ · select: select-item#\d+ (tabindex=0 → -1|data-highlighted= → \(none\))$/, "처음부터 열린 목록은 고른 항목을 강조하지 않는다(UI SDK). 눌러 열면 고른 항목을 강조하고 포커스가 따라간다"],
+    [/ · combobox: input-group-button#\d+ (aria-haspopup=listbox|data-placeholder=) → \(none\)$/, "Tab 이 닿지 않는 열기 단추(tabindex=-1)라 UI SDK 는 aria-haspopup 과 값이 비었다는 표시를 입력칸에만 둔다"],
+    [/ · select: select-trigger#\d+ tabindex=-1 → \(none\)$/, "꺼진 트리거는 native disabled 라 tabindex 없이도 Tab 이 닿지 않는다"],
+    [/ · (select|combobox(-[a-z]+)?): ([a-z-]+#\d+>)?svg#\d+ data-popup-open= → \(none\)$|· combobox: combobox-clear#\d+ data-popup-open= → \(none\)$/, "Base UI 는 트리거 안의 아이콘과 지우기 단추에도 열림 표시를 달았다. 스타일은 그것을 읽지 않고, 열림은 트리거의 data-popup-open 이 말한다"],
+    [/ · combobox(-[a-z]+)?: element ((input-group|combobox-chips)#\d+>span#\d+ gone)$/, "Base UI 가 화면 낭독기용으로 두던 보이지 않는 「Dismiss」 단추가 없다. UI SDK 의 목록은 Escape 로 닫는다"],
+    [/ · combobox(-[a-z]+)?: (root0>[a-z0-9]+#\d+|input-group-addon#\d+) aria-hidden=true → \(none\)$/, "Base UI 는 목록이 열린 동안 페이지의 나머지를 aria-hidden 으로 가렸다. UI SDK 의 콤보박스는 APG 처럼 모달이 아니라 가리지 않는다"],
+    [/ · combobox(-[a-z]+)?: (input-group-control|combobox-chip-input)#\d+ (aria-haspopup=listbox → \(none\)|type=\(none\) → text)$/, "role=combobox 는 aria-haspopup 의 기본값이 listbox 라 UI SDK 는 따로 적지 않고, 입력칸의 type=text 를 적어 둔다"],
+    [/ · combobox(-[a-z]+)?: combobox-list#\d+ tabindex=-1 → \(none\)$/, "포커스는 입력칸에 머물고 목록은 aria-activedescendant 로 가리킨다. 목록에 tabindex 를 따로 두지 않는다(UI SDK)"],
+    [/ · combobox-chips: (combobox-chips#\d+ aria-orientation=\(none\) → horizontal|combobox-chip#\d+ (aria-hidden=true → \(none\)|role=\(none\) → group|aria-label=\(none\) → .+)|root1 aria-multiselectable=\(none\) → true)$/, "UI SDK 는 고른 값의 칩을 이름 붙은 묶음으로 읽히게 하고(Base UI 는 칩을 숨기고 입력칸만 읽게 했다), 여럿을 고르는 목록에 aria-multiselectable 을 단다"],
+    [/ · toast: (element toast-list#\d+ new|root1 <div> → <section>|root1 (tabindex=-1 → \(none\)|aria-live=polite → \(none\)|aria-atomic=false → \(none\)|aria-relevant=additions text → \(none\)|aria-keyshortcuts=\(none\) → F6))$/, "UI SDK 의 알림 영역은 section 안의 목록(ol)이고 F6 으로 들어간다. 읽어 주는 일은 영역 전체의 aria-live 가 아니라 알림마다 맡는다"],
+    [/ · toast: (toast#\d+ (<div> → <li>|role=dialog → \(none\)|aria-modal=false → \(none\))|toast-(title|description)#\d+ <(h2|p)> → <div>|toast-(title|description|action|close)#\d+ data-type=[a-z]+ → \(none\)|toast-close#\d+ aria-hidden=true → \(none\))$/, "UI SDK 의 알림은 목록의 항목(li)이고 제목 · 설명을 div 로 그린다. 종류(data-type)는 알림에만 달고 안쪽 부분은 그것을 읽는다. 닫기 단추는 이름을 붙여 낭독기에도 보인다"],
+    [/ · scroll-area: (element scroll-area-(corner|scrollbar|thumb)#\d+ new|scroll-area(-viewport)?#\d+ role=presentation → \(none\))$/, "UI SDK 는 넘치지 않는 쪽의 스크롤 막대와 모서리를 display:none 으로 그려 두고(Base UI 는 그리지 않았다), 루트와 뷰포트에 role=presentation 을 따로 붙이지 않는다"],
     [/ · pagination: pagination-link#\d+ (role=button|tabindex=0) → \(none\)$/, "pagination 의 링크는 href 가 있는 a 다. Base UI 는 nativeButton={false} 로 role=button 을 붙였고 UI SDK 는 링크를 링크로 둔다(shadcn 원본과 같다)"],
 ];
 

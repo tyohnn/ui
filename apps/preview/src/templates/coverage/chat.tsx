@@ -272,7 +272,7 @@ export const chatSections: CoverageSection[] = [
     {
         name: "toast",
         components: ["toast"],
-        portals: ['[data-slot="toast-viewport"]'],
+        portals: ['[data-slot="toast-region"]'],
         render: (open) => (
             <Toaster>
                 <ToastOpener open={open} />

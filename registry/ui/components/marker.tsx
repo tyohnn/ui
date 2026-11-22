@@ -1,8 +1,8 @@
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+
+import { renderPart, type RenderableProps } from "@tyohnn/lib/slot"
 
 const markerVariants = cva(
   "cn-marker group/marker relative flex w-full items-center",
@@ -22,21 +22,19 @@ function Marker({
   variant = "default",
   render,
   ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof markerVariants>) {
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(markerVariants({ variant, className })),
-      },
-      props
-    ),
+}: RenderableProps<"div"> & VariantProps<typeof markerVariants>) {
+  return renderPart(
+    "div",
+    {
+      className: cn(markerVariants({ variant, className })),
+      ...props,
+    },
     render,
-    state: {
+    {
       slot: "marker",
       variant,
-    },
-  })
+    }
+  )
 }
 
 function MarkerIcon({ className, ...props }: React.ComponentProps<"span">) {

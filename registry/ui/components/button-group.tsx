@@ -1,9 +1,8 @@
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
 import { Separator } from "@tyohnn/components/separator"
+import { renderPart, type RenderableProps } from "@tyohnn/lib/slot"
 
 const buttonGroupVariants = cva(
   "cn-button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
@@ -42,23 +41,21 @@ function ButtonGroupText({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div">) {
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(
-          "cn-button-group-text flex items-center [&_svg]:pointer-events-none",
-          className
-        ),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "button-group-text",
+}: RenderableProps<"div">) {
+  return renderPart(
+    "div",
+    {
+      className: cn(
+        "cn-button-group-text flex items-center [&_svg]:pointer-events-none",
+        className
+      ),
+      ...props,
     },
-  })
+    render,
+    {
+      slot: "button-group-text",
+    }
+  )
 }
 
 function ButtonGroupSeparator({

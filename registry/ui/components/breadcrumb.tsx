@@ -1,10 +1,9 @@
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cn } from "cn"
 
 import { ChevronRight, MoreHorizontal } from "@tyohnn/icons"
 import { strings } from "@tyohnn/strings"
+import { renderPart, type RenderableProps } from "@tyohnn/lib/slot"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -44,20 +43,18 @@ function BreadcrumbLink({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"a">) {
-  return useRender({
-    defaultTagName: "a",
-    props: mergeProps<"a">(
-      {
-        className: cn("cn-breadcrumb-link", className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "breadcrumb-link",
+}: RenderableProps<"a">) {
+  return renderPart(
+    "a",
+    {
+      className: cn("cn-breadcrumb-link", className),
+      ...props,
     },
-  })
+    render,
+    {
+      slot: "breadcrumb-link",
+    }
+  )
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
