@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/role-steps",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Axis contract 7: add the role steps and point component slots at them in foundation and every system, without moving a value.",
+    "main": "index.mjs",
+    "dependencies": {
+        "@tyohnn/build-system": "*"
+    }
+}
