@@ -21,8 +21,8 @@
     /* graphite: no vertical padding — --control-padding-y-field is 0px (the height is a min-height). */
     padding-block: var(--control-padding-y-field);
 
-    border: var(--control-border-width) solid var(--input-border);
-    border-bottom-color: var(--input-border-bottom);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
+    border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     color: var(--foreground);

@@ -1,30 +1,34 @@
 "use client"
 
-import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
+import type * as React from "react"
+import { Switch as SwitchPrimitive, SwitchThumb } from "@ui-sdk/react/switch"
 import { cn } from "cn"
+
+import { slot } from "@acme/ui/lib/slot"
 
 function Switch({
   className,
   size = "default",
+  render,
   ...props
-}: SwitchPrimitive.Root.Props & {
+}: React.ComponentProps<typeof SwitchPrimitive> & {
   size?: "sm" | "default"
 }) {
   return (
-    <SwitchPrimitive.Root
-      data-slot="switch"
+    <SwitchPrimitive
       data-size={size}
       className={cn(
         "cn-switch peer group/switch relative inline-flex items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
+      render={slot("switch", render, "button")}
       {...props}
     >
-      <SwitchPrimitive.Thumb
-        data-slot="switch-thumb"
+      <SwitchThumb
+        render={slot("switch-thumb", undefined, "span")}
         className="cn-switch-thumb pointer-events-none block ring-0 transition-transform"
       />
-    </SwitchPrimitive.Root>
+    </SwitchPrimitive>
   )
 }
 

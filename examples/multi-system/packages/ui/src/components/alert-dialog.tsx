@@ -1,34 +1,56 @@
 "use client"
 
 import * as React from "react"
-import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
+import {
+  AlertDialog as AlertDialogPrimitive,
+  AlertDialogBackdrop,
+  AlertDialogClose,
+  AlertDialogContent as AlertDialogContentPrimitive,
+  AlertDialogDescription as AlertDialogDescriptionPrimitive,
+  AlertDialogTitle as AlertDialogTitlePrimitive,
+  AlertDialogTrigger as AlertDialogTriggerPrimitive,
+} from "@ui-sdk/react/alert-dialog"
 import { cn } from "cn"
 
 import { Button } from "@acme/ui/components/button"
+import { flag, slot } from "@acme/ui/lib/slot"
 
-function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
-  return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
+function AlertDialog({
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive>) {
+  return <AlertDialogPrimitive {...props} />
 }
 
-function AlertDialogTrigger({ ...props }: AlertDialogPrimitive.Trigger.Props) {
+function AlertDialogTrigger({
+  render,
+  ...props
+}: React.ComponentProps<typeof AlertDialogTriggerPrimitive>) {
   return (
-    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
+    <AlertDialogTriggerPrimitive
+      render={slot("alert-dialog-trigger", render, "button", (state) => ({
+        // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
+        "data-popup-open": flag(state.open),
+        // Base UI 는 다이얼로그를 여는 단추에도 aria-expanded 를 달았고, 단추 스타일이 그것을 읽어 열린 동안 눌린 모양을 낸다.
+        "aria-expanded": state.open,
+      }))}
+      {...props}
+    />
   )
 }
 
-function AlertDialogPortal({ ...props }: AlertDialogPrimitive.Portal.Props) {
-  return (
-    <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
-  )
+/** UI SDK 의 내용과 배경은 스스로 포털로 나간다. shadcn 의 계약을 지키려고 이름만 남긴다 */
+function AlertDialogPortal({ children }: { children?: React.ReactNode }) {
+  return <>{children}</>
 }
 
 function AlertDialogOverlay({
   className,
+  render,
   ...props
-}: AlertDialogPrimitive.Backdrop.Props) {
+}: React.ComponentProps<typeof AlertDialogBackdrop>) {
   return (
-    <AlertDialogPrimitive.Backdrop
-      data-slot="alert-dialog-overlay"
+    <AlertDialogBackdrop
+      render={slot("alert-dialog-overlay", render)}
       className={cn(
         "cn-alert-dialog-overlay fixed inset-0 isolate z-50",
         className
@@ -41,15 +63,16 @@ function AlertDialogOverlay({
 function AlertDialogContent({
   className,
   size = "default",
+  render,
   ...props
-}: AlertDialogPrimitive.Popup.Props & {
+}: React.ComponentProps<typeof AlertDialogContentPrimitive> & {
   size?: "default" | "sm"
 }) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
-      <AlertDialogPrimitive.Popup
-        data-slot="alert-dialog-content"
+      <AlertDialogContentPrimitive
+        render={slot("alert-dialog-content", render)}
         data-size={size}
         className={cn(
           "cn-alert-dialog-content group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 outline-none",
@@ -105,11 +128,12 @@ function AlertDialogMedia({
 
 function AlertDialogTitle({
   className,
+  render,
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
+}: React.ComponentProps<typeof AlertDialogTitlePrimitive>) {
   return (
-    <AlertDialogPrimitive.Title
-      data-slot="alert-dialog-title"
+    <AlertDialogTitlePrimitive
+      render={slot("alert-dialog-title", render, "h2")}
       className={cn("cn-alert-dialog-title cn-font-heading", className)}
       {...props}
     />
@@ -118,11 +142,12 @@ function AlertDialogTitle({
 
 function AlertDialogDescription({
   className,
+  render,
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
+}: React.ComponentProps<typeof AlertDialogDescriptionPrimitive>) {
   return (
-    <AlertDialogPrimitive.Description
-      data-slot="alert-dialog-description"
+    <AlertDialogDescriptionPrimitive
+      render={slot("alert-dialog-description", render, "p")}
       className={cn("cn-alert-dialog-description", className)}
       {...props}
     />
@@ -147,13 +172,16 @@ function AlertDialogCancel({
   variant = "outline",
   size = "default",
   ...props
-}: AlertDialogPrimitive.Close.Props &
+}: React.ComponentProps<typeof AlertDialogClose> &
   Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
   return (
-    <AlertDialogPrimitive.Close
-      data-slot="alert-dialog-cancel"
+    <AlertDialogClose
       className={cn("cn-alert-dialog-cancel", className)}
-      render={<Button variant={variant} size={size} />}
+      render={slot(
+        "alert-dialog-cancel",
+        <Button variant={variant} size={size} />,
+        "button"
+      )}
       {...props}
     />
   )

@@ -24,6 +24,14 @@
     @apply relative w-full overflow-x-auto;
 }
 
+/* The container takes focus only while the table is wider than its place (table.tsx gives it
+   tabindex and a name then), so a keyboard can scroll it. The ring is drawn inside the box: a table
+   usually sits flush in a card that clips, where a ring outside would be cut off. */
+.cn-table-container:focus-visible {
+    outline: var(--focus-ring-width) solid var(--ring);
+    outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
 .cn-table {
     font-size: var(--table-font-size);
     letter-spacing: var(--ui-letter-spacing);
@@ -41,7 +49,7 @@
 
 /* 푸터의 바탕은 mira 의 bg-muted/50 — 1층이 --muted-soft 로 푼 값이다. */
 .cn-table-footer {
-    background-color: var(--muted-soft);
+    background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     border-top: var(--surface-border-width) solid var(--border);
     font-weight: var(--ui-font-weight);
 
@@ -53,13 +61,13 @@
 /* hover 는 한 단 옅은 --muted-soft, 선택은 --muted 다. 둘이 한 단 차이라
    마우스를 올린 행과 고른 행이 구별된다. mira: hover:bg-muted/50 data-[state=selected]:bg-muted */
 .cn-table-row {
-    border-bottom: var(--surface-border-width) solid var(--table-row-divider);
+    border-bottom: var(--surface-border-width) solid var(--table-row-divider, var(--border));
     transition-property: color, background-color;
     transition-duration: var(--control-duration);
     transition-timing-function: var(--control-ease);
 
     &:hover {
-        background-color: var(--muted-soft);
+        background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     }
 
     &[data-state="selected"] {
@@ -78,7 +86,7 @@
 .cn-table-head {
     height: var(--table-head-height, var(--table-head-height-default));
     padding-inline: var(--table-cell-padding-x);
-    color: var(--table-head-foreground);
+    color: var(--table-head-foreground, var(--foreground));
     font-size: var(--table-head-font-size);
     line-height: var(--table-head-line-height);
     letter-spacing: var(--table-head-letter-spacing);

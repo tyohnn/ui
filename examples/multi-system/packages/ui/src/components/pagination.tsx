@@ -3,12 +3,13 @@ import { cn } from "cn"
 
 import { Button } from "@acme/ui/components/button"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "@acme/ui/icons"
+import { strings } from "@acme/ui/strings"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label={strings.pagination.label}
       data-slot="pagination"
       className={cn(
         "cn-pagination mx-auto flex w-full justify-center",
@@ -52,7 +53,6 @@ function PaginationLink({
       variant={isActive ? "outline" : "ghost"}
       size={size}
       className={cn("cn-pagination-link", className)}
-      nativeButton={false}
       render={
         <a
           aria-current={isActive ? "page" : undefined}
@@ -67,19 +67,19 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={text ?? strings.pagination.previousLabel}
       size="default"
       className={cn("cn-pagination-previous", className)}
       {...props}
     >
       <ChevronLeft data-icon="inline-start" className="cn-rtl-flip" />
       <span className="cn-pagination-previous-text hidden sm:block">
-        {text}
+        {text ?? strings.pagination.previous}
       </span>
     </PaginationLink>
   )
@@ -87,17 +87,19 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
-  text = "Next",
+  text,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={text ?? strings.pagination.nextLabel}
       size="default"
       className={cn("cn-pagination-next", className)}
       {...props}
     >
-      <span className="cn-pagination-next-text hidden sm:block">{text}</span>
+      <span className="cn-pagination-next-text hidden sm:block">
+        {text ?? strings.pagination.next}
+      </span>
       <ChevronRight data-icon="inline-end" className="cn-rtl-flip" />
     </PaginationLink>
   )
@@ -118,7 +120,6 @@ function PaginationEllipsis({
       {...props}
     >
       <MoreHorizontal />
-      <span className="sr-only">More pages</span>
     </span>
   )
 }

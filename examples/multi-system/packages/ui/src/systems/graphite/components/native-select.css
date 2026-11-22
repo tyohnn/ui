@@ -32,8 +32,8 @@
     appearance: none;
     user-select: none;
 
-    border: var(--control-border-width) solid var(--input-border);
-    border-bottom-color: var(--input-border-bottom);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
+    border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
     border-radius: var(--control-radius);
     background-color: var(--input-fill);
     color: var(--foreground);

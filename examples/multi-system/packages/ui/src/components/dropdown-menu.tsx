@@ -1,21 +1,85 @@
 "use client"
 
 import * as React from "react"
-import { Menu as MenuPrimitive } from "@base-ui/react/menu"
+import {
+  Menu as MenuPrimitive,
+  MenuCheckboxItem as MenuCheckboxItemPrimitive,
+  MenuContent as MenuContentPrimitive,
+  MenuGroup as MenuGroupPrimitive,
+  MenuGroupLabel as MenuGroupLabelPrimitive,
+  MenuItem as MenuItemPrimitive,
+  MenuItemIndicator as MenuItemIndicatorPrimitive,
+  MenuRadioGroup as MenuRadioGroupPrimitive,
+  MenuRadioItem as MenuRadioItemPrimitive,
+  MenuSeparator as MenuSeparatorPrimitive,
+  MenuSub as MenuSubPrimitive,
+  MenuSubTrigger as MenuSubTriggerPrimitive,
+  MenuTrigger as MenuTriggerPrimitive,
+} from "@ui-sdk/react/menu"
+import { renderElement } from "@ui-sdk/react/primitive"
 import { cn } from "cn"
 
 import { Check, ChevronRight } from "@acme/ui/icons"
+import { sideOf, type ContractSide } from "@acme/ui/lib/popup"
+import { flag, slot } from "@acme/ui/lib/slot"
 
-function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
-  return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+/** 묶음 이름표는 묶음 안에서만 UI SDK 의 이름표가 된다. 묶음 밖의 이름표는 글자만 보여 준다 */
+const InGroup = React.createContext(false)
+
+/** 체크 표시는 shadcn 이 감싼 span 안에 이름 없이 들어간다. UI SDK 가 붙이는 data-slot 을 지운다 */
+const unnamed = (props: Record<string, unknown>, state: unknown) =>
+  renderElement("span", { ...props, "data-slot": undefined }, undefined, state)
+
+/** 자식을 상태 함수로 받지 않는다. shadcn 의 항목은 아이콘 · 글자 · 표시를 그대로 늘어놓는다 */
+type Plain<T> = Omit<T, "children"> & { children?: React.ReactNode }
+
+/** 메뉴바처럼 이 부분들을 감싸 쓰는 쪽이 자기 이름(data-slot)을 넘길 수 있다 */
+type Named = { "data-slot"?: string }
+
+type ItemSelect = NonNullable<
+  React.ComponentProps<typeof MenuItemPrimitive>["onSelect"]
+>
+
+/**
+ * shadcn 은 항목을 고를 때 onClick 을 건다. Base UI 는 키보드로 고를 때도 click 을 내보냈지만 UI SDK 는 onSelect 만 부른다.
+ * 그래서 onClick 을 onSelect 로 옮겨 마우스와 키보드에서 한 번씩만 불리게 한다.
+ */
+function selectHandler(
+  onClick: React.MouseEventHandler<HTMLDivElement> | undefined,
+  onSelect: ItemSelect | undefined
+): ItemSelect | undefined {
+  if (!onClick) return onSelect
+  return (event) => {
+    onClick(event as unknown as React.MouseEvent<HTMLDivElement>)
+    return onSelect?.(event)
+  }
 }
 
-function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
-  return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
+function DropdownMenu({ ...props }: React.ComponentProps<typeof MenuPrimitive>) {
+  return <MenuPrimitive {...props} />
 }
 
-function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
-  return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
+/** UI SDK 의 메뉴 내용은 스스로 포털로 나간다. shadcn 의 계약을 지키려고 이름만 남긴다 */
+function DropdownMenuPortal({ children }: { children?: React.ReactNode }) {
+  return <>{children}</>
+}
+
+function DropdownMenuTrigger({
+  render,
+  "data-slot": name = "dropdown-menu-trigger",
+  ...props
+}: React.ComponentProps<typeof MenuTriggerPrimitive> & Named) {
+  return (
+    <MenuTriggerPrimitive
+      render={slot(name, render, "button", (state) => ({
+        // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
+        "data-popup-open": flag(state.open),
+        // Base UI 는 메뉴가 열린 동안 단추를 눌린 것으로 두었고, 단추 스타일이 data-pressed 를 읽는다.
+        "data-pressed": flag(state.open),
+      }))}
+      {...props}
+    />
+  )
 }
 
 function DropdownMenuContent({
@@ -24,51 +88,69 @@ function DropdownMenuContent({
   side = "bottom",
   sideOffset = 4,
   className,
+  render,
+  "data-slot": name = "dropdown-menu-content",
   ...props
-}: MenuPrimitive.Popup.Props &
-  Pick<
-    MenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+}: Omit<React.ComponentProps<typeof MenuContentPrimitive>, "side"> & {
+  side?: ContractSide
+  "data-slot"?: string
+}) {
   return (
-    <MenuPrimitive.Portal>
-      <MenuPrimitive.Positioner
-        className="isolate z-50 outline-none"
-        align={align}
-        alignOffset={alignOffset}
-        side={side}
-        sideOffset={sideOffset}
-      >
-        <MenuPrimitive.Popup
-          data-slot="dropdown-menu-content"
-          className={cn(
-            "cn-dropdown-menu-content cn-dropdown-menu-content-logical cn-menu-target cn-menu-translucent z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none data-closed:overflow-hidden",
-            className
-          )}
-          {...props}
-        />
-      </MenuPrimitive.Positioner>
-    </MenuPrimitive.Portal>
+    <MenuContentPrimitive
+      render={slot(name, render)}
+      align={align}
+      alignOffset={alignOffset}
+      side={sideOf(side)}
+      sideOffset={sideOffset}
+      className={cn(
+        "cn-dropdown-menu-content cn-dropdown-menu-content-logical cn-menu-target cn-menu-translucent isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none data-closed:overflow-hidden",
+        className
+      )}
+      {...props}
+    />
   )
 }
 
-function DropdownMenuGroup({ ...props }: MenuPrimitive.Group.Props) {
-  return <MenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
+function DropdownMenuGroup({
+  render,
+  "data-slot": name = "dropdown-menu-group",
+  ...props
+}: React.ComponentProps<typeof MenuGroupPrimitive> & Named) {
+  return (
+    <InGroup.Provider value={true}>
+      <MenuGroupPrimitive
+        render={slot(name, render)}
+        {...props}
+      />
+    </InGroup.Provider>
+  )
 }
 
 function DropdownMenuLabel({
   className,
   inset,
+  render,
+  "data-slot": name = "dropdown-menu-label",
   ...props
-}: MenuPrimitive.GroupLabel.Props & {
+}: React.ComponentProps<"div"> &
+  Pick<React.ComponentProps<typeof MenuGroupLabelPrimitive>, "render"> & {
   inset?: boolean
-}) {
+} & Named) {
+  const inGroup = React.useContext(InGroup)
+  const shared = {
+    "data-inset": inset,
+    className: cn("cn-dropdown-menu-label", className),
+    ...props,
+  }
+
+  if (!inGroup) {
+    return <div data-slot={name} {...shared} />
+  }
+
   return (
-    <MenuPrimitive.GroupLabel
-      data-slot="dropdown-menu-label"
-      data-inset={inset}
-      className={cn("cn-dropdown-menu-label", className)}
-      {...props}
+    <MenuGroupLabelPrimitive
+      render={slot(name, render)}
+      {...shared}
     />
   )
 }
@@ -77,16 +159,21 @@ function DropdownMenuItem({
   className,
   inset,
   variant = "default",
+  render,
+  onClick,
+  onSelect,
+  "data-slot": name = "dropdown-menu-item",
   ...props
-}: MenuPrimitive.Item.Props & {
+}: React.ComponentProps<typeof MenuItemPrimitive> & {
   inset?: boolean
   variant?: "default" | "destructive"
-}) {
+} & Named) {
   return (
-    <MenuPrimitive.Item
-      data-slot="dropdown-menu-item"
+    <MenuItemPrimitive
+      render={slot(name, render)}
       data-inset={inset}
       data-variant={variant}
+      onSelect={selectHandler(onClick, onSelect)}
       className={cn(
         "cn-dropdown-menu-item group/dropdown-menu-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
@@ -96,21 +183,27 @@ function DropdownMenuItem({
   )
 }
 
-function DropdownMenuSub({ ...props }: MenuPrimitive.SubmenuRoot.Props) {
-  return <MenuPrimitive.SubmenuRoot data-slot="dropdown-menu-sub" {...props} />
+function DropdownMenuSub({
+  ...props
+}: React.ComponentProps<typeof MenuSubPrimitive>) {
+  return <MenuSubPrimitive {...props} />
 }
 
 function DropdownMenuSubTrigger({
   className,
   inset,
   children,
+  render,
+  "data-slot": name = "dropdown-menu-sub-trigger",
   ...props
-}: MenuPrimitive.SubmenuTrigger.Props & {
+}: Plain<React.ComponentProps<typeof MenuSubTriggerPrimitive>> & {
   inset?: boolean
-}) {
+} & Named) {
   return (
-    <MenuPrimitive.SubmenuTrigger
-      data-slot="dropdown-menu-sub-trigger"
+    <MenuSubTriggerPrimitive
+      render={slot(name, render, "div", (state) => ({
+        "data-popup-open": flag(state.open),
+      }))}
       data-inset={inset}
       className={cn(
         "cn-dropdown-menu-sub-trigger flex cursor-default items-center outline-hidden select-none data-popup-open:bg-accent data-popup-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -120,7 +213,7 @@ function DropdownMenuSubTrigger({
     >
       {children}
       <ChevronRight className="cn-rtl-flip ml-auto" />
-    </MenuPrimitive.SubmenuTrigger>
+    </MenuSubTriggerPrimitive>
   )
 }
 
@@ -151,42 +244,54 @@ function DropdownMenuSubContent({
 function DropdownMenuCheckboxItem({
   className,
   children,
-  checked,
   inset,
+  value,
+  render,
+  "data-slot": name = "dropdown-menu-checkbox-item",
   ...props
-}: MenuPrimitive.CheckboxItem.Props & {
+}: Plain<Omit<React.ComponentProps<typeof MenuCheckboxItemPrimitive>, "value">> & {
+  value?: string
   inset?: boolean
-}) {
+} & Named) {
+  // UI SDK 는 체크 항목을 값으로 가리킨다. shadcn 은 값 없이 쓰므로 없으면 하나 만든다.
+  const fallback = React.useId()
+
   return (
-    <MenuPrimitive.CheckboxItem
-      data-slot="dropdown-menu-checkbox-item"
+    <MenuCheckboxItemPrimitive
+      value={value ?? fallback}
+      render={slot(name, render)}
       data-inset={inset}
       className={cn(
         "cn-dropdown-menu-checkbox-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
-      checked={checked}
       {...props}
     >
       <span
         className="cn-dropdown-menu-item-indicator pointer-events-none"
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
-        <MenuPrimitive.CheckboxItemIndicator>
+        <MenuItemIndicatorPrimitive render={unnamed}>
           <Check />
-        </MenuPrimitive.CheckboxItemIndicator>
+        </MenuItemIndicatorPrimitive>
       </span>
       {children}
-    </MenuPrimitive.CheckboxItem>
+    </MenuCheckboxItemPrimitive>
   )
 }
 
-function DropdownMenuRadioGroup({ ...props }: MenuPrimitive.RadioGroup.Props) {
+function DropdownMenuRadioGroup({
+  render,
+  "data-slot": name = "dropdown-menu-radio-group",
+  ...props
+}: React.ComponentProps<typeof MenuRadioGroupPrimitive> & Named) {
   return (
-    <MenuPrimitive.RadioGroup
-      data-slot="dropdown-menu-radio-group"
-      {...props}
-    />
+    <InGroup.Provider value={true}>
+      <MenuRadioGroupPrimitive
+        render={slot(name, render)}
+        {...props}
+      />
+    </InGroup.Provider>
   )
 }
 
@@ -194,13 +299,15 @@ function DropdownMenuRadioItem({
   className,
   children,
   inset,
+  render,
+  "data-slot": name = "dropdown-menu-radio-item",
   ...props
-}: MenuPrimitive.RadioItem.Props & {
+}: Plain<React.ComponentProps<typeof MenuRadioItemPrimitive>> & {
   inset?: boolean
-}) {
+} & Named) {
   return (
-    <MenuPrimitive.RadioItem
-      data-slot="dropdown-menu-radio-item"
+    <MenuRadioItemPrimitive
+      render={slot(name, render)}
       data-inset={inset}
       className={cn(
         "cn-dropdown-menu-radio-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -212,22 +319,27 @@ function DropdownMenuRadioItem({
         className="cn-dropdown-menu-item-indicator pointer-events-none"
         data-slot="dropdown-menu-radio-item-indicator"
       >
-        <MenuPrimitive.RadioItemIndicator>
+        <MenuItemIndicatorPrimitive render={unnamed}>
           <Check />
-        </MenuPrimitive.RadioItemIndicator>
+        </MenuItemIndicatorPrimitive>
       </span>
       {children}
-    </MenuPrimitive.RadioItem>
+    </MenuRadioItemPrimitive>
   )
 }
 
 function DropdownMenuSeparator({
   className,
+  render,
+  "data-slot": name = "dropdown-menu-separator",
   ...props
-}: MenuPrimitive.Separator.Props) {
+}: React.ComponentProps<typeof MenuSeparatorPrimitive> & Named) {
   return (
-    <MenuPrimitive.Separator
-      data-slot="dropdown-menu-separator"
+    <MenuSeparatorPrimitive
+      render={slot(name, render, "div", () => ({
+        // 3층 규칙이 Separator 와 같은 data-orientation 을 읽는다. 메뉴의 구분선은 늘 가로다.
+        "data-orientation": "horizontal",
+      }))}
       className={cn("cn-dropdown-menu-separator", className)}
       {...props}
     />

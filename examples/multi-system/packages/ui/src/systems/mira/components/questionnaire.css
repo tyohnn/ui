@@ -19,7 +19,7 @@
    ============================================================ */
 
 .cn-questionnaire {
-    gap: 16px;
+    gap: var(--questionnaire-gap, 16px);
 }
 
 .cn-questionnaire-progress {
@@ -32,7 +32,7 @@
 .cn-questionnaire-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--questionnaire-item-gap, 12px);
 }
 
 /* mira: text-sm font-semibold [&:not(:has(~[data-slot=questionnaire-description]))]:mb-3
@@ -77,25 +77,36 @@
     border-radius: var(--surface-radius-lg);
     /* 평소 바탕은 v4 슬롯 --questionnaire-choice-fill 이 갖는다(1층, foundation: transparent
        = mira 처럼 바탕 없음). hover · 켜짐은 아래에서 덮는다. */
-    background-color: var(--questionnaire-choice-fill);
+    background-color: var(--questionnaire-choice-fill, transparent);
     font-size: var(--ui-text-md);
     letter-spacing: var(--ui-letter-spacing);
     line-height: var(--ui-line-height-md);
 
+    /* The 44px touch floor is upstream's (min-h-11), so it stays a literal here; only the desktop
+       height is the system's to choose.
+       ⚠ Layer 3 owns this height. Written as a utility on the component it would sit in the
+          utilities layer and beat every system's rule — the same reason the four footer buttons
+          are given `height` rather than `min-height`. */
+    min-height: 2.75rem;
+
+    @media (width >= 40rem) {
+        min-height: var(--questionnaire-choice-min-height, 2.75rem);
+    }
+
     &:hover {
-        background-color: var(--input-fill-hover);
+        background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
     }
 
     &:is([data-state="checked"], [data-checked]:not([data-checked="false"])) {
-        border-color: var(--ring);
+        border-color: var(--questionnaire-choice-checked-border, var(--ring));
         /* mira: data-checked:bg-primary/10 — 필드 라벨의 /5 보다 한 단 진하다 */
-        background-color: var(--primary-soft-strong);
+        background-color: var(--primary-soft-strong, color-mix(in oklab, var(--primary) 10%, transparent));
     }
 
     /* mira: has-[>input:focus-visible]:border-ring …:ring-2 …:ring-ring/30 */
     &:has(> input:focus-visible) {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* mira: data-invalid:border-destructive — data-* 변형이 has-* 뒤에 오므로 포커스 중에도 붉다.
@@ -149,7 +160,7 @@
     width: 16px;
     height: 16px;
     /* 테두리 색은 v4 슬롯 --questionnaire-shortcut-border(1층, foundation 은 --input 의 별칭). */
-    border: var(--control-border-width) solid var(--questionnaire-shortcut-border);
+    border: var(--control-border-width) solid var(--questionnaire-shortcut-border, var(--input));
     border-radius: var(--control-radius-xs);
     /* mira: bg-background/80 — 선택지 바탕 위에 반투명으로 앉는다. */
     background-color: color-mix(in oklab, var(--background) 80%, transparent);
@@ -178,10 +189,17 @@
     line-height: var(--control-line-height-md);
     letter-spacing: var(--control-letter-spacing);
 
+    /* mira: selection:bg-primary selection:text-primary-foreground — 컴포넌트가 들고 있던 선택 색을
+       --selection 슬롯으로 내렸다. 값은 그대로다. */
+    &::selection {
+        background-color: var(--selection);
+        color: var(--selection-foreground);
+    }
+
     /* mira: focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 */
     &:focus-visible {
         border-color: var(--ring);
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 
     /* Input 과 같다 — 늘 그리고, 포커스보다 뒤에 두어 이긴다. */
@@ -201,10 +219,14 @@
 /* ⚠ 이 규칙은 2026-09-05 토큰화 4차에서 실수로 빠졌다가 되살렸다. 컴포넌트가
    `grid-cols-[minmax(0,1fr)_auto_auto]` 만 갖고 열 간격은 여기서 주므로, 빠지면
    '건너뛰기'와 '다음' 버튼이 맞닿는다. 지우지 말 것.
-   mira: gap-1.5 sm:min-h-7 — sm 이상의 최소 높이는 컴포넌트의 min-h-11 유틸리티가 이겨
-   실제로는 닿지 않는다. 규칙만 mira 대로 적어 둔다. */
+   mira: gap-1.5 sm:min-h-7. */
 .cn-questionnaire-actions {
     gap: 6px;
+
+    /* 누를 자리의 바닥 44px 은 업스트림(min-h-11)의 것이라 리터럴이다. sm 위의 높이는 아래
+       미디어 질의가 정한다 — 종전에는 컴포넌트의 sm:min-h-9(36px)가 이겨 이 줄이 죽어 있었다
+       (2026-09-20). 업스트림 참조는 sm:min-h-7 이었으므로 컴포넌트 쪽이 어긋나 있었다. */
+    min-height: 2.75rem;
 
     @media (width >= 40rem) {
         min-height: var(--control-height-md);

@@ -6,6 +6,7 @@ import { cn } from "cn"
 
 import { buttonVariants, type Button } from "@acme/ui/components/button"
 import { Check } from "@acme/ui/icons"
+import { strings } from "@acme/ui/strings"
 
 function Questionnaire({
   className,
@@ -109,7 +110,7 @@ function QuestionnaireChoice({
     <QuestionnairePrimitive.Choice
       data-slot="questionnaire-choice"
       className={cn(
-        "cn-questionnaire-choice group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start text-start transition-colors outline-none select-none",
+        "cn-questionnaire-choice group/questionnaire-choice relative flex cursor-pointer items-start text-start transition-colors outline-none select-none",
         "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
@@ -173,7 +174,7 @@ function QuestionnaireInput({
         data-slot="questionnaire-input"
         className={cn(
           "cn-questionnaire-input min-h-11 w-full min-w-0 transition-[color,box-shadow,background-color] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0",
-          "selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground",
+          "placeholder:text-muted-foreground",
           className
         )}
         {...props}
@@ -203,7 +204,7 @@ function QuestionnaireActions({
     <div
       data-slot="questionnaire-actions"
       className={cn(
-        "cn-questionnaire-actions grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center sm:min-h-9",
+        "cn-questionnaire-actions grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center",
         className
       )}
       {...props}
@@ -231,7 +232,7 @@ function QuestionnairePrevious({
       )}
       {...props}
     >
-      {children ?? "Previous"}
+      {children ?? strings.questionnaire.previous}
     </QuestionnairePrimitive.Previous>
   )
 }
@@ -256,7 +257,7 @@ function QuestionnaireSkip({
       )}
       {...props}
     >
-      {children ?? "Skip"}
+      {children ?? strings.questionnaire.skip}
     </QuestionnairePrimitive.Skip>
   )
 }
@@ -281,7 +282,7 @@ function QuestionnaireNext({
       )}
       {...props}
     >
-      {children ?? "Next"}
+      {children ?? strings.questionnaire.next}
     </QuestionnairePrimitive.Next>
   )
 }
@@ -306,7 +307,7 @@ function QuestionnaireSubmit({
       )}
       {...props}
     >
-      {children ?? "Submit"}
+      {children ?? strings.questionnaire.submit}
     </QuestionnairePrimitive.Submit>
   )
 }

@@ -1,8 +1,9 @@
 /* tyohnn:begin system */
 /* Design system graphite (tyohnn). One system per app; this order is the cascade contract: tailwindcss → layer 1
-   colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */
+   globals → layer 1 theme colours → layer 2 tokens → typeset → layer 3 rules in layer(base), so className utilities still win. */
 @import "tailwindcss";
 @import "@acme/ui/systems/graphite/globals.css";
+@import "@acme/ui/systems/graphite/theme.css";
 @import "@acme/ui/systems/graphite/tokens.css";
 @import "@acme/ui/systems/graphite/typeset.css";
 @import "@acme/ui/systems/graphite/typeset-preset.css";

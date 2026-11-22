@@ -35,7 +35,7 @@
 /* mira 의 bg-muted/50 — 1층이 --muted-soft 로 푼 값. 불투명 --muted 로 바꾸면 목록 안에서
    칠한 행이 되어 무엇이 선택된 것인지와 구분되지 않는다. */
 .cn-item-variant-muted {
-    background-color: var(--muted-soft);
+    background-color: var(--muted-soft, color-mix(in oklab, var(--muted) 50%, transparent));
     border-color: transparent;
 }
 

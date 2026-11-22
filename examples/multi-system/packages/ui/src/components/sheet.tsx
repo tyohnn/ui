@@ -1,32 +1,65 @@
 "use client"
 
 import * as React from "react"
-import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
+import {
+  Dialog as SheetPrimitive,
+  DialogBackdrop as SheetBackdrop,
+  DialogClose as SheetClosePrimitive,
+  DialogContent as SheetContentPrimitive,
+  DialogDescription as SheetDescriptionPrimitive,
+  DialogTitle as SheetTitlePrimitive,
+  DialogTrigger as SheetTriggerPrimitive,
+} from "@ui-sdk/react/dialog"
 import { cn } from "cn"
 
 import { Button } from "@acme/ui/components/button"
 import { X } from "@acme/ui/icons"
+import { flag, slot } from "@acme/ui/lib/slot"
+import { strings } from "@acme/ui/strings"
 
-function Sheet({ ...props }: SheetPrimitive.Root.Props) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive>) {
+  return <SheetPrimitive {...props} />
 }
 
-function SheetTrigger({ ...props }: SheetPrimitive.Trigger.Props) {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
-}
-
-function SheetClose({ ...props }: SheetPrimitive.Close.Props) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />
-}
-
-function SheetPortal({ ...props }: SheetPrimitive.Portal.Props) {
-  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
-}
-
-function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
+function SheetTrigger({
+  render,
+  ...props
+}: React.ComponentProps<typeof SheetTriggerPrimitive>) {
   return (
-    <SheetPrimitive.Backdrop
-      data-slot="sheet-overlay"
+    <SheetTriggerPrimitive
+      render={slot("sheet-trigger", render, "button", (state) => ({
+        // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
+        "data-popup-open": flag(state.open),
+        // Base UI 는 다이얼로그를 여는 단추에도 aria-expanded 를 달았고, 단추 스타일이 그것을 읽어 열린 동안 눌린 모양을 낸다.
+        "aria-expanded": state.open,
+      }))}
+      {...props}
+    />
+  )
+}
+
+function SheetClose({
+  render,
+  ...props
+}: React.ComponentProps<typeof SheetClosePrimitive>) {
+  return (
+    <SheetClosePrimitive render={slot("sheet-close", render, "button")} {...props} />
+  )
+}
+
+/** UI SDK 의 내용과 배경은 스스로 포털로 나간다. shadcn 의 계약을 지키려고 이름만 남긴다 */
+function SheetPortal({ children }: { children?: React.ReactNode }) {
+  return <>{children}</>
+}
+
+function SheetOverlay({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof SheetBackdrop>) {
+  return (
+    <SheetBackdrop
+      render={slot("sheet-overlay", render)}
       className={cn(
         "cn-sheet-overlay fixed inset-0 z-50 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0",
         className
@@ -41,16 +74,18 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  render,
   ...props
-}: SheetPrimitive.Popup.Props & {
+}: Omit<React.ComponentProps<typeof SheetContentPrimitive>, "children"> & {
+  children?: React.ReactNode
   side?: "top" | "right" | "bottom" | "left"
   showCloseButton?: boolean
 }) {
   return (
     <SheetPortal>
       <SheetOverlay />
-      <SheetPrimitive.Popup
-        data-slot="sheet-content"
+      <SheetContentPrimitive
+        render={slot("sheet-content", render)}
         data-side={side}
         className={cn(
           "cn-sheet-content data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem]",
@@ -60,8 +95,7 @@ function SheetContent({
       >
         {children}
         {showCloseButton && (
-          <SheetPrimitive.Close
-            data-slot="sheet-close"
+          <SheetClose
             render={
               <Button
                 variant="ghost"
@@ -71,10 +105,10 @@ function SheetContent({
             }
           >
             <X />
-            <span className="sr-only">Close</span>
-          </SheetPrimitive.Close>
+            <span className="sr-only">{strings.close}</span>
+          </SheetClose>
         )}
-      </SheetPrimitive.Popup>
+      </SheetContentPrimitive>
     </SheetPortal>
   )
 }
@@ -99,10 +133,14 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
+function SheetTitle({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof SheetTitlePrimitive>) {
   return (
-    <SheetPrimitive.Title
-      data-slot="sheet-title"
+    <SheetTitlePrimitive
+      render={slot("sheet-title", render, "h2")}
       className={cn("cn-sheet-title cn-font-heading", className)}
       {...props}
     />
@@ -111,11 +149,12 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
 
 function SheetDescription({
   className,
+  render,
   ...props
-}: SheetPrimitive.Description.Props) {
+}: React.ComponentProps<typeof SheetDescriptionPrimitive>) {
   return (
-    <SheetPrimitive.Description
-      data-slot="sheet-description"
+    <SheetDescriptionPrimitive
+      render={slot("sheet-description", render, "p")}
       className={cn("cn-sheet-description", className)}
       {...props}
     />

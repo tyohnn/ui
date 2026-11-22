@@ -1,36 +1,46 @@
 "use client"
 
-import { Radio as RadioPrimitive } from "@base-ui/react/radio"
-import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
+import type * as React from "react"
+import { Radio, RadioGroup as RadioGroupPrimitive, RadioIndicator } from "@ui-sdk/react/radio"
 import { cn } from "cn"
 
-function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
+import { slot } from "@acme/ui/lib/slot"
+
+function RadioGroup({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof RadioGroupPrimitive>) {
   return (
     <RadioGroupPrimitive
-      data-slot="radio-group"
       className={cn("cn-radio-group w-full", className)}
+      render={slot("radio-group", render)}
       {...props}
     />
   )
 }
 
-function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
+function RadioGroupItem({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof Radio>) {
   return (
-    <RadioPrimitive.Root
-      data-slot="radio-group-item"
+    <Radio
       className={cn(
-        "cn-radio-group-item group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+        "cn-radio-group-item group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
+      render={slot("radio-group-item", render, "button")}
       {...props}
     >
-      <RadioPrimitive.Indicator
-        data-slot="radio-group-indicator"
+      <RadioIndicator
+        render={slot("radio-group-indicator", undefined, "span")}
         className="cn-radio-group-indicator"
       >
         <span className="cn-radio-group-indicator-icon" />
-      </RadioPrimitive.Indicator>
-    </RadioPrimitive.Root>
+      </RadioIndicator>
+    </Radio>
   )
 }
 
