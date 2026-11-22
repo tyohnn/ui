@@ -1,0 +1,12 @@
+{
+    "name": "tyohnn",
+    "version": "0.1.0",
+    "description": "Design systems you shape in words. Turn a concept or a reference image into a system across colour, density, depth, texture and typography; every component you write after, even ones that never existed, takes its feel.",
+    "author": {
+        "name": "tyohnn"
+    },
+    "homepage": "https://tyohnn.vercel.app",
+    "repository": "https://github.com/tyohnn/ui",
+    "license": "MIT",
+    "keywords": ["design-system", "shadcn", "tailwind", "tokens", "base-ui", "ui-sdk"]
+}

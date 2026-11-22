@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "tyohnn": {
+            "type": "http",
+            "url": "https://tyohnn.vercel.app/api/mcp"
+        }
+    }
+}

@@ -1,0 +1,550 @@
+/* ============================================================
+   3층 — 역할 규칙 (축 계약 7)
+   ------------------------------------------------------------
+   바탕(registry/ui)에 없는 컴포넌트가 이 시스템의 느낌을 입는 자리다.
+   마크업에 `data-role` 을 달면 그 역할의 모양을 얻는다. 값은 전부 역할 토큰
+   (registry/foundation/reference/roles.md)과 1층 색에서 읽고, 컴포넌트 이름의
+   슬롯은 읽지 않는다. 그래서 시스템을 바꾸면 이 규칙을 쓰는 컴포넌트가 고치지
+   않아도 새 옷을 입는다.
+
+     data-role="control"    누르는 것.   data-variant = primary | secondary | outline | ghost | destructive
+                                          data-size = xs | sm | md(기본) | lg,  data-icon = 정사각 아이콘 단추
+     data-role="field"      적는 것.     data-size = sm | md(기본)
+     data-role="surface"    담는 면.     data-level = ground | raised(기본) | inset
+     data-role="popup"      떠 있는 면.
+     data-role="item"       목록의 한 줄. data-size = sm(기본) | md | lg,  [data-highlighted] · [data-active]
+     data-role="indicator"  상태 · 수.   data-shape = 없음(배지 모양) | pill | square,  data-size = sm | md | lg(정사각 원)
+                                          data-variant = primary(기본) | secondary | outline
+     data-role="label"      이름.        data-tone = muted
+     data-role="meta"       곁글.
+     data-role="separator"  나눔선.      data-orientation = horizontal(기본) | vertical
+     data-role="track"      control 을 담는 홈(탭 목록 · 세그먼트). 안의 control 은 한 단 작아진다.
+
+   ⚠ 이 파일은 base 레이어에 있다. 호출부가 준 유틸리티(배치 · 크기)가 이긴다.
+      색 · 모서리 · 그림자 · 글자 크기를 유틸리티로 덮으면 시스템을 바꿔도 따라오지 않으니
+      그런 값은 여기 역할이나 역할 토큰으로 해결한다.
+   ⚠ 포커스 링 · 검증 실패 · 전환은 _control-family 와 같은 언어로 여기서 다시 적는다.
+      컴포넌트 이름 목록에 [data-role] 을 섞지 않는 까닭은 바탕 컴포넌트의 규칙과 섞이지 않게
+      하려는 것이다(역할 규칙을 바꿔도 바탕 화면이 움직이지 않는다).
+   ============================================================ */
+
+/* --------------------------------------------------------
+   control
+   -------------------------------------------------------- */
+
+[data-role="control"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    user-select: none;
+    outline-style: none;
+    height: var(--control-height-md);
+    gap: var(--control-gap-md);
+    padding-inline: var(--control-padding-x-md);
+    border: var(--control-border-width) solid transparent;
+    background-clip: padding-box;
+    border-radius: var(--control-radius);
+    font-size: var(--control-font-size-md);
+    line-height: var(--control-line-height-md);
+    font-weight: var(--control-font-weight);
+    letter-spacing: var(--control-letter-spacing);
+    text-transform: var(--control-text-transform);
+    color: var(--foreground);
+    transition-property: color, background-color, border-color, box-shadow, translate, scale;
+    transition-duration: var(--control-duration);
+    transition-timing-function: var(--control-ease);
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-md);
+        height: var(--control-icon-size-md);
+        flex-shrink: 0;
+    }
+
+    &:active:not([aria-haspopup]):not(:disabled):not([aria-disabled="true"]) {
+        translate: 0 var(--control-press-offset);
+        scale: var(--control-press-scale);
+    }
+
+    &:disabled,
+    &[aria-disabled="true"],
+    &[data-disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}
+
+[data-role="control"][data-size="xs"] {
+    height: var(--control-height-xs);
+    gap: var(--control-gap-xs);
+    padding-inline: var(--control-padding-x-xs);
+    border-radius: var(--control-radius-xs);
+    font-size: var(--control-font-size-xs);
+    line-height: var(--control-line-height-xs);
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-xs);
+        height: var(--control-icon-size-xs);
+    }
+}
+
+[data-role="control"][data-size="sm"] {
+    height: var(--control-height-sm);
+    gap: var(--control-gap-sm);
+    padding-inline: var(--control-padding-x-sm);
+    border-radius: var(--control-radius-sm);
+    font-size: var(--control-font-size-sm);
+    line-height: var(--control-line-height-sm);
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-sm);
+        height: var(--control-icon-size-sm);
+    }
+}
+
+[data-role="control"][data-size="lg"] {
+    height: var(--control-height-lg);
+    gap: var(--control-gap-lg);
+    padding-inline: var(--control-padding-x-lg);
+    font-size: var(--control-font-size-lg);
+    line-height: var(--control-line-height-lg);
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-lg);
+        height: var(--control-icon-size-lg);
+    }
+}
+
+/* 정사각 아이콘 단추: 너비가 높이를 따른다 */
+[data-role="control"][data-icon] {
+    padding-inline: 0;
+    aspect-ratio: 1;
+}
+
+[data-role="control"]:not([data-variant]),
+[data-role="control"][data-variant="primary"] {
+    background-color: var(--primary);
+    background-image: var(--surface-primary);
+    border-color: var(--primary-border, transparent);
+    box-shadow: var(--shadow-control-primary);
+    color: var(--primary-foreground);
+
+    &:hover {
+        background-color: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
+        background-image: var(--surface-primary-hover, var(--surface-primary));
+    }
+}
+
+[data-role="control"][data-variant="secondary"] {
+    background-color: var(--secondary);
+    background-image: var(--surface-control);
+    border-color: var(--control-secondary-border, transparent);
+    box-shadow: var(--shadow-control);
+    color: var(--secondary-foreground);
+    font-weight: var(--control-font-weight-regular);
+
+    &:hover {
+        background-color: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
+        background-image: var(--surface-control-hover, var(--surface-control));
+    }
+}
+
+[data-role="control"][data-variant="outline"] {
+    background-color: var(--control-outline-fill);
+    background-image: var(--surface-control);
+    border-color: var(--control-outline-border, var(--border));
+    box-shadow: var(--shadow-control);
+    font-weight: var(--control-font-weight-regular);
+
+    &:hover {
+        background-color: var(--control-outline-hover-fill, var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent)));
+        background-image: var(--surface-control-hover, var(--surface-control));
+        color: var(--foreground);
+    }
+}
+
+/* 눌림: 솟은 그림자가 안으로 꺼진다(button.css 와 같은 --shadow-control-pressed) */
+[data-role="control"]:is(:not([data-variant]), [data-variant="primary"], [data-variant="secondary"], [data-variant="outline"]):active {
+    box-shadow: var(--shadow-control-pressed);
+}
+
+[data-role="control"][data-variant="ghost"] {
+    color: var(--control-ghost-foreground);
+    font-weight: var(--control-font-weight-regular);
+
+    &:hover {
+        background-color: var(--ghost-hover);
+    }
+}
+
+[data-role="control"][data-variant="destructive"] {
+    background-color: var(--destructive-soft);
+    color: var(--destructive);
+
+    &:hover {
+        background-color: var(--destructive-soft-hover);
+    }
+}
+
+/* 켜진 상태(토글 · 탭 · 세그먼트) */
+[data-role="control"]:is([aria-pressed="true"], [aria-selected="true"], [data-active], [data-checked]):is([data-variant="ghost"], [data-variant="outline"]) {
+    background-color: var(--muted);
+    color: var(--foreground);
+}
+
+[data-role="control"][aria-expanded="true"]:is([data-variant="ghost"], [data-variant="outline"]) {
+    background-color: var(--muted);
+}
+
+/* --------------------------------------------------------
+   track: control 을 담는 홈. 안의 control 은 한 단 작은 여백을 쓴다
+   -------------------------------------------------------- */
+
+[data-role="track"] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--control-gap-xs);
+    height: var(--control-height-lg);
+    padding: var(--control-track-padding);
+    border-radius: var(--control-radius);
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+
+    & > [data-role="control"] {
+        height: 100%;
+        gap: var(--control-nested-gap);
+        padding-inline: var(--control-nested-padding-x);
+        padding-block: var(--control-nested-padding-y);
+        border-radius: calc(var(--control-radius) - var(--control-track-padding));
+        background-color: transparent;
+        background-image: none;
+        box-shadow: none;
+        color: inherit;
+        font-weight: var(--control-font-weight);
+
+        &[data-icon] {
+            padding-inline: var(--control-nested-padding-x-icon);
+        }
+
+        &:hover {
+            color: var(--foreground);
+        }
+
+        &:is([aria-selected="true"], [aria-pressed="true"], [data-active], [data-checked]) {
+            background-color: var(--background);
+            color: var(--foreground);
+            box-shadow: var(--shadow-raised);
+        }
+    }
+}
+
+/* --------------------------------------------------------
+   field
+   -------------------------------------------------------- */
+
+[data-role="field"] {
+    width: 100%;
+    min-width: 0;
+    height: var(--control-height-md);
+    padding-inline: var(--control-padding-x-field);
+    padding-block: var(--control-padding-y-field);
+    border: var(--control-border-width) solid var(--input-border, var(--input));
+    border-bottom-color: var(--input-border-bottom, var(--input-border, var(--input)));
+    border-radius: var(--field-radius);
+    background-color: var(--input-fill);
+    box-shadow: var(--field-shadow);
+    color: var(--foreground);
+    font-size: var(--control-font-size-field);
+    line-height: var(--control-line-height-field);
+    letter-spacing: var(--control-letter-spacing-field);
+    outline-style: none;
+    transition-property: color, background-color, border-color, box-shadow;
+    transition-duration: var(--control-duration);
+    transition-timing-function: var(--control-ease);
+
+    &::placeholder {
+        color: var(--muted-foreground);
+    }
+
+    &:disabled,
+    &[data-disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}
+
+textarea[data-role="field"] {
+    height: auto;
+    padding-block: var(--control-padding-y-multiline);
+}
+
+[data-role="field"][data-size="sm"] {
+    height: var(--control-height-sm);
+    font-size: var(--control-font-size-sm);
+    line-height: var(--control-line-height-sm);
+}
+
+/* 포커스와 검증 실패는 바탕 컨트롤과 같은 언어. 검증 실패가 뒤에 와서 이긴다 */
+:is([data-role="control"], [data-role="field"]):focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
+}
+
+:is([data-role="control"], [data-role="field"])[aria-invalid="true"] {
+    border-color: var(--border-invalid);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-invalid);
+}
+
+/* --------------------------------------------------------
+   surface
+   -------------------------------------------------------- */
+
+[data-role="surface"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--surface-raised-spacing);
+    padding: var(--surface-raised-spacing);
+    border-radius: var(--surface-raised-radius);
+    background-color: var(--card);
+    background-image: var(--surface-sheen);
+    color: var(--card-foreground);
+    font-size: var(--ui-text-md);
+    line-height: var(--surface-line-height);
+    letter-spacing: var(--ui-letter-spacing);
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--surface-ring),
+        var(--surface-shadow);
+}
+
+/* 흐림을 쓰는 시스템(halo)은 surface 를 유리로 띄운다. 흐림이 없는 시스템은 채움이 --card 그대로라 같다. */
+@supports (backdrop-filter: blur(1px)) {
+    [data-role="surface"]:not([data-level]) {
+        background-color: var(--surface-glass-fill);
+        background-image: var(--surface-glass-sheen);
+        backdrop-filter: var(--surface-glass-filter);
+    }
+}
+
+[data-role="surface"][data-level="ground"] {
+    background-color: var(--background);
+    color: var(--foreground);
+    box-shadow: none;
+}
+
+[data-role="surface"][data-level="inset"] {
+    background-color: var(--muted);
+    color: var(--foreground);
+    box-shadow: var(--shadow-recessed);
+}
+
+[data-role="surface"][data-density="compact"] {
+    gap: var(--surface-gap);
+    padding: var(--surface-padding-sm);
+}
+
+[data-role="surface"][data-density="tight"] {
+    gap: var(--surface-gap);
+    padding: var(--surface-padding-xs);
+    border-radius: var(--surface-radius-sm);
+}
+
+/* --------------------------------------------------------
+   popup
+   -------------------------------------------------------- */
+
+[data-role="popup"] {
+    padding: var(--menu-padding);
+    min-width: var(--menu-min-width);
+    border-radius: var(--surface-radius);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    font-size: var(--ui-text-md);
+    line-height: var(--ui-line-height-md);
+    letter-spacing: var(--ui-letter-spacing);
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
+        var(--shadow-float);
+}
+
+[data-role="popup"][data-level="raised"] {
+    box-shadow:
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
+        var(--popup-shadow-lg);
+}
+
+/* --------------------------------------------------------
+   item
+   -------------------------------------------------------- */
+
+[data-role="item"] {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--item-gap);
+    min-height: var(--item-height-sm);
+    padding-inline: var(--item-padding-x);
+    padding-block: var(--item-padding-y-sm);
+    border-radius: var(--item-radius);
+    font-size: var(--ui-text-md);
+    line-height: var(--ui-line-height-md);
+    letter-spacing: var(--ui-letter-spacing);
+    user-select: none;
+    outline-style: none;
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-md);
+        height: var(--control-icon-size-md);
+        flex-shrink: 0;
+    }
+
+    & + [data-role="item"] {
+        margin-top: var(--item-spacing);
+    }
+
+    &:is(:focus-visible, [data-highlighted]) {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+    }
+
+    &:is([data-active], [aria-selected="true"], [aria-current="page"]) {
+        background-color: var(--muted);
+        color: var(--foreground);
+        font-weight: var(--ui-font-weight);
+    }
+
+    &:is(:disabled, [data-disabled], [aria-disabled="true"]) {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}
+
+[data-role="item"][data-size="md"] {
+    min-height: var(--item-height-md);
+
+    & svg:not([class*="size-"]) {
+        width: var(--control-icon-size-lg);
+        height: var(--control-icon-size-lg);
+    }
+}
+
+[data-role="item"][data-size="lg"] {
+    min-height: var(--item-height-lg);
+    padding-inline: var(--item-padding-x-lg);
+    padding-block: var(--item-padding-y-lg);
+}
+
+/* --------------------------------------------------------
+   indicator
+   -------------------------------------------------------- */
+
+[data-role="indicator"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: var(--indicator-gap);
+    height: var(--indicator-height);
+    min-width: var(--indicator-height);
+    padding-inline: var(--indicator-padding-x-lg);
+    padding-block: var(--indicator-padding-y);
+    border: var(--indicator-border-width) solid transparent;
+    border-radius: var(--indicator-radius);
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    font-size: var(--indicator-font-size);
+    line-height: var(--indicator-line-height);
+    font-weight: var(--indicator-font-weight);
+    letter-spacing: var(--indicator-letter-spacing);
+    text-transform: var(--indicator-text-transform);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+
+    & svg:not([class*="size-"]) {
+        width: var(--indicator-icon-size);
+        height: var(--indicator-icon-size);
+    }
+}
+
+[data-role="indicator"][data-shape="pill"] {
+    border-radius: var(--indicator-radius-pill);
+}
+
+/* 네모(키캡 · 목록 안의 숫자)는 좁게 앉는다 */
+[data-role="indicator"][data-shape="square"] {
+    padding-inline: var(--indicator-padding-x);
+    border-radius: var(--indicator-radius-sm);
+}
+
+[data-role="indicator"][data-variant="secondary"] {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+[data-role="indicator"][data-variant="outline"] {
+    background-color: var(--input-fill);
+    border-color: var(--border);
+    color: var(--foreground);
+}
+
+/* 크기를 주면 정사각 원(아바타 · 상태 점 · 릴처럼 둥근 것) */
+[data-role="indicator"]:is([data-size="sm"], [data-size="md"], [data-size="lg"]) {
+    padding: 0;
+    aspect-ratio: 1;
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+}
+
+[data-role="indicator"][data-size="sm"] {
+    height: var(--indicator-size-sm);
+    min-width: var(--indicator-size-sm);
+}
+
+[data-role="indicator"][data-size="md"] {
+    height: var(--indicator-size-md);
+    min-width: var(--indicator-size-md);
+}
+
+[data-role="indicator"][data-size="lg"] {
+    height: var(--indicator-size-lg);
+    min-width: var(--indicator-size-lg);
+}
+
+/* --------------------------------------------------------
+   label · meta · separator
+   -------------------------------------------------------- */
+
+[data-role="label"] {
+    font-size: var(--ui-text-sm);
+    line-height: var(--ui-line-height-sm);
+    font-weight: var(--ui-font-weight);
+    letter-spacing: var(--ui-label-letter-spacing, var(--ui-letter-spacing));
+    text-transform: var(--ui-label-text-transform);
+    color: var(--foreground);
+}
+
+[data-role="label"][data-tone="muted"] {
+    color: var(--muted-foreground);
+}
+
+[data-role="meta"] {
+    font-size: var(--ui-text-xs);
+    line-height: var(--ui-line-height-xs);
+    letter-spacing: var(--ui-letter-spacing);
+    color: var(--muted-foreground);
+    font-variant-numeric: tabular-nums;
+}
+
+[data-role="separator"] {
+    flex-shrink: 0;
+    border: 0;
+    background-color: var(--border);
+    height: 1px;
+    width: 100%;
+}
+
+[data-role="separator"][data-orientation="vertical"] {
+    height: auto;
+    width: 1px;
+    align-self: stretch;
+}

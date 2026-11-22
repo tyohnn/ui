@@ -1,0 +1,13 @@
+{
+    "name": "tyohnn",
+    "owner": {
+        "name": "tyohnn"
+    },
+    "plugins": [
+        {
+            "name": "tyohnn",
+            "source": "./plugin",
+            "description": "Shape a design system in words and have every component you write take its feel."
+        }
+    ]
+}

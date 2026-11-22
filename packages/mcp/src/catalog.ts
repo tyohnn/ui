@@ -94,7 +94,7 @@ const readSystems = (root: string): SystemSummary[] =>
     const folder = join(root, "registry/systems");
     const present = new Set(readdirSync(folder).filter((name) => existsSync(join(folder, name, "system.json"))));
 
-    // tyohnn's own systems first, then the shadcn ports: the order the preset list keeps
+    // the order the preset list keeps
     return presets.systems.filter((name) => present.has(name)).map((name) =>
     {
         const system = JSON.parse(readFileSync(join(folder, name, "system.json"), "utf8")) as { tagline?: string; defaultMode?: string };

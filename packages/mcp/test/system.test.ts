@@ -113,6 +113,6 @@ describe("the system being shaped", () =>
 
         expect(text).toContain("clover palette (the system's own), violet accent");
         expect(text).toContain("Tokens changed: --table-row-height 32px");
-        expect(text).toMatch(/--preset [0-9a-z]+/i);
+        expect(text).not.toContain("--preset");
     });
 });

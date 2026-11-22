@@ -27,3 +27,6 @@ apps/site/public/preview/
 apps/site/out/
 apps/site/out-*/
 apps/site/next-env.d.ts
+
+# systems published through the local MCP server
+.tyohnn/

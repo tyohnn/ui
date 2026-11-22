@@ -217,7 +217,8 @@
     --checkbox-border: transparent;
     /* outline 버튼의 바탕. mira 는 밝은 쪽에 아무 색도 두지 않고 어두운 쪽만 bg-input/30 이다 —
        Input 의 bg-input/20 과 다른 자리라 --input-fill 을 그대로 읽을 수 없다. */
-    --button-outline-fill: var(--background);    /* outline button bg-background */
+    --control-outline-fill: var(--background);
+    --button-outline-fill: var(--control-outline-fill);    /* outline button bg-background */
     /* luma: the slider track is bg-input/90, the same fill as the unchecked checkbox. */
     --slider-track-fill: var(--checkbox-fill);
     /* luma: the radio dot and the questionnaire choice dot grow a step in dark
@@ -242,7 +243,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     /* 켜진 스위치 손잡이. mira: bg-background, 어두운 쪽은 dark:data-checked:bg-primary-foreground —
        두 모드가 다른 색을 가리키므로 별칭 하나로 묶지 않는다. */
@@ -282,7 +284,8 @@
     --checkbox-border: transparent;
     /* Button variant edges and ghost text. mira: secondary has the transparent button border,
        outline uses --border, ghost inherits its text colour (`initial` = inherit). */
-    --button-outline-fill: transparent;    /* outline button dark:bg-transparent */
+    --control-outline-fill: transparent;
+    --button-outline-fill: var(--control-outline-fill);    /* outline button dark:bg-transparent */
     /* luma: the slider track is bg-input/90, the same fill as the unchecked checkbox. */
     --slider-track-fill: var(--checkbox-fill);
     /* luma: the radio dot and the questionnaire choice dot grow a step in dark
@@ -303,7 +306,8 @@
        value, which makes `color` fall back to inheritance).
        ⚠ A CSS-wide keyword cannot be hoisted into the rule: `var(--x, initial)` sets the property to its
           initial value (black), while an undeclared-to-invalid `var(--x)` inherits. These stay declared. */
-    --button-ghost-foreground: initial;
+    --control-ghost-foreground: initial;
+    --button-ghost-foreground: var(--control-ghost-foreground);
     --checkbox-indeterminate-foreground: initial;
     --ring-subtle: color-mix(in oklab, var(--foreground) 10%, transparent);
     --switch-thumb-on: var(--primary-foreground);
@@ -346,4 +350,10 @@
 
 .dark {
     --switch-thumb-on: var(--primary-foreground);
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --surface-sheen: none;
+    --surface-ring: var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent));
 }

@@ -2,7 +2,7 @@
     "name": "@tyohnn/mcp",
     "version": "0.0.0",
     "private": true,
-    "description": "An MCP server that lets a coding agent browse tyohnn's primitives, read their source and preview them as cards in any design system.",
+    "description": "tyohnn's MCP server: explore design systems and primitives, shape a system from a concept, check it, publish it and export its files.",
     "license": "MIT",
     "type": "module",
     "bin": {

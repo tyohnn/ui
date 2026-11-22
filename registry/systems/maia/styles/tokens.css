@@ -153,11 +153,15 @@
        Places where mira gives one value and maia gives two, so the value cannot move
        in a shared layer-2 axis alone. maia proposed the first group as slot candidates and v4
        adopted them; the foundation default that reproduces mira is written next to each. */
-    --badge-height: 20px;                       /* foundation: var(--control-height-xs) — maia's xs button is h-6, the badge stays h-5 */
-    --badge-radius: var(--control-radius);      /* foundation: 9999px — maia: rounded-4xl */
-    --badge-padding-x: 8px;                     /* foundation: var(--control-padding-x-xs) — maia: px-2 */
+    --indicator-height: 20px;
+    --badge-height: var(--indicator-height);                       /* foundation: var(--control-height-xs) — maia's xs button is h-6, the badge stays h-5 */
+    --indicator-radius: var(--control-radius);
+    --badge-radius: var(--indicator-radius);      /* foundation: 9999px — maia: rounded-4xl */
+    --indicator-padding-x-lg: 8px;
+    --badge-padding-x: var(--indicator-padding-x-lg);                     /* foundation: var(--control-padding-x-xs) — maia: px-2 */
     --badge-padding-x-icon: 6px;                /* foundation: var(--control-padding-x-icon-xs) — maia: pl-1.5 */
-    --badge-icon-size: 12px;                    /* foundation: var(--control-icon-size-xs) — maia: size-3! */
+    --indicator-icon-size: 12px;
+    --badge-icon-size: var(--indicator-icon-size);                    /* foundation: var(--control-icon-size-xs) — maia: size-3! */
     --kbd-height: 20px;                         /* foundation: var(--control-height-xs) — a keycap is not an xs button */
     --avatar-font-size: var(--ui-text-sm);      /* foundation: var(--ui-text-lg) — maia's fallback is text-sm, its lg UI step text-base */
     --avatar-line-height: var(--ui-line-height-sm);
@@ -176,7 +180,8 @@
     /* Moved out of layer 3 in the stage-2 slot migration (2026-09-17). */
     --menu-label-padding-y: 10px;               /* foundation: var(--menu-item-padding-y-check) — maia: py-2.5 */
     --bubble-padding-x: 14px;                   /* foundation: var(--surface-padding-sm) — maia: px-3.5 */
-    --bubble-padding-y: 10px;                   /* foundation: 6px — maia: py-2.5 */
+    --surface-padding-xs: 10px;
+    --bubble-padding-y: var(--surface-padding-xs);                   /* foundation: 6px — maia: py-2.5 */
     --bubble-line-height: 22.75px;              /* foundation: var(--ui-line-height-md) — maia: leading-relaxed on 14px */
     --control-padding-y-field: 4px;             /* foundation: 2px — maia: input · native select py-1 */
     --item-gap: 8px;                            /* foundation: var(--menu-item-gap) — maia: gap-2 · my-2, the menu row moved to 10 */
@@ -187,12 +192,15 @@
     --sidebar-separator-margin-inline: 8px;     /* foundation: var(--sidebar-item-padding-x) — maia: mx-2 */
     --slider-track-thickness: 12px;             /* foundation: 4px — maia: h-3 · w-3 */
     --tabs-list-height: var(--control-height-md);   /* foundation: var(--control-height-lg) — maia: the bar is h-9 */
-    --tabs-trigger-padding-x: 8px;              /* foundation: 6px — maia: px-2 */
-    --tabs-trigger-padding-y: 4px;              /* foundation: 2px — maia: py-1 */
+    --control-nested-padding-x: 8px;
+    --tabs-trigger-padding-x: var(--control-nested-padding-x);              /* foundation: 6px — maia: px-2 */
+    --control-nested-padding-y: 4px;
+    --tabs-trigger-padding-y: var(--control-nested-padding-y);              /* foundation: 2px — maia: py-1 */
     --toggle-gap: 4px;                          /* foundation: var(--control-gap-md) — maia: .cn-toggle's own gap-1 */
 
     /* 키캡의 모서리. mira: rounded-xs(2px) — 지시자(4)보다 한 단 작다. */
-    --kbd-radius: 6px;   /* maia: rounded-sm = 10 * 0.6 */
+    --indicator-radius-sm: 6px;
+    --kbd-radius: var(--indicator-radius-sm);   /* maia: rounded-sm = 10 * 0.6 */
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
@@ -229,9 +237,10 @@
        80% 막 위라 보이지 않는 값이지만, 시스템이 얹고 싶으면 이 슬롯만 채우면 된다. */
     --dialog-shadow: 0 0 #0000;
     /* 메뉴의 하위 목록만 한 단 깊다. mira: shadow-lg */
-    --menu-sub-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --popup-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --menu-sub-shadow: var(--popup-shadow-lg);
     /* Sheet 의 그림자 — mira: shadow-lg. 다른 띄운 면(popover · dropdown)의 shadow-md 보다 한 단 깊다. */
-    --sheet-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --sheet-shadow: var(--popup-shadow-lg);
     --surface-radius-lg: 26px;   /* maia: dialog · alert-dialog · command · drawer rounded-4xl */   /* dialog · alert-dialog · command · drawer · empty · navigation-menu 의 rounded-xl */
     --surface-padding-md: 24px;  /* maia: dialog p-6 · card --card-spacing --spacing(6) */  /* dialog p-4 · card --card-spacing --spacing(4) */
     --surface-padding-sm: 16px;  /* maia: popover p-4 */  /* popover p-2.5 */
@@ -251,17 +260,22 @@
        -------------------------------------------------------- */
     --menu-padding: 4px;              /* content p-1 */
     --menu-min-width: 192px;          /* maia: min-w-48 */          /* min-w-32 */
-    --menu-item-height: 36px;         /* maia drops min-h; py-2 + 20 line = 36 */         /* item min-h-7 */
-    --menu-item-radius: 14px;         /* maia: item rounded-xl = 10 * 1.4 */          /* item rounded-md */
-    --menu-item-padding-x: 12px;      /* maia: item px-3 */       /* item px-2 */
+    --item-height-sm: 36px;
+    --menu-item-height: var(--item-height-sm);         /* maia drops min-h; py-2 + 20 line = 36 */         /* item min-h-7 */
+    --item-radius: 14px;
+    --menu-item-radius: var(--item-radius);         /* maia: item rounded-xl = 10 * 1.4 */          /* item rounded-md */
+    --item-padding-x: 12px;
+    --menu-item-padding-x: var(--item-padding-x);      /* maia: item px-3 */       /* item px-2 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
     --menu-item-gap: 10px;            /* maia: item gap-2.5 */             /* item gap-2 */
     /* 세로 여백 — mira: 보통 항목 py-1, 체크·라디오·팔레트 항목 py-1.5. 높이는 --menu-item-height 가
        바닥을 잡고, 글이 길어지면 이 여백이 행을 키운다(2026-09-16 mira 대조에서 추가). */
-    --menu-item-padding-y: 8px;
+    --item-padding-y-sm: 8px;
+    --menu-item-padding-y: var(--item-padding-y-sm);
     --menu-item-padding-y-check: 8px;
     /* 팔레트(Command) 항목만 좌우가 한 단 넓다. mira: px-2.5 */
-    --command-item-padding-x: 12px;
+    --item-padding-x-lg: 12px;
+    --command-item-padding-x: var(--item-padding-x-lg);
 
     /* 아이콘 없는 항목을 아이콘 있는 항목과 왼쪽으로 맞출 때 쓴다(data-inset). mira: pl-7.5 */
     --menu-item-padding-inset: 38px;  /* maia: pl-9.5 */
@@ -278,15 +292,17 @@
        menu 축과 갈라 둔 축이다. 사이드바 밖에서 이 축을 읽지 말 것.
        mira: menu-button h-8 · p-2 · gap-2 · rounded-[calc(var(--radius-sm)+2px)] · [&>svg]:size-4
        -------------------------------------------------------- */
-    --sidebar-item-height: 36px;      /* maia: h-9 */
+    --item-height-md: 36px;
+    --sidebar-item-height: var(--item-height-md);      /* maia: h-9 */
     --sidebar-item-radius: 10px;      /* maia: rounded-lg */       /* radius-sm(6) + 2 */
-    --sidebar-item-padding-x: 12px;   /* maia: px-3 */
-    --sidebar-item-gap: 8px;
-    --sidebar-item-icon-size: 16px;
-    --sidebar-item-spacing: 4px;      /* maia: menu gap-1 */      /* menu gap-px */
+    --sidebar-item-padding-x: var(--item-padding-x);   /* maia: px-3 */
+    --sidebar-item-gap: var(--item-gap);
+    --sidebar-item-icon-size: var(--control-icon-size-lg);
+    --item-spacing: 4px;
+    --sidebar-item-spacing: var(--item-spacing);      /* maia: menu gap-1 */      /* menu gap-px */
     /* mira 는 평소 400 이고 data-active 에서 font-medium 이다. 3층은 굵기 축을 하나로 두므로
        활성 항목의 값(500)을 적는다. */
-    --sidebar-item-font-weight: 500;
+    --sidebar-item-font-weight: var(--ui-font-weight);
     /* Active item height. mira: the same row height. */
     --sidebar-item-height-active: var(--sidebar-item-height);
     --sidebar-item-font-size: var(--ui-text-sm);
@@ -298,9 +314,10 @@
 
     /* Count badge. mira: sits in the action slot (h-5 min-w-5 px-1 · right-1 · radius 4 · text-xs). */
     --sidebar-badge-height: var(--sidebar-item-action-size);
-    --sidebar-badge-padding-x: 4px;
+    --sidebar-badge-padding-x: var(--indicator-padding-x);
     --sidebar-badge-radius: 8px;   /* maia: rounded-md */
-    --sidebar-badge-inset-end: 4px;
+    --indicator-inset: 4px;
+    --sidebar-badge-inset-end: var(--indicator-inset);
     --sidebar-badge-line-height: var(--ui-line-height-xs);
     --sidebar-badge-min-width: var(--sidebar-item-action-size);
     --sidebar-badge-font-size: var(--ui-text-xs);
@@ -324,7 +341,7 @@
 
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */
     --sidebar-item-action-size: 20px;
-    --sidebar-item-action-icon-size: 16px;
+    --sidebar-item-action-icon-size: var(--control-icon-size-lg);
 
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
@@ -371,10 +388,12 @@
        DataTable 블록의 밀도 축(default · compact)이 이 넷을 골라 읽는다.
        mira: table-head h-10 · table-cell p-2. compact 는 한 단씩 줄인다.
        -------------------------------------------------------- */
-    --table-head-height-default: 48px;   /* maia: h-12 */
+    --item-height-lg: 48px;
+    --table-head-height-default: var(--item-height-lg);   /* maia: h-12 */
     --table-head-height-compact: 40px;
-    --table-cell-padding-y-default: 12px;  /* maia: p-3 */
-    --table-cell-padding-y-compact: 8px;
+    --item-padding-y-lg: 12px;
+    --table-cell-padding-y-default: var(--item-padding-y-lg);  /* maia: p-3 */
+    --table-cell-padding-y-compact: var(--item-padding-y-sm);
 
     /* Row box and text. mira: rows size to content · cells px-2 · text-xs (12/16) · the head
        inherits the table text. */
@@ -392,7 +411,8 @@
        tag — tone badge (<Badge data-tone>)
        mira has no tag; foundation tags keep the badge shape (rounded-full · px-2 · 10/14).
        -------------------------------------------------------- */
-    --tag-radius: 9999px;
+    --indicator-radius-pill: 9999px;
+    --tag-radius: var(--indicator-radius-pill);
     --tag-padding-x: 8px;   /* maia: badge px-2 */
     --tag-line-height: var(--ui-line-height-xs);
     --tag-font-size: var(--ui-text-xs);
@@ -405,8 +425,9 @@
     /* Divider under the line bar and the trigger box inside it. mira: no divider, and the default
        trigger box (px 6 · icon side 4 · 1px transparent border · control radius). */
     --tabs-line-divider-width: 0px;
-    --tabs-line-trigger-padding-x: 8px;   /* maia: px-2 */
-    --tabs-line-trigger-padding-x-icon: 6px;   /* maia: pl-1.5 */
+    --tabs-line-trigger-padding-x: var(--control-nested-padding-x);   /* maia: px-2 */
+    --control-nested-padding-x-icon: 6px;
+    --tabs-line-trigger-padding-x-icon: var(--control-nested-padding-x-icon);   /* maia: pl-1.5 */
     --tabs-line-trigger-border-width: var(--control-border-width);
     --tabs-line-trigger-radius: 14px;   /* maia: the trigger is rounded-xl, not the control radius */
 
@@ -419,13 +440,16 @@
        avatar — mira: size-6 · size-8 · size-10
        Avatar 와 AvatarGroupCount 두 곳이 함께 읽는다.
        -------------------------------------------------------- */
-    --avatar-size-sm: 24px;
+    --indicator-size-sm: 24px;
+    --avatar-size-sm: var(--indicator-size-sm);
     /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
     --avatar-font-size-sm: var(--ui-text-xs);       /* mira: group-data-[size=sm]/avatar:text-xs */
     --avatar-font-weight: initial;
     --avatar-line-height-sm: var(--ui-line-height-xs);
-    --avatar-size-md: 32px;
-    --avatar-size-lg: 40px;
+    --indicator-size-md: 32px;
+    --avatar-size-md: var(--indicator-size-md);
+    --indicator-size-lg: 40px;
+    --avatar-size-lg: var(--indicator-size-lg);
 
     /* --------------------------------------------------------
        typeset — 긴 글의 읽기 리듬
@@ -467,16 +491,25 @@
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
 :root {
-    --badge-padding-y: 2px;
-    --badge-gap: var(--control-gap-xs);
-    --badge-border-width: var(--control-border-width);
-    --badge-font-size: var(--ui-text-xs);
-    --badge-line-height: var(--ui-line-height-xs);
-    --badge-letter-spacing: var(--ui-letter-spacing);
-    --badge-font-weight: var(--ui-font-weight);
-    --badge-text-transform: initial;
+    --indicator-padding-y: 2px;
+    --badge-padding-y: var(--indicator-padding-y);
+    --indicator-gap: var(--control-gap-xs);
+    --badge-gap: var(--indicator-gap);
+    --indicator-border-width: var(--control-border-width);
+    --badge-border-width: var(--indicator-border-width);
+    --indicator-font-size: var(--ui-text-xs);
+    --badge-font-size: var(--indicator-font-size);
+    --indicator-line-height: var(--ui-line-height-xs);
+    --badge-line-height: var(--indicator-line-height);
+    --indicator-letter-spacing: var(--ui-letter-spacing);
+    --badge-letter-spacing: var(--indicator-letter-spacing);
+    --indicator-font-weight: var(--ui-font-weight);
+    --badge-font-weight: var(--indicator-font-weight);
+    --indicator-text-transform: initial;
+    --badge-text-transform: var(--indicator-text-transform);
     --kbd-min-width: var(--kbd-height);
-    --kbd-padding-x: 4px;
+    --indicator-padding-x: 4px;
+    --kbd-padding-x: var(--indicator-padding-x);
     --kbd-gap: var(--control-gap-xs);
     --kbd-font-size: var(--ui-text-xs);
     --kbd-line-height: var(--ui-line-height-xs);
@@ -493,7 +526,7 @@
     --control-letter-spacing-field: var(--control-letter-spacing);
     --switch-thumb-width-md: var(--switch-thumb-size-md);
     --switch-thumb-width-sm: var(--switch-thumb-size-sm);
-    --switch-radius: 9999px;
+    --switch-radius: var(--indicator-radius-pill);
     --label-font-weight: var(--ui-font-weight);
     --ui-label-text-transform: initial;
     --ui-label-letter-spacing: var(--ui-letter-spacing);
@@ -512,11 +545,16 @@
     --menubar-padding: var(--menu-padding);
     --menubar-gap: normal;
     --menubar-item-padding-inset: var(--menu-item-padding-inset);
-    --card-radius: var(--surface-radius);
+    --surface-raised-radius: var(--surface-radius);
+    --surface-raised-spacing: var(--surface-padding-md);    /* 축 계약 7: 떠 있는 면(카드)의 안 여백과 간격. card.css 의 --card-spacing 기본값과 같다 */
+    --surface-line-height: var(--ui-line-height-md);    /* 축 계약 7: 면 안 글의 줄 높이(카드 본문과 같다) */
+    --card-radius: var(--surface-raised-radius);
     --sheet-padding: var(--surface-padding-lg);
     --accordion-border-width: var(--surface-border-width);
-    --tabs-list-padding: 3px;
-    --tabs-trigger-gap: 6px;
+    --control-track-padding: 3px;
+    --tabs-list-padding: var(--control-track-padding);
+    --control-nested-gap: 6px;
+    --tabs-trigger-gap: var(--control-nested-gap);
     --tabs-trigger-active-shadow: none;
     --item-media-icon-size: var(--control-icon-size-lg);
     --sidebar-badge-font-weight: var(--ui-font-weight);
@@ -568,7 +606,8 @@
     --card-image-radius: var(--card-radius);
     /* The card's shadow, drawn after its ring. mira: none (the theme's --shadow-card is empty).
        rhea adds shadow-sm, sera · vega · luma their own card shadow. */
-    --card-shadow: var(--shadow-card);
+    --surface-shadow: var(--shadow-card);
+    --card-shadow: var(--surface-shadow);
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.
@@ -583,4 +622,13 @@
         --control-press-offset: 0px;
         --control-press-scale: 1;
     }
+}
+
+/* ---- Backfilled from foundation for _roles (tooling/backfill-component). Tune in place. ---- */
+:root {
+    --field-radius: var(--control-radius);
+    --field-shadow: 0 0 #0000;
+    --surface-glass-fill: var(--card);
+    --surface-glass-filter: none;
+    --surface-glass-sheen: var(--surface-sheen);
 }
