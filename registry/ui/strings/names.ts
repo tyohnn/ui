@@ -33,6 +33,18 @@ export interface Strings {
     previous: string
     next: string
   }
+  calendar: {
+    /** The <nav> around Previous and Next */
+    nav: string
+    previous: string
+    next: string
+    /** The month and year selects of captionLayout="dropdown" */
+    month: string
+    year: string
+    /** The week-number column (showWeekNumber): its header, and each week's name */
+    weekNumber: string
+    week: (weekNumber: number) => string
+  }
   combobox: {
     /** ComboboxChip: the icon button that takes a value out of the selection */
     removeChip: string
@@ -40,6 +52,8 @@ export interface Strings {
   command: {
     /** CommandDialog: the dialog's name (visually hidden) */
     title: string
+    /** CommandInput: the search field's name, when the caller gives it none */
+    search: string
   }
   sidebar: {
     /** SidebarTrigger and SidebarRail */

@@ -263,7 +263,7 @@
 .cn-dropdown-menu-label,
 .cn-context-menu-label,
 .cn-menubar-label,
-.cn-command-group [cmdk-group-heading],
+.cn-command-group .cn-command-group-heading,
 .cn-combobox-label {
     color: var(--muted-foreground);
     padding-inline: var(--menu-item-padding-x);

@@ -71,8 +71,8 @@
     padding: var(--menu-padding);
     color: var(--foreground);
 
-    & [cmdk-group-heading] {
-        /* mira: **:[[cmdk-group-heading]]:px-2.5 py-1.5 — 항목과 같은 좌우 여백이다. */
+    & .cn-command-group-heading {
+        /* mira: **:[.cn-command-group-heading]:px-2.5 py-1.5 — 항목과 같은 좌우 여백이다. */
         padding-inline: var(--command-item-padding-x);
         padding-block: var(--menu-item-padding-y-check);
         font-weight: var(--ui-font-weight);

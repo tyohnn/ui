@@ -18,8 +18,8 @@ function slot<State>(
   render?: RenderProp<State>,
   tag = "div",
   attrs?: (state: State, props: Record<string, unknown>) => Record<string, unknown>
-): RenderProp<State> {
-  return (props: Record<string, unknown>, state: State) =>
+): (props: Record<string, unknown>, state: State) => React.ReactElement {
+  return (props, state) =>
     renderElement(
       tag,
       { ...props, ...attrs?.(state, props), "data-slot": name },

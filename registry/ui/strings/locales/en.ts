@@ -1,12 +1,7 @@
-import { enUS } from "react-day-picker/locale"
-
 import type { Strings } from "../names"
 
-/** BCP 47 tag for Intl formatting (chart values, calendar months) */
+/** BCP 47 tag for Intl formatting (chart values, the calendar's month and weekday names) */
 export const locale = "en-US"
-
-/** react-day-picker's locale: month and weekday names and the calendar's own labels */
-export const dateLocale = enUS
 
 export const strings = {
   close: "Close",
@@ -30,11 +25,21 @@ export const strings = {
     previous: "Previous slide",
     next: "Next slide",
   },
+  calendar: {
+    nav: "Navigation bar",
+    previous: "Go to the Previous Month",
+    next: "Go to the Next Month",
+    month: "Choose the Month",
+    year: "Choose the Year",
+    weekNumber: "Week Number",
+    week: (weekNumber: number) => `Week ${weekNumber}`,
+  },
   combobox: {
     removeChip: "Remove",
   },
   command: {
     title: "Command Palette",
+    search: "Search commands",
   },
   sidebar: {
     toggle: "Toggle Sidebar",
