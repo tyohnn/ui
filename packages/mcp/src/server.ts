@@ -5,7 +5,11 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
 import { allPrimitives, type Catalog, type Primitive, readCatalog, searchPrimitives } from "./catalog";
-import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, presetCode, previewVars, readTailwind, readThemes, SCREENS, setColours, setTokens, startState, swatches, type Outcome, type SystemState } from "./system";
+import { checkSystem, findingsText } from "./check";
+import { type Draft, exportSystem, importLines, writeSystem } from "./export";
+import { cardText, readSystemCards, searchSystems } from "./library";
+import { folderStore, NAME, type SystemStore } from "./store";
+import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, previewVars, readTailwind, readThemes, SCREENS, setColours, setTokens, startState, swatches, type Outcome, type SystemState } from "./system";
 
 /**
  * The tools a coding agent calls. Three for the primitives:
@@ -21,6 +25,17 @@ import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, presetCode, pr
  * - `set_colours` — palette · accent · chart picks, and single colours by hand, per mode
  * - `set_tokens` — any other token the system declares: density, depth, texture, typography, layout
  * - `get_system` — what has changed so far, the person's edits in the view included
+ *
+ * And the life of a system around that: explore what exists, draft one from a concept, check it, keep it, use it.
+ *
+ * - `search_systems` · `read_system` — the base systems (and published ones) with the concept behind each
+ * - `draft_system` — names the system being shaped and records its concept, starting from a base or a published one
+ * - `check_system` — contrast, and changes that reach less than they should
+ * - `publish_system` — keeps the draft in the store under its name, for others to find and start from
+ * - `export_system` — the files an app keeps (styles folder, tyohnn.json, concept.md), written to a folder when the
+ *   server runs on the person's machine
+ *
+ * None of these runs, names or depends on the tyohnn CLI. The plugin and the CLI are separate products.
  *
  * The cards are the site's coverage sections (apps/preview `?template=coverage&section=<name>`), framed from
  * `previewBase`, so the plugin draws exactly what the site and the snapshot checks draw.
@@ -43,6 +58,10 @@ export interface ServerOptions
     /** The views' HTML; read from dist/widget.html and dist/system.html by default */
     widgetHtml?: string;
     systemHtml?: string;
+    /** Where published systems are kept (default: a folder under `<root>/.tyohnn/published`) */
+    store?: SystemStore;
+    /** export_system may write to a folder: true only when the server runs on the person's machine (stdio) */
+    canWrite?: boolean;
 }
 
 export const previewUrl = (base: string, system: string, mode: string, section: string) =>
@@ -71,8 +90,14 @@ export const createServer = (options: ServerOptions) =>
     const tailwind = readTailwind(options.root);
     const summaryOf = (name: string) => catalog.systems.find((entry) => entry.name === name) ?? catalog.systems[0];
 
+    const cards = readSystemCards(options.root);
+    const store = options.store ?? folderStore(join(options.root, ".tyohnn/published"), new Set(catalog.systems.map((entry) => entry.name)));
+    const characterOf = (name: string) => cards.find((card) => card.name === name)?.character ?? "";
+
     // One system is shaped at a time, per connection: the agent and the view both edit it
     let state: SystemState = startState(summaryOf("clover"), library);
+    /** The name and concept of the system being shaped, once draft_system gave them */
+    let draft: Draft | undefined;
 
     /** A result the System view draws: the state for the agent, the view's look-up tables in _meta only */
     const systemResult = (note?: string) =>
@@ -82,7 +107,7 @@ export const createServer = (options: ServerOptions) =>
 
         return {
             content: [{ type: "text" as const, text }],
-            structuredContent: { ...state, preset: presetCode(state, library), changes: colourChanges(state, state.system) + Object.keys(state.tokens).length },
+            structuredContent: { ...state, changes: colourChanges(state, state.system) + Object.keys(state.tokens).length },
             _meta: {
                 "tyohnn/view": {
                     previewBase: options.previewBase,
@@ -164,7 +189,7 @@ export const createServer = (options: ServerOptions) =>
                 `npm packages: ${primitive.packages.join(", ") || "none"}`,
                 `Preview (${chosen.name}, ${chosen.defaultMode}): ${preview}`,
                 "",
-                "In a project set up with `npx tyohnn init`, every primitive is already copied; import it from the components folder the CLI created. Pass no colours or sizes through className: the system's tokens decide them.",
+                "Copy it into the app's components folder as it is, with the primitives it uses. Pass no colours or sizes through className: the system's tokens decide them. For a component tyohnn has no primitive for, build it on Base UI and give its parts `data-role` (control, field, surface, popup, item, indicator, label, meta, separator, track) so every system dresses it.",
                 "",
                 "```tsx",
                 source.trimEnd(),
@@ -268,9 +293,9 @@ export const createServer = (options: ServerOptions) =>
         "set_tokens",
         {
             title: "Set the system's tokens",
-            description: "Changes any token the system declares other than colours: density (--control-height-md, --table-row-height …), depth (--card-shadow …), texture (--control-radius, --surface-radius …), typography (--font-sans …) and layout (--page-gutter-md, --sidebar-width …). A token with a slider in the view keeps to its unit and range. Pass null to put a token back to the system's value.",
+            description: "Changes any token the system declares other than colours: density (--control-height-md, --table-row-height …), depth (--surface-shadow, --shadow-control …), texture (--control-radius, --surface-radius …), typography (--font-sans …) and layout (--page-gutter-md, --sidebar-width …). A token with a slider in the view keeps to its unit and range. Pass null to put a token back to the system's value.",
             inputSchema: {
-                tokens: z.record(z.string(), z.string().nullable()).describe("Token → value, e.g. { \"--table-row-height\": \"32px\", \"--card-shadow\": \"none\" }"),
+                tokens: z.record(z.string(), z.string().nullable()).describe("Token → value, e.g. { \"--table-row-height\": \"32px\", \"--surface-shadow\": \"none\" }"),
             },
             _meta: systemView,
         },
@@ -281,7 +306,7 @@ export const createServer = (options: ServerOptions) =>
         "get_system",
         {
             title: "Get the system being shaped",
-            description: "Returns the system being shaped and everything changed in it so far, including what the person changed in the System view, and the preset code for its colours.",
+            description: "Returns the system being shaped and everything changed in it so far, including what the person changed in the System view.",
             inputSchema: {},
             annotations: { readOnlyHint: true },
         },
@@ -290,6 +315,204 @@ export const createServer = (options: ServerOptions) =>
             const { content, structuredContent } = systemResult();
 
             return { content, structuredContent };
+        },
+    );
+
+    server.registerTool(
+        "search_systems",
+        {
+            title: "Search tyohnn design systems",
+            description: "Finds design systems to start from or learn from: tyohnn's own systems first, then ports of shadcn presets, then systems people published. Each comes with what it is (mode, tags, fonts, icons) and, with read_system, the concept behind every axis. Describe what you are after in words (e.g. \"dense dark dashboard\", \"soft warm paper\").",
+            inputSchema: {
+                query: z.string().optional().describe("Words describing the feel or use"),
+                tag: z.string().optional().describe("Only systems with this tag, e.g. dark, dense, dashboard"),
+                mode: z.enum(["light", "dark"]).optional().describe("Only systems whose default mode is this"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        async ({ query, tag, mode }) =>
+        {
+            const found = searchSystems(cards, query, { tag, mode });
+            const published = (await store.list()).filter((entry) => !query || `${entry.id} ${entry.draft.concept}`.toLowerCase().includes(query.toLowerCase()));
+            const text = [
+                found.length > 0 ? found.map(cardText).join("\n\n") : `No base system matches${query ? ` “${query}”` : ""}.`,
+                published.length > 0 ? `## Published\n${published.map((entry) => `- ${entry.id} (from ${entry.state.system}): ${entry.draft.concept.split("\n")[0]}`).join("\n")}` : "",
+            ].filter(Boolean).join("\n\n");
+
+            return {
+                content: [{ type: "text", text }],
+                structuredContent: {
+                    systems: found.map(({ character: _character, doNot: _doNot, ...card }) => card),
+                    published: published.map((entry) => ({ id: entry.id, base: entry.state.system, concept: entry.draft.concept, publishedAt: entry.publishedAt })),
+                },
+            };
+        },
+    );
+
+    server.registerTool(
+        "read_system",
+        {
+            title: "Read a tyohnn design system",
+            description: "Returns one system's concept: what it chose on each axis (colour, density, depth, texture, typography) and why, what would break it, its fonts and icons. For a published system, its concept and every change over its base. Read it before starting from a system or explaining one.",
+            inputSchema: {
+                name: z.string().describe("A base system (e.g. graphite) or a published system's id"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        async ({ name }) =>
+        {
+            const card = cards.find((entry) => entry.name === name);
+
+            if (card)
+            {
+                const text = [cardText(card), card.source ? `Made from: ${card.source}` : "", "### Character", card.character || "(none written)", card.doNot ? `### Do not\n${card.doNot}` : ""].filter(Boolean).join("\n\n");
+
+                return { content: [{ type: "text", text }], structuredContent: { ...card } };
+            }
+
+            const published = await store.get(name);
+
+            if (!published) return refuse(`No system “${name}”. search_systems lists them.`);
+
+            const changes = describe(published.state, library);
+
+            return {
+                content: [{ type: "text", text: [`## ${published.id} (published ${published.publishedAt.slice(0, 10)}, from ${published.state.system})`, published.draft.concept, "### Changes over the base", changes].join("\n\n") }],
+                structuredContent: { ...published },
+            };
+        },
+    );
+
+    server.registerTool(
+        "draft_system",
+        {
+            title: "Draft a design system",
+            description: "Starts a new design system from a concept: names it, records the concept, and opens it in the System view on a base system (or on a published one, to fork it). Write the concept as what the person asked for in their words, then one line per axis saying how it answers: colour, density, depth, texture, typography. Then shape it with set_colours and set_tokens, check it with check_system, and keep it with publish_system or export_system.",
+            inputSchema: {
+                name: z.string().regex(NAME).describe("The new system's name: lower-case, digits and hyphens, e.g. forest-glass"),
+                concept: z.string().min(1).describe("What the person asked for and how each axis answers it"),
+                base: z.string().describe("The system to start from: a base system (search_systems) or a published id"),
+                mode: z.enum(["light", "dark"]).optional().describe("Colour mode to show first"),
+            },
+            _meta: systemView,
+        },
+        async ({ name, concept, base, mode }) =>
+        {
+            if (catalog.systems.some((entry) => entry.name === name)) return refuse(`“${name}” is a base system's name. Pick another.`);
+
+            if (systemNames.includes(base))
+            {
+                state = startState(summaryOf(base), library);
+            }
+            else
+            {
+                const published = await store.get(base);
+
+                if (!published) return refuse(`No system “${base}” to start from. search_systems lists them.`);
+                state = structuredClone(published.state);
+            }
+
+            if (mode) state = { ...state, mode };
+            draft = { name, concept };
+
+            return systemResult(`Drafting ${name} on ${base}.`);
+        },
+    );
+
+    server.registerTool(
+        "check_system",
+        {
+            title: "Check the system being shaped",
+            description: "Checks the system being shaped: palette pairs below WCAG AA in either mode, tokens set on one component's slot where the shared token would carry the change to every component (new ones included), and a missing name or concept. Run it before publish_system or export_system and fix what it finds.",
+            inputSchema: {},
+            annotations: { readOnlyHint: true },
+        },
+        async () =>
+        {
+            const findings = checkSystem({ root: options.root, state, library, draft });
+
+            return { content: [{ type: "text", text: findingsText(findings) }], structuredContent: { findings } };
+        },
+    );
+
+    server.registerTool(
+        "publish_system",
+        {
+            title: "Publish the system being shaped",
+            description: "Keeps the drafted system in tyohnn's store under its name, with its concept and its changes over the base, so it shows up in search_systems and anyone can start from it with draft_system. Ask the person first: publishing shares the system.",
+            inputSchema: {
+                replace: z.boolean().optional().describe("Publish over a system already published under this name"),
+            },
+        },
+        async ({ replace }) =>
+        {
+            if (!draft) return refuse("Nothing drafted yet: call draft_system with a name and the concept first.");
+
+            const blocking = checkSystem({ root: options.root, state, library, draft }).filter((finding) => finding.level === "error");
+
+            if (blocking.length > 0) return refuse(`Fix these first:\n${findingsText(blocking)}`);
+
+            const published = await store.publish({ draft, state }, { replace });
+
+            if ("error" in published) return refuse(published.error);
+
+            return { content: [{ type: "text", text: `Published ${published.id} (from ${state.system}).` }], structuredContent: { ...published } };
+        },
+    );
+
+    server.registerTool(
+        "export_system",
+        {
+            title: "Export a design system's files",
+            description: "Returns the files an app keeps for a system: its styles folder (the base's CSS with this system's colour and token changes written in), tyohnn.json (where it came from) and concept.md (what it is for), plus the import lines for the app's CSS entry. With `dir`, writes them there (only when this server runs on the person's machine). Without a name, exports the system being shaped.",
+            inputSchema: {
+                name: z.string().optional().describe("A base system or a published id; default the system being shaped"),
+                dir: z.string().optional().describe("Absolute folder to write the system into, e.g. /app/src/styles/tyohnn"),
+                stylesDir: z.string().optional().describe("How the app's CSS entry reaches the styles folder (default ./tyohnn/styles)"),
+            },
+        },
+        async ({ name, dir, stylesDir }) =>
+        {
+            let target = state;
+            let targetDraft = draft ?? { name: state.system, concept: characterOf(state.system) };
+
+            if (name && systemNames.includes(name))
+            {
+                target = startState(summaryOf(name), library);
+                targetDraft = { name, concept: characterOf(name) };
+            }
+            else if (name)
+            {
+                const published = await store.get(name);
+
+                if (!published) return refuse(`No system “${name}”. search_systems lists them.`);
+                target = published.state;
+                targetDraft = published.draft;
+            }
+
+            const styles = stylesDir ?? "./tyohnn/styles";
+            const files = exportSystem({ root: options.root, state: target, library, base: summaryOf(target.system), draft: targetDraft, baseCharacter: characterOf(target.system), stylesDir: styles });
+            const imports = importLines(styles);
+
+            if (dir)
+            {
+                if (!options.canWrite) return refuse("This server cannot write to your disk. Call export_system without dir and write the files yourself.");
+                if (!/^(\/|[A-Za-z]:[\\/])/.test(dir)) return refuse("dir must be an absolute path.");
+
+                const written = writeSystem(dir, files);
+
+                return {
+                    content: [{ type: "text", text: [`Wrote ${written.length} files for ${targetDraft.name} into ${dir}.`, "Add these lines to the app's CSS entry, after `@import \"tailwindcss\";`:", ...imports].join("\n") }],
+                    structuredContent: { system: targetDraft.name, dir, written, imports },
+                };
+            }
+
+            const small = files.filter((file) => !file.path.startsWith("styles/components/"));
+
+            return {
+                content: [{ type: "text", text: [`${files.length} files for ${targetDraft.name}. The component rules (styles/components/*) are in structuredContent; the rest:`, ...small.map((file) => `--- ${file.path}\n${file.content}`), "Import lines for the app's CSS entry:", ...imports].join("\n\n") }],
+                structuredContent: { system: targetDraft.name, files, imports },
+            };
         },
     );
 

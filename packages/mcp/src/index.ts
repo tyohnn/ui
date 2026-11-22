@@ -4,24 +4,33 @@
 //
 // --root <path>          the tyohnn/ui checkout to read (default: the one this file was built in)
 // --preview-base <url>   where the built previews are served (default: the site's)
+// --store <path>         the folder published systems are kept in (default: <root>/.tyohnn/published)
+//
+// Over stdio the server runs on the person's machine, so export_system may write a system into a folder they name.
 
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
+import { readCatalog } from "./catalog";
 import { createServer } from "./server";
+import { folderStore } from "./store";
 
 const { values } = parseArgs({
     options: {
         "root": { type: "string" },
         "preview-base": { type: "string" },
+        "store": { type: "string" },
     },
 });
 
 const root = values.root ?? fileURLToPath(new URL("../../..", import.meta.url));
 const previewBase = values["preview-base"] ?? process.env.TYOHNN_PREVIEW_BASE ?? "https://tyohnn.vercel.app/preview";
 
-const server = createServer({ root, previewBase });
+const store = folderStore(values.store ?? join(root, ".tyohnn/published"), new Set(readCatalog(root).systems.map((system) => system.name)));
+
+const server = createServer({ root, previewBase, store, canWrite: true });
 
 await server.connect(new StdioServerTransport());

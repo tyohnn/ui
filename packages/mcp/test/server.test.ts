@@ -1,34 +1,57 @@
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createServer, SYSTEM_URI, WIDGET_URI } from "../src/server";
+import { folderStore } from "../src/store";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const client = new Client({ name: "test", version: "0.0.0" });
+const published = mkdtempSync(join(tmpdir(), "tyohnn-published-"));
 
 beforeAll(async () =>
 {
-    const server = createServer({ root, previewBase: "https://tyohnn.vercel.app/preview", widgetHtml: "<!doctype html><title>view</title>", systemHtml: "<!doctype html><title>system</title>" });
+    const store = folderStore(published, new Set(["clover", "graphite", "vellum"]));
+    const server = createServer({ root, previewBase: "https://tyohnn.vercel.app/preview", widgetHtml: "<!doctype html><title>view</title>", systemHtml: "<!doctype html><title>system</title>", store });
     const [a, b] = InMemoryTransport.createLinkedPair();
 
     await Promise.all([server.connect(a), client.connect(b)]);
 });
 
+afterAll(() => rmSync(published, { recursive: true, force: true }));
+
 const textOf = (result: Awaited<ReturnType<typeof client.callTool>>) => (result.content as { type: string; text: string }[]).map((part) => part.text).join("\n");
 
 describe("the MCP server", () =>
 {
-    it("offers three read-only tools for the primitives and four for shaping a system, only get_system read-only", async () =>
+    it("offers tools to browse primitives, explore systems, shape one and keep it, the reading ones marked read-only", async () =>
     {
         const { tools } = await client.listTools();
         const readOnly = tools.filter((tool) => tool.annotations?.readOnlyHint).map((tool) => tool.name).sort();
 
-        expect(tools.map((tool) => tool.name).sort()).toEqual(["get_primitive", "get_system", "list_primitives", "set_colours", "set_tokens", "show_primitives", "show_system"]);
-        expect(readOnly).toEqual(["get_primitive", "get_system", "list_primitives", "show_primitives"]);
+        expect(tools.map((tool) => tool.name).sort()).toEqual([
+            "check_system", "draft_system", "export_system", "get_primitive", "get_system", "list_primitives", "publish_system",
+            "read_system", "search_systems", "set_colours", "set_tokens", "show_primitives", "show_system",
+        ]);
+        expect(readOnly).toEqual(["check_system", "get_primitive", "get_system", "list_primitives", "read_system", "search_systems", "show_primitives"]);
+    });
+
+    it("never points the agent at the tyohnn CLI", async () =>
+    {
+        const { tools } = await client.listTools();
+        const said = [
+            ...tools.map((tool) => `${tool.description} ${JSON.stringify(tool.inputSchema)}`),
+            textOf(await client.callTool({ name: "get_primitive", arguments: { name: "button" } })),
+            textOf(await client.callTool({ name: "show_system", arguments: { system: "clover" } })),
+            textOf(await client.callTool({ name: "export_system", arguments: { name: "clover" } })),
+        ].join("\n");
+
+        expect(said).not.toMatch(/npx tyohnn|tyohnn (init|use|add)|--preset/);
     });
 
     it("lists primitives by group and by purpose", async () =>
@@ -117,5 +140,75 @@ describe("the MCP server", () =>
         expect(refused.isError).toBe(true);
         expect(textOf(refused)).toContain("goes from 24px to 64px");
         expect((await client.callTool({ name: "get_system", arguments: {} })).structuredContent).toMatchObject({ tokens: {} });
+    });
+
+    it("finds systems by a description and reads one's concept", async () =>
+    {
+        const found = await client.callTool({ name: "search_systems", arguments: { query: "graphite" } });
+
+        expect((found.structuredContent as { systems: { name: string }[] }).systems[0].name).toBe("graphite");
+
+        const read = textOf(await client.callTool({ name: "read_system", arguments: { name: "graphite" } }));
+
+        expect(read).toContain("### Character");
+        expect((await client.callTool({ name: "read_system", arguments: { name: "nowhere" } })).isError).toBe(true);
+    });
+
+    it("drafts a system from a concept, checks it, publishes it and finds it again", async () =>
+    {
+        const concept = "Apple's glass over a forest: moss greens, frosted surfaces that lift off the ground, soft corners, airy rows.";
+
+        expect((await client.callTool({ name: "draft_system", arguments: { name: "graphite", concept, base: "clover" } })).isError).toBe(true);
+
+        const drafted = await client.callTool({ name: "draft_system", arguments: { name: "forest-glass", concept, base: "clover" } });
+
+        expect(drafted.structuredContent).toMatchObject({ system: "clover", changes: 0 });
+        expect(drafted._meta?.["tyohnn/view"]).toBeDefined();
+
+        await client.callTool({ name: "set_tokens", arguments: { tokens: { "--card-shadow": "none" } } });
+
+        const checked = await client.callTool({ name: "check_system", arguments: {} });
+
+        expect(textOf(checked)).toContain("set --surface-shadow instead");
+
+        await client.callTool({ name: "set_tokens", arguments: { tokens: { "--card-shadow": null, "--surface-shadow": "none" } } });
+        const kept = await client.callTool({ name: "publish_system", arguments: {} });
+
+        expect(kept.structuredContent).toMatchObject({ id: "forest-glass", state: { system: "clover", tokens: { "--surface-shadow": "none" } } });
+        expect((await client.callTool({ name: "publish_system", arguments: {} })).isError).toBe(true);
+
+        const found = await client.callTool({ name: "search_systems", arguments: { query: "forest" } });
+
+        expect((found.structuredContent as { published: { id: string }[] }).published.map((entry) => entry.id)).toEqual(["forest-glass"]);
+        expect(textOf(await client.callTool({ name: "read_system", arguments: { name: "forest-glass" } }))).toContain("--surface-shadow none");
+    });
+
+    it("forks a published system and refuses to publish one whose palette fails AA badly", async () =>
+    {
+        const forked = await client.callTool({ name: "draft_system", arguments: { name: "forest-dusk", concept: "The forest at dusk, same glass.", base: "forest-glass" } });
+
+        expect(forked.structuredContent).toMatchObject({ system: "clover", tokens: { "--surface-shadow": "none" } });
+
+        await client.callTool({ name: "set_colours", arguments: { light: { foreground: "#f4f4f4" } } });
+        const refused = await client.callTool({ name: "publish_system", arguments: {} });
+
+        expect(refused.isError).toBe(true);
+        expect(textOf(refused)).toContain("Fix these first");
+    });
+
+    it("exports a published system's files and keeps off the disk unless the server may write", async () =>
+    {
+        const exported = await client.callTool({ name: "export_system", arguments: { name: "forest-glass" } });
+        const data = exported.structuredContent as { system: string; files: { path: string; content: string }[]; imports: string[] };
+
+        expect(data.system).toBe("forest-glass");
+        expect(data.files.find((file) => file.path === "styles/tokens.css")?.content).toContain("--surface-shadow: none;");
+        expect(data.imports.at(-1)).toBe('@import "./tyohnn/styles/style.css" layer(base);');
+        expect(textOf(exported)).toContain("--- tyohnn.json");
+
+        const written = await client.callTool({ name: "export_system", arguments: { name: "forest-glass", dir: join(published, "app") } });
+
+        expect(written.isError).toBe(true);
+        expect(textOf(written)).toContain("cannot write");
     });
 });

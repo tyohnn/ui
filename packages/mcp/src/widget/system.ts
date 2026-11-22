@@ -35,7 +35,6 @@ interface SystemData
     chart: string | null;
     colours: Record<Mode, Colours>;
     tokens: Record<string, string>;
-    preset: string | null;
     changes: number;
 }
 
