@@ -158,10 +158,12 @@
     --control-indicator-icon-size: 14px;
     --control-indicator-dot-size: 8px;
     /* 키캡의 모서리. mira: rounded-xs(2px) — 지시자(4)보다 한 단 작다. */
-    --kbd-radius: 10px;    /* rounded-lg */
+    --indicator-radius-sm: 10px;
+    --kbd-radius: var(--indicator-radius-sm);    /* rounded-lg */
     /* luma: the keycap is h-5.5 · min-w-5.5 · px-1.5 — no longer the xs control's h-6. */
     --kbd-height: 22px;
-    --kbd-padding-x: 6px;
+    --indicator-padding-x: 6px;
+    --kbd-padding-x: var(--indicator-padding-x);
 
     /* 스위치 — 트랙만 토큰으로 두고 손잡이 크기와 이동 거리는 계산한다.
        손잡이 = 트랙 높이 − 안쪽 여백 2배, 이동 거리 = 트랙 너비 − 트랙 높이.
@@ -203,7 +205,8 @@
        80% 막 위라 보이지 않는 값이지만, 시스템이 얹고 싶으면 이 슬롯만 채우면 된다. */
     --dialog-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);    /* shadow-xl */
     /* 메뉴의 하위 목록만 한 단 깊다. mira: shadow-lg */
-    --menu-sub-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --popup-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --menu-sub-shadow: var(--popup-shadow-lg);
     /* Sheet 의 그림자 — mira: shadow-lg. 다른 띄운 면(popover · dropdown)의 shadow-md 보다 한 단 깊다. */
     --sheet-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);    /* shadow-xl */
     /* luma: the card is rounded-4xl (26) while popovers and menus are rounded-3xl (22);
@@ -213,7 +216,8 @@
     --empty-radius: 18px;    /* empty rounded-2xl */
     /* luma: the chat bubble is px-3.5 py-2.5 with leading-relaxed on text-sm (14 × 1.625). */
     --bubble-padding-x: 14px;
-    --bubble-padding-y: 10px;
+    --surface-padding-xs: 10px;
+    --bubble-padding-y: var(--surface-padding-xs);
     --bubble-line-height: 22.75px;
     --surface-radius-lg: 26px;    /* rounded-4xl — dialog · alert-dialog · command · drawer */
     --surface-padding-md: 24px;    /* dialog p-6 · card --card-spacing --spacing(6) */
@@ -234,17 +238,22 @@
        -------------------------------------------------------- */
     --menu-padding: 6px;    /* content p-1.5 */
     --menu-min-width: 192px;    /* min-w-48 */
-    --menu-item-height: 0px;    /* luma drops min-h-*; the row is padding plus text */
-    --menu-item-radius: 18px;    /* item rounded-2xl */
-    --menu-item-padding-x: 12px;    /* item px-3 */
+    --item-height-sm: 0px;
+    --menu-item-height: var(--item-height-sm);    /* luma drops min-h-*; the row is padding plus text */
+    --item-radius: 18px;
+    --menu-item-radius: var(--item-radius);    /* item rounded-2xl */
+    --item-padding-x: 12px;
+    --menu-item-padding-x: var(--item-padding-x);    /* item px-3 */
     --menu-item-padding-end: 32px;    /* checkbox-item pr-8 — 오른쪽 체크 표시 자리 */
     --menu-item-gap: 10px;    /* item gap-2.5 */
     /* 세로 여백 — mira: 보통 항목 py-1, 체크·라디오·팔레트 항목 py-1.5. 높이는 --menu-item-height 가
        바닥을 잡고, 글이 길어지면 이 여백이 행을 키운다(2026-09-16 mira 대조에서 추가). */
-    --menu-item-padding-y: 8px;    /* item py-2 */
+    --item-padding-y-sm: 8px;
+    --menu-item-padding-y: var(--item-padding-y-sm);    /* item py-2 */
     --menu-item-padding-y-check: 8px;    /* check · radio · palette rows py-2 */
     /* 팔레트(Command) 항목만 좌우가 한 단 넓다. mira: px-2.5 */
-    --command-item-padding-x: 12px;    /* palette item px-3 */
+    --item-padding-x-lg: 12px;
+    --command-item-padding-x: var(--item-padding-x-lg);    /* palette item px-3 */
     /* luma: every menu row is font-medium; the label keeps py-2.5. */
     --menu-item-font-weight: var(--ui-font-weight);
     --menu-label-padding-y: 10px;    /* label py-2.5 */
@@ -267,12 +276,14 @@
        menu 축과 갈라 둔 축이다. 사이드바 밖에서 이 축을 읽지 말 것.
        mira: menu-button h-8 · p-2 · gap-2 · rounded-[calc(var(--radius-sm)+2px)] · [&>svg]:size-4
        -------------------------------------------------------- */
-    --sidebar-item-height: 36px;    /* menu-button h-9 */
+    --item-height-md: 36px;
+    --sidebar-item-height: var(--item-height-md);    /* menu-button h-9 */
     --sidebar-item-radius: calc(var(--radius) * 1.4);    /* rounded-xl */
-    --sidebar-item-padding-x: 12px;    /* px-3 */
-    --sidebar-item-gap: 8px;
-    --sidebar-item-icon-size: 16px;
-    --sidebar-item-spacing: 2px;    /* menu gap-0.5 */
+    --sidebar-item-padding-x: var(--item-padding-x);    /* px-3 */
+    --sidebar-item-gap: var(--item-gap);
+    --sidebar-item-icon-size: var(--control-icon-size-lg);
+    --item-spacing: 2px;
+    --sidebar-item-spacing: var(--item-spacing);    /* menu gap-0.5 */
     /* luma: the shell keeps gap-2 · p-2 and the h-8 search box while the row grew to h-9 px-3 py-2. */
     --sidebar-surface-gap: 8px;
     --sidebar-surface-padding: 8px;
@@ -281,7 +292,7 @@
     --sidebar-separator-margin-inline: 8px;    /* separator mx-2 */
     /* mira 는 평소 400 이고 data-active 에서 font-medium 이다. 3층은 굵기 축을 하나로 두므로
        활성 항목의 값(500)을 적는다. */
-    --sidebar-item-font-weight: 500;
+    --sidebar-item-font-weight: var(--ui-font-weight);
     /* Active item height. mira: the same row height. */
     --sidebar-item-height-active: var(--sidebar-item-height);
     --sidebar-item-font-size: var(--ui-text-sm);
@@ -295,7 +306,8 @@
     --sidebar-badge-height: var(--sidebar-item-action-size);
     --sidebar-badge-padding-x: 4px;
     --sidebar-badge-radius: calc(var(--radius) * 1.4);    /* rounded-xl */
-    --sidebar-badge-inset-end: 4px;
+    --indicator-inset: 4px;
+    --sidebar-badge-inset-end: var(--indicator-inset);
     --sidebar-badge-line-height: var(--ui-line-height-xs);
     --sidebar-badge-min-width: var(--sidebar-item-action-size);
     --sidebar-badge-font-size: var(--ui-text-xs);   /* luma: text-xs */
@@ -319,7 +331,7 @@
 
     /* 항목 오른쪽 끝의 펼침 표시 · 자물쇠 자리. mira: menu-action w-5 · [&>svg]:size-4 */
     --sidebar-item-action-size: 20px;
-    --sidebar-item-action-icon-size: 16px;
+    --sidebar-item-action-icon-size: var(--control-icon-size-lg);
 
     /* --------------------------------------------------------
        ui-text — 컨트롤이 아닌 컴포넌트의 글자
@@ -366,10 +378,12 @@
        DataTable 블록의 밀도 축(default · compact)이 이 넷을 골라 읽는다.
        mira: table-head h-10 · table-cell p-2. compact 는 한 단씩 줄인다.
        -------------------------------------------------------- */
-    --table-head-height-default: 48px;    /* table-head h-12 */
+    --item-height-lg: 48px;
+    --table-head-height-default: var(--item-height-lg);    /* table-head h-12 */
     --table-head-height-compact: 40px;    /* one step down */
-    --table-cell-padding-y-default: 12px;    /* table-cell p-3 */
-    --table-cell-padding-y-compact: 8px;    /* one step down */
+    --item-padding-y-lg: 12px;
+    --table-cell-padding-y-default: var(--item-padding-y-lg);    /* table-cell p-3 */
+    --table-cell-padding-y-compact: var(--item-padding-y-sm);    /* one step down */
 
     /* Row box and text. mira: rows size to content · cells px-2 · text-xs (12/16) · the head
        inherits the table text. */
@@ -387,7 +401,8 @@
        tag — tone badge (<Badge data-tone>)
        mira has no tag; foundation tags keep the badge shape (rounded-full · px-2 · 10/14).
        -------------------------------------------------------- */
-    --tag-radius: 22px;    /* badge rounded-3xl */
+    --indicator-radius-pill: 22px;
+    --tag-radius: var(--indicator-radius-pill);    /* badge rounded-3xl */
     --tag-padding-x: 8px;    /* badge px-2 */
     --tag-line-height: 16px;    /* badge text-xs */
     --tag-font-size: 12px;    /* badge text-xs */
@@ -397,7 +412,7 @@
     --badge-height: 20px;
     --badge-padding-x: var(--tag-padding-x);
     --badge-padding-x-icon: 6px;
-    --badge-radius: var(--tag-radius);
+    --badge-radius: var(--indicator-radius-pill);
 
     /* --------------------------------------------------------
        tabs-line — underline tabs (TabsList variant="line")
@@ -407,17 +422,22 @@
     /* Divider under the line bar and the trigger box inside it. mira: no divider, and the default
        trigger box (px 6 · icon side 4 · 1px transparent border · control radius). */
     --tabs-line-divider-width: 0px;
-    --tabs-line-trigger-padding-x: 12px;    /* trigger px-3 */
-    --tabs-line-trigger-padding-x-icon: 8px;    /* icon side pl-2 */
+    --tabs-line-trigger-padding-x: var(--control-nested-padding-x);    /* trigger px-3 */
+    --control-nested-padding-x-icon: 8px;
+    --tabs-line-trigger-padding-x-icon: var(--control-nested-padding-x-icon);    /* icon side pl-2 */
     --tabs-line-trigger-border-width: var(--control-border-width);
     --tabs-line-trigger-radius: 9999px;    /* trigger rounded-full */
 
     /* Default tabs bar. luma: list h-9 p-1, trigger gap-2 px-3 py-1. */
     --tabs-list-height: var(--control-height-md);
-    --tabs-list-padding: 4px;
-    --tabs-trigger-gap: 8px;
-    --tabs-trigger-padding-x: 12px;
-    --tabs-trigger-padding-y: 4px;
+    --control-track-padding: 4px;
+    --tabs-list-padding: var(--control-track-padding);
+    --control-nested-gap: 8px;
+    --tabs-trigger-gap: var(--control-nested-gap);
+    --control-nested-padding-x: 12px;
+    --tabs-trigger-padding-x: var(--control-nested-padding-x);
+    --control-nested-padding-y: 4px;
+    --tabs-trigger-padding-y: var(--control-nested-padding-y);
 
     /* 표의 메타 열 — 체크박스·펼치기·손잡이·행 액션이 앉는 좁은 열.
        액션 열만 넓은 것은 메뉴 버튼(아이콘 버튼 md 28)이 오른쪽 끝에 붙기 때문이다. */
@@ -428,7 +448,8 @@
        avatar — mira: size-6 · size-8 · size-10
        Avatar 와 AvatarGroupCount 두 곳이 함께 읽는다.
        -------------------------------------------------------- */
-    --avatar-size-sm: 24px;
+    --indicator-size-sm: 24px;
+    --avatar-size-sm: var(--indicator-size-sm);
     /* Small initials type. mira gives the fallback no type of its own: `initial` = inherit. */
     --avatar-font-size-sm: var(--ui-text-xs);       /* mira: group-data-[size=sm]/avatar:text-xs */
     --avatar-font-weight: initial;
@@ -436,8 +457,10 @@
     /* md · lg initials. luma: text-sm (14/20), below the lg UI step. */
     --avatar-font-size: var(--ui-text-sm);
     --avatar-line-height: var(--ui-line-height-sm);
-    --avatar-size-md: 32px;
-    --avatar-size-lg: 40px;
+    --indicator-size-md: 32px;
+    --avatar-size-md: var(--indicator-size-md);
+    --indicator-size-lg: 40px;
+    --avatar-size-lg: var(--indicator-size-lg);
 
     /* --------------------------------------------------------
        typeset — 긴 글의 읽기 리듬
@@ -479,7 +502,8 @@
 
 /* ---- Backfilled from foundation: axis contract v4 slots. Tune in place. ---- */
 :root {
-    --badge-padding-y: 2px;
+    --indicator-padding-y: 2px;
+    --badge-padding-y: var(--indicator-padding-y);
     --badge-gap: var(--control-gap-xs);
     --badge-icon-size: var(--control-icon-size-xs);
     --badge-border-width: var(--control-border-width);
