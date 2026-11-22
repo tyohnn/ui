@@ -9,14 +9,11 @@ const cards = readSystemCards(root);
 
 describe("the systems to explore", () =>
 {
-    it("reads every system folder, tyohnn's own before the shadcn ports", () =>
+    it("reads every system folder as one of tyohnn's own, in name order", () =>
     {
-        const firstPort = cards.findIndex((card) => !card.own);
-
         expect(cards.length).toBeGreaterThanOrEqual(15);
-        expect(cards.slice(0, firstPort).every((card) => card.own)).toBe(true);
-        expect(cards.slice(firstPort).every((card) => !card.own)).toBe(true);
-        expect(cards.find((card) => card.name === "mira")?.own).toBe(false);
+        expect(cards.map((card) => card.name)).toEqual([...cards.map((card) => card.name)].sort());
+        expect(cards.map((card) => card.name)).toContain("mira");
     });
 
     it("takes a system's concept from the Character section of its DESIGN.md", () =>
@@ -42,7 +39,7 @@ describe("the systems to explore", () =>
         expect(searchSystems(cards, "qqqzzzx")).toEqual([]);
     });
 
-    it("filters by mode and tag, and with no words keeps the own-first order", () =>
+    it("filters by mode and tag, and with no words keeps the name order", () =>
     {
         expect(searchSystems(cards, undefined, { mode: "dark" }).every((card) => card.defaultMode === "dark")).toBe(true);
         expect(searchSystems(cards)).toEqual(cards);
@@ -52,9 +49,13 @@ describe("the systems to explore", () =>
         expect(searchSystems(cards, undefined, { tag }).every((card) => card.tags.includes(tag))).toBe(true);
     });
 
-    it("marks a port in its card text", () =>
+    it("never sets a system apart as a shadcn preset", () =>
     {
-        expect(cardText(cards.find((card) => card.name === "mira")!)).toContain("(port of a shadcn preset)");
-        expect(cardText(cards.find((card) => card.name === "graphite")!)).not.toContain("port");
+        for (const card of cards)
+        {
+            expect(card.tags).not.toContain("shadcn-preset");
+            expect(card.source).not.toMatch(/shadcn/i);
+            expect(cardText(card)).not.toMatch(/shadcn|port/i);
+        }
     });
 });

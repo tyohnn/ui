@@ -773,8 +773,7 @@ const renderTop = () =>
     if (!data || !meta) return;
 
     const holder = $<HTMLElement>("[data-systems]", app);
-    const ours = new Set(["graphite", "loam", "cirrus", "halo", "nocturne", "vellum", "clover"]);
-    const systems = [...meta.systems].sort((a, b) => Number(!ours.has(a.name)) - Number(!ours.has(b.name)));
+    const systems = [...meta.systems].sort((a, b) => a.name.localeCompare(b.name));
 
     holder.replaceChildren(combobox({
         label: "Design system",
@@ -784,7 +783,6 @@ const renderTop = () =>
             label: system.name,
             value: system.name,
             hint: system.tagline,
-            group: ours.has(system.name) ? "tyohnn" : "Ported from shadcn create",
             art: paletteDots(system.name),
         })),
         face: (option) => `${paletteDots(option.value)}<span><b>${esc(option.label)}</b><small>${esc(option.hint ?? "")}</small></span>`,

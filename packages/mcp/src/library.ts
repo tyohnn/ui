@@ -17,18 +17,20 @@ export interface SystemCard
     defaultMode: "light" | "dark";
     fonts: Record<string, string>;
     icons: string;
-    /** What the system was made from: a reference screenshot, a shadcn preset, a fork … */
+    /** What the system was made from: a reference screenshot, a product's design, a fork … */
     source: string;
     /** DESIGN.md's Character section: the concept, axis by axis */
     character: string;
     /** DESIGN.md's Do not section: what would break the feel */
     doNot: string;
-    /** tyohnn's own systems come first; ports of shadcn create presets prove the port, not the taste */
-    own: boolean;
 }
 
-/** The systems ported from shadcn create presets (CLAUDE.md: show tyohnn's own first) */
-const PORTED = new Set(["mira", "vega", "nova", "maia", "lyra", "luma", "sera", "rhea"]);
+/**
+ * Every system in the registry is one of tyohnn's own, offered the same way. How some were first measured (against
+ * a shadcn create preset) is the registry's provenance, not something to show: that tag and note stay out of a card.
+ */
+const PROVENANCE_TAGS = new Set(["shadcn-preset"]);
+const PROVENANCE_KINDS = new Set(["shadcn-preset"]);
 
 interface SystemJson
 {
@@ -72,25 +74,25 @@ export const readSystemCards = (root: string): SystemCard[] =>
                 name: json.name,
                 description: json.description ?? "",
                 tagline: json.tagline ?? "",
-                tags: json.tags ?? [],
+                tags: (json.tags ?? []).filter((tag) => !PROVENANCE_TAGS.has(tag)),
                 defaultMode: json.defaultMode ?? "light",
                 fonts: json.fonts ?? {},
                 icons: json.icons?.library ?? "",
-                source: [json.source?.kind, json.source?.note].filter(Boolean).join(": ") || (json.forkedFrom?.source ? `fork of ${json.forkedFrom.source}` : ""),
+                source: PROVENANCE_KINDS.has(json.source?.kind ?? "")
+                    ? ""
+                    : [json.source?.kind, json.source?.note].filter(Boolean).join(": ") || (json.forkedFrom?.source ? `fork of ${json.forkedFrom.source}` : ""),
                 character: sectionOf(doc, "Character"),
                 doNot: sectionOf(doc, "Do not"),
-                own: !PORTED.has(json.name),
             };
         })
-        .sort((a, b) => Number(b.own) - Number(a.own) || a.name.localeCompare(b.name));
+        .sort((a, b) => a.name.localeCompare(b.name));
 };
 
 const words = (text: string) => text.toLowerCase().split(/[^a-z0-9가-힣]+/).filter((word) => word.length > 1);
 
 /**
  * Systems that match a description, best first. Every word of the query scores where it appears: the name and tags
- * count most, then the description and tagline, then the Character section. With no query, the order is tyohnn's own
- * systems first, then the ports.
+ * count most, then the description and tagline, then the Character section. With no query, the order is by name.
  */
 export const searchSystems = (cards: SystemCard[], query?: string, filters: { tag?: string; mode?: "light" | "dark" } = {}) =>
 {
@@ -110,12 +112,12 @@ export const searchSystems = (cards: SystemCard[], query?: string, filters: { ta
             return { card, score };
         })
         .filter(({ score }) => score > 0)
-        .sort((a, b) => b.score - a.score || Number(b.card.own) - Number(a.card.own))
+        .sort((a, b) => b.score - a.score || a.card.name.localeCompare(b.card.name))
         .map(({ card }) => card);
 };
 
 /** A card as a few lines an agent can show a person */
 export const cardText = (card: SystemCard) =>
-    [`## ${card.name}${card.own ? "" : " (port of a shadcn preset)"}`, card.description, `${card.defaultMode} · ${card.tags.filter((tag) => tag !== card.defaultMode).join(" · ")} · fonts ${card.fonts.sans ?? "?"} · icons ${card.icons}`]
+    [`## ${card.name}`, card.description, `${card.defaultMode} · ${card.tags.filter((tag) => tag !== card.defaultMode).join(" · ")} · fonts ${card.fonts.sans ?? "?"} · icons ${card.icons}`]
         .filter(Boolean)
         .join("\n");

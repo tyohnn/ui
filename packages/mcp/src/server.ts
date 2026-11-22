@@ -322,7 +322,7 @@ export const createServer = (options: ServerOptions) =>
         "search_systems",
         {
             title: "Search tyohnn design systems",
-            description: "Finds design systems to start from or learn from: tyohnn's own systems first, then ports of shadcn presets, then systems people published. Each comes with what it is (mode, tags, fonts, icons) and, with read_system, the concept behind every axis. Describe what you are after in words (e.g. \"dense dark dashboard\", \"soft warm paper\").",
+            description: "Finds design systems to start from or learn from: tyohnn's systems first, then systems people published. Each comes with what it is (mode, tags, fonts, icons) and, with read_system, the concept behind every axis. Describe what you are after in words (e.g. \"dense dark dashboard\", \"soft warm paper\").",
             inputSchema: {
                 query: z.string().optional().describe("Words describing the feel or use"),
                 tag: z.string().optional().describe("Only systems with this tag, e.g. dark, dense, dashboard"),
