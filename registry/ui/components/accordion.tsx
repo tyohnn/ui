@@ -11,6 +11,9 @@ import { cn } from "cn"
 import { ChevronDown, ChevronUp } from "@tyohnn/icons"
 import { flag, slot } from "@tyohnn/lib/slot"
 
+/** Base UI 의 계약은 아코디언의 부분마다 data-orientation=vertical 을 단다. UI SDK 의 아코디언은 세로뿐이라 적지 않는다 */
+const vertical = () => ({ "data-orientation": "vertical" })
+
 function Accordion({
   className,
   render,
@@ -19,7 +22,7 @@ function Accordion({
   return (
     <AccordionPrimitive
       className={cn("cn-accordion flex w-full flex-col", className)}
-      render={slot("accordion", render)}
+      render={slot("accordion", render, "div", vertical)}
       {...props}
     />
   )
@@ -33,7 +36,7 @@ function AccordionItem({
   return (
     <AccordionItemPrimitive
       className={cn("cn-accordion-item", className)}
-      render={slot("accordion-item", render)}
+      render={slot("accordion-item", render, "div", vertical)}
       {...props}
     />
   )
@@ -57,6 +60,7 @@ function AccordionTrigger({
         render={slot("accordion-trigger", render, "button", (state) => ({
           // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
           "data-panel-open": flag(state.open),
+          "data-orientation": "vertical",
         }))}
         {...props}
       >
@@ -85,7 +89,7 @@ function AccordionContent({
   return (
     <AccordionPanel
       className="cn-accordion-content overflow-hidden"
-      render={slot("accordion-content", render)}
+      render={slot("accordion-content", render, "div", vertical)}
       {...props}
     >
       <div
