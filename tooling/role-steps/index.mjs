@@ -10,6 +10,7 @@
 //      `var(--<step>)`; a slot that differs keeps its value (the system tuned it on purpose).
 // Nothing resolves differently afterwards. The script checks that itself: it resolves every :root token
 // of globals.css + tokens.css before and after and fails on any difference. --check edits nothing.
+// It only reads :root; check-modes.mjs compares light and dark against a git ref after the run.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { relative } from "node:path";
@@ -29,7 +30,7 @@ const STEPS = [
     ["--item-gap", ["--menu-item-gap", "--sidebar-item-gap"]],
     ["--item-spacing", ["--sidebar-item-spacing"]],
     ["--popup-shadow-lg", ["--menu-sub-shadow", "--sheet-shadow"]],
-    ["--indicator-radius-pill", ["--tag-radius", "--badge-radius", "--switch-radius"]],
+    ["--indicator-radius-pill", ["--tag-radius", "--switch-radius"]],
     ["--indicator-radius-sm", ["--kbd-radius"]],
     ["--indicator-size-sm", ["--avatar-size-sm"]],
     ["--indicator-size-md", ["--avatar-size-md"]],
@@ -37,12 +38,27 @@ const STEPS = [
     ["--indicator-padding-x", ["--kbd-padding-x", "--sidebar-badge-padding-x"]],
     ["--indicator-padding-y", ["--badge-padding-y"]],
     ["--indicator-inset", ["--sidebar-badge-inset-end"]],
+    // the indicator that carries text (a badge): roles.css's default indicator reads these
+    ["--indicator-height", ["--badge-height"]],
+    ["--indicator-radius", ["--badge-radius"]],
+    ["--indicator-padding-x-lg", ["--badge-padding-x"]],
+    ["--indicator-gap", ["--badge-gap"]],
+    ["--indicator-border-width", ["--badge-border-width"]],
+    ["--indicator-icon-size", ["--badge-icon-size"]],
+    ["--indicator-font-size", ["--badge-font-size"]],
+    ["--indicator-line-height", ["--badge-line-height"]],
+    ["--indicator-font-weight", ["--badge-font-weight"]],
+    ["--indicator-letter-spacing", ["--badge-letter-spacing"]],
+    ["--indicator-text-transform", ["--badge-text-transform"]],
     ["--control-track-padding", ["--tabs-list-padding"]],
     ["--control-nested-padding-x", ["--tabs-trigger-padding-x", "--tabs-line-trigger-padding-x"]],
     ["--control-nested-padding-x-icon", ["--tabs-line-trigger-padding-x-icon"]],
     ["--control-nested-padding-y", ["--tabs-trigger-padding-y"]],
     ["--control-nested-gap", ["--tabs-trigger-gap"]],
     ["--surface-padding-xs", ["--bubble-padding-y"]],
+    // roles.css's default surface is the raised plane the card is
+    ["--surface-raised-radius", ["--card-radius"]],
+    ["--surface-shadow", ["--card-shadow"]],
 ];
 
 /** Slots that point at the same role token as another role token already, by value: no new step */

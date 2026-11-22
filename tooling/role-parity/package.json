@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/role-parity",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Axis contract 7: render each role (roles.css) beside the base component that defines its feel, in every system, and list the computed properties that differ.",
+    "main": "index.mjs",
+    "devDependencies": {
+        "@playwright/test": "1.62.1"
+    }
+}
