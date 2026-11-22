@@ -281,6 +281,18 @@ unchanged; the systems that had kept a rule now set a value instead. 14 layer-2 
 
 `registry/foundation/reference/README.md` §"Axis contract v5" has the defaults and the per-system values.
 
+**Version 7 (2026-11-22)** names the **roles** under the component slots, so a component that has no slot of its
+own can read the same step and take the system's feel. The eight roles (control · field · surface · popup · item ·
+indicator · label · separator) and where every layer-2 name goes are in `registry/foundation/reference/roles.md`.
+25 role steps: `--item-height-sm|md|lg`, `--item-radius`, `--item-padding-x|-x-lg`, `--item-padding-y-sm|-y-lg`,
+`--item-gap`, `--item-spacing`, `--popup-shadow-lg`, `--indicator-radius-pill|-sm`, `--indicator-size-sm|md|lg`,
+`--indicator-padding-x|-y`, `--indicator-inset`, `--control-track-padding`, `--control-nested-padding-x|-x-icon|-y`,
+`--control-nested-gap` and `--surface-padding-xs` (`--item-gap` existed as the Item component's gap and now holds
+the value). `node tooling/role-steps` added each step to foundation and every system with that system's value of
+the step's first slot, and turned every slot that resolved to the same value into `var(--<step>)`; a slot a system
+had tuned away from it keeps its value. It resolves every `:root` and `.dark` token before and after and refuses to
+write if one moves (0 moved). Component slots stay: a system still tunes `--sidebar-item-height` on its own.
+
 Version 3's slots:
 
 | Area | Layer 1 (colours) | Layer 2 (tokens) |
