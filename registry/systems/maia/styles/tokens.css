@@ -168,6 +168,10 @@
     --command-item-radius: 10px;                /* foundation: var(--menu-item-radius) — maia: rounded-lg against the menu row's rounded-xl */
     --command-item-gap: 8px;                    /* foundation: var(--menu-item-gap) — maia: the palette row keeps gap-2 */
     --sidebar-part-radius: 8px;                 /* foundation: var(--sidebar-item-radius) — maia rounds the menu button rounded-lg and every other sidebar part rounded-md */
+    /* 떠 있는 사이드바 옆 본문 판(sidebar.css 「본문 판」). 0 이면 업스트림처럼 맨바닥에 붙는다. */
+    --sidebar-pane-gap: 0px;
+    --sidebar-pane-radius: 0px;
+    --sidebar-pane-ring-width: 0px;
     --menu-narrow-min-width: 144px;             /* foundation: var(--menu-min-width) — maia: select · combobox · sub-menus min-w-36 against min-w-48 */
     /* Moved out of layer 3 in the stage-2 slot migration (2026-09-17). */
     --menu-label-padding-y: 10px;               /* foundation: var(--menu-item-padding-y-check) — maia: py-2.5 */

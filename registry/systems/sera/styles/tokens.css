@@ -536,6 +536,10 @@
     --accordion-border-width: 0px;   /* sera: no frame around the group */
     --tabs-trigger-active-shadow: none;
     --sidebar-part-radius: var(--sidebar-item-radius);
+    /* 떠 있는 사이드바 옆 본문 판(sidebar.css 「본문 판」). 0 이면 업스트림처럼 맨바닥에 붙는다. */
+    --sidebar-pane-gap: 0px;
+    --sidebar-pane-radius: 0px;
+    --sidebar-pane-ring-width: 0px;
 }
 
 :root {

@@ -618,6 +618,10 @@
     /* Every sidebar part that is not the menu button (group action · menu action · sub button …).
        mira: the same radius; maia rounds the menu button one step further. */
     --sidebar-part-radius: var(--sidebar-item-radius);
+    /* halo: 떠 있는 사이드바 옆 본문도 판이다. 모서리는 떠 있는 사이드바와 같은 --surface-radius. */
+    --sidebar-pane-gap: 8px;
+    --sidebar-pane-radius: var(--surface-radius);
+    --sidebar-pane-ring-width: var(--surface-border-width);
 }
 
 :root {
