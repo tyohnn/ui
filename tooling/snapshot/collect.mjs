@@ -236,6 +236,7 @@ export const coveragePage = async (browser, { url, mode, swap, side = "page" }) 
 
     return {
         side,
+        page,
         sections: async () =>
         {
             await open(null);
