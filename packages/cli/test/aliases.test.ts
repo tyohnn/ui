@@ -9,7 +9,7 @@ const source = [
     'import { ChevronDown } from "@tyohnn/icons";',
     'import type { IconProps } from "@tyohnn/icons/names";',
     'import { strings } from "@tyohnn/strings";',
-    'import { Tabs } from "@base-ui/react/tabs";',
+    'import { Tabs } from "@ui-sdk/react/tabs";',
 ].join("\n");
 
 describe("placeholder alias rewriting", () =>
@@ -23,7 +23,7 @@ describe("placeholder alias rewriting", () =>
             'import { ChevronDown } from "@acme/ui/icons";',
             'import type { IconProps } from "@acme/ui/icons/names";',
             'import { strings } from "@acme/ui/strings";',
-            'import { Tabs } from "@base-ui/react/tabs";',
+            'import { Tabs } from "@ui-sdk/react/tabs";',
         ].join("\n"));
     });
 
@@ -36,7 +36,7 @@ describe("placeholder alias rewriting", () =>
             'import { ChevronDown } from "@/components/icons";',
             'import type { IconProps } from "@/components/icons/names";',
             'import { strings } from "@/lib/strings";',
-            'import { Tabs } from "@base-ui/react/tabs";',
+            'import { Tabs } from "@ui-sdk/react/tabs";',
         ].join("\n"));
     });
 
