@@ -3,7 +3,7 @@ import { Button as ButtonPrimitive } from "@ui-sdk/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-import { slot } from "@tyohnn/lib/slot"
+import { slotElement } from "@tyohnn/lib/slot"
 
 const buttonVariants = cva(
   "cn-button group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -61,7 +61,8 @@ function Button({
     <ButtonPrimitive
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={onClick as React.ComponentProps<typeof ButtonPrimitive>["onClick"]}
-      render={slot(dataSlot, render, "button")}
+      // 서버 컴포넌트에서도 그리도록 함수가 아닌 요소로 넘긴다(buttonVariants 를 서버에서 쓰게 이 파일은 "use client" 가 아니다)
+      render={slotElement(dataSlot, render, "button")}
       {...props}
     />
   )

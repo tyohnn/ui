@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 import { renderElement, type RenderProp } from "@ui-sdk/react/primitive"
 
 /**
@@ -26,6 +26,19 @@ function slot<State>(
       render,
       state
     )
+}
+
+/**
+ * 이름만 바꿔 다는 render 를 함수가 아니라 요소로 만든다. 서버 컴포넌트에서 UI SDK 의 클라이언트 부분에 넘길 수 있다
+ * (함수는 서버에서 클라이언트로 넘어가지 못한다). UI SDK 는 요소의 props 를 자기 props 위에 덮으므로 이름이 이긴다.
+ * 호출부가 함수를 넘겼으면 그 호출부는 이미 클라이언트라 slot 으로 그린다
+ */
+function slotElement<State>(name: string, render?: RenderProp<State>, tag = "div"): RenderProp<State> {
+  if (typeof render === "function") return slot(name, render, tag)
+  // slot 처럼 호출부의 요소가 단 이름이 있으면 그것이 이긴다(pagination 의 a 는 pagination-link)
+  if (React.isValidElement<Record<string, unknown>>(render))
+    return render.props["data-slot"] === undefined ? React.cloneElement(render, { "data-slot": name }) : render
+  return React.createElement(tag, { "data-slot": name })
 }
 
 /** 참이면 빈 문자열(속성이 있다), 거짓이면 undefined(속성이 없다) */
@@ -59,4 +72,4 @@ function renderPart<State extends Record<string, unknown>>(
   return renderElement(tag, { ...native, ...attrs, ...props }, render, state)
 }
 
-export { flag, renderPart, slot, type RenderableProps }
+export { flag, renderPart, slot, slotElement, type RenderableProps }
