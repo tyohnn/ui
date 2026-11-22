@@ -58,6 +58,14 @@ const BEHAVE_SYSTEMS = ["foundation", "graphite"];
 const POPUP_SECTIONS = "popover|hover-card|tooltip|dropdown-menu|context-menu|menubar|select|combobox|navigation-menu";
 const FOCUS_ON_MOUNT = new RegExp(` · (${POPUP_SECTIONS}): ([a-z-]+#\\d+(>[a-z-]+#\\d+)* (border-(top|right|bottom|left)-color|box-shadow|outline-(width|color|style|offset))|select-item#\\d+ (color|background-color)) `);
 const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기지 않고 고른 항목도 강조하지 않는다(UI SDK). 눌러 열면 첫 입력칸이나 고른 항목으로 간다. Base UI 는 열린 채 붙어도 옮겨 포커스 표시와 강조가 보였다";
+/** cmdk 는 data-selected · data-disabled 를 거짓일 때도 "false" 로 달아, 3층의 [data-selected] · [data-disabled] 규칙이 모든 항목에 걸렸다 */
+const CMDK_FALSE_FLAGS = / · command(-dialog)?: (command-item#\d+ (opacity|background-color)|command-shortcut#\d+ color) /;
+const CMDK_FALSE_FLAGS_REASON = "cmdk 는 data-selected · data-disabled 를 거짓일 때도 \"false\" 로 달아 3층의 [data-selected] · [data-disabled] 규칙이 모든 항목에 걸렸다(모든 항목이 흐리고 배경이 깔렸다). 이제 강조된 항목에만 배경이, 꺼진 항목에만 흐림이 걸린다";
+/** 화면 차이를 그 까닭으로 읽는 차이들. 구역의 다른 차이가 모두 알고 둔 것이고 이 줄이 하나라도 있으면 화면 차이도 그 까닭이다 */
+const PIXEL_CAUSES = [
+    [FOCUS_ON_MOUNT, FOCUS_ON_MOUNT_REASON],
+    [CMDK_FALSE_FLAGS, CMDK_FALSE_FLAGS_REASON],
+];
 
 /**
  * 구역이 함께 재는 팝업의 선택자를 기록할 때 바꾼다. 빌드에는 그때의 coverage 템플릿이 들어 있어, 템플릿을 고쳐도
@@ -76,6 +84,13 @@ const PORTALS = {
  * UI SDK 는 영역 옆에 붙였다. 둘 다 실제로는 없는 자리라, 영역 한가운데를 오른쪽 단추로 눌러 같은 자리에 연다.
  */
 const PRE_MEASURE = {
+    // input-otp 판은 감싸는 상자에 이름이 없고 data-slot="input-otp" 를 숨은 input 에 달았다. UI SDK 판은 상자가 input-otp,
+    // input 이 otp-input-control 이다. 옛 판에 새 이름을 붙여 같은 요소끼리 견준다(이름 없는 상자가 사라지면 뒤의 차례가 모두 밀린다)
+    "input-otp": (tab) => tab.evaluate(() =>
+    {
+        for (const box of document.querySelectorAll("[data-input-otp-container]")) box.setAttribute("data-slot", "input-otp");
+        for (const input of document.querySelectorAll("input[data-input-otp]")) input.setAttribute("data-slot", "otp-input-control");
+    }),
     "context-menu": async (tab) =>
     {
         const box = await tab.locator('[data-slot="context-menu-trigger"]').first().boundingBox();
@@ -93,6 +108,13 @@ const PRE_MEASURE = {
 
 const KNOWN = [
     [FOCUS_ON_MOUNT, FOCUS_ON_MOUNT_REASON],
+    [CMDK_FALSE_FLAGS, CMDK_FALSE_FLAGS_REASON],
+    [/ · command(-dialog)?: command-item#\d+ data-(selected|disabled)=false → \(none\)$/, "cmdk 는 거짓인 상태도 \"false\" 로 달았다. UI SDK 판은 참일 때만 속성을 단다"],
+    [/ · command(-dialog)?: element command#\d+>label#\d+ gone$/, "cmdk 가 검색 칸의 이름으로 두던 숨은 label 이 없다. 검색 칸이 aria-label 로 이름을 갖는다(UI SDK 가 요구한다)"],
+    [/ · command(-dialog)?: (element command-list#\d+>div#\d+ gone|command(-list)?#\d+ tabindex=-1 → \(none\))$/, "cmdk 가 목록 안에 두던 높이 재기용 div 가 없다. 포커스는 검색 칸에 머물고 목록은 aria-activedescendant 로 가리켜 루트와 목록에 tabindex 를 두지 않는다(UI SDK)"],
+    [/ · command(-dialog)?: (element command-group#\d+>div#\d+ gone|element command-group-heading#\d+ new|command-group#\d+ role=presentation → group)$/, "cmdk 의 그룹은 role=presentation 안에 제목과 항목 묶음(role=group) 두 겹이었다. UI SDK 의 그룹은 한 겹의 role=group 이고 제목(data-slot=command-group-heading)이 그것을 이름 짓는다"],
+    [/ · command(-dialog)?: (command-input#\d+ (aria-label=\(none\)|aria-activedescendant=\(none\)) → .+|command-list#\d+ aria-label=Suggestions → .+)$/, "검색 칸은 aria-label 로 이름을 갖고 강조된 항목을 aria-activedescendant 로 가리킨다. 목록은 검색 칸과 같은 이름으로 읽힌다(UI SDK)"],
+    [/ · command(-dialog)?: command-separator#\d+ (role=separator → none|aria-hidden=\(none\) → true)$/, "목록 안의 구분선은 listbox 가 가질 수 있는 자식이 아니라서 UI SDK 는 role=none 과 aria-hidden 으로 감춘다. 모양은 같다"],
     [new RegExp(` · (${POPUP_SECTIONS}): element root\\d+>span#\\d+ gone$`), "Base UI 가 팝업 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
     [/ · ((command-)?dialog|alert-dialog(-[a-z]+)?|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
     [/ · ((command-)?dialog|alert-dialog(-[a-z]+)?|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
@@ -141,6 +163,19 @@ const KNOWN = [
     [/ · toast: (element toast-list#\d+ new|root1 <div> → <section>|root1 (tabindex=-1 → \(none\)|aria-live=polite → \(none\)|aria-atomic=false → \(none\)|aria-relevant=additions text → \(none\)|aria-keyshortcuts=\(none\) → F6))$/, "UI SDK 의 알림 영역은 section 안의 목록(ol)이고 F6 으로 들어간다. 읽어 주는 일은 영역 전체의 aria-live 가 아니라 알림마다 맡는다"],
     [/ · toast: (toast#\d+ (<div> → <li>|role=dialog → \(none\)|aria-modal=false → \(none\))|toast-(title|description)#\d+ <(h2|p)> → <div>|toast-(title|description|action|close)#\d+ data-type=[a-z]+ → \(none\)|toast-close#\d+ aria-hidden=true → \(none\))$/, "UI SDK 의 알림은 목록의 항목(li)이고 제목 · 설명을 div 로 그린다. 종류(data-type)는 알림에만 달고 안쪽 부분은 그것을 읽는다. 닫기 단추는 이름을 붙여 낭독기에도 보인다"],
     [/ · scroll-area: (element scroll-area-(corner|scrollbar|thumb)#\d+ new|scroll-area(-viewport)?#\d+ role=presentation → \(none\))$/, "UI SDK 는 넘치지 않는 쪽의 스크롤 막대와 모서리를 display:none 으로 그려 두고(Base UI 는 그리지 않았다), 루트와 뷰포트에 role=presentation 을 따로 붙이지 않는다"],
+    [/ · input-otp: element (root>noscript#\d+|input-otp#\d+>div#\d+) gone$/, "input-otp 가 두던 noscript 스타일과 숨은 input 을 감싸던 상자가 없다. UI SDK 는 input 을 루트 바로 안에 겹쳐 둔다"],
+    [/ · input-otp: otp-input-control#\d+ ((font-size|line-height|letter-spacing|outline-style|outline-width) |type=\(none\) → text$)/, "칸 위에 겹친 숨은 input 의 글자 크기 · 자간 · 윤곽선이다. 글자와 커서가 투명이라 보이지 않고, UI SDK 는 type=text 를 적어 둔다"],
+    [/ · input-otp: (input-otp-(group|slot|separator)#\d+ aria-hidden=\(none\) → true|input-otp-separator#\d+ role=separator → \(none\))$/, "낭독기는 숨은 input 하나로 코드를 읽는다. UI SDK 는 보이는 칸 · 묶음 · 구분선을 aria-hidden 으로 감춘다(input-otp 는 칸을 그대로 두어 글자를 두 번 읽혔다)"],
+    [/ · resizable: (resizable-panel#\d+>div#\d+ |element resizable-panel#\d+>div#\d+ gone$|resizable-panel#\d+ overflow-[xy] visible → auto$)/, "react-resizable-panels 는 패널 안에 스크롤 상자(overflow:auto)를 한 겹 더 두었다. UI SDK 판은 패널이 스스로 스크롤하고 내용을 바로 담아, 그 아래 요소의 차례가 한 칸씩 당겨진다"],
+    [/ · carousel: element carousel-content#\d+>div#\d+ new$/, "UI SDK 판은 스크롤하는 줄(뷰포트) 안에 슬라이드를 읽어 주는 영역(aria-live)을 한 겹 둔다. display: contents 라 상자는 없다"],
+    [/ · carousel: carousel-content#\d+>div#0 tabindex=\(none\) → 0$/, "UI SDK 판은 줄이 직접 스크롤해 키보드로 닿게 탭 차례에 넣는다. embla 판은 transform 으로 옮겨 줄에 포커스가 가지 않았다"],
+    [/ · carousel: carousel-item#\d+ (aria-label=\(none\) → \d+ of \d+|inert=\(none\) → |aria-hidden=\(none\) → true)$/, "UI SDK 는 슬라이드에 「n of m」 이름을 달고, 보이지 않는 슬라이드를 inert · aria-hidden 으로 탭 차례와 읽기에서 뺀다(carousel 패턴의 권고)"],
+    [/ · carousel: carousel-(previous|next)#\d+ (disabled= → \(none\)|aria-disabled=\(none\) → true|aria-controls=\(none\) → .+)$/, "UI SDK 는 넘길 페이지가 없는 단추를 끄지 않고 aria-disabled 로 두어 포커스를 남긴다. 모양은 data-disabled 로 embla 판의 꺼진 단추와 같다"],
+    [/ · calendar: button#\d+ (<button> → <span>|type=button → \(none\)|tabindex=-?\d → \(none\)|aria-label=.+ → \(none\)|disabled= → \(none\)|data-disabled= → \(none\)|data-selected-single=false → \(none\))$/, "UI SDK 의 달력은 칸(td, gridcell)이 포커스와 누름을 받는다. react-day-picker 판은 칸 안의 button 이 받았다. 날짜 단추는 이제 버튼 모양의 글자 자리(span)라 버튼의 속성이 빠지고 이름은 칸으로 옮겨 간다"],
+    [/ · calendar: calendar#\d+>td#\d+ (tabindex=\(none\) → -?\d|aria-selected=\(none\) → (true|false)|aria-label=\(none\) → .+|aria-disabled=\(none\) → true|aria-current=\(none\) → date)$/, "UI SDK 는 칸에 grid 패턴의 상태(aria-selected · aria-current · aria-disabled)와 이름을 단다. 고를 수 없는 날도 포커스로 닿아 읽힌다"],
+    [/ · calendar: calendar#\d+>svg#\d+ aria-hidden=\(none\) → true$/, "앞 · 뒤 달 단추의 화살표를 읽기에서 감춘다. 단추의 이름이 이미 말한다(lucide 는 원래 감췄고, 다른 아이콘 묶음도 이제 같다)"],
+    [/ · calendar: calendar#\d+>th#\d+ role=\(none\) → columnheader$/, "UI SDK 는 요일 머리에 columnheader 역할을 적어 둔다(th 의 암묵 역할과 같다)"],
+    [/ · calendar: calendar#\d+>(thead#\d+ aria-hidden=true → \(none\)|span#\d+ role=status → \(none\)|table#\d+ aria-multiselectable=false → \(none\))$/, "react-day-picker 판은 요일 머리를 읽기에서 감추고 달 이름에 status 역할을 달았다. UI SDK 는 요일 머리를 읽히고 달 이름은 aria-live 하나로 알린다. 하나만 고르는 표에는 aria-multiselectable 을 적지 않는다"],
     [/ · pagination: pagination-link#\d+ (role=button|tabindex=0) → \(none\)$/, "pagination 의 링크는 href 가 있는 a 다. Base UI 는 nativeButton={false} 로 role=button 을 붙였고 UI SDK 는 링크를 링크로 둔다(shadcn 원본과 같다)"],
 ];
 
@@ -212,9 +247,28 @@ const accepted = (section, key, attr) => ACCEPTED.find((entry) => (!entry.sectio
  */
 const NOISE = 8;
 
-/** 반 화소 자리 차이처럼 바뀐 화소 수가 작고 까닭을 아는 구역. 화소 수가 count 를 넘으면 차이로 센다 */
+/**
+ * UI SDK 는 팝업을 최상위 층(top layer: popover · showModal)에 올린다. Base UI 는 포털 안에서 transform 으로 자리를 잡았다.
+ * 자리 · 크기 · 계산값은 같고, 따로 합성되는 층이라 가장자리 · 글자의 안티에일리어싱만 몇 단계 다르다
+ */
+const TOP_LAYER_REASON = "UI SDK 는 팝업을 최상위 층(popover · showModal)에 올려 따로 합성한다. 자리 · 크기 · 계산값은 같고 가장자리와 글자의 안티에일리어싱만 다르다";
+
+/**
+ * 반 화소 자리 차이처럼 까닭을 아는 화면 차이. 바뀐 화소가 count 이하이거나 채널 차이가 max 이하이면 그 까닭으로 읽고,
+ * 둘 다 넘으면 차이로 센다
+ */
 const SMALL_SHIFT = {
-    tooltip: { count: 300, reason: "툴팁 화살표의 자리를 Base UI 는 반 화소(42.5px)까지, UI SDK 는 온 화소(42px)로 적는다. 화살표 가장자리 몇 줄만 다르다" },
+    tooltip: { count: 600, reason: "툴팁 화살표의 자리를 Base UI 는 반 화소(42.5px)까지, UI SDK 는 온 화소(42px)로 적고, 툴팁은 최상위 층에 따로 합성된다. 화살표 가장자리와 글자 몇 줄만 다르다" },
+    dialog: { count: 1500, reason: TOP_LAYER_REASON },
+    "alert-dialog": { count: 1500, reason: TOP_LAYER_REASON },
+    "alert-dialog-sm": { count: 1500, reason: TOP_LAYER_REASON },
+    sheet: { count: 1500, reason: TOP_LAYER_REASON },
+    "command-dialog": { count: 1500, reason: TOP_LAYER_REASON },
+    combobox: { count: 1500, max: 20, reason: TOP_LAYER_REASON },
+    "combobox-groups": { count: 1500, max: 20, reason: TOP_LAYER_REASON },
+    // 유리 재질(nocturne)은 팝업 뒤 흐림이 화면 전체에 걸려 바뀐 화소가 많지만 채널 차이는 20 이하다
+    "combobox-chips": { count: 1500, max: 20, reason: TOP_LAYER_REASON },
+    drawer: { count: 13000, reason: "서랍 판이 반 화소 자리(높이 191.5px)에 서고, UI SDK 는 판을 최상위 층에 올려 will-change: translate 로 따로 합성한다. 자리 · 크기 · 계산값은 같고 반 화소에 걸친 글자와 테두리가 달리 찍힌다" },
 };
 
 /**
@@ -589,7 +643,7 @@ const compare = async (before, after) =>
             {
                 const line = `${where}: ${shot.size ?? `${shot.count}px differ (max Δ${shot.max})`}`;
                 if (!shot.size && shot.max <= NOISE) known.push(`${line} — 같은 빌드를 다시 찍어도 나는 그리기의 잡음이다(채널 차이 ${NOISE} 이하)`);
-                else if (!shot.size && SMALL_SHIFT[section] && shot.count <= SMALL_SHIFT[section].count) known.push(`${line} — ${SMALL_SHIFT[section].reason}`);
+                else if (!shot.size && SMALL_SHIFT[section] && (shot.count <= SMALL_SHIFT[section].count || shot.max <= (SMALL_SHIFT[section].max ?? 0))) known.push(`${line} — ${SMALL_SHIFT[section].reason}`);
                 else shotLine = line;
             }
 
@@ -651,11 +705,13 @@ const compare = async (before, after) =>
 
             if (shotLine)
             {
-                // 화면 차이가 처음부터 열린 팝업의 포커스 표시뿐이면(다른 차이가 모두 알고 둔 것이고 포커스 줄이 있으면) 그 까닭으로 읽는다.
+                // 화면 차이를 낳는 알고 둔 차이(PIXEL_CAUSES)가 있고 다른 차이가 모두 알고 둔 것이면 그 까닭으로 읽는다.
                 const rest = failures.slice(sectionStart);
-                const focusOnly = rest.some((line) => FOCUS_ON_MOUNT.test(line)) && rest.every((line) => KNOWN.some(([pattern]) => pattern.test(line)));
+                const cause = rest.every((line) => KNOWN.some(([pattern]) => pattern.test(line)))
+                    ? PIXEL_CAUSES.find(([pattern]) => rest.some((line) => pattern.test(line)))
+                    : undefined;
 
-                if (focusOnly) known.push(`${shotLine} — ${FOCUS_ON_MOUNT_REASON}`);
+                if (cause) known.push(`${shotLine} — ${cause[1]}`);
                 else failures.push(shotLine);
             }
         }
