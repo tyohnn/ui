@@ -47,7 +47,7 @@ Say *taste* or *feel* for all of them together, never *theme* (a theme is colour
   group or ranking on the site, in the MCP, the plugin or the docs. Eight of them (mira, vega, nova, maia, lyra,
   luma, sera, rhea) are also checked element by element against a shadcn app with the same values
   (`tooling/preset`); that is how they are tested, not what they are.
-- Credit shadcn, Base UI and tweakcn plainly. tyohnn builds on them; it is not against them.
+- Credit shadcn, UI SDK and tweakcn plainly. tyohnn builds on them; it is not against them.
 - Site copy lives in `apps/site/src/lib/i18n/en.tsx` and `ko.tsx`; change both together. Korean follows the
   rules at the top of `ko.tsx` (해요체, 「토큰」, 「레이어」).
 

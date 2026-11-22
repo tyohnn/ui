@@ -140,7 +140,7 @@ export const createServer = (options: ServerOptions) =>
         "list_primitives",
         {
             title: "List tyohnn primitives",
-            description: "Lists tyohnn's primitive components (shadcn on Base UI, styled only by the design system's tokens) grouped as Basics, Forms, Display, Data, Overlays, Menus and Chat, each with what it is for. Filter by group or by words (e.g. \"pick from a long list\").",
+            description: "Lists tyohnn's primitive components (shadcn on UI SDK, styled only by the design system's tokens) grouped as Basics, Forms, Display, Data, Overlays, Menus and Chat, each with what it is for. Filter by group or by words (e.g. \"pick from a long list\").",
             inputSchema: {
                 group: z.enum(groupIds).optional().describe("Only this group"),
                 query: z.string().optional().describe("Words to match in the name, purpose and exported names"),
@@ -189,7 +189,7 @@ export const createServer = (options: ServerOptions) =>
                 `npm packages: ${primitive.packages.join(", ") || "none"}`,
                 `Preview (${chosen.name}, ${chosen.defaultMode}): ${preview}`,
                 "",
-                "Copy it into the app's components folder as it is, with the primitives it uses. Pass no colours or sizes through className: the system's tokens decide them. For a component tyohnn has no primitive for, build it on Base UI and give its parts `data-role` (control, field, surface, popup, item, indicator, label, meta, separator, track) so every system dresses it.",
+                "Copy it into the app's components folder as it is, with the primitives it uses. Pass no colours or sizes through className: the system's tokens decide them. For a component tyohnn has no primitive for, build it on UI SDK and give its parts `data-role` (control, field, surface, popup, item, indicator, label, meta, separator, track) so every system dresses it.",
                 "",
                 "```tsx",
                 source.trimEnd(),

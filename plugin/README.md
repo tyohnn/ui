@@ -6,7 +6,7 @@ Shape a design system in words and have every component you write take its feel.
   colour, density, depth, texture and typography, shaped on real screens in the System view.
 - **setup**: puts the system into an app as files it owns, plus `tyohnn.json`, a design-system rule and a line in
   CLAUDE.md, so every agent in the repo builds from it.
-- **craft-component**: new components, even ones no system ships, take behaviour from Base UI or UI SDK and their look from
+- **craft-component**: new components, even ones no system ships, take behaviour from UI SDK or Base UI and their look from
   `data-role` roles, so they keep working when the system changes.
 
 The skills talk to the tyohnn MCP server (`search_systems`, `read_system`, `draft_system`, `set_colours`,

@@ -244,7 +244,7 @@ const syncPackages = (ctx: SyncContext, placement: Placement, apps: AppFiles[]):
             name: record.ui.importBase,
             version: "0.0.0",
             private: true,
-            description: "shadcn components on Base UI primitives with tyohnn design systems: one set of TSX, one CSS folder per system.",
+            description: "shadcn components on UI SDK primitives with tyohnn design systems: one set of TSX, one CSS folder per system.",
         });
 
         if (exportsChanged) ctx.changes.wrote(rel(root, pkgFile));

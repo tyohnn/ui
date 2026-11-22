@@ -4,7 +4,7 @@
 
 **Density · Depth · Texture**
 
-shadcn components on [Base UI](https://base-ui.com) primitives, with every visual decision — not just colour,
+shadcn components on [UI SDK](https://ui-sdk.dev) primitives, with every visual decision — not just colour,
 but density, depth, texture and type — pulled out of the TSX and into three layers of plain CSS. Twelve complete
 systems ship with the registry. A CLI copies one into your project, source and all.
 
@@ -218,7 +218,7 @@ component needs a stylesheet in every system (`tooling/backfill-component` start
 
 ## Credits
 
-Built on [shadcn/ui](https://ui.shadcn.com), [Base UI](https://base-ui.com) and
+Built on [shadcn/ui](https://ui.shadcn.com), [UI SDK](https://ui-sdk.dev) and
 [Tailwind CSS](https://tailwindcss.com) v4. The comparison tooling uses [Playwright](https://playwright.dev).
 
 ## License

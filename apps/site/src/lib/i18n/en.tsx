@@ -34,7 +34,7 @@ export const en = {
     chrome: {
         navLabel: "Site",
         nav: { systems: "Systems", components: "Components", create: "Create", compare: "Compare", docs: "Docs", github: "GitHub" },
-        footerNote: "shadcn · Base UI · MIT",
+        footerNote: "shadcn · UI SDK · MIT",
         language: { label: "Language", other: "한국어", otherLang: "ko" },
     },
 
