@@ -101,7 +101,8 @@ Layer 3 is imported into `layer(base)`, so utilities you pass through `className
 
 **Colour and feel are separate axes.** A *theme* is 72 colour values; a *system* is the feel — density,
 shape, material, motion, and the formulas that derive hover · soft · ring colours from the palette. Any
-theme goes on any system. Seven of the eight ported shadcn presets have no colour of their own at all:
+theme goes on any system. Seven systems have no colour of their own at all and wear one of shadcn's neutral
+bases:
 
 ```json
 { "name": "sera", "extends": { "base": "taupe" }, "light": {}, "dark": {} }
@@ -129,14 +130,15 @@ theme goes on any system. Seven of the eight ported shadcn presets have no colou
 | `loam` | Geist · white veils · one sage signal | dark |
 | `clover` | Inter · white chips · green into teal | light |
 
-The first eight are ports of shadcn's `create` presets; `graphite`, `nocturne`, `vellum`, `cirrus`, `halo`, `loam` and `clover` are our own. Each is a
+All fifteen are tyohnn systems, offered the same way. Each is a
 **complete, frozen folder** — all three layers, its own `DESIGN.md`, nothing composed at build time — so
 what you copy is what you saw.
 
 ## Is it really the same as shadcn?
 
-For the eight ported presets, that is a testable claim, and it is tested. `tooling/preset/make-reference.mjs`
-builds a real shadcn app for the preset; `tooling/snapshot/compare-shadcn.mjs` renders every component in
+For the eight systems whose values shadcn's `create` page also ships (`mira`, `vega`, `nova`, `luma`, `rhea`,
+`maia`, `lyra`, `sera`), that is a testable claim, and it is tested. `tooling/preset/make-reference.mjs`
+builds a real shadcn app with the same values; `tooling/snapshot/compare-shadcn.mjs` renders every component in
 both apps and compares **computed styles element by element**, pairing by `data-slot`.
 
 The standing result: **2,581 element pairs per system, light and dark, 0 mismatches.** Differences that are
@@ -170,7 +172,7 @@ Full reference: [packages/cli/README.md](packages/cli/README.md).
 
 ## Roadmap
 
-- [x] Three-layer architecture, 61 components, 15 systems (the eight ported presets verified against shadcn)
+- [x] Three-layer architecture, 61 components, 15 systems (eight verified element by element against shadcn)
 - [x] CLI: scaffold, switch systems, fonts, icons, doctor, diff
 - [x] Colour as a separate axis — themes, 7 bases × 17 accents, free-form palettes
 - [x] `tyohnn theme` — wear any theme on any system, from the CLI
@@ -212,7 +214,7 @@ Read [DESIGN.md](DESIGN.md) before adding a component or a system — it is the 
 
 Issues and pull requests are welcome. A change to a component's look belongs in CSS, not in the TSX; a new
 component needs a stylesheet in every system (`tooling/backfill-component` starts that for you), and
-`npm run scan` plus `npm run validate` must be clean. For a ported preset, `compare-shadcn` must stay at zero.
+`npm run scan` plus `npm run validate` must be clean. For a system with a shadcn reference (`reference/`), `compare-shadcn` must stay at zero.
 
 ## Credits
 

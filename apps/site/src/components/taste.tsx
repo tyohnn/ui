@@ -5,8 +5,8 @@ import { declareTokens, getSystem, getSystemPalette, getSystemTokens } from "@/l
 type Pillar = "density" | "depth" | "texture" | "type";
 
 /**
- * Which systems stand side by side for each axis. Density uses ports of shadcn create presets — the axis they
- * already vary on; depth, texture and type lean on tyohnn's own systems. A row is drawn in one mode: dark like the
+ * Which systems stand side by side for each axis. Density uses the systems that differ most in
+ * control size; depth, texture and type use the ones that differ most in shadow, material and type. A row is drawn in one mode: dark like the
  * site, except depth, whose shadows only read on a light ground.
  */
 const PILLARS: { id: Pillar; mode: Mode; systems: [string, string, string] }[] = [

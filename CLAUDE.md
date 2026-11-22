@@ -43,8 +43,10 @@ Say *taste* or *feel* for all of them together, never *theme* (a theme is colour
 - Show, don't claim. Every visual on the site is drawn from real registry tokens, never hand-tuned to look good.
   Each system appears in its own colours. The site is dark, and so is every preview on the home page; the system,
   components and compare pages start dark and keep a light/dark switch that turns everything on them together.
-- Show tyohnn's own systems (graphite, loam, cirrus, halo, nocturne, vellum, clover) first. The ones
-  ported from shadcn create presets (mira, vega, nova, maia, lyra, luma, sera, rhea) prove the port, not the taste.
+- Every system in the registry is a tyohnn system, offered the same way: no "ported" or "shadcn preset" label,
+  group or ranking on the site, in the MCP, the plugin or the docs. Eight of them (mira, vega, nova, maia, lyra,
+  luma, sera, rhea) are also checked element by element against a shadcn app with the same values
+  (`tooling/preset`); that is how they are tested, not what they are.
 - Credit shadcn, Base UI and tweakcn plainly. tyohnn builds on them; it is not against them.
 - Site copy lives in `apps/site/src/lib/i18n/en.tsx` and `ko.tsx`; change both together. Korean follows the
   rules at the top of `ko.tsx` (해요체, 「토큰」, 「레이어」).
