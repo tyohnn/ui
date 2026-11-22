@@ -304,6 +304,7 @@ Version 2's slots:
 | table | `--table-row-divider` · `--table-head-foreground` | `--table-checkbox-inset-end` |
 | tabs | — | `--tabs-line-divider-width` · `--tabs-line-trigger-padding-x` · `--tabs-line-trigger-padding-x-icon` · `--tabs-line-trigger-border-width` · `--tabs-line-trigger-radius` |
 | sidebar | `--sidebar-item-border` · `--sidebar-item-active-border` · `--sidebar-item-hover-background` · `--sidebar-group-label-foreground` · `--sidebar-badge-background` · `--sidebar-badge-active-background` · `--sidebar-badge-hover-foreground` · `--sidebar-badge-active-foreground` | `--sidebar-item-border-width` · `--sidebar-item-font-weight-idle` · `--sidebar-group-label-font-size` · `--sidebar-group-label-line-height` · `--sidebar-group-label-font-weight` · `--sidebar-group-label-text-transform` · `--sidebar-badge-min-width` · `--sidebar-badge-font-size` |
+| sidebar pane (2026-11-20) | `--sidebar-pane-ring` (falls back to `--border`) | `--sidebar-pane-gap` · `--sidebar-pane-radius` · `--sidebar-pane-ring-width`. The main pane beside a floating sidebar. Foundation and the ported presets hold 0 (upstream: the main area sits on the ground); tyohnn's own systems hold 8px · their floating sidebar's corner · the surface border. Beside an inset or floating sidebar the pane clips its content (`overflow: clip`) so an app's opaque header or main cannot paint over the rounded corner |
 
 `data-shape` on Button sets the internal `--button-shape-radius` from the round/pill slots; the radius
 declarations read it with the size radius as fallback.

@@ -616,6 +616,10 @@
     /* Every sidebar part that is not the menu button (group action · menu action · sub button …).
        mira: the same radius; maia rounds the menu button one step further. */
     --sidebar-part-radius: var(--sidebar-item-radius);
+    /* loam: 떠 있는 사이드바 옆 본문도 판이다. 사이드바와 같은 큰 모서리를 쓴다. */
+    --sidebar-pane-gap: 8px;
+    --sidebar-pane-radius: var(--surface-radius-lg);
+    --sidebar-pane-ring-width: var(--surface-border-width);
 }
 
 :root {
@@ -712,8 +716,6 @@
     --card-emphasis-radius: 24px;
     /* A floating sidebar casts no shadow; its 10% edge is enough. Foundation: --shadow-chip. */
     --sidebar-floating-shadow: none;
-    /* The gap around the main pane beside a floating sidebar (the sidebar's own padding is 8px). */
-    --sidebar-pane-gap: 8px;
 }
 
 /* 동작 줄이기 — 사용자가 OS 에서 켰다면 시스템의 성격과 상관없이 모션을 끈다.

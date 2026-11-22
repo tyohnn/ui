@@ -49,7 +49,7 @@ every file under `styles/` belongs to this system. Tune values in place.
 | `--pane-sheen` · `--card-sheen` | white 4% ellipse · white 3.5% at 135° (ink in light) | light from the top left on panes and cards |
 | `--glass-fill` · `--glass-filter` · `--glass-sheen` | `--popover` at 72% · `blur(32px) saturate(1.6)` · white 6% at 135° (white 45% in light) | menus, selects, popovers, hover cards and the navigation menu |
 | `--card-emphasis-sheen` · `--card-emphasis-radius` | sage 16% glowing down from the top · 24px | a card marked `data-emphasis` |
-| `--sidebar-pane-ring` · `--sidebar-pane-gap` · `--sidebar-floating-shadow` | 6% white · 8px · none | the main pane beside a floating sidebar, and the sidebar without a shadow |
+| `--sidebar-pane-ring` · `--sidebar-pane-gap` · `--sidebar-pane-radius` · `--sidebar-pane-ring-width` · `--sidebar-floating-shadow` | 6% white · 8px · 18px (`--surface-radius-lg`) · 1px · none | the main pane beside a floating sidebar, and the sidebar without a shadow |
 | `--sidebar-foreground` · `--sidebar-active-foreground` | `#bdbdbd` · `#ffffff` | idle rows at 72% white, the active row white on its veil |
 | `--control-height-md` · `--control-font-size-md` | 36px · 14px | the control |
 | `--control-radius` · `--control-radius-field` | 9999px · 12px | pills · fields |
