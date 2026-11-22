@@ -293,6 +293,22 @@ the step's first slot, and turned every slot that resolved to the same value int
 had tuned away from it keeps its value. It resolves every `:root` and `.dark` token before and after and refuses to
 write if one moves (0 moved). Component slots stay: a system still tunes `--sidebar-item-height` on its own.
 
+Version 7 also ships **role rules**: `styles/components/_roles.css`, read right after `_shared.css`. Markup that sets
+`data-role="control|field|surface|popup|item|indicator|label|meta|separator|track"` (the file's header lists the
+`data-variant` · `data-size` · `data-level` · `data-shape` each takes) gets that role's look from role tokens and layer-1
+colours only, so a component written for one system wears another without an edit. Every role mirrors the base
+component that defines its feel (control = button, field = input, indicator = badge, surface = card). Where a system had
+put that feel in a component slot or a layer-3 rule, the value moved to a role name the rule reads:
+14 more steps by `role-steps` (`--indicator-height|-radius|-padding-x-lg|-gap|-border-width|-icon-size|-font-size|-line-height|-font-weight|-letter-spacing|-text-transform`
+from the badge, `--surface-raised-radius` and `--surface-shadow` from the card), layer-1 names that the button and card
+slots now alias (`--control-outline-fill|-border|-hover-fill`, `--control-secondary-border`, `--control-ghost-foreground`,
+`--surface-ring`, `--surface-sheen`), and per-system values read off the base rules (`--field-radius`, `--field-shadow`,
+`--surface-raised-spacing`, `--surface-line-height`, `--surface-glass-fill|-filter|-sheen`). `node tooling/role-steps/check-modes.mjs`
+confirms nothing resolves differently in either mode; `node tooling/role-parity` (after `build-system --all`) renders each
+role beside its base component in all sixteen and fails on a computed difference it does not know. Six known
+differences are layer-3 choices it lists with their reason (cirrus · luma small buttons stay pill, vega's flat secondary,
+sera's unfilled badge).
+
 Version 3's slots:
 
 | Area | Layer 1 (colours) | Layer 2 (tokens) |
