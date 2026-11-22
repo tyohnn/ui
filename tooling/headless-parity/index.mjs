@@ -54,7 +54,17 @@ const BEHAVE_SYSTEMS = ["foundation", "graphite"];
  * 알고 둔 차이: 정규식이 맞는 차이 줄은 실패로 세지 않고 까닭과 함께 따로 적는다.
  * 줄의 모양은 「<system>-<mode> · <section>: <key> <attr>=<before> → <after>」다.
  */
+/** 처음부터 열린(defaultOpen) 팝업 안 요소의 포커스 표시. Base UI 는 열린 채 붙어도 첫 입력칸으로 포커스를 옮겼다 */
+const POPUP_SECTIONS = "popover|hover-card|tooltip|dropdown-menu|context-menu|menubar|select|combobox|navigation-menu";
+const FOCUS_ON_MOUNT = new RegExp(` · (${POPUP_SECTIONS}): [a-z-]+#\\d+(>[a-z-]+#\\d+)* (border-(top|right|bottom|left)-color|box-shadow|outline-(width|color|style|offset)) `);
+const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기지 않는다(UI SDK). 눌러 열면 첫 입력칸으로 간다. Base UI 는 열린 채 붙어도 옮겨 포커스 표시가 보였다";
+
 const KNOWN = [
+    [FOCUS_ON_MOUNT, FOCUS_ON_MOUNT_REASON],
+    [new RegExp(` · (${POPUP_SECTIONS}): element root\\d+>span#\\d+ gone$`), "Base UI 가 팝업 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
+    [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+-trigger#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
+    [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
+    [/ · tooltip: (root\d+ (width|data-closed|data-instant|data-ending-style|tabindex|role)[ =]|element (root\d+>div#\d+ gone|(tooltip-arrow|tooltip-content|kbd)#\d+ new)$)/, "Base UI 는 한 Provider 안에서 툴팁을 하나만 열어 두어, 처음부터 열린 둘 가운데 앞의 것을 닫히는 중으로 두었다. UI SDK 는 둘 다 연다(마우스로는 어차피 하나만 열린다). 위치를 잡는 Positioner div 가 없어 부분의 이름이 한 칸씩 밀린다"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
     [/ · slider: element slider#\d+>div#\d+ gone$|· slider: element slider-control#\d+ new$/, "슬라이더의 control 에 UI SDK 가 이름(data-slot=slider-control)을 붙였다"],
@@ -141,6 +151,38 @@ const accepted = (section, key, attr) => ACCEPTED.find((entry) => (!entry.sectio
  * 바뀐 화소가 있어도 가장 큰 채널 차이가 이 값을 넘지 않으면 알고 둔 차이다. 자리나 색이 바뀌면 이보다 커진다.
  */
 const NOISE = 8;
+
+/** 반 화소 자리 차이처럼 바뀐 화소 수가 작고 까닭을 아는 구역. 화소 수가 count 를 넘으면 차이로 센다 */
+const SMALL_SHIFT = {
+    tooltip: { count: 300, reason: "툴팁 화살표의 자리를 Base UI 는 반 화소(42.5px)까지, UI SDK 는 온 화소(42px)로 적는다. 화살표 가장자리 몇 줄만 다르다" },
+};
+
+/**
+ * 레지스트리의 CSS 와 컴포넌트가 선택자로 읽는 data-* 이름. 이 속성이 사라지면 스타일이 걸리지 않으니 경고가 아니라 차이다.
+ * 새로 생긴 data-* 와 읽는 곳이 없는 data-* 는 경고로만 적는다.
+ */
+const STYLED_DATA = (() =>
+{
+    const names = new Set();
+    const walk = (dir) =>
+    {
+        for (const entry of readdirSync(dir, { withFileTypes: true }))
+        {
+            const path = join(dir, entry.name);
+
+            if (entry.isDirectory()) walk(path);
+            else if (/\.(css|tsx)$/.test(entry.name))
+            {
+                for (const [, name] of readFileSync(path, "utf8").matchAll(/data-\[?([a-z][a-z-]*)/g)) names.add(`data-${name}`);
+            }
+        }
+    };
+
+    walk(join(repoRoot, "registry"));
+    names.delete("data-slot");
+
+    return names;
+})();
 
 /** 스스로 포커스를 받는 요소. 여기에 붙은 tabindex="0" 은 아무 일도 하지 않는다 */
 const FOCUSABLE_TAGS = new Set(["button", "input", "select", "textarea", "summary"]);
@@ -293,6 +335,15 @@ const record = async (label) =>
                 const attrs = await page.page.evaluate(attrsInPage, [...NATIVE_ATTRS]);
 
                 measured[section.name] = { rows, attrs };
+                // 글자 선택은 컴포넌트의 모양이 아니다. UI SDK 는 열 때 채워진 입력칸의 글을 골라 두므로(네이티브 대화상자처럼)
+                // 찍기 전에 선택을 거두어 포커스 표시만 남긴다. 커서는 찍히지 않는다.
+                await page.page.evaluate(() =>
+                {
+                    const el = document.activeElement;
+
+                    if (el instanceof HTMLInputElement && el.selectionEnd !== null && el.selectionStart !== el.selectionEnd) el.setSelectionRange(0, 0);
+                    document.getSelection()?.removeAllRanges();
+                }).catch(() => {});
                 await page.shot(join(dir, `${section.name}.png`));
             }
 
@@ -468,12 +519,15 @@ const compare = async (before, after) =>
             }
 
             const shot = await pixels(join(root, before, folder, `${section}.png`), join(root, after, folder, `${section}.png`), tolerance);
+            const sectionStart = failures.length;
+            let shotLine;
 
             if (shot.count)
             {
                 const line = `${where}: ${shot.size ?? `${shot.count}px differ (max Δ${shot.max})`}`;
                 if (!shot.size && shot.max <= NOISE) known.push(`${line} — 같은 빌드를 다시 찍어도 나는 그리기의 잡음이다(채널 차이 ${NOISE} 이하)`);
-                else failures.push(line);
+                else if (!shot.size && SMALL_SHIFT[section] && shot.count <= SMALL_SHIFT[section].count) known.push(`${line} — ${SMALL_SHIFT[section].reason}`);
+                else shotLine = line;
             }
 
             const byKey = new Map(other.rows.map((row) => [row.key, row]));
@@ -527,8 +581,19 @@ const compare = async (before, after) =>
                     const rule = accepted(section, key, name);
 
                     if (rule) known.push(`${line} — ${rule.reason}`);
-                    else (name.startsWith("data-") ? warnings : failures).push(line);
+                    else if (!name.startsWith("data-")) failures.push(line);
+                    else (STYLED_DATA.has(name) && values[name] !== undefined && match.attrs[name] === undefined ? failures : warnings).push(line);
                 }
+            }
+
+            if (shotLine)
+            {
+                // 화면 차이가 처음부터 열린 팝업의 포커스 표시뿐이면(다른 차이가 모두 알고 둔 것이고 포커스 줄이 있으면) 그 까닭으로 읽는다.
+                const rest = failures.slice(sectionStart);
+                const focusOnly = rest.some((line) => FOCUS_ON_MOUNT.test(line)) && rest.every((line) => KNOWN.some(([pattern]) => pattern.test(line)));
+
+                if (focusOnly) known.push(`${shotLine} — ${FOCUS_ON_MOUNT_REASON}`);
+                else failures.push(shotLine);
             }
         }
 
