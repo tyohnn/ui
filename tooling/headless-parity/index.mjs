@@ -64,6 +64,7 @@ const KNOWN = [
     [new RegExp(` · (${POPUP_SECTIONS}): element root\\d+>span#\\d+ gone$`), "Base UI 가 팝업 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
     [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+-trigger#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
     [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
+    [/ · drawer(-[a-z]+)?: element drawer-viewport#\d+ new$/, "서랍을 화면 가장자리에 붙이는 viewport 를 UI SDK 가 그리고 인라인 스타일로 자리를 잡는다. Base UI 의 viewport 는 body 로 포털돼 섹션 밖에 있어 재지 않았다"],
     [/ · tooltip: (root\d+ (width|data-closed|data-instant|data-ending-style|tabindex|role)[ =]|element (root\d+>div#\d+ gone|(tooltip-arrow|tooltip-content|kbd)#\d+ new)$)/, "Base UI 는 한 Provider 안에서 툴팁을 하나만 열어 두어, 처음부터 열린 둘 가운데 앞의 것을 닫히는 중으로 두었다. UI SDK 는 둘 다 연다(마우스로는 어차피 하나만 열린다). 위치를 잡는 Positioner div 가 없어 부분의 이름이 한 칸씩 밀린다"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
