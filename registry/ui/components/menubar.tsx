@@ -1,8 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-import { Menubar as MenubarPrimitive } from "@base-ui/react/menubar"
+import {
+  MenuCheckboxItem as MenuCheckboxItemPrimitive,
+  MenuItemIndicator as MenuItemIndicatorPrimitive,
+  MenuRadioItem as MenuRadioItemPrimitive,
+} from "@ui-sdk/react/menu"
+import { Menubar as MenubarPrimitive } from "@ui-sdk/react/menubar"
+import { renderElement } from "@ui-sdk/react/primitive"
 import { cn } from "cn"
 
 import {
@@ -21,11 +26,23 @@ import {
   DropdownMenuTrigger,
 } from "@tyohnn/components/dropdown-menu"
 import { Check } from "@tyohnn/icons"
+import { slot } from "@tyohnn/lib/slot"
 
-function Menubar({ className, ...props }: MenubarPrimitive.Props) {
+/** 자식을 상태 함수로 받지 않는다. shadcn 의 항목은 글자와 표시를 그대로 늘어놓는다 */
+type Plain<T> = Omit<T, "children"> & { children?: React.ReactNode }
+
+/** 체크 표시는 shadcn 이 감싼 span 안에 이름 없이 들어간다. UI SDK 가 붙이는 data-slot 을 지운다 */
+const unnamed = (props: Record<string, unknown>, state: unknown) =>
+  renderElement("span", { ...props, "data-slot": undefined }, undefined, state)
+
+function Menubar({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof MenubarPrimitive>) {
   return (
     <MenubarPrimitive
-      data-slot="menubar"
+      render={slot("menubar", render)}
       className={cn("cn-menubar flex items-center", className)}
       {...props}
     />
@@ -33,7 +50,7 @@ function Menubar({ className, ...props }: MenubarPrimitive.Props) {
 }
 
 function MenubarMenu({ ...props }: React.ComponentProps<typeof DropdownMenu>) {
-  return <DropdownMenu data-slot="menubar-menu" {...props} />
+  return <DropdownMenu {...props} />
 }
 
 function MenubarGroup({
@@ -45,7 +62,7 @@ function MenubarGroup({
 function MenubarPortal({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPortal>) {
-  return <DropdownMenuPortal data-slot="menubar-portal" {...props} />
+  return <DropdownMenuPortal {...props} />
 }
 
 function MenubarTrigger({
@@ -106,30 +123,35 @@ function MenubarItem({
 function MenubarCheckboxItem({
   className,
   children,
-  checked,
   inset,
+  value,
+  render,
   ...props
-}: MenuPrimitive.CheckboxItem.Props & {
+}: Plain<Omit<React.ComponentProps<typeof MenuCheckboxItemPrimitive>, "value">> & {
+  value?: string
   inset?: boolean
 }) {
+  // UI SDK 는 체크 항목을 값으로 가리킨다. shadcn 은 값 없이 쓰므로 없으면 하나 만든다.
+  const fallback = React.useId()
+
   return (
-    <MenuPrimitive.CheckboxItem
-      data-slot="menubar-checkbox-item"
+    <MenuCheckboxItemPrimitive
+      value={value ?? fallback}
+      render={slot("menubar-checkbox-item", render)}
       data-inset={inset}
       className={cn(
         "cn-menubar-checkbox-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
-      checked={checked}
       {...props}
     >
       <span className="cn-menubar-checkbox-item-indicator pointer-events-none absolute flex items-center justify-center">
-        <MenuPrimitive.CheckboxItemIndicator>
+        <MenuItemIndicatorPrimitive render={unnamed}>
           <Check />
-        </MenuPrimitive.CheckboxItemIndicator>
+        </MenuItemIndicatorPrimitive>
       </span>
       {children}
-    </MenuPrimitive.CheckboxItem>
+    </MenuCheckboxItemPrimitive>
   )
 }
 
@@ -143,13 +165,14 @@ function MenubarRadioItem({
   className,
   children,
   inset,
+  render,
   ...props
-}: MenuPrimitive.RadioItem.Props & {
+}: Plain<React.ComponentProps<typeof MenuRadioItemPrimitive>> & {
   inset?: boolean
 }) {
   return (
-    <MenuPrimitive.RadioItem
-      data-slot="menubar-radio-item"
+    <MenuRadioItemPrimitive
+      render={slot("menubar-radio-item", render)}
       data-inset={inset}
       className={cn(
         "cn-menubar-radio-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -158,12 +181,12 @@ function MenubarRadioItem({
       {...props}
     >
       <span className="cn-menubar-radio-item-indicator pointer-events-none absolute flex items-center justify-center">
-        <MenuPrimitive.RadioItemIndicator>
+        <MenuItemIndicatorPrimitive render={unnamed}>
           <Check />
-        </MenuPrimitive.RadioItemIndicator>
+        </MenuItemIndicatorPrimitive>
       </span>
       {children}
-    </MenuPrimitive.RadioItem>
+    </MenuRadioItemPrimitive>
   )
 }
 

@@ -365,9 +365,9 @@ export const menuSections: CoverageSection[] = [
     {
         name: "navigation-menu",
         components: ["navigation-menu"],
-        // The popup surface carries no data-slot on either side, so it is reached as the content's
-        // grandparent (Popup > Viewport > Content).
-        portals: ['[data-slot="navigation-menu-content"]^2'],
+        // The floating surface is reached by its class: one element (the viewport) in UI SDK, the popup
+        // inside the positioner in the Base UI build the parity harness compares against.
+        portals: ['.cn-navigation-menu-popup'],
         render: (open) => (
             <div className="h-80">
                 <NavigationMenu defaultValue={open ? "getting-started" : null}>

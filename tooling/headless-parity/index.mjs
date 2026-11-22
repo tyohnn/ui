@@ -59,12 +59,51 @@ const POPUP_SECTIONS = "popover|hover-card|tooltip|dropdown-menu|context-menu|me
 const FOCUS_ON_MOUNT = new RegExp(` · (${POPUP_SECTIONS}): [a-z-]+#\\d+(>[a-z-]+#\\d+)* (border-(top|right|bottom|left)-color|box-shadow|outline-(width|color|style|offset)) `);
 const FOCUS_ON_MOUNT_REASON = "처음부터 열린 팝업은 포커스를 옮기지 않는다(UI SDK). 눌러 열면 첫 입력칸으로 간다. Base UI 는 열린 채 붙어도 옮겨 포커스 표시가 보였다";
 
+/**
+ * 구역이 함께 재는 팝업의 선택자를 기록할 때 바꾼다. 빌드에는 그때의 coverage 템플릿이 들어 있어, 템플릿을 고쳐도
+ * 이미 빌드한 「전」에는 옛 선택자가 남는다. 내비 메뉴의 판은 Base UI 에서 자리 잡이 · 팝업 · 뷰포트 세 겹이었고
+ * UI SDK 에서 한 겹이라 내용에서 두 칸 올라가는 옛 선택자(^2)가 같은 판을 가리키지 않는다. 두 쪽 모두 판에 붙는
+ * cn-navigation-menu-popup 으로 잰다.
+ */
+const PORTALS = {
+    "navigation-menu": [".cn-navigation-menu-popup"],
+};
+
+/**
+ * 재기 전에 구역마다 하는 일. 처음부터 열린(defaultOpen) 컨텍스트 메뉴는 누른 자리가 없어 Base UI 는 화면 왼쪽 위에,
+ * UI SDK 는 영역 옆에 붙였다. 둘 다 실제로는 없는 자리라, 영역 한가운데를 오른쪽 단추로 눌러 같은 자리에 연다.
+ */
+const PRE_MEASURE = {
+    "context-menu": async (tab) =>
+    {
+        const box = await tab.locator('[data-slot="context-menu-trigger"]').first().boundingBox();
+
+        if (!box) return;
+        // 먼저 빈 곳을 눌러 닫는다. 열린 채 다시 누르면 Base UI 는 처음부터 열린 하위 메뉴를 닫는다
+        await tab.mouse.click(1400, 880);
+        await tab.waitForTimeout(300);
+        await tab.mouse.click(box.x + box.width / 2, box.y + box.height / 2, { button: "right" });
+        await tab.waitForTimeout(600);
+        await tab.mouse.move(1400, 880);
+        await tab.waitForTimeout(300);
+    },
+};
+
 const KNOWN = [
     [FOCUS_ON_MOUNT, FOCUS_ON_MOUNT_REASON],
     [new RegExp(` · (${POPUP_SECTIONS}): element root\\d+>span#\\d+ gone$`), "Base UI 가 팝업 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
     [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): ([a-z-]+-trigger#\d+|root\d+>[a-z0-9-]+#\d+) inert=\(none\) → $/, "모달이 열린 동안 UI SDK 는 바깥을 inert 로 막는다(읽기와 포커스를 함께 막는다). Base UI 는 바깥에 aria-hidden 을 달고 포커스를 가두었다"],
     [/ · (dialog|alert-dialog|sheet(-[a-z]+)?|drawer(-[a-z]+)?): root\d+ (aria-hidden=true → \(none\)|aria-modal=\(none\) → true)$/, "배경(role=presentation)에 aria-hidden 을 따로 달지 않고, 모달 내용에 aria-modal=true 를 단다(UI SDK)"],
     [/ · drawer(-[a-z]+)?: element drawer-viewport#\d+ new$/, "서랍을 화면 가장자리에 붙이는 viewport 를 UI SDK 가 그리고 인라인 스타일로 자리를 잡는다. Base UI 의 viewport 는 body 로 포털돼 섹션 밖에 있어 재지 않았다"],
+    [/ · (dropdown-menu|context-menu|menubar): [a-z-]+-label#\d+ aria-hidden=true → \(none\)$/, "Base UI 는 묶음 이름표를 aria-hidden 으로 숨기고 묶음의 aria-labelledby 로만 읽게 했다. UI SDK 는 이름표를 숨기지 않고 묶음이 그것을 가리킨다"],
+    [/ · (dropdown-menu|context-menu|menubar): [a-z-]+-sub-trigger#\d+ (tabindex=0 → -1|data-highlighted= → \(none\))$/, "처음부터 열린 하위 메뉴의 단추를 강조하지 않는다(UI SDK). 포인터나 키보드로 열면 강조하고 포커스가 따라간다. Base UI 는 열린 채 붙어도 그 단추로 포커스를 옮겼다. 열린 단추는 data-popup-open 으로 같은 바탕을 칠해 화면은 같다"],
+    [/ · context-menu: root\d+ outline-width \d+px → \d+px$/, "오른쪽 클릭으로 연 뒤 UI SDK 는 메뉴 판에 초점을 두고, Base UI 는 첫 항목 앞에 두었다. 판은 outline-none 이라 테두리가 그려지지 않는다"],
+    [/ · (dropdown-menu|context-menu|menubar|navigation-menu): root\d+ margin-(top|right|bottom|left) 0px → \d+px$/, "UI SDK 는 화면 가장자리와의 여백(collision padding)을 인라인 margin 으로 적어 자리를 잡는다. 판이 놓이는 좌표는 같다"],
+    [/ · (dropdown-menu|context-menu|menubar): root\d+ data-instant=[a-z]+ → \(none\)$/, "Base UI 가 연 까닭(click · dismiss)을 적던 표지다. 스타일은 navigation-menu 의 위치 잡이만 읽고 메뉴 판은 읽지 않는다"],
+    [/ · menubar: element menubar#\d+>span#\d+ gone$/, "Base UI 가 메뉴바 안의 열린 메뉴 앞뒤에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
+    [/ · menubar: menubar-trigger#\d+ (disabled= → \(none\)|aria-disabled=\(none\) → true|tabindex=\(none\) → -1)$/, "메뉴바의 꺼진 트리거는 native disabled 가 아니라 aria-disabled · data-disabled 로 끈다(UI SDK, APG 메뉴바). 열리지 않고 모양도 data-disabled 로 같다"],
+    [/ · navigation-menu: element navigation-menu-item#\d+>span#\d+ gone$/, "Base UI 가 열린 항목 안에 두던 포커스 가드 span(보이지 않는 role=presentation)이 없다"],
+    [/ · navigation-menu: (element root\d+>div#\d+ gone|root\d+ <nav> → <div>)$/, "Base UI 의 판은 자리 잡이 · 팝업(nav) · 뷰포트(div) 세 겹이었다. UI SDK 의 뷰포트는 한 겹의 div 이고 내용이 바로 그 안에 든다. 랜드마크 nav 는 루트 하나다"],
     [/ · tooltip: (root\d+ (width|data-closed|data-instant|data-ending-style|tabindex|role)[ =]|element (root\d+>div#\d+ gone|(tooltip-arrow|tooltip-content|kbd)#\d+ new)$)/, "Base UI 는 한 Provider 안에서 툴팁을 하나만 열어 두어, 처음부터 열린 둘 가운데 앞의 것을 닫히는 중으로 두었다. UI SDK 는 둘 다 연다(마우스로는 어차피 하나만 열린다). 위치를 잡는 Positioner div 가 없어 부분의 이름이 한 칸씩 밀린다"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
     [/ · (checkbox|switch|radio-group|slider|field|label): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
@@ -332,7 +371,7 @@ const record = async (label) =>
 
             for (const section of sections)
             {
-                const { rows } = await page.measure(section);
+                const { rows } = await page.measure({ ...section, portals: PORTALS[section.name] ?? section.portals }, PRE_MEASURE[section.name]);
                 const attrs = await page.page.evaluate(attrsInPage, [...NATIVE_ATTRS]);
 
                 measured[section.name] = { rows, attrs };
@@ -422,7 +461,10 @@ const record = async (label) =>
                 await context.close();
             }
 
-            writeFileSync(join(dir, "measure.json"), JSON.stringify({ measured, behaviour }));
+            // 구역을 골라 다시 찍으면 나머지 구역의 기록은 그대로 둔다
+            const previous = only && existsSync(join(dir, "measure.json")) ? JSON.parse(readFileSync(join(dir, "measure.json"), "utf8")) : { measured: {}, behaviour: {} };
+
+            writeFileSync(join(dir, "measure.json"), JSON.stringify({ measured: { ...previous.measured, ...measured }, behaviour: { ...previous.behaviour, ...behaviour } }));
             console.log(`recorded ${label} ${system}-${mode}: ${sections.length} sections${Object.keys(behaviour).length ? `, behaviour ${Object.keys(behaviour).length}` : ""}`);
         }
     };
