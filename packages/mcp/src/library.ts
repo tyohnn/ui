@@ -116,6 +116,6 @@ export const searchSystems = (cards: SystemCard[], query?: string, filters: { ta
 
 /** A card as a few lines an agent can show a person */
 export const cardText = (card: SystemCard) =>
-    [`## ${card.name}${card.own ? "" : " (port of a shadcn preset)"}`, card.description, `${card.defaultMode} · ${card.tags.join(" · ")} · fonts ${card.fonts.sans ?? "?"} · icons ${card.icons}`]
+    [`## ${card.name}${card.own ? "" : " (port of a shadcn preset)"}`, card.description, `${card.defaultMode} · ${card.tags.filter((tag) => tag !== card.defaultMode).join(" · ")} · fonts ${card.fonts.sans ?? "?"} · icons ${card.icons}`]
         .filter(Boolean)
         .join("\n");

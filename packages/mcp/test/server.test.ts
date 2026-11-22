@@ -172,6 +172,10 @@ describe("the MCP server", () =>
         expect(textOf(checked)).toContain("set --surface-shadow instead");
 
         await client.callTool({ name: "set_tokens", arguments: { tokens: { "--card-shadow": null, "--surface-shadow": "none" } } });
+
+        const rewritten = await client.callTool({ name: "draft_system", arguments: { name: "forest-glass", concept: `${concept} Titles stay tight.`, base: "graphite", keep: true } });
+
+        expect(rewritten.structuredContent).toMatchObject({ system: "clover", tokens: { "--surface-shadow": "none" } });
         const kept = await client.callTool({ name: "publish_system", arguments: {} });
 
         expect(kept.structuredContent).toMatchObject({ id: "forest-glass", state: { system: "clover", tokens: { "--surface-shadow": "none" } } });

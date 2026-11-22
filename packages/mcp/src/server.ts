@@ -393,14 +393,19 @@ export const createServer = (options: ServerOptions) =>
                 concept: z.string().min(1).describe("What the person asked for and how each axis answers it"),
                 base: z.string().describe("The system to start from: a base system (search_systems) or a published id"),
                 mode: z.enum(["light", "dark"]).optional().describe("Colour mode to show first"),
+                keep: z.boolean().optional().describe("Keep the changes made so far and only rename or rewrite the concept (base is then ignored)"),
             },
             _meta: systemView,
         },
-        async ({ name, concept, base, mode }) =>
+        async ({ name, concept, base, mode, keep }) =>
         {
             if (catalog.systems.some((entry) => entry.name === name)) return refuse(`“${name}” is a base system's name. Pick another.`);
 
-            if (systemNames.includes(base))
+            if (keep)
+            {
+                // the system being shaped stays as it is
+            }
+            else if (systemNames.includes(base))
             {
                 state = startState(summaryOf(base), library);
             }
@@ -415,7 +420,7 @@ export const createServer = (options: ServerOptions) =>
             if (mode) state = { ...state, mode };
             draft = { name, concept };
 
-            return systemResult(`Drafting ${name} on ${base}.`);
+            return systemResult(keep ? `Drafting ${name}, keeping the changes so far.` : `Drafting ${name} on ${base}.`);
         },
     );
 
