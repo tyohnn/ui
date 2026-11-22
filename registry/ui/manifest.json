@@ -140,6 +140,7 @@
         "hooks/use-mobile.ts",
         "icons/index.ts",
         "icons/names.ts",
+        "lib/popup.ts",
         "lib/slot.ts",
         "lib/utils.ts",
         "strings/index.ts",

@@ -1,15 +1,32 @@
 "use client"
 
-import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
+import * as React from "react"
+import {
+  HoverCard as HoverCardPrimitive,
+  HoverCardContent as HoverCardContentPrimitive,
+  HoverCardTrigger as HoverCardTriggerPrimitive,
+} from "@ui-sdk/react/hover-card"
 import { cn } from "cn"
 
-function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
-  return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />
+import { sideOf, type ContractSide } from "@tyohnn/lib/popup"
+import { flag, slot } from "@tyohnn/lib/slot"
+
+function HoverCard({ ...props }: React.ComponentProps<typeof HoverCardPrimitive>) {
+  return <HoverCardPrimitive {...props} />
 }
 
-function HoverCardTrigger({ ...props }: PreviewCardPrimitive.Trigger.Props) {
+function HoverCardTrigger({
+  render,
+  ...props
+}: React.ComponentProps<typeof HoverCardTriggerPrimitive>) {
   return (
-    <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />
+    <HoverCardTriggerPrimitive
+      render={slot("hover-card-trigger", render, "a", (state) => ({
+        // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
+        "data-popup-open": flag(state.open),
+      }))}
+      {...props}
+    />
   )
 }
 
@@ -19,31 +36,24 @@ function HoverCardContent({
   sideOffset = 4,
   align = "center",
   alignOffset = 4,
+  render,
   ...props
-}: PreviewCardPrimitive.Popup.Props &
-  Pick<
-    PreviewCardPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+}: Omit<React.ComponentProps<typeof HoverCardContentPrimitive>, "side"> & {
+  side?: ContractSide
+}) {
   return (
-    <PreviewCardPrimitive.Portal data-slot="hover-card-portal">
-      <PreviewCardPrimitive.Positioner
-        align={align}
-        alignOffset={alignOffset}
-        side={side}
-        sideOffset={sideOffset}
-        className="isolate z-50"
-      >
-        <PreviewCardPrimitive.Popup
-          data-slot="hover-card-content"
-          className={cn(
-            "cn-hover-card-content cn-hover-card-content-logical z-50 origin-(--transform-origin) outline-hidden",
-            className
-          )}
-          {...props}
-        />
-      </PreviewCardPrimitive.Positioner>
-    </PreviewCardPrimitive.Portal>
+    <HoverCardContentPrimitive
+      align={align}
+      alignOffset={alignOffset}
+      side={sideOf(side)}
+      sideOffset={sideOffset}
+      render={slot("hover-card-content", render)}
+      className={cn(
+        "cn-hover-card-content cn-hover-card-content-logical isolate z-50 origin-(--transform-origin) outline-hidden",
+        className
+      )}
+      {...props}
+    />
   )
 }
 
