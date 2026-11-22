@@ -55,12 +55,12 @@ const BEHAVE_SYSTEMS = ["foundation", "graphite"];
  * 줄의 모양은 「<system>-<mode> · <section>: <key> <attr>=<before> → <after>」다.
  */
 const KNOWN = [
-    [/ · (checkbox|switch|radio-group|slider): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
-    [/ · (checkbox|switch|radio-group|slider): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
+    [/ · (checkbox|switch|radio-group|slider|field|label): element (root|[a-z-]+#\d+)(>[a-z-]+#\d+)*>input#\d+ gone$/, "폼에 들어가는 숨은 input 이 루트 옆이 아니라 컨트롤 안쪽에 있다(UI SDK)"],
+    [/ · (checkbox|switch|radio-group|slider|field|label): element (checkbox|switch|radio|slider|slider-thumb)-input#\d+ new$/, "폼에 들어가는 숨은 input 이 컨트롤 안쪽에 있고 UI SDK 가 이름(data-slot)을 붙였다"],
     [/ · slider: element slider#\d+>div#\d+ gone$|· slider: element slider-control#\d+ new$/, "슬라이더의 control 에 UI SDK 가 이름(data-slot=slider-control)을 붙였다"],
     [/ · accordion: element accordion-item#\d+>h3#\d+ gone$|· accordion: element accordion-header#\d+ new$/, "아코디언의 h3 머리에 UI SDK 가 이름(data-slot=accordion-header)을 붙였다"],
     [/ · progress: element progress#\d+>span#\d+ gone$/, "Base UI 가 progressbar 안에 두던 빈 role=presentation span 이 없다"],
-    [/ · slider: slider-range#\d+ (rect-)?(height|width) /, "범위 막대는 손잡이 가운데가 아니라 값의 자리에서 끝난다. 그 끝은 손잡이 아래에 가린다"],
+    [/ · (popover|dropdown-menu): root\d+>span#\d+ aria-owns=_r_[0-9a-z]+_ → _r_[0-9a-z]+_$/, "React 의 useId 가 매기는 번호가 앞선 컴포넌트의 수에 따라 한 칸 밀렸다. 가리키는 팝업은 같다"],
     [/ · behaviour toggle-group: toggle-group-item "[^"]*" · (End|ArrowLeft|ArrowRight|PageUp|Home) focus toggle-group-item "[^"]*" → toggle-group-item "Disabled"$/, "꺼진 토글 항목도 화살표로 닿는다(aria-disabled). 누를 수는 없다"],
     [/ · behaviour toggle-group: toggle-group-item "Top" · (ArrowRight|ArrowLeft|PageUp) focus /, "세로 토글 그룹은 위아래 화살표로 움직이고 좌우 화살표는 움직이지 않는다(shadcn 래퍼가 Base UI 에 방향을 넘기지 않던 것을 고쳤다)"],
     [/ · behaviour switch: switch\(switch\) "[^"]*" · (Enter|ArrowRight|ArrowDown|End|Home|ArrowLeft|PageUp) /, "스위치가 네이티브 button 이라 Enter 로도 켜고 끈다(Base UI 의 span 은 Space 만 받았다). 뒤의 키는 그 바뀐 상태를 이어받는다"],
@@ -75,15 +75,25 @@ const KNOWN = [
 ];
 
 /**
- * 알고 둔 속성 차이: 구역과 부분(키의 머리)이 맞으면 그 속성의 차이는 실패로 세지 않고 까닭과 함께 따로 적는다.
- * 정적 속성 비교와 키를 누른 뒤의 상태 비교에 함께 쓴다. 태그가 바뀐 것은 attrs 에 "<tag>" 로 적는다.
+ * 알고 둔 속성 차이: 구역(sections 가 없으면 모든 구역)과 부분(키의 머리)이 맞으면 그 속성의 차이는 실패로 세지 않고 까닭과 함께 따로 적는다.
+ * 계산된 스타일 비교, 정적 속성 비교, 키를 누른 뒤의 상태 비교에 함께 쓴다. 태그가 바뀐 것은 attrs 에 "<tag>" 로 적는다.
  */
 const ACCEPTED = [
     {
-        sections: ["checkbox", "switch", "radio-group"],
         part: /^(checkbox|switch|radio-group-item)\b/,
         attrs: ["<tag>", "type", "tabindex", "disabled"],
         reason: "UI SDK 는 체크박스 · 스위치 · 라디오를 span 이 아니라 네이티브 button 으로 그리고, 꺼진 것은 tabindex=-1 대신 disabled 로 막는다. 꺼진 그룹의 라디오는 Tab 으로 닿지 않는다",
+    },
+    {
+        part: /^(checkbox|switch|radio-group-item|checkbox-indicator|radio-group-indicator)\b/,
+        attrs: ["text-transform"],
+        reason: "네이티브 button 은 브라우저 기본값으로 text-transform 을 none 으로 되돌린다. 대문자로 쓰는 라벨 안에 있어도 이 컨트롤에는 글자가 없어 보이는 것은 같다",
+    },
+    {
+        sections: ["combobox"],
+        part: /^input-group-button\b/,
+        attrs: ["tabindex"],
+        reason: "콤보박스의 열기 단추는 Base UI 가 tabindex=-1 로 두어 Tab 은 입력칸에만 닿게 한다. 예전에는 Base UI 의 Button 이 tabindex=0 으로 덮어썼고 UI SDK 의 Button 은 덮어쓰지 않는다",
     },
     {
         sections: ["toggle-group"],
@@ -124,18 +134,13 @@ const aliasStep = (entry) => ({
     state: entry.state && Object.fromEntries(Object.entries(entry.state).map(([key, value]) => [aliasKey(key), value])),
 });
 
-const accepted = (section, key, attr) => ACCEPTED.find((entry) => entry.sections.includes(section) && entry.part.test(key) && entry.attrs.includes(attr));
+const accepted = (section, key, attr) => ACCEPTED.find((entry) => (!entry.sections || entry.sections.includes(section)) && entry.part.test(key) && entry.attrs.includes(attr));
 
 /**
- * 가장자리의 안티에일리어싱만 다른 구역: 바뀐 화소가 있어도 가장 큰 채널 차이가 max 를 넘지 않으면 알고 둔 차이다.
- * 어두운 모드에서 대비가 큰 가장자리도 반 화소의 반올림이면 이 안에 든다. 자리가 한 화소 넘게 옮겨 가면 이보다 커진다.
+ * 그리기의 잡음: 같은 빌드를 두 번 찍어도 블러 · 그라디언트 · 글꼴 가장자리에서 채널 차이가 7 까지 난다.
+ * 바뀐 화소가 있어도 가장 큰 채널 차이가 이 값을 넘지 않으면 알고 둔 차이다. 자리나 색이 바뀌면 이보다 커진다.
  */
-const SUBPIXEL = {
-    slider: {
-        max: 96,
-        reason: "손잡이를 막대 안에 두는 자리를 Base UI 는 재어 둔 손잡이 크기로, 여기서는 CSS 의 translate 로 셈한다. 값은 같고 소수점 아래의 반올림만 달라 가장자리가 흐릿하게 다르다. 범위 막대는 손잡이 가운데가 아니라 값의 자리에서 끝나지만 그 끝은 손잡이 아래에 가린다",
-    },
-};
+const NOISE = 8;
 
 /** 스스로 포커스를 받는 요소. 여기에 붙은 tabindex="0" 은 아무 일도 하지 않는다 */
 const FOCUSABLE_TAGS = new Set(["button", "input", "select", "textarea", "summary"]);
@@ -467,9 +472,7 @@ const compare = async (before, after) =>
             if (shot.count)
             {
                 const line = `${where}: ${shot.size ?? `${shot.count}px differ (max Δ${shot.max})`}`;
-                const blur = SUBPIXEL[section];
-
-                if (!shot.size && blur && shot.max <= blur.max) known.push(`${line} — ${blur.reason}`);
+                if (!shot.size && shot.max <= NOISE) known.push(`${line} — 같은 빌드를 다시 찍어도 나는 그리기의 잡음이다(채널 차이 ${NOISE} 이하)`);
                 else failures.push(line);
             }
 
@@ -487,7 +490,12 @@ const compare = async (before, after) =>
 
                 for (const [prop, value] of Object.entries(row.values))
                 {
-                    if (match.values[prop] !== value) failures.push(`${where}: ${row.key} ${prop} ${value} → ${match.values[prop]}`);
+                    if (match.values[prop] === value) continue;
+                    const line = `${where}: ${row.key} ${prop} ${value} → ${match.values[prop]}`;
+                    const rule = accepted(section, row.key, prop);
+
+                    if (rule) known.push(`${line} — ${rule.reason}`);
+                    else failures.push(line);
                 }
 
                 byKey.delete(row.key);
