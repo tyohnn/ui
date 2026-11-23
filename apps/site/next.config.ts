@@ -10,8 +10,10 @@ const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
  * a per-system preview build from public/preview/<system>/ (scripts/build-previews.mjs), so each one runs one
  * system in its own document.
  *
- * vercel.json rewrites /preview/<system>/index.html to /preview/<system>/index, the name Vercel's Next.js builder
- * gives a public .html file.
+ * vercel.json rewrites /preview/<system>/index.html to /preview/<system>/index: under the old static export Vercel
+ * stored public .html files without the extension. A Next build keeps index.html (`vercel build` puts it in
+ * .vercel/output/static as is) and the file system answers before the rewrite, so the rewrite only matters if that
+ * changes again.
  */
 const nextConfig: NextConfig = {
     // SITE_DIST_DIR=.next-check builds into another folder, so a check build never replaces the .next a running
