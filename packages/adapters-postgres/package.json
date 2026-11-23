@@ -1,0 +1,26 @@
+{
+    "name": "@tyohnn/adapters-postgres",
+    "version": "0.0.0",
+    "private": true,
+    "description": "The Postgres side of @tyohnn/mcp's store ports (published systems, MCP sessions). It connects with pg directly, not through the Data API. Server only: a client bundle that pulls it in fails to build.",
+    "license": "MIT",
+    "type": "module",
+    "exports": {
+        "./*": "./src/*.ts"
+    },
+    "scripts": {
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@tyohnn/mcp": "*",
+        "pg": "8.23.0",
+        "server-only": "0.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.19.43",
+        "@types/pg": "8.23.1",
+        "typescript": "^5.9.3",
+        "vitest": "^5.0.1"
+    }
+}

@@ -1,5 +1,7 @@
 import type { Session } from "./server";
 
+export type { Session };
+
 /**
  * Where the HTTP server keeps what each connection is shaping between its requests (http.ts). A session is saved
  * after every request and lasts a while after its last save; one not saved for that long reads as absent, and the
