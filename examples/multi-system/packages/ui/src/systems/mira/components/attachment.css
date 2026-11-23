@@ -30,7 +30,7 @@
     @apply w-fit;
 
     &:focus-within {
-        box-shadow: 0 0 0 1px var(--ring-focus);
+        box-shadow: 0 0 0 1px var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
     }
 }
 

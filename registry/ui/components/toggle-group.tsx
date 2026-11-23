@@ -1,12 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
+import {
+  Toggle as TogglePrimitive,
+  ToggleGroup as ToggleGroupPrimitive,
+} from "@ui-sdk/react/toggle"
 import { type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
 import { toggleVariants } from "@tyohnn/components/toggle"
+import { slot } from "@tyohnn/lib/slot"
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
@@ -28,15 +31,18 @@ function ToggleGroup({
   orientation = "horizontal",
   style,
   children,
+  render,
   ...props
-}: ToggleGroupPrimitive.Props &
+}: Omit<React.ComponentProps<typeof ToggleGroupPrimitive>, "children"> &
   VariantProps<typeof toggleVariants> & {
+    children?: React.ReactNode
     spacing?: number
     orientation?: "horizontal" | "vertical"
   }) {
   return (
     <ToggleGroupPrimitive
-      data-slot="toggle-group"
+      render={slot("toggle-group", render)}
+      orientation={orientation}
       data-variant={variant}
       data-size={size}
       data-spacing={spacing}
@@ -62,13 +68,15 @@ function ToggleGroupItem({
   children,
   variant = "default",
   size = "default",
+  render,
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof TogglePrimitive> &
+  VariantProps<typeof toggleVariants>) {
   const context = React.useContext(ToggleGroupContext)
 
   return (
     <TogglePrimitive
-      data-slot="toggle-group-item"
+      render={slot("toggle-group-item", render, "button")}
       data-variant={context.variant || variant}
       data-size={context.size || size}
       data-spacing={context.spacing}

@@ -4,13 +4,15 @@ A dark, dense dashboard design system. It was built from one reference screensho
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,
 compact rows, and a few saturated accents that carry meaning.
 
-A complete, frozen snapshot forked from foundation (shadcn components on Base UI primitives plus the
+A complete, frozen snapshot forked from foundation (shadcn components on UI SDK primitives plus the
 three CSS layers). Every file under `styles/` is this system's own; nothing is composed at runtime.
 
 ## Character
 
 - **Dark first.** The look is designed for `.dark`; the light values only give new slots a
-  matching personality. Put `dark` on `<html>`, never on a subtree (see Clay).
+  matching personality. The blue primary is the one colour both modes share: light uses the same
+  `#3d4ef5` fill, a `#4a5af7` → `#3443ea` clay surface, a `#3443ea` edge and `#3443ea` links.
+  Put `dark` on `<html>`, never on a subtree (see Clay).
 - **Planes, not shadows.** Depth comes from background steps about 4% apart, not from elevation:
   background `#151515`, sidebar `#1a1a1a`, field `#1a1a1a`, raised surface (card, popover) `#1f1f1f`,
   secondary/accent `#262626`.
@@ -20,7 +22,7 @@ three CSS layers). Every file under `styles/` is this system's own; nothing is c
 - **Dense.** Label buttons 28px, icon buttons 29px, table rows 41px with a 37px head, sidebar items
   29px (active 31px), tags 20px. Body table text 13/19, table head 11/15, sidebar items 13/19.
 - **Two accents with separate jobs.** Blue `--primary #3d4ef5` is for the primary action only.
-  Yellow `--selection #facc15` is for selection (checked and indeterminate checkboxes). Do not swap
+  Yellow `--checked #facc15` is for selection (checked and indeterminate checkboxes). Do not swap
   them and do not add a third accent for state.
 
 ## Key values
@@ -29,22 +31,33 @@ three CSS layers). Every file under `styles/` is this system's own; nothing is c
 |---|---|---|
 | `--foreground` / `--muted-foreground` / `--foreground-subtle` | `#f2f2f2` / `#8c8c8c` / `#5e5e5e` | text, secondary text, section labels |
 | `--primary` · `--primary-border` | `#3d4ef5` · `#5460e0` | primary button fill and its one-step-lighter edge |
-| `--selection` · `--selection-foreground` | `#facc15` · `#0a0a0a` | checkbox fill and check mark |
+| `--checked` · `--checked-foreground` | `#facc15` · `#0a0a0a` | checkbox fill and check mark |
 | `--link` | `#8fb2ff` | links (same hue as the blue tag text) |
 | `--muted` | `#1e1e1e` | selected table row |
 | `--control-font-weight-regular` · `--ui-font-weight-regular` | 400 | only the primary button and labels stay at 500 |
 | `--table-row-height` · `--table-head-height-default` | 41px · 37px | row boxes include the divider |
 
-## Clay (restrained, level C)
+## Clay (reference strength)
 
-Controls look very slightly moulded. Layer 2 composes `--shadow-control`, `--shadow-control-primary`,
+Controls look moulded. Layer 2 composes `--shadow-control`, `--shadow-control-primary`,
 `--shadow-raised`, `--shadow-control-pressed`, `--shadow-recessed`, `--surface-control` and
 `--surface-primary` from layer-1 `--clay-*` materials.
 
-The reference canvas was stronger (6% highlight, 45% shade, 35% ambient, top-to-bottom gradients).
-On 2026-09-15 the owner chose the restrained step **C**: in dark mode only a 3% top highlight and a
-contact shadow (20% / 12%) remain, shade and ambient are transparent, the control surface is a single
-colour (`#191919`), and only the primary button keeps a gentle gradient (`#4a5af7` → `#3443ea`).
+Dark mode runs at the reference canvas's strength: a 6% top highlight, a 45% bottom shade, a contact
+shadow (30% / 20%) and a 35% ambient shadow. The control surface is a top-to-bottom gradient
+(`#212121` → `#181818`) and the primary button keeps its own (`#4a5af7` → `#3443ea`) with a tinted
+ambient glow.
+
+History: on 2026-09-15 the owner chose a restrained step **C** (3% highlight, no shade or ambient, a
+single-colour surface). On 2026-10-02, after a first product with few controls on screen, the owner
+went back to the reference strength — at step C the moulded look did not read at all. To soften it
+again, lower the `--clay-*` materials in `globals.css`; nothing else changes.
+
+Cards are moulded too, in dark mode only: `--shadow-card` is a 5% top highlight plus a contact
+shadow. It says "a shaped slab", not "floating" — planes are still separated by colour.
+
+The app canvas (`--canvas`) is the page background in dark mode. The reference's `#3d3d3d` was the
+desk colour *outside* the app window; using it under cards made the floor lighter than the cards.
 
 Where clay applies: outline, secondary and primary buttons (pressed state sinks in), the select
 trigger, the active sidebar item and its count badge. Ghost, destructive and link buttons stay flat.

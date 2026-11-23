@@ -1,0 +1,11 @@
+{
+    "name": "@tyohnn/headless-parity",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Move a component to another headless library without changing what it draws or does: build the preview before and after, then compare every coverage section by pixels, computed values, ARIA and keyboard behaviour.",
+    "main": "index.mjs",
+    "devDependencies": {
+        "@playwright/test": "1.62.1"
+    }
+}

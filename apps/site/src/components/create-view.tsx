@@ -43,7 +43,7 @@ export const CreateView = ({
     presets,
     families,
 }: {
-    /** In the order presets.json counts them: tyohnn's own systems first, then the shadcn ports */
+    /** In the order presets.json counts them */
     systems: SystemSummary[];
     themes: ThemeInfo[];
     owns: Record<string, string>;

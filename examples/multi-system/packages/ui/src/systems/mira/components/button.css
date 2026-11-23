@@ -55,6 +55,7 @@
        1px 내려앉는다. 메뉴를 여는 버튼(aria-haspopup)은 눌린 채로 머무르므로 뺀다. */
     &:active:not([aria-haspopup]) {
         translate: 0 var(--control-press-offset);
+        scale: var(--control-press-scale);
     }
 }
 
@@ -65,25 +66,27 @@
 .cn-button-variant-default {
     background-color: var(--primary);
     background-image: var(--surface-primary);
-    border-color: var(--primary-border);
+    border-color: var(--primary-border, transparent);
     box-shadow: var(--shadow-control-primary);
     color: var(--primary-foreground);
 
     &:hover {
-        background-color: var(--primary-hover);
+        background-color: var(--primary-hover, color-mix(in oklab, var(--primary) 80%, transparent));
+        background-image: var(--surface-primary-hover, var(--surface-primary));
     }
 }
 
 .cn-button-variant-secondary {
     background-color: var(--secondary);
     background-image: var(--surface-control);
-    border-color: var(--button-secondary-border);
+    border-color: var(--button-secondary-border, transparent);
     box-shadow: var(--shadow-control);
     color: var(--secondary-foreground);
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
-        background-color: var(--secondary-hover);
+        background-color: var(--secondary-hover, color-mix(in oklab, var(--secondary) 95%, var(--foreground)));
+        background-image: var(--surface-control-hover, var(--surface-control));
     }
 }
 
@@ -96,13 +99,14 @@
 .cn-button-variant-outline {
     background-color: var(--button-outline-fill);
     background-image: var(--surface-control);
-    border-color: var(--button-outline-border);
+    border-color: var(--button-outline-border, var(--border));
     box-shadow: var(--shadow-control);
     font-weight: var(--control-font-weight-regular);
 
     &:hover {
         /* axis contract v4 — 종전 --input-fill-hover. foundation 값은 그 별칭이다. */
-        background-color: var(--button-outline-hover-fill);
+        background-color: var(--button-outline-hover-fill, var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent)));
+        background-image: var(--surface-control-hover, var(--surface-control));
         color: var(--foreground);
     }
 

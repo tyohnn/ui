@@ -1,21 +1,7 @@
-import { ko } from "react-day-picker/locale"
-
 import type { Strings } from "../names"
 
-/** BCP 47 tag for Intl formatting (chart values, calendar months) */
+/** BCP 47 tag for Intl formatting (chart values, the calendar's month and weekday names) */
 export const locale = "ko-KR"
-
-/** react-day-picker's locale: month and weekday names and the calendar's own labels, with the navigation named plainly */
-export const dateLocale = {
-  ...ko,
-  labels: {
-    ...ko.labels,
-    labelNav: "달 넘기기",
-    labelPrevious: "이전 달",
-    labelNext: "다음 달",
-    labelWeekNumber: (weekNumber: number) => `${weekNumber}주`,
-  },
-}
 
 // Screen words follow the Korean UX writing rules the consuming apps use: 해요체 for sentences, verbs on buttons,
 // 「닫기」 for stepping back, and the names people already use (메뉴, not 사이드바).
@@ -41,11 +27,21 @@ export const strings = {
     previous: "이전 슬라이드",
     next: "다음 슬라이드",
   },
+  calendar: {
+    nav: "달 넘기기",
+    previous: "이전 달",
+    next: "다음 달",
+    month: "월 선택",
+    year: "연도 선택",
+    weekNumber: "주 번호",
+    week: (weekNumber: number) => `${weekNumber}주`,
+  },
   combobox: {
     removeChip: "선택에서 빼기",
   },
   command: {
     title: "검색",
+    search: "명령 검색",
   },
   sidebar: {
     toggle: "메뉴 열고 닫기",

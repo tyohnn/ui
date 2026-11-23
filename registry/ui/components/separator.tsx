@@ -1,16 +1,21 @@
 "use client"
 
-import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
+import type * as React from "react"
+import { Separator as SeparatorPrimitive } from "@ui-sdk/react/separator"
 import { cn } from "cn"
+
+import { slot } from "@tyohnn/lib/slot"
 
 function Separator({
   className,
   orientation = "horizontal",
+  render,
+  "data-slot": dataSlot = "separator",
   ...props
-}: SeparatorPrimitive.Props) {
+}: React.ComponentProps<typeof SeparatorPrimitive> & { "data-slot"?: string }) {
   return (
     <SeparatorPrimitive
-      data-slot="separator"
+      render={slot(dataSlot, render)}
       orientation={orientation}
       // ⚠ cn-separator 를 붙이고 bg-border 를 걷어냈다. 종전에는 3층 클래스가 아예
       // 붙지 않아 .cn-separator 규칙이 죽어 있었고, 사이드바가 cn-sidebar-separator

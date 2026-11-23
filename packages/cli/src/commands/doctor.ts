@@ -389,6 +389,17 @@ const colorMixFallback = (text: string): string | undefined =>
     return found ? normalise(`${found[1]}:${found[2]}`) : undefined;
 };
 
+// A declaration is in the output only when the value ends there: `--leading:1.6` is not in `--leading:1.65`.
+const declares = (output: string, key: string) =>
+{
+    for (let at = output.indexOf(key); at !== -1; at = output.indexOf(key, at + 1))
+    {
+        if (/^[;}!]|^$/.test(output.charAt(at + key.length))) return true;
+    }
+
+    return false;
+};
+
 const builtCheck = (root: string, record: NonNullable<ReturnType<typeof readRecord>>, appPath: string, add: (level: Level, where: string, message: string) => void) =>
 {
     const app = record.apps[appPath];
@@ -415,9 +426,9 @@ const builtCheck = (root: string, record: NonNullable<ReturnType<typeof readReco
 
     const others = record.ui.systems.filter((name) => name !== app.system);
     const foreign = new Map(others.flatMap((name) => [...declarations(name)]));
-    const leaked = [...foreign].filter(([key]) => !own.has(key) && output.includes(key));
+    const leaked = [...foreign].filter(([key]) => !own.has(key) && declares(output, key));
     const ownDistinct = [...own.keys()].filter((key) => !foreign.has(key));
 
     if (leaked.length) add("FAIL", appPath, `built CSS contains ${leaked.length} value(s) only ${others.join("/")} declares, e.g. ${leaked.slice(0, 2).map(([, text]) => text).join(" · ")}`);
-    else add("ok", appPath, `built CSS: no ${others.join("/") || "other-system"}-only token values · ${ownDistinct.filter((key) => output.includes(key)).length} of ${ownDistinct.length} ${app.system}-only values present`);
+    else add("ok", appPath, `built CSS: no ${others.join("/") || "other-system"}-only token values · ${ownDistinct.filter((key) => declares(output, key)).length} of ${ownDistinct.length} ${app.system}-only values present`);
 };

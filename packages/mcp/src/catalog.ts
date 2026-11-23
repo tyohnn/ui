@@ -80,7 +80,7 @@ const exportsOf = (source: string) =>
     return [...names];
 };
 
-/** The npm package of an import specifier: `@base-ui/react/menu` → `@base-ui/react`, `cmdk` → `cmdk` */
+/** The npm package of an import specifier: `@ui-sdk/react/menu` → `@ui-sdk/react`, `recharts` → `recharts` */
 const packageOf = (specifier: string) =>
 {
     const parts = specifier.split("/");

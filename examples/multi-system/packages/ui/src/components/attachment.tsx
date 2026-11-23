@@ -1,10 +1,9 @@
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
 import { Button } from "@acme/ui/components/button"
+import { renderPart, type RenderableProps } from "@acme/ui/lib/slot"
 
 const attachmentVariants = cva(
   "cn-attachment group/attachment relative flex max-w-full min-w-0 shrink-0 flex-wrap border bg-card text-card-foreground transition-colors has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed",
@@ -163,24 +162,22 @@ function AttachmentTrigger({
   render,
   type,
   ...props
-}: useRender.ComponentProps<"button">) {
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(
-      {
-        type: render ? type : (type ?? "button"),
-        className: cn(
-          "cn-attachment-trigger absolute inset-0 z-10 outline-none",
-          className
-        ),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "attachment-trigger",
+}: RenderableProps<"button">) {
+  return renderPart(
+    "button",
+    {
+      type: render ? type : (type ?? "button"),
+      className: cn(
+        "cn-attachment-trigger absolute inset-0 z-10 outline-none",
+        className
+      ),
+      ...props,
     },
-  })
+    render,
+    {
+      slot: "attachment-trigger",
+    }
+  )
 }
 
 function AttachmentGroup({ className, ...props }: React.ComponentProps<"div">) {

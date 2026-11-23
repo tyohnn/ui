@@ -10,7 +10,7 @@ export function CreatePageView({ locale }: { locale: Locale })
 {
     const presets = readPresetLists();
     const all = localizeSystems(locale, getSystems());
-    // tyohnn's own systems first, then the shadcn ports: the order the preset lists keep
+    // the order the preset lists keep
     const systems = presets.systems.map((name) => all.find((system) => system.name === name)).filter((system) => system !== undefined);
 
     return (

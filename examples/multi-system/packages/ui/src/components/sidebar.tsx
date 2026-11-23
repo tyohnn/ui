@@ -1,8 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
@@ -13,7 +11,6 @@ import { Separator } from "@acme/ui/components/separator"
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@acme/ui/components/sheet"
@@ -24,6 +21,8 @@ import {
   TooltipTrigger,
 } from "@acme/ui/components/tooltip"
 import { PanelLeft } from "@acme/ui/icons"
+import { renderPart, slot, type RenderableProps } from "@acme/ui/lib/slot"
+import { strings } from "@acme/ui/strings"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -196,8 +195,7 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            <SheetTitle>{strings.sidebar.title}</SheetTitle>
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
@@ -272,7 +270,7 @@ function SidebarTrigger({
       {...props}
     >
       <PanelLeft className="cn-rtl-flip" />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{strings.sidebar.toggle}</span>
     </Button>
   )
 }
@@ -284,10 +282,10 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
+      aria-label={strings.sidebar.toggle}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={strings.sidebar.toggle}
       className={cn(
         "cn-sidebar-rail absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
@@ -397,48 +395,44 @@ function SidebarGroupLabel({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div"> & React.ComponentProps<"div">) {
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(
-          "cn-sidebar-group-label flex shrink-0 items-center outline-hidden [&>svg]:shrink-0",
-          className
-        ),
-      },
-      props
-    ),
+}: RenderableProps<"div"> & React.ComponentProps<"div">) {
+  return renderPart(
+    "div",
+    {
+      className: cn(
+        "cn-sidebar-group-label flex shrink-0 items-center outline-hidden [&>svg]:shrink-0",
+        className
+      ),
+      ...props,
+    },
     render,
-    state: {
+    {
       slot: "sidebar-group-label",
       sidebar: "group-label",
-    },
-  })
+    }
+  )
 }
 
 function SidebarGroupAction({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"button"> & React.ComponentProps<"button">) {
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(
-      {
-        className: cn(
-          "cn-sidebar-group-action flex aspect-square items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0",
-          className
-        ),
-      },
-      props
-    ),
+}: RenderableProps<"button"> & React.ComponentProps<"button">) {
+  return renderPart(
+    "button",
+    {
+      className: cn(
+        "cn-sidebar-group-action flex aspect-square items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0",
+        className
+      ),
+      ...props,
+    },
     render,
-    state: {
+    {
       slot: "sidebar-group-action",
       sidebar: "group-action",
-    },
-  })
+    }
+  )
 }
 
 function SidebarGroupContent({
@@ -506,28 +500,27 @@ function SidebarMenuButton({
   tooltip,
   className,
   ...props
-}: useRender.ComponentProps<"button"> &
+}: RenderableProps<"button"> &
   React.ComponentProps<"button"> & {
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar()
-  const comp = useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(
-      {
-        className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      },
-      props
-    ),
-    render: !tooltip ? render : <TooltipTrigger render={render} />,
-    state: {
+  const comp = renderPart(
+    "button",
+    {
+      className: cn(sidebarMenuButtonVariants({ variant, size }), className),
+      ...props,
+    },
+    // UI SDK 의 트리거는 data-slot 을 tooltip-trigger 로 쓴다. 메뉴 단추의 이름으로 다시 쓴다
+    !tooltip ? render : <TooltipTrigger render={slot("sidebar-menu-button", render, "button")} />,
+    {
       slot: "sidebar-menu-button",
       sidebar: "menu-button",
       size,
       active: isActive,
-    },
-  })
+    }
+  )
 
   if (!tooltip) {
     return comp
@@ -557,29 +550,27 @@ function SidebarMenuAction({
   render,
   showOnHover = false,
   ...props
-}: useRender.ComponentProps<"button"> &
+}: RenderableProps<"button"> &
   React.ComponentProps<"button"> & {
     showOnHover?: boolean
   }) {
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(
-      {
-        className: cn(
-          "cn-sidebar-menu-action flex items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0",
-          showOnHover &&
-            "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
-          className
-        ),
-      },
-      props
-    ),
+  return renderPart(
+    "button",
+    {
+      className: cn(
+        "cn-sidebar-menu-action flex items-center justify-center outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 md:after:hidden [&>svg]:shrink-0",
+        showOnHover &&
+          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
+        className
+      ),
+      ...props,
+    },
     render,
-    state: {
+    {
       slot: "sidebar-menu-action",
       sidebar: "menu-action",
-    },
-  })
+    }
+  )
 }
 
 function SidebarMenuBadge({
@@ -668,30 +659,28 @@ function SidebarMenuSubButton({
   isActive = false,
   className,
   ...props
-}: useRender.ComponentProps<"a"> &
+}: RenderableProps<"a"> &
   React.ComponentProps<"a"> & {
     size?: "sm" | "md"
     isActive?: boolean
   }) {
-  return useRender({
-    defaultTagName: "a",
-    props: mergeProps<"a">(
-      {
-        className: cn(
-          "cn-sidebar-menu-sub-button flex min-w-0 -translate-x-px items-center overflow-hidden outline-hidden group-data-[collapsible=icon]:hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:shrink-0",
-          className
-        ),
-      },
-      props
-    ),
+  return renderPart(
+    "a",
+    {
+      className: cn(
+        "cn-sidebar-menu-sub-button flex min-w-0 -translate-x-px items-center overflow-hidden outline-hidden group-data-[collapsible=icon]:hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:shrink-0",
+        className
+      ),
+      ...props,
+    },
     render,
-    state: {
+    {
       slot: "sidebar-menu-sub-button",
       sidebar: "menu-sub-button",
       size,
       active: isActive,
-    },
-  })
+    }
+  )
 }
 
 export {

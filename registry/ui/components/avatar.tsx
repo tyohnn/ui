@@ -1,19 +1,26 @@
 "use client"
 
 import * as React from "react"
-import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
+import {
+  Avatar as AvatarPrimitive,
+  AvatarFallback as AvatarFallbackPrimitive,
+  AvatarImage as AvatarImagePrimitive,
+} from "@ui-sdk/react/avatar"
 import { cn } from "cn"
+
+import { slot } from "@tyohnn/lib/slot"
 
 function Avatar({
   className,
   size = "default",
+  render,
   ...props
-}: AvatarPrimitive.Root.Props & {
+}: React.ComponentProps<typeof AvatarPrimitive> & {
   size?: "default" | "sm" | "lg"
 }) {
   return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
+    <AvatarPrimitive
+      render={slot("avatar", render, "span")}
       data-size={size}
       className={cn(
         "cn-avatar group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:border-border after:mix-blend-darken dark:after:mix-blend-lighten",
@@ -24,10 +31,14 @@ function Avatar({
   )
 }
 
-function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
+function AvatarImage({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof AvatarImagePrimitive>) {
   return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
+    <AvatarImagePrimitive
+      render={slot("avatar-image", render, "img")}
       className={cn(
         "cn-avatar-image aspect-square size-full object-cover",
         className
@@ -39,11 +50,12 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
 
 function AvatarFallback({
   className,
+  render,
   ...props
-}: AvatarPrimitive.Fallback.Props) {
+}: React.ComponentProps<typeof AvatarFallbackPrimitive>) {
   return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
+    <AvatarFallbackPrimitive
+      render={slot("avatar-fallback", render, "span")}
       className={cn(
         "cn-avatar-fallback flex size-full items-center justify-center",
         className

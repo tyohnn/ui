@@ -1,8 +1,8 @@
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+
+import { renderPart, type RenderableProps } from "@acme/ui/lib/slot"
 
 function BubbleGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -58,23 +58,21 @@ function BubbleContent({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"div">) {
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(
-          "cn-bubble-content w-fit max-w-full min-w-0 overflow-hidden wrap-break-word [button]:text-left [button,a]:transition-colors",
-          className
-        ),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "bubble-content",
+}: RenderableProps<"div">) {
+  return renderPart(
+    "div",
+    {
+      className: cn(
+        "cn-bubble-content w-fit max-w-full min-w-0 overflow-hidden wrap-break-word [button]:text-left [button,a]:transition-colors",
+        className
+      ),
+      ...props,
     },
-  })
+    render,
+    {
+      slot: "bubble-content",
+    }
+  )
 }
 
 const bubbleReactionsVariants = cva(

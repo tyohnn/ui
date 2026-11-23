@@ -72,7 +72,7 @@ under its layer-3 notes. Read both.
 
 | rule | property | → slot | value to move |
 |---|---|---|---|
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `6px` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `6px` |
 
 ### `styles/components/accordion.css`
 
@@ -109,7 +109,7 @@ under its layer-3 notes. Read both.
 
 | rule | property | → slot | value to move |
 |---|---|---|---|
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `6px` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `6px` |
 
 ### `styles/components/accordion.css`
 
@@ -262,7 +262,7 @@ under its layer-3 notes. Read both.
 
 | rule | property | → slot | value to move |
 |---|---|---|---|
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `var(--menu-item-padding-y)` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `var(--menu-item-padding-y)` |
 
 ### `styles/components/accordion.css`
 
@@ -411,7 +411,7 @@ under its layer-3 notes. Read both.
 | rule | property | → slot | value to move |
 |---|---|---|---|
 | `.cn-dropdown-menu-item, .cn-dropdown-menu-checkbox-item, .cn-dropdown-menu-radio-item, .cn-dropdown-menu-sub-trigger, .cn-context-menu-item, .cn-context-menu-checkbox-item, .cn-context-menu-radio-item, .cn-context-menu-sub-trigger, .cn-menubar-item, .cn-menubar-checkbox-item, .cn-menubar-radio-item, .cn-menubar-sub-trigger, .cn-command-item, .cn-combobox-item` | `font-weight` | `--menu-item-font-weight` | `var(--ui-font-weight)` |
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `10px` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `10px` |
 
 ### `styles/components/accordion.css`
 
@@ -715,7 +715,7 @@ under its layer-3 notes. Read both.
 
 | rule | property | → slot | value to move |
 |---|---|---|---|
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `10px` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `10px` |
 
 ### `styles/components/accordion.css`
 
@@ -816,7 +816,7 @@ under its layer-3 notes. Read both.
 
 | rule | property | → slot | value to move |
 |---|---|---|---|
-| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group [cmdk-group-heading], .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `8px` |
+| `.cn-dropdown-menu-label, .cn-context-menu-label, .cn-menubar-label, .cn-command-group .cn-command-group-heading, .cn-combobox-label` | `padding-block` | `--menu-label-padding-y` | `8px` |
 
 ### `styles/components/accordion.css`
 

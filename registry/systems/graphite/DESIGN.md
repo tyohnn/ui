@@ -4,7 +4,7 @@ A dark, dense dashboard design system. It was built from one reference screensho
 "Companies" screen and keeps that screen's character: quiet near-black planes, hairline dividers,
 compact rows, and a few saturated accents that carry meaning.
 
-A complete, frozen snapshot forked from foundation (shadcn components on Base UI primitives plus the
+A complete, frozen snapshot forked from foundation (shadcn components on UI SDK primitives plus the
 three CSS layers). Every file under `styles/` is this system's own; nothing is composed at runtime.
 
 ## Character

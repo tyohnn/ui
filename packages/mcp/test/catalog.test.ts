@@ -35,8 +35,8 @@ describe("the primitive catalog", () =>
         const combobox = primitives.find((primitive) => primitive.name === "combobox");
 
         expect(combobox?.exports).toContain("ComboboxChips");
-        expect(combobox?.packages).toContain("@base-ui/react");
-        expect(primitives.find((primitive) => primitive.name === "command")?.packages).toContain("cmdk");
+        expect(combobox?.packages).toContain("@ui-sdk/react");
+        expect(primitives.find((primitive) => primitive.name === "chart")?.packages).toContain("recharts");
         expect(primitives.find((primitive) => primitive.name === "alert-dialog")?.uses).toContain("button");
     });
 

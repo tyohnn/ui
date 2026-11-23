@@ -13,7 +13,7 @@ declare const __TYOHNN_VERSION__: string;
 
 const VERSION = typeof __TYOHNN_VERSION__ === "string" ? __TYOHNN_VERSION__ : "dev";
 
-const HELP = `tyohnn ${VERSION} — shadcn components on Base UI with a three-layer CSS design system
+const HELP = `tyohnn ${VERSION} — shadcn components on UI SDK with a three-layer CSS design system
 
 Usage
   tyohnn init [--system <name>] [--app <path>]     set up a system (monorepo: packages/ui + an app)

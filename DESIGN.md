@@ -2,12 +2,12 @@
 
 This file is the contract every component, design system and tool in the repository follows.
 
-## 1. Hooks: shadcn + Base UI + three CSS layers
+## 1. Hooks: shadcn + UI SDK + three CSS layers
 
 tyohnn's **foundation** is the combination of three things, as first established in an earlier product:
 
 1. **shadcn components** — the upstream anatomy and `cn-*` class contract;
-2. **Base UI primitives** underneath them (behaviour, accessibility, state attributes);
+2. **UI SDK primitives** (`@ui-sdk/react`) underneath them (behaviour, accessibility, state attributes);
 3. **the three-layer CSS architecture** tyohnn adds on top.
 
 Each component element carries a stable hook class named `cn-*` (`cn-button`,
@@ -132,7 +132,7 @@ snapshot is exactly what was reviewed; changes reach a system only when someone 
 
 ## 4. foundation is the maintainer master copy
 
-`registry/foundation` is shadcn + Base UI + the three layers with the shadcn mira preset values. It holds
+`registry/foundation` is shadcn + UI SDK + the three layers with the shadcn mira preset values. It holds
 only `styles/`, `DESIGN.template.md`, `foundation.json` (file list, `axisContractVersion`, `fonts`, `icons`)
 and `reference/` (the mira reference app it was proved against, and the exclusions of that comparison).
 
@@ -858,8 +858,8 @@ import { strings } from "@tyohnn/strings"
 ```
 registry/ui/strings/
   names.ts               the Strings interface: every key, with where it is used
-  locales/<locale>.ts    one per language: `strings` (satisfies Strings), `locale` (BCP 47, for Intl) and
-                         `dateLocale` (react-day-picker's locale, which also carries the calendar's own labels)
+  locales/<locale>.ts    one per language: `strings` (satisfies Strings, the calendar's labels included) and
+                         `locale` (BCP 47, for Intl and the calendar's month and weekday names)
   index.ts               export * from "./locales/<locale>"   (the alias target; en in the repo)
 ```
 

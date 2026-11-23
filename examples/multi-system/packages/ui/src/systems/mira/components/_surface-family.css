@@ -40,14 +40,14 @@
 /* --------------------------------------------------------
    뒤에 까는 막
    mira: bg-black/80 supports-backdrop-filter:backdrop-blur-xs
-   (100ms 전환은 각 파일의 duration-100 이 갖는다)
+   (전환 길이는 각 파일의 duration-(--motion-fast) 가 갖는다 — mira 의 duration-100)
    -------------------------------------------------------- */
 
 .cn-dialog-overlay,
 .cn-alert-dialog-overlay,
 .cn-sheet-overlay,
 .cn-drawer-overlay {
-    background-color: var(--overlay-backdrop);
+    background-color: var(--overlay-backdrop, oklch(0 0 0 / 80%));
 }
 
 @supports (backdrop-filter: blur(1px)) {
@@ -96,7 +96,7 @@
 .cn-dialog-content,
 .cn-alert-dialog-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--dialog-shadow);
 }
 
@@ -105,7 +105,7 @@
 .cn-popover-content,
 .cn-hover-card-content {
     box-shadow:
-        0 0 0 var(--surface-border-width) var(--ring-subtle),
+        0 0 0 var(--surface-border-width) var(--ring-subtle, color-mix(in oklab, var(--foreground) 10%, transparent)),
         var(--shadow-float);
 }
 

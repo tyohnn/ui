@@ -1,37 +1,51 @@
 "use client"
 
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+import type * as React from "react"
+import {
+  Progress as ProgressPrimitive,
+  ProgressIndicator as ProgressIndicatorPrimitive,
+  ProgressLabel as ProgressLabelPrimitive,
+  ProgressTrack as ProgressTrackPrimitive,
+  ProgressValue as ProgressValuePrimitive,
+} from "@ui-sdk/react/progress"
 import { cn } from "cn"
+
+import { slot } from "@tyohnn/lib/slot"
 
 function Progress({
   className,
   children,
-  value,
+  render,
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: Omit<React.ComponentProps<typeof ProgressPrimitive>, "children"> & {
+  children?: React.ReactNode
+}) {
   return (
-    <ProgressPrimitive.Root
-      value={value}
-      data-slot="progress"
+    <ProgressPrimitive
       className={cn("cn-progress-root flex flex-wrap gap-3", className)}
+      render={slot("progress", render)}
       {...props}
     >
       {children}
       <ProgressTrack>
         <ProgressIndicator />
       </ProgressTrack>
-    </ProgressPrimitive.Root>
+    </ProgressPrimitive>
   )
 }
 
-function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
+function ProgressTrack({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof ProgressTrackPrimitive>) {
   return (
-    <ProgressPrimitive.Track
+    <ProgressTrackPrimitive
       className={cn(
         "cn-progress-track relative flex w-full items-center overflow-x-hidden",
         className
       )}
-      data-slot="progress-track"
+      render={slot("progress-track", render)}
       {...props}
     />
   )
@@ -39,32 +53,41 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
 
 function ProgressIndicator({
   className,
+  render,
   ...props
-}: ProgressPrimitive.Indicator.Props) {
+}: React.ComponentProps<typeof ProgressIndicatorPrimitive>) {
   return (
-    <ProgressPrimitive.Indicator
-      data-slot="progress-indicator"
+    <ProgressIndicatorPrimitive
       className={cn("cn-progress-indicator h-full transition-all", className)}
+      render={slot("progress-indicator", render)}
       {...props}
     />
   )
 }
 
-function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
+function ProgressLabel({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof ProgressLabelPrimitive>) {
   return (
-    <ProgressPrimitive.Label
+    <ProgressLabelPrimitive
       className={cn("cn-progress-label", className)}
-      data-slot="progress-label"
+      render={slot("progress-label", render, "span")}
       {...props}
     />
   )
 }
 
-function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
+function ProgressValue({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof ProgressValuePrimitive>) {
   return (
-    <ProgressPrimitive.Value
+    <ProgressValuePrimitive
       className={cn("cn-progress-value", className)}
-      data-slot="progress-value"
+      render={slot("progress-value", render, "span")}
       {...props}
     />
   )

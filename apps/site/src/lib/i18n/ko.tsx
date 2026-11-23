@@ -19,7 +19,7 @@ export const ko: Messages = {
     chrome: {
         navLabel: "사이트 메뉴",
         nav: { systems: "시스템", components: "컴포넌트", create: "만들기", compare: "비교", docs: "문서", github: "GitHub" },
-        footerNote: "shadcn · Base UI · MIT",
+        footerNote: "shadcn · UI SDK · MIT",
         language: { label: "언어", other: "English", otherLang: "en" },
     },
 

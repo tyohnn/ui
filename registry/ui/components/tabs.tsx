@@ -1,18 +1,30 @@
 "use client"
 
-import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
+import type * as React from "react"
+import {
+  Tabs as TabsPrimitive,
+  TabsList as TabsListPrimitive,
+  TabsPanel as TabsPanelPrimitive,
+  TabsTab as TabsTabPrimitive,
+} from "@ui-sdk/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+
+import { flag, slot } from "@tyohnn/lib/slot"
 
 function Tabs({
   className,
   orientation = "horizontal",
+  activation = "manual",
+  render,
   ...props
-}: TabsPrimitive.Root.Props) {
+}: React.ComponentProps<typeof TabsPrimitive>) {
   return (
-    <TabsPrimitive.Root
-      data-slot="tabs"
-      data-orientation={orientation}
+    <TabsPrimitive
+      render={slot("tabs", render)}
+      orientation={orientation}
+      // 화살표는 포커스만 옮기고 Enter · Space 가 탭을 고른다(Base UI 시절과 같다). UI SDK 의 기본은 automatic 이다
+      activation={activation}
       className={cn(
         "cn-tabs group/tabs flex data-horizontal:flex-col",
         className
@@ -40,11 +52,13 @@ const tabsListVariants = cva(
 function TabsList({
   className,
   variant = "default",
+  render,
   ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+}: React.ComponentProps<typeof TabsListPrimitive> &
+  VariantProps<typeof tabsListVariants>) {
   return (
-    <TabsPrimitive.List
-      data-slot="tabs-list"
+    <TabsListPrimitive
+      render={slot("tabs-list", render)}
       data-variant={variant}
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
@@ -52,10 +66,17 @@ function TabsList({
   )
 }
 
-function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+function TabsTrigger({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof TabsTabPrimitive>) {
   return (
-    <TabsPrimitive.Tab
-      data-slot="tabs-trigger"
+    <TabsTabPrimitive
+      // UI SDK 의 고른 탭은 data-selected 다. shadcn 계약(data-active)으로 잇는다
+      render={slot("tabs-trigger", render, "button", (state) => ({
+        "data-active": flag(state.selected),
+      }))}
       className={cn(
         "cn-tabs-trigger relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap text-foreground/60 transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
         "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
@@ -68,10 +89,14 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
   )
 }
 
-function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
+function TabsContent({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof TabsPanelPrimitive>) {
   return (
-    <TabsPrimitive.Panel
-      data-slot="tabs-content"
+    <TabsPanelPrimitive
+      render={slot("tabs-content", render)}
       className={cn("cn-tabs-content flex-1 outline-none", className)}
       {...props}
     />

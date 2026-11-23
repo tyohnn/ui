@@ -76,7 +76,10 @@ export const collectInPage = ({ selectors, up, prefix, PROPS, BLOCK }) =>
     roots.forEach((root, index) => keys.set(root, roots.length === 1 ? `${prefix}root` : `${prefix}root${index}`));
 
     const isRoot = (element) => roots.includes(element);
-    const elements = roots.flatMap((root) => [root, ...[...root.querySelectorAll("*")].filter((element) => !element.parentElement?.closest("svg"))]);
+    // 다른 뿌리 안에 그려진 뿌리(포털 대신 부모 메뉴 안에 붙는 하위 메뉴 등)는 그 뿌리의 차례에 잰다.
+    // 어디에 붙었든 같은 차례로 세어야 포털로 나가던 판과 키가 맞는다.
+    const ownRoot = (element) => roots.find((root) => root === element) ?? roots.filter((root) => root.contains(element)).reduce((inner, root) => (inner && inner.contains(root) ? root : inner ?? root), undefined);
+    const elements = roots.flatMap((root) => [root, ...[...root.querySelectorAll("*")].filter((element) => !element.parentElement?.closest("svg") && ownRoot(element) === root)]);
 
     for (const element of elements)
     {
@@ -214,7 +217,7 @@ export const coverageSectionsInPage = () => [...document.querySelectorAll("[data
  * measurement.
  *
  * - `sections()` opens the whole template and returns what it declares.
- * - `measure(section)` opens one section, which renders its popups open, and measures the section element
+ * - `measure(section, prepare?)` opens one section, which renders its popups open, runs `prepare(page)`, and measures the section element
  *   together with its portalled popups as further roots — so an open dialog is compared with its trigger.
  * - `shot(path)` saves the section as it currently stands, `close()` ends the page.
  */
@@ -236,15 +239,18 @@ export const coveragePage = async (browser, { url, mode, swap, side = "page" }) 
 
     return {
         side,
+        page,
         sections: async () =>
         {
             await open(null);
 
             return page.evaluate(coverageSectionsInPage);
         },
-        measure: async (section) =>
+        measure: async (section, prepare) =>
         {
             await open(section.name);
+            // 열린 뒤 재기 전에 할 일(예: 컨텍스트 메뉴를 실제 자리에서 다시 열기)
+            if (prepare) await prepare(page);
 
             // The section element first, then each open popup: one call, so slot counters run across them.
             const roots = [`[data-coverage-section="${section.name}"]`, ...section.portals];

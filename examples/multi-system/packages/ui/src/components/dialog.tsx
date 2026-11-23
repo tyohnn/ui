@@ -1,35 +1,68 @@
 "use client"
 
 import * as React from "react"
-import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
+import {
+  Dialog as DialogPrimitive,
+  DialogBackdrop,
+  DialogClose as DialogClosePrimitive,
+  DialogContent as DialogContentPrimitive,
+  DialogDescription as DialogDescriptionPrimitive,
+  DialogTitle as DialogTitlePrimitive,
+  DialogTrigger as DialogTriggerPrimitive,
+} from "@ui-sdk/react/dialog"
 import { cn } from "cn"
 
 import { Button } from "@acme/ui/components/button"
 import { X } from "@acme/ui/icons"
+import { flag, slot } from "@acme/ui/lib/slot"
+import { strings } from "@acme/ui/strings"
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive>) {
+  return <DialogPrimitive {...props} />
 }
 
-function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
-  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+function DialogTrigger({
+  render,
+  ...props
+}: React.ComponentProps<typeof DialogTriggerPrimitive>) {
+  return (
+    <DialogTriggerPrimitive
+      render={slot("dialog-trigger", render, "button", (state) => ({
+        // Base UI 의 계약 이름이다. UI SDK 는 같은 상태를 data-open 으로 쓴다.
+        "data-popup-open": flag(state.open),
+        // Base UI 는 다이얼로그를 여는 단추에도 aria-expanded 를 달았고, 단추 스타일이 그것을 읽어 열린 동안 눌린 모양을 낸다.
+        "aria-expanded": state.open,
+      }))}
+      {...props}
+    />
+  )
 }
 
-function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
-  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+/** UI SDK 의 내용과 배경은 스스로 포털로 나간다. shadcn 의 계약을 지키려고 이름만 남긴다 */
+function DialogPortal({ children }: { children?: React.ReactNode }) {
+  return <>{children}</>
 }
 
-function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
-  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+function DialogClose({
+  render,
+  ...props
+}: React.ComponentProps<typeof DialogClosePrimitive>) {
+  return (
+    <DialogClosePrimitive
+      render={slot("dialog-close", render, "button")}
+      {...props}
+    />
+  )
 }
 
 function DialogOverlay({
   className,
+  render,
   ...props
-}: DialogPrimitive.Backdrop.Props) {
+}: React.ComponentProps<typeof DialogBackdrop>) {
   return (
-    <DialogPrimitive.Backdrop
-      data-slot="dialog-overlay"
+    <DialogBackdrop
+      render={slot("dialog-overlay", render)}
       className={cn("cn-dialog-overlay fixed inset-0 isolate z-50", className)}
       {...props}
     />
@@ -40,15 +73,17 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  render,
   ...props
-}: DialogPrimitive.Popup.Props & {
+}: Omit<React.ComponentProps<typeof DialogContentPrimitive>, "children"> & {
+  children?: React.ReactNode
   showCloseButton?: boolean
 }) {
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Popup
-        data-slot="dialog-content"
+      <DialogContentPrimitive
+        render={slot("dialog-content", render)}
         className={cn(
           "cn-dialog-content fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 outline-none",
           className
@@ -57,8 +92,7 @@ function DialogContent({
       >
         {children}
         {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
+          <DialogClose
             render={
               <Button
                 variant="ghost"
@@ -68,10 +102,10 @@ function DialogContent({
             }
           >
             <X />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
+            <span className="sr-only">{strings.close}</span>
+          </DialogClose>
         )}
-      </DialogPrimitive.Popup>
+      </DialogContentPrimitive>
     </DialogPortal>
   )
 }
@@ -105,18 +139,24 @@ function DialogFooter({
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close render={<Button variant="outline" />}>
-          Close
-        </DialogPrimitive.Close>
+        <DialogClosePrimitive
+          render={slot("button", <Button variant="outline" />, "button")}
+        >
+          {strings.close}
+        </DialogClosePrimitive>
       )}
     </div>
   )
 }
 
-function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
+function DialogTitle({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<typeof DialogTitlePrimitive>) {
   return (
-    <DialogPrimitive.Title
-      data-slot="dialog-title"
+    <DialogTitlePrimitive
+      render={slot("dialog-title", render, "h2")}
       className={cn("cn-dialog-title cn-font-heading", className)}
       {...props}
     />
@@ -125,11 +165,12 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
 
 function DialogDescription({
   className,
+  render,
   ...props
-}: DialogPrimitive.Description.Props) {
+}: React.ComponentProps<typeof DialogDescriptionPrimitive>) {
   return (
-    <DialogPrimitive.Description
-      data-slot="dialog-description"
+    <DialogDescriptionPrimitive
+      render={slot("dialog-description", render, "p")}
       className={cn("cn-dialog-description", className)}
       {...props}
     />

@@ -1,7 +1,7 @@
 {
     "version": 1,
     "source": {
-        "commit": "19b62a780c8aef4c07766bd0792648039500b328",
+        "commit": "82410795d7f065f755ce8e15f7bf7921ac039ccb",
         "kind": "local"
     },
     "project": "monorepo",
@@ -16,7 +16,8 @@
         "icons": [
             "hugeicons",
             "lucide"
-        ]
+        ],
+        "locale": "en"
     },
     "apps": {
         "apps/admin": {
@@ -58,23 +59,18 @@
             "pretendard"
         ],
         "packages/ui/package.json": [
-            "@base-ui/react",
             "@hugeicons/core-free-icons",
             "@hugeicons/react",
             "@shadcn/react",
             "@types/react",
             "@types/react-dom",
+            "@ui-sdk/core",
+            "@ui-sdk/react",
             "class-variance-authority",
-            "cmdk",
             "cn",
-            "date-fns",
-            "embla-carousel-react",
-            "input-otp",
             "lucide-react",
             "react",
-            "react-day-picker",
             "react-dom",
-            "react-resizable-panels",
             "recharts",
             "shadcn",
             "tailwindcss",
@@ -109,11 +105,11 @@
         },
         "packages/ui/src/components/accordion.tsx": {
             "from": "registry/ui/components/accordion.tsx",
-            "hash": "sha256-f5a9a1680da944d8"
+            "hash": "sha256-14c4e1635593c722"
         },
         "packages/ui/src/components/alert-dialog.tsx": {
             "from": "registry/ui/components/alert-dialog.tsx",
-            "hash": "sha256-c769bb1d2a73c838"
+            "hash": "sha256-f3642fae5bbdefc9"
         },
         "packages/ui/src/components/alert.tsx": {
             "from": "registry/ui/components/alert.tsx",
@@ -121,39 +117,39 @@
         },
         "packages/ui/src/components/aspect-ratio.tsx": {
             "from": "registry/ui/components/aspect-ratio.tsx",
-            "hash": "sha256-6df19df6b983c450"
+            "hash": "sha256-16a03b9c5f44b2a2"
         },
         "packages/ui/src/components/attachment.tsx": {
             "from": "registry/ui/components/attachment.tsx",
-            "hash": "sha256-a19b3e569b216cfe"
+            "hash": "sha256-326ac5dd3d21f1ce"
         },
         "packages/ui/src/components/avatar.tsx": {
             "from": "registry/ui/components/avatar.tsx",
-            "hash": "sha256-a9b3c857517e6c55"
+            "hash": "sha256-5288ef5d587099fe"
         },
         "packages/ui/src/components/badge.tsx": {
             "from": "registry/ui/components/badge.tsx",
-            "hash": "sha256-cad65ac68df79093"
+            "hash": "sha256-90ef875175c49300"
         },
         "packages/ui/src/components/breadcrumb.tsx": {
             "from": "registry/ui/components/breadcrumb.tsx",
-            "hash": "sha256-e4ef51dad93c9426"
+            "hash": "sha256-9c05671cb615aa61"
         },
         "packages/ui/src/components/bubble.tsx": {
             "from": "registry/ui/components/bubble.tsx",
-            "hash": "sha256-7b997c07146c49b4"
+            "hash": "sha256-693a861daf82aa3d"
         },
         "packages/ui/src/components/button-group.tsx": {
             "from": "registry/ui/components/button-group.tsx",
-            "hash": "sha256-6b068331addaaedc"
+            "hash": "sha256-e7f74e97e0c7da81"
         },
         "packages/ui/src/components/button.tsx": {
             "from": "registry/ui/components/button.tsx",
-            "hash": "sha256-74f982d7ad7a764e"
+            "hash": "sha256-959674641bebccf3"
         },
         "packages/ui/src/components/calendar.tsx": {
             "from": "registry/ui/components/calendar.tsx",
-            "hash": "sha256-9d743a200541c1a2"
+            "hash": "sha256-940b205a63f64c14"
         },
         "packages/ui/src/components/card.tsx": {
             "from": "registry/ui/components/card.tsx",
@@ -161,47 +157,47 @@
         },
         "packages/ui/src/components/carousel.tsx": {
             "from": "registry/ui/components/carousel.tsx",
-            "hash": "sha256-5e280eca184406d9"
+            "hash": "sha256-9c7874fe11ea3447"
         },
         "packages/ui/src/components/chart.tsx": {
             "from": "registry/ui/components/chart.tsx",
-            "hash": "sha256-b80d2713d72bf2c2"
+            "hash": "sha256-8a886dc934d8c94a"
         },
         "packages/ui/src/components/checkbox.tsx": {
             "from": "registry/ui/components/checkbox.tsx",
-            "hash": "sha256-5b6f7c3c718dfb2a"
+            "hash": "sha256-7c54d4b7b8f185ce"
         },
         "packages/ui/src/components/collapsible.tsx": {
             "from": "registry/ui/components/collapsible.tsx",
-            "hash": "sha256-ead4349ff7b01d69"
+            "hash": "sha256-e9487174ec73cf5b"
         },
         "packages/ui/src/components/combobox.tsx": {
             "from": "registry/ui/components/combobox.tsx",
-            "hash": "sha256-4f8d8ede7871c117"
+            "hash": "sha256-192e26cbece4750f"
         },
         "packages/ui/src/components/command.tsx": {
             "from": "registry/ui/components/command.tsx",
-            "hash": "sha256-983ca6740a8a80b5"
+            "hash": "sha256-0a2f144a9abd7fc2"
         },
         "packages/ui/src/components/context-menu.tsx": {
             "from": "registry/ui/components/context-menu.tsx",
-            "hash": "sha256-dcb4dbae72224639"
+            "hash": "sha256-f1ec814ea4f823a0"
         },
         "packages/ui/src/components/dialog.tsx": {
             "from": "registry/ui/components/dialog.tsx",
-            "hash": "sha256-a9d37d91e3166d20"
+            "hash": "sha256-ad7c52cfa3d3a77a"
         },
         "packages/ui/src/components/direction.tsx": {
             "from": "registry/ui/components/direction.tsx",
-            "hash": "sha256-661ff5b9c0dc26ed"
+            "hash": "sha256-86dc5fbd30960bc2"
         },
         "packages/ui/src/components/drawer.tsx": {
             "from": "registry/ui/components/drawer.tsx",
-            "hash": "sha256-7180299dff3cc165"
+            "hash": "sha256-f5d51c8294976c11"
         },
         "packages/ui/src/components/dropdown-menu.tsx": {
             "from": "registry/ui/components/dropdown-menu.tsx",
-            "hash": "sha256-9ac2dcfb9f890ba4"
+            "hash": "sha256-ded88c49708df470"
         },
         "packages/ui/src/components/empty.tsx": {
             "from": "registry/ui/components/empty.tsx",
@@ -213,7 +209,7 @@
         },
         "packages/ui/src/components/hover-card.tsx": {
             "from": "registry/ui/components/hover-card.tsx",
-            "hash": "sha256-9c1412f06a968da1"
+            "hash": "sha256-2e044cdc114f45af"
         },
         "packages/ui/src/components/input-group.tsx": {
             "from": "registry/ui/components/input-group.tsx",
@@ -221,15 +217,15 @@
         },
         "packages/ui/src/components/input-otp.tsx": {
             "from": "registry/ui/components/input-otp.tsx",
-            "hash": "sha256-72de47e05137a7e8"
+            "hash": "sha256-6e4e8f378a8b05d4"
         },
         "packages/ui/src/components/input.tsx": {
             "from": "registry/ui/components/input.tsx",
-            "hash": "sha256-00213ec177e4556e"
+            "hash": "sha256-4b01c006abf8826f"
         },
         "packages/ui/src/components/item.tsx": {
             "from": "registry/ui/components/item.tsx",
-            "hash": "sha256-6d02b56130bfd960"
+            "hash": "sha256-95fbb2308652d771"
         },
         "packages/ui/src/components/kbd.tsx": {
             "from": "registry/ui/components/kbd.tsx",
@@ -241,15 +237,15 @@
         },
         "packages/ui/src/components/marker.tsx": {
             "from": "registry/ui/components/marker.tsx",
-            "hash": "sha256-f7daf3c6f9ae5eee"
+            "hash": "sha256-5adc29f7a9b04d4e"
         },
         "packages/ui/src/components/menubar.tsx": {
             "from": "registry/ui/components/menubar.tsx",
-            "hash": "sha256-a9d345fb5b7b3e78"
+            "hash": "sha256-3780a54c094c77df"
         },
         "packages/ui/src/components/message-scroller.tsx": {
             "from": "registry/ui/components/message-scroller.tsx",
-            "hash": "sha256-85d5ed8eeebda08f"
+            "hash": "sha256-ad1dc2e70a79e3dd"
         },
         "packages/ui/src/components/message.tsx": {
             "from": "registry/ui/components/message.tsx",
@@ -261,51 +257,51 @@
         },
         "packages/ui/src/components/navigation-menu.tsx": {
             "from": "registry/ui/components/navigation-menu.tsx",
-            "hash": "sha256-fad96780cd29846f"
+            "hash": "sha256-d5eea497074c3711"
         },
         "packages/ui/src/components/pagination.tsx": {
             "from": "registry/ui/components/pagination.tsx",
-            "hash": "sha256-8b2a79ee7d639d5c"
+            "hash": "sha256-f3bac82eca461d66"
         },
         "packages/ui/src/components/popover.tsx": {
             "from": "registry/ui/components/popover.tsx",
-            "hash": "sha256-935bab728b60fd86"
+            "hash": "sha256-1be604486d8c8a70"
         },
         "packages/ui/src/components/progress.tsx": {
             "from": "registry/ui/components/progress.tsx",
-            "hash": "sha256-00afc4c7f319f5f5"
+            "hash": "sha256-dc3a1855e030bf2c"
         },
         "packages/ui/src/components/questionnaire.tsx": {
             "from": "registry/ui/components/questionnaire.tsx",
-            "hash": "sha256-f9749fdde6f99fc6"
+            "hash": "sha256-10980b0de2764459"
         },
         "packages/ui/src/components/radio-group.tsx": {
             "from": "registry/ui/components/radio-group.tsx",
-            "hash": "sha256-c27fecb49f924d32"
+            "hash": "sha256-bc5d693e2f5e5566"
         },
         "packages/ui/src/components/resizable.tsx": {
             "from": "registry/ui/components/resizable.tsx",
-            "hash": "sha256-7971b48619d5e322"
+            "hash": "sha256-7501ca56cf28ad7a"
         },
         "packages/ui/src/components/scroll-area.tsx": {
             "from": "registry/ui/components/scroll-area.tsx",
-            "hash": "sha256-214525d7c69e2fae"
+            "hash": "sha256-667ba999d0cb00a7"
         },
         "packages/ui/src/components/select.tsx": {
             "from": "registry/ui/components/select.tsx",
-            "hash": "sha256-be6b1faae348b5a1"
+            "hash": "sha256-2f795eeaf151ccd9"
         },
         "packages/ui/src/components/separator.tsx": {
             "from": "registry/ui/components/separator.tsx",
-            "hash": "sha256-ee31a3c71de44146"
+            "hash": "sha256-c6b492fd77b808ad"
         },
         "packages/ui/src/components/sheet.tsx": {
             "from": "registry/ui/components/sheet.tsx",
-            "hash": "sha256-17b47df4ac2a8a88"
+            "hash": "sha256-09542428e801987f"
         },
         "packages/ui/src/components/sidebar.tsx": {
             "from": "registry/ui/components/sidebar.tsx",
-            "hash": "sha256-50cdee50d216d492"
+            "hash": "sha256-7a9c95b992d584d2"
         },
         "packages/ui/src/components/skeleton.tsx": {
             "from": "registry/ui/components/skeleton.tsx",
@@ -313,23 +309,23 @@
         },
         "packages/ui/src/components/slider.tsx": {
             "from": "registry/ui/components/slider.tsx",
-            "hash": "sha256-0255828e9c447758"
+            "hash": "sha256-daa3442ce07a3585"
         },
         "packages/ui/src/components/spinner.tsx": {
             "from": "registry/ui/components/spinner.tsx",
-            "hash": "sha256-b282b1866618565a"
+            "hash": "sha256-7634f8d9147de7ff"
         },
         "packages/ui/src/components/switch.tsx": {
             "from": "registry/ui/components/switch.tsx",
-            "hash": "sha256-87aaf20b3209fabb"
+            "hash": "sha256-ae1a3d9c37048004"
         },
         "packages/ui/src/components/table.tsx": {
             "from": "registry/ui/components/table.tsx",
-            "hash": "sha256-77d15e11fcf1fb2f"
+            "hash": "sha256-41410505c9c95fff"
         },
         "packages/ui/src/components/tabs.tsx": {
             "from": "registry/ui/components/tabs.tsx",
-            "hash": "sha256-1eda25325a7aae91"
+            "hash": "sha256-11bc4f76e2326820"
         },
         "packages/ui/src/components/textarea.tsx": {
             "from": "registry/ui/components/textarea.tsx",
@@ -337,19 +333,19 @@
         },
         "packages/ui/src/components/toast.tsx": {
             "from": "registry/ui/components/toast.tsx",
-            "hash": "sha256-03d2e1b5c5568d30"
+            "hash": "sha256-1f029e2855f7e274"
         },
         "packages/ui/src/components/toggle-group.tsx": {
             "from": "registry/ui/components/toggle-group.tsx",
-            "hash": "sha256-f26d3f3e4f46c203"
+            "hash": "sha256-ac6c0619b7cb153a"
         },
         "packages/ui/src/components/toggle.tsx": {
             "from": "registry/ui/components/toggle.tsx",
-            "hash": "sha256-b53df3a8d6ad7ae3"
+            "hash": "sha256-ccb67450760bddde"
         },
         "packages/ui/src/components/tooltip.tsx": {
             "from": "registry/ui/components/tooltip.tsx",
-            "hash": "sha256-dc5ec917d8276af9"
+            "hash": "sha256-564b9ef3d882fb7f"
         },
         "packages/ui/src/hooks/use-mobile.ts": {
             "from": "registry/ui/hooks/use-mobile.ts",
@@ -365,27 +361,51 @@
         },
         "packages/ui/src/icons/libraries/hugeicons.tsx": {
             "from": "registry/ui/icons/libraries/hugeicons.tsx",
-            "hash": "sha256-4ceadf7e3017f60d"
+            "hash": "sha256-b2325a7f98a3a999"
         },
         "packages/ui/src/icons/libraries/lucide.tsx": {
             "from": "registry/ui/icons/libraries/lucide.tsx",
-            "hash": "sha256-d99547776cdbb29d"
+            "hash": "sha256-00853785cf874c08"
         },
         "packages/ui/src/icons/names.ts": {
             "from": "registry/ui/icons/names.ts",
-            "hash": "sha256-01e629dcc0983e45"
+            "hash": "sha256-281eacb26f2b3b99"
+        },
+        "packages/ui/src/lib/popup.ts": {
+            "from": "registry/ui/lib/popup.ts",
+            "hash": "sha256-bf4ebcfbad01dd70"
+        },
+        "packages/ui/src/lib/slot.ts": {
+            "from": "registry/ui/lib/slot.ts",
+            "hash": "sha256-b8f84c0a30f638a8"
         },
         "packages/ui/src/lib/utils.ts": {
             "from": "registry/ui/lib/utils.ts",
             "hash": "sha256-14300d758170c270"
         },
+        "packages/ui/src/strings/index.ts": {
+            "from": "generated:strings/index.ts",
+            "hash": "sha256-11729d8766d18cf9"
+        },
+        "packages/ui/src/strings/locales/en.ts": {
+            "from": "registry/ui/strings/locales/en.ts",
+            "hash": "sha256-fa61081c0b3e59de"
+        },
+        "packages/ui/src/strings/names.ts": {
+            "from": "registry/ui/strings/names.ts",
+            "hash": "sha256-afcc840ddac9f0b3"
+        },
         "packages/ui/src/systems/graphite/components/_control-family.css": {
             "from": "registry/systems/graphite/styles/components/_control-family.css",
-            "hash": "sha256-eab7dcc9aad7ef49"
+            "hash": "sha256-183ef63e1cab231d"
         },
         "packages/ui/src/systems/graphite/components/_menu-family.css": {
             "from": "registry/systems/graphite/styles/components/_menu-family.css",
-            "hash": "sha256-2e1aa30284a70c14"
+            "hash": "sha256-ecc6a2bc5c3d24b1"
+        },
+        "packages/ui/src/systems/graphite/components/_roles.css": {
+            "from": "registry/systems/graphite/styles/components/_roles.css",
+            "hash": "sha256-0829cf43884cba23"
         },
         "packages/ui/src/systems/graphite/components/_shared.css": {
             "from": "registry/systems/graphite/styles/components/_shared.css",
@@ -393,15 +413,15 @@
         },
         "packages/ui/src/systems/graphite/components/_surface-family.css": {
             "from": "registry/systems/graphite/styles/components/_surface-family.css",
-            "hash": "sha256-61f975179413bdce"
+            "hash": "sha256-639ba35551cb832d"
         },
         "packages/ui/src/systems/graphite/components/accordion.css": {
             "from": "registry/systems/graphite/styles/components/accordion.css",
-            "hash": "sha256-d98b6ee8a636d322"
+            "hash": "sha256-9a1faeb8bc8ba9f0"
         },
         "packages/ui/src/systems/graphite/components/alert-dialog.css": {
             "from": "registry/systems/graphite/styles/components/alert-dialog.css",
-            "hash": "sha256-710c69ad95206bb0"
+            "hash": "sha256-fcdc64c8fa725e88"
         },
         "packages/ui/src/systems/graphite/components/alert.css": {
             "from": "registry/systems/graphite/styles/components/alert.css",
@@ -409,7 +429,7 @@
         },
         "packages/ui/src/systems/graphite/components/attachment.css": {
             "from": "registry/systems/graphite/styles/components/attachment.css",
-            "hash": "sha256-d4065678e5516b7c"
+            "hash": "sha256-7dc3d24cf739d662"
         },
         "packages/ui/src/systems/graphite/components/avatar.css": {
             "from": "registry/systems/graphite/styles/components/avatar.css",
@@ -425,7 +445,7 @@
         },
         "packages/ui/src/systems/graphite/components/bubble.css": {
             "from": "registry/systems/graphite/styles/components/bubble.css",
-            "hash": "sha256-47558e3feab6c1c0"
+            "hash": "sha256-4999040ed3327499"
         },
         "packages/ui/src/systems/graphite/components/button-group.css": {
             "from": "registry/systems/graphite/styles/components/button-group.css",
@@ -433,15 +453,15 @@
         },
         "packages/ui/src/systems/graphite/components/button.css": {
             "from": "registry/systems/graphite/styles/components/button.css",
-            "hash": "sha256-2036896000e7bc21"
+            "hash": "sha256-20efb0e68c38368c"
         },
         "packages/ui/src/systems/graphite/components/calendar.css": {
             "from": "registry/systems/graphite/styles/components/calendar.css",
-            "hash": "sha256-cf4bd8031cdc877a"
+            "hash": "sha256-369a05f104189302"
         },
         "packages/ui/src/systems/graphite/components/card.css": {
             "from": "registry/systems/graphite/styles/components/card.css",
-            "hash": "sha256-645270700195b4da"
+            "hash": "sha256-2d78a25c85746470"
         },
         "packages/ui/src/systems/graphite/components/carousel.css": {
             "from": "registry/systems/graphite/styles/components/carousel.css",
@@ -449,35 +469,35 @@
         },
         "packages/ui/src/systems/graphite/components/chart.css": {
             "from": "registry/systems/graphite/styles/components/chart.css",
-            "hash": "sha256-2c8802c3ee761ced"
+            "hash": "sha256-75f67817b8b67381"
         },
         "packages/ui/src/systems/graphite/components/checkbox.css": {
             "from": "registry/systems/graphite/styles/components/checkbox.css",
-            "hash": "sha256-59519324030ce0a0"
+            "hash": "sha256-aec25c5a49dfaf21"
         },
         "packages/ui/src/systems/graphite/components/combobox.css": {
             "from": "registry/systems/graphite/styles/components/combobox.css",
-            "hash": "sha256-67baeccbaf4df8cd"
+            "hash": "sha256-2c0f9628c439b0cd"
         },
         "packages/ui/src/systems/graphite/components/command.css": {
             "from": "registry/systems/graphite/styles/components/command.css",
-            "hash": "sha256-35c14ac73cde1096"
+            "hash": "sha256-836d59a323cbb600"
         },
         "packages/ui/src/systems/graphite/components/context-menu.css": {
             "from": "registry/systems/graphite/styles/components/context-menu.css",
-            "hash": "sha256-b8800ddd07c2bd76"
+            "hash": "sha256-cfa7b87839131ebc"
         },
         "packages/ui/src/systems/graphite/components/dialog.css": {
             "from": "registry/systems/graphite/styles/components/dialog.css",
-            "hash": "sha256-6290a6f43d337644"
+            "hash": "sha256-0610ca1bf54d92e2"
         },
         "packages/ui/src/systems/graphite/components/drawer.css": {
             "from": "registry/systems/graphite/styles/components/drawer.css",
-            "hash": "sha256-d6f5ca9bd5862cbd"
+            "hash": "sha256-df12fd759eef5f60"
         },
         "packages/ui/src/systems/graphite/components/dropdown-menu.css": {
             "from": "registry/systems/graphite/styles/components/dropdown-menu.css",
-            "hash": "sha256-3ed2e99e55680196"
+            "hash": "sha256-5a315fd5985eeb90"
         },
         "packages/ui/src/systems/graphite/components/empty.css": {
             "from": "registry/systems/graphite/styles/components/empty.css",
@@ -485,27 +505,27 @@
         },
         "packages/ui/src/systems/graphite/components/field.css": {
             "from": "registry/systems/graphite/styles/components/field.css",
-            "hash": "sha256-86202bbf2dc38a9f"
+            "hash": "sha256-22943d571c13e2de"
         },
         "packages/ui/src/systems/graphite/components/hover-card.css": {
             "from": "registry/systems/graphite/styles/components/hover-card.css",
-            "hash": "sha256-c6ff22072d823456"
+            "hash": "sha256-64a20b275afd98d7"
         },
         "packages/ui/src/systems/graphite/components/input-group.css": {
             "from": "registry/systems/graphite/styles/components/input-group.css",
-            "hash": "sha256-a96e5694f9b68ed1"
+            "hash": "sha256-271dbc55c5a14851"
         },
         "packages/ui/src/systems/graphite/components/input-otp.css": {
             "from": "registry/systems/graphite/styles/components/input-otp.css",
-            "hash": "sha256-6c51334b1c2bc79d"
+            "hash": "sha256-76fedea4f45084d6"
         },
         "packages/ui/src/systems/graphite/components/input.css": {
             "from": "registry/systems/graphite/styles/components/input.css",
-            "hash": "sha256-bd10f967339003cb"
+            "hash": "sha256-cad89106e6a71fb1"
         },
         "packages/ui/src/systems/graphite/components/item.css": {
             "from": "registry/systems/graphite/styles/components/item.css",
-            "hash": "sha256-88606344a39c85ce"
+            "hash": "sha256-6acca73b0eceff7e"
         },
         "packages/ui/src/systems/graphite/components/kbd.css": {
             "from": "registry/systems/graphite/styles/components/kbd.css",
@@ -521,7 +541,7 @@
         },
         "packages/ui/src/systems/graphite/components/menubar.css": {
             "from": "registry/systems/graphite/styles/components/menubar.css",
-            "hash": "sha256-12af7facce535f7b"
+            "hash": "sha256-370cadd0c7bc95e9"
         },
         "packages/ui/src/systems/graphite/components/message-scroller.css": {
             "from": "registry/systems/graphite/styles/components/message-scroller.css",
@@ -533,11 +553,11 @@
         },
         "packages/ui/src/systems/graphite/components/native-select.css": {
             "from": "registry/systems/graphite/styles/components/native-select.css",
-            "hash": "sha256-d2c27dbe4b5dd9ba"
+            "hash": "sha256-91965cc9b94283e3"
         },
         "packages/ui/src/systems/graphite/components/navigation-menu.css": {
             "from": "registry/systems/graphite/styles/components/navigation-menu.css",
-            "hash": "sha256-384bbb6825d02ec9"
+            "hash": "sha256-0c4d9c902e3cad75"
         },
         "packages/ui/src/systems/graphite/components/pagination.css": {
             "from": "registry/systems/graphite/styles/components/pagination.css",
@@ -545,7 +565,7 @@
         },
         "packages/ui/src/systems/graphite/components/popover.css": {
             "from": "registry/systems/graphite/styles/components/popover.css",
-            "hash": "sha256-6232755ae99ef7b8"
+            "hash": "sha256-12783910edc34581"
         },
         "packages/ui/src/systems/graphite/components/progress.css": {
             "from": "registry/systems/graphite/styles/components/progress.css",
@@ -553,11 +573,11 @@
         },
         "packages/ui/src/systems/graphite/components/questionnaire.css": {
             "from": "registry/systems/graphite/styles/components/questionnaire.css",
-            "hash": "sha256-9da943bed193f899"
+            "hash": "sha256-d9c32c7520807970"
         },
         "packages/ui/src/systems/graphite/components/radio-group.css": {
             "from": "registry/systems/graphite/styles/components/radio-group.css",
-            "hash": "sha256-7235836bc133faca"
+            "hash": "sha256-e47b3847abc9db5d"
         },
         "packages/ui/src/systems/graphite/components/resizable.css": {
             "from": "registry/systems/graphite/styles/components/resizable.css",
@@ -569,7 +589,7 @@
         },
         "packages/ui/src/systems/graphite/components/select.css": {
             "from": "registry/systems/graphite/styles/components/select.css",
-            "hash": "sha256-55c4fb503d9ac4f1"
+            "hash": "sha256-10c464492a9c7b88"
         },
         "packages/ui/src/systems/graphite/components/separator.css": {
             "from": "registry/systems/graphite/styles/components/separator.css",
@@ -577,27 +597,27 @@
         },
         "packages/ui/src/systems/graphite/components/sheet.css": {
             "from": "registry/systems/graphite/styles/components/sheet.css",
-            "hash": "sha256-e6dc889c9094f2cc"
+            "hash": "sha256-2d4c4e2280386719"
         },
         "packages/ui/src/systems/graphite/components/sidebar.css": {
             "from": "registry/systems/graphite/styles/components/sidebar.css",
-            "hash": "sha256-8f2915e66fb403ea"
+            "hash": "sha256-ead937c29cef7dfd"
         },
         "packages/ui/src/systems/graphite/components/skeleton.css": {
             "from": "registry/systems/graphite/styles/components/skeleton.css",
-            "hash": "sha256-bf1641ecf9e7060a"
+            "hash": "sha256-7912b07aec063cb5"
         },
         "packages/ui/src/systems/graphite/components/slider.css": {
             "from": "registry/systems/graphite/styles/components/slider.css",
-            "hash": "sha256-cfa91701914a9157"
+            "hash": "sha256-829cd9879a614b53"
         },
         "packages/ui/src/systems/graphite/components/switch.css": {
             "from": "registry/systems/graphite/styles/components/switch.css",
-            "hash": "sha256-c55d9b9963563dd7"
+            "hash": "sha256-2b5776722a0776a6"
         },
         "packages/ui/src/systems/graphite/components/table.css": {
             "from": "registry/systems/graphite/styles/components/table.css",
-            "hash": "sha256-15983ae84bed8c80"
+            "hash": "sha256-1e54894302495797"
         },
         "packages/ui/src/systems/graphite/components/tabs.css": {
             "from": "registry/systems/graphite/styles/components/tabs.css",
@@ -605,7 +625,7 @@
         },
         "packages/ui/src/systems/graphite/components/textarea.css": {
             "from": "registry/systems/graphite/styles/components/textarea.css",
-            "hash": "sha256-ebd4663375571f60"
+            "hash": "sha256-bde3864729f3512b"
         },
         "packages/ui/src/systems/graphite/components/toast.css": {
             "from": "registry/systems/graphite/styles/components/toast.css",
@@ -617,31 +637,35 @@
         },
         "packages/ui/src/systems/graphite/components/toggle.css": {
             "from": "registry/systems/graphite/styles/components/toggle.css",
-            "hash": "sha256-a2ca7c99af53477e"
+            "hash": "sha256-a71ca1baeaaf0e6e"
         },
         "packages/ui/src/systems/graphite/components/tooltip.css": {
             "from": "registry/systems/graphite/styles/components/tooltip.css",
-            "hash": "sha256-e0857aaba4dd1b16"
+            "hash": "sha256-f175a6f8f0d9e698"
         },
         "packages/ui/src/systems/graphite/DESIGN.md": {
             "from": "registry/systems/graphite/DESIGN.md",
-            "hash": "sha256-c835f7055b36eb41"
+            "hash": "sha256-895067a64c1e79fc"
         },
         "packages/ui/src/systems/graphite/globals.css": {
             "from": "registry/systems/graphite/styles/globals.css",
-            "hash": "sha256-229f6a4c2546da51"
+            "hash": "sha256-43447c3b70fe864a"
         },
         "packages/ui/src/systems/graphite/style.css": {
             "from": "registry/systems/graphite/styles/style.css",
-            "hash": "sha256-7d31f1fb38434827"
+            "hash": "sha256-345a0e4613b6f979"
         },
         "packages/ui/src/systems/graphite/system.json": {
             "from": "registry/systems/graphite/system.json",
-            "hash": "sha256-8de062409e12db15"
+            "hash": "sha256-43c8d06be1965474"
+        },
+        "packages/ui/src/systems/graphite/theme.css": {
+            "from": "registry/systems/graphite/styles/theme.css",
+            "hash": "sha256-6b6a68ac51de60eb"
         },
         "packages/ui/src/systems/graphite/tokens.css": {
             "from": "registry/systems/graphite/styles/tokens.css",
-            "hash": "sha256-24af60acf053cf38"
+            "hash": "sha256-d9a6438d6fc5722d"
         },
         "packages/ui/src/systems/graphite/typeset-preset.css": {
             "from": "registry/systems/graphite/styles/typeset-preset.css",
@@ -653,11 +677,15 @@
         },
         "packages/ui/src/systems/mira/components/_control-family.css": {
             "from": "registry/systems/mira/styles/components/_control-family.css",
-            "hash": "sha256-b473c02d99eec08e"
+            "hash": "sha256-7fc6c90c6a17f54b"
         },
         "packages/ui/src/systems/mira/components/_menu-family.css": {
             "from": "registry/systems/mira/styles/components/_menu-family.css",
-            "hash": "sha256-efa0616f1dc66e6f"
+            "hash": "sha256-60ab033996b3fa23"
+        },
+        "packages/ui/src/systems/mira/components/_roles.css": {
+            "from": "registry/systems/mira/styles/components/_roles.css",
+            "hash": "sha256-0829cf43884cba23"
         },
         "packages/ui/src/systems/mira/components/_shared.css": {
             "from": "registry/systems/mira/styles/components/_shared.css",
@@ -665,15 +693,15 @@
         },
         "packages/ui/src/systems/mira/components/_surface-family.css": {
             "from": "registry/systems/mira/styles/components/_surface-family.css",
-            "hash": "sha256-128cf0ffafe8ee53"
+            "hash": "sha256-f0814d49af8c3c52"
         },
         "packages/ui/src/systems/mira/components/accordion.css": {
             "from": "registry/systems/mira/styles/components/accordion.css",
-            "hash": "sha256-d98b6ee8a636d322"
+            "hash": "sha256-9a1faeb8bc8ba9f0"
         },
         "packages/ui/src/systems/mira/components/alert-dialog.css": {
             "from": "registry/systems/mira/styles/components/alert-dialog.css",
-            "hash": "sha256-9fe09038beb97aaa"
+            "hash": "sha256-f047040143dbdcb2"
         },
         "packages/ui/src/systems/mira/components/alert.css": {
             "from": "registry/systems/mira/styles/components/alert.css",
@@ -681,7 +709,7 @@
         },
         "packages/ui/src/systems/mira/components/attachment.css": {
             "from": "registry/systems/mira/styles/components/attachment.css",
-            "hash": "sha256-d4065678e5516b7c"
+            "hash": "sha256-7dc3d24cf739d662"
         },
         "packages/ui/src/systems/mira/components/avatar.css": {
             "from": "registry/systems/mira/styles/components/avatar.css",
@@ -697,7 +725,7 @@
         },
         "packages/ui/src/systems/mira/components/bubble.css": {
             "from": "registry/systems/mira/styles/components/bubble.css",
-            "hash": "sha256-47558e3feab6c1c0"
+            "hash": "sha256-4999040ed3327499"
         },
         "packages/ui/src/systems/mira/components/button-group.css": {
             "from": "registry/systems/mira/styles/components/button-group.css",
@@ -705,15 +733,15 @@
         },
         "packages/ui/src/systems/mira/components/button.css": {
             "from": "registry/systems/mira/styles/components/button.css",
-            "hash": "sha256-60ff45357462c26a"
+            "hash": "sha256-fecf90d536eeb47a"
         },
         "packages/ui/src/systems/mira/components/calendar.css": {
             "from": "registry/systems/mira/styles/components/calendar.css",
-            "hash": "sha256-130b72f56797e5ff"
+            "hash": "sha256-f94887abbb7da8d9"
         },
         "packages/ui/src/systems/mira/components/card.css": {
             "from": "registry/systems/mira/styles/components/card.css",
-            "hash": "sha256-645270700195b4da"
+            "hash": "sha256-2d78a25c85746470"
         },
         "packages/ui/src/systems/mira/components/carousel.css": {
             "from": "registry/systems/mira/styles/components/carousel.css",
@@ -725,31 +753,31 @@
         },
         "packages/ui/src/systems/mira/components/checkbox.css": {
             "from": "registry/systems/mira/styles/components/checkbox.css",
-            "hash": "sha256-59519324030ce0a0"
+            "hash": "sha256-aec25c5a49dfaf21"
         },
         "packages/ui/src/systems/mira/components/combobox.css": {
             "from": "registry/systems/mira/styles/components/combobox.css",
-            "hash": "sha256-67baeccbaf4df8cd"
+            "hash": "sha256-2c0f9628c439b0cd"
         },
         "packages/ui/src/systems/mira/components/command.css": {
             "from": "registry/systems/mira/styles/components/command.css",
-            "hash": "sha256-596177db2e1e39b9"
+            "hash": "sha256-180fcdf79afaa83b"
         },
         "packages/ui/src/systems/mira/components/context-menu.css": {
             "from": "registry/systems/mira/styles/components/context-menu.css",
-            "hash": "sha256-b8800ddd07c2bd76"
+            "hash": "sha256-cfa7b87839131ebc"
         },
         "packages/ui/src/systems/mira/components/dialog.css": {
             "from": "registry/systems/mira/styles/components/dialog.css",
-            "hash": "sha256-6290a6f43d337644"
+            "hash": "sha256-0610ca1bf54d92e2"
         },
         "packages/ui/src/systems/mira/components/drawer.css": {
             "from": "registry/systems/mira/styles/components/drawer.css",
-            "hash": "sha256-d6f5ca9bd5862cbd"
+            "hash": "sha256-df12fd759eef5f60"
         },
         "packages/ui/src/systems/mira/components/dropdown-menu.css": {
             "from": "registry/systems/mira/styles/components/dropdown-menu.css",
-            "hash": "sha256-3ed2e99e55680196"
+            "hash": "sha256-5a315fd5985eeb90"
         },
         "packages/ui/src/systems/mira/components/empty.css": {
             "from": "registry/systems/mira/styles/components/empty.css",
@@ -757,27 +785,27 @@
         },
         "packages/ui/src/systems/mira/components/field.css": {
             "from": "registry/systems/mira/styles/components/field.css",
-            "hash": "sha256-792f79926d365542"
+            "hash": "sha256-fadef77b7642a311"
         },
         "packages/ui/src/systems/mira/components/hover-card.css": {
             "from": "registry/systems/mira/styles/components/hover-card.css",
-            "hash": "sha256-c6ff22072d823456"
+            "hash": "sha256-64a20b275afd98d7"
         },
         "packages/ui/src/systems/mira/components/input-group.css": {
             "from": "registry/systems/mira/styles/components/input-group.css",
-            "hash": "sha256-a96e5694f9b68ed1"
+            "hash": "sha256-271dbc55c5a14851"
         },
         "packages/ui/src/systems/mira/components/input-otp.css": {
             "from": "registry/systems/mira/styles/components/input-otp.css",
-            "hash": "sha256-6c51334b1c2bc79d"
+            "hash": "sha256-76fedea4f45084d6"
         },
         "packages/ui/src/systems/mira/components/input.css": {
             "from": "registry/systems/mira/styles/components/input.css",
-            "hash": "sha256-75004cb6bc4af537"
+            "hash": "sha256-ef6998480ff4df70"
         },
         "packages/ui/src/systems/mira/components/item.css": {
             "from": "registry/systems/mira/styles/components/item.css",
-            "hash": "sha256-88606344a39c85ce"
+            "hash": "sha256-6acca73b0eceff7e"
         },
         "packages/ui/src/systems/mira/components/kbd.css": {
             "from": "registry/systems/mira/styles/components/kbd.css",
@@ -793,7 +821,7 @@
         },
         "packages/ui/src/systems/mira/components/menubar.css": {
             "from": "registry/systems/mira/styles/components/menubar.css",
-            "hash": "sha256-32c169c3994fc338"
+            "hash": "sha256-ce104981bf9df0c1"
         },
         "packages/ui/src/systems/mira/components/message-scroller.css": {
             "from": "registry/systems/mira/styles/components/message-scroller.css",
@@ -805,11 +833,11 @@
         },
         "packages/ui/src/systems/mira/components/native-select.css": {
             "from": "registry/systems/mira/styles/components/native-select.css",
-            "hash": "sha256-a06672b909411a9c"
+            "hash": "sha256-d797d2398b9244ad"
         },
         "packages/ui/src/systems/mira/components/navigation-menu.css": {
             "from": "registry/systems/mira/styles/components/navigation-menu.css",
-            "hash": "sha256-37eeae7b57eb5610"
+            "hash": "sha256-d8e62a83183b5879"
         },
         "packages/ui/src/systems/mira/components/pagination.css": {
             "from": "registry/systems/mira/styles/components/pagination.css",
@@ -817,7 +845,7 @@
         },
         "packages/ui/src/systems/mira/components/popover.css": {
             "from": "registry/systems/mira/styles/components/popover.css",
-            "hash": "sha256-6232755ae99ef7b8"
+            "hash": "sha256-12783910edc34581"
         },
         "packages/ui/src/systems/mira/components/progress.css": {
             "from": "registry/systems/mira/styles/components/progress.css",
@@ -825,11 +853,11 @@
         },
         "packages/ui/src/systems/mira/components/questionnaire.css": {
             "from": "registry/systems/mira/styles/components/questionnaire.css",
-            "hash": "sha256-819e69dfd93cb7e7"
+            "hash": "sha256-1c8d36aa05945c56"
         },
         "packages/ui/src/systems/mira/components/radio-group.css": {
             "from": "registry/systems/mira/styles/components/radio-group.css",
-            "hash": "sha256-b7fde9148de83e67"
+            "hash": "sha256-66d6a4ae80854283"
         },
         "packages/ui/src/systems/mira/components/resizable.css": {
             "from": "registry/systems/mira/styles/components/resizable.css",
@@ -841,7 +869,7 @@
         },
         "packages/ui/src/systems/mira/components/select.css": {
             "from": "registry/systems/mira/styles/components/select.css",
-            "hash": "sha256-9877098a17c2de61"
+            "hash": "sha256-c7d6f97d4853369f"
         },
         "packages/ui/src/systems/mira/components/separator.css": {
             "from": "registry/systems/mira/styles/components/separator.css",
@@ -849,27 +877,27 @@
         },
         "packages/ui/src/systems/mira/components/sheet.css": {
             "from": "registry/systems/mira/styles/components/sheet.css",
-            "hash": "sha256-e6dc889c9094f2cc"
+            "hash": "sha256-2d4c4e2280386719"
         },
         "packages/ui/src/systems/mira/components/sidebar.css": {
             "from": "registry/systems/mira/styles/components/sidebar.css",
-            "hash": "sha256-f0d9b5347da13195"
+            "hash": "sha256-19988d1e092ccb45"
         },
         "packages/ui/src/systems/mira/components/skeleton.css": {
             "from": "registry/systems/mira/styles/components/skeleton.css",
-            "hash": "sha256-bf1641ecf9e7060a"
+            "hash": "sha256-7912b07aec063cb5"
         },
         "packages/ui/src/systems/mira/components/slider.css": {
             "from": "registry/systems/mira/styles/components/slider.css",
-            "hash": "sha256-cfa91701914a9157"
+            "hash": "sha256-829cd9879a614b53"
         },
         "packages/ui/src/systems/mira/components/switch.css": {
             "from": "registry/systems/mira/styles/components/switch.css",
-            "hash": "sha256-c55d9b9963563dd7"
+            "hash": "sha256-2b5776722a0776a6"
         },
         "packages/ui/src/systems/mira/components/table.css": {
             "from": "registry/systems/mira/styles/components/table.css",
-            "hash": "sha256-15983ae84bed8c80"
+            "hash": "sha256-1e54894302495797"
         },
         "packages/ui/src/systems/mira/components/tabs.css": {
             "from": "registry/systems/mira/styles/components/tabs.css",
@@ -877,7 +905,7 @@
         },
         "packages/ui/src/systems/mira/components/textarea.css": {
             "from": "registry/systems/mira/styles/components/textarea.css",
-            "hash": "sha256-ebd4663375571f60"
+            "hash": "sha256-bde3864729f3512b"
         },
         "packages/ui/src/systems/mira/components/toast.css": {
             "from": "registry/systems/mira/styles/components/toast.css",
@@ -889,31 +917,35 @@
         },
         "packages/ui/src/systems/mira/components/toggle.css": {
             "from": "registry/systems/mira/styles/components/toggle.css",
-            "hash": "sha256-989f7dffe5bb5fd8"
+            "hash": "sha256-51753a0373e3b382"
         },
         "packages/ui/src/systems/mira/components/tooltip.css": {
             "from": "registry/systems/mira/styles/components/tooltip.css",
-            "hash": "sha256-e0857aaba4dd1b16"
+            "hash": "sha256-f175a6f8f0d9e698"
         },
         "packages/ui/src/systems/mira/DESIGN.md": {
             "from": "registry/systems/mira/DESIGN.md",
-            "hash": "sha256-6134e4fda5b878f3"
+            "hash": "sha256-0f95da433eac2334"
         },
         "packages/ui/src/systems/mira/globals.css": {
             "from": "registry/systems/mira/styles/globals.css",
-            "hash": "sha256-4cccce0abaada1d1"
+            "hash": "sha256-39da1fa4b7e53af0"
         },
         "packages/ui/src/systems/mira/style.css": {
             "from": "registry/systems/mira/styles/style.css",
-            "hash": "sha256-7d31f1fb38434827"
+            "hash": "sha256-345a0e4613b6f979"
         },
         "packages/ui/src/systems/mira/system.json": {
             "from": "registry/systems/mira/system.json",
-            "hash": "sha256-8ab99ff54af3bbfa"
+            "hash": "sha256-975ec4f53aa7e127"
+        },
+        "packages/ui/src/systems/mira/theme.css": {
+            "from": "registry/systems/mira/styles/theme.css",
+            "hash": "sha256-fd9bc9a02b90e929"
         },
         "packages/ui/src/systems/mira/tokens.css": {
             "from": "registry/systems/mira/styles/tokens.css",
-            "hash": "sha256-7e2da090cb5d9e65"
+            "hash": "sha256-c785f920607e7430"
         },
         "packages/ui/src/systems/mira/typeset-preset.css": {
             "from": "registry/systems/mira/styles/typeset-preset.css",

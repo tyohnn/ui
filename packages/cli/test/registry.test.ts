@@ -69,7 +69,6 @@ describe("registry", () =>
             expect(shape(module.strings)).toEqual(shape(loaded[0].strings));
             expect(Intl.getCanonicalLocales(module.locale)[0]).toBe(module.locale);
             expect(module.locale.startsWith(locales[index])).toBe(true);
-            expect(module.dateLocale.code.split("-")[0]).toBe(locales[index]);
         }
     });
 

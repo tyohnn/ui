@@ -1,6 +1,6 @@
 ---
 name: craft-component
-description: Builds a component the design system does not have (a mixtape recorder, a pricing toggle, a timeline, a game HUD) so it takes the system's feel and keeps it when the system changes. Takes behaviour from a headless library (Base UI or UI SDK) and the look from tyohnn's roles (data-role), never from literal colours, radii, shadows or sizes. Use when the person asks for any new UI piece in a repo with tyohnn.json, or for something the primitives (button, card, menu …) do not cover.
+description: Builds a component the design system does not have (a mixtape recorder, a pricing toggle, a timeline, a game HUD) so it takes the system's feel and keeps it when the system changes. Takes behaviour from a headless library (UI SDK or Base UI) and the look from tyohnn's roles (data-role), never from literal colours, radii, shadows or sizes. Use when the person asks for any new UI piece in a repo with tyohnn.json, or for something the primitives (button, card, menu …) do not cover.
 ---
 
 # Craft a component that wears the system
@@ -8,8 +8,8 @@ description: Builds a component the design system does not have (a mixtape recor
 A component has two halves that come from different places:
 
 - **Behaviour** (focus, keyboard, selection, dragging, opening and dismissing, ARIA) comes from a headless
-  library: Base UI (`@base-ui/react`), which tyohnn's primitives already use, or UI SDK (`@ui-sdk/react`). Use the
-  one the app already depends on; with neither, use Base UI. A tyohnn primitive that already wraps it counts too.
+  library: UI SDK (`@ui-sdk/react`), which tyohnn's primitives already use, or Base UI (`@base-ui/react`). Use the
+  one the app already depends on; with neither, use UI SDK. A tyohnn primitive that already wraps it counts too.
 - **Look** (colour, density, depth, texture, type) comes from the system: each part says which **role** it plays
   with `data-role`, and the system's role rules and tokens dress it.
 

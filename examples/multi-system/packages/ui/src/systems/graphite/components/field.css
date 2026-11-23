@@ -103,12 +103,12 @@
         border-radius: var(--control-radius);
 
         &:not(:has(:disabled, [data-disabled])):hover {
-            background-color: var(--input-fill-hover);
+            background-color: var(--input-fill-hover, color-mix(in oklab, var(--input) 50%, transparent));
         }
 
         &:has(:focus-visible) {
             border-color: var(--ring);
-            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus);
+            box-shadow: 0 0 0 var(--focus-ring-width) var(--ring-focus, color-mix(in oklab, var(--ring) 30%, transparent));
         }
     }
 }

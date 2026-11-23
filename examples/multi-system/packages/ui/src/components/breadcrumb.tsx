@@ -1,14 +1,14 @@
 import * as React from "react"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
 import { cn } from "cn"
 
 import { ChevronRight, MoreHorizontal } from "@acme/ui/icons"
+import { strings } from "@acme/ui/strings"
+import { renderPart, type RenderableProps } from "@acme/ui/lib/slot"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      aria-label="breadcrumb"
+      aria-label={strings.breadcrumb.label}
       data-slot="breadcrumb"
       className={cn("cn-breadcrumb", className)}
       {...props}
@@ -43,20 +43,18 @@ function BreadcrumbLink({
   className,
   render,
   ...props
-}: useRender.ComponentProps<"a">) {
-  return useRender({
-    defaultTagName: "a",
-    props: mergeProps<"a">(
-      {
-        className: cn("cn-breadcrumb-link", className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: "breadcrumb-link",
+}: RenderableProps<"a">) {
+  return renderPart(
+    "a",
+    {
+      className: cn("cn-breadcrumb-link", className),
+      ...props,
     },
-  })
+    render,
+    {
+      slot: "breadcrumb-link",
+    }
+  )
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
@@ -108,7 +106,6 @@ function BreadcrumbEllipsis({
       {...props}
     >
       <MoreHorizontal />
-      <span className="sr-only">More</span>
     </span>
   )
 }
