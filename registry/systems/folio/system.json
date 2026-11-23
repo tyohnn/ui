@@ -1,0 +1,37 @@
+{
+    "$schema": "../../schema/system.schema.json",
+    "name": "folio",
+    "theme": "folio",
+    "description": "Vellum's paper and ink turned into a landing voice: the same parchment shell, white document surface, serif headings and hairline rules, with one deep teal taking over as the action colour. The primary button is lit from above and lifts on a teal glow; large buttons can go pill-shaped; Korean runs on Pretendard with MaruBuri in headings.",
+    "tagline": "MaruBuri headings · teal lit buttons · parchment shell",
+    "added": "2026-11-23T22:53:09.907Z",
+    "forkedFrom": {
+        "source": "vellum",
+        "commit": "c14fed0",
+        "note": "Forked to carry a teal action colour, a lit primary button, pill-shaped large buttons and Pretendard body text as system values instead of app-level overrides."
+    },
+    "fonts": {
+        "sans": "pretendard",
+        "heading": "source-serif-4",
+        "mono": "system",
+        "hangulFallback": "pretendard",
+        "hangulHeading": "maru-buri"
+    },
+    "icons": {
+        "library": "lucide"
+    },
+    "defaultMode": "light",
+    "tags": [
+        "light",
+        "dark",
+        "warm",
+        "serif",
+        "document",
+        "teal",
+        "landing"
+    ],
+    "source": {
+        "kind": "own-product",
+        "note": "Design values read off our own marketing page (a Korean document-form plugin, 2026-11-23): the teal of its app icon, its lit CTA button, its serif display headings. No third-party marks or wording."
+    }
+}
