@@ -24,9 +24,11 @@
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.32.1",
+        "effect": "4.1.4",
         "zod": "^3.25.76"
     },
     "devDependencies": {
+        "@effect/vitest": "4.1.4",
         "@modelcontextprotocol/ext-apps": "^2.0.3",
         "@types/node": "^20.19.43",
         "esbuild": "^0.28.2",

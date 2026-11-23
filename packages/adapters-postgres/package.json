@@ -14,10 +14,12 @@
     },
     "dependencies": {
         "@tyohnn/mcp": "*",
+        "effect": "4.1.4",
         "pg": "8.23.0",
         "server-only": "0.0.1"
     },
     "devDependencies": {
+        "@effect/vitest": "4.1.4",
         "@types/node": "^20.19.43",
         "@types/pg": "8.23.1",
         "typescript": "^5.9.3",
