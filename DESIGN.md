@@ -442,7 +442,8 @@ pages with `&motion=off`, so none of this reaches the shadcn comparisons.
   (`--base=/preview/<name>/ --own-css`) into `apps/site/public/preview/<name>/`, then `next build` prerenders every
   page. The site reads systems and fonts from the registry at build time and styles itself with mira. One route runs
   on request: `/api/mcp`, the plugin's MCP server (`packages/mcp/src/http.ts`), which reads the registry the site was
-  built from. `npm run serve -w @tyohnn/site` runs the build on port 5210.
+  built from and, with `SITE_DATABASE_URL`, keeps published systems and sessions in Postgres (`supabase/README.md`).
+  `npm run serve -w @tyohnn/site` runs the build on port 5210.
 
 - `node tooling/snapshot/compare-shadcn.mjs --system <name> [--mode light|dark] [--reference <url>] [--preview <origin>]` —
   compares the preview against the shadcn reference app of a preset (`tooling/preset/make-reference.mjs`).
