@@ -1,6 +1,7 @@
 import "server-only";
 
-import { SESSION_TTL_MS, type Session, type SessionStore } from "@tyohnn/mcp/sessions";
+import { SESSION_TTL_MS, type Session, SessionStore, SessionStoreError } from "@tyohnn/mcp/sessions";
+import { Effect, Layer } from "effect";
 
 import type { SqlExecutor } from "../connection";
 
@@ -11,6 +12,7 @@ import type { SqlExecutor } from "../connection";
  *   function instances with drifting clocks agree on whether a session is alive.
  * - Expired rows are swept by the next save, in the same statement. The sweep skips the id being saved: a statement
  *   that deletes a row and upserts it at once fails in Postgres.
+ * - A query that fails comes back as SessionStoreError; the HTTP handler answers it with 503.
  */
 
 interface SessionRow
@@ -35,21 +37,18 @@ const SET = `
 
 const DELETE = `delete from systems.session where id = $1`;
 
-export const sessionStorePostgres = (sql: SqlExecutor, ttlMs = SESSION_TTL_MS): SessionStore => ({
-    async get(id)
-    {
-        const row = (await sql.query<SessionRow>(GET, [id])).rows[0];
+const query = <A>(operation: string, run: () => Promise<A>) =>
+    Effect.tryPromise({ try: run, catch: (cause) => new SessionStoreError({ message: `${operation}: ${String(cause)}` }) });
 
-        if (!row) return undefined;
+const sessionOf = (row: SessionRow): Session => (row.draft === null ? { state: row.state } : { state: row.state, draft: row.draft });
 
-        return row.draft === null ? { state: row.state } : { state: row.state, draft: row.draft };
-    },
-    async set(id, session)
-    {
-        await sql.query(SET, [id, JSON.stringify(session.state), session.draft ? JSON.stringify(session.draft) : null, ttlMs / 1000]);
-    },
-    async delete(id)
-    {
-        await sql.query(DELETE, [id]);
-    },
-});
+export const sessionStorePostgres = (sql: SqlExecutor, ttlMs = SESSION_TTL_MS): Layer.Layer<SessionStore> =>
+    Layer.succeed(SessionStore, SessionStore.of({
+        get: (id) => query("reading a session", () => sql.query<SessionRow>(GET, [id])).pipe(
+            Effect.map((result) => (result.rows[0] ? sessionOf(result.rows[0]) : undefined)),
+        ),
+        set: (id, session) => query("saving a session", () => sql.query(SET, [id, JSON.stringify(session.state), session.draft ? JSON.stringify(session.draft) : null, ttlMs / 1000])).pipe(
+            Effect.asVoid,
+        ),
+        delete: (id) => query("ending a session", () => sql.query(DELETE, [id])).pipe(Effect.asVoid),
+    }));

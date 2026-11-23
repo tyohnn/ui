@@ -1,7 +1,9 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
+import { Effect, type Layer, ManagedRuntime } from "effect";
 
 import { createServer, type ServerOptions, type Session } from "./server";
-import type { SessionStore } from "./sessions";
+import { SessionStore } from "./sessions";
+import type { SystemStore } from "./store";
 
 /**
  * tyohnn's MCP server over Streamable HTTP, for a route handler (the site's /api/mcp). It takes a web Request and
@@ -13,11 +15,15 @@ import type { SessionStore } from "./sessions";
  * `sessions` under that id (a SessionStore, sessions.ts), loaded before the request and saved after it.
  *
  * An id the store does not know is answered with 404, the spec's way of telling a client to start a new session.
+ *
+ * Both stores come in as one Layer. The handler builds it once into a runtime that every request runs on, so a store
+ * that holds state (sessions in memory, a database pool) is shared by all of them.
  */
 
-export interface HttpOptions extends Omit<ServerOptions, "session" | "onSession" | "canWrite" | "canReplace">
+export interface HttpOptions extends Omit<ServerOptions, "session" | "onSession" | "canWrite" | "canReplace" | "run">
 {
-    sessions: SessionStore;
+    /** Where published systems and sessions are kept */
+    layer: Layer.Layer<SystemStore | SessionStore>;
     /** A new session id (default: a random UUID) */
     newId?: () => string;
 }
@@ -31,17 +37,23 @@ const jsonError = (status: number, code: number, message: string) =>
 const isInitialize = (body: unknown) =>
     (Array.isArray(body) ? body : [body]).some((message) => typeof message === "object" && message !== null && (message as { method?: unknown }).method === "initialize");
 
+/** The body as JSON, or nothing when it is not JSON */
+const readJson = (request: Request) =>
+    Effect.promise(() => request.json().then((value: unknown) => ({ value }), () => undefined));
+
 export const createHttpHandler = (options: HttpOptions) =>
 {
-    const { sessions, newId = () => crypto.randomUUID(), ...serverOptions } = options;
+    const { layer, newId = () => crypto.randomUUID(), ...serverOptions } = options;
+    const runtime = ManagedRuntime.make(layer);
 
-    return async (request: Request): Promise<Response> =>
+    const answer = (request: Request) => Effect.gen(function*()
     {
+        const sessions = yield* SessionStore;
         const id = request.headers.get(SESSION_HEADER);
 
         if (request.method === "DELETE")
         {
-            if (id) await sessions.delete(id);
+            if (id) yield* sessions.delete(id);
 
             return new Response(null, { status: id ? 200 : 400 });
         }
@@ -49,48 +61,58 @@ export const createHttpHandler = (options: HttpOptions) =>
         // No server-to-client stream: every answer comes back on the POST that asked for it
         if (request.method !== "POST") return jsonError(405, -32000, "Method not allowed: this server answers POST only.");
 
-        let body: unknown;
+        const parsed = yield* readJson(request);
 
-        try
-        {
-            body = await request.json();
-        }
-        catch
-        {
-            return jsonError(400, -32700, "Parse error: the body is not JSON.");
-        }
+        if (!parsed) return jsonError(400, -32700, "Parse error: the body is not JSON.");
 
+        const body = parsed.value;
         const starting = isInitialize(body);
         const sessionId = starting ? newId() : id;
 
         if (!sessionId) return jsonError(400, -32000, "Bad request: send the Mcp-Session-Id that initialize returned.");
 
-        const session = starting ? undefined : await sessions.get(sessionId);
+        const session = starting ? undefined : yield* sessions.get(sessionId);
 
         if (!starting && !session) return jsonError(404, -32001, "Session not found: initialize a new session.");
 
         let shaped: Session | undefined;
-        // canWrite stays off: a hosted server has no folder of the person's to write into. canReplace too: it knows
-        // nobody, so it cannot tell whether the one publishing over a system is the one who published it
-        const server = createServer({ ...serverOptions, session, onSession: (created) => { shaped = created; }, canWrite: false, canReplace: false });
-        const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
 
-        await server.connect(transport);
+        return yield* Effect.acquireUseRelease(
+            Effect.promise(async () =>
+            {
+                // canWrite stays off: a hosted server has no folder of the person's to write into. canReplace too: it
+                // knows nobody, so it cannot tell whether the one publishing over a system is the one who published it
+                const server = createServer({
+                    ...serverOptions,
+                    run: (effect) => runtime.runPromise(effect),
+                    session,
+                    onSession: (created) => { shaped = created; },
+                    canWrite: false,
+                    canReplace: false,
+                });
+                const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
 
-        try
-        {
-            const response = await transport.handleRequest(request, { parsedBody: body });
-            const headers = new Headers(response.headers);
+                await server.connect(transport);
 
-            headers.set("Mcp-Session-Id", sessionId);
+                return { server, transport };
+            }),
+            ({ transport }) => Effect.gen(function*()
+            {
+                const response = yield* Effect.promise(() => transport.handleRequest(request, { parsedBody: body }));
+                const headers = new Headers(response.headers);
 
-            if (shaped) await sessions.set(sessionId, shaped);
+                headers.set("Mcp-Session-Id", sessionId);
 
-            return new Response(response.body, { status: response.status, headers });
-        }
-        finally
-        {
-            await server.close();
-        }
-    };
+                if (shaped) yield* sessions.set(sessionId, shaped);
+
+                return new Response(response.body, { status: response.status, headers });
+            }),
+            ({ server }) => Effect.promise(() => server.close()),
+        );
+    });
+
+    return (request: Request): Promise<Response> =>
+        runtime.runPromise(answer(request).pipe(
+            Effect.catchTag("SessionStoreError", (failed) => Effect.succeed(jsonError(503, -32603, `Sessions are not available right now: ${failed.message}`))),
+        ));
 };

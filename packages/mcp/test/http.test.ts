@@ -5,30 +5,39 @@ import { fileURLToPath } from "node:url";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { Effect, Layer } from "effect";
 import { describe, expect, it } from "vitest";
 
 import { createHttpHandler } from "../src/http";
-import { memorySessions } from "../src/sessions";
-import { closedStore, folderStore } from "../src/store";
+import type { Session } from "../src/server";
+import { SessionStore, SessionStoreError } from "../src/sessions";
+import { SystemStore, systemStoreClosed, SystemStoreError, systemStoreFolder } from "../src/store";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const url = new URL("https://tyohnn.test/api/mcp");
 
+/** Sessions kept in a map the test can look into */
+const sessionsIn = (saved: Map<string, Session>) =>
+    Layer.succeed(SessionStore, SessionStore.of({
+        get: (id) => Effect.sync(() => structuredClone(saved.get(id))),
+        set: (id, session) => Effect.sync(() => void saved.set(id, structuredClone(session))),
+        delete: (id) => Effect.sync(() => void saved.delete(id)),
+    }));
+
 /** A handler as the site's route serves it, and a fetch that calls it in place of the network */
-const setup = (store = closedStore("Publishing is not open on the hosted server yet.")) =>
+const setup = (store: Layer.Layer<SystemStore> = systemStoreClosed("Publishing is not open on the hosted server yet."), sessions?: Layer.Layer<SessionStore>) =>
 {
-    const sessions = memorySessions();
+    const saved = new Map<string, Session>();
     const handler = createHttpHandler({
         root,
         previewBase: "https://tyohnn.vercel.app/preview",
         widgetHtml: "<!doctype html><title>view</title>",
         systemHtml: "<!doctype html><title>system</title>",
-        store,
-        sessions,
+        layer: Layer.mergeAll(store, sessions ?? sessionsIn(saved)),
     });
     const fetch = (input: string | URL | Request, init?: RequestInit) => handler(new Request(input, init));
 
-    return { handler, sessions, fetch };
+    return { handler, saved, fetch };
 };
 
 const connect = async (fetch: ReturnType<typeof setup>["fetch"]) =>
@@ -84,13 +93,13 @@ describe("the MCP server over HTTP", () =>
 
     it("forgets a session the client ends", async () =>
     {
-        const { fetch, sessions } = setup();
+        const { fetch, saved } = setup();
         const { transport } = await connect(fetch);
         const id = transport.sessionId as string;
 
-        expect(await sessions.get(id)).toBeDefined();
+        expect(saved.get(id)).toBeDefined();
         await transport.terminateSession();
-        expect(await sessions.get(id)).toBeUndefined();
+        expect(saved.get(id)).toBeUndefined();
     });
 
     it("never writes to a disk: export_system with dir is refused and the files come back instead", async () =>
@@ -123,7 +132,7 @@ describe("the MCP server over HTTP", () =>
 
         try
         {
-            const { fetch } = setup(folderStore(dir));
+            const { fetch } = setup(systemStoreFolder(dir));
             const { client } = await connect(fetch);
 
             await client.callTool({ name: "draft_system", arguments: { name: "forest-glass", concept: "A quiet forest app.", base: "clover" } });
@@ -139,5 +148,30 @@ describe("the MCP server over HTTP", () =>
         {
             rmSync(dir, { recursive: true, force: true });
         }
+    });
+
+    it("answers 503 when the sessions cannot be read, instead of failing the request", async () =>
+    {
+        const down = Effect.fail(new SessionStoreError({ message: "connection refused" }));
+        const { handler } = setup(undefined, Layer.succeed(SessionStore, SessionStore.of({ get: () => down, set: () => down, delete: () => down })));
+        const response = await handler(new Request(url, {
+            method: "POST",
+            headers: { "content-type": "application/json", accept: "application/json, text/event-stream", "mcp-session-id": "any" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
+        }));
+
+        expect(response.status).toBe(503);
+        expect(await response.text()).toContain("connection refused");
+    });
+
+    it("refuses to read a published system when the store fails, saying what failed", async () =>
+    {
+        const down = Effect.fail(new SystemStoreError({ message: "connection refused" }));
+        const { fetch } = setup(Layer.succeed(SystemStore, SystemStore.of({ list: () => down, get: () => down, add: () => down, put: () => down })));
+        const { client } = await connect(fetch);
+        const read = await client.callTool({ name: "read_system", arguments: { name: "forest-glass" } });
+
+        expect(read.isError).toBe(true);
+        expect(textOf(read)).toContain("connection refused");
     });
 });

@@ -7,8 +7,8 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { createServer, SYSTEM_URI, WIDGET_URI } from "../src/server";
-import { folderStore } from "../src/store";
+import { createServer, runWith, SYSTEM_URI, WIDGET_URI } from "../src/server";
+import { systemStoreFolder } from "../src/store";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const client = new Client({ name: "test", version: "0.0.0" });
@@ -16,8 +16,8 @@ const published = mkdtempSync(join(tmpdir(), "tyohnn-published-"));
 
 beforeAll(async () =>
 {
-    const store = folderStore(published);
-    const server = createServer({ root, previewBase: "https://tyohnn.vercel.app/preview", widgetHtml: "<!doctype html><title>view</title>", systemHtml: "<!doctype html><title>system</title>", store });
+    const run = runWith(systemStoreFolder(published));
+    const server = createServer({ root, previewBase: "https://tyohnn.vercel.app/preview", widgetHtml: "<!doctype html><title>view</title>", systemHtml: "<!doctype html><title>system</title>", run });
     const [a, b] = InMemoryTransport.createLinkedPair();
 
     await Promise.all([server.connect(a), client.connect(b)]);

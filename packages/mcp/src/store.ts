@@ -1,6 +1,8 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { Clock, Context, Effect, Layer, Schema } from "effect";
+
 import type { Draft } from "./export";
 import type { SystemState } from "./system";
 
@@ -10,9 +12,10 @@ import type { SystemState } from "./system";
  * so a published system keeps working when the base gains a component.
  *
  * The port is the store's operations, nothing more; which names may be published is `publishVerdict`, and
- * `publishSystem` puts the two together. Adapters: a folder of JSON files (the local server keeps them under the
- * checkout's .tyohnn/published), Postgres (`@tyohnn/adapters-postgres`, the hosted server with a database) and
- * closedStore (the hosted server without one). One contract (`testing/contracts.ts`) runs against each.
+ * `publishSystem` puts the two together. Adapters are Layers: a folder of JSON files (systemStoreFolder, the local
+ * server's, under the checkout's .tyohnn/published), Postgres (`@tyohnn/adapters-postgres`, the hosted server with a
+ * database) and systemStoreClosed (the hosted server without one). One contract (`testing/contracts.ts`) runs against
+ * each.
  */
 
 export interface PublishedSystem
@@ -24,17 +27,25 @@ export interface PublishedSystem
     publishedAt: string;
 }
 
-export interface SystemStore
-{
+/** The store could not be read or written */
+export class SystemStoreError extends Schema.TaggedError<SystemStoreError>()("SystemStoreError", { message: Schema.String })
+{}
+
+/** The store keeps nothing: publishing is not open where this server runs */
+export class StoreClosed extends Schema.TaggedError<StoreClosed>()("StoreClosed", { reason: Schema.String })
+{}
+
+export class SystemStore extends Context.Service<SystemStore, {
     /** Every published system, the newest first */
-    list(): Promise<PublishedSystem[]>;
+    readonly list: () => Effect.Effect<PublishedSystem[], SystemStoreError>;
     /** The system published under `id`, or undefined (also for an id that is not a name) */
-    get(id: string): Promise<PublishedSystem | undefined>;
+    readonly get: (id: string) => Effect.Effect<PublishedSystem | undefined, SystemStoreError>;
     /** Keeps a new system; "taken" when one is already published under its id, which is then left as it was */
-    add(system: PublishedSystem): Promise<"added" | "taken">;
+    readonly add: (system: PublishedSystem) => Effect.Effect<"added" | "taken", SystemStoreError | StoreClosed>;
     /** Keeps a system under its id whether or not one is there, publishing over it */
-    put(system: PublishedSystem): Promise<void>;
-}
+    readonly put: (system: PublishedSystem) => Effect.Effect<void, SystemStoreError | StoreClosed>;
+}>()("@tyohnn/mcp/SystemStore")
+{}
 
 export const NAME = /^[a-z][a-z0-9-]{1,39}$/;
 
@@ -47,8 +58,8 @@ export const publishVerdict = (name: string, reserved: ReadonlySet<string>): str
     return null;
 };
 
-/** What closedStore throws on a write; publishSystem answers with its message */
-export class StoreClosed extends Error
+/** Why a system was not published, in words for the person */
+export class PublishRefused extends Schema.TaggedError<PublishRefused>()("PublishRefused", { message: Schema.String })
 {}
 
 export interface PublishOptions
@@ -57,39 +68,30 @@ export interface PublishOptions
     replace?: boolean;
     /** The base systems' names, which no published system may take */
     reserved: ReadonlySet<string>;
-    now?: () => Date;
 }
 
-/** Publishes a drafted system under its name, or says why not */
-export const publishSystem = async (
-    store: SystemStore,
-    system: Pick<PublishedSystem, "draft" | "state">,
-    options: PublishOptions,
-): Promise<PublishedSystem | { error: string }> =>
-{
-    const id = system.draft.name;
-    const refused = publishVerdict(id, options.reserved);
-
-    if (refused) return { error: refused };
-
-    const entry: PublishedSystem = { id, draft: system.draft, state: system.state, publishedAt: (options.now ?? (() => new Date()))().toISOString() };
-
-    try
+/** Publishes a drafted system under its name, stamped with the clock's time, or says why not */
+export const publishSystem = (system: Pick<PublishedSystem, "draft" | "state">, options: PublishOptions) =>
+    Effect.gen(function*()
     {
-        if (options.replace) await store.put(entry);
-        else if (await store.add(entry) === "taken") return { error: `“${id}” is already published. Pass replace: true to publish over it.` };
-    }
-    catch (error)
-    {
-        if (error instanceof StoreClosed) return { error: error.message };
+        const id = system.draft.name;
+        const refused = publishVerdict(id, options.reserved);
 
-        throw error;
-    }
+        if (refused) return yield* new PublishRefused({ message: refused });
 
-    return entry;
-};
+        const store = yield* SystemStore;
+        const entry: PublishedSystem = { id, draft: system.draft, state: system.state, publishedAt: new Date(yield* Clock.currentTimeMillis).toISOString() };
 
-export const folderStore = (dir: string): SystemStore =>
+        if (options.replace) yield* store.put(entry);
+        else if ((yield* store.add(entry)) === "taken") return yield* new PublishRefused({ message: `“${id}” is already published. Pass replace: true to publish over it.` });
+
+        return entry;
+    }).pipe(Effect.catchTag("StoreClosed", (closed) => Effect.fail(new PublishRefused({ message: closed.reason }))));
+
+const failure = (operation: string) => (cause: unknown) => new SystemStoreError({ message: `${operation}: ${String(cause)}` });
+
+/** Published systems as JSON files in `dir`, one per system, named by its id */
+export const systemStoreFolder = (dir: string): Layer.Layer<SystemStore> =>
 {
     const path = (id: string) => join(dir, `${id}.json`);
     const read = (id: string) => (existsSync(path(id)) ? JSON.parse(readFileSync(path(id), "utf8")) as PublishedSystem : undefined);
@@ -99,58 +101,42 @@ export const folderStore = (dir: string): SystemStore =>
         writeFileSync(path(system.id), `${JSON.stringify(system, null, 4)}\n`);
     };
 
-    return {
-        async list()
-        {
-            if (!existsSync(dir)) return [];
-
-            return readdirSync(dir)
+    return Layer.succeed(SystemStore, SystemStore.of({
+        list: () => Effect.try({
+            try: () => (existsSync(dir) ? readdirSync(dir) : [])
                 .filter((name) => name.endsWith(".json"))
                 .map((name) => read(name.slice(0, -5)))
                 .filter((entry): entry is PublishedSystem => entry !== undefined)
-                .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-        },
-        async get(id)
-        {
-            return NAME.test(id) ? read(id) : undefined;
-        },
-        async add(system)
-        {
-            // The id is the file name, so it must be a name even when a caller skipped publishVerdict
-            if (!NAME.test(system.id) || read(system.id)) return "taken";
+                .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)),
+            catch: failure("listing published systems"),
+        }),
+        get: (id) => (NAME.test(id) ? Effect.try({ try: () => read(id), catch: failure(`reading ${id}`) }) : Effect.succeed(undefined)),
+        add: (system) => Effect.try({
+            try: () =>
+            {
+                // The id is the file name, so it must be a name even when a caller skipped publishVerdict
+                if (!NAME.test(system.id) || read(system.id)) return "taken" as const;
 
-            write(system);
+                write(system);
 
-            return "added";
-        },
-        async put(system)
-        {
-            if (!NAME.test(system.id)) throw new Error(`“${system.id}” is not a system name`);
-
-            write(system);
-        },
-    };
+                return "added" as const;
+            },
+            catch: failure(`publishing ${system.id}`),
+        }),
+        put: (system) => (NAME.test(system.id)
+            ? Effect.try({ try: () => write(system), catch: failure(`publishing ${system.id}`) })
+            : Effect.fail(new SystemStoreError({ message: `“${system.id}” is not a system name` }))),
+    }));
 };
 
 /**
  * A store with nothing in it that refuses to publish: the hosted server's when it has no database. A folder under the
  * function's file system would be lost between requests, so it does not pretend to keep anything.
  */
-export const closedStore = (reason: string): SystemStore => ({
-    async list()
-    {
-        return [];
-    },
-    async get()
-    {
-        return undefined;
-    },
-    async add()
-    {
-        throw new StoreClosed(reason);
-    },
-    async put()
-    {
-        throw new StoreClosed(reason);
-    },
-});
+export const systemStoreClosed = (reason: string): Layer.Layer<SystemStore> =>
+    Layer.succeed(SystemStore, SystemStore.of({
+        list: () => Effect.succeed([]),
+        get: () => Effect.succeed(undefined),
+        add: () => Effect.fail(new StoreClosed({ reason })),
+        put: () => Effect.fail(new StoreClosed({ reason })),
+    }));

@@ -1,6 +1,8 @@
+import { Effect } from "effect";
 import { afterAll, describe, expect, it } from "vitest";
 import { Pool } from "pg";
 
+import { SessionStore } from "@tyohnn/mcp/sessions";
 import { CONTRACT_IDS, sessionStoreContract, systemStoreContract } from "@tyohnn/mcp/testing/contracts";
 
 import { closePostgresPools, poolExecutor, postgresPool } from "../connection";
@@ -42,14 +44,12 @@ else
         await owner.end();
     });
 
-    systemStoreContract("postgres · site_app", async () =>
-    {
-        await owner.query("delete from systems.published where id = any($1::text[])", [[...CONTRACT_IDS]]);
+    systemStoreContract("postgres · site_app", () =>
+        Effect.promise(() => owner.query("delete from systems.published where id = any($1::text[])", [[...CONTRACT_IDS]])).pipe(
+            Effect.as(systemStorePostgres(sql)),
+        ));
 
-        return systemStorePostgres(sql);
-    });
-
-    sessionStoreContract("postgres · site_app", async (ttlMs) => sessionStorePostgres(sql, ttlMs));
+    sessionStoreContract("postgres · site_app", (ttlMs) => Effect.succeed(sessionStorePostgres(sql, ttlMs)));
 
     describe("what the systems tables refuse (postgres)", () =>
     {
@@ -98,12 +98,15 @@ else
 
         it("sweeps expired sessions on the next save", async () =>
         {
-            const short = sessionStorePostgres(sql, 50);
             const expired = crypto.randomUUID();
+            const save = (id: string) => Effect.runPromise(Effect.provide(Effect.gen(function*()
+            {
+                yield* (yield* SessionStore).set(id, { state: JSON.parse(state) });
+            }), sessionStorePostgres(sql, 50)));
 
-            await short.set(expired, { state: JSON.parse(state) });
+            await save(expired);
             await new Promise((resolve) => setTimeout(resolve, 150));
-            await short.set(crypto.randomUUID(), { state: JSON.parse(state) });
+            await save(crypto.randomUUID());
 
             expect((await owner.query("select 1 from systems.session where id = $1", [expired])).rowCount).toBe(0);
         });

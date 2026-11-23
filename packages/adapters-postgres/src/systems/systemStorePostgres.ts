@@ -1,6 +1,7 @@
 import "server-only";
 
-import { NAME, type PublishedSystem, type SystemStore } from "@tyohnn/mcp/store";
+import { NAME, type PublishedSystem, SystemStore, SystemStoreError } from "@tyohnn/mcp/store";
+import { Effect, Layer } from "effect";
 
 import type { SqlExecutor } from "../connection";
 
@@ -11,6 +12,7 @@ import type { SqlExecutor } from "../connection";
  *   reading first and then inserting would let the second overwrite it. No row back means the name was taken.
  * - `put` publishes over a system in one statement too. The id never changes; `site_app` may not update it.
  * - An id that is not a name never reaches the database, the same answer the folder store gives.
+ * - A query that fails comes back as SystemStoreError; the MCP tools answer it as a refusal.
  */
 
 interface PublishedRow
@@ -52,25 +54,21 @@ const systemOf = (row: PublishedRow): PublishedSystem => ({
 
 const valuesOf = (system: PublishedSystem) => [system.id, JSON.stringify(system.draft), JSON.stringify(system.state), system.publishedAt];
 
-export const systemStorePostgres = (sql: SqlExecutor): SystemStore => ({
-    async list()
-    {
-        return (await sql.query<PublishedRow>(LIST)).rows.map(systemOf);
-    },
-    async get(id)
-    {
-        if (!NAME.test(id)) return undefined;
+const query = <A>(operation: string, run: () => Promise<A>) =>
+    Effect.tryPromise({ try: run, catch: (cause) => new SystemStoreError({ message: `${operation}: ${String(cause)}` }) });
 
-        const row = (await sql.query<PublishedRow>(GET, [id])).rows[0];
-
-        return row ? systemOf(row) : undefined;
-    },
-    async add(system)
-    {
-        return (await sql.query(ADD, valuesOf(system))).rowCount === 1 ? "added" : "taken";
-    },
-    async put(system)
-    {
-        await sql.query(PUT, valuesOf(system));
-    },
-});
+export const systemStorePostgres = (sql: SqlExecutor): Layer.Layer<SystemStore> =>
+    Layer.succeed(SystemStore, SystemStore.of({
+        list: () => query("listing published systems", () => sql.query<PublishedRow>(LIST)).pipe(
+            Effect.map((result) => result.rows.map(systemOf)),
+        ),
+        get: (id) => (NAME.test(id)
+            ? query(`reading ${id}`, () => sql.query<PublishedRow>(GET, [id])).pipe(
+                Effect.map((result) => (result.rows[0] ? systemOf(result.rows[0]) : undefined)),
+            )
+            : Effect.succeed(undefined)),
+        add: (system) => query(`publishing ${system.id}`, () => sql.query(ADD, valuesOf(system))).pipe(
+            Effect.map((result) => (result.rowCount === 1 ? "added" as const : "taken" as const)),
+        ),
+        put: (system) => query(`publishing ${system.id}`, () => sql.query(PUT, valuesOf(system))).pipe(Effect.asVoid),
+    }));
