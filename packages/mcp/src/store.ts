@@ -10,7 +10,8 @@ import type { SystemState } from "./system";
  * so a published system keeps working when the base gains a component.
  *
  * The port has one adapter here, a folder of JSON files (the local server keeps them under the checkout's
- * .tyohnn/published). The hosted server swaps in a database adapter with the same three methods.
+ * .tyohnn/published). The hosted server uses closedStore below until a database adapter with the same three methods
+ * takes its place.
  */
 
 export interface PublishedSystem
@@ -69,3 +70,22 @@ export const folderStore = (dir: string, reserved: Set<string>, now: () => Date 
         },
     };
 };
+
+/**
+ * A store with nothing in it that refuses to publish: the hosted server's until it has a database adapter. A folder
+ * under the function's file system would be lost between requests, so it does not pretend to keep anything.
+ */
+export const closedStore = (reason: string): SystemStore => ({
+    async list()
+    {
+        return [];
+    },
+    async get()
+    {
+        return undefined;
+    },
+    async publish()
+    {
+        return { error: reason };
+    },
+});

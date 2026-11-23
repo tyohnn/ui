@@ -55,13 +55,24 @@ export interface ServerOptions
     root: string;
     /** Where the built previews are served: `<base>/<system>/index.html?template=coverage…` */
     previewBase: string;
-    /** The views' HTML; read from dist/widget.html and dist/system.html by default */
-    widgetHtml?: string;
-    systemHtml?: string;
+    /** The views' HTML: dist/widget.html and dist/system.html, read by the entry point (index.ts, or the site's route) */
+    widgetHtml: string;
+    systemHtml: string;
     /** Where published systems are kept (default: a folder under `<root>/.tyohnn/published`) */
     store?: SystemStore;
     /** export_system may write to a folder: true only when the server runs on the person's machine (stdio) */
     canWrite?: boolean;
+    /** The system being shaped, carried in from an earlier request of the same session (the HTTP server) */
+    session?: Session;
+    /** Called once with the session this server shapes, so the HTTP server can save it after the request */
+    onSession?: (session: Session) => void;
+}
+
+/** What one connection is shaping: the system's state, and its name and concept once draft_system gave them */
+export interface Session
+{
+    state: SystemState;
+    draft?: Draft;
 }
 
 export const previewUrl = (base: string, system: string, mode: string, section: string) =>
@@ -83,8 +94,8 @@ export const createServer = (options: ServerOptions) =>
     const names = primitives.map((primitive) => primitive.name) as [string, ...string[]];
     const groupIds = catalog.groups.map((group) => group.id) as [string, ...string[]];
     const systemNames = catalog.systems.map((system) => system.name) as [string, ...string[]];
-    const html = options.widgetHtml ?? readFileSync(new URL("./widget.html", import.meta.url), "utf8");
-    const systemHtml = options.systemHtml ?? readFileSync(new URL("./system.html", import.meta.url), "utf8");
+    const html = options.widgetHtml;
+    const systemHtml = options.systemHtml;
     const frameOrigin = new URL(options.previewBase).origin;
     const library = readThemes(options.root);
     const tailwind = readTailwind(options.root);
@@ -94,20 +105,21 @@ export const createServer = (options: ServerOptions) =>
     const store = options.store ?? folderStore(join(options.root, ".tyohnn/published"), new Set(catalog.systems.map((entry) => entry.name)));
     const characterOf = (name: string) => cards.find((card) => card.name === name)?.character ?? "";
 
-    // One system is shaped at a time, per connection: the agent and the view both edit it
-    let state: SystemState = startState(summaryOf("clover"), library);
-    /** The name and concept of the system being shaped, once draft_system gave them */
-    let draft: Draft | undefined;
+    // One system is shaped at a time, per connection: the agent and the view both edit it. The HTTP server keeps
+    // this object between requests of one session (http.ts); over stdio it lives as long as the process.
+    const session: Session = options.session ?? { state: startState(summaryOf("clover"), library) };
+
+    options.onSession?.(session);
 
     /** A result the System view draws: the state for the agent, the view's look-up tables in _meta only */
     const systemResult = (note?: string) =>
     {
-        const colours = coloursOf(state, library);
-        const text = [note, describe(state, library)].filter(Boolean).join("\n\n");
+        const colours = coloursOf(session.state, library);
+        const text = [note, describe(session.state, library)].filter(Boolean).join("\n\n");
 
         return {
             content: [{ type: "text" as const, text }],
-            structuredContent: { ...state, changes: colourChanges(state, state.system) + Object.keys(state.tokens).length },
+            structuredContent: { ...session.state, changes: colourChanges(session.state, session.state.system) + Object.keys(session.state.tokens).length },
             _meta: {
                 "tyohnn/view": {
                     previewBase: options.previewBase,
@@ -116,8 +128,8 @@ export const createServer = (options: ServerOptions) =>
                     axes: AXES,
                     colourGroups: COLOUR_GROUPS,
                     colours,
-                    vars: previewVars(state, library),
-                    swatches: swatches(library, state.mode),
+                    vars: previewVars(session.state, library),
+                    swatches: swatches(library, session.state.mode),
                     tailwind,
                 },
             },
@@ -128,7 +140,7 @@ export const createServer = (options: ServerOptions) =>
     const commit = (outcome: Outcome, note: string) =>
     {
         if ("error" in outcome) return refuse(outcome.error);
-        state = outcome.state;
+        session.state = outcome.state;
 
         return systemResult(note);
     };
@@ -265,8 +277,8 @@ export const createServer = (options: ServerOptions) =>
         },
         async ({ system, mode }) =>
         {
-            if (system) state = startState(summaryOf(system), library);
-            if (mode) state = { ...state, mode };
+            if (system) session.state = startState(summaryOf(system), library);
+            if (mode) session.state = { ...session.state, mode };
 
             return systemResult(system ? `Showing ${system}.` : undefined);
         },
@@ -286,7 +298,7 @@ export const createServer = (options: ServerOptions) =>
             },
             _meta: systemView,
         },
-        async (input) => commit(setColours(state, input, library), "Colours changed."),
+        async (input) => commit(setColours(session.state, input, library), "Colours changed."),
     );
 
     server.registerTool(
@@ -299,7 +311,7 @@ export const createServer = (options: ServerOptions) =>
             },
             _meta: systemView,
         },
-        async ({ tokens }) => commit(setTokens(state, tokens, library), "Tokens changed."),
+        async ({ tokens }) => commit(setTokens(session.state, tokens, library), "Tokens changed."),
     );
 
     server.registerTool(
@@ -407,18 +419,18 @@ export const createServer = (options: ServerOptions) =>
             }
             else if (systemNames.includes(base))
             {
-                state = startState(summaryOf(base), library);
+                session.state = startState(summaryOf(base), library);
             }
             else
             {
                 const published = await store.get(base);
 
                 if (!published) return refuse(`No system “${base}” to start from. search_systems lists them.`);
-                state = structuredClone(published.state);
+                session.state = structuredClone(published.state);
             }
 
-            if (mode) state = { ...state, mode };
-            draft = { name, concept };
+            if (mode) session.state = { ...session.state, mode };
+            session.draft = { name, concept };
 
             return systemResult(keep ? `Drafting ${name}, keeping the changes so far.` : `Drafting ${name} on ${base}.`);
         },
@@ -434,7 +446,7 @@ export const createServer = (options: ServerOptions) =>
         },
         async () =>
         {
-            const findings = checkSystem({ root: options.root, state, library, draft });
+            const findings = checkSystem({ root: options.root, state: session.state, library, draft: session.draft });
 
             return { content: [{ type: "text", text: findingsText(findings) }], structuredContent: { findings } };
         },
@@ -451,17 +463,17 @@ export const createServer = (options: ServerOptions) =>
         },
         async ({ replace }) =>
         {
-            if (!draft) return refuse("Nothing drafted yet: call draft_system with a name and the concept first.");
+            if (!session.draft) return refuse("Nothing drafted yet: call draft_system with a name and the concept first.");
 
-            const blocking = checkSystem({ root: options.root, state, library, draft }).filter((finding) => finding.level === "error");
+            const blocking = checkSystem({ root: options.root, state: session.state, library, draft: session.draft }).filter((finding) => finding.level === "error");
 
             if (blocking.length > 0) return refuse(`Fix these first:\n${findingsText(blocking)}`);
 
-            const published = await store.publish({ draft, state }, { replace });
+            const published = await store.publish({ draft: session.draft, state: session.state }, { replace });
 
             if ("error" in published) return refuse(published.error);
 
-            return { content: [{ type: "text", text: `Published ${published.id} (from ${state.system}).` }], structuredContent: { ...published } };
+            return { content: [{ type: "text", text: `Published ${published.id} (from ${session.state.system}).` }], structuredContent: { ...published } };
         },
     );
 
@@ -478,8 +490,8 @@ export const createServer = (options: ServerOptions) =>
         },
         async ({ name, dir, stylesDir }) =>
         {
-            let target = state;
-            let targetDraft = draft ?? { name: state.system, concept: characterOf(state.system) };
+            let target = session.state;
+            let targetDraft = session.draft ?? { name: session.state.system, concept: characterOf(session.state.system) };
 
             if (name && systemNames.includes(name))
             {
