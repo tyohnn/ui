@@ -14,10 +14,13 @@ The way it is set up follows tyohnn/scaffold's:
   `deny_all` policy, so the GRANTs in the migration are the only boundary. The migration creates the role by name only;
   LOGIN, BYPASSRLS and the password are set outside migrations (`seed.sql` locally, by hand on a remote project).
 - **The app connects with `pg`**, not through the Data API, and `systems` is not in `config.toml`'s exposed schemas.
-- **Ports and adapters.** The ports are in `packages/mcp` (`SystemStore` in `store.ts`, `SessionStore` in
-  `sessions.ts`), the rules in pure functions next to them (`publishVerdict`), and the Postgres side in
-  `packages/adapters-postgres`. One contract (`packages/mcp/src/testing/contracts.ts`) runs against the folder store,
-  memory sessions and Postgres alike.
+- **Ports and adapters, in Effect.** The ports are `Context.Service`s in `packages/mcp` (`SystemStore` in `store.ts`,
+  `SessionStore` in `sessions.ts`), one method per operation, each returning an Effect that fails with a tagged error
+  (`SystemStoreError`, `SessionStoreError`). The rules are pure functions next to them (`publishVerdict`). Adapters are
+  Layers: `systemStoreFolder`, `systemStoreClosed` and `sessionStoreMemory` there, `systemStorePostgres` and
+  `sessionStorePostgres` in `packages/adapters-postgres`. The HTTP handler builds one Layer into a runtime that every
+  request runs on. One contract (`packages/mcp/src/testing/contracts.ts`, `@effect/vitest`) runs against the folder
+  store, memory sessions and Postgres alike.
 
 ## Local
 
