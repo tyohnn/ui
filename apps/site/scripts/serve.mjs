@@ -1,6 +1,6 @@
-// serve — a static server for the exported site (out/), for local checks only.
+// serve — a static server for a folder of the site (public/ by default: the built previews), for local checks only.
 //
-//   node scripts/serve.mjs [--port 5210] [--dir out]
+//   node scripts/serve.mjs [--port 5210] [--dir public]
 //
 // Resolves /path, /path.html and /path/index.html like a static host.
 
@@ -17,7 +17,7 @@ const arg = (name, fallback) =>
     return index > 0 ? process.argv[index + 1] : fallback;
 };
 const port = Number(arg("port", "5210"));
-const root = join(siteRoot, arg("dir", "out"));
+const root = join(siteRoot, arg("dir", "public"));
 
 const TYPES = {
     ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json",
