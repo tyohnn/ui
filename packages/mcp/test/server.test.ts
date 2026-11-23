@@ -16,7 +16,7 @@ const published = mkdtempSync(join(tmpdir(), "tyohnn-published-"));
 
 beforeAll(async () =>
 {
-    const store = folderStore(published, new Set(["clover", "graphite", "vellum"]));
+    const store = folderStore(published);
     const server = createServer({ root, previewBase: "https://tyohnn.vercel.app/preview", widgetHtml: "<!doctype html><title>view</title>", systemHtml: "<!doctype html><title>system</title>", store });
     const [a, b] = InMemoryTransport.createLinkedPair();
 

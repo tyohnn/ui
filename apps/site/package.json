@@ -2,13 +2,13 @@
     "name": "@tyohnn/site",
     "version": "0.0.0",
     "private": true,
-    "description": "The public tyohnn site: every design system rendering the preview templates in live iframes, the components, a side-by-side compare and the CLI docs. Static export (out/).",
+    "description": "The public tyohnn site: every design system rendering the preview templates in live iframes, the components, a side-by-side compare and the CLI docs. Next on Vercel: the pages are prerendered, and /api/mcp serves the plugin's MCP server.",
     "scripts": {
         "build-previews": "node scripts/build-previews.mjs",
         "dev": "next dev --port 5210",
-        "build": "node scripts/build-previews.mjs && next build",
+        "build": "npm --prefix ../../packages/mcp run build && node scripts/build-previews.mjs && next build",
         "build:site": "next build",
-        "serve": "node scripts/serve.mjs --port 5210",
+        "serve": "next start --port 5210",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
@@ -21,6 +21,8 @@
         "@fontsource-variable/noto-sans": "^5.3.0",
         "@fontsource-variable/playfair-display": "^5.3.0",
         "@fontsource-variable/source-serif-4": "^5.3.0",
+        "@tyohnn/adapters-postgres": "*",
+        "@tyohnn/mcp": "*",
         "@tyohnn/theme": "*",
         "next": "16.3.4",
         "pretendard": "^1.3.9",

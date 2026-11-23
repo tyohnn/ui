@@ -5,6 +5,12 @@
     "description": "tyohnn's MCP server: explore design systems and primitives, shape a system from a concept, check it, publish it and export its files.",
     "license": "MIT",
     "type": "module",
+    "exports": {
+        "./http": "./src/http.ts",
+        "./sessions": "./src/sessions.ts",
+        "./store": "./src/store.ts",
+        "./testing/contracts": "./src/testing/contracts.ts"
+    },
     "bin": {
         "tyohnn-mcp": "dist/index.js"
     },

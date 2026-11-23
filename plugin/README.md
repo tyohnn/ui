@@ -19,8 +19,12 @@ The skills talk to the tyohnn MCP server (`search_systems`, `read_system`, `draf
 /plugin install tyohnn@tyohnn
 ```
 
-`.mcp.json` points at the hosted server. To run the server from a checkout instead (it can then write exports
-straight into a folder):
+`.mcp.json` points at the hosted server, `https://tyohnn.vercel.app/api/mcp` (the site's route,
+`apps/site/src/app/api/mcp/route.ts`). The hosted server writes no files: `export_system` returns them for the agent
+to write. With a database (`SITE_DATABASE_URL`, `supabase/README.md`) it publishes systems and keeps each connection's
+work across requests; without one `publish_system` is closed. It never publishes over a published system, since it
+cannot tell who published it. To run the server from a checkout instead (it can then write exports straight into a
+folder and publish to `.tyohnn/published`, over its own systems too):
 
 ```
 npm install && npm run build -w @tyohnn/mcp

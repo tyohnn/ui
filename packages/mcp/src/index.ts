@@ -8,13 +8,13 @@
 //
 // Over stdio the server runs on the person's machine, so export_system may write a system into a folder they name.
 
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-import { readCatalog } from "./catalog";
 import { createServer } from "./server";
 import { folderStore } from "./store";
 
@@ -29,8 +29,12 @@ const { values } = parseArgs({
 const root = values.root ?? fileURLToPath(new URL("../../..", import.meta.url));
 const previewBase = values["preview-base"] ?? process.env.TYOHNN_PREVIEW_BASE ?? "https://tyohnn.vercel.app/preview";
 
-const store = folderStore(values.store ?? join(root, ".tyohnn/published"), new Set(readCatalog(root).systems.map((system) => system.name)));
+const store = folderStore(values.store ?? join(root, ".tyohnn/published"));
 
-const server = createServer({ root, previewBase, store, canWrite: true });
+// The views are built next to this file (dist/widget.html, dist/system.html)
+const widgetHtml = readFileSync(new URL("./widget.html", import.meta.url), "utf8");
+const systemHtml = readFileSync(new URL("./system.html", import.meta.url), "utf8");
+
+const server = createServer({ root, previewBase, widgetHtml, systemHtml, store, canWrite: true });
 
 await server.connect(new StdioServerTransport());
