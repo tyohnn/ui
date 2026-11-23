@@ -8,7 +8,7 @@ import { allPrimitives, type Catalog, type Primitive, readCatalog, searchPrimiti
 import { checkSystem, findingsText } from "./check";
 import { type Draft, exportSystem, importLines, writeSystem } from "./export";
 import { cardText, readSystemCards, searchSystems } from "./library";
-import { folderStore, NAME, type SystemStore } from "./store";
+import { folderStore, NAME, publishSystem, type SystemStore } from "./store";
 import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, previewVars, readTailwind, readThemes, SCREENS, setColours, setTokens, startState, swatches, type Outcome, type SystemState } from "./system";
 
 /**
@@ -62,6 +62,11 @@ export interface ServerOptions
     store?: SystemStore;
     /** export_system may write to a folder: true only when the server runs on the person's machine (stdio) */
     canWrite?: boolean;
+    /**
+     * publish_system may publish over a system already published (default true). The hosted server knows nobody, so
+     * there it is false: anyone could otherwise overwrite anyone's system.
+     */
+    canReplace?: boolean;
     /** The system being shaped, carried in from an earlier request of the same session (the HTTP server) */
     session?: Session;
     /** Called once with the session this server shapes, so the HTTP server can save it after the request */
@@ -102,7 +107,8 @@ export const createServer = (options: ServerOptions) =>
     const summaryOf = (name: string) => catalog.systems.find((entry) => entry.name === name) ?? catalog.systems[0];
 
     const cards = readSystemCards(options.root);
-    const store = options.store ?? folderStore(join(options.root, ".tyohnn/published"), new Set(catalog.systems.map((entry) => entry.name)));
+    const store = options.store ?? folderStore(join(options.root, ".tyohnn/published"));
+    const reserved = new Set<string>(systemNames);
     const characterOf = (name: string) => cards.find((card) => card.name === name)?.character ?? "";
 
     // One system is shaped at a time, per connection: the agent and the view both edit it. The HTTP server keeps
@@ -469,7 +475,9 @@ export const createServer = (options: ServerOptions) =>
 
             if (blocking.length > 0) return refuse(`Fix these first:\n${findingsText(blocking)}`);
 
-            const published = await store.publish({ draft: session.draft, state: session.state }, { replace });
+            if (replace && options.canReplace === false) return refuse("This server cannot publish over a published system: it does not know who published it. Publish under a new name.");
+
+            const published = await publishSystem(store, { draft: session.draft, state: session.state }, { replace, reserved });
 
             if ("error" in published) return refuse(published.error);
 

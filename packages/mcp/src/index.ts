@@ -15,7 +15,6 @@ import { parseArgs } from "node:util";
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-import { readCatalog } from "./catalog";
 import { createServer } from "./server";
 import { folderStore } from "./store";
 
@@ -30,7 +29,7 @@ const { values } = parseArgs({
 const root = values.root ?? fileURLToPath(new URL("../../..", import.meta.url));
 const previewBase = values["preview-base"] ?? process.env.TYOHNN_PREVIEW_BASE ?? "https://tyohnn.vercel.app/preview";
 
-const store = folderStore(values.store ?? join(root, ".tyohnn/published"), new Set(readCatalog(root).systems.map((system) => system.name)));
+const store = folderStore(values.store ?? join(root, ".tyohnn/published"));
 
 // The views are built next to this file (dist/widget.html, dist/system.html)
 const widgetHtml = readFileSync(new URL("./widget.html", import.meta.url), "utf8");

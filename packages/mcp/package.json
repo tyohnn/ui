@@ -7,7 +7,9 @@
     "type": "module",
     "exports": {
         "./http": "./src/http.ts",
-        "./store": "./src/store.ts"
+        "./sessions": "./src/sessions.ts",
+        "./store": "./src/store.ts",
+        "./testing/contracts": "./src/testing/contracts.ts"
     },
     "bin": {
         "tyohnn-mcp": "dist/index.js"

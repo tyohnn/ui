@@ -5,12 +5,13 @@
 //
 // Sessions live in the function's memory. Vercel reuses a warm instance for the next request, so a session usually
 // lasts; when a request lands on another instance the id is unknown, the client is told 404 and starts a new session,
-// and the system it was shaping starts over. A shared store (memorySessions' SessionStore port) removes that.
+// and the system it was shaping starts over. A shared store (the SessionStore port, packages/mcp/src/sessions.ts) removes that.
 
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { createHttpHandler, memorySessions } from "@tyohnn/mcp/http";
+import { createHttpHandler } from "@tyohnn/mcp/http";
+import { memorySessions } from "@tyohnn/mcp/sessions";
 import { closedStore } from "@tyohnn/mcp/store";
 
 export const dynamic = "force-dynamic";

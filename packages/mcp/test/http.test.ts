@@ -1,17 +1,21 @@
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { describe, expect, it } from "vitest";
 
-import { createHttpHandler, memorySessions } from "../src/http";
-import { closedStore } from "../src/store";
+import { createHttpHandler } from "../src/http";
+import { memorySessions } from "../src/sessions";
+import { closedStore, folderStore } from "../src/store";
 
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const url = new URL("https://tyohnn.test/api/mcp");
 
 /** A handler as the site's route serves it, and a fetch that calls it in place of the network */
-const setup = () =>
+const setup = (store = closedStore("Publishing is not open on the hosted server yet.")) =>
 {
     const sessions = memorySessions();
     const handler = createHttpHandler({
@@ -19,7 +23,7 @@ const setup = () =>
         previewBase: "https://tyohnn.vercel.app/preview",
         widgetHtml: "<!doctype html><title>view</title>",
         systemHtml: "<!doctype html><title>system</title>",
-        store: closedStore("Publishing is not open on the hosted server yet."),
+        store,
         sessions,
     });
     const fetch = (input: string | URL | Request, init?: RequestInit) => handler(new Request(input, init));
@@ -111,5 +115,29 @@ describe("the MCP server over HTTP", () =>
 
         expect(published.isError).toBe(true);
         expect(textOf(published)).toContain("Publishing is not open on the hosted server yet.");
+    });
+
+    it("publishes into the store it was given, but never over a published system: it does not know who published it", async () =>
+    {
+        const dir = mkdtempSync(join(tmpdir(), "tyohnn-http-"));
+
+        try
+        {
+            const { fetch } = setup(folderStore(dir));
+            const { client } = await connect(fetch);
+
+            await client.callTool({ name: "draft_system", arguments: { name: "forest-glass", concept: "A quiet forest app.", base: "clover" } });
+
+            expect((await client.callTool({ name: "publish_system", arguments: {} })).structuredContent).toMatchObject({ id: "forest-glass" });
+
+            const over = await client.callTool({ name: "publish_system", arguments: { replace: true } });
+
+            expect(over.isError).toBe(true);
+            expect(textOf(over)).toContain("cannot publish over");
+        }
+        finally
+        {
+            rmSync(dir, { recursive: true, force: true });
+        }
     });
 });
