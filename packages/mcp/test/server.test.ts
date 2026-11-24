@@ -35,10 +35,10 @@ describe("the MCP server", () =>
         const readOnly = tools.filter((tool) => tool.annotations?.readOnlyHint).map((tool) => tool.name).sort();
 
         expect(tools.map((tool) => tool.name).sort()).toEqual([
-            "check_system", "draft_system", "export_system", "get_primitive", "get_system", "list_primitives", "publish_system",
-            "read_system", "search_systems", "set_colours", "set_tokens", "show_primitives", "show_system",
+            "check_object", "check_system", "design_object", "draft_system", "export_system", "get_primitive", "get_system", "list_primitives",
+            "publish_system", "read_system", "search_systems", "set_colours", "set_tokens", "show_primitives", "show_system",
         ]);
-        expect(readOnly).toEqual(["check_system", "get_primitive", "get_system", "list_primitives", "read_system", "search_systems", "show_primitives"]);
+        expect(readOnly).toEqual(["check_object", "check_system", "design_object", "get_primitive", "get_system", "list_primitives", "read_system", "search_systems", "show_primitives"]);
     });
 
     it("never points the agent at the tyohnn CLI", async () =>
@@ -52,6 +52,24 @@ describe("the MCP server", () =>
         ].join("\n");
 
         expect(said).not.toMatch(/npx tyohnn|tyohnn (init|use|add)|--preset/);
+    });
+
+    it("hands an agent the object contract with the anchors in the system being shaped, and checks what it wrote", async () =>
+    {
+        await client.callTool({ name: "show_system", arguments: { system: "clover" } });
+
+        const designed = await client.callTool({ name: "design_object", arguments: {} });
+        const data = designed.structuredContent as { system: string; anchors: { token: string; light: string | null }[]; example: { name: string; preview: string } };
+
+        expect(data.system).toBe("clover");
+        expect(data.anchors.find((anchor) => anchor.token === "--primary")?.light).toMatch(/\S/);
+        expect(data.example.preview).toBe("https://tyohnn.vercel.app/preview/clover/index.html?template=objects&mode=light");
+        expect(textOf(designed)).toContain("@ui-sdk/core/skills/ui-sdk/SKILL.md");
+
+        const checked = await client.callTool({ name: "check_object", arguments: { name: "dial", css: ".dial { font-family: Michroma; color: var(--primary); }" } });
+
+        expect(textOf(checked)).toContain("✗ type");
+        expect(textOf(checked)).toContain("✗ focus");
     });
 
     it("lists primitives by group and by purpose", async () =>

@@ -10,6 +10,7 @@ import { allPrimitives, type Catalog, type Primitive, readCatalog, searchPrimiti
 import { checkSystem, findingsText } from "./check";
 import { type Draft, exportSystem, importLines, writeSystem } from "./export";
 import { cardText, readSystemCards, searchSystems } from "./library";
+import { ANCHORS, anchorColours, checkObject, objectFindingsText, readObjects } from "./object";
 import { NAME, publishSystem, type PublishRefused, SystemStore, systemStoreFolder, type SystemStoreError } from "./store";
 import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, previewVars, readTailwind, readThemes, SCREENS, setColours, setTokens, startState, swatches, type Outcome, type SystemState } from "./system";
 
@@ -36,6 +37,11 @@ import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, previewVars, r
  * - `publish_system` — keeps the draft in the store under its name, for others to find and start from
  * - `export_system` — the files an app keeps (styles folder, tyohnn.json, concept.md), written to a folder when the
  *   server runs on the person's machine
+ *
+ * And two for objects (registry/objects): interfaces with a material of their own that still wear the system.
+ *
+ * - `design_object` — the contract, the anchors' values in the system being shaped, UI SDK's skill and an example
+ * - `check_object` — an object's CSS (and source) against the contract
  *
  * None of these runs, names or depends on the tyohnn CLI. The plugin and the CLI are separate products.
  *
@@ -119,6 +125,8 @@ export const createServer = (options: ServerOptions) =>
     const summaryOf = (name: string) => catalog.systems.find((entry) => entry.name === name) ?? catalog.systems[0];
 
     const cards = readSystemCards(options.root);
+    const objects = readObjects(options.root);
+    const exampleNames = objects.objects.map((object) => object.name) as [string, ...string[]];
     const run = options.run ?? runWith(systemStoreFolder(join(options.root, ".tyohnn/published")));
     const reserved = new Set<string>(systemNames);
     const characterOf = (name: string) => cards.find((card) => card.name === name)?.character ?? "";
@@ -563,6 +571,62 @@ export const createServer = (options: ServerOptions) =>
                 structuredContent: { system: targetDraft.name, files, imports },
             };
         })),
+    );
+
+    server.registerTool(
+        "design_object",
+        {
+            title: "Design an object that wears the system",
+            description: "For an interface with a material of its own (a hardware switch, a device face, a ticket, a dial) that should still belong to the product's design system. Returns the contract (behaviour from UI SDK, material literal on the root, a few anchors bound to system tokens), each anchor's value in the system being shaped, where UI SDK's own skill and docs are, and an example object's source. Write the object to the contract, then run check_object on it.",
+            inputSchema: {
+                example: z.enum(exampleNames).optional().describe("Which example object's source to return (default the first)"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        ({ example }) =>
+        {
+            const entry = objects.objects.find((object) => object.name === example) ?? objects.objects[0];
+            const colours = anchorColours(session.state, library);
+            const anchors = ANCHORS.map((anchor) => ({ ...anchor, light: colours.light[anchor.token] ?? null, dark: colours.dark[anchor.token] ?? null }));
+            const preview = `${options.previewBase.replace(/\/$/, "")}/${session.state.system}/index.html?template=objects&mode=${session.state.mode}`;
+            const text = [
+                `## Objects wear ${session.state.system}`,
+                objects.contract,
+                "### Anchors in this system",
+                anchors.map((anchor) => `- ${anchor.anchor}: ${anchor.token}${anchor.light ? ` (light ${anchor.light}, dark ${anchor.dark})` : ""}: ${anchor.what}`).join("\n"),
+                "### UI SDK",
+                "Its own skill ships in the package: node_modules/@ui-sdk/core/skills/ui-sdk/SKILL.md (read it first). The docs index is node_modules/@ui-sdk/<framework>/docs/llms.txt; read only the component pages you use (docs/components/<name>.md). Import each component from its own entry, style it from data-slot and state attributes (data-checked, data-open), name every control.",
+                `### Example: ${entry.name} (uses ${entry.behaviour.join(", ")})`,
+                `Drawn in this system: ${preview}`,
+                `--- registry/objects/${entry.name}.tsx\n${entry.tsx}`,
+                `--- registry/objects/${entry.name}.css\n${entry.css}`,
+            ].join("\n\n");
+
+            return {
+                content: [{ type: "text", text }],
+                structuredContent: { system: session.state.system, contract: objects.contract, anchors, examples: objects.objects.map((object) => object.name), example: { ...entry, preview } },
+            };
+        },
+    );
+
+    server.registerTool(
+        "check_object",
+        {
+            title: "Check an object against the contract",
+            description: "Checks an object's stylesheet (and, if given, its component source) against the object contract: type, durations and easing, focus and at least one colour read from the system; material named as custom properties on the root; UI SDK imported from its entries with no hand-written roles; JavaScript or canvas motion that respects reduced motion. Errors break the contract; warnings are material left unnamed or a canvas the anchors cannot reach.",
+            inputSchema: {
+                name: z.string().regex(/^[a-z][a-z0-9-]*$/).describe("The object's name, which prefixes its material (--<name>-*)"),
+                css: z.string().describe("The object's stylesheet"),
+                source: z.string().optional().describe("The component's source (TSX, Vue, Svelte, …), for the behaviour and motion checks"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        ({ name, css, source }) =>
+        {
+            const findings = checkObject({ name, css, source });
+
+            return { content: [{ type: "text", text: objectFindingsText(findings) }], structuredContent: { findings } };
+        },
     );
 
     server.registerResource(

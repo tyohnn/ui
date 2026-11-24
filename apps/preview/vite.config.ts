@@ -112,6 +112,8 @@ export default defineConfig({
         alias: [
             // @tyohnn/blocks/* → registry/blocks/* (before the ui pattern: blocks has a lib folder of its own).
             { find: /^@tyohnn\/blocks\//, replacement: `${repoRoot}registry/blocks/` },
+            // @tyohnn/objects/* → registry/objects/* (objects with a material of their own; registry/objects/README.md).
+            { find: /^@tyohnn\/objects\//, replacement: `${repoRoot}registry/objects/` },
             { find: /^@tyohnn\/(components|lib|hooks)\//, replacement: `${repoRoot}registry/ui/$1/` },
             { find: /^@tyohnn\/icons$/, replacement: `${repoRoot}registry/ui/icons/libraries/${iconLibrary}.tsx` },
             { find: /^@tyohnn\/strings$/, replacement: `${repoRoot}registry/ui/strings/locales/${locale}.ts` },

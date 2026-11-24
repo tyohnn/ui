@@ -22,6 +22,7 @@ import { ComponentSheet } from "./component-sheet";
 import { Coverage } from "./coverage";
 import { CrmDashboard } from "./crm-dashboard";
 import { IconSheet } from "./icons";
+import { ObjectSheet } from "./objects";
 import { TypesetSheet } from "./typeset";
 
 /** `?section=<name>` renders one coverage section with its popups open (see coverage/index.tsx). */
@@ -52,6 +53,7 @@ const BUILT: Partial<Record<TemplateId, ComponentType>> = {
     coverage: CoverageTemplate,
     "crm-dashboard": CrmDashboard,
     icons: IconSheet,
+    objects: ObjectSheet,
     typeset: TypesetSheet,
 };
 
