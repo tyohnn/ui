@@ -1,17 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "@effect/vitest";
+import { Effect, type Layer } from "effect";
 
 import type { Session } from "../server";
-import type { SessionStore } from "../sessions";
-import type { PublishedSystem, SystemStore } from "../store";
+import { SessionStore } from "../sessions";
+import { type PublishedSystem, SystemStore } from "../store";
 import type { SystemState } from "../system";
 
 /**
- * The contracts the store ports promise. Every adapter runs the same code: the folder store and memorySessions here
+ * The contracts the store ports promise. Every adapter runs the same code: the folder store and memory sessions here
  * (test/contracts.test.ts), Postgres in @tyohnn/adapters-postgres.
  *
- * A Postgres store is one shared database, so the contracts never assume an empty store: they only look at the ids
- * they wrote. Published ids are the fixed CONTRACT_IDS, which the Postgres side clears in `make`; session ids are new
- * random UUIDs every time and expire on their own.
+ * `make` hands over a fresh Layer for each test. A Postgres store is one shared database, so the contracts never
+ * assume an empty store: they only look at the ids they wrote. Published ids are the fixed CONTRACT_IDS, which the
+ * Postgres side clears in `make`; session ids are new random UUIDs every time and expire on their own.
+ *
+ * Tests that wait out a time to live run on the live clock (`it.live`), since the Postgres store keeps the database's time.
  */
 
 const state = (accent: string | null = null): SystemState => ({
@@ -34,165 +37,182 @@ const published = (id: (typeof CONTRACT_IDS)[number], concept: string, published
     publishedAt,
 });
 
-export const systemStoreContract = (name: string, make: () => Promise<SystemStore>): void =>
+export type MakeSystemStore = () => Effect.Effect<Layer.Layer<SystemStore>>;
+export type MakeSessionStore = (ttlMs: number) => Effect.Effect<Layer.Layer<SessionStore>>;
+
+export const systemStoreContract = (name: string, make: MakeSystemStore): void =>
 {
+    const within = <A, E>(program: Effect.Effect<A, E, SystemStore>) => Effect.flatMap(make(), (layer) => Effect.provide(program, layer));
+
     describe(`the published-system store (${name})`, () =>
     {
-        it("keeps a system under its id with its concept, its base and its changes", async () =>
-        {
-            const store = await make();
-            const system = published("contract-first", "Glass over moss.", "2026-11-01T00:00:00.000Z");
+        it.effect("keeps a system under its id with its concept, its base and its changes", () =>
+            within(Effect.gen(function*()
+            {
+                const store = yield* SystemStore;
+                const system = published("contract-first", "Glass over moss.", "2026-11-01T00:00:00.000Z");
 
-            expect(await store.add(system)).toBe("added");
-            expect(await store.get("contract-first")).toEqual(system);
-        });
+                expect(yield* store.add(system)).toBe("added");
+                expect(yield* store.get("contract-first")).toEqual(system);
+            })));
 
-        it("refuses to add under an id already taken and leaves the first system as it was", async () =>
-        {
-            const store = await make();
-            const first = published("contract-first", "first", "2026-11-01T00:00:00.000Z");
+        it.effect("refuses to add under an id already taken and leaves the first system as it was", () =>
+            within(Effect.gen(function*()
+            {
+                const store = yield* SystemStore;
+                const first = published("contract-first", "first", "2026-11-01T00:00:00.000Z");
 
-            await store.add(first);
+                yield* store.add(first);
 
-            expect(await store.add(published("contract-first", "second", "2026-11-02T00:00:00.000Z"))).toBe("taken");
-            expect(await store.get("contract-first")).toEqual(first);
-        });
+                expect(yield* store.add(published("contract-first", "second", "2026-11-02T00:00:00.000Z"))).toBe("taken");
+                expect(yield* store.get("contract-first")).toEqual(first);
+            })));
 
-        it("publishes over a system with put, and keeps a new one with put too", async () =>
-        {
-            const store = await make();
-            const second = published("contract-first", "second", "2026-11-02T00:00:00.000Z");
-            const fresh = published("contract-second", "fresh", "2026-11-03T00:00:00.000Z");
+        it.effect("publishes over a system with put, and keeps a new one with put too", () =>
+            within(Effect.gen(function*()
+            {
+                const store = yield* SystemStore;
+                const second = published("contract-first", "second", "2026-11-02T00:00:00.000Z");
+                const fresh = published("contract-second", "fresh", "2026-11-03T00:00:00.000Z");
 
-            await store.add(published("contract-first", "first", "2026-11-01T00:00:00.000Z"));
-            await store.put(second);
-            await store.put(fresh);
+                yield* store.add(published("contract-first", "first", "2026-11-01T00:00:00.000Z"));
+                yield* store.put(second);
+                yield* store.put(fresh);
 
-            expect(await store.get("contract-first")).toEqual(second);
-            expect(await store.get("contract-second")).toEqual(fresh);
-        });
+                expect(yield* store.get("contract-first")).toEqual(second);
+                expect(yield* store.get("contract-second")).toEqual(fresh);
+            })));
 
-        it("lists the newest first", async () =>
-        {
-            const store = await make();
+        it.effect("lists the newest first", () =>
+            within(Effect.gen(function*()
+            {
+                const store = yield* SystemStore;
 
-            await store.add(published("contract-second", "b", "2026-11-02T00:00:00.000Z"));
-            await store.add(published("contract-third", "c", "2026-11-03T00:00:00.000Z"));
-            await store.add(published("contract-first", "a", "2026-11-01T00:00:00.000Z"));
+                yield* store.add(published("contract-second", "b", "2026-11-02T00:00:00.000Z"));
+                yield* store.add(published("contract-third", "c", "2026-11-03T00:00:00.000Z"));
+                yield* store.add(published("contract-first", "a", "2026-11-01T00:00:00.000Z"));
 
-            const ids = (await store.list()).map((entry) => entry.id).filter((id) => (CONTRACT_IDS as readonly string[]).includes(id));
+                const ids = (yield* store.list()).map((entry) => entry.id).filter((id) => (CONTRACT_IDS as readonly string[]).includes(id));
 
-            expect(ids).toEqual(["contract-third", "contract-second", "contract-first"]);
-        });
+                expect(ids).toEqual(["contract-third", "contract-second", "contract-first"]);
+            })));
 
-        it("answers nothing for an id it does not hold, including one that is not a name", async () =>
-        {
-            const store = await make();
+        it.effect("answers nothing for an id it does not hold, including one that is not a name", () =>
+            within(Effect.gen(function*()
+            {
+                const store = yield* SystemStore;
 
-            expect(await store.get("contract-first")).toBeUndefined();
-            expect(await store.get("../../etc/passwd")).toBeUndefined();
-            expect(await store.get("")).toBeUndefined();
-        });
+                expect(yield* store.get("contract-first")).toBeUndefined();
+                expect(yield* store.get("../../etc/passwd")).toBeUndefined();
+                expect(yield* store.get("")).toBeUndefined();
+            })));
     });
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const sessionStoreContract = (name: string, make: (ttlMs: number) => Promise<SessionStore>): void =>
+export const sessionStoreContract = (name: string, make: MakeSessionStore): void =>
 {
     const hour = 60 * 60 * 1000;
+    const within = <A, E>(ttlMs: number, program: Effect.Effect<A, E, SessionStore>) => Effect.flatMap(make(ttlMs), (layer) => Effect.provide(program, layer));
 
     describe(`the session store (${name})`, () =>
     {
-        it("gives a session back as it was saved, draft included", async () =>
-        {
-            const sessions = await make(hour);
-            const id = crypto.randomUUID();
-            const session: Session = { state: state("violet"), draft: { name: "forest-glass", concept: "Glass over moss." } };
+        it.effect("gives a session back as it was saved, draft included", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
+                const session: Session = { state: state("violet"), draft: { name: "forest-glass", concept: "Glass over moss." } };
 
-            await sessions.set(id, session);
+                yield* sessions.set(id, session);
 
-            expect(await sessions.get(id)).toEqual(session);
-        });
+                expect(yield* sessions.get(id)).toEqual(session);
+            })));
 
-        it("replaces what was saved under an id, so a session without a draft comes back without one", async () =>
-        {
-            const sessions = await make(hour);
-            const id = crypto.randomUUID();
+        it.effect("replaces what was saved under an id, so a session without a draft comes back without one", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
 
-            await sessions.set(id, { state: state("violet"), draft: { name: "forest-glass", concept: "a" } });
-            await sessions.set(id, { state: state("amber") });
+                yield* sessions.set(id, { state: state("violet"), draft: { name: "forest-glass", concept: "a" } });
+                yield* sessions.set(id, { state: state("amber") });
 
-            expect(await sessions.get(id)).toEqual({ state: state("amber") });
-        });
+                expect(yield* sessions.get(id)).toEqual({ state: state("amber") });
+            })));
 
-        it("answers nothing for an id it never saw", async () =>
-        {
-            const sessions = await make(hour);
+        it.effect("answers nothing for an id it never saw", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
 
-            expect(await sessions.get(crypto.randomUUID())).toBeUndefined();
-            expect(await sessions.get("gone")).toBeUndefined();
-        });
+                expect(yield* sessions.get(crypto.randomUUID())).toBeUndefined();
+                expect(yield* sessions.get("gone")).toBeUndefined();
+            })));
 
-        it("keeps sessions apart", async () =>
-        {
-            const sessions = await make(hour);
-            const one = crypto.randomUUID();
-            const two = crypto.randomUUID();
+        it.effect("keeps sessions apart", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const one = crypto.randomUUID();
+                const two = crypto.randomUUID();
 
-            await sessions.set(one, { state: state("violet") });
-            await sessions.set(two, { state: state("amber") });
+                yield* sessions.set(one, { state: state("violet") });
+                yield* sessions.set(two, { state: state("amber") });
 
-            expect((await sessions.get(one))?.state.accent).toBe("violet");
-            expect((await sessions.get(two))?.state.accent).toBe("amber");
-        });
+                expect((yield* sessions.get(one))?.state.accent).toBe("violet");
+                expect((yield* sessions.get(two))?.state.accent).toBe("amber");
+            })));
 
-        it("keeps a copy: changing the session after saving it does not change what was saved", async () =>
-        {
-            const sessions = await make(hour);
-            const id = crypto.randomUUID();
-            const session: Session = { state: state("violet") };
+        it.effect("keeps a copy: changing the session after saving it does not change what was saved", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
+                const session: Session = { state: state("violet") };
 
-            await sessions.set(id, session);
-            session.state.accent = "amber";
+                yield* sessions.set(id, session);
+                session.state.accent = "amber";
 
-            expect((await sessions.get(id))?.state.accent).toBe("violet");
-        });
+                expect((yield* sessions.get(id))?.state.accent).toBe("violet");
+            })));
 
-        it("forgets a session that is ended, and ending one it never saw does nothing", async () =>
-        {
-            const sessions = await make(hour);
-            const id = crypto.randomUUID();
+        it.effect("forgets a session that is ended, and ending one it never saw does nothing", () =>
+            within(hour, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
 
-            await sessions.set(id, { state: state() });
-            await sessions.delete(id);
-            await sessions.delete(crypto.randomUUID());
+                yield* sessions.set(id, { state: state() });
+                yield* sessions.delete(id);
+                yield* sessions.delete(crypto.randomUUID());
 
-            expect(await sessions.get(id)).toBeUndefined();
-        });
+                expect(yield* sessions.get(id)).toBeUndefined();
+            })));
 
-        it("reads a session not saved again within its time to live as absent", async () =>
-        {
-            const sessions = await make(50);
-            const id = crypto.randomUUID();
+        it.live("reads a session not saved again within its time to live as absent", () =>
+            within(50, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
 
-            await sessions.set(id, { state: state() });
-            await sleep(150);
+                yield* sessions.set(id, { state: state() });
+                yield* Effect.sleep("150 millis");
 
-            expect(await sessions.get(id)).toBeUndefined();
-        });
+                expect(yield* sessions.get(id)).toBeUndefined();
+            })));
 
-        it("starts the time to live again on every save", async () =>
-        {
-            const sessions = await make(400);
-            const id = crypto.randomUUID();
+        it.live("starts the time to live again on every save", () =>
+            within(400, Effect.gen(function*()
+            {
+                const sessions = yield* SessionStore;
+                const id = crypto.randomUUID();
 
-            await sessions.set(id, { state: state("violet") });
-            await sleep(250);
-            await sessions.set(id, { state: state("amber") });
-            await sleep(250);
+                yield* sessions.set(id, { state: state("violet") });
+                yield* Effect.sleep("250 millis");
+                yield* sessions.set(id, { state: state("amber") });
+                yield* Effect.sleep("250 millis");
 
-            expect((await sessions.get(id))?.state.accent).toBe("amber");
-        });
+                expect((yield* sessions.get(id))?.state.accent).toBe("amber");
+            })));
     });
 };

@@ -2,13 +2,15 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { Effect, type Layer } from "effect";
 import { z } from "zod";
 
 import { allPrimitives, type Catalog, type Primitive, readCatalog, searchPrimitives } from "./catalog";
 import { checkSystem, findingsText } from "./check";
 import { type Draft, exportSystem, importLines, writeSystem } from "./export";
 import { cardText, readSystemCards, searchSystems } from "./library";
-import { folderStore, NAME, publishSystem, type SystemStore } from "./store";
+import { NAME, publishSystem, type PublishRefused, SystemStore, systemStoreFolder, type SystemStoreError } from "./store";
 import { AXES, colourChanges, coloursOf, COLOUR_GROUPS, describe, previewVars, readTailwind, readThemes, SCREENS, setColours, setTokens, startState, swatches, type Outcome, type SystemState } from "./system";
 
 /**
@@ -58,8 +60,12 @@ export interface ServerOptions
     /** The views' HTML: dist/widget.html and dist/system.html, read by the entry point (index.ts, or the site's route) */
     widgetHtml: string;
     systemHtml: string;
-    /** Where published systems are kept (default: a folder under `<root>/.tyohnn/published`) */
-    store?: SystemStore;
+    /**
+     * Runs what a tool asks of the published-system store and hands back the result. The entry point builds it once
+     * from the store's Layer: a ManagedRuntime in the HTTP handler, `runWith` over stdio. Default: a folder under
+     * `<root>/.tyohnn/published`
+     */
+    run?: StoreRunner;
     /** export_system may write to a folder: true only when the server runs on the person's machine (stdio) */
     canWrite?: boolean;
     /**
@@ -72,6 +78,12 @@ export interface ServerOptions
     /** Called once with the session this server shapes, so the HTTP server can save it after the request */
     onSession?: (session: Session) => void;
 }
+
+/** Runs an Effect that needs the published-system store */
+export type StoreRunner = <A, E>(effect: Effect.Effect<A, E, SystemStore>) => Promise<A>;
+
+/** A runner that provides `layer` to each Effect. Fits a Layer that holds no state, like the folder store */
+export const runWith = (layer: Layer.Layer<SystemStore>): StoreRunner => (effect) => Effect.runPromise(Effect.provide(effect, layer));
 
 /** What one connection is shaping: the system's state, and its name and concept once draft_system gave them */
 export interface Session
@@ -107,7 +119,7 @@ export const createServer = (options: ServerOptions) =>
     const summaryOf = (name: string) => catalog.systems.find((entry) => entry.name === name) ?? catalog.systems[0];
 
     const cards = readSystemCards(options.root);
-    const store = options.store ?? folderStore(join(options.root, ".tyohnn/published"));
+    const run = options.run ?? runWith(systemStoreFolder(join(options.root, ".tyohnn/published")));
     const reserved = new Set<string>(systemNames);
     const characterOf = (name: string) => cards.find((card) => card.name === name)?.character ?? "";
 
@@ -142,7 +154,14 @@ export const createServer = (options: ServerOptions) =>
         };
     };
 
-    const refuse = (error: string) => ({ content: [{ type: "text" as const, text: error }], isError: true });
+    const refuse = (error: string): CallToolResult => ({ content: [{ type: "text", text: error }], isError: true });
+
+    /** Runs a tool's work on the store; a store that fails or a refused publish comes back as a refusal, not a crash */
+    const handle = (program: Effect.Effect<CallToolResult, SystemStoreError | PublishRefused, SystemStore>) =>
+        run(program.pipe(Effect.catchTags({
+            SystemStoreError: (failed) => Effect.succeed(refuse(`The store of published systems could not be reached: ${failed.message}`)),
+            PublishRefused: (refused) => Effect.succeed(refuse(refused.message)),
+        })));
     const commit = (outcome: Outcome, note: string) =>
     {
         if ("error" in outcome) return refuse(outcome.error);
@@ -348,23 +367,24 @@ export const createServer = (options: ServerOptions) =>
             },
             annotations: { readOnlyHint: true },
         },
-        async ({ query, tag, mode }) =>
+        ({ query, tag, mode }) => handle(Effect.gen(function*()
         {
+            const store = yield* SystemStore;
             const found = searchSystems(cards, query, { tag, mode });
-            const published = (await store.list()).filter((entry) => !query || `${entry.id} ${entry.draft.concept}`.toLowerCase().includes(query.toLowerCase()));
+            const published = (yield* store.list()).filter((entry) => !query || `${entry.id} ${entry.draft.concept}`.toLowerCase().includes(query.toLowerCase()));
             const text = [
                 found.length > 0 ? found.map(cardText).join("\n\n") : `No base system matches${query ? ` “${query}”` : ""}.`,
                 published.length > 0 ? `## Published\n${published.map((entry) => `- ${entry.id} (from ${entry.state.system}): ${entry.draft.concept.split("\n")[0]}`).join("\n")}` : "",
             ].filter(Boolean).join("\n\n");
 
             return {
-                content: [{ type: "text", text }],
+                content: [{ type: "text" as const, text }],
                 structuredContent: {
                     systems: found.map(({ character: _character, doNot: _doNot, ...card }) => card),
                     published: published.map((entry) => ({ id: entry.id, base: entry.state.system, concept: entry.draft.concept, publishedAt: entry.publishedAt })),
                 },
             };
-        },
+        })),
     );
 
     server.registerTool(
@@ -377,7 +397,7 @@ export const createServer = (options: ServerOptions) =>
             },
             annotations: { readOnlyHint: true },
         },
-        async ({ name }) =>
+        ({ name }) => handle(Effect.gen(function*()
         {
             const card = cards.find((entry) => entry.name === name);
 
@@ -385,20 +405,20 @@ export const createServer = (options: ServerOptions) =>
             {
                 const text = [cardText(card), card.source ? `Made from: ${card.source}` : "", "### Character", card.character || "(none written)", card.doNot ? `### Do not\n${card.doNot}` : ""].filter(Boolean).join("\n\n");
 
-                return { content: [{ type: "text", text }], structuredContent: { ...card } };
+                return { content: [{ type: "text" as const, text }], structuredContent: { ...card } };
             }
 
-            const published = await store.get(name);
+            const published = yield* (yield* SystemStore).get(name);
 
             if (!published) return refuse(`No system “${name}”. search_systems lists them.`);
 
             const changes = describe(published.state, library);
 
             return {
-                content: [{ type: "text", text: [`## ${published.id} (published ${published.publishedAt.slice(0, 10)}, from ${published.state.system})`, published.draft.concept, "### Changes over the base", changes].join("\n\n") }],
+                content: [{ type: "text" as const, text: [`## ${published.id} (published ${published.publishedAt.slice(0, 10)}, from ${published.state.system})`, published.draft.concept, "### Changes over the base", changes].join("\n\n") }],
                 structuredContent: { ...published },
             };
-        },
+        })),
     );
 
     server.registerTool(
@@ -415,7 +435,7 @@ export const createServer = (options: ServerOptions) =>
             },
             _meta: systemView,
         },
-        async ({ name, concept, base, mode, keep }) =>
+        ({ name, concept, base, mode, keep }) => handle(Effect.gen(function*()
         {
             if (catalog.systems.some((entry) => entry.name === name)) return refuse(`“${name}” is a base system's name. Pick another.`);
 
@@ -429,7 +449,7 @@ export const createServer = (options: ServerOptions) =>
             }
             else
             {
-                const published = await store.get(base);
+                const published = yield* (yield* SystemStore).get(base);
 
                 if (!published) return refuse(`No system “${base}” to start from. search_systems lists them.`);
                 session.state = structuredClone(published.state);
@@ -439,7 +459,7 @@ export const createServer = (options: ServerOptions) =>
             session.draft = { name, concept };
 
             return systemResult(keep ? `Drafting ${name}, keeping the changes so far.` : `Drafting ${name} on ${base}.`);
-        },
+        })),
     );
 
     server.registerTool(
@@ -469,19 +489,20 @@ export const createServer = (options: ServerOptions) =>
         },
         async ({ replace }) =>
         {
-            if (!session.draft) return refuse("Nothing drafted yet: call draft_system with a name and the concept first.");
+            const draft = session.draft;
 
-            const blocking = checkSystem({ root: options.root, state: session.state, library, draft: session.draft }).filter((finding) => finding.level === "error");
+            if (!draft) return refuse("Nothing drafted yet: call draft_system with a name and the concept first.");
+
+            const blocking = checkSystem({ root: options.root, state: session.state, library, draft }).filter((finding) => finding.level === "error");
 
             if (blocking.length > 0) return refuse(`Fix these first:\n${findingsText(blocking)}`);
 
             if (replace && options.canReplace === false) return refuse("This server cannot publish over a published system: it does not know who published it. Publish under a new name.");
 
-            const published = await publishSystem(store, { draft: session.draft, state: session.state }, { replace, reserved });
-
-            if ("error" in published) return refuse(published.error);
-
-            return { content: [{ type: "text", text: `Published ${published.id} (from ${session.state.system}).` }], structuredContent: { ...published } };
+            return handle(Effect.map(
+                publishSystem({ draft, state: session.state }, { replace, reserved }),
+                (published) => ({ content: [{ type: "text" as const, text: `Published ${published.id} (from ${published.state.system}).` }], structuredContent: { ...published } }),
+            ));
         },
     );
 
@@ -496,7 +517,7 @@ export const createServer = (options: ServerOptions) =>
                 stylesDir: z.string().optional().describe("How the app's CSS entry reaches the styles folder (default ./tyohnn/styles)"),
             },
         },
-        async ({ name, dir, stylesDir }) =>
+        ({ name, dir, stylesDir }) => handle(Effect.gen(function*()
         {
             let target = session.state;
             let targetDraft = session.draft ?? { name: session.state.system, concept: characterOf(session.state.system) };
@@ -508,7 +529,7 @@ export const createServer = (options: ServerOptions) =>
             }
             else if (name)
             {
-                const published = await store.get(name);
+                const published = yield* (yield* SystemStore).get(name);
 
                 if (!published) return refuse(`No system “${name}”. search_systems lists them.`);
                 target = published.state;
@@ -524,21 +545,24 @@ export const createServer = (options: ServerOptions) =>
                 if (!options.canWrite) return refuse("This server cannot write to your disk. Call export_system without dir and write the files yourself.");
                 if (!/^(\/|[A-Za-z]:[\\/])/.test(dir)) return refuse("dir must be an absolute path.");
 
-                const written = writeSystem(dir, files);
+                const folder = dir;
 
-                return {
-                    content: [{ type: "text", text: [`Wrote ${written.length} files for ${targetDraft.name} into ${dir}.`, "Add these lines to the app's CSS entry, after `@import \"tailwindcss\";`:", ...imports].join("\n") }],
-                    structuredContent: { system: targetDraft.name, dir, written, imports },
-                };
+                return yield* Effect.try({ try: () => writeSystem(folder, files), catch: String }).pipe(Effect.match({
+                    onFailure: (reason) => refuse(`Could not write into ${folder}: ${reason}`),
+                    onSuccess: (written) => ({
+                        content: [{ type: "text" as const, text: [`Wrote ${written.length} files for ${targetDraft.name} into ${folder}.`, "Add these lines to the app's CSS entry, after `@import \"tailwindcss\";`:", ...imports].join("\n") }],
+                        structuredContent: { system: targetDraft.name, dir: folder, written, imports },
+                    }),
+                }));
             }
 
             const small = files.filter((file) => !file.path.startsWith("styles/components/"));
 
             return {
-                content: [{ type: "text", text: [`${files.length} files for ${targetDraft.name}. The component rules (styles/components/*) are in structuredContent; the rest:`, ...small.map((file) => `--- ${file.path}\n${file.content}`), "Import lines for the app's CSS entry:", ...imports].join("\n\n") }],
+                content: [{ type: "text" as const, text: [`${files.length} files for ${targetDraft.name}. The component rules (styles/components/*) are in structuredContent; the rest:`, ...small.map((file) => `--- ${file.path}\n${file.content}`), "Import lines for the app's CSS entry:", ...imports].join("\n\n") }],
                 structuredContent: { system: targetDraft.name, files, imports },
             };
-        },
+        })),
     );
 
     server.registerResource(
