@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
             "../../registry/presets.json",
             "../../registry/themes/**/*.json",
             "../../registry/ui/components/**/*",
+            "../../registry/objects/*",
             "../../registry/systems/*/system.json",
             "../../registry/systems/*/DESIGN.md",
             "../../registry/systems/*/styles/**/*",
