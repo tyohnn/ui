@@ -8,7 +8,8 @@
         "build-systems": "node ../../tooling/build-system --all",
         "dev": "npm run build-systems && node scripts/vite-system.mjs --port 5173 --strictPort",
         "build": "npm run build-systems && node scripts/vite-system.mjs build",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run"
     },
     "dependencies": {
         "@fontsource-variable/source-serif-4": "^5.3.0",
@@ -26,13 +27,18 @@
         "@fontsource-variable/noto-sans": "^5.3.0",
         "@fontsource-variable/playfair-display": "^5.3.0",
         "@kfonts/maruburi": "^0.1.0",
+        "@testing-library/dom": "^10.4.2",
+        "@testing-library/react": "^16.3.3",
+        "@testing-library/user-event": "^14.6.13",
         "@tyohnn/build-system": "*",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@vitejs/plugin-react": "^6.1.1",
+        "jsdom": "^31.0.1",
         "pretendard": "^1.3.9",
         "recharts": "3.8.0",
         "typescript": "^5",
-        "vite": "8.3.0"
+        "vite": "8.3.0",
+        "vitest": "^5.0.1"
     }
 }
