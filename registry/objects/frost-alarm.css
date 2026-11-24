@@ -1,0 +1,276 @@
+/*
+ * Frost alarm (registry/objects/README.md). Adapted from UI SDK's ui-feed design "Frost alarm".
+ *
+ * The root names everything: first the anchors, which read the started system, then the face's highlights and
+ * shades mixed from the face anchor, then the material, which stays literal whatever the system. The rules below
+ * read only these names.
+ */
+.frost {
+    /* Anchors: the system */
+    --frost-face: var(--primary);
+    --frost-ink: var(--primary-foreground);
+    --frost-signal: var(--destructive);
+    --frost-font: var(--font-heading);
+    --frost-focus: var(--ring);
+    --frost-duration: var(--motion-base);
+    --frost-ease: var(--motion-ease);
+
+    /* The face's light and shade, mixed from the face */
+    --frost-face-top: color-mix(in oklch, var(--frost-face), white 14%);
+    --frost-face-bottom: color-mix(in oklch, var(--frost-face), black 5%);
+    --frost-rim-shade: color-mix(in oklch, var(--frost-face), black 40%);
+    --frost-rim-light: color-mix(in oklch, var(--frost-face), white 50%);
+
+    /* Material: black glass, LCD, metal */
+    --frost-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.16  0 0 0 0 0  0 0 0 -0.9 0.46'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    --frost-black: #000;
+    --frost-bezel: linear-gradient(180deg, #1d1d1f 0%, #111112 30%, #0b0b0c 100%);
+    --frost-bezel-glint: #ffffff14;
+    --frost-glare: linear-gradient(118deg, #ffffff00 0 36%, #ffffff12 36.15% 47%, #ffffff00 47.15% 50%, #ffffff0b 50.15% 53%, #ffffff00 53.15%);
+    --frost-print: #e9e6da;
+    --frost-glass: radial-gradient(120% 130% at 18% 0%, #bcc4ad 0%, #aab39b 48%, #9aa48b 100%);
+    --frost-glass-depth: inset 0 5px 7px -2px #2b33205c, inset 3px 0 5px -3px #2b332040, inset 0 0 0 1px #20261a66;
+    --frost-segment: #1b2016;
+    --frost-segment-cast: #1b201638;
+    --frost-well: #0a0a0a;
+    --frost-track-off: #1a1a1b;
+    --frost-well-depth: inset 0 14px 11px -7px #000000c4, inset 7px 0 8px -5px #00000094, inset -7px 0 8px -5px #00000066, inset 0 -4px 5px -4px #00000059;
+    --frost-ridges: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='58'%3E%3ClinearGradient id='r' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%236c6d71'/%3E%3Cstop offset='.55' stop-color='%23444548'/%3E%3Cstop offset='1' stop-color='%232a2b2d'/%3E%3C/linearGradient%3E%3Crect x='7' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='0' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='0.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='19' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='12' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='12.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='31' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='24' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='24.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='43' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='36' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='36.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='55' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='48' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='48.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='67' y='1' width='3.5' height='56' rx='1.75' fill='%23060607'/%3E%3Crect x='60' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='60.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3Crect x='72' width='7.5' height='58' rx='3.75' fill='url(%23r)'/%3E%3Crect x='72.6' y='2' width='1.3' height='54' rx='0.65' fill='%23a3a4a8' opacity='.7'/%3E%3C/svg%3E");
+    --frost-thumb: linear-gradient(180deg, #424346 0%, #2e2f31 55%, #222325 100%);
+    --frost-thumb-hover: linear-gradient(180deg, #4b4c4f 0%, #353638 55%, #28292b 100%);
+    --frost-thumb-edges: inset 0 1.5px 0 #6a6b6f, inset 0 -2px 0 #131314, inset 1px 0 0 #4c4d50, inset -1px 0 0 #1b1b1c;
+    --frost-thumb-lift: 0 8px 8px -2px #000000d1, 7px 0 9px -3px #000000a6, -7px 0 9px -3px #000000a6;
+    --frost-thumb-pressed: 0 3px 4px -1px #000000d9, 2px 0 3px -2px #00000080, -2px 0 3px -2px #00000080;
+
+    position: relative;
+    width: 540px;
+    height: 540px;
+    overflow: hidden;
+    background: var(--frost-grain), linear-gradient(178deg, var(--frost-face-top) 0%, var(--frost-face) 46%, var(--frost-face-bottom) 100%);
+    color: var(--frost-ink);
+    font-family: var(--frost-font);
+    -webkit-font-smoothing: antialiased;
+    cursor: default;
+    user-select: none;
+}
+
+.frost *,
+.frost *::before,
+.frost *::after {
+    box-sizing: border-box;
+}
+
+.frost-bezel {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 504px;
+    height: 328px;
+    border-radius: 13px;
+    background: var(--frost-bezel);
+    box-shadow:
+        0 -1.5px 0 var(--frost-rim-shade),
+        0 1.5px 0 var(--frost-rim-light),
+        inset 0 0 0 1px var(--frost-black),
+        inset 0 2px 1px var(--frost-bezel-glint);
+}
+
+.frost-bezel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--frost-glare);
+    pointer-events: none;
+}
+
+.frost-print {
+    position: absolute;
+    color: var(--frost-print);
+    font-size: 10.5px;
+    line-height: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.frost-print-top {
+    left: 23px;
+    top: 9px;
+}
+
+.frost-lcd {
+    position: absolute;
+    left: 22px;
+    top: 28px;
+    width: 460px;
+    height: 270px;
+    border-radius: 3px;
+    background: var(--frost-glass);
+    box-shadow: var(--frost-glass-depth);
+    overflow: hidden;
+}
+
+.frost-lcd svg {
+    display: block;
+    width: 460px;
+    height: 270px;
+    /* The segments cast a faint shadow onto the glass behind them */
+    filter: drop-shadow(1.4px 2px 0.5px var(--frost-segment-cast));
+}
+
+.frost-lcd .on { fill: var(--frost-segment); }
+.frost-lcd .off { fill: var(--frost-segment); opacity: 0.065; }
+.frost-lcd .frost-ghost { fill: var(--frost-segment); opacity: 0.075; }
+
+.frost-lcd .frost-ring {
+    fill: none;
+    stroke: var(--frost-segment);
+    stroke-width: 5;
+}
+
+.frost-lcd .frost-c { stroke-width: 7; }
+
+.frost-hours {
+    position: absolute;
+    left: 226px;
+    top: 304px;
+    width: 240px;
+    height: 20px;
+}
+
+.frost-hours i {
+    position: absolute;
+    top: 0;
+    width: 40px;
+    margin-left: -20px;
+    padding-top: 7px;
+    color: var(--frost-print);
+    font-size: 10.5px;
+    font-style: normal;
+    line-height: 12px;
+    letter-spacing: 0.06em;
+    text-align: center;
+}
+
+.frost-hours i::before {
+    content: "";
+    position: absolute;
+    left: 19.5px;
+    top: 0;
+    width: 1px;
+    height: 5px;
+    background: var(--frost-print);
+}
+
+.frost-control {
+    position: absolute;
+    inset: 346px 0 0 0;
+    display: block;
+    cursor: pointer;
+}
+
+.frost-legend {
+    position: absolute;
+    left: 39px;
+    top: 47px;
+    font-size: 27px;
+    line-height: 36px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.frost-switch {
+    position: absolute;
+    left: 244px;
+    top: 29px;
+    width: 256px;
+    height: 108px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    outline: 0;
+    background:
+        linear-gradient(90deg, var(--frost-signal) 0 117px, var(--frost-track-off) 117px) no-repeat 11px 11px / 234px 86px,
+        var(--frost-well);
+    box-shadow:
+        0 -1.5px 0 var(--frost-rim-shade),
+        0 1.5px 0 var(--frost-rim-light),
+        inset 0 5px 8px var(--frost-black),
+        inset 0 0 0 1px var(--frost-black);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.frost-switch::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    z-index: 1;
+    border-radius: 5px;
+    box-shadow: var(--frost-well-depth);
+    pointer-events: none;
+}
+
+.frost-switch:focus-visible {
+    outline: 3px solid var(--frost-focus);
+    outline-offset: 5px;
+}
+
+/* Printed on the signal half of the track, under the thumb until the alarm is on */
+.frost-bell {
+    position: absolute;
+    left: 53px;
+    top: 34px;
+    width: 31px;
+    height: 41px;
+    fill: var(--frost-ink);
+}
+
+.frost-thumb {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 2;
+    width: 120px;
+    height: 92px;
+    border-radius: 5px;
+    background: var(--frost-ridges) no-repeat 20px 17px / 80px 58px, var(--frost-thumb);
+    box-shadow: var(--frost-thumb-edges), var(--frost-thumb-lift);
+    translate: 0 0;
+    transition: translate var(--frost-duration) var(--frost-ease);
+}
+
+.frost-thumb[data-checked] { translate: 120px 0; }
+
+.frost-switch:hover .frost-thumb {
+    background: var(--frost-ridges) no-repeat 20px 17px / 80px 58px, var(--frost-thumb-hover);
+}
+
+.frost-switch:active .frost-thumb {
+    box-shadow: var(--frost-thumb-edges), var(--frost-thumb-pressed);
+}
+
+.frost-ends {
+    position: absolute;
+    left: 252px;
+    top: 498px;
+    display: grid;
+    grid-template-columns: 120px 120px;
+    width: 240px;
+    pointer-events: none;
+}
+
+.frost-ends i {
+    font-size: 13px;
+    font-style: normal;
+    line-height: 14px;
+    letter-spacing: 0.2em;
+    text-align: center;
+    text-indent: 0.2em;
+    text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .frost-thumb { transition: none; }
+}
