@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { allPrimitives, type Catalog, type Primitive, readCatalog, searchPrimitives } from "./catalog";
 import { checkSystem, findingsText } from "./check";
+import { readPatterns, searchPatterns, summaryOf as patternSummary, withDependencies } from "./patterns";
 import { type Draft, exportSystem, importLines, writeSystem } from "./export";
 import { cardText, readSystemCards, searchSystems } from "./library";
 import { ANCHORS, anchorColours, checkObject, objectFindingsText, readObjects } from "./object";
@@ -114,6 +115,8 @@ export const createServer = (options: ServerOptions) =>
 {
     const catalog = readCatalog(options.root);
     const primitives = allPrimitives(catalog);
+    const patterns = readPatterns(options.root);
+    const patternNames = patterns.map((pattern) => pattern.name) as [string, ...string[]];
     const names = primitives.map((primitive) => primitive.name) as [string, ...string[]];
     const groupIds = catalog.groups.map((group) => group.id) as [string, ...string[]];
     const systemNames = catalog.systems.map((system) => system.name) as [string, ...string[]];
@@ -244,6 +247,68 @@ export const createServer = (options: ServerOptions) =>
             return {
                 content: [{ type: "text", text }],
                 structuredContent: { ...primitive, preview },
+            };
+        },
+    );
+
+    server.registerTool(
+        "list_patterns",
+        {
+            title: "List tyohnn patterns",
+            description: "Lists tyohnn's patterns: compositions of its primitives that screens are made of (a page heading, a table in a card, an agenda, a members list), each with what it is for and the primitives it composes. Patterns are references, not installed parts: copy one as it is or adapt it into the repo's own blocks folder. Filter by words (e.g. \"table bulk actions\").",
+            inputSchema: {
+                query: z.string().optional().describe("Words to match in the name, purpose, exports and composed primitives"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        async ({ query }) =>
+        {
+            const found = query ? searchPatterns(patterns, query) : patterns;
+            const text = found.length > 0
+                ? found.map((pattern) => `- ${pattern.name}: ${patternSummary(pattern)} (${pattern.components.join(", ") || "no primitives"})`).join("\n")
+                : `No pattern matches${query ? ` “${query}”` : ""}. Compose the screen from primitives (list_primitives).`;
+
+            return {
+                content: [{ type: "text", text }],
+                structuredContent: { patterns: found.map(({ name, description, components }) => ({ name, summary: patternSummary({ description }), components })) },
+            };
+        },
+    );
+
+    server.registerTool(
+        "get_pattern",
+        {
+            title: "Get a tyohnn pattern",
+            description: "Returns one pattern's source (TSX) with the patterns and helper modules it builds on, and the primitives it composes. Copy it into the repo's blocks folder as it is, or adapt it; the repo owns the copy.",
+            inputSchema: {
+                name: z.enum(patternNames).describe("The pattern, e.g. data-table"),
+            },
+            annotations: { readOnlyHint: true },
+        },
+        async ({ name }) =>
+        {
+            const needed = withDependencies(patterns, name);
+            const pattern = needed[0];
+            const helpers = [...new Set(needed.flatMap((entry) => entry.helpers))];
+            const fence = (file: string) => [`### ${file}`, "", "```tsx", readFileSync(join(options.root, file), "utf8").trimEnd(), "```"].join("\n");
+
+            const text = [
+                `# ${pattern.name}`,
+                pattern.description,
+                "",
+                `Exports: ${pattern.exports.join(", ")}`,
+                `Composes primitives: ${[...new Set(needed.flatMap((entry) => entry.components))].join(", ") || "none"}`,
+                `Builds on patterns: ${needed.slice(1).map((entry) => entry.name).join(", ") || "none"}`,
+                "",
+                "Copy it into the repo's blocks folder (`<ui>/blocks/<name>/`) as it is, or adapt it. Rewrite the imports to the repo's own paths: `@tyohnn/components/*` → the repo's components, `@tyohnn/blocks/*` → its blocks, `@tyohnn/lib/utils` → its `cn`, `@tyohnn/strings` → the block's own `<Name>Labels` defaults. Keep it free of data fetching and domain types; values stay tokens.",
+                "",
+                ...needed.map((entry) => fence(entry.file)),
+                ...helpers.map(fence),
+            ].join("\n\n");
+
+            return {
+                content: [{ type: "text", text }],
+                structuredContent: { ...pattern, needs: needed.slice(1).map((entry) => entry.name), helpers },
             };
         },
     );
@@ -521,7 +586,7 @@ export const createServer = (options: ServerOptions) =>
             description: "Returns the files an app keeps for a system: its styles folder (the base's CSS with this system's colour and token changes written in), tyohnn.json (where it came from) and concept.md (what it is for), plus the import lines for the app's CSS entry. With `dir`, writes them there (only when this server runs on the person's machine). Without a name, exports the system being shaped.",
             inputSchema: {
                 name: z.string().optional().describe("A base system or a published id; default the system being shaped"),
-                dir: z.string().optional().describe("Absolute folder to write the system into, e.g. /app/src/styles/tyohnn"),
+                dir: z.string().optional().describe("Absolute folder to write the system into, e.g. /repo/packages/ui/src/systems/forest-glass"),
                 stylesDir: z.string().optional().describe("How the app's CSS entry reaches the styles folder (default ./tyohnn/styles)"),
             },
         },
