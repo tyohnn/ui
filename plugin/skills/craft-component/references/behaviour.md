@@ -1,7 +1,8 @@
-# Behaviour from a headless library
+# Behaviour from UI SDK
 
-The behaviour comes from a headless library: unstyled elements with the right ARIA, keyboard handling and state.
-tyohnn reads two of them, and the roles do not care which one is underneath.
+The behaviour comes from UI SDK (`@ui-sdk/react`): unstyled elements with the right ARIA, keyboard handling and
+state, the same library tyohnn's primitives are built on. Base UI is listed beside it for repos whose parts have not
+moved yet; the roles do not care which one is underneath.
 
 - **Base UI** (`@base-ui/react/<part>`): parts are namespaces
   (`Slider.Root`, `Slider.Thumb`). State shows as `data-pressed`, `data-checked`, `data-highlighted` and `aria-*`.
@@ -9,7 +10,7 @@ tyohnn reads two of them, and the roles do not care which one is underneath.
   (`definePrimitive`), the same API in React, Vue, Svelte, Solid and plain web. Parts are named exports
   (`Slider`, `SliderThumb`). State shows as `aria-*` and `data-*`.
 
-Use the one the app already depends on. With neither, use UI SDK, since the tyohnn primitives bring it. Do not mix
+Use UI SDK. Use Base UI only in a repo whose parts still sit on it. Do not mix
 the two inside one component. Either way, you add `data-role` for the look; the role rules read `aria-pressed`,
 `aria-selected`, `aria-expanded`, `aria-disabled` and `data-disabled`, which both libraries set.
 

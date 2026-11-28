@@ -13,7 +13,8 @@
         "dev": "turbo dev",
         "build": "turbo build",
         "typecheck": "turbo typecheck",
-        "test": "turbo test",
+        "test": "turbo test && npm run test:plugin",
+        "test:plugin": "node --test plugin/skills/screen-rules/scripts/check-screens.test.mjs",
         "build-systems": "node tooling/build-system --all",
         "scan": "node tooling/scan-tokens",
         "validate": "node tooling/validate-system"
