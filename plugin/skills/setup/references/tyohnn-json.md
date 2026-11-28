@@ -1,20 +1,20 @@
 # tyohnn.json
 
-One file at the app root says which system the app wears and where its files are. Agents and the token check read
-it; nothing runs it.
+One file at the repo root says which system the apps wear, where its files are and which files tyohnn owns. Agents,
+the screen check and setup read it; nothing runs it.
 
 ```json
 {
     "schema": 2,
     "system": "forest-glass",
-    "styles": "src/app/tyohnn/styles",
+    "styles": "packages/ui/src/systems/forest-glass/styles",
     "imports": [
-        "src/app/tyohnn/styles/globals.css",
-        "src/app/tyohnn/styles/theme.css",
-        "src/app/tyohnn/styles/tokens.css",
-        "src/app/tyohnn/styles/typeset.css",
-        "src/app/tyohnn/styles/typeset-preset.css",
-        "src/app/tyohnn/styles/style.css layer(base)"
+        "packages/ui/src/systems/forest-glass/styles/globals.css",
+        "packages/ui/src/systems/forest-glass/styles/theme.css",
+        "packages/ui/src/systems/forest-glass/styles/tokens.css",
+        "packages/ui/src/systems/forest-glass/styles/typeset.css",
+        "packages/ui/src/systems/forest-glass/styles/typeset-preset.css",
+        "packages/ui/src/systems/forest-glass/styles/style.css layer(base)"
     ],
     "source": {
         "kind": "mcp",
@@ -24,6 +24,13 @@ it; nothing runs it.
         "chart": null,
         "colours": { "light": {}, "dark": { "primary": "oklch(0.7 0.1 150)" } },
         "tokens": { "--surface-shadow": "none" }
+    },
+    "files": {
+        ".claude/rules/design-system.md": "sha256:…",
+        "packages/ui/src/CLAUDE.md": "sha256:…",
+        "packages/ui/src/blocks/CLAUDE.md": "sha256:…",
+        "scripts/check-screens.mjs": "sha256:…",
+        "scripts/report-screens.mjs": "sha256:…"
     }
 }
 ```
@@ -35,9 +42,11 @@ it; nothing runs it.
 | `styles` | The styles folder, relative to this file |
 | `imports` | The same folder's files in import order, relative to this file. The CSS entry's `@import` lines are these, made relative to the entry |
 | `source` | What the system is made of: the base system and every change over it. Pass it back to `draft_system`'s base (by publishing it) to reshape the system later |
+| `files` | The files tyohnn owns and replaces when setup runs again, each with its SHA-256 (screen-rules `references/setup.md` step 6) |
 
-`export_system` writes the file with paths relative to the CSS entry (`./tyohnn/styles`). When you move it to the
-app root, rewrite `styles` and every `imports` entry to start from the root, as above. `source` stays as is.
+`export_system` writes the file with paths relative to the CSS entry. When you move it to the repo root, rewrite
+`styles` and every `imports` entry to start from the root, as above. `source` stays as is.
 
-`concept.md` stays inside the system folder, next to `styles/`. It is what the system is for; the rule file points
-agents at it.
+A hash in `files` that no longer matches its file means someone edited a tyohnn file. Before replacing it, say so,
+and move the change into the repo's own config (`screen-rules.config.json`) or its own rule file
+(`.claude/rules/screens.md`), which tyohnn never touches.

@@ -35,10 +35,10 @@ describe("the MCP server", () =>
         const readOnly = tools.filter((tool) => tool.annotations?.readOnlyHint).map((tool) => tool.name).sort();
 
         expect(tools.map((tool) => tool.name).sort()).toEqual([
-            "check_object", "check_system", "design_object", "draft_system", "export_system", "get_primitive", "get_system", "list_primitives",
-            "publish_system", "read_system", "search_systems", "set_colours", "set_tokens", "show_primitives", "show_system",
+            "check_object", "check_system", "design_object", "draft_system", "export_system", "get_pattern", "get_primitive", "get_system", "list_patterns",
+            "list_primitives", "publish_system", "read_system", "search_systems", "set_colours", "set_tokens", "show_primitives", "show_system",
         ]);
-        expect(readOnly).toEqual(["check_object", "check_system", "design_object", "get_primitive", "get_system", "list_primitives", "read_system", "search_systems", "show_primitives"]);
+        expect(readOnly).toEqual(["check_object", "check_system", "design_object", "get_pattern", "get_primitive", "get_system", "list_patterns", "list_primitives", "read_system", "search_systems", "show_primitives"]);
     });
 
     it("never points the agent at the tyohnn CLI", async () =>
@@ -47,6 +47,7 @@ describe("the MCP server", () =>
         const said = [
             ...tools.map((tool) => `${tool.description} ${JSON.stringify(tool.inputSchema)}`),
             textOf(await client.callTool({ name: "get_primitive", arguments: { name: "button" } })),
+            textOf(await client.callTool({ name: "get_pattern", arguments: { name: "data-table" } })),
             textOf(await client.callTool({ name: "show_system", arguments: { system: "clover" } })),
             textOf(await client.callTool({ name: "export_system", arguments: { name: "clover" } })),
         ].join("\n");
@@ -88,6 +89,26 @@ describe("the MCP server", () =>
 
         expect(text).toContain("https://tyohnn.vercel.app/preview/clover/index.html?template=coverage&mode=light&section=badge");
         expect(text).toContain(readFileSync(`${root}/registry/ui/components/badge.tsx`, "utf8").trim().split("\n")[0]);
+    });
+
+    it("lists patterns by purpose and points at the repo's blocks folder", async () =>
+    {
+        const text = textOf(await client.callTool({ name: "list_patterns", arguments: { query: "agenda" } }));
+
+        expect(text).toContain("- agenda:");
+        expect(textOf(await client.callTool({ name: "list_patterns", arguments: { query: "nothing-matches-this" } }))).toContain("list_primitives");
+    });
+
+    it("returns a pattern's source with the patterns and helpers it builds on", async () =>
+    {
+        const result = await client.callTool({ name: "get_pattern", arguments: { name: "action-item-list" } });
+        const text = textOf(result);
+        const data = result.structuredContent as { needs: string[] };
+
+        expect(data.needs).toContain("pending");
+        expect(text).toContain("### registry/blocks/action-item-list.tsx");
+        expect(text).toContain("### registry/blocks/pending.tsx");
+        expect(text).toContain("<ui>/blocks/");
     });
 
     it("ties show_primitives to the cards view, which may frame only the preview origin", async () =>
